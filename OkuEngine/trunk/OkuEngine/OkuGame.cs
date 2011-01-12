@@ -115,13 +115,55 @@ namespace OkuEngine
       }
     }
 
+    private Stack<Matrix3> _matStack = new Stack<Matrix3>();
+    private Matrix3 _worldMatrix = new Matrix3();
+
+    private void pushMatrix()
+    {
+      _matStack.Push(_worldMatrix);
+    }
+
+    private void popMatrix()
+    {
+      _worldMatrix = _matStack.Pop();
+    }
+
     public void Render()
     {
       OkuInterfaces.Renderer.Begin();
+      _worldMatrix.LoadIdentity();
 
-      OkuInterfaces.Renderer.DrawTree(OkuData.Scene.World);
+      RenderTree(OkuData.Scene.World);
+      //OkuInterfaces.Renderer.DrawTree(OkuData.Scene.World);
 
       OkuInterfaces.Renderer.End();
+    }
+
+    private void RenderTree(SceneNode startNode)
+    {
+      pushMatrix();
+
+      _worldMatrix.Translate(startNode.Transform.Translation);
+      _worldMatrix.Scale(startNode.Transform.Scale);
+      _worldMatrix.Rotate(startNode.Transform.Rotation);
+
+      if (startNode.Content != null && startNode.Content.Type == ContentType.Image)
+      {
+        Vector v1 = _worldMatrix.Transform(startNode.Content.ContentData.Get<Vector>("oku.v1"));
+        Vector v2 = _worldMatrix.Transform(startNode.Content.ContentData.Get<Vector>("oku.v2"));
+        Vector v3 = _worldMatrix.Transform(startNode.Content.ContentData.Get<Vector>("oku.v3"));
+        Vector v4 = _worldMatrix.Transform(startNode.Content.ContentData.Get<Vector>("oku.v4"));
+
+        OkuInterfaces.Renderer.Draw(startNode.Content, v1, v2, v3, v4);
+      }
+
+      if (startNode.HasChildren())
+      {
+        foreach (SceneNode child in startNode.Children)
+          RenderTree(child);
+      }
+
+      popMatrix();
     }
 
   }

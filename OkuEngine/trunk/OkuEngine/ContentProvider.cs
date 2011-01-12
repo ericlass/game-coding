@@ -83,9 +83,13 @@ namespace OkuEngine
           Stream data = GetBytes(name);
 
           if (type == ContentType.Image)
+          {
             OkuInterfaces.Renderer.InitContent(result, data);
+          }
           else if (type == ContentType.Sound)
+          {
             OkuInterfaces.SoundEngine.InitContent(result, data);
+          }
 
           data.Close();
           _content.Add(name, result);

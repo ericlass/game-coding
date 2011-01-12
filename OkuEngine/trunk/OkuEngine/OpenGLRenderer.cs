@@ -159,8 +159,21 @@ namespace OkuEngine
 
       content.ContentData.Set<int>(ContentTextureName, textureId);
 
-      //Create a display list for the texture rectangle
       float halfHeight = tex.Height / 2.0f;
+      float halfWidth = tex.Width / 2.0f;
+
+      Vector v1 = new Vector(-halfWidth, -halfHeight);
+      Vector v2 = new Vector(halfWidth, -halfHeight);
+      Vector v3 = new Vector(halfWidth, halfHeight);
+      Vector v4 = new Vector(-halfWidth, halfHeight);
+
+      content.ContentData.Set<Vector>("oku.v1", v1);
+      content.ContentData.Set<Vector>("oku.v2", v2);
+      content.ContentData.Set<Vector>("oku.v3", v3);
+      content.ContentData.Set<Vector>("oku.v4", v4);
+
+      //Create a display list for the texture rectangle
+      /*float halfHeight = tex.Height / 2.0f;
       float halfWidth = tex.Width / 2.0f;
 
       int dispList = Gl.glGenLists(1);
@@ -185,7 +198,7 @@ namespace OkuEngine
 
       Gl.glEndList();
 
-      content.ContentData.Set<int>(ContentDispListName, dispList);
+      content.ContentData.Set<int>(ContentDispListName, dispList);*/
     }
 
     public void ReleaseContent(Content content)
@@ -254,6 +267,28 @@ namespace OkuEngine
 
       Gl.glEnd();
     }*/
+
+    public void Draw(Content content, Vector v1, Vector v2, Vector v3, Vector v4)
+    {
+      int texture = content.ContentData.Get<int>("gl.texture");
+      Gl.glBindTexture(Gl.GL_TEXTURE_2D, texture);
+
+      Gl.glBegin(Gl.GL_QUADS);
+
+      Gl.glTexCoord2f(0, 0);
+      Gl.glVertex2f(v1.X, v1.Y);
+
+      Gl.glTexCoord2f(1, 0);
+      Gl.glVertex2f(v2.X, v2.Y);
+
+      Gl.glTexCoord2f(1, 1);
+      Gl.glVertex2f(v3.X, v3.Y);
+
+      Gl.glTexCoord2f(0, 1);
+      Gl.glVertex2f(v4.X, v4.Y);
+
+      Gl.glEnd();
+    }
 
     public void DrawTree(SceneNode startNode)
     {

@@ -18,10 +18,76 @@ namespace OkuTest
       Application.SetCompatibleTextRenderingDefault(false);
 
       OkuGame game = new OkuGame();
+
+      //OkuData.Scene.Game.ActionHandler.OnAction = new ActionHandleDelegate(SimpleTransformAction);
       //OkuData.Scene.Game.ActionHandler.OnAction = new ActionHandleDelegate(RotationAction);
       OkuData.Scene.Game.ActionHandler.OnAction = new ActionHandleDelegate(ParticleGameAction);
+
       game.Run();
     }
+
+    public static void SimpleTransformAction(SceneNode node, ActionType type)
+    {
+      switch (type)
+      {
+        case ActionType.Init:
+          Content image = OkuData.Content.Get("car.png", ContentType.Image);
+          SceneNode testNode = OkuData.Scene.Add(OkuData.Scene.World, image);
+          testNode.Transform.Translation = new Vector(50, 50);
+          testNode.ActionHandler.OnAction = new ActionHandleDelegate(SimpleTransformNodeAction);
+          break;
+
+        case ActionType.Update:
+          
+          break;
+
+        case ActionType.Finish:
+          break;
+
+        default:
+          break;
+      }
+    }
+
+    #region Simple Transform Test
+
+    public static void SimpleTransformNodeAction(SceneNode node, ActionType type)
+    {
+      if (type == ActionType.Update)
+      {
+        float dt = OkuData.Globals.Get<float>("oku.timedelta");
+        float speed = 250 * dt;
+        float angVel = 90 * dt;
+        float scaleVel = 0.5f * dt;
+
+        if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.Right))
+          node.Transform.Translation.X += speed;
+        if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.Left))
+          node.Transform.Translation.X -= speed;
+        if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.Up))
+          node.Transform.Translation.Y -= speed;
+        if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.Down))
+          node.Transform.Translation.Y += speed;
+
+        if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.NumPad6))
+          node.Transform.Rotation -= angVel;
+        if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.NumPad4))
+          node.Transform.Rotation += angVel;
+
+        if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.NumPad8))
+        {
+          node.Transform.Scale.X += scaleVel;
+          node.Transform.Scale.Y += scaleVel;
+        }
+        if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.NumPad2))
+        {
+          node.Transform.Scale.X -= scaleVel;
+          node.Transform.Scale.Y -= scaleVel;
+        }
+      }
+    }
+
+    #endregion
 
     #region Hierachical Rotation Test
 
@@ -63,12 +129,14 @@ namespace OkuTest
       {
         float dt = OkuData.Globals.Get<float>("oku.timedelta");
         float rotation = OkuData.Locals.Get<float>("rotation");
-        System.Diagnostics.Debug.WriteLine(dt.ToString("0.######"));
+        //System.Diagnostics.Debug.WriteLine(dt.ToString("0.######"));
         node.Transform.Rotation += rotation * dt;
       }
     }
 
     #endregion
+
+    #region Particle Test
 
     private static SceneNode _parent = null;
 
@@ -79,7 +147,7 @@ namespace OkuTest
         case ActionType.Init:
           int numParticles = 1000;
           Random rand = new Random();
-          Content image = OkuData.Content.Get("earth.png", ContentType.Image);
+          Content image = OkuData.Content.Get("yinyang.png", ContentType.Image);
           ActionHandleDelegate action = new ActionHandleDelegate(ParticleNodeAction);
 
           _parent = OkuData.Scene.Add(OkuData.Scene.World, null);
@@ -115,9 +183,9 @@ namespace OkuTest
             _parent.Transform.Translation.Y += speed;
 
           if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.NumPad6))
-            _parent.Transform.Rotation += angVel;
-          if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.NumPad4))
             _parent.Transform.Rotation -= angVel;
+          if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.NumPad4))
+            _parent.Transform.Rotation += angVel;
 
           if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.NumPad8))
           {
@@ -182,6 +250,8 @@ namespace OkuTest
 
       OkuData.Locals.Set<Vector>("velocity", velocity);
     }
+
+    #endregion
 
   }
 }

@@ -14,6 +14,7 @@ namespace OkuEngine
     private static VariableList _locals = null;
     private static SceneGraph _scene = new SceneGraph();
     private static ContentProvider _content = new ContentProvider();
+    //private static Matrix3 _worldMatrix = new Matrix3();
 
     /// <summary>
     /// Gets the global variable list.
@@ -58,6 +59,18 @@ namespace OkuEngine
       get { return _content; }
       set { _content = value; }
     }
+
+    /// <summary>
+    /// Gets or sets the world transformation matrix that can be used
+    /// to transform coordinates from object space to world space.
+    /// Object space means current object space of the scene node that is 
+    /// currently processed.
+    /// </summary>
+    /*public static Matrix3 WorldMatrix
+    {
+      get { return _worldMatrix; }
+      set { _worldMatrix = value; }
+    }*/
 
   }
 }

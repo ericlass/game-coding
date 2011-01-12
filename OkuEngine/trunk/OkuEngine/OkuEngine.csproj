@@ -65,6 +65,7 @@
     <Compile Include="ISoundEngine.cs" />
     <Compile Include="LineSegment.cs" />
     <Compile Include="Matrix.cs" />
+    <Compile Include="Matrix3.cs" />
     <Compile Include="OkuData.cs" />
     <Compile Include="OkuInterfaces.cs" />
     <Compile Include="OkuGame.cs" />
