@@ -154,7 +154,8 @@ namespace OkuEngine
         Vector v3 = _worldMatrix.Transform(startNode.Content.ContentData.Get<Vector>("oku.v3"));
         Vector v4 = _worldMatrix.Transform(startNode.Content.ContentData.Get<Vector>("oku.v4"));
 
-        OkuInterfaces.Renderer.Draw(startNode.Content, v1, v2, v3, v4);
+        //OkuInterfaces.Renderer.Draw(startNode.Content, v1, v2, v3, v4);
+        OkuInterfaces.Renderer.DrawPoint(v1);
       }
 
       if (startNode.HasChildren())

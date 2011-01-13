@@ -72,7 +72,7 @@ namespace OkuEngine
 
     public void Initialize()
     {
-      _form = new Form();
+      _form = new GameForm();
       _form.ClientSize = new System.Drawing.Size(_screenWidth, _screenHeight);
       _form.Resize += new EventHandler(_form_Resize);
 
@@ -91,7 +91,8 @@ namespace OkuEngine
       Gdi.PIXELFORMATDESCRIPTOR pfd = new Gdi.PIXELFORMATDESCRIPTOR();
       pfd.nSize = (short)System.Runtime.InteropServices.Marshal.SizeOf(pfd);
       pfd.nVersion = 1;
-      pfd.dwFlags = Gdi.PFD_DRAW_TO_WINDOW | Gdi.PFD_SUPPORT_OPENGL | Gdi.PFD_DOUBLEBUFFER;
+      //pfd.dwFlags = Gdi.PFD_DRAW_TO_WINDOW | Gdi.PFD_SUPPORT_OPENGL | Gdi.PFD_DOUBLEBUFFER; //creates lag when moving mouse cursor in window;
+      pfd.dwFlags = Gdi.PFD_DRAW_TO_WINDOW | Gdi.PFD_SUPPORT_OPENGL;
       pfd.iPixelType = Gdi.PFD_TYPE_RGBA;
       pfd.cColorBits = 24;
       pfd.cDepthBits = 16;
@@ -113,10 +114,16 @@ namespace OkuEngine
       Gl.glEnable(Gl.GL_ALPHA_TEST);
       Gl.glAlphaFunc(Gl.GL_GREATER, 0.05f);
 
-      Gl.glBlendFunc(Gl.GL_SRC_ALPHA, Gl.GL_ONE_MINUS_SRC_ALPHA);
       Gl.glEnable(Gl.GL_BLEND);
+      Gl.glBlendFunc(Gl.GL_SRC_ALPHA, Gl.GL_ONE_MINUS_SRC_ALPHA);      
 
       Gl.glClearColor(_clearColor.R, _clearColor.G, _clearColor.B, 1);
+
+      Gl.glLineWidth(1.5f);
+      Gl.glEnable(Gl.GL_LINE_SMOOTH);
+
+      Gl.glPointSize(10);
+      Gl.glEnable(Gl.GL_POINT_SMOOTH);
     }
 
     public void Finish()
@@ -171,34 +178,6 @@ namespace OkuEngine
       content.ContentData.Set<Vector>("oku.v2", v2);
       content.ContentData.Set<Vector>("oku.v3", v3);
       content.ContentData.Set<Vector>("oku.v4", v4);
-
-      //Create a display list for the texture rectangle
-      /*float halfHeight = tex.Height / 2.0f;
-      float halfWidth = tex.Width / 2.0f;
-
-      int dispList = Gl.glGenLists(1);
-
-      Gl.glNewList(dispList, Gl.GL_COMPILE);
-
-        Gl.glBegin(Gl.GL_QUADS);
-
-        Gl.glTexCoord2f(0, 0);
-        Gl.glVertex2f(-halfWidth, -halfHeight);
-
-        Gl.glTexCoord2f(1, 0);
-        Gl.glVertex2f(halfWidth, -halfHeight);
-
-        Gl.glTexCoord2f(1, 1);
-        Gl.glVertex2f(halfWidth, halfHeight);
-
-        Gl.glTexCoord2f(0, 1);
-        Gl.glVertex2f(-halfWidth, halfHeight);
-
-        Gl.glEnd();
-
-      Gl.glEndList();
-
-      content.ContentData.Set<int>(ContentDispListName, dispList);*/
     }
 
     public void ReleaseContent(Content content)
@@ -218,55 +197,6 @@ namespace OkuEngine
     {
       Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
     }
-
-    /*public void Draw(SceneNode node)
-    {
-      //Check if all necessary content data is set
-      if (!node.Content.ContentData.Contains("gl.texture") ||
-        !node.Content.ContentData.Contains("gl.bounds.v1") ||
-        !node.Content.ContentData.Contains("gl.bounds.v2") ||
-        !node.Content.ContentData.Contains("gl.bounds.v3") ||
-        !node.Content.ContentData.Contains("gl.bounds.v4"))
-        return;
-
-      //Get vector of corner points
-      Vector v1 = node.Content.ContentData.Get<Vector>("gl.bounds.v1");
-      Vector v2 = node.Content.ContentData.Get<Vector>("gl.bounds.v2");
-      Vector v3 = node.Content.ContentData.Get<Vector>("gl.bounds.v3");
-      Vector v4 = node.Content.ContentData.Get<Vector>("gl.bounds.v4");
-
-      Matrix toWorld = node.ActionHandler.Locals.Get<Matrix>("world_matrix");
-
-      //Transform corner points from object space to world space
-      v1 = toWorld.Multiply(v1);
-      v2 = toWorld.Multiply(v2);
-      v3 = toWorld.Multiply(v3);
-      v4 = toWorld.Multiply(v4);
-      
-      //TODO: Check if node is in view rectangle of camera
-      //TODO: Transform corner points into camera space
-
-      //Get texture id and bind it
-      int texture = node.Content.ContentData.Get<int>("gl.texture");
-      Gl.glBindTexture(Gl.GL_TEXTURE_2D, texture);
-
-      //Draw quad with texture on it
-      Gl.glBegin(Gl.GL_QUADS);
-
-      Gl.glTexCoord2f(0, 0);
-      Gl.glVertex2f(v1.X, v1.Y);
-
-      Gl.glTexCoord2f(1, 0);
-      Gl.glVertex2f(v2.X, v2.Y);
-
-      Gl.glTexCoord2f(1, 1);
-      Gl.glVertex2f(v3.X, v3.Y);
-
-      Gl.glTexCoord2f(0, 1);
-      Gl.glVertex2f(v4.X, v4.Y);
-
-      Gl.glEnd();
-    }*/
 
     public void Draw(Content content, Vector v1, Vector v2, Vector v3, Vector v4)
     {
@@ -288,6 +218,35 @@ namespace OkuEngine
       Gl.glVertex2f(v4.X, v4.Y);
 
       Gl.glEnd();
+    }
+
+    public void DrawLine(Vector start, Vector end)
+    {
+      Gl.glDisable(Gl.GL_TEXTURE_2D);
+      
+      Gl.glBegin(Gl.GL_LINES);
+
+      Gl.glColor3f(1, 1, 1);
+      Gl.glVertex2f(start.X, start.Y);
+      Gl.glVertex2f(end.X, end.Y);
+
+      Gl.glEnd();
+
+      Gl.glEnable(Gl.GL_TEXTURE_2D);
+    }
+
+    public void DrawPoint(Vector p)
+    {
+      Gl.glDisable(Gl.GL_TEXTURE_2D);
+
+      Gl.glBegin(Gl.GL_POINTS);
+
+      Gl.glColor3f(1, 1, 1);
+      Gl.glVertex2f(p.X, p.Y);
+
+      Gl.glEnd();
+
+      Gl.glEnable(Gl.GL_TEXTURE_2D);
     }
 
     public void DrawTree(SceneNode startNode)

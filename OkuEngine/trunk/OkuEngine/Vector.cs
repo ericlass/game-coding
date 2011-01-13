@@ -213,6 +213,16 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Assigns the X and Y values of the given vector to this vector.
+    /// </summary>
+    /// <param name="vec">The vector to assign to this vector.</param>
+    public void Assign(Vector vec)
+    {
+      _x = vec._x;
+      _y = vec._y;
+    }
+
+    /// <summary>
     /// Creates a string representation of the vector in the format "X,Y".
     /// </summary>
     /// <returns>A string representation of the vector.</returns>

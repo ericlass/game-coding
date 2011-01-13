@@ -29,6 +29,9 @@ namespace OkuEngine
     void DrawTree(SceneNode startNode);
     void Draw(Content content, Vector v1, Vector v2, Vector v3, Vector v4);
 
+    void DrawLine(Vector start, Vector end);
+    void DrawPoint(Vector p);
+
     void InitContent(Content content, Stream data);
     void ReleaseContent(Content content);
   }

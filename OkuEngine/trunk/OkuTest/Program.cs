@@ -145,9 +145,9 @@ namespace OkuTest
       switch (type)
       {
         case ActionType.Init:
-          int numParticles = 1000;
+          int numParticles = 5000;
           Random rand = new Random();
-          Content image = OkuData.Content.Get("yinyang.png", ContentType.Image);
+          Content image = OkuData.Content.Get("smiley.png", ContentType.Image);
           ActionHandleDelegate action = new ActionHandleDelegate(ParticleNodeAction);
 
           _parent = OkuData.Scene.Add(OkuData.Scene.World, null);
@@ -156,7 +156,7 @@ namespace OkuTest
           for (int i = 0; i < numParticles; i++)
           {
             float rotation = (float)((rand.NextDouble() * 2) - 1) * 360;
-            float scale = (float)rand.NextDouble() * 0.8f + 0.2f;
+            float scale = (float)rand.NextDouble() * 0.6f + 0.7f;
             Vector velocity = new Vector((float)((rand.NextDouble() * 2) - 1) * 200, (float)((rand.NextDouble() * 2) - 1) * 200);
 
             SceneNode particle = OkuData.Scene.Add(_parent, image);
@@ -223,6 +223,7 @@ namespace OkuTest
       node.Transform.Translation += new Vector(velocity.X * dt, velocity.Y * dt);
 
       int size = 300;
+      int nsize = -size;
 
       if (node.Transform.Translation.X >= size)
       {
@@ -230,9 +231,9 @@ namespace OkuTest
         velocity.X *= -1;
       }
 
-      if (node.Transform.Translation.X <= -size)
+      if (node.Transform.Translation.X <= nsize)
       {
-        node.Transform.Translation.X = -size + (node.Transform.Translation.X - -size);
+        node.Transform.Translation.X = nsize - (node.Transform.Translation.X - nsize);
         velocity.X *= -1;
       }
 
@@ -242,9 +243,9 @@ namespace OkuTest
         velocity.Y *= -1;
       }
 
-      if (node.Transform.Translation.Y <= -size)
+      if (node.Transform.Translation.Y <= nsize)
       {
-        node.Transform.Translation.Y = -size + (node.Transform.Translation.Y - -size);
+        node.Transform.Translation.Y = nsize - (node.Transform.Translation.Y - nsize);
         velocity.Y *= -1;
       }
 
