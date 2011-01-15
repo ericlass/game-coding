@@ -59,6 +59,14 @@ namespace OkuEngine
       vec.Y = res10;
     }
 
+    public void Transform(ref float x, ref float y)
+    {
+      float res00 = V00 * x + V01 * y + V02;
+      float res10 = V10 * x + V11 * y + V12;
+      x = res00;
+      y = res10;
+    }
+
     public Vector Transform(Vector vec)
     {
       return new Vector(V00 * vec.X + V01 * vec.Y + V02, V10 * vec.X + V11 * vec.Y + V12);

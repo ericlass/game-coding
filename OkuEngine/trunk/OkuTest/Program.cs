@@ -26,6 +26,8 @@ namespace OkuTest
       game.Run();
     }
 
+    #region Simple Transform Test
+
     public static void SimpleTransformAction(SceneNode node, ActionType type)
     {
       switch (type)
@@ -48,8 +50,6 @@ namespace OkuTest
           break;
       }
     }
-
-    #region Simple Transform Test
 
     public static void SimpleTransformNodeAction(SceneNode node, ActionType type)
     {
@@ -145,7 +145,7 @@ namespace OkuTest
       switch (type)
       {
         case ActionType.Init:
-          int numParticles = 5000;
+          int numParticles = 1000;
           Random rand = new Random();
           Content image = OkuData.Content.Get("smiley.png", ContentType.Image);
           ActionHandleDelegate action = new ActionHandleDelegate(ParticleNodeAction);

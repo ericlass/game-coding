@@ -61,9 +61,6 @@
     <Compile Include="ContentProvider.cs" />
     <Compile Include="Display.cs" />
     <Compile Include="DisplayMode.cs" />
-    <Compile Include="GameForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="IRenderer.cs" />
     <Compile Include="ISoundEngine.cs" />
     <Compile Include="LineSegment.cs" />
@@ -75,6 +72,7 @@
     <Compile Include="OpenALSoundEngine.cs" />
     <Compile Include="OpenGLRenderer.cs" />
     <Compile Include="Polygon.cs" />
+    <Compile Include="Quad.cs" />
     <Compile Include="SceneGraph.cs" />
     <Compile Include="SceneNode.cs" />
     <Compile Include="SceneNodeList.cs" />

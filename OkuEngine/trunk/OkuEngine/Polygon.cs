@@ -5,7 +5,6 @@ namespace OkuEngine
 {
   /// <summary>
   /// Simple polygon class which is just a list of vectors specifying the points of the polygon.
-  /// +++ NOT YET APPROVED FOR OKU GEN-2 +++
   /// </summary>
   public class Polygon : List<Vector>
   {

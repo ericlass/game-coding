@@ -72,7 +72,7 @@ namespace OkuEngine
 
     public void Initialize()
     {
-      _form = new GameForm();
+      _form = new Form();
       _form.ClientSize = new System.Drawing.Size(_screenWidth, _screenHeight);
       _form.Resize += new EventHandler(_form_Resize);
 
@@ -92,7 +92,7 @@ namespace OkuEngine
       pfd.nSize = (short)System.Runtime.InteropServices.Marshal.SizeOf(pfd);
       pfd.nVersion = 1;
       //pfd.dwFlags = Gdi.PFD_DRAW_TO_WINDOW | Gdi.PFD_SUPPORT_OPENGL | Gdi.PFD_DOUBLEBUFFER; //creates lag when moving mouse cursor in window;
-      pfd.dwFlags = Gdi.PFD_DRAW_TO_WINDOW | Gdi.PFD_SUPPORT_OPENGL;
+      pfd.dwFlags = Gdi.PFD_DRAW_TO_WINDOW | Gdi.PFD_DOUBLEBUFFER;
       pfd.iPixelType = Gdi.PFD_TYPE_RGBA;
       pfd.cColorBits = 24;
       pfd.cDepthBits = 16;
