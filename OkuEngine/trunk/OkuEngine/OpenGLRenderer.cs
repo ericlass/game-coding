@@ -24,10 +24,11 @@ namespace OkuEngine
     private bool _fullscreen = false;
     private Color _clearColor = new Color(0, 0, 0.5f);
 
-    private static Form _form = null;
-    private static IntPtr _handle = IntPtr.Zero;
-    private static IntPtr _dc = IntPtr.Zero;
-    private static IntPtr _rc = IntPtr.Zero;
+    private Form _form = null;
+    private IntPtr _handle = IntPtr.Zero;
+    private IntPtr _dc = IntPtr.Zero;
+    private IntPtr _rc = IntPtr.Zero;
+    private Dictionary<int, int> _textures = new Dictionary<int, int>();
 
     /// <summary>
     /// Gets or set the prefered screen width in pixels.
@@ -148,7 +149,7 @@ namespace OkuEngine
       _screenHeight = _form.ClientSize.Height;
     }
 
-    public void InitContent(Content content, Stream data)
+    public void InitContentFile(ImageContent content, Stream data)
     {
       //Load texture and set it's options
       int textureId = 0;
@@ -164,23 +165,40 @@ namespace OkuEngine
 
       tex.UnlockBits(bmData);
 
-      content.ContentData.Set<int>(ContentTextureName, textureId);
+      _textures.Add(content.ContentKey, textureId);
 
       float halfHeight = tex.Height / 2.0f;
       float halfWidth = tex.Width / 2.0f;
 
-      Vector v1 = new Vector(-halfWidth, -halfHeight);
-      Vector v2 = new Vector(halfWidth, -halfHeight);
-      Vector v3 = new Vector(halfWidth, halfHeight);
-      Vector v4 = new Vector(-halfWidth, halfHeight);
-
-      content.ContentData.Set<Vector>("oku.v1", v1);
-      content.ContentData.Set<Vector>("oku.v2", v2);
-      content.ContentData.Set<Vector>("oku.v3", v3);
-      content.ContentData.Set<Vector>("oku.v4", v4);
+      content.Vertices.Add(new Vector(-halfWidth, -halfHeight));
+      content.Vertices.Add(new Vector(halfWidth, -halfHeight));
+      content.Vertices.Add(new Vector(halfWidth, halfHeight));
+      content.Vertices.Add(new Vector(-halfWidth, halfHeight));
     }
 
-    public void ReleaseContent(Content content)
+    public void InitContentRaw(ImageContent content, byte[] data, int width, int height)
+    {
+      //Load texture and set it's options
+      int textureId = 0;
+
+      Gl.glGenTextures(1, out textureId);
+      Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
+      Gl.glTexImage2D(Gl.GL_TEXTURE_2D, 0, 4, width, height, 0, Gl.GL_BGRA, Gl.GL_UNSIGNED_BYTE, data);
+      Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, Gl.GL_LINEAR);
+      Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, Gl.GL_LINEAR);
+
+      _textures.Add(content.ContentKey, textureId);
+
+      float halfHeight = height / 2.0f;
+      float halfWidth = width / 2.0f;
+
+      content.Vertices.Add(new Vector(-halfWidth, -halfHeight));
+      content.Vertices.Add(new Vector(halfWidth, -halfHeight));
+      content.Vertices.Add(new Vector(halfWidth, halfHeight));
+      content.Vertices.Add(new Vector(-halfWidth, halfHeight));
+    }
+
+    public void ReleaseContent(ImageContent content)
     {
       if (content != null && content.Type == ContentType.Image)
       {
@@ -198,13 +216,22 @@ namespace OkuEngine
       Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
     }
 
-    public void Draw(Content content, Vector v1, Vector v2, Vector v3, Vector v4)
+    public void Draw(ImageContent content, Matrix3 world)
     {
-      int texture = content.ContentData.Get<int>("gl.texture");
-      Gl.glBindTexture(Gl.GL_TEXTURE_2D, texture);
+      if (!_textures.ContainsKey(content.ContentKey))
+        return;
+
+      int textureId = _textures[content.ContentKey];
+
+      Vector v1 = world.Transform(content.Vertices[0]);
+      Vector v2 = world.Transform(content.Vertices[1]);
+      Vector v3 = world.Transform(content.Vertices[2]);
+      Vector v4 = world.Transform(content.Vertices[3]);
+
+      Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
 
       Gl.glBegin(Gl.GL_QUADS);
-
+ 
       Gl.glTexCoord2f(0, 0);
       Gl.glVertex2f(v1.X, v1.Y);
 
@@ -247,42 +274,6 @@ namespace OkuEngine
       Gl.glEnd();
 
       Gl.glEnable(Gl.GL_TEXTURE_2D);
-    }
-
-    public void DrawTree(SceneNode startNode)
-    {
-      Gl.glMatrixMode(Gl.GL_MODELVIEW);
-      Gl.glLoadIdentity();
-
-      DrawTreeRecursive(startNode);
-    }
-
-    private void DrawTreeRecursive(SceneNode node)
-    {
-      Gl.glPushMatrix();
-
-      Gl.glTranslatef(node.Transform.Translation.X, node.Transform.Translation.Y, 0);
-      Gl.glScalef(node.Transform.Scale.X, node.Transform.Scale.Y, 1);
-      Gl.glRotatef(node.Transform.Rotation, 0, 0, 1);
-
-      if (node.Content != null && node.Content.Type == ContentType.Image)
-      {
-        //Get texture id and bind it
-        int texture = node.Content.ContentData.Get<int>("gl.texture");
-        Gl.glBindTexture(Gl.GL_TEXTURE_2D, texture);
-
-        //Draw prepared display list
-        int dispList = node.Content.ContentData.Get<int>("gl.displaylist");
-        Gl.glCallList(dispList);
-      }
-
-      if (node.HasChildren())
-      {
-        foreach (SceneNode child in node.Children)
-          DrawTreeRecursive(child);
-      }
-
-      Gl.glPopMatrix();
     }
 
     public void End()

@@ -25,14 +25,13 @@ namespace OkuEngine
     void Begin();
     void End();
 
-    //void Draw(SceneNode node);
-    void DrawTree(SceneNode startNode);
-    void Draw(Content content, Vector v1, Vector v2, Vector v3, Vector v4);
+    void Draw(ImageContent content, Matrix3 world);
 
     void DrawLine(Vector start, Vector end);
     void DrawPoint(Vector p);
 
-    void InitContent(Content content, Stream data);
-    void ReleaseContent(Content content);
+    void InitContentFile(ImageContent content, Stream data);
+    void InitContentRaw(ImageContent content, byte[] data, int width, int height);
+    void ReleaseContent(ImageContent content);
   }
 }

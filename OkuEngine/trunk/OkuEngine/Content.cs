@@ -18,41 +18,37 @@ namespace OkuEngine
     /// <summary>
     /// Content is a sound that can be played.
     /// </summary>
-    Sound
+    Sound,
+    /// <summary>
+    /// Content is used by the system and cannot be edited.
+    /// </summary>
+    System
   }
 
   /// <summary>
   /// Basic game content like sounds and images. User type content can also be created.
   /// </summary>
-  public class Content
+  public abstract class Content
   {
-    private ContentType _type = default(ContentType);
-    private int _contentKey = 0;
+    private int _contentKey = KeySequence.NextValue;
     private VariableList _contentData = null;
 
     /// <summary>
     /// Creates a new content with the given 
     /// </summary>
-    /// <param name="type">The type of content.</param>
-    /// <param name="contentKey">The artificial content key.</param>
-    public Content(ContentType type, int contentKey)
+    public Content()
     {
-      _type = type;
-      _contentKey = contentKey;
     }
 
     /// <summary>
     /// Gets the type of the content.
     /// </summary>
-    public ContentType Type
-    {
-      get { return _type; }
-    }
+    public abstract ContentType Type { get; }
 
     /// <summary>
     /// Gets the artificial content key.
     /// </summary>
-    public int ContentKey
+    public virtual int ContentKey
     {
       get { return _contentKey; }
     }

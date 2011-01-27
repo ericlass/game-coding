@@ -13,8 +13,6 @@ namespace OkuEngine
     private static VariableList _globals = null;
     private static VariableList _locals = null;
     private static SceneGraph _scene = new SceneGraph();
-    private static ContentProvider _content = new ContentProvider();
-    //private static Matrix3 _worldMatrix = new Matrix3();
 
     /// <summary>
     /// Gets the global variable list.
@@ -49,15 +47,6 @@ namespace OkuEngine
     public static SceneGraph Scene
     {
       get { return _scene; }
-    }
-
-    /// <summary>
-    /// Gets or sets the content provider used to load content.
-    /// </summary>
-    public static ContentProvider Content
-    {
-      get { return _content; }
-      set { _content = value; }
     }
 
     /// <summary>

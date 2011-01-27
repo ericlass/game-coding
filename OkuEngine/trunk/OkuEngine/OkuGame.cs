@@ -134,7 +134,6 @@ namespace OkuEngine
       _worldMatrix.LoadIdentity();
 
       RenderTree(OkuData.Scene.World);
-      //OkuInterfaces.Renderer.DrawTree(OkuData.Scene.World);
 
       OkuInterfaces.Renderer.End();
     }
@@ -149,12 +148,7 @@ namespace OkuEngine
 
       if (startNode.Content != null && startNode.Content.Type == ContentType.Image)
       {
-        Vector v1 = _worldMatrix.Transform(startNode.Content.ContentData.Get<Vector>("oku.v1"));
-        Vector v2 = _worldMatrix.Transform(startNode.Content.ContentData.Get<Vector>("oku.v2"));
-        Vector v3 = _worldMatrix.Transform(startNode.Content.ContentData.Get<Vector>("oku.v3"));
-        Vector v4 = _worldMatrix.Transform(startNode.Content.ContentData.Get<Vector>("oku.v4"));
-
-        OkuInterfaces.Renderer.Draw(startNode.Content, v1, v2, v3, v4);
+        OkuInterfaces.Renderer.Draw((ImageContent)(startNode.Content), _worldMatrix);
       }
 
       if (startNode.HasChildren())

@@ -29,12 +29,12 @@ namespace OkuEngine
 
     private void Init()
     {
-      _root = new SceneNode(new Content(ContentType.None, -1));
+      _root = new SceneNode(new RootContent());
       _nodes.Add(_root);
 
-      _game = AddInternal(null, new Content(ContentType.None, -2));
-      _camera = AddInternal(null, new Content(ContentType.None, -3));
-      _world = AddInternal(null, new Content(ContentType.None, -4));
+      _game = AddInternal(null, new GameContent());
+      _camera = AddInternal(null, new CameraContent());
+      _world = AddInternal(null, new WorldContent());
     }
 
     /// <summary>
