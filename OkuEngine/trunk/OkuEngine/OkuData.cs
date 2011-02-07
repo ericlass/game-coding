@@ -49,17 +49,5 @@ namespace OkuEngine
       get { return _scene; }
     }
 
-    /// <summary>
-    /// Gets or sets the world transformation matrix that can be used
-    /// to transform coordinates from object space to world space.
-    /// Object space means current object space of the scene node that is 
-    /// currently processed.
-    /// </summary>
-    /*public static Matrix3 WorldMatrix
-    {
-      get { return _worldMatrix; }
-      set { _worldMatrix = value; }
-    }*/
-
   }
 }

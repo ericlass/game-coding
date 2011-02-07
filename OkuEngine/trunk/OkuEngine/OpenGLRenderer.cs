@@ -16,9 +16,6 @@ namespace OkuEngine
   /// </summary>
   public class OpenGLRenderer : IRenderer
   {
-    private const string ContentTextureName = "gl.texture";
-    private const string ContentDispListName = "gl.displaylist";
-
     private int _screenWidth = 1024;
     private int _screenHeight = 768;
     private bool _fullscreen = false;
@@ -92,8 +89,11 @@ namespace OkuEngine
       Gdi.PIXELFORMATDESCRIPTOR pfd = new Gdi.PIXELFORMATDESCRIPTOR();
       pfd.nSize = (short)System.Runtime.InteropServices.Marshal.SizeOf(pfd);
       pfd.nVersion = 1;
+
+      //IMPORTANT: SOMEHOW DOUBLE BUFFERING MESSES UP THE DRAWING. IT IS FASTER AND MORE STABLE WITHOUT DOUBLE BUFFERING!!!
       //pfd.dwFlags = Gdi.PFD_DRAW_TO_WINDOW | Gdi.PFD_SUPPORT_OPENGL | Gdi.PFD_DOUBLEBUFFER; //creates lag when moving mouse cursor in window;
-      pfd.dwFlags = Gdi.PFD_DRAW_TO_WINDOW | Gdi.PFD_DOUBLEBUFFER;
+      pfd.dwFlags = Gdi.PFD_DRAW_TO_WINDOW;
+
       pfd.iPixelType = Gdi.PFD_TYPE_RGBA;
       pfd.cColorBits = 24;
       pfd.cDepthBits = 16;
@@ -167,6 +167,9 @@ namespace OkuEngine
 
       _textures.Add(content.ContentKey, textureId);
 
+      content.Width = tex.Width;
+      content.Height = tex.Height;
+
       float halfHeight = tex.Height / 2.0f;
       float halfWidth = tex.Width / 2.0f;
 
@@ -189,6 +192,9 @@ namespace OkuEngine
 
       _textures.Add(content.ContentKey, textureId);
 
+      content.Width = width;
+      content.Height = height;
+
       float halfHeight = height / 2.0f;
       float halfWidth = width / 2.0f;
 
@@ -202,12 +208,8 @@ namespace OkuEngine
     {
       if (content != null && content.Type == ContentType.Image)
       {
-        int texId = content.ContentData.Get<int>(ContentTextureName);
-        int dispList = content.ContentData.Get<int>(ContentDispListName);
-        content.ContentData.Remove(ContentTextureName);
-        content.ContentData.Remove(ContentDispListName);
+        int texId = _textures[content.ContentKey];
         Gl.glDeleteTextures(1, ref texId);
-        Gl.glDeleteLists(dispList, 1);
       }
     }
 
@@ -216,33 +218,32 @@ namespace OkuEngine
       Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
     }
 
-    public void Draw(ImageContent content, Matrix3 world)
+    public void Draw(ImageContent content, Polygon shape)
     {
       if (!_textures.ContainsKey(content.ContentKey))
         return;
 
       int textureId = _textures[content.ContentKey];
 
-      Vector v1 = world.Transform(content.Vertices[0]);
-      Vector v2 = world.Transform(content.Vertices[1]);
-      Vector v3 = world.Transform(content.Vertices[2]);
-      Vector v4 = world.Transform(content.Vertices[3]);
-
       Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
 
       Gl.glBegin(Gl.GL_QUADS);
  
       Gl.glTexCoord2f(0, 0);
-      Gl.glVertex2f(v1.X, v1.Y);
+      Vector vec = shape[0];
+      Gl.glVertex2f(vec.X, vec.Y);
 
       Gl.glTexCoord2f(1, 0);
-      Gl.glVertex2f(v2.X, v2.Y);
+      vec = shape[1];
+      Gl.glVertex2f(vec.X, vec.Y);
 
       Gl.glTexCoord2f(1, 1);
-      Gl.glVertex2f(v3.X, v3.Y);
+      vec = shape[2];
+      Gl.glVertex2f(vec.X, vec.Y);
 
       Gl.glTexCoord2f(0, 1);
-      Gl.glVertex2f(v4.X, v4.Y);
+      vec = shape[3];
+      Gl.glVertex2f(vec.X, vec.Y);
 
       Gl.glEnd();
     }

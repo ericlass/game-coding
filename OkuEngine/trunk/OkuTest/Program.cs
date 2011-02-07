@@ -33,7 +33,7 @@ namespace OkuTest
       switch (type)
       {
         case ActionType.Init:
-          Content image = OkuData.Content.Get("car.png", ContentType.Image);
+          ImageContent image = new ImageContent(".\\content\\car.png"); //OkuData.Content.Get("car.png", ContentType.Image);
           SceneNode testNode = OkuData.Scene.Add(OkuData.Scene.World, image);
           testNode.Transform.Translation = new Vector(50, 50);
           testNode.ActionHandler.OnAction = new ActionHandleDelegate(SimpleTransformNodeAction);
@@ -96,7 +96,7 @@ namespace OkuTest
       switch (type)
       {
         case ActionType.Init:
-          Content image = OkuData.Content.Get("earth.png", ContentType.Image);
+          ImageContent image = new ImageContent(".\\content\\earth.png"); //OkuData.Content.Get("earth.png", ContentType.Image);
 
           SceneNode test1 = OkuData.Scene.Add(OkuData.Scene.World, image);
           test1.Transform.Translation = new Vector(400, 300);
@@ -138,8 +138,6 @@ namespace OkuTest
 
     #region Particle Test
 
-    private static SceneNode _parent = null;
-
     public static void ParticleGameAction(SceneNode node, ActionType type)
     {
       switch (type)
@@ -147,11 +145,8 @@ namespace OkuTest
         case ActionType.Init:
           int numParticles = 1000;
           Random rand = new Random();
-          Content image = OkuData.Content.Get("smiley.png", ContentType.Image);
+          Content image = new ImageContent(".\\content\\smiley.png"); //OkuData.Content.Get("smiley.png", ContentType.Image);
           ActionHandleDelegate action = new ActionHandleDelegate(ParticleNodeAction);
-
-          _parent = OkuData.Scene.Add(OkuData.Scene.World, null);
-          _parent.Transform.Translation = new Vector(OkuInterfaces.Renderer.ScreenWidth / 2, OkuInterfaces.Renderer.ScreenHeight / 2);
 
           for (int i = 0; i < numParticles; i++)
           {
@@ -159,7 +154,7 @@ namespace OkuTest
             float scale = (float)rand.NextDouble() * 0.6f + 0.7f;
             Vector velocity = new Vector((float)((rand.NextDouble() * 2) - 1) * 200, (float)((rand.NextDouble() * 2) - 1) * 200);
 
-            SceneNode particle = OkuData.Scene.Add(_parent, image);
+            SceneNode particle = OkuData.Scene.Add(OkuData.Scene.World, image);
             particle.ActionHandler.Locals.Set<float>("rotation", rotation);
             particle.ActionHandler.Locals.Set<Vector>("velocity", velocity);
             particle.Transform.Scale = new Vector(scale, scale);
@@ -174,36 +169,36 @@ namespace OkuTest
           float scaleVel = 0.5f * dt;
 
           if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.Right))
-            _parent.Transform.Translation.X += speed;
+            OkuData.Scene.Camera.Transform.Translation.X += speed;
           if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.Left))
-            _parent.Transform.Translation.X -= speed;
+            OkuData.Scene.Camera.Transform.Translation.X -= speed;
           if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.Up))
-            _parent.Transform.Translation.Y -= speed;
+            OkuData.Scene.Camera.Transform.Translation.Y -= speed;
           if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.Down))
-            _parent.Transform.Translation.Y += speed;
+            OkuData.Scene.Camera.Transform.Translation.Y += speed;
 
           if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.NumPad6))
-            _parent.Transform.Rotation -= angVel;
+            OkuData.Scene.Camera.Transform.Rotation -= angVel;
           if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.NumPad4))
-            _parent.Transform.Rotation += angVel;
+            OkuData.Scene.Camera.Transform.Rotation += angVel;
 
           if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.NumPad8))
           {
-            _parent.Transform.Scale.X += scaleVel;
-            _parent.Transform.Scale.Y += scaleVel;
+            OkuData.Scene.Camera.Transform.Scale.X += scaleVel;
+            OkuData.Scene.Camera.Transform.Scale.Y += scaleVel;
           }
           if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.NumPad2))
           {
-            _parent.Transform.Scale.X -= scaleVel;
-            _parent.Transform.Scale.Y -= scaleVel;
+            OkuData.Scene.Camera.Transform.Scale.X -= scaleVel;
+            OkuData.Scene.Camera.Transform.Scale.Y -= scaleVel;
           }
 
           if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.NumPad0))
           {
-            _parent.Transform.Translation = new Vector(OkuInterfaces.Renderer.ScreenWidth / 2, OkuInterfaces.Renderer.ScreenHeight / 2);
-            _parent.Transform.Rotation = 0;
-            _parent.Transform.Scale.X = 1;
-            _parent.Transform.Scale.Y = 1;
+            OkuData.Scene.Camera.Transform.Translation = new Vector(OkuInterfaces.Renderer.ScreenWidth / 2, OkuInterfaces.Renderer.ScreenHeight / 2);
+            OkuData.Scene.Camera.Transform.Rotation = 0;
+            OkuData.Scene.Camera.Transform.Scale.X = 1;
+            OkuData.Scene.Camera.Transform.Scale.Y = 1;
           }
 
           break;

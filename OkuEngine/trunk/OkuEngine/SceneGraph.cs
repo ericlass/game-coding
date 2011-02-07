@@ -34,7 +34,7 @@ namespace OkuEngine
 
       _game = AddInternal(null, new GameContent());
       _camera = AddInternal(null, new CameraContent());
-      _world = AddInternal(null, new WorldContent());
+      _world = AddInternal(null, new WorldContent());      
     }
 
     /// <summary>

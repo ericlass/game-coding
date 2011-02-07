@@ -25,7 +25,7 @@ namespace OkuEngine
     void Begin();
     void End();
 
-    void Draw(ImageContent content, Matrix3 world);
+    void Draw(ImageContent content, Polygon shape);
 
     void DrawLine(Vector start, Vector end);
     void DrawPoint(Vector p);

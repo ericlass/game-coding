@@ -117,6 +117,7 @@ namespace OkuEngine
 
     private Stack<Matrix3> _matStack = new Stack<Matrix3>();
     private Matrix3 _worldMatrix = new Matrix3();
+    private Polygon _transformed = new Polygon();
 
     private void pushMatrix()
     {
@@ -133,6 +134,11 @@ namespace OkuEngine
       OkuInterfaces.Renderer.Begin();
       _worldMatrix.LoadIdentity();
 
+      Transformation cameraTransform = OkuData.Scene.Camera.Transform;
+      _worldMatrix.Translate(cameraTransform.Translation * -1);
+      _worldMatrix.Scale(cameraTransform.Scale);
+      _worldMatrix.Rotate(-cameraTransform.Rotation);
+
       RenderTree(OkuData.Scene.World);
 
       OkuInterfaces.Renderer.End();
@@ -148,7 +154,10 @@ namespace OkuEngine
 
       if (startNode.Content != null && startNode.Content.Type == ContentType.Image)
       {
-        OkuInterfaces.Renderer.Draw((ImageContent)(startNode.Content), _worldMatrix);
+        ImageContent content = (ImageContent)startNode.Content;
+        _worldMatrix.Transform(content.Vertices, _transformed);
+        if (IsInViewPort(_transformed))
+          OkuInterfaces.Renderer.Draw(content, _transformed);
       }
 
       if (startNode.HasChildren())
@@ -158,6 +167,23 @@ namespace OkuEngine
       }
 
       popMatrix();
+    }
+
+    private bool IsInViewPort(Polygon shape)
+    {
+      float left = float.MaxValue;
+      float right = -float.MaxValue;
+      float top = float.MaxValue;
+      float bottom = -float.MaxValue;
+      foreach (Vector vec in shape)
+      {
+        left = Math.Min(left, vec.X);
+        right = Math.Max(right, vec.X);
+        top = Math.Min(top, vec.Y);
+        bottom = Math.Max(bottom, vec.Y);
+      }
+
+      return ((right >= 0) && (left < OkuInterfaces.Renderer.ScreenWidth) && (bottom >= 0) && (top < OkuInterfaces.Renderer.ScreenHeight));
     }
 
   }

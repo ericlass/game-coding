@@ -72,15 +72,20 @@ namespace OkuEngine
       return new Vector(V00 * vec.X + V01 * vec.Y + V02, V10 * vec.X + V11 * vec.Y + V12);
     }
 
+    /// <summary>
+    /// Transforms the given <code>poly</code>. The result of the transform will be returned in <code>target</code>.
+    /// </summary>
+    /// <param name="poly">The polygon that is transformed.</param>
+    /// <param name="target">Th resulting transformed polygon.</param>    
+    public void Transform(Polygon poly, Polygon target)
+    {
+      target.Clear();
+      for (int i = 0; i < poly.Count; i++)
+        target.Add(Transform(poly[i]));
+    }
+
     public void Multiply(Matrix3 other)
     {
-      /*float res00 = other.V00 * V00 + other.V01 * V10;
-      float res10 = other.V10 * V00 + other.V11 * V10;
-      float res01 = other.V00 * V01 + other.V01 * V11;
-      float res11 = other.V10 * V01 + other.V11 * V11;
-      float res02 = other.V00 * V02 + other.V01 * V12 + other.V02;
-      float res12 = other.V10 * V02 + other.V11 * V12 + other.V12;*/
-
       float res00 = V00 * other.V00 + V01 * other.V10;
       float res10 = V10 * other.V00 + V11 * other.V10;
       float res01 = V00 * other.V01 + V01 * other.V11;
