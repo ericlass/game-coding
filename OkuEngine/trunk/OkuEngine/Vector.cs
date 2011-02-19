@@ -187,32 +187,6 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Reads a string in the format "float,float", that represents a vector, into this vector.
-    /// You can get a string in that format from the <code>ToString</code> method.
-    /// Throws a <code>FormatException</code> if the format of the given string is not correct.
-    /// </summary>
-    /// <param name="str"></param>
-    public void Assign(string str)
-    {
-      string[] components = str.Split(',');
-      if (components.Length == 2)
-      {
-        float value = 0;
-        if (Single.TryParse(components[0], out value))
-          _x = value;
-        else
-          throw new FormatException("Wrong number format of X component in vector string: \"" + components[0] + "\" is not a valid float number!");
-
-        if (Single.TryParse(components[1], out value))
-          _y = value;
-        else
-          throw new FormatException("Wrong number format of Y component in vector string: \"" + components[1] + "\" is not a valid float number!");
-      }
-      else
-        throw new FormatException("Wrong vector string format: \"" + str + "\"");
-    }
-
-    /// <summary>
     /// Assigns the X and Y values of the given vector to this vector.
     /// </summary>
     /// <param name="vec">The vector to assign to this vector.</param>
@@ -223,15 +197,17 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Creates a string representation of the vector in the format "X,Y".
+    /// Creates a string representation of the vector in the format "[X,Y]".
     /// </summary>
     /// <returns>A string representation of the vector.</returns>
     public override string ToString()
     {
       StringBuilder result = new StringBuilder();
+      result.Append("[");
       result.Append(_x);
       result.Append(',');
       result.Append(_y);
+      result.Append("]");
       return result.ToString();
     }
 

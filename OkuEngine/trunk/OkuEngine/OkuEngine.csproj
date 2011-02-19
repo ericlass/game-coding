@@ -58,6 +58,7 @@
     <Compile Include="ActionHandler.cs" />
     <Compile Include="CameraContent.cs" />
     <Compile Include="Color.cs" />
+    <Compile Include="ConfigFile.cs" />
     <Compile Include="Content.cs" />
     <Compile Include="Display.cs" />
     <Compile Include="DisplayMode.cs" />
