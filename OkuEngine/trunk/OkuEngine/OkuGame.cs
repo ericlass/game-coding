@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.IO;
 
 namespace OkuEngine
 {
@@ -72,8 +73,30 @@ namespace OkuEngine
       OkuInterfaces.SoundEngine.Finish();
     }
 
+    private void InitDefaultConfig()
+    {
+      OkuData.Globals.Set<int>(OkuConstants.VarScreenWidth, 1024);
+      OkuData.Globals.Set<int>(OkuConstants.VarScreenHeight, 768);
+    }
+
+    private void LoadConfigFile()
+    {
+      if (File.Exists(OkuConstants.ConfigFilename))
+      {
+        ConfigFile config = new ConfigFile();
+        config.LoadFile(OkuConstants.ConfigFilename);
+        if (config.Contains(OkuConstants.VarScreenWidth))
+          OkuData.Globals.Set<int>(OkuConstants.VarScreenWidth, config.GetInt(OkuConstants.VarScreenWidth));
+        if (config.Contains(OkuConstants.VarScreenHeight))
+          OkuData.Globals.Set<int>(OkuConstants.VarScreenHeight, config.GetInt(OkuConstants.VarScreenHeight));
+      }
+    }
+
     public void Initialize()
     {
+      InitDefaultConfig();
+      LoadConfigFile();
+      
       OkuInterfaces.Renderer = new OpenGLRenderer();
       OkuInterfaces.Renderer.Initialize();
 
@@ -183,7 +206,7 @@ namespace OkuEngine
         bottom = Math.Max(bottom, vec.Y);
       }
 
-      return ((right >= 0) && (left < OkuInterfaces.Renderer.ScreenWidth) && (bottom >= 0) && (top < OkuInterfaces.Renderer.ScreenHeight));
+      return ((right >= 0) && (left < OkuData.Globals.Get<int>(OkuConstants.VarScreenWidth)) && (bottom >= 0) && (top < OkuData.Globals.Get<int>(OkuConstants.VarScreenHeight)));
     }
 
   }

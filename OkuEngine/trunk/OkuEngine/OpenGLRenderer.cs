@@ -16,8 +16,6 @@ namespace OkuEngine
   /// </summary>
   public class OpenGLRenderer : IRenderer
   {
-    private int _screenWidth = 1024;
-    private int _screenHeight = 768;
     private bool _fullscreen = false;
     private Color _clearColor = new Color(0, 0, 0.5f);
 
@@ -26,24 +24,6 @@ namespace OkuEngine
     private IntPtr _dc = IntPtr.Zero;
     private IntPtr _rc = IntPtr.Zero;
     private Dictionary<int, int> _textures = new Dictionary<int, int>();
-
-    /// <summary>
-    /// Gets or set the prefered screen width in pixels.
-    /// </summary>
-    public int ScreenWidth
-    {
-      get { return _screenWidth; }
-      set { _screenWidth = value; }
-    }
-
-    /// <summary>
-    /// Gets or sets the prefered screen height in pixels.
-    /// </summary>
-    public int ScreenHeight
-    {
-      get { return _screenHeight; }
-      set { _screenHeight = value; }
-    }
 
     /// <summary>
     /// Gets or sets of the application should be run in fullscreen or not.
@@ -70,8 +50,11 @@ namespace OkuEngine
 
     public void Initialize()
     {
+      int screenWidth = OkuData.Globals.GetDef<int>(OkuConstants.VarScreenWidth, 800);
+      int screenHeight = OkuData.Globals.GetDef<int>(OkuConstants.VarScreenHeight, 600);
+
       _form = new Form();
-      _form.ClientSize = new System.Drawing.Size(_screenWidth, _screenHeight);
+      _form.ClientSize = new System.Drawing.Size(screenWidth, screenHeight);
       _form.Resize += new EventHandler(_form_Resize);
 
       if (_fullscreen)
@@ -92,7 +75,7 @@ namespace OkuEngine
 
       //IMPORTANT: SOMEHOW DOUBLE BUFFERING MESSES UP THE DRAWING. IT IS FASTER AND MORE STABLE WITHOUT DOUBLE BUFFERING!!!
       //pfd.dwFlags = Gdi.PFD_DRAW_TO_WINDOW | Gdi.PFD_SUPPORT_OPENGL | Gdi.PFD_DOUBLEBUFFER; //creates lag when moving mouse cursor in window;
-      pfd.dwFlags = Gdi.PFD_DRAW_TO_WINDOW;
+      pfd.dwFlags = Gdi.PFD_DRAW_TO_WINDOW | Gdi.PFD_SUPPORT_OPENGL;
 
       pfd.iPixelType = Gdi.PFD_TYPE_RGBA;
       pfd.cColorBits = 24;
@@ -144,9 +127,6 @@ namespace OkuEngine
 
       Gl.glMatrixMode(Gl.GL_MODELVIEW);
       Gl.glLoadIdentity();
-
-      _screenWidth = _form.ClientSize.Width;
-      _screenHeight = _form.ClientSize.Height;
     }
 
     public void InitContentFile(ImageContent content, Stream data)

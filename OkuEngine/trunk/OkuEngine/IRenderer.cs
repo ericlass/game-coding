@@ -13,8 +13,6 @@ namespace OkuEngine
   /// </summary>
   public interface IRenderer
   {
-    int ScreenWidth { get; set; }
-    int ScreenHeight { get; set; }
     bool Fullscreen { get; set; }
     Color ClearColor { get; set; }
     Form MainForm { get; }

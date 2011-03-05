@@ -46,6 +46,24 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Gets the value of the variable with the given name. If there currently is no variable
+    /// with this name, the given defaultValue is returned. Note that this method
+    /// uses type casting. If you try read a variable with a type other than the one you wrote
+    /// it with, there will be an InvalidTypeCast exception.
+    /// </summary>
+    /// <typeparam name="T">The type of the variable.</typeparam>
+    /// <param name="name">The name of the variable.</param>
+    /// <param name="defaultValue">The default value that will be returned if there is no variable with the given name.</param>
+    /// <returns>The value of the variable, or the given defaultValue if there is no variable with the given name.</returns>
+    public T GetDef<T>(string name, T defaultValue)
+    {
+      if (_values.ContainsKey(name))
+        return (T)_values[name];
+      else
+        return defaultValue;
+    }
+
+    /// <summary>
     /// Sets the given variable to the given value.
     /// </summary>
     /// <typeparam name="T">The type of the variable.</typeparam>

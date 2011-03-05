@@ -69,6 +69,7 @@
     <Compile Include="KeySequence.cs" />
     <Compile Include="LineSegment.cs" />
     <Compile Include="Matrix3.cs" />
+    <Compile Include="OkuConstants.cs" />
     <Compile Include="OkuData.cs" />
     <Compile Include="OkuInterfaces.cs" />
     <Compile Include="OkuGame.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="KeyboardInput.cs" />
     <Compile Include="MouseInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WaveLoader.cs" />
     <Compile Include="Winmm.cs" />
     <Compile Include="WorldContent.cs" />
   </ItemGroup>
