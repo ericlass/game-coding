@@ -15,7 +15,9 @@ namespace OkuEngine
 
     void Play(SceneNode node);
 
-    void InitContent(Content content, Stream data);
+    void InitContent(Content content, WaveForm wave);
+    void InitContentRaw(Content content, byte[] data, int sampleRate, int numChannels);
+
     void ReleaseContent(Content content);
   }
 }

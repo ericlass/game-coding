@@ -81,6 +81,7 @@
     <Compile Include="SceneGraph.cs" />
     <Compile Include="SceneNode.cs" />
     <Compile Include="SceneNodeList.cs" />
+    <Compile Include="SoundContent.cs" />
     <Compile Include="Spline.cs" />
     <Compile Include="Transformation.cs" />
     <Compile Include="User32.cs" />

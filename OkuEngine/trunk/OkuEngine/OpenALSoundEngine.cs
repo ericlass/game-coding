@@ -11,6 +11,7 @@ namespace OkuEngine
   {
     private IntPtr _device;
     private IntPtr _context;
+    private Dictionary<int, int> _buffers = new Dictionary<int, int>();
 
     private float _volume = 1.0f;
 
@@ -39,11 +40,36 @@ namespace OkuEngine
       Alc.alcCloseDevice(_device);
     }
 
-    public void InitContent(Content content, Stream data)
+    private int GetAlFormatForChannels(int numChannels)
     {
-      //Pass data to to wave loader to get raw sound data
-      //Create buffer
-      //put buffer id in content data with name "al.buffer"
+      if (numChannels == 8)
+        return Al.AL_FORMAT_71CHN16;
+      if (numChannels == 7)
+        return Al.AL_FORMAT_61CHN16;
+      if (numChannels == 6)
+        return Al.AL_FORMAT_51CHN16;
+      if (numChannels == 4)
+        return Al.AL_FORMAT_QUAD16;
+      if (numChannels == 2)
+        return Al.AL_FORMAT_STEREO16;
+      if (numChannels == 1)
+        return Al.AL_FORMAT_MONO16;
+
+      return 0;
+    }
+
+    public void InitContent(Content content, WaveForm wave)
+    {
+      InitContentRaw(content, wave.ChannelData, wave.SampleRate, wave.NumChannels);
+    }
+
+    public void InitContentRaw(Content content, byte[] data, int sampleRate, int numChannels)
+    {
+      int format = GetAlFormatForChannels(numChannels);
+
+      int buffer = 0;
+      Al.alGenBuffers(1, out buffer);
+      Al.alBufferData(buffer, format, data, data.Length * 2, sampleRate);
     }
 
     public void ReleaseContent(Content content)

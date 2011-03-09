@@ -9,12 +9,12 @@ namespace OkuEngine
   /// <summary>
   /// Contains a wave form including some information about the format and the sample data itself.
   /// </summary>
-  class WaveForm
+  public class WaveForm
   {
     public uint NumberOfSamples { get; set; }
     public int SampleRate { get; set; }
     public int NumChannels { get; set; }
-    public List<short[]> ChannelData { get; set; }
+    public byte[] ChannelData { get; set; }
   }
 
   /// <summary>
@@ -133,8 +133,8 @@ namespace OkuEngine
           return false;
 
         ushort format = reader.ReadUInt16();
-        if (format != 1)
-          return false;
+        /*if (format != 1)
+          return false;*/
 
         ushort channels = reader.ReadUInt16();
         wave.NumChannels = channels;
@@ -166,17 +166,11 @@ namespace OkuEngine
         uint numSamples = size / (uint)wave.NumChannels / 2;
         wave.NumberOfSamples = numSamples;
 
-        List<short[]> samples = new List<short[]>();
-        for (int i = 0; i < wave.NumChannels; i++)
-          samples.Add(new short[numSamples]);
+        int dataLength = (int)(numSamples * wave.NumChannels);
 
-        for (int i = 0; i < numSamples; i++)
-        {
-          for (int c = 0; c < wave.NumChannels; c++)
-          {
-            samples[c][i] = reader.ReadInt16();
-          }
-        }
+        byte[] samples = new byte[dataLength];
+        for (int i = 0; i < dataLength; i++)
+          samples[i] = reader.ReadByte();
 
         wave.ChannelData = samples;
         return true;
