@@ -23,7 +23,7 @@ namespace OkuEngine
     void Begin();
     void End();
 
-    void Draw(ImageContent content, Polygon shape);
+    void Draw(SceneNode node);
 
     void DrawLine(Vector start, Vector end);
     void DrawPoint(Vector p);

@@ -198,31 +198,34 @@ namespace OkuEngine
       Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
     }
 
-    public void Draw(ImageContent content, Polygon shape)
+    public void Draw(SceneNode node)
     {
-      if (!_textures.ContainsKey(content.ContentKey))
+      if (!_textures.ContainsKey(node.Content.ContentKey) || node.Content.Type != ContentType.Image)
         return;
 
-      int textureId = _textures[content.ContentKey];
+      ImageContent content = (ImageContent)node.Content;
 
+      int textureId = _textures[content.ContentKey];
       Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
+
+      Polygon transformed = content.GetTransformedVertices(node.WorldMatrix);
 
       Gl.glBegin(Gl.GL_QUADS);
  
       Gl.glTexCoord2f(0, 0);
-      Vector vec = shape[0];
+      Vector vec = transformed[0];
       Gl.glVertex2f(vec.X, vec.Y);
 
       Gl.glTexCoord2f(1, 0);
-      vec = shape[1];
+      vec = transformed[1];
       Gl.glVertex2f(vec.X, vec.Y);
 
       Gl.glTexCoord2f(1, 1);
-      vec = shape[2];
+      vec = transformed[2];
       Gl.glVertex2f(vec.X, vec.Y);
 
       Gl.glTexCoord2f(0, 1);
-      vec = shape[3];
+      vec = transformed[3];
       Gl.glVertex2f(vec.X, vec.Y);
 
       Gl.glEnd();

@@ -211,5 +211,15 @@ namespace OkuEngine
       return result.ToString();
     }
 
+    /// <summary>
+    /// Compares the vector to another vector by comparing the X and Y values.
+    /// </summary>
+    /// <param name="other">The vector to compare to.</param>
+    /// <returns>True if the vectors are equal, else False.</returns>
+    public bool Equals(Vector other)
+    {
+      return _x == other._x && _y == other._y;
+    }
+
   }
 }

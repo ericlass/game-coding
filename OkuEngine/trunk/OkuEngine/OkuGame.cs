@@ -11,16 +11,19 @@ namespace OkuEngine
 {
   /// <summary>
   /// Main game class that runs the whole game.
-  /// +++ NOT FULLY APPROVED FOR OKU GEN-2 +++
-  /// May need some modification for Oku Gen2
   /// </summary>
   public class OkuGame
   {
-
+    /// <summary>
+    /// Creates a new game.
+    /// </summary>
     public OkuGame()
     {
     }
 
+    /// <summary>
+    /// Runs the game in an infinite loop.
+    /// </summary>
     public void Run()
     {
       Initialize();
@@ -73,12 +76,18 @@ namespace OkuEngine
       OkuInterfaces.SoundEngine.Finish();
     }
 
+    /// <summary>
+    /// Initializes the configuration with their default values.
+    /// </summary>
     private void InitDefaultConfig()
     {
       OkuData.Globals.Set<int>(OkuConstants.VarScreenWidth, 1024);
       OkuData.Globals.Set<int>(OkuConstants.VarScreenHeight, 768);
     }
 
+    /// <summary>
+    /// Loads the config file into the global variable cache.
+    /// </summary>
     private void LoadConfigFile()
     {
       if (File.Exists(OkuConstants.ConfigFilename))
@@ -92,6 +101,9 @@ namespace OkuEngine
       }
     }
 
+    /// <summary>
+    /// Triggers the initialization of all engine parts.
+    /// </summary>
     public void Initialize()
     {
       InitDefaultConfig();
@@ -118,6 +130,10 @@ namespace OkuEngine
       }
     }
 
+    /// <summary>
+    /// Triggers update of all engine parts and node actions every frame.
+    /// </summary>
+    /// <param name="dt"></param>
     public void Update(float dt)
     {
       OkuData.Globals.Set<float>("oku.timedelta", dt);
@@ -140,18 +156,26 @@ namespace OkuEngine
 
     private Stack<Matrix3> _matStack = new Stack<Matrix3>();
     private Matrix3 _worldMatrix = new Matrix3();
-    private Polygon _transformed = new Polygon();
 
+    /// <summary>
+    /// Pushes the current world matrix onto the stack.
+    /// </summary>
     private void pushMatrix()
     {
       _matStack.Push(_worldMatrix);
     }
 
+    /// <summary>
+    /// Pops the last matrix from the stack into the world matrix.
+    /// </summary>
     private void popMatrix()
     {
       _worldMatrix = _matStack.Pop();
     }
 
+    /// <summary>
+    /// Trigger the rendering of the whole scene.
+    /// </summary>
     public void Render()
     {
       OkuInterfaces.Renderer.Begin();
@@ -159,7 +183,7 @@ namespace OkuEngine
 
       Transformation cameraTransform = OkuData.Scene.Camera.Transform;
       _worldMatrix.Translate(cameraTransform.Translation * -1);
-      _worldMatrix.Scale(cameraTransform.Scale);
+      _worldMatrix.Scale(-cameraTransform.Scale);
       _worldMatrix.Rotate(-cameraTransform.Rotation);
 
       RenderTree(OkuData.Scene.World);
@@ -167,20 +191,23 @@ namespace OkuEngine
       OkuInterfaces.Renderer.End();
     }
 
+    /// <summary>
+    /// Renders the scene graph starting at the given scene node. Typically
+    /// this would be the world node.
+    /// </summary>
+    /// <param name="startNode">The node to start rendering at.</param>
     private void RenderTree(SceneNode startNode)
     {
       pushMatrix();
 
-      _worldMatrix.Translate(startNode.Transform.Translation);
-      _worldMatrix.Scale(startNode.Transform.Scale);
-      _worldMatrix.Rotate(startNode.Transform.Rotation);
+      _worldMatrix.ApplyTransform(startNode.Transform);
+      startNode.WorldMatrix = _worldMatrix;
 
       if (startNode.Content != null && startNode.Content.Type == ContentType.Image)
       {
-        ImageContent content = (ImageContent)startNode.Content;
-        _worldMatrix.Transform(content.Vertices, _transformed);
-        if (IsInViewPort(_transformed))
-          OkuInterfaces.Renderer.Draw(content, _transformed);
+        Polygon transformed = ((ImageContent)(startNode.Content)).GetTransformedVertices(_worldMatrix);
+        if (IsInViewPort(transformed))
+          OkuInterfaces.Renderer.Draw(startNode);
       }
 
       if (startNode.HasChildren())
@@ -192,6 +219,12 @@ namespace OkuEngine
       popMatrix();
     }
 
+    /// <summary>
+    /// Checks if the given polygon is i the viewport. At the moment
+    /// this is a simple boudning box test.
+    /// </summary>
+    /// <param name="shape">The shape to test for visibility.</param>
+    /// <returns>True if the shape is visible, else False.</returns>
     private bool IsInViewPort(Polygon shape)
     {
       float left = float.MaxValue;

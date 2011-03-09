@@ -195,7 +195,7 @@ namespace OkuTest
 
           if (OkuInterfaces.Input.Keyboard.ButtonIsDown(Keys.NumPad0))
           {
-            OkuData.Scene.Camera.Transform.Translation = new Vector(OkuInterfaces.Renderer.ScreenWidth / 2, OkuInterfaces.Renderer.ScreenHeight / 2);
+            OkuData.Scene.Camera.Transform.Translation = new Vector(OkuData.Globals.Get<int>(OkuConstants.VarScreenWidth) / 2, OkuData.Globals.Get<int>(OkuConstants.VarScreenHeight) / 2);
             OkuData.Scene.Camera.Transform.Rotation = 0;
             OkuData.Scene.Camera.Transform.Scale.X = 1;
             OkuData.Scene.Camera.Transform.Scale.Y = 1;

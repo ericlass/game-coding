@@ -17,6 +17,8 @@ namespace OkuEngine
     private Transformation _transform = new Transformation();
     private ActionHandler _actionHandler = new ActionHandler();
     private Content _content = null;
+    private Polygon _vertices = new Polygon();
+    private Matrix3 _worldMatrix = Matrix3.Indentity;
 
     /// <summary>
     /// Creates a new empty scene node.
@@ -99,6 +101,26 @@ namespace OkuEngine
           throw new ArgumentException("The content of a scene node cannot be set to null when it was not null before!");
         _content = value; 
       }
+    }
+
+    /// <summary>
+    /// Gets or sets the matrix that can be used to transform the scene node to world space coordinates.
+    /// This property is calculated and updated by the engine every frame. If you mess with it you really
+    /// need to know what you are doing!
+    /// </summary>
+    public Matrix3 WorldMatrix
+    {
+      get { return _worldMatrix; }
+      set { _worldMatrix = value; }
+    }
+
+    /// <summary>
+    /// Gets the list of vertices that represent the current node. For image content these are the vertices (4)
+    /// that are used to draw the image. For all other node types there is only one vertex.
+    /// </summary>
+    public Polygon Vertices
+    {
+      get { return _vertices; }
     }
 
     /// <summary>

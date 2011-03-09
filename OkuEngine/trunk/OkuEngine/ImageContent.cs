@@ -13,6 +13,9 @@ namespace OkuEngine
     private int _width = 0;
     private int _height = 0;
 
+    private Matrix3 _lastTransform = Matrix3.Indentity;
+    private Polygon _transformed = new Polygon();
+
     public ImageContent(string filename)
     {
       FileStream stream = new FileStream(filename, FileMode.Open);
@@ -57,6 +60,16 @@ namespace OkuEngine
     public override ContentType Type
     {
       get { return ContentType.Image; }
+    }
+
+    public Polygon GetTransformedVertices(Matrix3 transform)
+    {
+      if (!transform.Equals(_lastTransform))
+      {
+        transform.Transform(_vertices, _transformed);
+        _lastTransform = transform;
+      }
+      return _transformed;
     }
 
   }
