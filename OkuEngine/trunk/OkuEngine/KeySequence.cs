@@ -7,6 +7,8 @@ namespace OkuEngine
 {
   static class KeySequence
   {
+    public const int InvalidKey = -1;
+
     private static int _currentValue = 0;
 
     public static int NextValue

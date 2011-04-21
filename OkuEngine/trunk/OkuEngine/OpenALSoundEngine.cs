@@ -11,7 +11,8 @@ namespace OkuEngine
   {
     private IntPtr _device;
     private IntPtr _context;
-    private Dictionary<int, int> _buffers = new Dictionary<int, int>();
+    private Dictionary<int, int> _buffers = new Dictionary<int, int>(); //Maps content keys to open al buffer id's
+    private Dictionary<SceneNode, int> _sources = new Dictionary<SceneNode, int>(); //Maps scene nodes to open al source id's
 
     private float _volume = 1.0f;
 
@@ -70,12 +71,22 @@ namespace OkuEngine
       int buffer = 0;
       Al.alGenBuffers(1, out buffer);
       Al.alBufferData(buffer, format, data, data.Length * 2, sampleRate);
+
+      _buffers.Add(content.ContentKey, buffer);
     }
 
     public void ReleaseContent(Content content)
     {
-      //Release buffer
-      //Release source
+      if (_buffers.ContainsKey(content.ContentKey))
+      {
+        //Release buffer
+        int buffer = _buffers[content.ContentKey];
+        Al.alDeleteBuffers(1, ref buffer);
+        //Release source
+        //TODO: How?
+        //Al.alDeleteSources();
+        
+      }
     }
 
     public void Play(SceneNode node)
