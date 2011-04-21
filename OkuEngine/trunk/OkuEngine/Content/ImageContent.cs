@@ -9,7 +9,6 @@ namespace OkuEngine
   public class ImageContent : Content
   {
     private Polygon _vertices = new Polygon();
-    private Polygon _boundaries = null;
     private int _width = 0;
     private int _height = 0;
 
@@ -39,12 +38,6 @@ namespace OkuEngine
       set { _vertices = value; }
     }
 
-    public Polygon Boundaries
-    {
-      get { return _boundaries; }
-      set { _boundaries = value; }
-    }
-
     public int Width
     {
       get { return _width; }
@@ -55,11 +48,6 @@ namespace OkuEngine
     {
       get { return _height; }
       set { _height = value; }
-    }
-
-    public override ContentType Type
-    {
-      get { return ContentType.Image; }
     }
 
     public Polygon GetTransformedVertices(Matrix3 transform)

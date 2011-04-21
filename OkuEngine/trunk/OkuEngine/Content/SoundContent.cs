@@ -36,10 +36,5 @@ namespace OkuEngine
         ; //TODO: Log error
     }
 
-    public override ContentType Type
-    {
-      get { return ContentType.Sound; }
-    }
-
   }
 }

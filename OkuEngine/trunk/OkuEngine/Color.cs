@@ -5,12 +5,15 @@ namespace OkuEngine
   /// <summary>
   /// Stores a color value in RGBA format.
   /// </summary>
-  public class Color
+  public struct Color
   {
-    public float R { get; set; }
-    public float G { get; set; }
-    public float B { get; set; }
-    public float A { get; set; }
+    public float R;
+    public float G;
+    public float B;
+    public float A;
+
+    public const Color White = new Color(1, 1, 1);
+    public const Color Black = new Color(0, 0, 0);
 
     /// <summary>
     /// Creates a new opaque color with the given color values.
