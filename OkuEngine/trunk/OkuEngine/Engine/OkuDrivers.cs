@@ -5,7 +5,7 @@ using System.Text;
 
 namespace OkuEngine
 {
-  public static class OkuInterfaces
+  public static class OkuDrivers
   {
     private static Input _input = null;
     private static ISoundEngine _sound = null;

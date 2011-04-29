@@ -15,11 +15,27 @@ namespace OkuEngine
     /// <summary>
     /// The X component of the vector.
     /// </summary>
-    private float _x;
+    private float _x = 0;
     /// <summary>
     /// The Y component of the vector.
     /// </summary>
-    private float _y;
+    private float _y = 0;
+
+    /// <summary>
+    /// A vector with X and Y set to 0.
+    /// </summary>
+    public static Vector Zero
+    {
+      get { return new Vector(); }
+    }    
+
+    /// <summary>
+    /// A vector with X and Y set to 1.
+    /// </summary>
+    public static Vector One
+    {
+      get { return new Vector(1.0f, 1.0f); }
+    }
 
     public Vector()
     {
@@ -151,6 +167,28 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Multiplies the two given vectors component-wise (X1 * X2 and Y1 * Y2).
+    /// </summary>
+    /// <param name="vec1">The first vector.</param>
+    /// <param name="vec2">The second vector.</param>
+    /// <returns>The result of the multiplication as a new vector.</returns>
+    public static Vector operator *(Vector vec1, Vector vec2)
+    {
+      return new Vector(vec1.X * vec2.X, vec1.Y * vec2.Y);
+    }
+
+    /// <summary>
+    /// Divides the two given vectors component-wise (X1 / X2 and Y1 / Y2).
+    /// </summary>
+    /// <param name="vec1">The first vector.</param>
+    /// <param name="vec2">The second vector.</param>
+    /// <returns>The result of the division as a new vector.</returns>
+    public static Vector operator /(Vector vec1, Vector vec2)
+    {
+      return new Vector(vec1.X / vec2.X, vec1.Y / vec2.Y);
+    }
+
+    /// <summary>
     /// Normalizes the given vector and returns the result as a new vector.
     /// </summary>
     /// <param name="vec">The vector to be normalized.</param>
@@ -219,6 +257,42 @@ namespace OkuEngine
     public bool Equals(Vector other)
     {
       return _x == other._x && _y == other._y;
+    }
+
+    /// <summary>
+    /// Rotates the vector around the origin by the given angle. Positive angles
+    /// mean clockwise rotation, negative values mean counter-clockwise rotation.
+    /// </summary>
+    /// <param name="angle">The angle to rotate in degrees.</param>
+    public void Rotate(float angle)
+    {
+      float rad = (angle * 180.0f) / (float)Math.PI;
+
+      float sin = (float)Math.Sin(rad);
+      float cos = (float)Math.Cos(rad);
+
+      float nx = _x * cos - _y * sin;
+      float ny = _x * sin + _y * cos;
+
+      _x = nx;
+      _y = ny;
+    }
+
+    /// <summary>
+    /// Rotates the given vector by the given angle. The result
+    /// is returned as a new vector. The given vector is not changed.
+    /// Positive angles mean clockwise rotation, negative values mean
+    /// counter-clockwise rotation.
+    /// </summary>
+    /// <param name="vec">The vector to be rotated.</param>
+    /// <param name="angle">The angle to rotate in degrees.</param>
+    /// <returns>The result of the rotation in a new vector.</returns>
+    public static Vector Rotate(Vector vec, float angle)
+    {
+      Vector result = new Vector();
+      result.Assign(vec);
+      result.Rotate(angle);
+      return result;
     }
 
   }

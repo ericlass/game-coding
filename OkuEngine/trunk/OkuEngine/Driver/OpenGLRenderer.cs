@@ -26,7 +26,7 @@ namespace OkuEngine
     private Dictionary<int, int> _textures = new Dictionary<int, int>();
 
     /// <summary>
-    /// Gets or sets of the application should be run in fullscreen or not.
+    /// Gets or sets if the application should be run in fullscreen or not.
     /// </summary>
     public bool Fullscreen
     {
@@ -103,11 +103,16 @@ namespace OkuEngine
 
       Gl.glClearColor(_clearColor.R, _clearColor.G, _clearColor.B, 1);
 
-      Gl.glLineWidth(1.5f);
+      Gl.glLineWidth(1.0f);
       Gl.glEnable(Gl.GL_LINE_SMOOTH);
 
-      Gl.glPointSize(10);
+      Gl.glPointSize(1);
       Gl.glEnable(Gl.GL_POINT_SMOOTH);
+    }
+
+    public void Update(float dt)
+    {
+      //Nothing to do here by now
     }
 
     public void Finish()
@@ -145,18 +150,10 @@ namespace OkuEngine
 
       tex.UnlockBits(bmData);
 
-      _textures.Add(content.ContentKey, textureId);
+      _textures.Add(content.ContentId, textureId);
 
       content.Width = tex.Width;
       content.Height = tex.Height;
-
-      float halfHeight = tex.Height / 2.0f;
-      float halfWidth = tex.Width / 2.0f;
-
-      content.Vertices.Add(new Vector(-halfWidth, -halfHeight));
-      content.Vertices.Add(new Vector(halfWidth, -halfHeight));
-      content.Vertices.Add(new Vector(halfWidth, halfHeight));
-      content.Vertices.Add(new Vector(-halfWidth, halfHeight));
     }
 
     public void InitContentRaw(ImageContent content, byte[] data, int width, int height)
@@ -170,26 +167,19 @@ namespace OkuEngine
       Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, Gl.GL_LINEAR);
       Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, Gl.GL_LINEAR);
 
-      _textures.Add(content.ContentKey, textureId);
+      _textures.Add(content.ContentId, textureId);
 
       content.Width = width;
       content.Height = height;
-
-      float halfHeight = height / 2.0f;
-      float halfWidth = width / 2.0f;
-
-      content.Vertices.Add(new Vector(-halfWidth, -halfHeight));
-      content.Vertices.Add(new Vector(halfWidth, -halfHeight));
-      content.Vertices.Add(new Vector(halfWidth, halfHeight));
-      content.Vertices.Add(new Vector(-halfWidth, halfHeight));
     }
 
     public void ReleaseContent(ImageContent content)
     {
-      if (content != null && content.Type == ContentType.Image)
+      if (_textures.ContainsKey(content.ContentId))
       {
-        int texId = _textures[content.ContentKey];
+        int texId = _textures[content.ContentId];
         Gl.glDeleteTextures(1, ref texId);
+        _textures.Remove(content.ContentId);
       }
     }
 
@@ -198,66 +188,264 @@ namespace OkuEngine
       Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
     }
 
-    public void Draw(SceneNode node)
+    public void DrawImage(ImageContent content, Vector position)
     {
-      if (!_textures.ContainsKey(node.Content.ContentKey) || node.Content.Type != ContentType.Image)
+      DrawImage(content, position, 0.0f, Vector.One, Color.White);
+    }
+
+    public void DrawImage(ImageContent content, Vector position, float rotation)
+    {
+      DrawImage(content, position, rotation, Vector.One, Color.White);
+    }
+
+    public void DrawImage(ImageContent content, Vector position, Vector scale)
+    {
+      DrawImage(content, position, 0.0f, scale, Color.White);
+    }
+
+    public void DrawImage(ImageContent content, Vector position, float rotation, Vector scale)
+    {
+      DrawImage(content, position, rotation, scale, Color.White);
+    }
+
+    public void DrawImage(ImageContent content, Vector position, Color tint)
+    {
+      DrawImage(content, position, 0.0f, Vector.One, tint);
+    }
+
+    public void DrawImage(ImageContent content, Vector position, float rotation, Vector scale, Color tint)
+    {
+      if (!_textures.ContainsKey(content.ContentId))
         return;
 
-      ImageContent content = (ImageContent)node.Content;
-
-      int textureId = _textures[content.ContentKey];
+      int textureId = _textures[content.ContentId];
       Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
 
-      Polygon transformed = content.GetTransformedVertices(node.WorldMatrix);
+      Gl.glPushMatrix();
+
+      Gl.glTranslatef(position.X, position.Y, 0.0f);
+      Gl.glScalef(scale.X, scale.Y, 1.0f);
+      Gl.glRotatef(rotation, 0.0f, 0.0f, 1.0f);
+
+      float halfWidth = content.Width / 2.0f;
+      float halfHeight = content.Height / 2.0f;
 
       Gl.glBegin(Gl.GL_QUADS);
- 
+
+      Gl.glColor4f(tint.R, tint.G, tint.B, tint.A);
+
       Gl.glTexCoord2f(0, 0);
-      Vector vec = transformed[0];
-      Gl.glVertex2f(vec.X, vec.Y);
+      Gl.glVertex2f(-halfWidth, -halfHeight);
 
       Gl.glTexCoord2f(1, 0);
-      vec = transformed[1];
-      Gl.glVertex2f(vec.X, vec.Y);
+      Gl.glVertex2f(halfWidth, -halfHeight);
 
       Gl.glTexCoord2f(1, 1);
-      vec = transformed[2];
-      Gl.glVertex2f(vec.X, vec.Y);
+      Gl.glVertex2f(halfWidth, halfHeight);
 
       Gl.glTexCoord2f(0, 1);
-      vec = transformed[3];
-      Gl.glVertex2f(vec.X, vec.Y);
+      Gl.glVertex2f(-halfWidth, halfHeight);
+
+      Gl.glEnd();
+
+      Gl.glPopMatrix();
+    }
+
+    public void DrawImage(ImageContent content, Matrix3 transform)
+    {
+      DrawImage(content, transform, Color.White);
+    }
+
+    public void DrawImage(ImageContent content, Matrix3 transform, Color tint)
+    {
+      if (!_textures.ContainsKey(content.ContentId))
+        return;
+
+      int textureId = _textures[content.ContentId];
+      Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
+
+      float halfWidth = content.Width / 2.0f;
+      float halfHeight = content.Height / 2.0f;
+
+      Gl.glBegin(Gl.GL_QUADS);
+
+      Gl.glColor4f(tint.R, tint.G, tint.B, tint.A);
+
+      Gl.glTexCoord2f(0, 0);
+
+      float x = -halfWidth;
+      float y = -halfHeight;
+      transform.Transform(ref x, ref y);
+      Gl.glVertex2f(x, y);
+
+      Gl.glTexCoord2f(1, 0);
+
+      x = halfWidth;
+      y = -halfHeight;
+      transform.Transform(ref x, ref y);
+      Gl.glVertex2f(x, y);
+
+      Gl.glTexCoord2f(1, 1);
+
+      x = halfWidth;
+      y = halfHeight;
+      transform.Transform(ref x, ref y);
+      Gl.glVertex2f(x, y);
+
+      Gl.glTexCoord2f(0, 1);
+
+      x = -halfWidth;
+      y = halfHeight;
+      transform.Transform(ref x, ref y);
+      Gl.glVertex2f(x, y);
 
       Gl.glEnd();
     }
 
-    public void DrawLine(Vector start, Vector end)
+    public void DrawLine(Vector start, Vector end, float width, Color color)
     {
-      Gl.glDisable(Gl.GL_TEXTURE_2D);
-      
-      Gl.glBegin(Gl.GL_LINES);
-
-      Gl.glColor3f(1, 1, 1);
-      Gl.glVertex2f(start.X, start.Y);
-      Gl.glVertex2f(end.X, end.Y);
-
-      Gl.glEnd();
-
-      Gl.glEnable(Gl.GL_TEXTURE_2D);
+      DrawLines(new VectorList() { start, end }, width, color, VertexInterpretation.LineSegments);
     }
 
-    public void DrawPoint(Vector p)
+    public void DrawLines(VectorList vertices, float width, Color color, VertexInterpretation interpretation)
+    {
+      Gl.glDisable(Gl.GL_TEXTURE_2D);
+      try
+      {
+        Gl.glLineWidth(width);
+
+        switch (interpretation)
+        {
+          case VertexInterpretation.Polygon:
+            Gl.glBegin(Gl.GL_LINE_STRIP);
+            break;
+          case VertexInterpretation.PolygonClosed:
+            Gl.glBegin(Gl.GL_LINE_LOOP);
+            break;
+          case VertexInterpretation.LineSegments:
+            Gl.glBegin(Gl.GL_LINES);
+            break;
+          default:
+            throw new ArgumentOutOfRangeException("Vertex interpretation " + interpretation.ToString() + " is not implemented in DrawLines(...)!");
+        }
+
+        Gl.glColor4f(color.R, color.G, color.B, color.A);
+        foreach (Vector vec in vertices)
+        {
+          Gl.glVertex2f(vec.X, vec.Y);
+        }
+
+        Gl.glEnd();
+      }
+      finally
+      {
+        Gl.glEnable(Gl.GL_TEXTURE_2D);
+      }   
+    }
+
+    public void DrawLine(Vector start, Vector end, Matrix3 transform, float width, Color color)
+    {
+      DrawLines(new VectorList() { start, end }, transform, width, color, VertexInterpretation.LineSegments);
+    }
+
+    public void DrawLines(VectorList vertices, Matrix3 transform, float width, Color color, VertexInterpretation interpretation)
+    {
+      Gl.glDisable(Gl.GL_TEXTURE_2D);
+      try
+      {
+        Gl.glLineWidth(width);
+
+        switch (interpretation)
+        {
+          case VertexInterpretation.Polygon:
+            Gl.glBegin(Gl.GL_LINE_STRIP);
+            break;
+          case VertexInterpretation.PolygonClosed:
+            Gl.glBegin(Gl.GL_LINE_LOOP);
+            break;
+          case VertexInterpretation.LineSegments:
+            Gl.glBegin(Gl.GL_LINES);
+            break;
+          default:
+            throw new ArgumentOutOfRangeException("Vertex interpretation " + interpretation.ToString() + " is not implemented in DrawLines(...)!");
+        }
+
+        Gl.glColor4f(color.R, color.G, color.B, color.A);
+        foreach (Vector vec in vertices)
+        {
+          float x = vec.X;
+          float y = vec.Y;
+          transform.Transform(ref x, ref y);
+          Gl.glVertex2f(x, y);
+        }
+
+        Gl.glEnd();
+      }
+      finally
+      {
+        Gl.glEnable(Gl.GL_TEXTURE_2D);
+      }  
+    }
+
+    public void DrawPoint(Vector p, float size, Color color)
+    {
+      DrawPoints(new VectorList() { p }, size, color);
+    }
+
+    public void DrawPoints(VectorList points, float size, Color color)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
 
-      Gl.glBegin(Gl.GL_POINTS);
+      try
+      {
+        Gl.glPointSize(size);
 
-      Gl.glColor3f(1, 1, 1);
-      Gl.glVertex2f(p.X, p.Y);
+        Gl.glBegin(Gl.GL_POINTS);
 
-      Gl.glEnd();
+        Gl.glColor4f(color.R, color.G, color.B, color.A);
+        foreach (Vector vec in points)
+        {
+          Gl.glVertex2f(vec.X, vec.Y);
+        }
 
-      Gl.glEnable(Gl.GL_TEXTURE_2D);
+        Gl.glEnd();
+      }
+      finally
+      {
+        Gl.glEnable(Gl.GL_TEXTURE_2D);
+      } 
+    }
+
+    public void DrawPoint(Vector p, Matrix3 transform, float size, Color color)
+    {
+      DrawPoints(new VectorList() { p }, transform, size, color);    
+    }
+
+    public void DrawPoints(VectorList points, Matrix3 transform, float size, Color color)
+    {
+      Gl.glDisable(Gl.GL_TEXTURE_2D);
+
+      try
+      {
+        Gl.glPointSize(size);
+
+        Gl.glBegin(Gl.GL_POINTS);
+
+        Gl.glColor4f(color.R, color.G, color.B, color.A);
+        foreach (Vector vec in points)
+        {
+          float x = vec.X;
+          float y = vec.Y;
+          transform.Transform(ref x, ref y);
+          Gl.glVertex2f(x, y);
+        }
+
+        Gl.glEnd();
+      }
+      finally
+      {
+        Gl.glEnable(Gl.GL_TEXTURE_2D);
+      } 
     }
 
     public void End()

@@ -161,9 +161,9 @@ namespace OkuEngine
     /// </summary>
     /// <param name="points">Specifies how many points the resulting polygon will have.</param>
     /// <returns>The tesselated polygon.</returns>
-    public Polygon Tesselate(int points)
+    public VectorList Tesselate(int points)
     {
-      Polygon result = new Polygon();
+      VectorList result = new VectorList();
 
       double step = 1.0 / points;
       for (double t = 0.0; t <= 1.0; t += step)
@@ -176,7 +176,7 @@ namespace OkuEngine
       return result;
     }
 
-    public Polygon TesselateParameterized()
+    public VectorList TesselateParameterized()
     {
       throw new NotImplementedException("TesselateParameterized");
     }

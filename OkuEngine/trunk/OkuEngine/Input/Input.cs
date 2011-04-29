@@ -4,7 +4,6 @@ namespace OkuEngine
 {
   /// <summary>
   /// Handles all input of keyboard, mouse and joysticks.
-  /// +++ APPROVED FOR OKU GEN-2 +++
   /// </summary>
   public class Input
   {

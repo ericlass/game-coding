@@ -5,16 +5,19 @@ using System.Text;
 
 namespace OkuEngine
 {
-  public class ImageInstance : ContentInstance
+  public class ImageInstance : VisualInstance
   {
     private ImageContent _content = null;
     private Color _tintColor = Color.White;
-    private float _transparency = 0.0f;
-    private string _shader = null;
 
     private ImageInstance(ImageContent content)
     {
       _content = content;
+    }
+
+    public override void Draw(Matrix3 transform)
+    {
+      OkuDrivers.Renderer.DrawImage(_content, transform, _tintColor);
     }
 
     public ImageContent Content
@@ -27,18 +30,6 @@ namespace OkuEngine
     {
       get { return _tintColor; }
       set { _tintColor = value; }
-    }
-
-    public float Transparency
-    {
-      get { return _transparency; }
-      set { _transparency = value; }
-    }
-
-    public string Shader
-    {
-      get { return _shader; }
-      set { _shader = value; }
     }
 
   }

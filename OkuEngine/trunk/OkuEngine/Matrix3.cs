@@ -139,7 +139,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="poly">The polygon that is transformed.</param>
     /// <param name="target">The resulting transformed polygon.</param>    
-    public void Transform(Polygon poly, Polygon target)
+    public void Transform(VectorList poly, VectorList target)
     {
       target.Clear();
       for (int i = 0; i < poly.Count; i++)

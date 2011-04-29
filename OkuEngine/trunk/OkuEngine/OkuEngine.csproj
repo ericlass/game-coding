@@ -56,32 +56,32 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionHandler.cs" />
-    <Compile Include="Content\CameraContent.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="ConfigFile.cs" />
     <Compile Include="Content\Content.cs" />
+    <Compile Include="Content\VisualContent.cs" />
     <Compile Include="Display.cs" />
     <Compile Include="DisplayMode.cs" />
-    <Compile Include="Content\GameContent.cs" />
     <Compile Include="Content\ImageContent.cs" />
+    <Compile Include="Driver\VertexInterpretation.cs" />
     <Compile Include="Instance\ImageInstance.cs" />
     <Compile Include="Instance\ContentInstance.cs" />
     <Compile Include="Driver\IRenderer.cs" />
     <Compile Include="Driver\ISoundEngine.cs" />
+    <Compile Include="Instance\VisualInstance.cs" />
     <Compile Include="KeySequence.cs" />
     <Compile Include="LineSegment.cs" />
     <Compile Include="Matrix3.cs" />
     <Compile Include="Engine\OkuConstants.cs" />
     <Compile Include="Engine\OkuData.cs" />
-    <Compile Include="Engine\OkuInterfaces.cs" />
+    <Compile Include="Engine\OkuDrivers.cs" />
     <Compile Include="Engine\OkuGame.cs" />
     <Compile Include="Driver\OpenALSoundEngine.cs" />
     <Compile Include="Driver\OpenGLRenderer.cs" />
-    <Compile Include="Polygon.cs" />
+    <Compile Include="VectorList.cs" />
     <Compile Include="Content\PolygonContent.cs" />
     <Compile Include="Instance\PolygonInstance.cs" />
     <Compile Include="Quad.cs" />
-    <Compile Include="Content\RootContent.cs" />
     <Compile Include="Scene\SceneGraph.cs" />
     <Compile Include="Scene\SceneNode.cs" />
     <Compile Include="Scene\SceneNodeList.cs" />
@@ -101,7 +101,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WaveLoader.cs" />
     <Compile Include="Platform\Winmm.cs" />
-    <Compile Include="Content\WorldContent.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

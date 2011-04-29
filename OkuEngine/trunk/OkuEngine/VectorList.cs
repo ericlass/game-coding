@@ -6,10 +6,32 @@ namespace OkuEngine
   /// <summary>
   /// Simple polygon class which is just a list of vectors specifying the points of the polygon.
   /// </summary>
-  public class Polygon : List<Vector>
+  public class VectorList : List<Vector>
   {
-    public Polygon()
+    public VectorList()
     {
+    }
+
+    /// <summary>
+    /// Calculates the bounding box of the vector list. The complexity is O(n).
+    /// </summary>
+    /// <returns>The calculated bounding box of the vector list.</returns>
+    public Quad GetBoundingBox()
+    {
+      float left = float.MaxValue;
+      float right = float.MinValue;
+      float top = float.MaxValue;
+      float bottom = float.MinValue;
+
+      foreach (Vector vec in this)
+      {
+        left = Math.Min(left, vec.X);
+        right = Math.Max(right, vec.X);
+        top = Math.Min(top, vec.Y);
+        bottom = Math.Max(bottom, vec.Y);
+      }
+
+      return new Quad(left, right, top, bottom);
     }
 
     public bool IsConvex()

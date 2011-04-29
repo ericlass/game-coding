@@ -8,7 +8,6 @@ namespace OkuEngine
 {
   public class SoundContent : Content
   {
-
     public SoundContent(string filename)
     {
       Init(WaveLoader.LoadWave(filename));
@@ -31,7 +30,7 @@ namespace OkuEngine
     private void Init(WaveForm wave)
     {
       if (wave != null)
-        OkuInterfaces.SoundEngine.InitContent(this, wave);
+        OkuDrivers.SoundEngine.InitContent(this, wave);
       else
         ; //TODO: Log error
     }

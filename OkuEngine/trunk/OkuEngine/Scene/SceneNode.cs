@@ -17,7 +17,7 @@ namespace OkuEngine
     private Transformation _transform = new Transformation();
     private ActionHandler _actionHandler = new ActionHandler();
     private Content _content = null;
-    private Polygon _vertices = new Polygon();
+    private VectorList _vertices = new VectorList();
     private Matrix3 _worldMatrix = Matrix3.Indentity;
 
     /// <summary>
@@ -56,8 +56,8 @@ namespace OkuEngine
       get { return _parent; }
       set 
       {
-        if (_content != null && _content.ContentKey < 0)
-          throw new InvalidOperationException("Changing the parent of a system node (Key: " + _content.ContentKey + ") is not allowed!");
+        if (_content != null && _content.ContentId < 0)
+          throw new InvalidOperationException("Changing the parent of a system node (Key: " + _content.ContentId + ") is not allowed!");
         _parent = value; 
       }
     }
@@ -118,7 +118,7 @@ namespace OkuEngine
     /// Gets the list of vertices that represent the current node. For image content these are the vertices (4)
     /// that are used to draw the image. For all other node types there is only one vertex.
     /// </summary>
-    public Polygon Vertices
+    public VectorList Vertices
     {
       get { return _vertices; }
     }
@@ -148,7 +148,7 @@ namespace OkuEngine
     /// <returns>True if the node is a system node, else false.</returns>
     public bool IsSystemNode()
     {
-      return _content != null && _content.ContentKey < 0;
+      return _content != null && _content.ContentId < 0;
     }
 
     /// <summary>

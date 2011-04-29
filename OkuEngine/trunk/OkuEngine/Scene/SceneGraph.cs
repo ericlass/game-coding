@@ -29,12 +29,12 @@ namespace OkuEngine
 
     private void Init()
     {
-      _root = new SceneNode(new RootContent());
+      _root = new SceneNode();
       _nodes.Add(_root);
 
-      _game = AddInternal(null, new GameContent());
-      _camera = AddInternal(null, new CameraContent());
-      _world = AddInternal(null, new WorldContent());      
+      _game = AddInternal(null, null);
+      _camera = AddInternal(null, null);
+      _world = AddInternal(null, null);
     }
 
     /// <summary>
@@ -130,8 +130,8 @@ namespace OkuEngine
     /// <returns>The newly created scene node.</returns>
     public SceneNode Add(SceneNode parent, Content content)
     {
-      if (content != null && content.ContentKey < 0)
-        throw new ArgumentException("Content key \"" + content.ContentKey + "\" cannot be added! Content keys < 0 are reserved for system use!");
+      if (content != null && content.ContentId < 0)
+        throw new ArgumentException("Content key \"" + content.ContentId + "\" cannot be added! Content keys < 0 are reserved for system use!");
 
       return AddInternal(parent, content);
     }
@@ -202,7 +202,7 @@ namespace OkuEngine
       SceneNodeList result = new SceneNodeList();
       foreach (SceneNode node in _nodes)
       {
-        if (node.Content.ContentKey == contentKey)
+        if (node.Content.ContentId == contentKey)
           result.Add(node);
       }
       return result;

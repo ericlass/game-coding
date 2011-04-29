@@ -10,9 +10,31 @@ namespace OkuEngine
   /// </summary>
   public class Transformation
   {
-    private Vector _translation = new Vector();
-    private Vector _scale = new Vector(1, 1);
+    private Vector _translation = null;
+    private Vector _scale = null;
     private float _rotation = 0.0f;
+
+    /// <summary>
+    /// Creates a new transformation with translation (0,0), scale (1,1) and rotation (0).
+    /// </summary>
+    public Transformation()
+    {
+      _translation = new Vector();
+      _scale = new Vector(1, 1);
+    }
+
+    /// <summary>
+    /// Creates a new transformation with the given values for translation, scale and rotation.
+    /// </summary>
+    /// <param name="translation">The translation vector.</param>
+    /// <param name="scale">The scale vector.</param>
+    /// <param name="rotation">The rotation angle in degrees.</param>
+    public Transformation(Vector translation, Vector scale, float rotation)
+    {
+      _translation = translation;
+      _scale = scale;
+      _rotation = rotation;
+    }
 
     /// <summary>
     /// Gets or sets the translation vector.

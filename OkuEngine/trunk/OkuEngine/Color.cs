@@ -12,8 +12,8 @@ namespace OkuEngine
     public float B;
     public float A;
 
-    public const Color White = new Color(1, 1, 1);
-    public const Color Black = new Color(0, 0, 0);
+    public static Color White = new Color(1, 1, 1);
+    public static Color Black = new Color(0, 0, 0);
 
     /// <summary>
     /// Creates a new opaque color with the given color values.
