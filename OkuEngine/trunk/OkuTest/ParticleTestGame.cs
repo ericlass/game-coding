@@ -8,22 +8,25 @@ namespace OkuTest
 {
   public class ParticleTestGame : OkuGame
   {
-    ImageContent _smiley = null;
-    float rotation = 0.0f;
+    private ImageInstance _smiley = null;
+    private float _rotation = 0.0f;
+    private Vector _pos1 = new Vector(100, 100);
 
     public override void Initialize()
     {
-      _smiley = new ImageContent(".\\content\\yinyang.png");
+      ImageContent content = new ImageContent(".\\content\\smiley.png");
+      _smiley = new ImageInstance(content);
+      _smiley.TintColor = Color.Green;
     }
 
     public override void Update(float dt)
     {
-      rotation += dt * 360;
+      _rotation += dt * 90;
     }
 
     public override void Render()
     {
-      OkuDrivers.Renderer.DrawImage(_smiley, new Vector(100, 100), rotation);
+      _smiley.Draw(_pos1, _rotation);
     }
 
   }

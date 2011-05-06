@@ -17,11 +17,6 @@ namespace OkuEngine
       _content = content;
     }
 
-    public override void Draw(Matrix3 transform)
-    {
-      OkuDrivers.Renderer.DrawLines(_content.Vertices, _lineWidth, _lineColor, _interpretation);
-    }
-
     public PolygonContent Content
     {
       get { return _content; }
@@ -44,6 +39,11 @@ namespace OkuEngine
     {
       get { return _interpretation; }
       set { _interpretation = value; }
+    }
+
+    public override void Draw(Matrix3 transform)
+    {
+      OkuDrivers.Renderer.DrawLines(_content.Vertices, transform, _lineWidth, _lineColor, _interpretation);
     }
 
   }

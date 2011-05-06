@@ -35,7 +35,7 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// 
+    /// Gets or sets the color that is used to clear the screen each frame before rendering begins.
     /// </summary>
     public Color ClearColor
     {
@@ -43,11 +43,17 @@ namespace OkuEngine
       set { _clearColor = value; }
     }
 
+    /// <summary>
+    /// Gets the form that is used to draw on.
+    /// </summary>
     public Form MainForm
     {
       get { return _form; }
     }
 
+    /// <summary>
+    /// Initializes the renderer. This includes creating the form and intitializing OpenGL.
+    /// </summary>
     public void Initialize()
     {
       int screenWidth = OkuData.Globals.GetDef<int>(OkuConstants.VarScreenWidth, 800);
@@ -110,11 +116,18 @@ namespace OkuEngine
       Gl.glEnable(Gl.GL_POINT_SMOOTH);
     }
 
+    /// <summary>
+    /// In the OpenGL renderer this method does nothing.
+    /// </summary>
+    /// <param name="dt"></param>
     public void Update(float dt)
     {
       //Nothing to do here by now
     }
 
+    /// <summary>
+    /// Frees all resources that are created by the renderer. This includes all textures.
+    /// </summary>
     public void Finish()
     {
       Wgl.wglMakeCurrent(IntPtr.Zero, IntPtr.Zero);
@@ -122,6 +135,11 @@ namespace OkuEngine
       User.ReleaseDC(_handle, _dc);
     }
 
+    /// <summary>
+    /// Handles resizing of the form. The OpenGL viewport is reset to fit the new size of the form.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The event arguments.</param>
     private void _form_Resize(object sender, EventArgs e)
     {
       Gl.glViewport(0, 0, _form.ClientSize.Width, _form.ClientSize.Height);
@@ -134,6 +152,12 @@ namespace OkuEngine
       Gl.glLoadIdentity();
     }
 
+    /// <summary>
+    /// Initializes image content which means that OpenGL textures are created for them.
+    /// THis method also sets the Width and Height properties of the content.
+    /// </summary>
+    /// <param name="content">The content to be initialized.</param>
+    /// <param name="data">The content data. This must be a stream that contains a complete image file like PNG, BMP or JPG.</param>
     public void InitContentFile(ImageContent content, Stream data)
     {
       //Load texture and set it's options
@@ -156,6 +180,14 @@ namespace OkuEngine
       content.Height = tex.Height;
     }
 
+    /// <summary>
+    /// Initializes image content from raw data which is represented by a byte array.
+    /// The data is expected to only contain pixel data.
+    /// </summary>
+    /// <param name="content">The content to be initialized.</param>
+    /// <param name="data">The pixel data.</param>
+    /// <param name="width">The width of the image.</param>
+    /// <param name="height">The height of the image.</param>
     public void InitContentRaw(ImageContent content, byte[] data, int width, int height)
     {
       //Load texture and set it's options
@@ -167,12 +199,19 @@ namespace OkuEngine
       Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, Gl.GL_LINEAR);
       Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, Gl.GL_LINEAR);
 
+      //Remember texture for this content
       _textures.Add(content.ContentId, textureId);
 
+      //Write width and height to the content
       content.Width = width;
       content.Height = height;
     }
 
+    /// <summary>
+    /// Releases content that was previously initialized by the renderer. 
+    /// This frees all resource that are conected to the given content.
+    /// </summary>
+    /// <param name="content">The content to release.</param>
     public void ReleaseContent(ImageContent content)
     {
       if (_textures.ContainsKey(content.ContentId))
@@ -183,36 +222,106 @@ namespace OkuEngine
       }
     }
 
+    /// <summary>
+    /// Starts the rendering process. Clears the screen with the setup clear color.
+    /// </summary>
     public void Begin()
     {
       Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
     }
 
+    /// <summary>
+    /// Draws the given image content at the given position.
+    /// </summary>
+    /// <param name="content">The content to be drawn.</param>
+    /// <param name="position">The position to draw the image to in screen space pixels.</param>
     public void DrawImage(ImageContent content, Vector position)
     {
       DrawImage(content, position, 0.0f, Vector.One, Color.White);
     }
 
+    /// <summary>
+    /// Draws the given image content at the given position, rotating it by the given angle.
+    /// The image rotated around it's center.
+    /// </summary>
+    /// <param name="content">The content to be drawn.</param>
+    /// <param name="position">The position to draw the image to.</param>
+    /// <param name="rotation">The rotation angle in degrees.</param>
     public void DrawImage(ImageContent content, Vector position, float rotation)
     {
       DrawImage(content, position, rotation, Vector.One, Color.White);
     }
 
+    /// <summary>
+    /// Draws the given image content at the given position, scaling it by the given factors.
+    /// </summary>
+    /// <param name="content">The content to be drawn.</param>
+    /// <param name="position">The position to draw the image to in screen space pixels.</param>
+    /// <param name="scale">The scale factors.</param>
     public void DrawImage(ImageContent content, Vector position, Vector scale)
     {
       DrawImage(content, position, 0.0f, scale, Color.White);
     }
 
+    /// <summary>
+    /// Draws the given image content at the given position, rotating and scaling it 
+    /// by the given values.
+    /// </summary>
+    /// <param name="content">The content to be drawn.</param>
+    /// <param name="position">The position to draw the image to in screen space pixels.</param>
+    /// <param name="rotation">The rotation angle in degrees.</param>
+    /// <param name="scale">The scale factors.</param>
     public void DrawImage(ImageContent content, Vector position, float rotation, Vector scale)
     {
       DrawImage(content, position, rotation, scale, Color.White);
     }
 
+    /// <summary>
+    /// Draws the given image content at the given position. The image is tinted with given tint color.
+    /// </summary>
+    /// <param name="content">The content to be drawn.</param>
+    /// <param name="position">The position to draw the image to in screen space pixels.</param>
+    /// <param name="tint">A color that is used to tint the image with.</param>
     public void DrawImage(ImageContent content, Vector position, Color tint)
     {
       DrawImage(content, position, 0.0f, Vector.One, tint);
     }
 
+    /// <summary>
+    /// Draws the given image content at the given position, rotating it by the given 
+    /// values. The image is tinted with given tint color.
+    /// </summary>
+    /// <param name="content">The content to be drawn.</param>
+    /// <param name="position">The position to draw the image to in screen space pixels.</param>
+    /// <param name="rotation">The rotation angle in degrees.</param>
+    /// <param name="tint">A color that is used to tint the image with.</param>
+    public void DrawImage(ImageContent content, Vector position, float rotation, Color tint)
+    {
+      DrawImage(content, position, rotation, Vector.One, tint);
+    }
+
+    /// <summary>
+    /// Draws the given image content at the given position, scaling it by the given 
+    /// values. The image is tinted with given tint color.
+    /// </summary>
+    /// <param name="content">The content to be drawn.</param>
+    /// <param name="position">The position to draw the image to in screen space pixels.</param>
+    /// <param name="scale">The scale factors.</param>
+    /// <param name="tint">A color that is used to tint the image with.</param>
+    public void DrawImage(ImageContent content, Vector position, Vector scale, Color tint)
+    {
+      DrawImage(content, position, 0.0f, scale, tint);
+    }
+
+    /// <summary>
+    /// Draws the given image content at the given position, rotating and scaling it by the given 
+    /// values. The image is tinted with given tint color.
+    /// </summary>
+    /// <param name="content">The content to be drawn.</param>
+    /// <param name="position">The position to draw the image to in screen space pixels.</param>
+    /// <param name="rotation">The rotation angle in degrees.</param>
+    /// <param name="scale">The scale factors.</param>
+    /// <param name="tint">A color that is used to tint the image with.</param>
     public void DrawImage(ImageContent content, Vector position, float rotation, Vector scale, Color tint)
     {
       if (!_textures.ContainsKey(content.ContentId))
@@ -251,11 +360,22 @@ namespace OkuEngine
       Gl.glPopMatrix();
     }
 
+    /// <summary>
+    /// Draws the given image transforming it by the given tranformation matrix.
+    /// </summary>
+    /// <param name="content">The content to be drawn.</param>
+    /// <param name="transform">The transformation matrix.</param>
     public void DrawImage(ImageContent content, Matrix3 transform)
     {
       DrawImage(content, transform, Color.White);
     }
 
+    /// <summary>
+    /// Draws the given image transforming it by the given tranformation matrix.
+    /// The image is tinted with given tint color.
+    /// </summary>
+    /// <param name="content">The content to be drawn.</param>
+    /// <param name="transform">The transformation matrix.</param>
     public void DrawImage(ImageContent content, Matrix3 transform, Color tint)
     {
       if (!_textures.ContainsKey(content.ContentId))
@@ -302,11 +422,26 @@ namespace OkuEngine
       Gl.glEnd();
     }
 
+    /// <summary>
+    /// Draws a line from start to end with the given width and color.
+    /// </summary>
+    /// <param name="start">The start of the line.</param>
+    /// <param name="end">The end of the line.</param>
+    /// <param name="width">The width of the line in pixels.</param>
+    /// <param name="color">The color of the line.</param>
     public void DrawLine(Vector start, Vector end, float width, Color color)
     {
       DrawLines(new VectorList() { start, end }, width, color, VertexInterpretation.LineSegments);
     }
 
+    /// <summary>
+    /// Draws a series of lines using the given vertices with the given width and color.
+    /// How the vertices are interpreted is specified by interpretation.
+    /// </summary>
+    /// <param name="vertices">The vertices to draw lines with.</param>
+    /// <param name="width">The width of the lines in pixel.</param>
+    /// <param name="color">The color of the lines.</param>
+    /// <param name="interpretation">Specifies how to interpret the vertices.</param>
     public void DrawLines(VectorList vertices, float width, Color color, VertexInterpretation interpretation)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
@@ -314,20 +449,25 @@ namespace OkuEngine
       {
         Gl.glLineWidth(width);
 
+        //Convert the interpretation to an OpenGL primitive type.
+        int primitive = 0;
         switch (interpretation)
         {
           case VertexInterpretation.Polygon:
-            Gl.glBegin(Gl.GL_LINE_STRIP);
+            primitive = Gl.GL_LINE_STRIP;
             break;
           case VertexInterpretation.PolygonClosed:
-            Gl.glBegin(Gl.GL_LINE_LOOP);
+            primitive = Gl.GL_LINE_LOOP;
             break;
           case VertexInterpretation.LineSegments:
-            Gl.glBegin(Gl.GL_LINES);
+            primitive = Gl.GL_LINES;
             break;
           default:
             throw new ArgumentOutOfRangeException("Vertex interpretation " + interpretation.ToString() + " is not implemented in DrawLines(...)!");
         }
+
+        //Draw the lines
+        Gl.glBegin(primitive);
 
         Gl.glColor4f(color.R, color.G, color.B, color.A);
         foreach (Vector vec in vertices)
@@ -343,11 +483,29 @@ namespace OkuEngine
       }   
     }
 
+    /// <summary>
+    /// Draws a line from start to end with the given width and color. The vertices (start and end) are
+    /// tranformed by the transformation matrix before drawing.
+    /// </summary>
+    /// <param name="start">The start point.</param>
+    /// <param name="end">The end point.</param>
+    /// <param name="transform">The transformation matrix.</param>
+    /// <param name="width">The width of the line in pixels.</param>
+    /// <param name="color">The color of the line.</param>
     public void DrawLine(Vector start, Vector end, Matrix3 transform, float width, Color color)
     {
       DrawLines(new VectorList() { start, end }, transform, width, color, VertexInterpretation.LineSegments);
     }
 
+    /// <summary>
+    /// Draws line using the given vertices with the given width and color. The vertices are
+    /// tranformed by the transformation matrix before drawing.
+    /// </summary>
+    /// <param name="vertices">The vertices to use.</param>
+    /// <param name="transform">The transformation matrix.</param>
+    /// <param name="width">The width of the line in pixels.</param>
+    /// <param name="color">The color of the line.</param>
+    /// <param name="interpretation">Specifies how to interpret the vertices.</param>
     public void DrawLines(VectorList vertices, Matrix3 transform, float width, Color color, VertexInterpretation interpretation)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
@@ -387,11 +545,23 @@ namespace OkuEngine
       }  
     }
 
+    /// <summary>
+    /// Draws a point at the given point p with the given size and color.
+    /// </summary>
+    /// <param name="p">The center of the point in screen space pixels.</param>
+    /// <param name="size">The size of the point in pixels.</param>
+    /// <param name="color">The color of the point.</param>
     public void DrawPoint(Vector p, float size, Color color)
     {
       DrawPoints(new VectorList() { p }, size, color);
     }
 
+    /// <summary>
+    /// Draws a series of points at the given vertices with the given size and color.
+    /// </summary>
+    /// <param name="points">The center of the points in screen space pixels.</param>
+    /// <param name="size">The size of the points in pixels.</param>
+    /// <param name="color">The color of the points.</param>
     public void DrawPoints(VectorList points, float size, Color color)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
@@ -416,11 +586,27 @@ namespace OkuEngine
       } 
     }
 
+    /// <summary>
+    /// Draws a point at the given point p with the given size and color.
+    /// The point is transformed by the given transformation matrix before drawing.
+    /// </summary>
+    /// <param name="p">The center of the point in screen space pixels.</param>
+    /// <param name="transform">The transformation matrix.</param>
+    /// <param name="size">The size of the point in pixels.</param>
+    /// <param name="color">The color of the point.</param>
     public void DrawPoint(Vector p, Matrix3 transform, float size, Color color)
     {
       DrawPoints(new VectorList() { p }, transform, size, color);    
     }
 
+    /// <summary>
+    /// Draws a series of points at the given vertices with the given size and color.
+    /// The points are transformed by the given transformation matrix before drawing.
+    /// </summary>
+    /// <param name="points">The center of the points in screen space pixels.</param>
+    /// <param name="transform">The transformation matrix.</param>
+    /// <param name="size">The size of the points in pixels.</param>
+    /// <param name="color">The color of the points.</param>
     public void DrawPoints(VectorList points, Matrix3 transform, float size, Color color)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
@@ -448,6 +634,10 @@ namespace OkuEngine
       } 
     }
 
+    /// <summary>
+    /// Finished the drawing process. The drawing operations are flushed and the 
+    /// offscreen buffer is swapped to the screen.
+    /// </summary>
     public void End()
     {
       Gl.glFlush();
