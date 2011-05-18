@@ -24,9 +24,9 @@ namespace OkuEngine
     void Pause(SoundInstance instance);
     void Stop(SoundInstance instance);
 
-    void InitContent(Content content, WaveForm wave);
-    void InitContentRaw(Content content, byte[] data, int sampleRate, int numChannels);
+    void InitContent(SoundContent content, WaveForm wave);
+    void InitContentRaw(SoundContent content, byte[] data, int sampleRate, int numChannels);
 
-    void ReleaseContent(Content content);
+    void ReleaseContent(SoundContent content);
   }
 }

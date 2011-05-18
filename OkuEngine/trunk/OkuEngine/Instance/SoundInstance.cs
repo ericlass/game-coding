@@ -9,7 +9,7 @@ namespace OkuEngine
   {
     private SoundContent _content = null;
     private float _volume = 1.0f;
-    private float _pitch = 0.0f;
+    private float _pitch = 1.0f;
     private float _pan = 0.0f;
     private bool _loop = false;
 
@@ -20,14 +20,17 @@ namespace OkuEngine
 
     public void Play()
     {
+      OkuDrivers.SoundEngine.Play(this);
     }
 
     public void Pause()
     {
+      OkuDrivers.SoundEngine.Pause(this);
     }
 
     public void Stop()
     {
+      OkuDrivers.SoundEngine.Stop(this);
     }
 
     public SoundContent Content

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace OkuEngine
 {
-  class PolygonInstance : VisualInstance
+  public class PolygonInstance : VisualInstance
   {
     private PolygonContent _content = null;
     private float _lineWidth = 1.0f;
@@ -44,6 +44,11 @@ namespace OkuEngine
     public override void Draw(Matrix3 transform)
     {
       OkuDrivers.Renderer.DrawLines(_content.Vertices, transform, _lineWidth, _lineColor, _interpretation);
+    }
+
+    public void Draw()
+    {
+      OkuDrivers.Renderer.DrawLines(_content.Vertices, _lineWidth, _lineColor, _interpretation);
     }
 
   }

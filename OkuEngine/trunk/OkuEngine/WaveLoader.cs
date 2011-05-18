@@ -142,6 +142,11 @@ namespace OkuEngine
         uint samplerate = reader.ReadUInt32();
         wave.SampleRate = (int)samplerate;
 
+        reader.ReadUInt32();
+        reader.ReadUInt16();
+
+        ushort bits = reader.ReadUInt16();
+
         return true;
       }
       else
@@ -166,11 +171,7 @@ namespace OkuEngine
         uint numSamples = size / (uint)wave.NumChannels / 2;
         wave.NumberOfSamples = numSamples;
 
-        int dataLength = (int)(numSamples * wave.NumChannels);
-
-        byte[] samples = new byte[dataLength];
-        for (int i = 0; i < dataLength; i++)
-          samples[i] = reader.ReadByte();
+        byte[] samples = reader.ReadBytes((int)size);
 
         wave.ChannelData = samples;
         return true;

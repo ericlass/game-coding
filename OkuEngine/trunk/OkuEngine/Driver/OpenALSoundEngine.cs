@@ -29,6 +29,11 @@ namespace OkuEngine
       _context = Alc.alcCreateContext(_device, IntPtr.Zero);
       Alc.alcMakeContextCurrent(_context);
       int error = Alc.alcGetError(_device);
+
+      Al.alListener3f(Al.AL_POSITION, 0, 0, 0);
+      float[] vec = new float[] { 0, 0, -1, 0, 1, 0 };
+      Al.alListenerfv(Al.AL_ORIENTATION, vec);
+      Al.alListenerf(Al.AL_GAIN, 1.0f);
     }
 
     public void Update(float dt)
@@ -76,23 +81,23 @@ namespace OkuEngine
       return 0;
     }
 
-    public void InitContent(Content content, WaveForm wave)
+    public void InitContent(SoundContent content, WaveForm wave)
     {
       InitContentRaw(content, wave.ChannelData, wave.SampleRate, wave.NumChannels);
     }
 
-    public void InitContentRaw(Content content, byte[] data, int sampleRate, int numChannels)
+    public void InitContentRaw(SoundContent content, byte[] data, int sampleRate, int numChannels)
     {
       int format = GetAlFormatForChannels(numChannels);
 
       int buffer = 0;
       Al.alGenBuffers(1, out buffer);
-      Al.alBufferData(buffer, format, data, data.Length * 2, sampleRate);
+      Al.alBufferData(buffer, format, data, data.Length, sampleRate);
 
       _buffers.Add(content.ContentId, buffer);
     }
 
-    public void ReleaseContent(Content content)
+    public void ReleaseContent(SoundContent content)
     {
       if (_buffers.ContainsKey(content.ContentId))
       {
@@ -113,17 +118,21 @@ namespace OkuEngine
       if (_sources.ContainsKey(instance.InstanceId))
         source = _sources[instance.InstanceId];
       else
+      {
         source = GetPlayableSource();
+        Al.alSourcei(source, Al.AL_BUFFER, buffer);
+        Al.alSourcef(source, Al.AL_PITCH, instance.Pitch);
+        Al.alSourcef(source, Al.AL_GAIN, instance.Volume);
+        Al.alSource3f(source, Al.AL_POSITION, instance.Pan, 0, -1);
+        Al.alSource3f(source, Al.AL_VELOCITY, 0, 0, 0);
 
-      Al.alSourcei(source, Al.AL_BUFFER, buffer);
-      Al.alSourcef(source, Al.AL_GAIN, instance.Volume);
-      Al.alSourcef(source, Al.AL_PITCH, instance.Pitch);
-      Al.alSource3f(source, Al.AL_POSITION, instance.Pan, 0, -1);
+        if (instance.Loop)
+          Al.alSourcei(source, Al.AL_LOOPING, Al.AL_TRUE);
+        else
+          Al.alSourcei(source, Al.AL_LOOPING, Al.AL_FALSE);
 
-      if (instance.Loop)
-        Al.alSourcei(source, Al.AL_LOOPING, Al.AL_TRUE);
-      else
-        Al.alSourcei(source, Al.AL_LOOPING, Al.AL_FALSE);
+        int error = Al.alGetError();
+      }
 
       Al.alSourcePlay(source);
     }
@@ -178,32 +187,11 @@ namespace OkuEngine
       if (result == 0)
       {
         Al.alGenSources(1, out result);
+        int error = Al.alGetError();
       }
 
       return result;
     }
-
-    /*public void Play(SceneNode node)
-    {
-      if (node.Content == null)
-        throw new ArgumentException("A scene node with no content cannot be played by the sound engine!");
-
-      if (node.Content.Type != ContentType.Sound)
-        throw new ArgumentException("The content \"" + node.Content.ContentData.Get<string>("content.name") + "\" cannot be played by the sound engine as it is of type \"" + node.Content.Type.ToString() + "\"!");
-
-      int source = 0;
-      if (!node.Content.ContentData.Contains("al.source"))
-      {
-        //Create source
-      }
-      else
-      {
-        //Update source position
-        source = node.Content.ContentData.Get<int>("al.source");
-      }
-
-      //Al.alSourcePlay(source);
-    }*/
 
   }
 }

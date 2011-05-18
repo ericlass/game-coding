@@ -40,7 +40,11 @@ namespace OkuEngine
     public Color ClearColor
     {
       get { return _clearColor; }
-      set { _clearColor = value; }
+      set 
+      { 
+        _clearColor = value;
+        Gl.glClearColor(_clearColor.R, _clearColor.G, _clearColor.B, 1);
+      }
     }
 
     /// <summary>
