@@ -6,14 +6,11 @@ namespace OkuEngine
 {
   /// <summary>
   /// Handles getting input from the keyboard.
-  /// +++ APPROVED FOR OKU GEN-2 +++
   /// </summary>
   public class KeyboardInput
   {
+    private byte[] _lastState = new byte[256];
     private byte[] _state = new byte[256];
-
-    [DllImport("User32.dll")]
-    private static extern bool GetKeyboardState(byte[] keyState);
 
     /// <summary>
     /// Creates a new keyboard input.
@@ -28,7 +25,8 @@ namespace OkuEngine
     /// </summary>
     public void Update()
     {
-      GetKeyboardState(_state);
+      Array.Copy(_state, _lastState, _state.Length);
+      User32.GetKeyboardState(_state);
     }
 
     /// <summary>
@@ -37,11 +35,52 @@ namespace OkuEngine
     /// method.
     /// </summary>
     /// <param name="key">The key to check.</param>
+    /// <param name="state">An array that contains the key states.</param>
     /// <returns>True if the key is pressed down, else false.</returns>
-    public bool ButtonIsDown(Keys key)
+    private bool KeyIsDown(Keys key, byte[] state)
     {
       byte mask = 128;
-      return (_state[(int)key] & mask) == mask;
+      return (state[(int)key] & mask) == mask;
+    }
+
+    /// <summary>
+    /// Checks if the given key is pressed down now.
+    /// </summary>
+    /// <param name="key">The key to be checked.</param>
+    /// <returns>True if the key is pressed down right now, else false.</returns>
+    public bool KeyIsDown(Keys key)
+    {
+      return KeyIsDown(key, _state);
+    }
+
+    /// <summary>
+    /// Checks if the given key is hold down.
+    /// </summary>
+    /// <param name="key">The key to be checked.</param>
+    /// <returns>True if the key is hold down, else false.</returns>
+    public bool KeyIsHoldDown(Keys key)
+    {
+      return KeyIsDown(key, _lastState) && KeyIsDown(key, _state);
+    }
+
+    /// <summary>
+    /// Checks if the key was pressed down since the last frame.
+    /// </summary>
+    /// <param name="key">The key to check.</param>
+    /// <returns>True if the key was pressed, else false.</returns>
+    public bool KeyPressed(Keys key)
+    {
+      return !KeyIsDown(key, _lastState) && KeyIsDown(key, _state);
+    }
+
+    /// <summary>
+    /// Checks if the key was raised since the last frame.
+    /// </summary>
+    /// <param name="key">The key to check.</param>
+    /// <returns>True if the key was raised, else false.</returns>
+    public bool KeyRaised(Keys key)
+    {
+      return KeyIsDown(key, _lastState) && !KeyIsDown(key, _state);
     }
 
     /// <summary>

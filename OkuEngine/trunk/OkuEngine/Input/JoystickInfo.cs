@@ -9,6 +9,7 @@ namespace OkuEngine
   public class JoystickInfo
   {
     private uint _id = 0;
+    private uint _lastButtons = 0;
     private uint _buttons = 0;
     private JOYCAPS _caps;
 
@@ -42,6 +43,7 @@ namespace OkuEngine
     /// <param name="state">The joysticks current state.</param>
     public void SetState(JOYINFOEX state)
     {
+      _lastButtons = _buttons;
       _buttons = state.dwButtons;
       X = (state.dwXpos - _caps.wXmin) / (float)(_caps.wXmax - _caps.wXmin);
       Y = (state.dwYpos - _caps.wYmin) / (float)(_caps.wYmax - _caps.wYmin);
@@ -53,14 +55,55 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Checks if the button with the given index is currently pressed or not.
+    /// Checks if the button with the given index is currently pressed or not in the given button state.
     /// </summary>
     /// <param name="buttonIndex">The index of the button. Must be in the range 0..NumberOfButtons.</param>
+    /// <param name="buttonState">The button state to get the current state of the button from.</param>
     /// <returns>True if the button is down, else false.</returns>
-    public bool IsDown(int buttonIndex)
+    private bool ButtonIsDown(int buttonIndex, uint buttonState)
     {
       uint mask = (uint)Math.Pow(2, buttonIndex);
-      return (_buttons & mask) == mask;
+      return (buttonState & mask) == mask;
+    }
+
+    /// <summary>
+    /// Checks if the given button is down at the moment.
+    /// </summary>
+    /// <param name="buttonIndex">The number of the button to check. Must be in the range 0..NumberOfButtons.</param>
+    /// <returns>True if the button is down, else false.</returns>
+    public bool ButtonIsDown(int buttonIndex)
+    {
+      return ButtonIsDown(buttonIndex, _buttons);
+    }
+
+    /// <summary>
+    /// Checks if the given button is hold down.
+    /// </summary>
+    /// <param name="buttonIndex">The number of the button to check. Must be in the range 0..NumberOfButtons.</param>
+    /// <returns>True if the button is hold down, else false.</returns>
+    public bool ButtonIsHoldDown(int buttonIndex)
+    {
+      return ButtonIsDown(buttonIndex, _lastButtons) && ButtonIsDown(buttonIndex, _buttons);
+    }
+
+    /// <summary>
+    /// Checks if the given button was pressed down since the last frame.
+    /// </summary>
+    /// <param name="buttonIndex">The number of the button to check. Must be in the range 0..NumberOfButtons.</param>
+    /// <returns>True if the button was pressed down, else false.</returns>
+    public bool ButtonPressed(int buttonIndex)
+    {
+      return !ButtonIsDown(buttonIndex, _lastButtons) && ButtonIsDown(buttonIndex, _buttons);
+    }
+
+    /// <summary>
+    /// Checks if the given button was raised since the last frame.
+    /// </summary>
+    /// <param name="buttonIndex">The number of the button to check. Must be in the range 0..NumberOfButtons.</param>
+    /// <returns>True if the button was raised, else false.</returns>
+    public bool ButtonRaised(int buttonIndex)
+    {
+      return ButtonIsDown(buttonIndex, _lastButtons) && !ButtonIsDown(buttonIndex, _buttons);
     }
 
     /// <summary>

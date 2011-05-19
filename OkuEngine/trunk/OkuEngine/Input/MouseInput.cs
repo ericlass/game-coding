@@ -6,30 +6,24 @@ using System.Windows.Forms;
 
 namespace OkuEngine
 {
+  public enum MouseButton
+  {
+    Left = (int)Keys.LButton,
+    Right = (int)Keys.RButton,
+    Middle = (int)Keys.MButton,
+    Fourth = (int)Keys.XButton1,
+    Fifth = (int)Keys.XButton2
+  }
+
   /// <summary>
   /// Handles access to the mouse cursor position and button states.
-  /// +++ APPROVED FOR OKU GEN-2 +++
   /// </summary>
   public class MouseInput
   {
-    /// <summary>
-    /// Internal struct to get mouse position.
-    /// </summary>
-    private struct Point
-    {
-      public int X;
-      public int Y;
-    }
-
-    private Point _lastPos = new Point();
-    private Point _position = new Point();
-    private byte[] _buttonState = new byte[256];
-
-    [DllImport("User32.dll")]
-    private static extern bool GetKeyboardState(byte[] keyState);
-
-    [DllImport("User32.dll")]
-    private static extern bool GetCursorPos(ref Point pos);
+    private User32.Point _lastPos = new User32.Point();
+    private User32.Point _position = new User32.Point();
+    private byte[] _lastButtonState = new byte[256];
+    private byte[] _buttonState = new byte[256];    
 
     /// <summary>
     /// Creates a new mouse input.
@@ -44,8 +38,9 @@ namespace OkuEngine
     public void Update()
     {
       _lastPos = _position;
-      GetCursorPos(ref _position);
-      GetKeyboardState(_buttonState);
+      User32.GetCursorPos(ref _position);
+      Array.Copy(_buttonState, _lastButtonState, _buttonState.Length);
+      User32.GetKeyboardState(_buttonState);
     }
 
     /// <summary>
@@ -83,65 +78,55 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Gets if the left mouse button is pressed down or not.
+    /// Check if the given button is down in the given state.
     /// </summary>
-    public bool LeftButtonIsDown
+    /// <param name="button">The button to e checked.</param>
+    /// <param name="state">The button state array.</param>
+    /// <returns>True if the button is down, else False.</returns>
+    private bool ButtonIsDown(MouseButton button, byte[] state)
     {
-      get 
-      {
-        byte mask = 128;
-        return (_buttonState[(int)(Keys.LButton)] & mask) == mask;
-      }
+      byte mask = 128;
+      return (state[(int)(button)] & mask) == mask;
     }
 
     /// <summary>
-    /// Gets if the right mouse button is pressed down or not.
+    /// Checks if the given button is currently pressed down. Returns true as long as the button is pressed down.
     /// </summary>
-    public bool RightButtonIsDown
+    /// <param name="button">The button to check.</param>
+    /// <returns>True if the button is pressed down right now, else false.</returns>
+    public bool ButtonIsDown(MouseButton button)
     {
-      get
-      {
-        byte mask = 128;
-        return (_buttonState[(int)(Keys.RButton)] & mask) == mask;
-      }
+      return ButtonIsDown(button, _buttonState);
     }
 
     /// <summary>
-    /// Gets if the middle mouse button is pressed down or not.
+    /// Checks if the given button is currently hold down, that is it is pressed down now and was also pressed down last frame.
     /// </summary>
-    public bool MiddleButtonIsDown
+    /// <param name="button">The button to check.</param>
+    /// <returns>True if the button is hold down, else false.</returns>
+    public bool ButtonIsHoldDown(MouseButton button)
     {
-      get
-      {
-        byte mask = 128;
-        return (_buttonState[(int)(Keys.MButton)] & mask) == mask;
-      }
+      return ButtonIsDown(button, _lastButtonState) && ButtonIsDown(button, _buttonState);
     }
 
     /// <summary>
-    /// Gets if the fourth mouse button on a five button mouse is pressed down or not.
-    /// This button is usualy used in browsers for "back".
+    /// Checks if the given button was pressed down since the last frame.
     /// </summary>
-    public bool FourthButtonIsDown
+    /// <param name="button">The button to check.</param>
+    /// <returns>True if the button was pressed, else false.</returns>
+    public bool ButtonPressed(MouseButton button)
     {
-      get
-      {
-        byte mask = 128;
-        return (_buttonState[(int)(Keys.XButton1)] & mask) == mask;
-      }
+      return !ButtonIsDown(button, _lastButtonState) && ButtonIsDown(button, _buttonState);
     }
 
     /// <summary>
-    /// Gets if the fifth mouse button on a five button mouse is pressed down or not.
-    /// This button is usualy used in browsers for "forward".
+    /// Checks if the given button was raised since the last frame.
     /// </summary>
-    public bool FifthButtonIsDown
+    /// <param name="button">The button to check.</param>
+    /// <returns>True if the button was raised, else false.</returns>
+    public bool ButtonRaised(MouseButton button)
     {
-      get
-      {
-        byte mask = 128;
-        return (_buttonState[(int)(Keys.XButton2)] & mask) == mask;
-      }
+      return ButtonIsDown(button, _lastButtonState) && !ButtonIsDown(button, _buttonState);
     }
 
   }

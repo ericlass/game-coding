@@ -8,10 +8,18 @@ namespace OkuEngine
 {
   /// <summary>
   /// Wraps functions from user32.dll.
-  /// +++ APPROVED FOR OKU GEN-2 +++
   /// </summary>
   class User32
   {
+    /// <summary>
+    /// Internal struct to get mouse position.
+    /// </summary>
+    public struct Point
+    {
+      public int X;
+      public int Y;
+    } 
+
     [StructLayout(LayoutKind.Sequential)]
     public struct NativeMessage
     {
@@ -35,6 +43,12 @@ namespace OkuEngine
 
     [DllImport("user32.dll")]
     public static extern IntPtr DispatchMessage([In] ref NativeMessage lpMsg);
+
+    [DllImport("User32.dll")]
+    public static extern bool GetKeyboardState(byte[] keyState);
+
+    [DllImport("User32.dll")]
+    public static extern bool GetCursorPos(ref Point pos);
 
   }
 }

@@ -37,9 +37,9 @@ namespace OkuTest
       _poly.LineWidth = 1;
       _poly.LineColor = new Color(0, 0, 1);
 
-      //SoundContent sound = new SoundContent(".\\content\\sinus.wav");
+      SoundContent sound = new SoundContent(".\\content\\sinus.wav");
       //SoundContent sound = new SoundContent("D:\\Musik\\Meshuggah\\I\\Meshuggah - I.wav");
-      SoundContent sound = new SoundContent("D:\\Temp\\sinus_mono.wav");
+      //SoundContent sound = new SoundContent("D:\\Temp\\sinus_mono.wav");
 
       _sound = new SoundInstance(sound);
     }
@@ -48,10 +48,8 @@ namespace OkuTest
     {
       _rotation += dt * 90;
 
-      if (OkuDrivers.Input.Mouse.LeftButtonIsDown)
-      {
+      if (OkuDrivers.Input.Mouse.ButtonPressed(MouseButton.Left))
         _sound.Play();
-      }
     }
 
     public override void Render()
