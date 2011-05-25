@@ -30,6 +30,7 @@ namespace OkuEngine
       Alc.alcMakeContextCurrent(_context);
       int error = Alc.alcGetError(_device);
 
+      //Setup Listener
       Al.alListener3f(Al.AL_POSITION, 0, 0, 0);
       float[] vec = new float[] { 0, 0, -1, 0, 1, 0 };
       Al.alListenerfv(Al.AL_ORIENTATION, vec);
@@ -38,7 +39,7 @@ namespace OkuEngine
 
     public void Update(float dt)
     {
-      CleanUpSources();
+      //CleanUpSources();
     }
 
     public void Finish()
@@ -132,6 +133,8 @@ namespace OkuEngine
           Al.alSourcei(source, Al.AL_LOOPING, Al.AL_FALSE);
 
         int error = Al.alGetError();
+
+        _sources.Add(instance.InstanceId, source);
       }
 
       Al.alSourcePlay(source);
@@ -155,7 +158,7 @@ namespace OkuEngine
       Al.alSourceStop(source);
     }
 
-    private void CleanUpSources()
+    /*private void CleanUpSources()
     {
       foreach (KeyValuePair<int, int> kvp in _sources)
       {
@@ -167,11 +170,12 @@ namespace OkuEngine
           Al.alDeleteSources(1, ref src);
         }
       }
-    }
+    }*/
 
     private int GetPlayableSource()
     {
       int result = 0;
+      int instance = 0;
       foreach (KeyValuePair<int, int> kvp in _sources)
       {
         int src = kvp.Value;
@@ -180,6 +184,7 @@ namespace OkuEngine
         if (state != Al.AL_PLAYING && state != Al.AL_PAUSED)
         {
           result = src;
+          instance = kvp.Key;
           break;
         }
       }
@@ -188,6 +193,10 @@ namespace OkuEngine
       {
         Al.alGenSources(1, out result);
         int error = Al.alGetError();
+      }
+      else
+      {
+        _sources.Remove(instance); // If source is beeing reused, the current entry in _sources must be removed to avoid source leak
       }
 
       return result;

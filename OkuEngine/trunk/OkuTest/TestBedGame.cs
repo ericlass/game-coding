@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using OkuEngine;
 
 namespace OkuTest
@@ -27,19 +28,19 @@ namespace OkuTest
       Random rand = new Random();
       int width = OkuData.Globals.Get<int>(OkuConstants.VarScreenWidth);
       int height = OkuData.Globals.Get<int>(OkuConstants.VarScreenHeight);
-      for (int i = 0; i < 100; i++)
+      for (int i = 0; i < 10; i++)
       {
         vecs.Add(new Vector((float)(rand.NextDouble()) * width, (float)(rand.NextDouble()) * height));
       }
       PolygonContent polyContent = new PolygonContent(vecs);
       _poly = new PolygonInstance(polyContent);
-      _poly.Interpretation = VertexInterpretation.Polygon;
+      _poly.Interpretation = VertexInterpretation.PolygonClosed;
       _poly.LineWidth = 1;
       _poly.LineColor = new Color(0, 0, 1);
 
-      SoundContent sound = new SoundContent(".\\content\\sinus.wav");
+      //SoundContent sound = new SoundContent(".\\content\\sinus.wav");
       //SoundContent sound = new SoundContent("D:\\Musik\\Meshuggah\\I\\Meshuggah - I.wav");
-      //SoundContent sound = new SoundContent("D:\\Temp\\sinus_mono.wav");
+      SoundContent sound = new SoundContent("D:\\Temp\\sinus_mono.wav");
 
       _sound = new SoundInstance(sound);
     }
