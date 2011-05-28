@@ -8,7 +8,6 @@ namespace OkuEngine
   /// Vector defines a two dimensional Vector with all standard vector math routines.
   /// The + and - operators have been overloaded to add / subtract two vectors. The
   /// * operator is overloaded to scale a vector by a float value.
-  /// +++ APPROVED FOR OKU GEN-2 +++
   /// </summary>
   public class Vector
   {

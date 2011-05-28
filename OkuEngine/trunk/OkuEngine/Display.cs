@@ -8,7 +8,6 @@ namespace OkuEngine
 {
   /// <summary>
   /// Handles getting and setting display modes.
-  /// +++ APPROVED FOR OKU GEN-2 +++
   /// </summary>
   public class Display
   {

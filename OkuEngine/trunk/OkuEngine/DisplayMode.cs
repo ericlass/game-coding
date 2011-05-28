@@ -7,7 +7,6 @@ namespace OkuEngine
 {
   /// <summary>
   /// Specifies a display mode with resolution, display frequency, bits per pixel and display orientation.
-  /// +++ APPROVED FOR OKU GEN-2 +++
   /// </summary>
   public class DisplayMode
   {

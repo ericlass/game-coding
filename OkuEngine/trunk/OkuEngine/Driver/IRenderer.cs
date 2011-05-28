@@ -74,17 +74,37 @@ namespace OkuEngine
 
     //Line drawing
     void DrawLine(Vector start, Vector end, float width, Color color);
+    void DrawLine(Vertex start, Vertex end, float width);
+    void DrawLine(Vertex start, Vertex end, float width, Color color);
+
     void DrawLines(VectorList vertices, float width, Color color, VertexInterpretation interpretation);
+    void DrawLines(VertexList vertices, float width, VertexInterpretation interpretation);
+    void DrawLines(VertexList vertices, float width, VertexInterpretation interpretation, Color color);
 
     void DrawLine(Vector start, Vector end, Matrix3 transform, float width, Color color);
+    void DrawLine(Vertex start, Vertex end, Matrix3 transform, float width);
+    void DrawLine(Vertex start, Vertex end, Matrix3 transform, float width, Color color);
+
     void DrawLines(VectorList vertices, Matrix3 transform, float width, Color color, VertexInterpretation interpretation);
+    void DrawLines(VertexList vertices, Matrix3 transform, float width, VertexInterpretation interpretation);
+    void DrawLines(VertexList vertices, Matrix3 transform, float width, VertexInterpretation interpretation, Color color);
 
     //Point drawing
     void DrawPoint(Vector p, float size, Color color);
+    void DrawPoint(Vertex p, float size);
+    void DrawPoint(Vertex p, float size, Color color);
+
     void DrawPoints(VectorList points, float size, Color color);
+    void DrawPoints(VertexList points, float size);
+    void DrawPoints(VertexList points, float size, Color color);
 
     void DrawPoint(Vector p, Matrix3 transform, float size, Color color);
+    void DrawPoint(Vertex p, Matrix3 transform, float size);
+    void DrawPoint(Vertex p, Matrix3 transform, float size, Color color);
+
     void DrawPoints(VectorList points, Matrix3 transform, float size, Color color);
+    void DrawPoints(VertexList points, Matrix3 transform, float size);
+    void DrawPoints(VertexList points, Matrix3 transform, float size, Color color);
 
     //Content handling
     void InitContentFile(ImageContent content, Stream data);

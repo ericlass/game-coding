@@ -99,6 +99,8 @@
     <Compile Include="Input\KeyboardInput.cs" />
     <Compile Include="Input\MouseInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Vertex.cs" />
+    <Compile Include="VertexList.cs" />
     <Compile Include="WaveLoader.cs" />
     <Compile Include="Platform\Winmm.cs" />
   </ItemGroup>

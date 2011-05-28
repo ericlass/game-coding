@@ -5,7 +5,6 @@ namespace OkuEngine
 {
   /// <summary>
   /// Contains extended information about the joystick position, point-of-view position, and button state.
-  /// +++ APPROVED FOR OKU GEN-2 +++
   /// </summary>
   [StructLayout(LayoutKind.Sequential)]
   public struct JOYINFOEX
@@ -66,7 +65,6 @@ namespace OkuEngine
 
   /// <summary>
   /// The JOYINFO structure contains information about the joystick position and button state.
-  /// +++ APPROVED FOR OKU GEN-2 +++
   /// </summary>
   [StructLayout(LayoutKind.Sequential)]
   public struct JOYINFO
@@ -91,7 +89,6 @@ namespace OkuEngine
 
   /// <summary>
   /// The JOYCAPS structure contains information about the joystick capabilities.
-  /// +++ APPROVED FOR OKU GEN-2 +++
   /// </summary>
   public struct JOYCAPS 
   {
@@ -198,7 +195,6 @@ namespace OkuEngine
 
   /// <summary>
   /// Wrapper class for the Winmm.dll. Currently only most common joystick functions are supported.
-  /// +++ APPROVED FOR OKU GEN-2 +++
   /// </summary>
   public class Winmm
   {

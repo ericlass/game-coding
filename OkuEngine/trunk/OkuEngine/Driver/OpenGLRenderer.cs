@@ -438,6 +438,16 @@ namespace OkuEngine
       DrawLines(new VectorList() { start, end }, width, color, VertexInterpretation.LineSegments);
     }
 
+    public void DrawLine(Vertex start, Vertex end, float width)
+    {
+      DrawLines(new VertexList() { start, end }, width, VertexInterpretation.LineSegments, false, Color.White);
+    }
+
+    public void DrawLine(Vertex start, Vertex end, float width, Color color)
+    {
+      DrawLines(new VertexList() { start, end }, width, VertexInterpretation.LineSegments, true, color);
+    }
+
     /// <summary>
     /// Draws a series of lines using the given vertices with the given width and color.
     /// How the vertices are interpreted is specified by interpretation.
@@ -487,6 +497,66 @@ namespace OkuEngine
       }   
     }
 
+    public void DrawLines(VertexList vertices, float width, VertexInterpretation interpretation)
+    {
+      DrawLines(vertices, width, interpretation, false, Color.White);
+    }
+
+    public void DrawLines(VertexList vertices, float width, VertexInterpretation interpretation, Color color)
+    {
+      DrawLines(vertices, width, interpretation, true, color);
+    }
+
+    private void DrawLines(VertexList vertices, float width, VertexInterpretation interpretation, bool useColorOverride, Color color)
+    {
+      Gl.glDisable(Gl.GL_TEXTURE_2D);
+      try
+      {
+        Gl.glLineWidth(width);
+
+        //Convert the interpretation to an OpenGL primitive type.
+        int primitive = 0;
+        switch (interpretation)
+        {
+          case VertexInterpretation.Polygon:
+            primitive = Gl.GL_LINE_STRIP;
+            break;
+          case VertexInterpretation.PolygonClosed:
+            primitive = Gl.GL_LINE_LOOP;
+            break;
+          case VertexInterpretation.LineSegments:
+            primitive = Gl.GL_LINES;
+            break;
+          default:
+            throw new ArgumentOutOfRangeException("Vertex interpretation " + interpretation.ToString() + " is not implemented in DrawLines(...)!");
+        }
+
+        //Draw the lines
+        Gl.glBegin(primitive);
+
+        if (useColorOverride)
+        {
+          Gl.glColor4f(color.R, color.G, color.B, color.A);
+          foreach (Vertex vert in vertices)
+            Gl.glVertex2f(vert.Position.X, vert.Position.Y);
+        }
+        else
+        {
+          foreach (Vertex vert in vertices)
+          {
+            Gl.glColor4f(vert.Color.R, vert.Color.G, vert.Color.B, vert.Color.A);
+            Gl.glVertex2f(vert.Position.X, vert.Position.Y);
+          }
+        }
+
+        Gl.glEnd();
+      }
+      finally
+      {
+        Gl.glEnable(Gl.GL_TEXTURE_2D);
+      }
+    }
+
     /// <summary>
     /// Draws a line from start to end with the given width and color. The vertices (start and end) are
     /// tranformed by the transformation matrix before drawing.
@@ -499,6 +569,16 @@ namespace OkuEngine
     public void DrawLine(Vector start, Vector end, Matrix3 transform, float width, Color color)
     {
       DrawLines(new VectorList() { start, end }, transform, width, color, VertexInterpretation.LineSegments);
+    }
+
+    public void DrawLine(Vertex start, Vertex end, Matrix3 transform, float width)
+    {
+      DrawLines(new VertexList() { start, end }, transform, width, VertexInterpretation.LineSegments, false, Color.White);
+    }
+
+    public void DrawLine(Vertex start, Vertex end, Matrix3 transform, float width, Color color)
+    {
+      DrawLines(new VertexList() { start, end }, transform, width, VertexInterpretation.LineSegments, true, color);
     }
 
     /// <summary>
@@ -546,7 +626,70 @@ namespace OkuEngine
       finally
       {
         Gl.glEnable(Gl.GL_TEXTURE_2D);
-      }  
+      }
+    }
+
+    public void DrawLines(VertexList vertices, Matrix3 transform, float width, VertexInterpretation interpretation)
+    {
+      DrawLines(vertices, transform, width, interpretation, false, Color.White);
+    }
+
+    public void DrawLines(VertexList vertices, Matrix3 transform, float width, VertexInterpretation interpretation, Color color)
+    {
+      DrawLines(vertices, transform, width, interpretation, true, color);
+    }
+
+    private void DrawLines(VertexList vertices, Matrix3 transform, float width, VertexInterpretation interpretation, bool useColorOverride, Color color)
+    {
+      Gl.glDisable(Gl.GL_TEXTURE_2D);
+      try
+      {
+        Gl.glLineWidth(width);
+
+        switch (interpretation)
+        {
+          case VertexInterpretation.Polygon:
+            Gl.glBegin(Gl.GL_LINE_STRIP);
+            break;
+          case VertexInterpretation.PolygonClosed:
+            Gl.glBegin(Gl.GL_LINE_LOOP);
+            break;
+          case VertexInterpretation.LineSegments:
+            Gl.glBegin(Gl.GL_LINES);
+            break;
+          default:
+            throw new ArgumentOutOfRangeException("Vertex interpretation " + interpretation.ToString() + " is not implemented in DrawLines(...)!");
+        }
+
+        if (useColorOverride)
+        {
+          Gl.glColor4f(color.R, color.G, color.B, color.A);
+          foreach (Vertex vert in vertices)
+          {
+            float x = vert.Position.X;
+            float y = vert.Position.Y;
+            transform.Transform(ref x, ref y);
+            Gl.glVertex2f(x, y);
+          }
+        }
+        else
+        {
+          foreach (Vertex vert in vertices)
+          {
+            Gl.glColor4f(vert.Color.R, vert.Color.G, vert.Color.B, vert.Color.A);
+            float x = vert.Position.X;
+            float y = vert.Position.Y;
+            transform.Transform(ref x, ref y);
+            Gl.glVertex2f(x, y);
+          }
+        }
+
+        Gl.glEnd();
+      }
+      finally
+      {
+        Gl.glEnable(Gl.GL_TEXTURE_2D);
+      }
     }
 
     /// <summary>
@@ -558,6 +701,16 @@ namespace OkuEngine
     public void DrawPoint(Vector p, float size, Color color)
     {
       DrawPoints(new VectorList() { p }, size, color);
+    }
+
+    public void DrawPoint(Vertex p, float size)
+    {
+      DrawPoints(new VertexList() { p }, size, false, Color.White);
+    }
+
+    public void DrawPoint(Vertex p, float size, Color color)
+    {
+      DrawPoints(new VertexList() { p }, size, true, color);
     }
 
     /// <summary>
@@ -587,7 +740,50 @@ namespace OkuEngine
       finally
       {
         Gl.glEnable(Gl.GL_TEXTURE_2D);
-      } 
+      }
+    }
+
+    public void DrawPoints(VertexList points, float size)
+    {
+      DrawPoints(points, size, false, Color.White);
+    }
+
+    public void DrawPoints(VertexList points, float size, Color color)
+    {
+      DrawPoints(points, size, true, color);
+    }
+
+    private void DrawPoints(VertexList points, float size, bool useColorOverride, Color color)
+    {
+      Gl.glDisable(Gl.GL_TEXTURE_2D);
+
+      try
+      {
+        Gl.glPointSize(size);
+
+        Gl.glBegin(Gl.GL_POINTS);
+
+        if (useColorOverride)
+        {
+          Gl.glColor4f(color.R, color.G, color.B, color.A);
+          foreach (Vertex vert in points)
+            Gl.glVertex2f(vert.Position.X, vert.Position.Y);
+        }
+        else
+        {
+          foreach (Vertex vert in points)
+          {
+            Gl.glColor4f(vert.Color.R, vert.Color.G, vert.Color.B, vert.Color.A);
+            Gl.glVertex2f(vert.Position.X, vert.Position.Y);
+          }
+        }
+
+        Gl.glEnd();
+      }
+      finally
+      {
+        Gl.glEnable(Gl.GL_TEXTURE_2D);
+      }
     }
 
     /// <summary>
@@ -601,6 +797,16 @@ namespace OkuEngine
     public void DrawPoint(Vector p, Matrix3 transform, float size, Color color)
     {
       DrawPoints(new VectorList() { p }, transform, size, color);    
+    }
+
+    public void DrawPoint(Vertex p, Matrix3 transform, float size)
+    {
+      DrawPoints(new VertexList() { p }, transform, size, false, Color.White);
+    }
+
+    public void DrawPoint(Vertex p, Matrix3 transform, float size, Color color)
+    {
+      DrawPoints(new VertexList() { p }, transform, size, true, color);
     }
 
     /// <summary>
@@ -636,6 +842,57 @@ namespace OkuEngine
       {
         Gl.glEnable(Gl.GL_TEXTURE_2D);
       } 
+    }
+
+    public void DrawPoints(VertexList points, Matrix3 transform, float size)
+    {
+      DrawPoints(points, transform, size, false, Color.White);
+    }
+
+    public void DrawPoints(VertexList points, Matrix3 transform, float size, Color color)
+    {
+      DrawPoints(points, transform, size, true, color);
+    }
+
+    private void DrawPoints(VertexList points, Matrix3 transform, float size, bool useColorOverride, Color color)
+    {
+      Gl.glDisable(Gl.GL_TEXTURE_2D);
+
+      try
+      {
+        Gl.glPointSize(size);
+
+        Gl.glBegin(Gl.GL_POINTS);
+
+        if (useColorOverride)
+        {
+          Gl.glColor4f(color.R, color.G, color.B, color.A);
+          foreach (Vertex vert in points)
+          {
+            float x = vert.Position.X;
+            float y = vert.Position.Y;
+            transform.Transform(ref x, ref y);
+            Gl.glVertex2f(x, y);
+          }
+        }
+        else
+        {
+          foreach (Vertex vert in points)
+          {
+            Gl.glColor4f(vert.Color.R, vert.Color.G, vert.Color.B, vert.Color.A);
+            float x = vert.Position.X;
+            float y = vert.Position.Y;
+            transform.Transform(ref x, ref y);
+            Gl.glVertex2f(x, y);
+          }
+        }
+
+        Gl.glEnd();
+      }
+      finally
+      {
+        Gl.glEnable(Gl.GL_TEXTURE_2D);
+      }
     }
 
     /// <summary>

@@ -7,7 +7,6 @@ namespace OkuEngine
 {
   /// <summary>
   /// Defines a hermite spline in 2D space.
-  /// +++ APPROVED FOR OKU GEN-2 +++
   /// Usefull tool if arc length parameterization is implemented.
   /// </summary>
   public class Spline
