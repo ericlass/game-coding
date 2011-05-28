@@ -158,7 +158,7 @@ namespace OkuEngine
 
     /// <summary>
     /// Initializes image content which means that OpenGL textures are created for them.
-    /// THis method also sets the Width and Height properties of the content.
+    /// This method also sets the Width and Height properties of the content.
     /// </summary>
     /// <param name="content">The content to be initialized.</param>
     /// <param name="data">The content data. This must be a stream that contains a complete image file like PNG, BMP or JPG.</param>
@@ -223,6 +223,52 @@ namespace OkuEngine
         int texId = _textures[content.ContentId];
         Gl.glDeleteTextures(1, ref texId);
         _textures.Remove(content.ContentId);
+      }
+    }
+
+    /// <summary>
+    /// Converts a VertexInterpretation to an OpenGL primitive type that can be used during rendering with glBegin().
+    /// </summary>
+    /// <param name="interpretation">The interpretation to be converted.</param>
+    /// <returns>The OpenGL primitive type for the given VertexInterpretation.</returns>
+    private int VertexIntToGLPrimitive(VertexInterpretation interpretation)
+    {
+      switch (interpretation)
+      {
+        case VertexInterpretation.Polygon:
+          return Gl.GL_LINE_STRIP;
+        case VertexInterpretation.PolygonClosed:
+          return Gl.GL_LINE_LOOP;
+        case VertexInterpretation.LineSegments:
+          return Gl.GL_LINES;
+        default:
+          throw new ArgumentOutOfRangeException("Vertex interpretation " + interpretation.ToString() + " is not supported in OpenGLRenderer!");
+      }
+    }
+
+    /// <summary>
+    /// Converts a Mesh Mode to a OpenGL primitive type that can be used with glBegin().
+    /// </summary>
+    /// <param name="mode">The mode to be converted.</param>
+    /// <returns>The OpenGL primitive type for the given mesh mode. Note that MeshMode.Indexed always returns 0 as there is no primitive type for it.</returns>
+    private int MeshModeToGLPrimitive(MeshMode mode)
+    {
+      switch (mode)
+      {
+        case MeshMode.Triangles:
+          return Gl.GL_TRIANGLES;
+        case MeshMode.TriangleStrip:
+          return Gl.GL_TRIANGLE_STRIP;
+        case MeshMode.TriangleFan:
+          return Gl.GL_TRIANGLE_FAN;
+        case MeshMode.Quads:
+          return Gl.GL_QUADS;
+        case MeshMode.QuadStrip:
+          return Gl.GL_QUAD_STRIP;
+        case MeshMode.Indexed:
+          return 0;
+        default:
+          throw new ArgumentOutOfRangeException("Mesh Mode " + mode.ToString() + " is not supported in OpenGLRenderer!");
       }
     }
 
@@ -438,14 +484,16 @@ namespace OkuEngine
       DrawLines(new VectorList() { start, end }, width, color, VertexInterpretation.LineSegments);
     }
 
+    /// <summary>
+    /// Draws a line from start to end with the given width. The color of the line 
+    /// is determined by the color of the vertices.
+    /// </summary>
+    /// <param name="start">The start vertex.</param>
+    /// <param name="end">The end vertex.</param>
+    /// <param name="width">The width of the line in pixels.</param>
     public void DrawLine(Vertex start, Vertex end, float width)
     {
-      DrawLines(new VertexList() { start, end }, width, VertexInterpretation.LineSegments, false, Color.White);
-    }
-
-    public void DrawLine(Vertex start, Vertex end, float width, Color color)
-    {
-      DrawLines(new VertexList() { start, end }, width, VertexInterpretation.LineSegments, true, color);
+      DrawLines(new VertexList() { start, end }, width, VertexInterpretation.LineSegments);
     }
 
     /// <summary>
@@ -464,21 +512,7 @@ namespace OkuEngine
         Gl.glLineWidth(width);
 
         //Convert the interpretation to an OpenGL primitive type.
-        int primitive = 0;
-        switch (interpretation)
-        {
-          case VertexInterpretation.Polygon:
-            primitive = Gl.GL_LINE_STRIP;
-            break;
-          case VertexInterpretation.PolygonClosed:
-            primitive = Gl.GL_LINE_LOOP;
-            break;
-          case VertexInterpretation.LineSegments:
-            primitive = Gl.GL_LINES;
-            break;
-          default:
-            throw new ArgumentOutOfRangeException("Vertex interpretation " + interpretation.ToString() + " is not implemented in DrawLines(...)!");
-        }
+        int primitive = VertexIntToGLPrimitive(interpretation);
 
         //Draw the lines
         Gl.glBegin(primitive);
@@ -497,17 +531,14 @@ namespace OkuEngine
       }   
     }
 
+    /// <summary>
+    /// Draws lines using the given vertices with the given width. The color of the lines 
+    /// is determined by the color of their vertices.
+    /// </summary>
+    /// <param name="vertices">The vertices to use.</param>
+    /// <param name="width">The width of the line in pixels.</param>
+    /// <param name="interpretation">Specifies how to interpret the vertices.</param>
     public void DrawLines(VertexList vertices, float width, VertexInterpretation interpretation)
-    {
-      DrawLines(vertices, width, interpretation, false, Color.White);
-    }
-
-    public void DrawLines(VertexList vertices, float width, VertexInterpretation interpretation, Color color)
-    {
-      DrawLines(vertices, width, interpretation, true, color);
-    }
-
-    private void DrawLines(VertexList vertices, float width, VertexInterpretation interpretation, bool useColorOverride, Color color)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
       try
@@ -515,38 +546,16 @@ namespace OkuEngine
         Gl.glLineWidth(width);
 
         //Convert the interpretation to an OpenGL primitive type.
-        int primitive = 0;
-        switch (interpretation)
-        {
-          case VertexInterpretation.Polygon:
-            primitive = Gl.GL_LINE_STRIP;
-            break;
-          case VertexInterpretation.PolygonClosed:
-            primitive = Gl.GL_LINE_LOOP;
-            break;
-          case VertexInterpretation.LineSegments:
-            primitive = Gl.GL_LINES;
-            break;
-          default:
-            throw new ArgumentOutOfRangeException("Vertex interpretation " + interpretation.ToString() + " is not implemented in DrawLines(...)!");
-        }
+        int primitive = VertexIntToGLPrimitive(interpretation);
 
         //Draw the lines
         Gl.glBegin(primitive);
 
-        if (useColorOverride)
+        foreach (Vertex vert in vertices)
         {
-          Gl.glColor4f(color.R, color.G, color.B, color.A);
-          foreach (Vertex vert in vertices)
-            Gl.glVertex2f(vert.Position.X, vert.Position.Y);
-        }
-        else
-        {
-          foreach (Vertex vert in vertices)
-          {
-            Gl.glColor4f(vert.Color.R, vert.Color.G, vert.Color.B, vert.Color.A);
-            Gl.glVertex2f(vert.Position.X, vert.Position.Y);
-          }
+          Gl.glColor4f(vert.Color.R, vert.Color.G, vert.Color.B, vert.Color.A);
+          Gl.glTexCoord2f(vert.TextureCoordinates.X, vert.TextureCoordinates.Y);
+          Gl.glVertex2f(vert.Position.X, vert.Position.Y);
         }
 
         Gl.glEnd();
@@ -571,18 +580,22 @@ namespace OkuEngine
       DrawLines(new VectorList() { start, end }, transform, width, color, VertexInterpretation.LineSegments);
     }
 
+    /// <summary>
+    /// Draws a line from start to end with the given width. The vertices (start and end) are
+    /// tranformed by the transformation matrix before drawing. The color of the line 
+    /// is determined by the color of the vertices.
+    /// </summary>
+    /// <param name="start">The start vertex.</param>
+    /// <param name="end">The end vertex.</param>
+    /// <param name="transform">The transformation matrix.</param>
+    /// <param name="width">The width of the line in pixels.</param>
     public void DrawLine(Vertex start, Vertex end, Matrix3 transform, float width)
     {
-      DrawLines(new VertexList() { start, end }, transform, width, VertexInterpretation.LineSegments, false, Color.White);
-    }
-
-    public void DrawLine(Vertex start, Vertex end, Matrix3 transform, float width, Color color)
-    {
-      DrawLines(new VertexList() { start, end }, transform, width, VertexInterpretation.LineSegments, true, color);
+      DrawLines(new VertexList() { start, end }, transform, width, VertexInterpretation.LineSegments);
     }
 
     /// <summary>
-    /// Draws line using the given vertices with the given width and color. The vertices are
+    /// Draws lines using the given vertices with the given width and color. The vertices are
     /// tranformed by the transformation matrix before drawing.
     /// </summary>
     /// <param name="vertices">The vertices to use.</param>
@@ -597,20 +610,9 @@ namespace OkuEngine
       {
         Gl.glLineWidth(width);
 
-        switch (interpretation)
-        {
-          case VertexInterpretation.Polygon:
-            Gl.glBegin(Gl.GL_LINE_STRIP);
-            break;
-          case VertexInterpretation.PolygonClosed:
-            Gl.glBegin(Gl.GL_LINE_LOOP);
-            break;
-          case VertexInterpretation.LineSegments:
-            Gl.glBegin(Gl.GL_LINES);
-            break;
-          default:
-            throw new ArgumentOutOfRangeException("Vertex interpretation " + interpretation.ToString() + " is not implemented in DrawLines(...)!");
-        }
+        int primitive = VertexIntToGLPrimitive(interpretation);
+
+        Gl.glBegin(primitive);
 
         Gl.glColor4f(color.R, color.G, color.B, color.A);
         foreach (Vector vec in vertices)
@@ -629,59 +631,34 @@ namespace OkuEngine
       }
     }
 
+    /// <summary>
+    /// Draws lines using the given vertices with the given width. The vertices are
+    /// tranformed by the transformation matrix before drawing. The color of the lines 
+    /// is determined by the color of their vertices.
+    /// </summary>
+    /// <param name="vertices">The vertices to use.</param>
+    /// <param name="transform">The transformation matrix.</param>
+    /// <param name="width">The width of the line in pixels.</param>
+    /// <param name="interpretation">Specifies how to interpret the vertices.</param>
     public void DrawLines(VertexList vertices, Matrix3 transform, float width, VertexInterpretation interpretation)
-    {
-      DrawLines(vertices, transform, width, interpretation, false, Color.White);
-    }
-
-    public void DrawLines(VertexList vertices, Matrix3 transform, float width, VertexInterpretation interpretation, Color color)
-    {
-      DrawLines(vertices, transform, width, interpretation, true, color);
-    }
-
-    private void DrawLines(VertexList vertices, Matrix3 transform, float width, VertexInterpretation interpretation, bool useColorOverride, Color color)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
       try
       {
         Gl.glLineWidth(width);
 
-        switch (interpretation)
-        {
-          case VertexInterpretation.Polygon:
-            Gl.glBegin(Gl.GL_LINE_STRIP);
-            break;
-          case VertexInterpretation.PolygonClosed:
-            Gl.glBegin(Gl.GL_LINE_LOOP);
-            break;
-          case VertexInterpretation.LineSegments:
-            Gl.glBegin(Gl.GL_LINES);
-            break;
-          default:
-            throw new ArgumentOutOfRangeException("Vertex interpretation " + interpretation.ToString() + " is not implemented in DrawLines(...)!");
-        }
+        int primitive = VertexIntToGLPrimitive(interpretation);
 
-        if (useColorOverride)
+        Gl.glBegin(primitive);
+
+        foreach (Vertex vert in vertices)
         {
-          Gl.glColor4f(color.R, color.G, color.B, color.A);
-          foreach (Vertex vert in vertices)
-          {
-            float x = vert.Position.X;
-            float y = vert.Position.Y;
-            transform.Transform(ref x, ref y);
-            Gl.glVertex2f(x, y);
-          }
-        }
-        else
-        {
-          foreach (Vertex vert in vertices)
-          {
-            Gl.glColor4f(vert.Color.R, vert.Color.G, vert.Color.B, vert.Color.A);
-            float x = vert.Position.X;
-            float y = vert.Position.Y;
-            transform.Transform(ref x, ref y);
-            Gl.glVertex2f(x, y);
-          }
+          Gl.glColor4f(vert.Color.R, vert.Color.G, vert.Color.B, vert.Color.A);
+          Gl.glTexCoord2f(vert.TextureCoordinates.X, vert.TextureCoordinates.Y);
+          float x = vert.Position.X;
+          float y = vert.Position.Y;
+          transform.Transform(ref x, ref y);
+          Gl.glVertex2f(x, y);
         }
 
         Gl.glEnd();
@@ -703,14 +680,15 @@ namespace OkuEngine
       DrawPoints(new VectorList() { p }, size, color);
     }
 
+    /// <summary>
+    /// Draws a point at the given vertex with the given size.
+    /// The color of the point is taken from the vertex color.
+    /// </summary>
+    /// <param name="p">The center of the point in screen space pixels.</param>
+    /// <param name="size">The size of the point in pixels.</param>
     public void DrawPoint(Vertex p, float size)
     {
-      DrawPoints(new VertexList() { p }, size, false, Color.White);
-    }
-
-    public void DrawPoint(Vertex p, float size, Color color)
-    {
-      DrawPoints(new VertexList() { p }, size, true, color);
+      DrawPoints(new VertexList() { p }, size);
     }
 
     /// <summary>
@@ -743,17 +721,13 @@ namespace OkuEngine
       }
     }
 
+    /// <summary>
+    /// Draws a series of points at the given vertices with the given size.
+    /// The color of the points is taken from the vertex colors.
+    /// </summary>
+    /// <param name="points">The vertices of the points.</param>
+    /// <param name="size">The size of the points in pixels.</param>
     public void DrawPoints(VertexList points, float size)
-    {
-      DrawPoints(points, size, false, Color.White);
-    }
-
-    public void DrawPoints(VertexList points, float size, Color color)
-    {
-      DrawPoints(points, size, true, color);
-    }
-
-    private void DrawPoints(VertexList points, float size, bool useColorOverride, Color color)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
 
@@ -763,19 +737,11 @@ namespace OkuEngine
 
         Gl.glBegin(Gl.GL_POINTS);
 
-        if (useColorOverride)
+        foreach (Vertex vert in points)
         {
-          Gl.glColor4f(color.R, color.G, color.B, color.A);
-          foreach (Vertex vert in points)
-            Gl.glVertex2f(vert.Position.X, vert.Position.Y);
-        }
-        else
-        {
-          foreach (Vertex vert in points)
-          {
-            Gl.glColor4f(vert.Color.R, vert.Color.G, vert.Color.B, vert.Color.A);
-            Gl.glVertex2f(vert.Position.X, vert.Position.Y);
-          }
+          Gl.glColor4f(vert.Color.R, vert.Color.G, vert.Color.B, vert.Color.A);
+          Gl.glTexCoord2f(vert.TextureCoordinates.X, vert.TextureCoordinates.Y);
+          Gl.glVertex2f(vert.Position.X, vert.Position.Y);
         }
 
         Gl.glEnd();
@@ -799,14 +765,17 @@ namespace OkuEngine
       DrawPoints(new VectorList() { p }, transform, size, color);    
     }
 
+    /// <summary>
+    /// Draws a point at the given vertex with the given size.
+    /// The point is transformed by the given transformation matrix before drawing.
+    /// The color of the point is taken from the vertex color.
+    /// </summary>
+    /// <param name="p">The center of the point in screen space pixels.</param>
+    /// <param name="transform">The transformation matrix.</param>
+    /// <param name="size">The size of the point in pixels.</param>
     public void DrawPoint(Vertex p, Matrix3 transform, float size)
     {
-      DrawPoints(new VertexList() { p }, transform, size, false, Color.White);
-    }
-
-    public void DrawPoint(Vertex p, Matrix3 transform, float size, Color color)
-    {
-      DrawPoints(new VertexList() { p }, transform, size, true, color);
+      DrawPoints(new VertexList() { p }, transform, size);
     }
 
     /// <summary>
@@ -844,17 +813,15 @@ namespace OkuEngine
       } 
     }
 
+    /// <summary>
+    /// Draws a series of points at the given vertices with the given size.
+    /// The points are transformed by the given transformation matrix before drawing.
+    /// The color of the points is taken from the vertex colors.
+    /// </summary>
+    /// <param name="points">The vertices of the points.</param>
+    /// <param name="transform">The transformation matrix.</param>
+    /// <param name="size">The size of the points in pixels.</param>
     public void DrawPoints(VertexList points, Matrix3 transform, float size)
-    {
-      DrawPoints(points, transform, size, false, Color.White);
-    }
-
-    public void DrawPoints(VertexList points, Matrix3 transform, float size, Color color)
-    {
-      DrawPoints(points, transform, size, true, color);
-    }
-
-    private void DrawPoints(VertexList points, Matrix3 transform, float size, bool useColorOverride, Color color)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
 
@@ -864,27 +831,14 @@ namespace OkuEngine
 
         Gl.glBegin(Gl.GL_POINTS);
 
-        if (useColorOverride)
+        foreach (Vertex vert in points)
         {
-          Gl.glColor4f(color.R, color.G, color.B, color.A);
-          foreach (Vertex vert in points)
-          {
-            float x = vert.Position.X;
-            float y = vert.Position.Y;
-            transform.Transform(ref x, ref y);
-            Gl.glVertex2f(x, y);
-          }
-        }
-        else
-        {
-          foreach (Vertex vert in points)
-          {
-            Gl.glColor4f(vert.Color.R, vert.Color.G, vert.Color.B, vert.Color.A);
-            float x = vert.Position.X;
-            float y = vert.Position.Y;
-            transform.Transform(ref x, ref y);
-            Gl.glVertex2f(x, y);
-          }
+          Gl.glColor4f(vert.Color.R, vert.Color.G, vert.Color.B, vert.Color.A);
+          Gl.glTexCoord2f(vert.TextureCoordinates.X, vert.TextureCoordinates.Y);
+          float x = vert.Position.X;
+          float y = vert.Position.Y;
+          transform.Transform(ref x, ref y);
+          Gl.glVertex2f(x, y);
         }
 
         Gl.glEnd();

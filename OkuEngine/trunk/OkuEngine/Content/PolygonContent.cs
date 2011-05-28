@@ -7,14 +7,19 @@ namespace OkuEngine
 {
   public class PolygonContent : VisualContent
   {
-    private VectorList _vertices = new VectorList();
+    private VertexList _vertices = null;
 
-    public PolygonContent(VectorList vertices)
+    public PolygonContent()
+    {
+      _vertices = new VertexList();
+    }
+
+    public PolygonContent(VertexList vertices)
     {
       _vertices = vertices;
     }
 
-    public VectorList Vertices
+    public VertexList Vertices
     {
       get { return _vertices; }
       set { _vertices = value; }

@@ -24,18 +24,22 @@ namespace OkuTest
       _smiley = new ImageInstance(content);
       _smiley.TintColor = Color.Green;
 
-      VectorList vecs = new VectorList();
+      VertexList verts = new VertexList();
       Random rand = new Random();
       int width = OkuData.Globals.Get<int>(OkuConstants.VarScreenWidth);
       int height = OkuData.Globals.Get<int>(OkuConstants.VarScreenHeight);
-      for (int i = 0; i < 10; i++)
+      for (int i = 0; i < 50; i++)
       {
-        vecs.Add(new Vector((float)(rand.NextDouble()) * width, (float)(rand.NextDouble()) * height));
+        Vertex vert = new Vertex();
+        vert.Position.X = (float)(rand.NextDouble()) * width;
+        vert.Position.Y = (float)(rand.NextDouble()) * height;
+        vert.Color = Color.RandomColor(rand);
+        verts.Add(vert);
       }
-      PolygonContent polyContent = new PolygonContent(vecs);
+      PolygonContent polyContent = new PolygonContent(verts);
       _poly = new PolygonInstance(polyContent);
       _poly.Interpretation = VertexInterpretation.PolygonClosed;
-      _poly.LineWidth = 1;
+      _poly.LineWidth = 3;
       _poly.LineColor = new Color(0, 0, 1);
 
       //SoundContent sound = new SoundContent(".\\content\\sinus.wav");
@@ -56,7 +60,6 @@ namespace OkuTest
     public override void Render()
     {
       _poly.Draw();
-      OkuDrivers.Renderer.DrawPoints(_poly.Content.Vertices, 5, Color.Red);
       _smiley.Draw(_pos1, _rotation);
     }
 

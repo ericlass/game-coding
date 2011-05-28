@@ -47,5 +47,14 @@ namespace OkuEngine
       A = alpha;
     }
 
+    public static Color RandomColor(Random rand)
+    {
+      //return new Color((float)(rand.NextDouble()) * 0.5f + 0.25f, (float)(rand.NextDouble()) * 0.5f + 0.25f, (float)(rand.NextDouble()) * 0.5f + 0.25f);
+      return new Color(
+        (float)(Math.Round(rand.NextDouble())),
+        (float)(Math.Round(rand.NextDouble())),
+        (float)(Math.Round(rand.NextDouble())));
+    }
+
   }
 }

@@ -43,12 +43,12 @@ namespace OkuEngine
 
     public override void Draw(Matrix3 transform)
     {
-      OkuDrivers.Renderer.DrawLines(_content.Vertices, transform, _lineWidth, _lineColor, _interpretation);
+      OkuDrivers.Renderer.DrawLines(_content.Vertices, transform, _lineWidth, _interpretation);
     }
 
     public void Draw()
     {
-      OkuDrivers.Renderer.DrawLines(_content.Vertices, _lineWidth, _lineColor, _interpretation);
+      OkuDrivers.Renderer.DrawLines(_content.Vertices, _lineWidth, _interpretation);
     }
 
   }

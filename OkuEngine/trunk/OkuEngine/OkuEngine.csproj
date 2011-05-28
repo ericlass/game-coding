@@ -63,6 +63,7 @@
     <Compile Include="Display.cs" />
     <Compile Include="DisplayMode.cs" />
     <Compile Include="Content\ImageContent.cs" />
+    <Compile Include="Driver\MeshMode.cs" />
     <Compile Include="Driver\VertexInterpretation.cs" />
     <Compile Include="Instance\ImageInstance.cs" />
     <Compile Include="Instance\ContentInstance.cs" />
