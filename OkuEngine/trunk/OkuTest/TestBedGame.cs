@@ -15,6 +15,7 @@ namespace OkuTest
 
     private PolygonInstance _poly = null;
     private SoundInstance _sound = null;
+    private MeshInstance _mesh = null;
 
     public override void Initialize()
     {
@@ -36,17 +37,38 @@ namespace OkuTest
         vert.Color = Color.RandomColor(rand);
         verts.Add(vert);
       }
-      PolygonContent polyContent = new PolygonContent(verts);
+      VertexContent polyContent = new VertexContent(verts);
       _poly = new PolygonInstance(polyContent);
       _poly.Interpretation = VertexInterpretation.PolygonClosed;
       _poly.LineWidth = 3;
       _poly.LineColor = new Color(0, 0, 1);
 
-      //SoundContent sound = new SoundContent(".\\content\\sinus.wav");
+      SoundContent sound = new SoundContent(".\\content\\laser.wav");
       //SoundContent sound = new SoundContent("D:\\Musik\\Meshuggah\\I\\Meshuggah - I.wav");
-      SoundContent sound = new SoundContent("D:\\Temp\\sinus_mono.wav");
+      //SoundContent sound = new SoundContent("D:\\Temp\\sinus_mono.wav");
 
       _sound = new SoundInstance(sound);
+
+      VertexContent meshVerts = new VertexContent();
+      int numVerts = 10;
+      for (int i = 0; i < numVerts; i++)
+      {
+        int x = (i * 50) + 50;
+        int y = ((i % 2) * 50) + 200;
+        Vertex vert = new Vertex();
+        vert.Position.X = x;
+        vert.Position.Y = y;
+        vert.Color = Color.RandomColor(rand);
+        vert.TextureCoordinates.X = (float)i / numVerts;
+        vert.TextureCoordinates.Y = (i % 2);
+        meshVerts.Vertices.Add(vert);
+      }
+      _mesh = new MeshInstance(meshVerts);
+      _mesh.Mode = MeshMode.TriangleStrip;
+
+      ImageContent car = new ImageContent(".\\content\\car.png");
+
+      _mesh.Texture = car;
     }
 
     public override void Update(float dt)
@@ -61,6 +83,7 @@ namespace OkuTest
     {
       _poly.Draw();
       _smiley.Draw(_pos1, _rotation);
+      _mesh.Draw();
     }
 
   }

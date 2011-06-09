@@ -5,16 +5,16 @@ using System.Text;
 
 namespace OkuEngine
 {
-  public class PolygonContent : VisualContent
+  public class VertexContent : VisualContent
   {
     private VertexList _vertices = null;
 
-    public PolygonContent()
+    public VertexContent()
     {
       _vertices = new VertexList();
     }
 
-    public PolygonContent(VertexList vertices)
+    public VertexContent(VertexList vertices)
     {
       _vertices = vertices;
     }

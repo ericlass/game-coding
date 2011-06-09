@@ -7,17 +7,17 @@ namespace OkuEngine
 {
   public class PolygonInstance : VisualInstance
   {
-    private PolygonContent _content = null;
+    private VertexContent _content = null;
     private float _lineWidth = 1.0f;
     private Color _lineColor = Color.White;
     private VertexInterpretation _interpretation = VertexInterpretation.Polygon;
 
-    public PolygonInstance(PolygonContent content)
+    public PolygonInstance(VertexContent content)
     {
       _content = content;
     }
 
-    public PolygonContent Content
+    public VertexContent Content
     {
       get { return _content; }
       set { _content = value; }

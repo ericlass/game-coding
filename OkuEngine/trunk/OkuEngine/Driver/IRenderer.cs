@@ -300,6 +300,50 @@ namespace OkuEngine
     /// <param name="size">The size of the points in pixels.</param>
     void DrawPoints(VertexList points, Matrix3 transform, float size);
 
+    /// <summary>
+    /// Draws a mesh using the given vertices and mesh mode. The vertices are
+    /// interpreted as screen space coordinates. The vertex colors will color
+    /// the rendered mesh.
+    /// </summary>
+    /// <param name="vertices">The vertices of the mesh.</param>
+    /// <param name="mode">The mesh drwing mode.</param>
+    void DrawMesh(VertexList vertices, MeshMode mode);
+
+    /// <summary>
+    /// Draws a mesh using the given vertices and mesh mode. The vertices are
+    /// interpreted as screen space coordinates. The mesh is textured with the 
+    /// given texture using the texture coordinates of the vertices. Vertex colors 
+    /// tint the texture.
+    /// </summary>
+    /// <param name="vertices">The vertices of the mesh.</param>
+    /// <param name="mode">The mesh drwing mode.</param>
+    /// <param name="texture">The texture to use. Can be null to specify no texture.</param>
+    void DrawMesh(VertexList vertices, MeshMode mode, ImageContent texture);
+
+    /// <summary>
+    /// Draws a mesh using the given vertices and mesh mode. The vertices are
+    /// interpreted as screen space coordinates. The vertex colors will color
+    /// the rendered mesh. Before drawing the vertices are transformed by the 
+    /// given transformation matrix.
+    /// </summary>
+    /// <param name="vertices">The vertices of the mesh.</param>
+    /// <param name="transform">The transformation matrix.</param>
+    /// <param name="mode">The mesh drwing mode.</param>    
+    void DrawMesh(VertexList vertices, MeshMode mode, Matrix3 transform);
+
+    /// <summary>
+    /// Draws a mesh using the given vertices and mesh mode. The vertices are
+    /// interpreted as screen space coordinates. The mesh is textured with the 
+    /// given texture using the texture coordinates of the vertices. Vertex colors 
+    /// tint the texture. Before drawing the vertices are transformed by the 
+    /// given transformation matrix.
+    /// </summary>
+    /// <param name="vertices">The vertices of the mesh.</param>
+    /// <param name="mode">The mesh drwing mode.</param>
+    /// <param name="transform">The transformation matrix.</param>
+    /// <param name="texture">The texture to use. Can be null to specify no texture.</param>
+    void DrawMesh(VertexList vertices, MeshMode mode, Matrix3 transform, ImageContent texture);
+
     //Content handling
     void InitContentFile(ImageContent content, Stream data);
     void InitContentRaw(ImageContent content, byte[] data, int width, int height);

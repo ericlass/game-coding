@@ -849,6 +849,73 @@ namespace OkuEngine
       }
     }
 
+    public void DrawMesh(VertexList vertices, MeshMode mode)
+    {
+      DrawMesh(vertices, mode, null);
+    }
+
+    public void DrawMesh(VertexList vertices, MeshMode mode, ImageContent texture)
+    {
+      if (texture != null)
+      {
+        if (!_textures.ContainsKey(texture.ContentId))
+          return;
+
+        int textureId = _textures[texture.ContentId];
+        Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
+      }
+      else
+        Gl.glBindTexture(Gl.GL_TEXTURE_2D, 0);
+
+      int primitive = MeshModeToGLPrimitive(mode);
+
+      Gl.glBegin(primitive);
+
+      foreach (Vertex vert in vertices)
+      {
+        Gl.glColor4f(vert.Color.R, vert.Color.G, vert.Color.B, vert.Color.A);
+        Gl.glTexCoord2f(vert.TextureCoordinates.X, vert.TextureCoordinates.Y);
+        Gl.glVertex2f(vert.Position.X, vert.Position.Y);
+      }
+
+      Gl.glEnd();
+    }
+
+    public void DrawMesh(VertexList vertices, MeshMode mode, Matrix3 transform)
+    {
+      DrawMesh(vertices, mode, transform, null);
+    }
+
+    public void DrawMesh(VertexList vertices, MeshMode mode, Matrix3 transform, ImageContent texture)
+    {
+      if (texture != null)
+      {
+        if (!_textures.ContainsKey(texture.ContentId))
+          return;
+
+        int textureId = _textures[texture.ContentId];
+        Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
+      }
+      else
+        Gl.glBindTexture(Gl.GL_TEXTURE_2D, 0);
+
+      int primitive = MeshModeToGLPrimitive(mode);
+
+      Gl.glBegin(primitive);
+
+      foreach (Vertex vert in vertices)
+      {
+        Gl.glColor4f(vert.Color.R, vert.Color.G, vert.Color.B, vert.Color.A);
+        Gl.glTexCoord2f(vert.TextureCoordinates.X, vert.TextureCoordinates.Y);
+        float x = vert.Position.X;
+        float y = vert.Position.Y;
+        transform.Transform(ref x, ref y);
+        Gl.glVertex2f(x, y);
+      }
+
+      Gl.glEnd();
+    }
+
     /// <summary>
     /// Finished the drawing process. The drawing operations are flushed and the 
     /// offscreen buffer is swapped to the screen.
