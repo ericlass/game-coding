@@ -8,7 +8,7 @@ namespace OkuEngine
 {
   public class SpriteFont
   {
-    private const int _texWidth = 512;
+    private const int _texWidth = 1024;
 
     private Bitmap _fontSheet = null;
     private Graphics _graphics = null;
@@ -22,13 +22,15 @@ namespace OkuEngine
     private FontStyle _fontStyle = FontStyle.Regular;
 
     private bool _antiAlias = false;
+    private Color _color = Color.White;
 
-    public SpriteFont(string fontname, float size, FontStyle style, bool antiAlias)
+    public SpriteFont(string fontname, float size, FontStyle style, bool antiAlias, Color color)
     {
       _fontFamily = new FontFamily(fontname);
       _fontStyle = style;
       _font = new Font(_fontFamily, size, _fontStyle);
       _antiAlias = antiAlias;
+      _color = color;
     }
 
     public bool AntiAlias
@@ -101,7 +103,7 @@ namespace OkuEngine
             _nextPos.Y += height;
             if (_nextPos.Y + height >= _fontSheet.Height)
             {
-              ResizeFontSheet(_texWidth, NextPowerOfTwo(_nextPos.Y + height));              
+              ResizeFontSheet(_texWidth, NextPowerOfTwo(_nextPos.Y + height));
             }
           }
 
@@ -120,6 +122,7 @@ namespace OkuEngine
           vert.Position.Y = 0;
           vert.TextureCoordinates.X = texLeft;
           vert.TextureCoordinates.Y = texTop;
+          vert.Color = _color;
           vertices.Add(vert);
 
           vert = new Vertex();
@@ -127,6 +130,7 @@ namespace OkuEngine
           vert.Position.Y = 0;
           vert.TextureCoordinates.X = texRight;
           vert.TextureCoordinates.Y = texTop;
+          vert.Color = _color;
           vertices.Add(vert);
 
           vert = new Vertex();
@@ -134,6 +138,7 @@ namespace OkuEngine
           vert.Position.Y = height;
           vert.TextureCoordinates.X = texRight;
           vert.TextureCoordinates.Y = texBottom;
+          vert.Color = _color;
           vertices.Add(vert);
 
           vert = new Vertex();
@@ -141,6 +146,7 @@ namespace OkuEngine
           vert.Position.Y = height;
           vert.TextureCoordinates.X = texLeft;
           vert.TextureCoordinates.Y = texBottom;
+          vert.Color = _color;
           vertices.Add(vert);          
 
           _chars.Add(current, vertices);
@@ -177,8 +183,8 @@ namespace OkuEngine
       {
         if (c == '\n')
         {
-          offset.Y += (_fontFamily.GetEmHeight(_fontStyle) / _font.GetHeight()) * _fontFamily.GetLineSpacing(_fontStyle);
-          offset.X = y;
+          offset.Y += (_font.GetHeight() / _fontFamily.GetEmHeight(_fontStyle)) * _fontFamily.GetLineSpacing(_fontStyle);
+          offset.X = x;
         }
         else
         {

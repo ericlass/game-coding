@@ -20,7 +20,7 @@ namespace OkuTest
 
     public override void Initialize()
     {
-      OkuDrivers.Renderer.ClearColor = Color.Blue;
+      OkuDrivers.Renderer.ClearColor = Color.White;
 
       ImageContent content = new ImageContent(".\\content\\smiley.png");
       _smiley = new ImageInstance(content);
@@ -71,7 +71,7 @@ namespace OkuTest
 
       _mesh.Texture = car;
 
-      _font = new SpriteFont("Consolas", 12, System.Drawing.FontStyle.Bold, true);
+      _font = new SpriteFont("Consolas", 24, System.Drawing.FontStyle.Bold, true, Color.Red);
     }
 
     public override void Update(float dt)

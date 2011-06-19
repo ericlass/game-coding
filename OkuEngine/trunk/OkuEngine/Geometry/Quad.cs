@@ -20,5 +20,7 @@ namespace OkuEngine
       Bottom = bottom;
     }
 
+    //TODO: OKU-3 - Add geometric functions like "intersect" and so on
+
   }
 }
