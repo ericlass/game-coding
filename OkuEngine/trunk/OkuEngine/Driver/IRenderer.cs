@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using System.IO;
+using System.Drawing;
 
 namespace OkuEngine
 {
@@ -344,9 +341,44 @@ namespace OkuEngine
     /// <param name="texture">The texture to use. Can be null to specify no texture.</param>
     void DrawMesh(VertexList vertices, MeshMode mode, Matrix3 transform, ImageContent texture);
 
-    //Content handling
+    /// <summary>
+    /// Initializes image content which means that textures are created for them.
+    /// This method also sets the Width and Height properties of the content.
+    /// If the given content has already been initialized, the current texture
+    /// is dropped and a new one is created. This can be used to update the content.
+    /// </summary>
+    /// <param name="content">The content to be initialized.</param>
+    /// <param name="data">The content data. This must be a stream that contains a complete image file like PNG, BMP or JPG.</param>
     void InitContentFile(ImageContent content, Stream data);
+
+    /// <summary>
+    /// Initializes image content from raw data which is represented by a byte array.
+    /// The data is expected to only contain pixel data.
+    /// This method also sets the Width and Height properties of the content.
+    /// If the given content has already been initialized, the current texture
+    /// is dropped and a new one is created. This can be used to update the content.
+    /// </summary>
+    /// <param name="content">The content to be initialized.</param>
+    /// <param name="data">The pixel data.</param>
+    /// <param name="width">The width of the image.</param>
+    /// <param name="height">The height of the image.</param>
     void InitContentRaw(ImageContent content, byte[] data, int width, int height);
+
+    /// <summary>
+    /// Initializes image content which means that textures are created for them.
+    /// This method also sets the Width and Height properties of the content.
+    /// If the given content has already been initialized, the current texture
+    /// is dropped and a new one is created. This can be used to update the content.
+    /// </summary>
+    /// <param name="content">The content to be initialized.</param>
+    /// <param name="data">A bitmap containing the image data. Must be pixel format Format32bppArgb.</param>
+    void InitContentBitmap(ImageContent content, Bitmap image);
+
+    /// <summary>
+    /// Releases content that was previously initialized by the renderer. 
+    /// This frees all resource that are connected to the given content.
+    /// </summary>
+    /// <param name="content">The content to release.</param>
     void ReleaseContent(ImageContent content);
   }
 }

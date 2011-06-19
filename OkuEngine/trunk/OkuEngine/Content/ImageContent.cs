@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.IO;
+using System.Drawing;
 
 namespace OkuEngine
 {
@@ -20,12 +17,17 @@ namespace OkuEngine
 
     public ImageContent(Stream fileStream)
     {
-      OkuDrivers.Renderer.InitContentFile(this, fileStream);
+      UpdateData(fileStream);
     }
 
     public ImageContent(byte[] rawData, int width, int height)
     {
-      OkuDrivers.Renderer.InitContentRaw(this, rawData, width, height);
+      UpdateData(rawData, width, height);
+    }
+
+    public ImageContent(Bitmap image)
+    {
+      UpdateData(image);
     }
 
     public int Width
@@ -38,6 +40,21 @@ namespace OkuEngine
     {
       get { return _height; }
       set { _height = value; }
+    }
+
+    public void UpdateData(Stream fileStream)
+    {
+      OkuDrivers.Renderer.InitContentFile(this, fileStream);
+    }
+
+    public void UpdateData(byte[] rawData, int width, int height)
+    {
+      OkuDrivers.Renderer.InitContentRaw(this, rawData, width, height);
+    }
+
+    public void UpdateData(Bitmap image)
+    {
+      OkuDrivers.Renderer.InitContentBitmap(this, image);
     }
 
   }

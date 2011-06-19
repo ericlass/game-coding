@@ -96,5 +96,14 @@ namespace OkuEngine
       set { _color = value; }
     }
 
+    /// <summary>
+    /// Creates a new vertex instance that is a copy of the vertex.
+    /// </summary>
+    /// <returns>The new, copied vertex.</returns>
+    public Vertex Clone()
+    {
+      return new Vertex(new Vector(_position.X, _position.Y), new Vector(_texCoord.X, _texCoord.Y), _color);
+    }
+
   }
 }

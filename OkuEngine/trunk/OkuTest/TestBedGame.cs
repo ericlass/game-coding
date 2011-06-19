@@ -16,10 +16,11 @@ namespace OkuTest
     private PolygonInstance _poly = null;
     private SoundInstance _sound = null;
     private MeshInstance _mesh = null;
+    private SpriteFont _font = null;
 
     public override void Initialize()
     {
-      OkuDrivers.Renderer.ClearColor = Color.White;
+      OkuDrivers.Renderer.ClearColor = Color.Blue;
 
       ImageContent content = new ImageContent(".\\content\\smiley.png");
       _smiley = new ImageInstance(content);
@@ -69,6 +70,8 @@ namespace OkuTest
       ImageContent car = new ImageContent(".\\content\\car.png");
 
       _mesh.Texture = car;
+
+      _font = new SpriteFont("Consolas", 12, System.Drawing.FontStyle.Bold, true);
     }
 
     public override void Update(float dt)
@@ -84,6 +87,8 @@ namespace OkuTest
       _poly.Draw();
       _smiley.Draw(_pos1, _rotation);
       _mesh.Draw();
+
+      _font.DrawString("Hallo Welt!", 5, 5);
     }
 
   }

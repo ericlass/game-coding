@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -164,24 +162,8 @@ namespace OkuEngine
     /// <param name="data">The content data. This must be a stream that contains a complete image file like PNG, BMP or JPG.</param>
     public void InitContentFile(ImageContent content, Stream data)
     {
-      //Load texture and set it's options
-      int textureId = 0;
-
       Bitmap tex = new Bitmap(data);
-      BitmapData bmData = tex.LockBits(new Rectangle(0, 0, tex.Width, tex.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-
-      Gl.glGenTextures(1, out textureId);
-      Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
-      Gl.glTexImage2D(Gl.GL_TEXTURE_2D, 0, 4, tex.Width, tex.Height, 0, Gl.GL_BGRA, Gl.GL_UNSIGNED_BYTE, bmData.Scan0);
-      Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, Gl.GL_LINEAR);
-      Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, Gl.GL_LINEAR);
-
-      tex.UnlockBits(bmData);
-
-      _textures.Add(content.ContentId, textureId);
-
-      content.Width = tex.Width;
-      content.Height = tex.Height;
+      InitContentBitmap(content, tex);
     }
 
     /// <summary>
@@ -203,12 +185,38 @@ namespace OkuEngine
       Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, Gl.GL_LINEAR);
       Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, Gl.GL_LINEAR);
 
+      if (_textures.ContainsKey(content.ContentId))
+        ReleaseContent(content);
+
       //Remember texture for this content
       _textures.Add(content.ContentId, textureId);
 
       //Write width and height to the content
       content.Width = width;
       content.Height = height;
+    }
+
+    public void InitContentBitmap(ImageContent content, Bitmap image)
+    {
+      int textureId = 0;
+
+      BitmapData bmData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+
+      Gl.glGenTextures(1, out textureId);
+      Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
+      Gl.glTexImage2D(Gl.GL_TEXTURE_2D, 0, 4, image.Width, image.Height, 0, Gl.GL_BGRA, Gl.GL_UNSIGNED_BYTE, bmData.Scan0);
+      Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, Gl.GL_LINEAR);
+      Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, Gl.GL_LINEAR);
+
+      image.UnlockBits(bmData);
+
+      if (_textures.ContainsKey(content.ContentId))
+        ReleaseContent(content);
+
+      _textures.Add(content.ContentId, textureId);
+
+      content.Width = image.Width;
+      content.Height = image.Height;
     }
 
     /// <summary>

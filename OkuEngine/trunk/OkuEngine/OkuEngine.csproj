@@ -90,6 +90,7 @@
     <Compile Include="Content\SoundContent.cs" />
     <Compile Include="Instance\SoundInstance.cs" />
     <Compile Include="Geometry\Spline.cs" />
+    <Compile Include="SpriteFont.cs" />
     <Compile Include="Transformation.cs" />
     <Compile Include="Platform\User32.cs" />
     <Compile Include="VariableList.cs" />
