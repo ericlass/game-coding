@@ -17,6 +17,7 @@ namespace OkuTest
     private SoundInstance _sound = null;
     private MeshInstance _mesh = null;
     private SpriteFont _font = null;
+    private MeshInstance _text = null;
 
     public override void Initialize()
     {
@@ -71,7 +72,8 @@ namespace OkuTest
 
       _mesh.Texture = car;
 
-      _font = new SpriteFont("Consolas", 24, System.Drawing.FontStyle.Bold, true, Color.Red);
+      _font = new SpriteFont("Consolas", 12, System.Drawing.FontStyle.Regular, false);
+      _text = _font.GetStringMesh("Ein bisschen Text muss sein.", 50, 400, Color.Red);
     }
 
     public override void Update(float dt)
@@ -88,7 +90,7 @@ namespace OkuTest
       _smiley.Draw(_pos1, _rotation);
       _mesh.Draw();
 
-      _font.DrawString("Hallo Welt!", 5, 5);
+      _text.Draw();
     }
 
   }

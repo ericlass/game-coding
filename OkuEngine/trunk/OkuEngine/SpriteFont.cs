@@ -8,29 +8,63 @@ namespace OkuEngine
 {
   public class SpriteFont
   {
-    private const int _texWidth = 1024;
+    /// <summary>
+    /// Used internally to store character dimensions. The values are represented in texture pixel space.
+    /// </summary>
+    private struct CharDimensions
+    {
+      public int Left;
+      public int Width;
+
+      public CharDimensions(int left, int width)
+      {
+        Left = left;
+        Width = width;
+      }
+
+      public int Right
+      {
+        get { return Left + Width; }
+      }
+    }
+
+    private int _texWidth = 0;
+    private int _texHeight = 0;
 
     private Bitmap _fontSheet = null;
     private Graphics _graphics = null;
     private ImageContent _fontSheetContent = null;
-    private Point _nextPos = Point.Empty;
+    private int _nextPos = 0;
 
-    private Dictionary<char, VertexList> _chars = new Dictionary<char, VertexList>();
+    private Dictionary<char, CharDimensions> _chars = new Dictionary<char, CharDimensions>();
 
     private FontFamily _fontFamily = null;
     private Font _font = null;
     private FontStyle _fontStyle = FontStyle.Regular;
 
     private bool _antiAlias = false;
-    private Color _color = Color.White;
 
-    public SpriteFont(string fontname, float size, FontStyle style, bool antiAlias, Color color)
+    public SpriteFont(string fontname, float size, FontStyle style, bool antiAlias)
     {
       _fontFamily = new FontFamily(fontname);
       _fontStyle = style;
       _font = new Font(_fontFamily, size, _fontStyle);
       _antiAlias = antiAlias;
-      _color = color;
+
+      _fontSheet = new Bitmap(1, 1); //Create dummy bitmap to get graphics context
+      _graphics = Graphics.FromImage(_fontSheet);
+      SizeF charSize = _graphics.MeasureString("M", _font);
+      _fontSheet.Dispose();
+
+      _texWidth = NextPowerOfTwo((int)(charSize.Width * 100));
+      _texHeight = NextPowerOfTwo(_font.Height);
+      _fontSheet = new Bitmap(_texWidth, _texHeight, PixelFormat.Format32bppArgb);
+      _graphics = Graphics.FromImage(_fontSheet);
+      _graphics.Clear(System.Drawing.Color.FromArgb(0, 128, 128, 128));
+      if (antiAlias)
+        _graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+      else
+        _graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
     }
 
     public bool AntiAlias
@@ -50,32 +84,9 @@ namespace OkuEngine
       return num + 1;
     }
 
-    private void ResizeFontSheet(int width, int height)
-    {
-      //Remember old font sheet
-      Bitmap oldSheet = _fontSheet;
-      //Create new sheet with new dimensions
-      _fontSheet = new Bitmap(width, NextPowerOfTwo(height), PixelFormat.Format32bppArgb);
-      //Create graphics object
-      _graphics = Graphics.FromImage(_fontSheet);
-      //Enable or Disable anti aliasing
-      if (_antiAlias)
-        _graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
-      else
-        _graphics.TextRenderingHint = TextRenderingHint.SingleBitPerPixelGridFit;
-      //Clear whole bitmap with transparent color
-      _graphics.Clear(System.Drawing.Color.FromArgb(0, 0, 0, 0));
-      //Copy old sheet to new
-      if (oldSheet != null)
-        _graphics.DrawImageUnscaled(oldSheet, 0, 0);
-    }
-
     public void PrepareChars(string chars)
     {
       int height = _font.Height;
-      
-      if (_fontSheet == null)
-        ResizeFontSheet(_texWidth, NextPowerOfTwo(height));
 
       bool updated = false;
       foreach (char current in chars)
@@ -97,61 +108,14 @@ namespace OkuEngine
             throw new InvalidOperationException("The font is too big! The character " + current + " is wider than the texture it will be drawn too!");
 
           //Make sure that character fits into texture
-          if ((_nextPos.X + width) >= _texWidth)
-          {
-            _nextPos.X = 0;
-            _nextPos.Y += height;
-            if (_nextPos.Y + height >= _fontSheet.Height)
-            {
-              ResizeFontSheet(_texWidth, NextPowerOfTwo(_nextPos.Y + height));
-            }
-          }
+          if ((_nextPos + width) >= _texWidth)
+            throw new InvalidOperationException("Oops! You are using a lot of characters. I didn't expect that. Unfortunately you cannot have any more characters.");
 
-          _graphics.DrawString(charStr, _font, Brushes.White, _nextPos.X, _nextPos.Y, StringFormat.GenericTypographic);
+          _graphics.DrawString(charStr, _font, Brushes.White, _nextPos, 0, StringFormat.GenericTypographic);
 
-          float texLeft = _nextPos.X / (float)_texWidth;
-          float texRight = (_nextPos.X + width) / (float)_texWidth;
+          _chars.Add(current, new CharDimensions(_nextPos, width));
 
-          float texTop = _nextPos.Y / (float)(_fontSheet.Height);
-          float texBottom = (_nextPos.Y + height) / (float)(_fontSheet.Height);
-
-          VertexList vertices = new VertexList();
-
-          Vertex vert = new Vertex();
-          vert.Position.X = 0;
-          vert.Position.Y = 0;
-          vert.TextureCoordinates.X = texLeft;
-          vert.TextureCoordinates.Y = texTop;
-          vert.Color = _color;
-          vertices.Add(vert);
-
-          vert = new Vertex();
-          vert.Position.X = width;
-          vert.Position.Y = 0;
-          vert.TextureCoordinates.X = texRight;
-          vert.TextureCoordinates.Y = texTop;
-          vert.Color = _color;
-          vertices.Add(vert);
-
-          vert = new Vertex();
-          vert.Position.X = width;
-          vert.Position.Y = height;
-          vert.TextureCoordinates.X = texRight;
-          vert.TextureCoordinates.Y = texBottom;
-          vert.Color = _color;
-          vertices.Add(vert);
-
-          vert = new Vertex();
-          vert.Position.X = 0;
-          vert.Position.Y = height;
-          vert.TextureCoordinates.X = texLeft;
-          vert.TextureCoordinates.Y = texBottom;
-          vert.Color = _color;
-          vertices.Add(vert);          
-
-          _chars.Add(current, vertices);
-
-          _nextPos.X += width + 1;
+          _nextPos += width + 1;
 
           updated = true;
         }
@@ -166,41 +130,63 @@ namespace OkuEngine
       }
     }
 
-    public void DrawString(string text, Vector origin)
-    {
-      DrawString(text, origin.X, origin.Y);
-    }
-
-    public void DrawString(string text, float x, float y)
+    public MeshInstance GetStringMesh(string text, float offsetX, float offsetY, Color color)
     {
       PrepareChars(text);
 
       VertexList vertices = new VertexList();
-      Vector offset = new Vector();
-      offset.X = x;
-      offset.Y = y;
-      foreach (char c in text)
+      float left = offsetX;
+      float bottom = _font.Height + offsetY;
+
+      float textureSize = _texWidth;
+
+      float texBottom = _font.Height / (float)_texHeight;
+      
+      foreach (char current in text)
       {
-        if (c == '\n')
-        {
-          offset.Y += (_font.GetHeight() / _fontFamily.GetEmHeight(_fontStyle)) * _fontFamily.GetLineSpacing(_fontStyle);
-          offset.X = x;
-        }
-        else
-        {
-          VertexList charVerts = _chars[c];
-          foreach (Vertex vert in charVerts)
-          {
-            Vertex clone = vert.Clone();
-            clone.Position.Add(offset);
-            vertices.Add(clone);
-          }
-            
-          offset.X += charVerts[1].Position.X;
-        }
+        CharDimensions dims = _chars[current];
+        float texLeft = dims.Left / textureSize;
+        float texRight = texLeft + dims.Width / textureSize;
+
+        float right = left + dims.Width;
+
+        Vertex vert = new Vertex();
+        vert.Position.X = left;
+        vert.Position.Y = offsetY;
+        vert.TextureCoordinates.X = texLeft;
+        vert.TextureCoordinates.Y = 0;
+        vert.Color = color;
+        vertices.Add(vert);
+
+        vert = new Vertex();
+        vert.Position.X = right;
+        vert.Position.Y = offsetY;
+        vert.TextureCoordinates.X = texRight;
+        vert.TextureCoordinates.Y = 0;
+        vert.Color = color;
+        vertices.Add(vert);
+
+        vert = new Vertex();
+        vert.Position.X = right;
+        vert.Position.Y = bottom;
+        vert.TextureCoordinates.X = texRight;
+        vert.TextureCoordinates.Y = texBottom;
+        vert.Color = color;
+        vertices.Add(vert);
+
+        vert = new Vertex();
+        vert.Position.X = left;
+        vert.Position.Y = bottom;
+        vert.TextureCoordinates.X = texLeft;
+        vert.TextureCoordinates.Y = texBottom;
+        vert.Color = color;
+        vertices.Add(vert);
+
+        left += dims.Width;
       }
 
-      OkuDrivers.Renderer.DrawMesh(vertices, MeshMode.Quads, _fontSheetContent);
+      VertexContent content = new VertexContent(vertices);
+      return  new MeshInstance(content, _fontSheetContent, MeshMode.Quads);
     }
 
   }
