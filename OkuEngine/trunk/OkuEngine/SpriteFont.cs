@@ -136,7 +136,8 @@ namespace OkuEngine
 
       VertexList vertices = new VertexList();
       float left = offsetX;
-      float bottom = _font.Height + offsetY;
+      float top = offsetY;
+      float bottom = top + _font.Height;      
 
       float textureSize = _texWidth;
 
@@ -144,45 +145,54 @@ namespace OkuEngine
       
       foreach (char current in text)
       {
-        CharDimensions dims = _chars[current];
-        float texLeft = dims.Left / textureSize;
-        float texRight = texLeft + dims.Width / textureSize;
+        if (current == '\n')
+        {
+          top += _font.Height;
+          left = offsetX;
+          bottom = top + _font.Height;
+        }
+        else if (current >= ' ')
+        {
+          CharDimensions dims = _chars[current];
+          float texLeft = dims.Left / textureSize;
+          float texRight = texLeft + dims.Width / textureSize;
 
-        float right = left + dims.Width;
+          float right = left + dims.Width;
 
-        Vertex vert = new Vertex();
-        vert.Position.X = left;
-        vert.Position.Y = offsetY;
-        vert.TextureCoordinates.X = texLeft;
-        vert.TextureCoordinates.Y = 0;
-        vert.Color = color;
-        vertices.Add(vert);
+          Vertex vert = new Vertex();
+          vert.Position.X = left;
+          vert.Position.Y = top;
+          vert.TextureCoordinates.X = texLeft;
+          vert.TextureCoordinates.Y = 0;
+          vert.Color = color;
+          vertices.Add(vert);
 
-        vert = new Vertex();
-        vert.Position.X = right;
-        vert.Position.Y = offsetY;
-        vert.TextureCoordinates.X = texRight;
-        vert.TextureCoordinates.Y = 0;
-        vert.Color = color;
-        vertices.Add(vert);
+          vert = new Vertex();
+          vert.Position.X = right;
+          vert.Position.Y = top;
+          vert.TextureCoordinates.X = texRight;
+          vert.TextureCoordinates.Y = 0;
+          vert.Color = color;
+          vertices.Add(vert);
 
-        vert = new Vertex();
-        vert.Position.X = right;
-        vert.Position.Y = bottom;
-        vert.TextureCoordinates.X = texRight;
-        vert.TextureCoordinates.Y = texBottom;
-        vert.Color = color;
-        vertices.Add(vert);
+          vert = new Vertex();
+          vert.Position.X = right;
+          vert.Position.Y = bottom;
+          vert.TextureCoordinates.X = texRight;
+          vert.TextureCoordinates.Y = texBottom;
+          vert.Color = color;
+          vertices.Add(vert);
 
-        vert = new Vertex();
-        vert.Position.X = left;
-        vert.Position.Y = bottom;
-        vert.TextureCoordinates.X = texLeft;
-        vert.TextureCoordinates.Y = texBottom;
-        vert.Color = color;
-        vertices.Add(vert);
+          vert = new Vertex();
+          vert.Position.X = left;
+          vert.Position.Y = bottom;
+          vert.TextureCoordinates.X = texLeft;
+          vert.TextureCoordinates.Y = texBottom;
+          vert.Color = color;
+          vertices.Add(vert);
 
-        left += dims.Width;
+          left += dims.Width;
+        }
       }
 
       VertexContent content = new VertexContent(vertices);

@@ -72,8 +72,14 @@ namespace OkuTest
 
       _mesh.Texture = car;
 
-      _font = new SpriteFont("Consolas", 12, System.Drawing.FontStyle.Regular, false);
-      _text = _font.GetStringMesh("Ein bisschen Text muss sein.", 50, 400, Color.Red);
+      _font = new SpriteFont("Arial", 12, System.Drawing.FontStyle.Regular, true);
+      _text = _font.GetStringMesh(
+        "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore\n" +
+        "aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,\n" +
+        "no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,\n" +
+        "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et\n" +
+        "accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit\n" +
+        "amet.", 50, 500, Color.Black);
     }
 
     public override void Update(float dt)

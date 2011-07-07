@@ -6,7 +6,7 @@ using System.Text;
 namespace OkuEngine
 {
   /// <summary>
-  /// The scene node is the most basic item of the Oku engine scene. Do not intanciate this node
+  /// The scene node is the most basic item of the Oku engine scene. Do not instanciate this node
   /// directly. Use the functions provided by the <code>SceneGraph</code> class to manage
   /// scene nodes.
   /// </summary>
@@ -16,8 +16,7 @@ namespace OkuEngine
     private SceneNodeList _children = new SceneNodeList();
     private Transformation _transform = new Transformation();
     private ActionHandler _actionHandler = new ActionHandler();
-    private Content _content = null;
-    private VectorList _vertices = new VectorList();
+    private VisualContent _content = null;
     private Matrix3 _worldMatrix = Matrix3.Indentity;
 
     /// <summary>
@@ -31,7 +30,7 @@ namespace OkuEngine
     /// Creates a new scene node with the given content.
     /// </summary>
     /// <param name="content">The content of the new scene node.</param>
-    public SceneNode(Content content)
+    public SceneNode(VisualContent content)
     {
       _content = content;
     }
@@ -41,7 +40,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="parent">The parent node of the new scene node.</param>
     /// <param name="content">The content of the new scene node.</param>
-    public SceneNode(SceneNode parent, Content content)
+    public SceneNode(SceneNode parent, VisualContent content)
     {
       _parent = parent;
       _content = content;
@@ -92,7 +91,7 @@ namespace OkuEngine
     /// Gets or sets the content associated with the scene node. 
     /// Trying to set the content to null throws an <code>ArgumentException</code>.
     /// </summary>
-    public Content Content
+    public VisualContent Content
     {
       get { return _content; }
       set 
@@ -112,15 +111,6 @@ namespace OkuEngine
     {
       get { return _worldMatrix; }
       set { _worldMatrix = value; }
-    }
-
-    /// <summary>
-    /// Gets the list of vertices that represent the current node. For image content these are the vertices (4)
-    /// that are used to draw the image. For all other node types there is only one vertex.
-    /// </summary>
-    public VectorList Vertices
-    {
-      get { return _vertices; }
     }
 
     /// <summary>

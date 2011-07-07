@@ -6,7 +6,6 @@ using System.Text;
 namespace OkuEngine
 {
   public class SceneNodeList : List<SceneNode>
-  {
-    
+  {    
   }
 }
