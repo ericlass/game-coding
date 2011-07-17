@@ -17,6 +17,7 @@ namespace OkuEngine
     public static Color Red = new Color(1, 0, 0);
     public static Color Green = new Color(0, 1, 0);
     public static Color Blue = new Color(0, 0, 1);
+    public static Color Silver = new Color(0.7f, 0.7f, 0.7f);
 
     /// <summary>
     /// Creates a new opaque color with the given color values.

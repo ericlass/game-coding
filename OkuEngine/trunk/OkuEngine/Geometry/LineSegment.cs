@@ -5,24 +5,10 @@ namespace OkuEngine
   /// <summary>
   /// A simple line segment starting at (X1, Y1) and ending at (X2, Y2).
   /// </summary>
-  public struct LineSegment
+  public class LineSegment
   {
-    /// <summary>
-    /// The x component of the start point.
-    /// </summary>
-    public float X1;
-    /// <summary>
-    /// The y component of the start point.
-    /// </summary>
-    public float Y1;
-    /// <summary>
-    /// The x component of the end point.
-    /// </summary>
-    public float X2;
-    /// <summary>
-    /// The y component of the end point.
-    /// </summary>
-    public float Y2;
+    private Vector _start = null;
+    private Vector _end = null;
 
     /// <summary>
     /// Creates a new line segment and initializes it's fields to the given values.
@@ -33,10 +19,26 @@ namespace OkuEngine
     /// <param name="y2">The y component of the end point.</param>
     public LineSegment(float x1, float y1, float x2, float y2)
     {
-      X1 = x1;
-      Y1 = y1;
-      X2 = x2;
-      Y2 = y2;
+      _start = new Vector(x1, y1);
+      _end = new Vector(x2, y2);
+    }
+
+    /// <summary>
+    /// Gets or sets the start point of the line segment.
+    /// </summary>
+    public Vector Start
+    {
+      get { return _start; }
+      set { _start = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the end point of the line segment.
+    /// </summary>
+    public Vector End
+    {
+      get { return _end; }
+      set { _end = value; }
     }
 
     /// <summary>
@@ -45,8 +47,8 @@ namespace OkuEngine
     /// <returns>The length of the line segment.</returns>
     public float Length()
     {
-      float a = X1 - X2;
-      float b = Y1 - Y2;
+      float a = _end.X - _start.X;
+      float b = _end.Y - _start.Y;
       return (float)Math.Sqrt(a * a + b * b);
     }
 
@@ -56,8 +58,8 @@ namespace OkuEngine
     /// <returns>The normalized normal of the line segment.</returns>
     public Vector Normal()
     {
-      float x = X1 - X2;
-      float y = Y1 - Y2;
+      float x = _end.X - _start.X;
+      float y = _end.Y - _start.Y;
       Vector result = new Vector(y, -x);
       result.Normalize();
       return result;
@@ -71,7 +73,7 @@ namespace OkuEngine
     /// <returns>The interpolated point on the line segment.</returns>
     public Vector GetPointAt(float factor)
     {
-      return new Vector(X1 + factor * (X2 - X1), Y1 + factor * (Y2 - Y1));
+      return _start + ((_end - _start) * factor);
     }
 
   }

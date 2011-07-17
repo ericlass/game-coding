@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using OkuEngine;
 
 namespace OkuTest
@@ -14,11 +15,13 @@ namespace OkuTest
 
     public override void Initialize()
     {
-      int mapWidth = 32;
-      int mapHeight = 24;
+      int mapWidth = 16;
+      int mapHeight = 16;
 
       _map = new Tilemap(mapWidth, mapHeight, 32);
-      _map.TileImages = ImageContent.LoadSheet(".\\content\\tilesheet.png", 32, 6);
+      _map.Origin.X = 50;
+      _map.Origin.Y = 50;
+      _map.TileImages = ImageContent.LoadSheet(".\\content\\tilesheet.png", 32);
 
       Random rand = new Random();
 
@@ -47,14 +50,14 @@ namespace OkuTest
       if (OkuDrivers.Input.Mouse.ButtonIsDown(MouseButton.Left))
       {
         System.Drawing.Point p = OkuDrivers.Renderer.MainForm.PointToClient(new System.Drawing.Point(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y));
-        _line.X1 = p.X;
-        _line.Y1 = p.Y;
+        _line.Start.X = p.X;
+        _line.Start.Y = p.Y;
       }
       if (OkuDrivers.Input.Mouse.ButtonIsDown(MouseButton.Right))
       {
         System.Drawing.Point p = OkuDrivers.Renderer.MainForm.PointToClient(new System.Drawing.Point(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y));
-        _line.X2 = p.X;
-        _line.Y2 = p.Y;
+        _line.End.X = p.X;
+        _line.End.Y = p.Y;
       }
       _colPoint = _map.GetIntersection(_line);
     }
@@ -62,9 +65,9 @@ namespace OkuTest
     public override void Render()
     {
       _map.Draw();
-      OkuDrivers.Renderer.DrawLine(_line.X1, _line.Y1, _line.X2, _line.Y2, 2, Color.Red);
-      OkuDrivers.Renderer.DrawPoint(_line.X1, _line.Y1, 4, Color.Blue);
-      OkuDrivers.Renderer.DrawPoint(_line.X2, _line.Y2, 4, Color.Blue);
+      OkuDrivers.Renderer.DrawLine(_line.Start, _line.End, 2, Color.Red);
+      OkuDrivers.Renderer.DrawPoint(_line.Start, 4, Color.Blue);
+      OkuDrivers.Renderer.DrawPoint(_line.End, 4, Color.Blue);
 
       if (_colPoint != null)
         OkuDrivers.Renderer.DrawPoint(_colPoint, 4, Color.Green);

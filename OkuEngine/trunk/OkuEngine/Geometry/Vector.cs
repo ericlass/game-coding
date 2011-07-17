@@ -294,5 +294,26 @@ namespace OkuEngine
       return result;
     }
 
+    /// <summary>
+    /// Project the given vector to this vector.
+    /// </summary>
+    /// <param name="other">The vector to be projected.</param>
+    /// <returns>The projected vector.</returns>
+    public Vector Project(Vector other)
+    {
+      float dp = DotProduct(other) / (_x * _x + _y * _y);
+      return new Vector(dp * _x, dp * _y);
+    }
+
+    /// <summary>
+    /// Projects the given vector to this vector.
+    /// </summary>
+    /// <param name="other">The vector to be projected.</param>
+    /// <returns>The 1d scalar projecetd value.</returns>
+    public float ProjectScalar(Vector other)
+    {
+      return DotProduct(other) / (_x * _x + _y * _y);
+    }
+
   }
 }

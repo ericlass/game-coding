@@ -59,7 +59,7 @@ namespace OkuEngine
     /// <returns>True if the line segments intersect, otherwise false.</returns>
     public static bool LineSegments(LineSegment ls1, LineSegment ls2, out float factor, float minT)
     {
-      return LineSegments(ls1.X1, ls1.Y1, ls1.X2, ls1.Y2, ls2.X1, ls2.Y1, ls2.X2, ls2.Y2, out factor, minT);
+      return LineSegments(ls1.Start.X, ls1.Start.Y, ls1.End.X, ls1.End.Y, ls2.Start.X, ls2.Start.Y, ls2.End.X, ls2.End.Y, out factor, minT);
     }
 
     /// <summary>
@@ -108,17 +108,17 @@ namespace OkuEngine
       }
 
       float yt = 0.0f;
-      if (y1 < bottom)
+      if (y1 < top)
       {
-        yt = bottom - y1;
+        yt = top - y1;
         if (yt > lineDeltaY)
           return false;
         yt /= lineDeltaY;
         inside = false;
       }
-      else if (y1 > top)
+      else if (y1 > bottom)
       {
-        yt = top - y1;
+        yt = bottom - y1;
         if (yt < lineDeltaY)
           return false;
         yt /= lineDeltaY;
@@ -146,12 +146,14 @@ namespace OkuEngine
       switch (which)
       {
         case 0:
+          t -= (0.000001f * lineDeltaX);
           float y = y1 + lineDeltaY * t;
-          if (y < bottom || y > top)
+          if (y > bottom || y < top)
             return false;
           break;
 
         case 1:
+          t -= (0.000001f * lineDeltaY);
           float x = x1 + lineDeltaX * t;
           if (x < left || x > right)
             return false;
