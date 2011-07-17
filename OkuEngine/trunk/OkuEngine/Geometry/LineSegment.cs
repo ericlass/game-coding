@@ -63,5 +63,16 @@ namespace OkuEngine
       return result;
     }
 
+    /// <summary>
+    /// Uses the line segment formula "p' = p1 + factor * (p2 - p1)" to calculate a point 
+    /// on the line segment. The value is expected to be >= 0.0 and &lt;= 1.0.
+    /// </summary>
+    /// <param name="factor">The factor between the start and the end point. 0 means the start point, 1 means the end point.</param>
+    /// <returns>The interpolated point on the line segment.</returns>
+    public Vector GetPointAt(float factor)
+    {
+      return new Vector(X1 + factor * (X2 - X1), Y1 + factor * (Y2 - Y1));
+    }
+
   }
 }

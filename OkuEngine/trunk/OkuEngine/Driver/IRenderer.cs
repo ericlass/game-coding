@@ -145,6 +145,17 @@ namespace OkuEngine
     void DrawImage(ImageContent content, Matrix3 transform, Color tint);
 
     /// <summary>
+    /// Draws a line from (x1,y1) to (x2,y2) with the given width and color.
+    /// </summary>
+    /// <param name="x1">The x component of the start point.</param>
+    /// <param name="y1">The y component of the start point.</param>
+    /// <param name="x2">The x component of the end point.</param>
+    /// <param name="y2">The y component of the end point.</param>
+    /// <param name="width">The width of the line in pixels.</param>
+    /// <param name="color">The color of the line.</param>
+    void DrawLine(float x1, float y1, float x2, float y2, float width, Color color);
+
+    /// <summary>
     /// Draws a line from start to end with the given width and color.
     /// </summary>
     /// <param name="start">The start of the line.</param>
@@ -224,6 +235,23 @@ namespace OkuEngine
     /// <param name="width">The width of the line in pixels.</param>
     /// <param name="interpretation">Specifies how to interpret the vertices.</param>
     void DrawLines(VertexList vertices, Matrix3 transform, float width, VertexInterpretation interpretation);
+
+    /// <summary>
+    /// Draws a white point at the given coordinates with the given size.
+    /// </summary>
+    /// <param name="x">The x coordinate.</param>
+    /// <param name="y">The y coordinate.</param>
+    /// <param name="size">The size in pixels.</param>
+    void DrawPoint(float x, float y, float size);
+
+    /// <summary>
+    /// Draws a point at the given coordinates with the given size and color.
+    /// </summary>
+    /// <param name="x">The x coordinate.</param>
+    /// <param name="y">The y coordinate.</param>
+    /// <param name="size">The size in pixels.</param>
+    /// <param name="color">The color of the point.</param>
+    void DrawPoint(float x, float y, float size, Color color);
 
     /// <summary>
     /// Draws a point at the given point p with the given size and color.

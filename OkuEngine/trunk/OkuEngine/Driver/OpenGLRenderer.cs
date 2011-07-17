@@ -101,7 +101,7 @@ namespace OkuEngine
 
       Gl.glMatrixMode(Gl.GL_PROJECTION);
       Gl.glLoadIdentity();
-      Gl.glOrtho(0, _form.ClientSize.Width - 1, _form.ClientSize.Height - 1, 0, -1, 1);
+      Gl.glOrtho(0, _form.ClientSize.Width, _form.ClientSize.Height, 0, -1, 1);
 
       Gl.glEnable(Gl.GL_ALPHA_TEST);
       Gl.glAlphaFunc(Gl.GL_GREATER, 0.05f);
@@ -148,7 +148,7 @@ namespace OkuEngine
 
       Gl.glMatrixMode(Gl.GL_PROJECTION);
       Gl.glLoadIdentity();
-      Gl.glOrtho(0, _form.ClientSize.Width - 1, _form.ClientSize.Height - 1, 0, -1, 1);
+      Gl.glOrtho(0, _form.ClientSize.Width, _form.ClientSize.Height, 0, -1, 1);
 
       Gl.glMatrixMode(Gl.GL_MODELVIEW);
       Gl.glLoadIdentity();
@@ -480,6 +480,11 @@ namespace OkuEngine
       Gl.glEnd();
     }
 
+    public void DrawLine(float x1, float y1, float x2, float y2, float width, Color color)
+    {
+      DrawLines(new VectorList() { new Vector(x1, y1), new Vector(x2, y2) }, width, color, VertexInterpretation.LineSegments);
+    }
+
     /// <summary>
     /// Draws a line from start to end with the given width and color.
     /// </summary>
@@ -675,6 +680,16 @@ namespace OkuEngine
       {
         Gl.glEnable(Gl.GL_TEXTURE_2D);
       }
+    }
+
+    public void DrawPoint(float x, float y, float size)
+    {
+      DrawPoints(new VectorList() { new Vector(x, y) }, size, Color.White);
+    }
+
+    public void DrawPoint(float x, float y, float size, Color color)
+    {
+      DrawPoints(new VectorList() { new Vector(x, y) }, size, color);
     }
 
     /// <summary>
