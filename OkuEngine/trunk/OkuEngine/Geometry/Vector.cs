@@ -315,5 +315,40 @@ namespace OkuEngine
       return DotProduct(other) / (_x * _x + _y * _y);
     }
 
+    /// <summary>
+    /// Creates a new vector between the given points.
+    /// </summary>
+    /// <param name="p1">The first point.</param>
+    /// <param name="p2">The second point.</param>
+    /// <returns>The new, unnormalized vector.</returns>
+    public static Vector FromPoints(Vector p1, Vector p2)
+    {
+      return p2 - p1;
+    }
+
+    /// <summary>
+    /// Creates a new vector between the points represented by the given coordinates.
+    /// </summary>
+    /// <param name="x1">The x component of the first point.</param>
+    /// <param name="y1">The y component of the first point.</param>
+    /// <param name="x2">The x component of the second point.</param>
+    /// <param name="y2">The y component of the second point.</param>
+    /// <returns>The new, unnormalized vector.</returns>
+    public static Vector FromPoints(float x1, float y1, float x2, float y2)
+    {
+      return new Vector(x2 - x1, y2 - y1);
+    }
+
+    /// <summary>
+    /// Calculates the left hand normal of the vector.
+    /// </summary>
+    /// <returns>The normalized left hand vector of the vector.</returns>
+    public Vector GetNormal()
+    {
+      Vector normal = new Vector(_y, -_x);
+      normal.Normalize();
+      return normal;
+    }
+
   }
 }

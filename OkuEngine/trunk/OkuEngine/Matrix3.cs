@@ -135,6 +135,19 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Transforms the given polygon.
+    /// </summary>
+    /// <param name="poly">The polygon to be transformed.</param>
+    public void Transform(VectorList poly)
+    {
+      for (int i = 0; i < poly.Count; i++)
+      {
+        Vector vec = poly[i];
+        Transform(ref vec);
+      }
+    }
+
+    /// <summary>
     /// Transforms the given <code>poly</code>. The result of the transform will be returned in <code>target</code>.
     /// </summary>
     /// <param name="poly">The polygon that is transformed.</param>

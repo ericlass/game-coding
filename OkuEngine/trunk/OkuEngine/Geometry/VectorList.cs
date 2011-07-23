@@ -60,5 +60,15 @@ namespace OkuEngine
       return true;
     }
 
+    public static VectorList Box(float left, float right, float top, float bottom)
+    {
+      return new VectorList() {
+        new Vector(left, top),
+        new Vector(right, top),
+        new Vector(right, bottom),
+        new Vector(left, bottom)
+      };
+    }
+
   }
 }
