@@ -61,7 +61,7 @@ namespace OkuTest
 
     public override void Update(float dt)
     {
-      float transSpeed = 50;
+      float transSpeed = 100;
       float rotSpeed = 90;
 
       float dx = 0;
@@ -90,13 +90,13 @@ namespace OkuTest
       transform.Transform(_box2, _transformed2);
 
       _intersect = Intersect(_transformed1, _transformed2);
-      /*if (_intersect != null)
+      if (_intersect != null)
       {
         _transform2.Translation.Add(_intersect);
         transform = Matrix3.Indentity;
         transform.ApplyTransform(_transform2);
         transform.Transform(_box2, _transformed2);
-      }*/
+      }
     }
 
     private Vector _pos = new Vector(512, 384);
@@ -167,16 +167,23 @@ namespace OkuTest
           return null;
         else
         {
-          float mtd = Math.Min(max1, max2) - Math.Max(min1, min2);
+          float center1 = (min1 + max1);
+          float center2 = (min2 + max2);
 
-          if (mtd < minOverlap)
+          float mtd = 0;
+          if (center2 > center1)
+            mtd = max1 - min2;
+          else
+            mtd = min1 - max2;
+
+          if (Math.Abs(mtd) < Math.Abs(minOverlap))
           {
             minOverlap = mtd;
             separation = axis;
           }
         }
       }
-      
+
       return separation * minOverlap;
     }
 
