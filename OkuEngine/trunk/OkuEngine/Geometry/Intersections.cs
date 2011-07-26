@@ -167,5 +167,93 @@ namespace OkuEngine
       return true;
     }
 
+    /// <summary>
+    /// Tests intersection of two convex polygons using the separating axis theorem.
+    /// The returned vector is the minimum transaltion distance that can be used to move the 
+    /// two polygons apart.
+    /// </summary>
+    /// <param name="poly1">The first polygon.</param>
+    /// <param name="poly2">The second polygon.</param>
+    /// <returns>If an intersection is present, the minimum transalation vector is returned. Otherwise, null is returned.</returns>
+    public static Vector Intersect(VectorList poly1, VectorList poly2)
+    {
+      VectorList normalAxes = new VectorList();
+
+      //Get normals of first poly
+      for (int i = 0; i < poly1.Count; i++)
+      {
+        int j = (i + 1) % poly1.Count;
+        Vector vec = poly1[j] - poly1[i];
+        normalAxes.Add(vec.GetNormal());
+      }
+
+      //Get normals of second poly
+      for (int i = 0; i < poly2.Count; i++)
+      {
+        int j = (i + 1) % poly2.Count;
+        Vector vec = poly2[j] - poly2[i];
+        normalAxes.Add(vec.GetNormal());
+      }
+
+      Vector separation = new Vector();
+      float minOverlap = float.MaxValue;
+
+      float min1 = float.MaxValue;
+      float max1 = float.MinValue;
+      float min2 = float.MaxValue;
+      float max2 = float.MinValue;
+
+      foreach (Vector axis in normalAxes)
+      {
+        GetProjectedBounds(axis, poly1, out min1, out max1);
+        GetProjectedBounds(axis, poly2, out min2, out max2);
+
+        if (min1 > max2 || max1 < min2)
+          return null;
+        else
+        {
+          float center1 = (min1 + max1);
+          float center2 = (min2 + max2);
+
+          float mtd = 0;
+          if (center2 > center1)
+            mtd = max1 - min2;
+          else
+            mtd = min1 - max2;
+
+          if (Math.Abs(mtd) < Math.Abs(minOverlap))
+          {
+            minOverlap = mtd;
+            separation = axis;
+          }
+        }
+      }
+
+      return separation * minOverlap;
+    }
+
+    /// <summary>
+    /// Projects the location vectors of the given poly to the given axis and returns the
+    /// minimum and maximum of all projections in the out parameters min and max.
+    /// </summary>
+    /// <param name="axis">The axis to project the poly onto.</param>
+    /// <param name="poly">The polygon to be projected. Must have at least one point.</param>
+    /// <param name="min">The minimum projection value is returned in this parameter.</param>
+    /// <param name="max">The maximum projection value is returned in this parameter.</param>
+    private static void GetProjectedBounds(Vector axis, VectorList poly, out float min, out float max)
+    {
+      if (poly.Count < 1)
+        throw new ArgumentException("Poly must have at least one vector!");
+
+      min = float.MaxValue;
+      max = float.MinValue;
+      foreach (Vector vec in poly)
+      {
+        float projected = axis.ProjectScalar(vec);
+        min = Math.Min(min, projected);
+        max = Math.Max(max, projected);
+      }
+    }
+
   }
 }
