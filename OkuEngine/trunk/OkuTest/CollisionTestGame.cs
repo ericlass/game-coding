@@ -89,7 +89,6 @@ namespace OkuTest
       transform.ApplyTransform(_transform2);
       transform.Transform(_box2, _transformed2);
 
-      //_intersect = Intersect(_transformed1, _transformed2);
       _intersect = Intersections.Intersect(_transformed1, _transformed2);
       if (_intersect != null)
       {

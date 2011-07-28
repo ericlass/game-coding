@@ -71,6 +71,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="TileTestGame.cs" />
+    <Compile Include="UpdateTexGame.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OkuEngine\OkuEngine.csproj">

@@ -403,6 +403,28 @@ namespace OkuEngine
     void InitContentBitmap(ImageContent content, Bitmap image);
 
     /// <summary>
+    /// Updates a region of the given image content with new image data.
+    /// </summary>
+    /// <param name="content">The content to be updated.</param>
+    /// <param name="x">The left bound of the region.</param>
+    /// <param name="y">The top bound of the region.</param>
+    /// <param name="width">The width of the region.</param>
+    /// <param name="height">The height of the region.</param>
+    /// <param name="rawData">The data to put into the region.</param>
+    void UpdateContent(ImageContent content, int x, int y, int width, int height, byte[] rawData);
+
+    /// <summary>
+    /// Updates a region of the given image content with new image data.
+    /// </summary>
+    /// <param name="content">The content to be updated.</param>
+    /// <param name="x">The left bound of the region.</param>
+    /// <param name="y">The top bound of the region.</param>
+    /// <param name="width">The width of the region.</param>
+    /// <param name="height">The height of the region.</param>
+    /// <param name="image">The image data to put into the region.</param>
+    void UpdateContent(ImageContent content, int x, int y, int width, int height, Bitmap image);
+
+    /// <summary>
     /// Releases content that was previously initialized by the renderer. 
     /// This frees all resource that are connected to the given content.
     /// </summary>

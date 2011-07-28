@@ -59,6 +59,16 @@ namespace OkuEngine
       OkuDrivers.Renderer.InitContentBitmap(this, image);
     }
 
+    public void Update(int x, int y, int width, int height, byte[] rawData)
+    {
+      OkuDrivers.Renderer.UpdateContent(this, x, y, width, height, rawData);
+    }
+
+    public void Update(int x, int y, int width, int height, Bitmap image)
+    {
+      OkuDrivers.Renderer.UpdateContent(this, x, y, width, height, image);
+    }
+
     public static List<ImageContent> LoadSheet(string filename, int tileSize)
     {
       Bitmap sheet = new Bitmap(filename);

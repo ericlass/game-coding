@@ -219,6 +219,34 @@ namespace OkuEngine
       content.Height = image.Height;
     }
 
+    public void UpdateContent(ImageContent content, int x, int y, int width, int height, byte[] rawData)
+    {
+      int textureId = 0;
+      if (_textures.ContainsKey(content.ContentId))
+        textureId = _textures[content.ContentId];
+      else
+        return;
+
+      Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
+      Gl.glTexSubImage2D(Gl.GL_TEXTURE_2D, 0, x, y, width, height, Gl.GL_BGRA, Gl.GL_UNSIGNED_BYTE, rawData);
+    }
+
+    public void UpdateContent(ImageContent content, int x, int y, int width, int height, Bitmap image)
+    {
+      int textureId = 0;
+      if (_textures.ContainsKey(content.ContentId))
+        textureId = _textures[content.ContentId];
+      else
+        return;
+
+      BitmapData bmData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+
+      Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
+      Gl.glTexSubImage2D(Gl.GL_TEXTURE_2D, 0, x, y, width, height, Gl.GL_BGRA, Gl.GL_UNSIGNED_BYTE, bmData.Scan0);
+
+      image.UnlockBits(bmData);
+    }
+
     /// <summary>
     /// Releases content that was previously initialized by the renderer. 
     /// This frees all resource that are conected to the given content.
