@@ -19,17 +19,17 @@ namespace OkuEngine
 
     public ImageContent(Stream fileStream)
     {
-      UpdateData(fileStream);
+      OkuDrivers.Renderer.InitContentFile(this, fileStream);
     }
 
     public ImageContent(byte[] rawData, int width, int height)
     {
-      UpdateData(rawData, width, height);
+      OkuDrivers.Renderer.InitContentRaw(this, rawData, width, height);
     }
 
     public ImageContent(Bitmap image)
     {
-      UpdateData(image);
+      OkuDrivers.Renderer.InitContentBitmap(this, image);
     }
 
     public int Width
@@ -42,21 +42,6 @@ namespace OkuEngine
     {
       get { return _height; }
       set { _height = value; }
-    }
-
-    public void UpdateData(Stream fileStream)
-    {
-      OkuDrivers.Renderer.InitContentFile(this, fileStream);
-    }
-
-    public void UpdateData(byte[] rawData, int width, int height)
-    {
-      OkuDrivers.Renderer.InitContentRaw(this, rawData, width, height);
-    }
-
-    public void UpdateData(Bitmap image)
-    {
-      OkuDrivers.Renderer.InitContentBitmap(this, image);
     }
 
     public void Update(int x, int y, int width, int height, byte[] rawData)

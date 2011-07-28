@@ -126,7 +126,7 @@ namespace OkuEngine
         if (_fontSheetContent == null)
           _fontSheetContent = new ImageContent(_fontSheet);
         else
-          _fontSheetContent.UpdateData(_fontSheet);
+          _fontSheetContent.Update(0, 0, _fontSheetContent.Width, _fontSheetContent.Height, _fontSheet);
       }
     }
 
