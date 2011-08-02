@@ -10,8 +10,8 @@ namespace OkuEngine
   /// </summary>
   public class Vertex
   {
-    private Vector _position = null;
-    private Vector _texCoord = null;
+    private Vector _position = Vector.Zero;
+    private Vector _texCoord = Vector.Zero;
     private Color _color = Color.White;
 
     /// <summary>
@@ -19,8 +19,8 @@ namespace OkuEngine
     /// </summary>
     public Vertex()
     {
-      _position = new Vector();
-      _texCoord = new Vector();
+      _position = Vector.Zero;
+      _texCoord = Vector.Zero;
     }
 
     /// <summary>
@@ -30,7 +30,7 @@ namespace OkuEngine
     public Vertex(Vector position)
     {
       _position = position;
-      _texCoord = new Vector();
+      _texCoord = Vector.Zero;
     }
 
     /// <summary>
@@ -65,7 +65,7 @@ namespace OkuEngine
     public Vertex(Vector position, Color color)
     {
       _position = position;
-      _texCoord = new Vector();
+      _texCoord = Vector.Zero;
       _color = color;
     }
 

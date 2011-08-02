@@ -160,34 +160,26 @@ namespace OkuEngine
           float right = left + dims.Width;
 
           Vertex vert = new Vertex();
-          vert.Position.X = left;
-          vert.Position.Y = top;
-          vert.TextureCoordinates.X = texLeft;
-          vert.TextureCoordinates.Y = 0;
+          vert.Position = new Vector(left, top);
+          vert.TextureCoordinates = new Vector(texLeft, 0);
           vert.Color = color;
           vertices.Add(vert);
 
           vert = new Vertex();
-          vert.Position.X = right;
-          vert.Position.Y = top;
-          vert.TextureCoordinates.X = texRight;
-          vert.TextureCoordinates.Y = 0;
+          vert.Position = new Vector(right, top);
+          vert.TextureCoordinates = new Vector(texRight, 0);
           vert.Color = color;
           vertices.Add(vert);
 
           vert = new Vertex();
-          vert.Position.X = right;
-          vert.Position.Y = bottom;
-          vert.TextureCoordinates.X = texRight;
-          vert.TextureCoordinates.Y = texBottom;
+          vert.Position = new Vector(right, bottom);
+          vert.TextureCoordinates = new Vector(texRight, texBottom);
           vert.Color = color;
           vertices.Add(vert);
 
           vert = new Vertex();
-          vert.Position.X = left;
-          vert.Position.Y = bottom;
-          vert.TextureCoordinates.X = texLeft;
-          vert.TextureCoordinates.Y = texBottom;
+          vert.Position = new Vector(left, bottom);
+          vert.TextureCoordinates = new Vector(texLeft, texBottom);
           vert.Color = color;
           vertices.Add(vert);
 

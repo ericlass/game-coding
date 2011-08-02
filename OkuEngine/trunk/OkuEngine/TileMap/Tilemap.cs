@@ -88,9 +88,12 @@ namespace OkuEngine
     /// Calculates the first intersection of the line segment with a collision tile.
     /// </summary>
     /// <param name="line">The line in world space coordinates.</param>
-    /// <returns>If there is an intersection, the intersection point is returned in world space coordinates. If there is no intersection, null is returned.</returns>
-    public Vector GetIntersection(LineSegment line)
+    /// <param name="ip">The intersection point in world space coordinates is returned in this parameter.</param>
+    /// <returns>If there is an intersection, true is returned. Otherwise false.</returns>
+    public bool GetIntersection(LineSegment line, out Vector ip)
     {
+      ip = Vector.Zero;
+
       int vx = 0;
       int vy = 0;
 
@@ -121,7 +124,7 @@ namespace OkuEngine
           lineOrgMapPixelSpace.Y = p.Y - mapTop;
         }
         else
-          return null; //Ray does not hit tilemap
+          return false; //Ray does not hit tilemap
       }
 
       //Calculate line direction
@@ -183,7 +186,10 @@ namespace OkuEngine
           }
 
           if (intersects)
-            return line.GetPointAt(minT);
+          {
+            ip = line.GetPointAt(minT);
+            return true;
+          }
         }
 
         //Traverse through tile map
@@ -191,14 +197,14 @@ namespace OkuEngine
         {
           vx = vx + stepX;
           if (vx == outX)
-            return null;
+            return false;
           tMaxX = tMaxX + tDeltaX;
         }
         else
         {
           vy = vy + stepY;
           if (vy == outY)
-            return null;
+            return false;
           tMaxY = tMaxY + tDeltaY;
         }
       }

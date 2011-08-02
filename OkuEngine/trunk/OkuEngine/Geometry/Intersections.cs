@@ -174,9 +174,12 @@ namespace OkuEngine
     /// </summary>
     /// <param name="poly1">The first polygon.</param>
     /// <param name="poly2">The second polygon.</param>
-    /// <returns>If an intersection is present, the minimum transalation vector is returned. Otherwise, null is returned.</returns>
-    public static Vector Intersect(VectorList poly1, VectorList poly2)
+    /// <param name="mtd">The minimum transaltion distance is returned in this parameter if true is returned.</param>
+    /// <returns>If an intersection is present, true is returned. Else false.</returns>
+    public static bool Intersect(VectorList poly1, VectorList poly2, out Vector mtd)
     {
+      mtd = Vector.Zero;
+
       VectorList normalAxes = new VectorList();
 
       //Get normals of first poly
@@ -209,27 +212,28 @@ namespace OkuEngine
         GetProjectedBounds(axis, poly2, out min2, out max2);
 
         if (min1 > max2 || max1 < min2)
-          return null;
+          return false;
         else
         {
           float center1 = (min1 + max1);
           float center2 = (min2 + max2);
 
-          float mtd = 0;
+          float mtdValue = 0;
           if (center2 > center1)
-            mtd = max1 - min2;
+            mtdValue = max1 - min2;
           else
-            mtd = min1 - max2;
+            mtdValue = min1 - max2;
 
-          if (Math.Abs(mtd) < Math.Abs(minOverlap))
+          if (Math.Abs(mtdValue) < Math.Abs(minOverlap))
           {
-            minOverlap = mtd;
+            minOverlap = mtdValue;
             separation = axis;
           }
         }
       }
 
-      return separation * minOverlap;
+      mtd = separation * minOverlap;
+      return true;
     }
 
     /// <summary>

@@ -10,8 +10,8 @@ namespace OkuEngine
   /// </summary>
   public class Transformation
   {
-    private Vector _translation = null;
-    private Vector _scale = null;
+    private Vector _translation = Vector.Zero;
+    private Vector _scale = Vector.Zero;
     private float _rotation = 0.0f;
 
     /// <summary>

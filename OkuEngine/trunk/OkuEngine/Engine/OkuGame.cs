@@ -167,28 +167,5 @@ namespace OkuEngine
     {
     }
 
-    /// <summary>
-    /// Checks if the given polygon is i the viewport. At the moment
-    /// this is a simple boudning box test.
-    /// </summary>
-    /// <param name="shape">The shape to test for visibility.</param>
-    /// <returns>True if the shape is visible, else False.</returns>
-    private bool IsInViewPort(VectorList shape)
-    {
-      float left = float.MaxValue;
-      float right = -float.MaxValue;
-      float top = float.MaxValue;
-      float bottom = -float.MaxValue;
-      foreach (Vector vec in shape)
-      {
-        left = Math.Min(left, vec.X);
-        right = Math.Max(right, vec.X);
-        top = Math.Min(top, vec.Y);
-        bottom = Math.Max(bottom, vec.Y);
-      }
-
-      return ((right >= 0) && (left < OkuData.Globals.Get<int>(OkuConstants.VarScreenWidth)) && (bottom >= 0) && (top < OkuData.Globals.Get<int>(OkuConstants.VarScreenHeight)));
-    }
-
   }
 }

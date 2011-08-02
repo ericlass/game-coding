@@ -34,8 +34,7 @@ namespace OkuTest
       for (int i = 0; i < 50; i++)
       {
         Vertex vert = new Vertex();
-        vert.Position.X = (float)(rand.NextDouble()) * width;
-        vert.Position.Y = (float)(rand.NextDouble()) * height;
+        vert.Position = new Vector((float)(rand.NextDouble()) * width, (float)(rand.NextDouble()) * height);
         vert.Color = Color.RandomColor(rand);
         verts.Add(vert);
       }
@@ -58,11 +57,9 @@ namespace OkuTest
         int x = (i * 50) + 50;
         int y = ((i % 2) * 50) + 200;
         Vertex vert = new Vertex();
-        vert.Position.X = x;
-        vert.Position.Y = y;
+        vert.Position = new Vector(x, y);
         vert.Color = Color.RandomColor(rand);
-        vert.TextureCoordinates.X = (float)i / numVerts;
-        vert.TextureCoordinates.Y = (i % 2);
+        vert.TextureCoordinates = new Vector((float)i / numVerts, (i % 2));
         meshVerts.Vertices.Add(vert);
       }
       _mesh = new MeshInstance(meshVerts);

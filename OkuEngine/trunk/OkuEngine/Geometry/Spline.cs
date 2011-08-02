@@ -11,7 +11,7 @@ namespace OkuEngine
   /// </summary>
   public class Spline
   {
-    private List<Vector> _points = null;
+    private VectorList _points = null;
     private double _tension = 0;
     private double _bias = 0;
     private double _continuity = 0;
@@ -20,7 +20,7 @@ namespace OkuEngine
     /// Creates a new spline with the given points.
     /// </summary>
     /// <param name="points">The points that will be used for interpolation.</param>
-    public Spline(List<Vector> points)
+    public Spline(VectorList points)
     {
       _points = points;
     }
@@ -28,7 +28,7 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets the points that are used for interpolation.
     /// </summary>
-    public List<Vector> Points
+    public VectorList Points
     {
       get { return _points; }
       set { _points = value; }
@@ -139,8 +139,8 @@ namespace OkuEngine
       double step = 1.0 / steps;
 
       double result = 0;
-      Vector last = new Vector();
-      Vector current = new Vector();
+      Vector last = Vector.Zero;
+      Vector current = Vector.Zero;
       GetInterpolatedPoint(0, ref last);
       for (double t = step; t <= 1.0; t += step)
       {
@@ -165,9 +165,9 @@ namespace OkuEngine
       VectorList result = new VectorList();
 
       double step = 1.0 / points;
+      Vector vec = Vector.Zero;
       for (double t = 0.0; t <= 1.0; t += step)
       {
-        Vector vec = new Vector();
         GetInterpolatedPoint(t, ref vec);
         result.Add(vec);
       }

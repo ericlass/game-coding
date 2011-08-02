@@ -7,8 +7,8 @@ namespace OkuEngine
   /// </summary>
   public class LineSegment
   {
-    private Vector _start = null;
-    private Vector _end = null;
+    private Vector _start = Vector.Zero;
+    private Vector _end = Vector.Zero;
 
     /// <summary>
     /// Creates a new line segment and initializes it's fields to the given values.
@@ -58,9 +58,7 @@ namespace OkuEngine
     /// <returns>The normalized normal of the line segment.</returns>
     public Vector Normal()
     {
-      float x = _end.X - _start.X;
-      float y = _end.Y - _start.Y;
-      Vector result = new Vector(y, -x);
+      Vector result = new Vector(_end.Y - _start.Y, -(_end.X - _start.X));
       result.Normalize();
       return result;
     }

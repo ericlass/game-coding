@@ -9,36 +9,27 @@ namespace OkuEngine
   /// The + and - operators have been overloaded to add / subtract two vectors. The
   /// * operator is overloaded to scale a vector by a float value.
   /// </summary>
-  public class Vector
+  public struct Vector
   {
     /// <summary>
     /// The X component of the vector.
     /// </summary>
-    private float _x = 0;
+    public float X;
+
     /// <summary>
     /// The Y component of the vector.
     /// </summary>
-    private float _y = 0;
+    public float Y;
 
     /// <summary>
     /// A vector with X and Y set to 0.
     /// </summary>
-    public static Vector Zero
-    {
-      get { return new Vector(); }
-    }    
+    public static Vector Zero = new Vector(0, 0);
 
     /// <summary>
     /// A vector with X and Y set to 1.
     /// </summary>
-    public static Vector One
-    {
-      get { return new Vector(1.0f, 1.0f); }
-    }
-
-    public Vector()
-    {
-    }
+    public static Vector One = new Vector(1, 1);
 
     /// <summary>
     /// Creates a new Vector and initializes X and Y with the given values.
@@ -47,20 +38,8 @@ namespace OkuEngine
     /// <param name="y">The y component.</param>
     public Vector(float x, float y)
     {
-      _x = x;
-      _y = y;
-    }
-
-    public float X
-    {
-      get { return _x; }
-      set { _x = value; }
-    }
-
-    public float Y
-    {
-      get { return _y; }
-      set { _y = value; }
+      X = x;
+      Y = y;
     }
 
     /// <summary>
@@ -68,7 +47,7 @@ namespace OkuEngine
     /// </summary>
     public float Magnitude
     {
-      get { return (float)Math.Sqrt(_x * _x + _y * _y); }
+      get { return (float)Math.Sqrt(X * X + Y * Y); }
     }
 
     /// <summary>
@@ -77,8 +56,8 @@ namespace OkuEngine
     /// <param name="other">The vector to be added.</param>
     public void Add(Vector other)
     {
-      _x += other.X;
-      _y += other.Y;
+      X += other.X;
+      Y += other.Y;
     }
 
     /// <summary>
@@ -87,8 +66,8 @@ namespace OkuEngine
     /// <param name="other">The vector to be subtracted.</param>
     public void Subtract(Vector other)
     {
-      _x -= other.X;
-      _y -= other.X;
+      X -= other.X;
+      Y -= other.X;
     }
 
     /// <summary>
@@ -97,8 +76,8 @@ namespace OkuEngine
     public void Normalize()
     {
       float magnitude = Magnitude;
-      _x /= magnitude;
-      _y /= magnitude;
+      X /= magnitude;
+      Y /= magnitude;
     }
 
     /// <summary>
@@ -107,8 +86,8 @@ namespace OkuEngine
     /// <param name="factor">The scaling factor.</param>
     public void Scale(float factor)
     {
-      _x *= factor;
-      _y *= factor;
+      X *= factor;
+      Y *= factor;
     }
 
     /// <summary>
@@ -119,7 +98,7 @@ namespace OkuEngine
     /// <returns>The dot/scalar product of the two vectors.</returns>
     public float DotProduct(Vector other)
     {
-      return _x * other.X + _y * other.Y;
+      return X * other.X + Y * other.Y;
     }
 
     /// <summary>
@@ -229,8 +208,8 @@ namespace OkuEngine
     /// <param name="vec">The vector to assign to this vector.</param>
     public void Assign(Vector vec)
     {
-      _x = vec._x;
-      _y = vec._y;
+      X = vec.X;
+      Y = vec.Y;
     }
 
     /// <summary>
@@ -241,9 +220,9 @@ namespace OkuEngine
     {
       StringBuilder result = new StringBuilder();
       result.Append("[");
-      result.Append(_x);
+      result.Append(X);
       result.Append(',');
-      result.Append(_y);
+      result.Append(Y);
       result.Append("]");
       return result.ToString();
     }
@@ -255,7 +234,7 @@ namespace OkuEngine
     /// <returns>True if the vectors are equal, else False.</returns>
     public bool Equals(Vector other)
     {
-      return _x == other._x && _y == other._y;
+      return X == other.X && Y == other.Y;
     }
 
     /// <summary>
@@ -270,11 +249,11 @@ namespace OkuEngine
       float sin = (float)Math.Sin(rad);
       float cos = (float)Math.Cos(rad);
 
-      float nx = _x * cos - _y * sin;
-      float ny = _x * sin + _y * cos;
+      float nx = X * cos - Y * sin;
+      float ny = X * sin + Y * cos;
 
-      _x = nx;
-      _y = ny;
+      X = nx;
+      Y = ny;
     }
 
     /// <summary>
@@ -288,7 +267,7 @@ namespace OkuEngine
     /// <returns>The result of the rotation in a new vector.</returns>
     public static Vector Rotate(Vector vec, float angle)
     {
-      Vector result = new Vector();
+      Vector result = Vector.Zero;
       result.Assign(vec);
       result.Rotate(angle);
       return result;
@@ -301,8 +280,8 @@ namespace OkuEngine
     /// <returns>The projected vector.</returns>
     public Vector Project(Vector other)
     {
-      float dp = DotProduct(other) / (_x * _x + _y * _y);
-      return new Vector(dp * _x, dp * _y);
+      float dp = DotProduct(other) / (X * X + Y * Y);
+      return new Vector(dp * X, dp * Y);
     }
 
     /// <summary>
@@ -312,7 +291,7 @@ namespace OkuEngine
     /// <returns>The 1d scalar projecetd value.</returns>
     public float ProjectScalar(Vector other)
     {
-      return DotProduct(other) / (_x * _x + _y * _y);
+      return DotProduct(other) / (X * X + Y * Y);
     }
 
     /// <summary>
@@ -345,7 +324,7 @@ namespace OkuEngine
     /// <returns>The normalized left hand vector of the vector.</returns>
     public Vector GetNormal()
     {
-      Vector normal = new Vector(_y, -_x);
+      Vector normal = new Vector(Y, -X);
       normal.Normalize();
       return normal;
     }

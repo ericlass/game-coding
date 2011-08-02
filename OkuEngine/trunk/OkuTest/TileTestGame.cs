@@ -11,7 +11,8 @@ namespace OkuTest
   {
     private Tilemap _map = null;
     private LineSegment _line = new LineSegment(50, 50, 200, 200);
-    private Vector _colPoint = null;
+    private Vector _colPoint = Vector.Zero;
+    private bool _intersect = false;
 
     public override void Initialize()
     {
@@ -19,8 +20,7 @@ namespace OkuTest
       int mapHeight = 16;
 
       _map = new Tilemap(mapWidth, mapHeight, 32);
-      _map.Origin.X = 50;
-      _map.Origin.Y = 50;
+      _map.Origin = new Vector(50, 50);
       _map.TileImages = ImageContent.LoadSheet(".\\content\\tilesheet.png", 32);
 
       Random rand = new Random();
@@ -50,16 +50,14 @@ namespace OkuTest
       if (OkuDrivers.Input.Mouse.ButtonIsDown(MouseButton.Left))
       {
         System.Drawing.Point p = OkuDrivers.Renderer.MainForm.PointToClient(new System.Drawing.Point(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y));
-        _line.Start.X = p.X;
-        _line.Start.Y = p.Y;
+        _line.Start = new Vector(p.X, p.Y);
       }
       if (OkuDrivers.Input.Mouse.ButtonIsDown(MouseButton.Right))
       {
         System.Drawing.Point p = OkuDrivers.Renderer.MainForm.PointToClient(new System.Drawing.Point(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y));
-        _line.End.X = p.X;
-        _line.End.Y = p.Y;
+        _line.End = new Vector(p.X, p.Y);
       }
-      _colPoint = _map.GetIntersection(_line);
+      _intersect = _map.GetIntersection(_line, out _colPoint);
     }
 
     public override void Render()
@@ -69,7 +67,7 @@ namespace OkuTest
       OkuDrivers.Renderer.DrawPoint(_line.Start, 4, Color.Blue);
       OkuDrivers.Renderer.DrawPoint(_line.End, 4, Color.Blue);
 
-      if (_colPoint != null)
+      if (_intersect)
         OkuDrivers.Renderer.DrawPoint(_colPoint, 4, Color.Green);
     }
 

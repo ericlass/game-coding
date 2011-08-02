@@ -141,10 +141,7 @@ namespace OkuEngine
     public void Transform(VectorList poly)
     {
       for (int i = 0; i < poly.Count; i++)
-      {
-        Vector vec = poly[i];
-        Transform(ref vec);
-      }
+        poly[i] = Transform(poly[i]);
     }
 
     /// <summary>
