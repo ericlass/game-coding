@@ -165,15 +165,6 @@ namespace OkuEngine
     void DrawLine(Vector start, Vector end, float width, Color color);
 
     /// <summary>
-    /// Draws a line from start to end with the given width. The color of the line 
-    /// is determined by the color of the vertices.
-    /// </summary>
-    /// <param name="start">The start vertex.</param>
-    /// <param name="end">The end vertex.</param>
-    /// <param name="width">The width of the line in pixels.</param>
-    void DrawLine(Vertex start, Vertex end, float width);
-
-    /// <summary>
     /// Draws a series of lines using the given vertices with the given width and color.
     /// How the vertices are interpreted is specified by interpretation.
     /// </summary>
@@ -181,16 +172,7 @@ namespace OkuEngine
     /// <param name="width">The width of the lines in pixel.</param>
     /// <param name="color">The color of the lines.</param>
     /// <param name="interpretation">Specifies how to interpret the vertices.</param>
-    void DrawLines(VectorList vertices, float width, Color color, VertexInterpretation interpretation);
-
-    /// <summary>
-    /// Draws lines using the given vertices with the given width. The color of the lines 
-    /// is determined by the color of their vertices.
-    /// </summary>
-    /// <param name="vertices">The vertices to use.</param>
-    /// <param name="width">The width of the line in pixels.</param>
-    /// <param name="interpretation">Specifies how to interpret the vertices.</param>
-    void DrawLines(VertexList vertices, float width, VertexInterpretation interpretation);
+    void DrawLines(Vector[] vertices, float width, Color color, VertexInterpretation interpretation);
 
     /// <summary>
     /// Draws a line from start to end with the given width and color. The vertices (start and end) are
@@ -204,17 +186,6 @@ namespace OkuEngine
     void DrawLine(Vector start, Vector end, Matrix3 transform, float width, Color color);
 
     /// <summary>
-    /// Draws a line from start to end with the given width. The vertices (start and end) are
-    /// tranformed by the transformation matrix before drawing. The color of the line 
-    /// is determined by the color of the vertices.
-    /// </summary>
-    /// <param name="start">The start vertex.</param>
-    /// <param name="end">The end vertex.</param>
-    /// <param name="transform">The transformation matrix.</param>
-    /// <param name="width">The width of the line in pixels.</param>
-    void DrawLine(Vertex start, Vertex end, Matrix3 transform, float width);
-
-    /// <summary>
     /// Draws lines using the given vertices with the given width and color. The vertices are
     /// tranformed by the transformation matrix before drawing.
     /// </summary>
@@ -223,18 +194,7 @@ namespace OkuEngine
     /// <param name="width">The width of the line in pixels.</param>
     /// <param name="color">The color of the line.</param>
     /// <param name="interpretation">Specifies how to interpret the vertices.</param>
-    void DrawLines(VectorList vertices, Matrix3 transform, float width, Color color, VertexInterpretation interpretation);
-
-    /// <summary>
-    /// Draws lines using the given vertices with the given width. The vertices are
-    /// tranformed by the transformation matrix before drawing. The color of the lines 
-    /// is determined by the color of their vertices.
-    /// </summary>
-    /// <param name="vertices">The vertices to use.</param>
-    /// <param name="transform">The transformation matrix.</param>
-    /// <param name="width">The width of the line in pixels.</param>
-    /// <param name="interpretation">Specifies how to interpret the vertices.</param>
-    void DrawLines(VertexList vertices, Matrix3 transform, float width, VertexInterpretation interpretation);
+    void DrawLines(Vector[] vertices, Matrix3 transform, float width, Color color, VertexInterpretation interpretation);
 
     /// <summary>
     /// Draws a white point at the given coordinates with the given size.
@@ -262,28 +222,12 @@ namespace OkuEngine
     void DrawPoint(Vector p, float size, Color color);
 
     /// <summary>
-    /// Draws a point at the given vertex with the given size.
-    /// The color of the point is taken from the vertex color.
-    /// </summary>
-    /// <param name="p">The center of the point in screen space pixels.</param>
-    /// <param name="size">The size of the point in pixels.</param>
-    void DrawPoint(Vertex p, float size);
-
-    /// <summary>
     /// Draws a series of points at the given vertices with the given size and color.
     /// </summary>
     /// <param name="points">The center of the points in screen space pixels.</param>
     /// <param name="size">The size of the points in pixels.</param>
     /// <param name="color">The color of the points.</param>
-    void DrawPoints(VectorList points, float size, Color color);
-
-    /// <summary>
-    /// Draws a series of points at the given vertices with the given size.
-    /// The color of the points is taken from the vertex colors.
-    /// </summary>
-    /// <param name="points">The vertices of the points.</param>
-    /// <param name="size">The size of the points in pixels.</param>
-    void DrawPoints(VertexList points, float size);
+    void DrawPoints(Vector[] points, float size, Color color);
 
     /// <summary>
     /// Draws a point at the given point p with the given size and color.
@@ -296,16 +240,6 @@ namespace OkuEngine
     void DrawPoint(Vector p, Matrix3 transform, float size, Color color);
 
     /// <summary>
-    /// Draws a point at the given vertex with the given size.
-    /// The point is transformed by the given transformation matrix before drawing.
-    /// The color of the point is taken from the vertex color.
-    /// </summary>
-    /// <param name="p">The center of the point in screen space pixels.</param>
-    /// <param name="transform">The transformation matrix.</param>
-    /// <param name="size">The size of the point in pixels.</param>
-    void DrawPoint(Vertex p, Matrix3 transform, float size);
-
-    /// <summary>
     /// Draws a series of points at the given vertices with the given size and color.
     /// The points are transformed by the given transformation matrix before drawing.
     /// </summary>
@@ -313,61 +247,17 @@ namespace OkuEngine
     /// <param name="transform">The transformation matrix.</param>
     /// <param name="size">The size of the points in pixels.</param>
     /// <param name="color">The color of the points.</param>
-    void DrawPoints(VectorList points, Matrix3 transform, float size, Color color);
+    void DrawPoints(Vector[] points, Matrix3 transform, float size, Color color);
 
     /// <summary>
-    /// Draws a series of points at the given vertices with the given size.
-    /// The points are transformed by the given transformation matrix before drawing.
-    /// The color of the points is taken from the vertex colors.
+    /// Draws a generic mesh using the given parameters.
     /// </summary>
-    /// <param name="points">The vertices of the points.</param>
-    /// <param name="transform">The transformation matrix.</param>
-    /// <param name="size">The size of the points in pixels.</param>
-    void DrawPoints(VertexList points, Matrix3 transform, float size);
-
-    /// <summary>
-    /// Draws a mesh using the given vertices and mesh mode. The vertices are
-    /// interpreted as screen space coordinates. The vertex colors will color
-    /// the rendered mesh.
-    /// </summary>
-    /// <param name="vertices">The vertices of the mesh.</param>
-    /// <param name="mode">The mesh drwing mode.</param>
-    void DrawMesh(VertexList vertices, MeshMode mode);
-
-    /// <summary>
-    /// Draws a mesh using the given vertices and mesh mode. The vertices are
-    /// interpreted as screen space coordinates. The mesh is textured with the 
-    /// given texture using the texture coordinates of the vertices. Vertex colors 
-    /// tint the texture.
-    /// </summary>
-    /// <param name="vertices">The vertices of the mesh.</param>
-    /// <param name="mode">The mesh drwing mode.</param>
-    /// <param name="texture">The texture to use. Can be null to specify no texture.</param>
-    void DrawMesh(VertexList vertices, MeshMode mode, ImageContent texture);
-
-    /// <summary>
-    /// Draws a mesh using the given vertices and mesh mode. The vertices are
-    /// interpreted as screen space coordinates. The vertex colors will color
-    /// the rendered mesh. Before drawing the vertices are transformed by the 
-    /// given transformation matrix.
-    /// </summary>
-    /// <param name="vertices">The vertices of the mesh.</param>
-    /// <param name="transform">The transformation matrix.</param>
-    /// <param name="mode">The mesh drwing mode.</param>    
-    void DrawMesh(VertexList vertices, MeshMode mode, Matrix3 transform);
-
-    /// <summary>
-    /// Draws a mesh using the given vertices and mesh mode. The vertices are
-    /// interpreted as screen space coordinates. The mesh is textured with the 
-    /// given texture using the texture coordinates of the vertices. Vertex colors 
-    /// tint the texture. Before drawing the vertices are transformed by the 
-    /// given transformation matrix.
-    /// </summary>
-    /// <param name="vertices">The vertices of the mesh.</param>
-    /// <param name="mode">The mesh drwing mode.</param>
-    /// <param name="transform">The transformation matrix.</param>
-    /// <param name="texture">The texture to use. Can be null to specify no texture.</param>
-    void DrawMesh(VertexList vertices, MeshMode mode, Matrix3 transform, ImageContent texture);
+    /// <param name="points">The coordinates of the vertices of the mesh in world space. Must not be null.</param>
+    /// <param name="texCoords">The normalized texture coordinates of the vertices. Must be same length as points. If null, no texture is applied.</param>
+    /// <param name="colors">The colors of the vertices. Must be same length as points. If null, white is used as default color.</param>
+    /// <param name="mode">The mode used to create polygons from the given vertices.</param>
+    /// <param name="texture">The texture to be applied. If not null, texCoords must also be given.</param>
+    void DrawMesh(Vector[] points, Vector[] texCoords, Color[] colors, MeshMode mode, ImageContent texture);
 
     /// <summary>
     /// Initializes image content which means that textures are created for them.

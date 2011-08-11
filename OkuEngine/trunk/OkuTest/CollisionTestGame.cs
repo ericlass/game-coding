@@ -26,13 +26,13 @@ namespace OkuTest
       }
     }
 
-    private VectorList _box1 = VectorList.Box(-50, 50, -100, 100);
+    private Vector[] _box1 = PolygonFactory.Box(-50, 50, -100, 100);
     private Transformation _transform1 = new Transformation();
-    private VectorList _transformed1 = new VectorList();
+    private Vector[] _transformed1 = null;
 
-    private VectorList _box2 = VectorList.Box(-25, 25, -50, 50);
+    private Vector[] _box2 = PolygonFactory.Box(-25, 25, -50, 50);
     private Transformation _transform2 = new Transformation();
-    private VectorList _transformed2 = new VectorList();    
+    private Vector[] _transformed2 = null;
 
     private Vector _mtd = Vector.Zero;
     private bool _intersect = false;
@@ -51,6 +51,9 @@ namespace OkuTest
 
       _transform1.Translation = new Vector(100, 150);
       _transform2.Translation = new Vector(300, 150);
+
+      _transformed1 = new Vector[_box1.Length];
+      _transformed2 = new Vector[_box2.Length];
 
       Matrix3 transform = Matrix3.Indentity;
       transform.ApplyTransform(_transform1);

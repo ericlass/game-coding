@@ -41,14 +41,9 @@ namespace OkuEngine
       set { _interpretation = value; }
     }
 
-    public override void Draw(Matrix3 transform)
-    {
-      OkuDrivers.Renderer.DrawLines(_content.Vertices, transform, _lineWidth, _interpretation);
-    }
-
     public void Draw()
     {
-      OkuDrivers.Renderer.DrawLines(_content.Vertices, _lineWidth, _interpretation);
+      OkuDrivers.Renderer.DrawLines(_content.Positions, _lineWidth, _lineColor, _interpretation);
     }
 
   }

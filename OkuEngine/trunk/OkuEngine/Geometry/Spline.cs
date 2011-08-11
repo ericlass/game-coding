@@ -11,7 +11,7 @@ namespace OkuEngine
   /// </summary>
   public class Spline
   {
-    private VectorList _points = null;
+    private Vector[] _points = null;
     private double _tension = 0;
     private double _bias = 0;
     private double _continuity = 0;
@@ -20,7 +20,7 @@ namespace OkuEngine
     /// Creates a new spline with the given points.
     /// </summary>
     /// <param name="points">The points that will be used for interpolation.</param>
-    public Spline(VectorList points)
+    public Spline(Vector[] points)
     {
       _points = points;
     }
@@ -28,7 +28,7 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets the points that are used for interpolation.
     /// </summary>
-    public VectorList Points
+    public Vector[] Points
     {
       get { return _points; }
       set { _points = value; }
@@ -116,12 +116,12 @@ namespace OkuEngine
       if ((t < 0) || (t > 1))
         return false;
 
-      double realPos = t * (_points.Count - 1);
+      double realPos = t * (_points.Length - 1);
       int second = (int)Math.Floor(realPos);
       int third = (int)Math.Ceiling(realPos);
 
       int first = Math.Max(second - 1, 0);
-      int fourth = Math.Min(third + 1, _points.Count - 1);
+      int fourth = Math.Min(third + 1, _points.Length - 1);
 
       result = InterpolateHermite(_points[first], _points[second], _points[third], _points[fourth], t, _tension, _bias, _continuity);
 
@@ -135,7 +135,7 @@ namespace OkuEngine
     /// <returns>The aproximated arc-length of the spline.</returns>
     public double GetLength()
     {
-      int steps = _points.Count * 20;
+      int steps = _points.Length * 20;
       double step = 1.0 / steps;
 
       double result = 0;
@@ -160,22 +160,24 @@ namespace OkuEngine
     /// </summary>
     /// <param name="points">Specifies how many points the resulting polygon will have.</param>
     /// <returns>The tesselated polygon.</returns>
-    public VectorList Tesselate(int points)
+    public Vector[] Tesselate(int points)
     {
-      VectorList result = new VectorList();
+      Vector[] result = new Vector[points];
 
-      double step = 1.0 / points;
+      double step = 1.0 / (points - 1);
       Vector vec = Vector.Zero;
-      for (double t = 0.0; t <= 1.0; t += step)
+
+      for (int i = 0; i < points; i++)
       {
+        double t = i * step;
         GetInterpolatedPoint(t, ref vec);
-        result.Add(vec);
+        result[i] = vec;
       }
 
       return result;
     }
 
-    public VectorList TesselateParameterized()
+    public Vector[] TesselateParameterized()
     {
       throw new NotImplementedException("TesselateParameterized");
     }

@@ -176,24 +176,24 @@ namespace OkuEngine
     /// <param name="poly2">The second polygon.</param>
     /// <param name="mtd">The minimum transaltion distance is returned in this parameter if true is returned.</param>
     /// <returns>If an intersection is present, true is returned. Else false.</returns>
-    public static bool Intersect(VectorList poly1, VectorList poly2, out Vector mtd)
+    public static bool Intersect(Vector[] poly1, Vector[] poly2, out Vector mtd)
     {
       mtd = Vector.Zero;
 
-      VectorList normalAxes = new VectorList();
+      List<Vector> normalAxes = new List<Vector>(poly1.Length + poly2.Length);
 
       //Get normals of first poly
-      for (int i = 0; i < poly1.Count; i++)
+      for (int i = 0; i < poly1.Length; i++)
       {
-        int j = (i + 1) % poly1.Count;
+        int j = (i + 1) % poly1.Length;
         Vector vec = poly1[j] - poly1[i];
         normalAxes.Add(vec.GetNormal());
       }
 
       //Get normals of second poly
-      for (int i = 0; i < poly2.Count; i++)
+      for (int i = 0; i < poly2.Length; i++)
       {
-        int j = (i + 1) % poly2.Count;
+        int j = (i + 1) % poly2.Length;
         Vector vec = poly2[j] - poly2[i];
         normalAxes.Add(vec.GetNormal());
       }
@@ -244,9 +244,9 @@ namespace OkuEngine
     /// <param name="poly">The polygon to be projected. Must have at least one point.</param>
     /// <param name="min">The minimum projection value is returned in this parameter.</param>
     /// <param name="max">The maximum projection value is returned in this parameter.</param>
-    private static void GetProjectedBounds(Vector axis, VectorList poly, out float min, out float max)
+    private static void GetProjectedBounds(Vector axis, Vector[] poly, out float min, out float max)
     {
-      if (poly.Count < 1)
+      if (poly.Length < 1)
         throw new ArgumentException("Poly must have at least one vector!");
 
       min = float.MaxValue;

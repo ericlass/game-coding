@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace OkuEngine
 {
   /// <summary>
   /// Stores a color value in RGBA format.
   /// </summary>
+  [StructLayout(LayoutKind.Sequential)]
   public struct Color
   {
     public float R;

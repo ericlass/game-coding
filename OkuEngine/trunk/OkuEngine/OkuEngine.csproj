@@ -66,6 +66,7 @@
     <Compile Include="Driver\MeshMode.cs" />
     <Compile Include="Driver\VertexInterpretation.cs" />
     <Compile Include="Geometry\Intersections.cs" />
+    <Compile Include="Geometry\PolygonFactory.cs" />
     <Compile Include="Instance\MeshInstance.cs" />
     <Compile Include="Instance\ImageInstance.cs" />
     <Compile Include="Instance\ContentInstance.cs" />
@@ -81,7 +82,6 @@
     <Compile Include="Engine\OkuGame.cs" />
     <Compile Include="Driver\OpenALSoundEngine.cs" />
     <Compile Include="Driver\OpenGLRenderer.cs" />
-    <Compile Include="Geometry\VectorList.cs" />
     <Compile Include="Content\VertexContent.cs" />
     <Compile Include="Instance\PolygonInstance.cs" />
     <Compile Include="Geometry\Quad.cs" />
@@ -105,8 +105,6 @@
     <Compile Include="Input\KeyboardInput.cs" />
     <Compile Include="Input\MouseInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Geometry\Vertex.cs" />
-    <Compile Include="Geometry\VertexList.cs" />
     <Compile Include="WaveLoader.cs" />
     <Compile Include="Platform\Winmm.cs" />
   </ItemGroup>

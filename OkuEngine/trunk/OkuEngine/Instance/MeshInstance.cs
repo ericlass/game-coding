@@ -57,17 +57,10 @@ namespace OkuEngine
 
     public void Draw()
     {
-      OkuDrivers.Renderer.DrawMesh(_vertices.Vertices, _mode, _texture);
-    }
-
-    public override void Draw(Matrix3 transform)
-    {
-      OkuDrivers.Renderer.DrawMesh(_vertices.Vertices, _mode, transform, _texture);
+      OkuDrivers.Renderer.DrawMesh(_vertices.Positions, _vertices.TexCoords, _vertices.Colors, _mode, _texture);
     }
 
     //TODO: static functions to create default geometry like quads, circles...
-
-
     
   }
 }

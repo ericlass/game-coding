@@ -134,7 +134,6 @@ namespace OkuEngine
     {
       PrepareChars(text);
 
-      VertexList vertices = new VertexList();
       float left = offsetX;
       float top = offsetY;
       float bottom = top + _font.Height;      
@@ -142,6 +141,10 @@ namespace OkuEngine
       float textureSize = _texWidth;
 
       float texBottom = _font.Height / (float)_texHeight;
+
+      List<Vector> positions = new List<Vector>();
+      List<Vector> texCoords = new List<Vector>();
+      List<Color> colors = new List<Color>();
       
       foreach (char current in text)
       {
@@ -159,35 +162,27 @@ namespace OkuEngine
 
           float right = left + dims.Width;
 
-          Vertex vert = new Vertex();
-          vert.Position = new Vector(left, top);
-          vert.TextureCoordinates = new Vector(texLeft, 0);
-          vert.Color = color;
-          vertices.Add(vert);
+          positions.Add(new Vector(left, top));
+          texCoords.Add(new Vector(texLeft, 0));
+          colors.Add(color);
 
-          vert = new Vertex();
-          vert.Position = new Vector(right, top);
-          vert.TextureCoordinates = new Vector(texRight, 0);
-          vert.Color = color;
-          vertices.Add(vert);
+          positions.Add(new Vector(right, top));
+          texCoords.Add(new Vector(texRight, 0));
+          colors.Add(color);
 
-          vert = new Vertex();
-          vert.Position = new Vector(right, bottom);
-          vert.TextureCoordinates = new Vector(texRight, texBottom);
-          vert.Color = color;
-          vertices.Add(vert);
+          positions.Add(new Vector(right, bottom));
+          texCoords.Add(new Vector(texRight, texBottom));
+          colors.Add(color);
 
-          vert = new Vertex();
-          vert.Position = new Vector(left, bottom);
-          vert.TextureCoordinates = new Vector(texLeft, texBottom);
-          vert.Color = color;
-          vertices.Add(vert);
+          positions.Add(new Vector(left, bottom));
+          texCoords.Add(new Vector(texLeft, texBottom));
+          colors.Add(color);
 
           left += dims.Width;
         }
       }
 
-      VertexContent content = new VertexContent(vertices);
+      VertexContent content = new VertexContent(positions.ToArray(), texCoords.ToArray(), colors.ToArray());
       return  new MeshInstance(content, _fontSheetContent, MeshMode.Quads);
     }
 

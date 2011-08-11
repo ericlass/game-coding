@@ -44,9 +44,9 @@ namespace OkuEngine
       set { _bottom = value; }
     }
 
-    public VectorList GetNormals()
+    public Vector[] GetNormals()
     {
-      return new VectorList() {
+      return new Vector[4] {
         Vector.FromPoints(_left, _top, _right, _top).GetNormal(),
         Vector.FromPoints(_right, _top, _right, _bottom).GetNormal(),
         Vector.FromPoints(_right, _bottom, _left, _bottom).GetNormal(),

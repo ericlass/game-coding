@@ -52,10 +52,5 @@ namespace OkuEngine
       OkuDrivers.Renderer.DrawImage(_content, position, rotation, scale, _tintColor);
     }
 
-    public override void Draw(Matrix3 transform)
-    {
-      OkuDrivers.Renderer.DrawImage(_content, transform, _tintColor);
-    }
-
   }
 }

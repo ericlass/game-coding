@@ -138,9 +138,9 @@ namespace OkuEngine
     /// Transforms the given polygon.
     /// </summary>
     /// <param name="poly">The polygon to be transformed.</param>
-    public void Transform(VectorList poly)
+    public void Transform(Vector[] poly)
     {
-      for (int i = 0; i < poly.Count; i++)
+      for (int i = 0; i < poly.Length; i++)
         poly[i] = Transform(poly[i]);
     }
 
@@ -149,11 +149,10 @@ namespace OkuEngine
     /// </summary>
     /// <param name="poly">The polygon that is transformed.</param>
     /// <param name="target">The resulting transformed polygon.</param>    
-    public void Transform(VectorList poly, VectorList target)
+    public void Transform(Vector[] poly, Vector[] target)
     {
-      target.Clear();
-      for (int i = 0; i < poly.Count; i++)
-        target.Add(Transform(poly[i]));
+      for (int i = 0; i < poly.Length; i++)
+        target[i] = Transform(poly[i]);
     }
 
     /// <summary>

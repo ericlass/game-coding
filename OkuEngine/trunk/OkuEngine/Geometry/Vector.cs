@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace OkuEngine
 {
@@ -9,6 +10,7 @@ namespace OkuEngine
   /// The + and - operators have been overloaded to add / subtract two vectors. The
   /// * operator is overloaded to scale a vector by a float value.
   /// </summary>
+  [StructLayout(LayoutKind.Sequential)]
   public struct Vector
   {
     /// <summary>

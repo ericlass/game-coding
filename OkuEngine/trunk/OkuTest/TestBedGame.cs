@@ -27,18 +27,17 @@ namespace OkuTest
       _smiley = new ImageInstance(content);
       _smiley.TintColor = Color.Green;
 
-      VertexList verts = new VertexList();
+      Vector[] verts = new Vector[50];
+      Color[] colors = new Color[verts.Length];
       Random rand = new Random();
       int width = OkuData.Globals.Get<int>(OkuConstants.VarScreenWidth);
       int height = OkuData.Globals.Get<int>(OkuConstants.VarScreenHeight);
-      for (int i = 0; i < 50; i++)
+      for (int i = 0; i < verts.Length; i++)
       {
-        Vertex vert = new Vertex();
-        vert.Position = new Vector((float)(rand.NextDouble()) * width, (float)(rand.NextDouble()) * height);
-        vert.Color = Color.RandomColor(rand);
-        verts.Add(vert);
+        verts[i] = new Vector((float)(rand.NextDouble()) * width, (float)(rand.NextDouble()) * height);
+        colors[i] = Color.RandomColor(rand);
       }
-      VertexContent polyContent = new VertexContent(verts);
+      VertexContent polyContent = new VertexContent(verts, colors);
       _poly = new PolygonInstance(polyContent);
       _poly.Interpretation = VertexInterpretation.PolygonClosed;
       _poly.LineWidth = 3;
@@ -50,19 +49,21 @@ namespace OkuTest
 
       _sound = new SoundInstance(sound);
 
-      VertexContent meshVerts = new VertexContent();
       int numVerts = 10;
+      verts = new Vector[numVerts];
+      colors = new Color[numVerts];
+      Vector[] texCoords = new Vector[numVerts];
       for (int i = 0; i < numVerts; i++)
       {
         int x = (i * 50) + 50;
         int y = ((i % 2) * 50) + 200;
-        Vertex vert = new Vertex();
-        vert.Position = new Vector(x, y);
-        vert.Color = Color.RandomColor(rand);
-        vert.TextureCoordinates = new Vector((float)i / numVerts, (i % 2));
-        meshVerts.Vertices.Add(vert);
+
+        verts[i] = new Vector(x, y);
+        colors[i] = Color.RandomColor(rand);
+        texCoords[i] = new Vector((float)i / numVerts, (i % 2));
       }
-      _mesh = new MeshInstance(meshVerts);
+      polyContent = new VertexContent(verts, texCoords, colors);
+      _mesh = new MeshInstance(polyContent);
       _mesh.Mode = MeshMode.TriangleStrip;
 
       ImageContent car = new ImageContent(".\\content\\car.png");
