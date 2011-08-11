@@ -43,7 +43,10 @@ namespace OkuEngine
 
     public void Draw()
     {
-      OkuDrivers.Renderer.DrawLines(_content.Positions, _lineWidth, _lineColor, _interpretation);
+      if (_content.Colors != null)
+        OkuDrivers.Renderer.DrawLines(_content.Positions, _content.Colors, _lineWidth, _interpretation);
+      else
+        OkuDrivers.Renderer.DrawLines(_content.Positions, _lineWidth, _lineColor, _interpretation);
     }
 
   }

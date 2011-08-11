@@ -451,73 +451,6 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Draws the given image transforming it by the given tranformation matrix.
-    /// </summary>
-    /// <param name="content">The content to be drawn.</param>
-    /// <param name="transform">The transformation matrix.</param>
-    public void DrawImage(ImageContent content, Matrix3 transform)
-    {
-      DrawImage(content, transform, Color.White);
-    }
-
-    /// <summary>
-    /// Draws the given image transforming it by the given tranformation matrix.
-    /// The image is tinted with given tint color.
-    /// </summary>
-    /// <param name="content">The content to be drawn.</param>
-    /// <param name="transform">The transformation matrix.</param>
-    public void DrawImage(ImageContent content, Matrix3 transform, Color tint)
-    {
-      if (!_textures.ContainsKey(content.ContentId))
-        return;
-
-      int textureId = _textures[content.ContentId];
-      Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
-
-      float halfWidth = content.Width / 2.0f;
-      float halfHeight = content.Height / 2.0f;
-
-      Gl.glBegin(Gl.GL_QUADS);
-
-      Gl.glColor4f(tint.R, tint.G, tint.B, tint.A);
-
-      Gl.glTexCoord2f(0, 0);
-
-      float x = -halfWidth;
-      float y = -halfHeight;
-      transform.Transform(ref x, ref y);
-      Gl.glVertex2f(x, y);
-
-      Gl.glTexCoord2f(1, 0);
-
-      x = halfWidth;
-      y = -halfHeight;
-      transform.Transform(ref x, ref y);
-      Gl.glVertex2f(x, y);
-
-      Gl.glTexCoord2f(1, 1);
-
-      x = halfWidth;
-      y = halfHeight;
-      transform.Transform(ref x, ref y);
-      Gl.glVertex2f(x, y);
-
-      Gl.glTexCoord2f(0, 1);
-
-      x = -halfWidth;
-      y = halfHeight;
-      transform.Transform(ref x, ref y);
-      Gl.glVertex2f(x, y);
-
-      Gl.glEnd();
-    }
-
-    public void DrawLine(float x1, float y1, float x2, float y2, float width, Color color)
-    {
-      DrawLines(new Vector[2] { new Vector(x1, y1), new Vector(x2, y2) }, width, color, VertexInterpretation.LineSegments);
-    }
-
-    /// <summary>
     /// Draws a line from start to end with the given width and color.
     /// </summary>
     /// <param name="start">The start of the line.</param>
@@ -526,7 +459,23 @@ namespace OkuEngine
     /// <param name="color">The color of the line.</param>
     public void DrawLine(Vector start, Vector end, float width, Color color)
     {
-      DrawLines(new Vector[2] { start, end }, width, color, VertexInterpretation.LineSegments);
+      Gl.glDisable(Gl.GL_TEXTURE_2D);
+      try
+      {
+        Gl.glLineWidth(width);
+
+        Gl.glBegin(Gl.GL_LINES);
+
+        Gl.glColor4f(color.R, color.G, color.B, color.A);
+        Gl.glVertex2f(start.X, start.Y);
+        Gl.glVertex2f(end.X, end.Y);
+
+        Gl.glEnd();
+      }
+      finally
+      {
+        Gl.glEnable(Gl.GL_TEXTURE_2D);
+      } 
     }
 
     /// <summary>
@@ -548,7 +497,7 @@ namespace OkuEngine
         int primitive = VertexIntToGLPrimitive(interpretation);
 
         //Draw the lines
-        Gl.glBegin(primitive);
+        /*Gl.glBegin(primitive);
 
         Gl.glColor4f(color.R, color.G, color.B, color.A);
         foreach (Vector vec in vertices)
@@ -556,7 +505,11 @@ namespace OkuEngine
           Gl.glVertex2f(vec.X, vec.Y);
         }
 
-        Gl.glEnd();
+        Gl.glEnd();*/
+
+        Gl.glColor4f(color.R, color.G, color.B, color.A);
+        SetPointers(vertices, null, null);
+        Gl.glDrawArrays(primitive, 0, vertices.Length);
       }
       finally
       {
@@ -564,65 +517,23 @@ namespace OkuEngine
       }   
     }
 
-    /// <summary>
-    /// Draws a line from start to end with the given width and color. The vertices (start and end) are
-    /// tranformed by the transformation matrix before drawing.
-    /// </summary>
-    /// <param name="start">The start point.</param>
-    /// <param name="end">The end point.</param>
-    /// <param name="transform">The transformation matrix.</param>
-    /// <param name="width">The width of the line in pixels.</param>
-    /// <param name="color">The color of the line.</param>
-    public void DrawLine(Vector start, Vector end, Matrix3 transform, float width, Color color)
-    {
-      DrawLines(new Vector[2] { start, end }, transform, width, color, VertexInterpretation.LineSegments);
-    }
-
-    /// <summary>
-    /// Draws lines using the given vertices with the given width and color. The vertices are
-    /// tranformed by the transformation matrix before drawing.
-    /// </summary>
-    /// <param name="vertices">The vertices to use.</param>
-    /// <param name="transform">The transformation matrix.</param>
-    /// <param name="width">The width of the line in pixels.</param>
-    /// <param name="color">The color of the line.</param>
-    /// <param name="interpretation">Specifies how to interpret the vertices.</param>
-    public void DrawLines(Vector[] vertices, Matrix3 transform, float width, Color color, VertexInterpretation interpretation)
+    public void DrawLines(Vector[] vertices, Color[] colors, float width, VertexInterpretation interpretation)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
       try
       {
         Gl.glLineWidth(width);
 
+        //Convert the interpretation to an OpenGL primitive type.
         int primitive = VertexIntToGLPrimitive(interpretation);
 
-        Gl.glBegin(primitive);
-
-        Gl.glColor4f(color.R, color.G, color.B, color.A);
-        foreach (Vector vec in vertices)
-        {
-          float x = vec.X;
-          float y = vec.Y;
-          transform.Transform(ref x, ref y);
-          Gl.glVertex2f(x, y);
-        }
-
-        Gl.glEnd();
+        SetPointers(vertices, null, colors);
+        Gl.glDrawArrays(primitive, 0, vertices.Length);
       }
       finally
       {
         Gl.glEnable(Gl.GL_TEXTURE_2D);
       }
-    }
-
-    public void DrawPoint(float x, float y, float size)
-    {
-      DrawPoints(new Vector[1] { new Vector(x, y) }, size, Color.White);
-    }
-
-    public void DrawPoint(float x, float y, float size, Color color)
-    {
-      DrawPoints(new Vector[1] { new Vector(x, y) }, size, color);
     }
 
     /// <summary>
@@ -666,52 +577,9 @@ namespace OkuEngine
       }
     }
 
-    /// <summary>
-    /// Draws a point at the given point p with the given size and color.
-    /// The point is transformed by the given transformation matrix before drawing.
-    /// </summary>
-    /// <param name="p">The center of the point in screen space pixels.</param>
-    /// <param name="transform">The transformation matrix.</param>
-    /// <param name="size">The size of the point in pixels.</param>
-    /// <param name="color">The color of the point.</param>
-    public void DrawPoint(Vector p, Matrix3 transform, float size, Color color)
+    public void DrawPoints(Vector[] points, Color[] colors, float size)
     {
-      DrawPoints(new Vector[1] { p }, transform, size, color);    
-    }
-
-    /// <summary>
-    /// Draws a series of points at the given vertices with the given size and color.
-    /// The points are transformed by the given transformation matrix before drawing.
-    /// </summary>
-    /// <param name="points">The center of the points in screen space pixels.</param>
-    /// <param name="transform">The transformation matrix.</param>
-    /// <param name="size">The size of the points in pixels.</param>
-    /// <param name="color">The color of the points.</param>
-    public void DrawPoints(Vector[] points, Matrix3 transform, float size, Color color)
-    {
-      Gl.glDisable(Gl.GL_TEXTURE_2D);
-
-      try
-      {
-        Gl.glPointSize(size);
-
-        Gl.glBegin(Gl.GL_POINTS);
-
-        Gl.glColor4f(color.R, color.G, color.B, color.A);
-        foreach (Vector vec in points)
-        {
-          float x = vec.X;
-          float y = vec.Y;
-          transform.Transform(ref x, ref y);
-          Gl.glVertex2f(x, y);
-        }
-
-        Gl.glEnd();
-      }
-      finally
-      {
-        Gl.glEnable(Gl.GL_TEXTURE_2D);
-      } 
+      throw new NotImplementedException();
     }
 
     public void DrawMesh(Vector[] points, Vector[] texCoords, Color[] colors, MeshMode mode, ImageContent texture)
@@ -729,11 +597,49 @@ namespace OkuEngine
 
       int primitive = MeshModeToGLPrimitive(mode);
 
-      Gl.glVertexPointer(2, Gl.GL_FLOAT, System.Runtime.InteropServices.Marshal.SizeOf(Vector.Zero), points);
+      SetPointers(points, texCoords, colors);
+      /*Gl.glVertexPointer(2, Gl.GL_FLOAT, System.Runtime.InteropServices.Marshal.SizeOf(Vector.Zero), points);
       Gl.glColorPointer(4, Gl.GL_FLOAT, System.Runtime.InteropServices.Marshal.SizeOf(Color.Black), colors);
-      Gl.glTexCoordPointer(2, Gl.GL_FLOAT, System.Runtime.InteropServices.Marshal.SizeOf(Vector.Zero), texCoords);
+      Gl.glTexCoordPointer(2, Gl.GL_FLOAT, System.Runtime.InteropServices.Marshal.SizeOf(Vector.Zero), texCoords);*/
 
       Gl.glDrawArrays(primitive, 0, points.Length);
+    }
+
+    /// <summary>
+    /// Set array pointers for vertices, texture coordinates and vertex colors.
+    /// If a non-null value is given for an array, the corresponding client state
+    /// array is enabled. If null is given, it is disabled.
+    /// </summary>
+    /// <param name="vertices">The vertex array.</param>
+    /// <param name="texCoords">The texture coordinate array.</param>
+    /// <param name="colors">The vertex color array.</param>
+    private void SetPointers(Vector[] vertices, Vector[] texCoords, Color[] colors)
+    {
+      int vectorSize = System.Runtime.InteropServices.Marshal.SizeOf(Vector.Zero);
+
+      if (vertices != null)
+      {
+        Gl.glEnableClientState(Gl.GL_VERTEX_ARRAY);
+        Gl.glVertexPointer(2, Gl.GL_FLOAT, vectorSize, vertices);
+      }
+      else
+        Gl.glDisableClientState(Gl.GL_VERTEX_ARRAY);
+
+      if (texCoords != null)
+      {
+        Gl.glEnableClientState(Gl.GL_TEXTURE_COORD_ARRAY);
+        Gl.glTexCoordPointer(2, Gl.GL_FLOAT, vectorSize, texCoords);
+      }
+      else
+        Gl.glDisableClientState(Gl.GL_TEXTURE_COORD_ARRAY);
+
+      if (colors != null)
+      {
+        Gl.glEnableClientState(Gl.GL_COLOR_ARRAY);
+        Gl.glColorPointer(4, Gl.GL_FLOAT, System.Runtime.InteropServices.Marshal.SizeOf(Color.Black), colors);
+      }
+      else
+        Gl.glDisableClientState(Gl.GL_COLOR_ARRAY);
     }
 
     /// <summary>

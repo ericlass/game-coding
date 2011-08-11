@@ -113,8 +113,8 @@ namespace OkuTest
       for (int i = 0; i < _projections.Count; i++)
       {
         Ranges rang = _projections[i];
-        OkuDrivers.Renderer.DrawLine(x + rang.Min1, y + (diff * i), x + rang.Max1, y + (diff * i), 2, OkuEngine.Color.Red);
-        OkuDrivers.Renderer.DrawLine(x + rang.Min2, y + 4 + (diff * i), x + rang.Max2, y + 4 + (diff * i), 2, OkuEngine.Color.Blue);
+        OkuDrivers.Renderer.DrawLine(new Vector(x + rang.Min1, y + (diff * i)), new Vector(x + rang.Max1, y + (diff * i)), 2, OkuEngine.Color.Red);
+        OkuDrivers.Renderer.DrawLine(new Vector(x + rang.Min2, y + 4 + (diff * i)), new Vector(x + rang.Max2, y + 4 + (diff * i)), 2, OkuEngine.Color.Blue);
       }
 
       if (_intersect)

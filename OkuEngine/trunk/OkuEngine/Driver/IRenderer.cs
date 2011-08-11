@@ -130,32 +130,6 @@ namespace OkuEngine
     void DrawImage(ImageContent content, Vector position, float rotation, Vector scale, Color tint);
 
     /// <summary>
-    /// Draws the given image transforming it by the given tranformation matrix.
-    /// </summary>
-    /// <param name="content">The content to be drawn.</param>
-    /// <param name="transform">The transformation matrix.</param>
-    void DrawImage(ImageContent content, Matrix3 transform);
-
-    /// <summary>
-    /// Draws the given image transforming it by the given tranformation matrix.
-    /// The image is tinted with given tint color.
-    /// </summary>
-    /// <param name="content">The content to be drawn.</param>
-    /// <param name="transform">The transformation matrix.</param>
-    void DrawImage(ImageContent content, Matrix3 transform, Color tint);
-
-    /// <summary>
-    /// Draws a line from (x1,y1) to (x2,y2) with the given width and color.
-    /// </summary>
-    /// <param name="x1">The x component of the start point.</param>
-    /// <param name="y1">The y component of the start point.</param>
-    /// <param name="x2">The x component of the end point.</param>
-    /// <param name="y2">The y component of the end point.</param>
-    /// <param name="width">The width of the line in pixels.</param>
-    /// <param name="color">The color of the line.</param>
-    void DrawLine(float x1, float y1, float x2, float y2, float width, Color color);
-
-    /// <summary>
     /// Draws a line from start to end with the given width and color.
     /// </summary>
     /// <param name="start">The start of the line.</param>
@@ -175,48 +149,19 @@ namespace OkuEngine
     void DrawLines(Vector[] vertices, float width, Color color, VertexInterpretation interpretation);
 
     /// <summary>
-    /// Draws a line from start to end with the given width and color. The vertices (start and end) are
-    /// tranformed by the transformation matrix before drawing.
+    /// Draws a series of lines using the given vertices with the given width and colors.
+    /// How the vertices are interpreted is specified by interpretation.
     /// </summary>
-    /// <param name="start">The start point.</param>
-    /// <param name="end">The end point.</param>
-    /// <param name="transform">The transformation matrix.</param>
-    /// <param name="width">The width of the line in pixels.</param>
-    /// <param name="color">The color of the line.</param>
-    void DrawLine(Vector start, Vector end, Matrix3 transform, float width, Color color);
-
-    /// <summary>
-    /// Draws lines using the given vertices with the given width and color. The vertices are
-    /// tranformed by the transformation matrix before drawing.
-    /// </summary>
-    /// <param name="vertices">The vertices to use.</param>
-    /// <param name="transform">The transformation matrix.</param>
-    /// <param name="width">The width of the line in pixels.</param>
-    /// <param name="color">The color of the line.</param>
+    /// <param name="vertices">The vertices to draw the lines with.</param>
+    /// <param name="colors">The colors belonging to the vertices. Has to be same lentgh as vertices.</param>
+    /// <param name="width">The width of the lines in pixels.</param>
     /// <param name="interpretation">Specifies how to interpret the vertices.</param>
-    void DrawLines(Vector[] vertices, Matrix3 transform, float width, Color color, VertexInterpretation interpretation);
-
-    /// <summary>
-    /// Draws a white point at the given coordinates with the given size.
-    /// </summary>
-    /// <param name="x">The x coordinate.</param>
-    /// <param name="y">The y coordinate.</param>
-    /// <param name="size">The size in pixels.</param>
-    void DrawPoint(float x, float y, float size);
-
-    /// <summary>
-    /// Draws a point at the given coordinates with the given size and color.
-    /// </summary>
-    /// <param name="x">The x coordinate.</param>
-    /// <param name="y">The y coordinate.</param>
-    /// <param name="size">The size in pixels.</param>
-    /// <param name="color">The color of the point.</param>
-    void DrawPoint(float x, float y, float size, Color color);
+    void DrawLines(Vector[] vertices, Color[] colors, float width, VertexInterpretation interpretation);
 
     /// <summary>
     /// Draws a point at the given point p with the given size and color.
     /// </summary>
-    /// <param name="p">The center of the point in screen space pixels.</param>
+    /// <param name="p">The center of the point in world space pixels.</param>
     /// <param name="size">The size of the point in pixels.</param>
     /// <param name="color">The color of the point.</param>
     void DrawPoint(Vector p, float size, Color color);
@@ -224,30 +169,18 @@ namespace OkuEngine
     /// <summary>
     /// Draws a series of points at the given vertices with the given size and color.
     /// </summary>
-    /// <param name="points">The center of the points in screen space pixels.</param>
+    /// <param name="points">The center of the points in world space pixels.</param>
     /// <param name="size">The size of the points in pixels.</param>
     /// <param name="color">The color of the points.</param>
     void DrawPoints(Vector[] points, float size, Color color);
 
     /// <summary>
-    /// Draws a point at the given point p with the given size and color.
-    /// The point is transformed by the given transformation matrix before drawing.
-    /// </summary>
-    /// <param name="p">The center of the point in screen space pixels.</param>
-    /// <param name="transform">The transformation matrix.</param>
-    /// <param name="size">The size of the point in pixels.</param>
-    /// <param name="color">The color of the point.</param>
-    void DrawPoint(Vector p, Matrix3 transform, float size, Color color);
-
-    /// <summary>
     /// Draws a series of points at the given vertices with the given size and color.
-    /// The points are transformed by the given transformation matrix before drawing.
     /// </summary>
-    /// <param name="points">The center of the points in screen space pixels.</param>
-    /// <param name="transform">The transformation matrix.</param>
+    /// <param name="points">The center of the points in world space pixels.</param>
+    /// <param name="colors">The color values belonging to the points. Must be same length as points.</param>
     /// <param name="size">The size of the points in pixels.</param>
-    /// <param name="color">The color of the points.</param>
-    void DrawPoints(Vector[] points, Matrix3 transform, float size, Color color);
+    void DrawPoints(Vector[] points, Color[] colors, float size);
 
     /// <summary>
     /// Draws a generic mesh using the given parameters.
