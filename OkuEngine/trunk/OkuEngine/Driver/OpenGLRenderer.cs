@@ -497,16 +497,6 @@ namespace OkuEngine
         int primitive = VertexIntToGLPrimitive(interpretation);
 
         //Draw the lines
-        /*Gl.glBegin(primitive);
-
-        Gl.glColor4f(color.R, color.G, color.B, color.A);
-        foreach (Vector vec in vertices)
-        {
-          Gl.glVertex2f(vec.X, vec.Y);
-        }
-
-        Gl.glEnd();*/
-
         Gl.glColor4f(color.R, color.G, color.B, color.A);
         SetPointers(vertices, null, null);
         Gl.glDrawArrays(primitive, 0, vertices.Length);
@@ -544,7 +534,23 @@ namespace OkuEngine
     /// <param name="color">The color of the point.</param>
     public void DrawPoint(Vector p, float size, Color color)
     {
-      DrawPoints(new Vector[1] { p }, size, color);
+      Gl.glDisable(Gl.GL_TEXTURE_2D);
+
+      try
+      {
+        Gl.glPointSize(size);
+
+        Gl.glBegin(Gl.GL_POINTS);
+
+        Gl.glColor4f(color.R, color.G, color.B, color.A);
+        Gl.glVertex2f(p.X, p.Y);
+
+        Gl.glEnd();
+      }
+      finally
+      {
+        Gl.glEnable(Gl.GL_TEXTURE_2D);
+      }
     }
 
     /// <summary>
@@ -561,15 +567,9 @@ namespace OkuEngine
       {
         Gl.glPointSize(size);
 
-        Gl.glBegin(Gl.GL_POINTS);
-
         Gl.glColor4f(color.R, color.G, color.B, color.A);
-        foreach (Vector vec in points)
-        {
-          Gl.glVertex2f(vec.X, vec.Y);
-        }
-
-        Gl.glEnd();
+        SetPointers(points, null, null);
+        Gl.glDrawArrays(Gl.GL_POINTS, 0, points.Length);
       }
       finally
       {
@@ -579,7 +579,19 @@ namespace OkuEngine
 
     public void DrawPoints(Vector[] points, Color[] colors, float size)
     {
-      throw new NotImplementedException();
+      Gl.glDisable(Gl.GL_TEXTURE_2D);
+
+      try
+      {
+        Gl.glPointSize(size);
+
+        SetPointers(points, null, colors);
+        Gl.glDrawArrays(Gl.GL_POINTS, 0, points.Length);
+      }
+      finally
+      {
+        Gl.glEnable(Gl.GL_TEXTURE_2D);
+      }
     }
 
     public void DrawMesh(Vector[] points, Vector[] texCoords, Color[] colors, MeshMode mode, ImageContent texture)
@@ -598,10 +610,6 @@ namespace OkuEngine
       int primitive = MeshModeToGLPrimitive(mode);
 
       SetPointers(points, texCoords, colors);
-      /*Gl.glVertexPointer(2, Gl.GL_FLOAT, System.Runtime.InteropServices.Marshal.SizeOf(Vector.Zero), points);
-      Gl.glColorPointer(4, Gl.GL_FLOAT, System.Runtime.InteropServices.Marshal.SizeOf(Color.Black), colors);
-      Gl.glTexCoordPointer(2, Gl.GL_FLOAT, System.Runtime.InteropServices.Marshal.SizeOf(Vector.Zero), texCoords);*/
-
       Gl.glDrawArrays(primitive, 0, points.Length);
     }
 

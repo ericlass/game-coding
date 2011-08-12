@@ -91,6 +91,9 @@ namespace OkuTest
     public override void Render()
     {
       _poly.Draw();
+
+      OkuDrivers.Renderer.DrawPoints(_poly.Content.Positions, _poly.Content.Colors, 10);
+
       _smiley.Draw(_pos1, _rotation);
       _mesh.Draw();
 
