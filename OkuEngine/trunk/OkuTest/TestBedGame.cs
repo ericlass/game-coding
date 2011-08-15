@@ -21,7 +21,7 @@ namespace OkuTest
 
     public override void Initialize()
     {
-      OkuDrivers.Renderer.ClearColor = Color.White;
+      OkuDrivers.Renderer.ClearColor = Color.Silver;
 
       ImageContent content = new ImageContent(".\\content\\smiley.png");
       _smiley = new ImageInstance(content);
@@ -41,7 +41,7 @@ namespace OkuTest
       _poly = new PolygonInstance(polyContent);
       _poly.Interpretation = VertexInterpretation.PolygonClosed;
       _poly.LineWidth = 3;
-      _poly.LineColor = new Color(0, 0, 1);
+      _poly.LineColor = Color.Blue;
 
       SoundContent sound = new SoundContent(".\\content\\laser.wav");
       //SoundContent sound = new SoundContent("D:\\Musik\\Meshuggah\\I\\Meshuggah - I.wav");

@@ -15,7 +15,7 @@ namespace OkuEngine
   public class OpenGLRenderer : IRenderer
   {
     private bool _fullscreen = false;
-    private Color _clearColor = new Color(0, 0, 0.5f);
+    private Color _clearColor = Color.Black;
 
     private Form _form = null;
     private IntPtr _handle = IntPtr.Zero;
@@ -41,7 +41,7 @@ namespace OkuEngine
       set 
       { 
         _clearColor = value;
-        Gl.glClearColor(_clearColor.R, _clearColor.G, _clearColor.B, 1);
+        Gl.glClearColor(_clearColor.R / 255.0f, _clearColor.G / 255.0f, _clearColor.B / 255.0f, 1);
       }
     }
 
@@ -107,9 +107,9 @@ namespace OkuEngine
       Gl.glAlphaFunc(Gl.GL_GREATER, 0.05f);
 
       Gl.glEnable(Gl.GL_BLEND);
-      Gl.glBlendFunc(Gl.GL_SRC_ALPHA, Gl.GL_ONE_MINUS_SRC_ALPHA);      
+      Gl.glBlendFunc(Gl.GL_SRC_ALPHA, Gl.GL_ONE_MINUS_SRC_ALPHA);
 
-      Gl.glClearColor(_clearColor.R, _clearColor.G, _clearColor.B, 1);
+      Gl.glClearColor(_clearColor.R / 255.0f, _clearColor.G / 255.0f, _clearColor.B / 255.0f, 1);
 
       Gl.glLineWidth(1.0f);
       Gl.glEnable(Gl.GL_LINE_SMOOTH);
@@ -431,7 +431,7 @@ namespace OkuEngine
 
       Gl.glBegin(Gl.GL_QUADS);
 
-      Gl.glColor4f(tint.R, tint.G, tint.B, tint.A);
+      Gl.glColor4ub(tint.R, tint.G, tint.B, tint.A);
 
       Gl.glTexCoord2f(0, 0);
       Gl.glVertex2f(-halfWidth, -halfHeight);
@@ -466,7 +466,7 @@ namespace OkuEngine
 
         Gl.glBegin(Gl.GL_LINES);
 
-        Gl.glColor4f(color.R, color.G, color.B, color.A);
+        Gl.glColor4ub(color.R, color.G, color.B, color.A);
         Gl.glVertex2f(start.X, start.Y);
         Gl.glVertex2f(end.X, end.Y);
 
@@ -497,7 +497,7 @@ namespace OkuEngine
         int primitive = VertexIntToGLPrimitive(interpretation);
 
         //Draw the lines
-        Gl.glColor4f(color.R, color.G, color.B, color.A);
+        Gl.glColor4ub(color.R, color.G, color.B, color.A);
         SetPointers(vertices, null, null);
         Gl.glDrawArrays(primitive, 0, vertices.Length);
       }
@@ -542,7 +542,7 @@ namespace OkuEngine
 
         Gl.glBegin(Gl.GL_POINTS);
 
-        Gl.glColor4f(color.R, color.G, color.B, color.A);
+        Gl.glColor4ub(color.R, color.G, color.B, color.A);
         Gl.glVertex2f(p.X, p.Y);
 
         Gl.glEnd();
@@ -553,12 +553,6 @@ namespace OkuEngine
       }
     }
 
-    /// <summary>
-    /// Draws a series of points at the given vertices with the given size and color.
-    /// </summary>
-    /// <param name="points">The center of the points in screen space pixels.</param>
-    /// <param name="size">The size of the points in pixels.</param>
-    /// <param name="color">The color of the points.</param>
     public void DrawPoints(Vector[] points, float size, Color color)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
@@ -567,7 +561,7 @@ namespace OkuEngine
       {
         Gl.glPointSize(size);
 
-        Gl.glColor4f(color.R, color.G, color.B, color.A);
+        Gl.glColor4ub(color.R, color.G, color.B, color.A);
         SetPointers(points, null, null);
         Gl.glDrawArrays(Gl.GL_POINTS, 0, points.Length);
       }
@@ -644,7 +638,7 @@ namespace OkuEngine
       if (colors != null)
       {
         Gl.glEnableClientState(Gl.GL_COLOR_ARRAY);
-        Gl.glColorPointer(4, Gl.GL_FLOAT, System.Runtime.InteropServices.Marshal.SizeOf(Color.Black), colors);
+        Gl.glColorPointer(4, Gl.GL_UNSIGNED_BYTE, System.Runtime.InteropServices.Marshal.SizeOf(Color.Black), colors);
       }
       else
         Gl.glDisableClientState(Gl.GL_COLOR_ARRAY);
