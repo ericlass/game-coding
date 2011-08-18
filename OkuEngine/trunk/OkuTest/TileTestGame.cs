@@ -16,6 +16,8 @@ namespace OkuTest
 
     public override void Initialize()
     {
+      OkuDrivers.Renderer.ViewPort.Center = new Vector(OkuDrivers.Renderer.ViewPort.Width / 2, OkuDrivers.Renderer.ViewPort.Height / 2);
+
       int mapWidth = 16;
       int mapHeight = 16;
 

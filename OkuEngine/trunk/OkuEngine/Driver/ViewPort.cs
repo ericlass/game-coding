@@ -3,43 +3,95 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OkuEngine.Driver
+namespace OkuEngine
 {
+  public delegate void ViewPortChangeEventHandler(ViewPort sender);
+
   public class ViewPort
   {
     private Vector _center = Vector.Zero;
-    private Vector _scale = Vector.Zero;
+    private Vector _scale = Vector.One;
     private float _halfWidth = 0;
     private float _halfHeight = 0;
 
     public ViewPort()
     {
-      _halfWidth = OkuData.Globals.Get<int>(OkuConstants.VarScreenWidth) / 2;
-      _halfHeight = OkuData.Globals.Get<int>(OkuConstants.VarScreenHeight) / 2;
+      _halfWidth = OkuData.Globals.Get<int>(OkuConstants.VarScreenWidth) / 2.0f;
+      _halfHeight = OkuData.Globals.Get<int>(OkuConstants.VarScreenHeight) / 2.0f;
+    }
+
+    public ViewPort(int width, int height)
+    {
+      _halfWidth = width / 2.0f;
+      _halfHeight = height / 2.0f;
+    }
+
+    public event ViewPortChangeEventHandler Change = null;
+
+    public virtual void OnChange(ViewPort sender)
+    {
+      if (Change != null)
+        Change(sender);
     }
 
     public Vector Center
     {
       get { return _center; }
-      set { _center = value; }
+      set 
+      {
+        _center = value;
+        OnChange(this);
+      }
     }
 
     public Vector Scale
     {
       get { return _scale; }
-      set { _scale = value; }
+      set
+      { 
+        _scale = value;
+        OnChange(this);
+      }
     }
 
     public float Left
     {
       get { return _center.X - (_halfWidth * _scale.X); }
-      set { _center.X = value + (_halfWidth * _scale.Y); }
+      set 
+      { 
+        _center.X = value + (_halfWidth * _scale.Y);
+        OnChange(this);
+      }
     }
 
     public float Top
     {
       get { return _center.Y - (_halfHeight * _scale.Y); }
-      set { _center.Y = value + (_halfHeight * _scale.Y); }
+      set 
+      { 
+        _center.Y = value + (_halfHeight * _scale.Y);
+        OnChange(this);
+      }
+    }
+
+    public float Right
+    {
+      get { return _center.X + (_halfWidth * _scale.X); }
+      set
+      {
+        _center.X = value - (_halfWidth * _scale.X);
+        OnChange(this);
+      }
+    }
+
+    public float Bottom
+    {
+      get { return _center.Y + (_halfHeight * _scale.Y); }
+      set
+      {
+        _center.Y = value - (_halfHeight * _scale.Y);
+        OnChange(this);
+      }
     }
 
     public float Width

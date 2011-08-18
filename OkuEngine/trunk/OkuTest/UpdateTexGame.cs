@@ -18,6 +18,7 @@ namespace OkuTest
     public override void Initialize()
     {
       OkuDrivers.Renderer.ClearColor = OkuEngine.Color.White;
+      OkuDrivers.Renderer.ViewPort.Center = new Vector(OkuDrivers.Renderer.ViewPort.Width / 2, OkuDrivers.Renderer.ViewPort.Height / 2);
 
       _leds = new Bitmap[4];
       _leds[0] = new Bitmap(".\\content\\led_red.png");

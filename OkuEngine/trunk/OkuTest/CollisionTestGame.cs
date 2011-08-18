@@ -44,6 +44,7 @@ namespace OkuTest
     public override void Initialize()
     {
       OkuDrivers.Renderer.ClearColor = OkuEngine.Color.White;
+      OkuDrivers.Renderer.ViewPort.Center = new Vector(OkuDrivers.Renderer.ViewPort.Width / 2, OkuDrivers.Renderer.ViewPort.Height / 2);
 
       SpriteFont font = new SpriteFont("Arial", 12, FontStyle.Regular, false);
       _strIntersect = font.GetStringMesh("Intersection", 5, 5, OkuEngine.Color.Red);

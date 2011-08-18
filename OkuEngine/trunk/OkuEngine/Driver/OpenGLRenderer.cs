@@ -16,6 +16,7 @@ namespace OkuEngine
   {
     private bool _fullscreen = false;
     private Color _clearColor = Color.Black;
+    private ViewPort _viewPort = null;
 
     private Form _form = null;
     private IntPtr _handle = IntPtr.Zero;
@@ -53,6 +54,17 @@ namespace OkuEngine
       get { return _form; }
     }
 
+    public ViewPort ViewPort
+    {
+      get { return _viewPort; }
+      set { _viewPort = value; }
+    }
+
+    private void _viewPort_Change(ViewPort sender)
+    {
+      UpdateGLViewPort();
+    }
+
     /// <summary>
     /// Initializes the renderer. This includes creating the form and intitializing OpenGL.
     /// </summary>
@@ -60,6 +72,9 @@ namespace OkuEngine
     {
       int screenWidth = OkuData.Globals.GetDef<int>(OkuConstants.VarScreenWidth, 800);
       int screenHeight = OkuData.Globals.GetDef<int>(OkuConstants.VarScreenHeight, 600);
+
+      _viewPort = new ViewPort(screenWidth, screenHeight);
+      _viewPort.Change += new ViewPortChangeEventHandler(_viewPort_Change);
 
       _form = new Form();
       _form.ClientSize = new System.Drawing.Size(screenWidth, screenHeight);
@@ -99,9 +114,10 @@ namespace OkuEngine
 
       Gl.glHint(Gl.GL_PERSPECTIVE_CORRECTION_HINT, Gl.GL_NICEST);
 
-      Gl.glMatrixMode(Gl.GL_PROJECTION);
+      /*Gl.glMatrixMode(Gl.GL_PROJECTION);
       Gl.glLoadIdentity();
-      Gl.glOrtho(0, _form.ClientSize.Width, _form.ClientSize.Height, 0, -1, 1);
+      Gl.glOrtho(0, _form.ClientSize.Width, _form.ClientSize.Height, 0, -1, 1);*/
+      UpdateGLViewPort();
 
       Gl.glEnable(Gl.GL_ALPHA_TEST);
       Gl.glAlphaFunc(Gl.GL_GREATER, 0.05f);
@@ -150,12 +166,18 @@ namespace OkuEngine
     {
       Gl.glViewport(0, 0, _form.ClientSize.Width, _form.ClientSize.Height);
 
-      Gl.glMatrixMode(Gl.GL_PROJECTION);
-      Gl.glLoadIdentity();
-      Gl.glOrtho(0, _form.ClientSize.Width, _form.ClientSize.Height, 0, -1, 1);
+      UpdateGLViewPort();
 
       Gl.glMatrixMode(Gl.GL_MODELVIEW);
       Gl.glLoadIdentity();
+    }
+
+    private void UpdateGLViewPort()
+    {
+      Gl.glMatrixMode(Gl.GL_PROJECTION);
+      Gl.glLoadIdentity();
+      Gl.glOrtho(_viewPort.Left, _viewPort.Right, _viewPort.Bottom, _viewPort.Top, -1, 1);
+      //Gl.glOrtho(0, _form.ClientSize.Width, _form.ClientSize.Height, 0, -1, 1);
     }
 
     /// <summary>

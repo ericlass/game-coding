@@ -22,6 +22,7 @@ namespace OkuTest
     public override void Initialize()
     {
       OkuDrivers.Renderer.ClearColor = Color.Silver;
+      OkuDrivers.Renderer.ViewPort.Center = new Vector(OkuDrivers.Renderer.ViewPort.Width / 2, OkuDrivers.Renderer.ViewPort.Height / 2);
 
       ImageContent content = new ImageContent(".\\content\\smiley.png");
       _smiley = new ImageInstance(content);
@@ -86,6 +87,30 @@ namespace OkuTest
 
       if (OkuDrivers.Input.Mouse.ButtonPressed(MouseButton.Left))
         _sound.Play();
+
+      float speed = 200 * dt;
+      Vector center = OkuDrivers.Renderer.ViewPort.Center;
+      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Left))
+        center.X -= speed;
+      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Right))
+        center.X += speed;
+      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Up))
+        center.Y -= speed;
+      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Down))
+        center.Y += speed;      
+
+      speed = dt;
+      Vector scale = OkuDrivers.Renderer.ViewPort.Scale;
+      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Add))
+        scale.X += speed;
+      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Subtract))
+        scale.X -= speed;
+
+      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.NumPad0))
+        scale = Vector.One;
+      
+      OkuDrivers.Renderer.ViewPort.Center = center;
+      OkuDrivers.Renderer.ViewPort.Scale = scale;
     }
 
     public override void Render()

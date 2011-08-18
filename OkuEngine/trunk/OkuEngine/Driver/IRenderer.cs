@@ -25,6 +25,11 @@ namespace OkuEngine
     Form MainForm { get; }
 
     /// <summary>
+    /// Gets or sets the current viewport that is rendered to the screen.
+    /// </summary>
+    ViewPort ViewPort { get; set; }
+
+    /// <summary>
     /// Is called once at the start of the application. It should do all necessary initialization
     /// that is needed by the renderer. It has to create the form that is used to display the game.
     /// </summary>
