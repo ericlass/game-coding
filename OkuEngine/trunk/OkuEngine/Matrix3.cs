@@ -238,7 +238,7 @@ namespace OkuEngine
       result.LoadIdentity();
       result.V00 = x;
       result.V11 = y;
-      return _identity;
+      return result;
     }
 
     /// <summary>

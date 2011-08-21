@@ -18,6 +18,7 @@ namespace OkuTest
     private MeshInstance _mesh = null;
     private SpriteFont _font = null;
     private MeshInstance _text = null;
+    private MeshInstance _guiText = null;
 
     public override void Initialize()
     {
@@ -79,6 +80,8 @@ namespace OkuTest
         "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et\n" +
         "accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit\n" +
         "amet.", 50, 500, Color.Black);
+
+      _guiText = _font.GetStringMesh("Ammo: 100", 5, 5, Color.Black);
     }
 
     public override void Update(float dt)
@@ -102,9 +105,15 @@ namespace OkuTest
       speed = dt;
       Vector scale = OkuDrivers.Renderer.ViewPort.Scale;
       if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Add))
+      {
         scale.X += speed;
+        scale.Y += speed;
+      }
       if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Subtract))
+      {
         scale.X -= speed;
+        scale.Y -= speed;
+      }
 
       if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.NumPad0))
         scale = Vector.One;
@@ -123,6 +132,10 @@ namespace OkuTest
       _mesh.Draw();
 
       _text.Draw();
+
+      Vector[] transformed = new Vector[_guiText.Vertices.Positions.Length];
+      OkuDrivers.Renderer.ViewPort.ScreenSpaceMatrix.Transform(_guiText.Vertices.Positions, transformed);
+      OkuDrivers.Renderer.DrawMesh(transformed, _guiText.Vertices.TexCoords, _guiText.Vertices.Colors, _guiText.Mode, _guiText.Texture);
     }
 
   }

@@ -5,8 +5,15 @@ using System.Text;
 
 namespace OkuEngine
 {
+  /// <summary>
+  /// Specified the delegate for a viewport change event handler. Should only be implemented by the Renderer.
+  /// </summary>
+  /// <param name="sender">The view port that fired the change event.</param>
   public delegate void ViewPortChangeEventHandler(ViewPort sender);
 
+  /// <summary>
+  /// Species the part of the world space that is currently shown on screen.
+  /// </summary>
   public class ViewPort
   {
     private Vector _center = Vector.Zero;
@@ -14,26 +21,52 @@ namespace OkuEngine
     private float _halfWidth = 0;
     private float _halfHeight = 0;
 
+    private bool _matrixEffective = false;
+    private Matrix3 _screenToWorld = Matrix3.Indentity;
+
+    /// <summary>
+    /// Creates a new viewport centered at world space coordinates (0,0)
+    /// and width and height set to the screen resolution.
+    /// </summary>
     public ViewPort()
     {
       _halfWidth = OkuData.Globals.Get<int>(OkuConstants.VarScreenWidth) / 2.0f;
       _halfHeight = OkuData.Globals.Get<int>(OkuConstants.VarScreenHeight) / 2.0f;
     }
 
+    /// <summary>
+    /// Create a new viewport centered at the world space coordinate (0,0)
+    /// and width the given width and height.
+    /// </summary>
+    /// <param name="width">The width of the viewport in world space units.</param>
+    /// <param name="height">The height of the viewport in world space units.</param>
     public ViewPort(int width, int height)
     {
       _halfWidth = width / 2.0f;
       _halfHeight = height / 2.0f;
     }
 
+    /// <summary>
+    /// Event that is triggered when any parameter of the viewport is changed.
+    /// The renderer should listen to this event and change the view of the scene
+    /// accordingly.
+    /// </summary>
     public event ViewPortChangeEventHandler Change = null;
 
+    /// <summary>
+    /// Is called when any of the viewport parameters is changed.
+    /// </summary>
+    /// <param name="sender">The viewport that triggered the event.</param>
     public virtual void OnChange(ViewPort sender)
     {
+      _matrixEffective = false;
       if (Change != null)
         Change(sender);
     }
 
+    /// <summary>
+    /// Gets or sets the center of the viewport.
+    /// </summary>
     public Vector Center
     {
       get { return _center; }
@@ -44,6 +77,9 @@ namespace OkuEngine
       }
     }
 
+    /// <summary>
+    /// Gets or sets the scale of the viewport.
+    /// </summary>
     public Vector Scale
     {
       get { return _scale; }
@@ -54,6 +90,9 @@ namespace OkuEngine
       }
     }
 
+    /// <summary>
+    /// Gets or sets the left border of the viewport taking into account scale.
+    /// </summary>
     public float Left
     {
       get { return _center.X - (_halfWidth * _scale.X); }
@@ -64,6 +103,9 @@ namespace OkuEngine
       }
     }
 
+    /// <summary>
+    /// Gets or sets the top border of the viewport taking into account scale.
+    /// </summary>
     public float Top
     {
       get { return _center.Y - (_halfHeight * _scale.Y); }
@@ -74,6 +116,9 @@ namespace OkuEngine
       }
     }
 
+    /// <summary>
+    /// Gets or sets the right border of the viewport taking into account scale.
+    /// </summary>
     public float Right
     {
       get { return _center.X + (_halfWidth * _scale.X); }
@@ -84,6 +129,9 @@ namespace OkuEngine
       }
     }
 
+    /// <summary>
+    /// Gets or sets the bottom border of the viewport taking into account scale.
+    /// </summary>
     public float Bottom
     {
       get { return _center.Y + (_halfHeight * _scale.Y); }
@@ -94,14 +142,38 @@ namespace OkuEngine
       }
     }
 
+    /// <summary>
+    /// Gets the width of the viewport in world space units.
+    /// </summary>
     public float Width
     {
       get { return _halfWidth * 2; }
     }
 
+    /// <summary>
+    /// Gets the height of the viewport in world space units.
+    /// </summary>
     public float Height
     {
       get { return _halfHeight * 2; }
+    }
+
+    /// <summary>
+    /// Gets the screen space matrix which can be used to tranform coordinates
+    /// from screen space to world space. This is really handy for GUI.
+    /// </summary>
+    public Matrix3 ScreenSpaceMatrix
+    {
+      get
+      {
+        if (!_matrixEffective)
+        {
+          _screenToWorld.LoadIdentity();
+          _screenToWorld.Translate(Left, Top);
+          _screenToWorld.Scale(_scale);
+        }
+        return _screenToWorld;
+      }
     }
 
   }
