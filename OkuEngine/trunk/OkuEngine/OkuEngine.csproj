@@ -66,6 +66,7 @@
     <Compile Include="Driver\MeshMode.cs" />
     <Compile Include="Driver\VertexInterpretation.cs" />
     <Compile Include="Driver\ViewPort.cs" />
+    <Compile Include="OkuExtensions.cs" />
     <Compile Include="Geometry\Intersections.cs" />
     <Compile Include="Geometry\PolygonFactory.cs" />
     <Compile Include="Instance\MeshInstance.cs" />
@@ -87,10 +88,11 @@
     <Compile Include="Instance\PolygonInstance.cs" />
     <Compile Include="Geometry\Quad.cs" />
     <Compile Include="Particles\IParticleController.cs" />
-    <Compile Include="Particles\IParticleEmitter.cs" />
+    <Compile Include="Particles\ParticleEmitter.cs" />
     <Compile Include="Particles\IParticleRenderer.cs" />
     <Compile Include="Particles\Particle.cs" />
     <Compile Include="Particles\ParticleSystem.cs" />
+    <Compile Include="Particles\PointEmitter.cs" />
     <Compile Include="Scene\SceneGraph.cs" />
     <Compile Include="Scene\SceneNode.cs" />
     <Compile Include="Scene\SceneNodeList.cs" />

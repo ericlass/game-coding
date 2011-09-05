@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace OkuEngine
 {
   public class ParticleSystem<E, C, R>
-    where E : IParticleEmitter
+    where E : ParticleEmitter
     where C : IParticleController
     where R : IParticleRenderer
   {

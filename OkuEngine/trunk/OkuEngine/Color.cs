@@ -59,5 +59,25 @@ namespace OkuEngine
         );
     }
 
+    public static Color operator *(Color color, float mul)
+    {
+      return new Color((byte)(color.R * mul), (byte)(color.G * mul), (byte)(color.B * mul), color.A);
+    }
+
+    public static Color operator +(Color col1, Color col2)
+    {
+      return new Color((byte)(col1.R + col2.R), (byte)(col1.R + col2.R), (byte)(col1.R + col2.R));
+    }
+
+    public bool Equals(Color other)
+    {
+      return (R == other.R) && (G == other.G) && (B == other.B) && (A == other.A);
+    }
+
+    public bool EqualsColor(Color other)
+    {
+      return (R == other.R) && (G == other.G) && (B == other.B);
+    }
+
   }
 }

@@ -331,5 +331,14 @@ namespace OkuEngine
       return normal;
     }
 
+    /// <summary>
+    /// Checks if the vector has a length of zero (= both components are zero).
+    /// </summary>
+    /// <returns>True if the vector is zero length, else false.</returns>
+    public bool IsZero()
+    {
+      return (X == 0.0f) && (Y == 0.0f);
+    }
+
   }
 }
