@@ -84,7 +84,7 @@ namespace OkuEngine
     public float Energy
     {
       get { return _energy; }
-      set { _lifeTime = value; }
+      set { _energy = value; }
     }
 
     public float LifeTime

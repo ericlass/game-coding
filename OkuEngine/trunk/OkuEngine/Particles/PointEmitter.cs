@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OkuEngine.Particles
+namespace OkuEngine
 {
   public class PointEmitter : ParticleEmitter
   {
@@ -11,10 +11,10 @@ namespace OkuEngine.Particles
 
     public override void Emit(List<Particle> particles, float dt)
     {
-      int numParticles = GetNumParticleToEmit();
+      int numParticles = GetNumParticleToEmit(dt);
       for (int i = 0; i < numParticles; i++)
       {
-        Particle p = GetNewParticle();
+        Particle p = AddParticle(particles);
         p.Position = _center;
         p.OldPosition = _center;
       }

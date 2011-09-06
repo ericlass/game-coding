@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CollisionTestGame.cs" />
+    <Compile Include="ParticleTestGame.cs" />
     <Compile Include="TestBedGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -44,8 +44,8 @@ namespace OkuEngine
 
     public void Update(float dt)
     {
-      _emitter.Emit(_particles, dt);
       _contoller.Update(_particles, dt);
+      _emitter.Emit(_particles, dt);
     }
 
     public void Draw()

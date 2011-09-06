@@ -24,7 +24,7 @@ namespace OkuEngine
     private Color _color = Color.White;
 
     private Random _rand = new Random();
-    private float _2pi = (float)Math.PI * 2.0f;
+    private float _pi = (float)Math.PI;
     private float _emitTimer = 0.0f; // Used to keep track of fractional particles per frame
 
     /// <summary>
@@ -44,7 +44,7 @@ namespace OkuEngine
     /// <returns>The direction vector scaled by the speed.</returns>
     protected Vector GetRandomVelocity()
     {
-      float angle = _angleVariation == 0.0f ? _angle : _angle + (_rand.RandomFloat() * _2pi * _angleVariation);
+      float angle = _angleVariation == 0.0f ? _angle : _angle + (_rand.RandomFloat() * _pi * _angleVariation);
       float speed = _speedVariation == 0.0f ? _speed : _speed + (_rand.RandomFloat() * _speed * _speedVariation);
       return new Vector((float)Math.Cos(angle) * speed, (float)Math.Sin(angle) * speed);
     }
@@ -85,14 +85,30 @@ namespace OkuEngine
     /// Creates a new particle from the configured parameters.
     /// </summary>
     /// <returns>The newly created particle.</returns>
-    protected Particle GetNewParticle()
+    protected Particle AddParticle(List<Particle> particles)
     {
-      Particle result = new Particle();
+      Particle result = null;
+      foreach (Particle p in particles)
+      {
+        if (p.IsDead)
+        {
+          result = p;
+          break;
+        }
+      }
+
+      if (result == null)
+      {
+        result = new Particle();
+        particles.Add(result);
+      }
+
       result.Color = _color;
       result.Energy = GetRandomLifetime();
-      result.LifeTime = result.LifeTime;
+      result.LifeTime = result.Energy;
       result.Scale = GetRandomScale();
       result.Velocity = GetRandomVelocity();
+
       return result;
     }
 
