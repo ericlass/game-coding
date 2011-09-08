@@ -7,13 +7,9 @@ namespace OkuEngine
 {
   public class DefaultParticleController : IParticleController
   {
-    public void Update(List<Particle> particles, float dt)
+    public void Update(Particle particle, float dt)
     {
-      foreach (Particle p in particles)
-      {
-        if (!p.IsDead)
-          p.Update(dt);
-      }
+      particle.Update(dt);
     }
 
   }

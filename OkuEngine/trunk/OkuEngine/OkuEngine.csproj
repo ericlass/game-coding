@@ -88,7 +88,10 @@
     <Compile Include="Instance\PolygonInstance.cs" />
     <Compile Include="Geometry\Quad.cs" />
     <Compile Include="Particles\DefaultParticleController.cs" />
+    <Compile Include="Particles\ForceEffector.cs" />
     <Compile Include="Particles\IParticleController.cs" />
+    <Compile Include="Particles\IParticleEffector.cs" />
+    <Compile Include="Particles\LineParticleRenderer.cs" />
     <Compile Include="Particles\ParticleEmitter.cs" />
     <Compile Include="Particles\IParticleRenderer.cs" />
     <Compile Include="Particles\Particle.cs" />

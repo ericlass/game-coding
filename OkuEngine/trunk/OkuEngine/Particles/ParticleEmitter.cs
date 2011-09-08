@@ -44,7 +44,7 @@ namespace OkuEngine
     /// <returns>The direction vector scaled by the speed.</returns>
     protected Vector GetRandomVelocity()
     {
-      float angle = _angleVariation == 0.0f ? _angle : _angle + (_rand.RandomFloat() * _pi * _angleVariation);
+      float angle = _angleVariation == 0.0f ? _angle : ((_angle / 180.0f) * _pi) + (_rand.RandomFloat() * _pi * _angleVariation);
       float speed = _speedVariation == 0.0f ? _speed : _speed + (_rand.RandomFloat() * _speed * _speedVariation);
       return new Vector((float)Math.Cos(angle) * speed, (float)Math.Sin(angle) * speed);
     }

@@ -12,6 +12,7 @@ namespace OkuEngine
     private C _contoller = default(C);
     private R _renderer = default(R);
     private List<Particle> _particles = new List<Particle>();
+    private List<IParticleEffector> _effectors = new List<IParticleEffector>();
 
     public ParticleSystem()
     {
@@ -42,9 +43,27 @@ namespace OkuEngine
       set { _renderer = value; }
     }
 
+    public List<IParticleEffector> Effectors
+    {
+      get { return _effectors; }
+      set { _effectors = value; }
+    }
+
     public void Update(float dt)
     {
-      _contoller.Update(_particles, dt);
+      foreach (Particle p in _particles)
+      {
+        if (!p.IsDead)
+        {
+          _contoller.Update(p, dt);
+          foreach (IParticleEffector eff in _effectors)
+          {
+            if (eff.Enabled)
+              eff.Effect(p, dt);
+          }
+        }
+      }
+      
       _emitter.Emit(_particles, dt);
     }
 
