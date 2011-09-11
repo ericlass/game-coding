@@ -169,6 +169,28 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Checks if the two vectors are equal.
+    /// </summary>
+    /// <param name="vec1">The first vector.</param>
+    /// <param name="vec2">The second vector.</param>
+    /// <returns>True if the vectors are equal, else false.</returns>
+    public static bool operator ==(Vector vec1, Vector vec2)
+    {
+      return (vec1.X == vec2.X) && (vec1.Y == vec2.Y);
+    }
+
+    /// <summary>
+    /// Checks if the two vectors are not equal.
+    /// </summary>
+    /// <param name="vec1">The first vector.</param>
+    /// <param name="vec2">The second vector.</param>
+    /// <returns>True if the vectors are not equal, else false.</returns>
+    public static bool operator !=(Vector vec1, Vector vec2)
+    {
+      return (vec1.X != vec2.X) || (vec1.Y != vec2.Y);
+    }
+
+    /// <summary>
     /// Normalizes the given vector and returns the result as a new vector.
     /// </summary>
     /// <param name="vec">The vector to be normalized.</param>

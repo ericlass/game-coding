@@ -23,7 +23,7 @@ namespace OkuEngine
 
     private Color _color = Color.White;
 
-    private Random _rand = new Random();
+    protected Random _rand = new Random();
     private float _pi = (float)Math.PI;
     private float _emitTimer = 0.0f; // Used to keep track of fractional particles per frame
 
@@ -38,14 +38,33 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Calculates a random angle value taking into account the current configuration.
+    /// </summary>
+    /// <returns>A renadom angle in radians.</returns>
+    protected float GetRandomAngle()
+    {
+      float rads = (_angle / 180.0f) * _pi;
+      return _angleVariation == 0.0f ? rads : rads + (_rand.RandomFloat() * _pi * _angleVariation);
+    }
+
+    /// <summary>
+    /// Calculates a random speed value taking into account the current configuration.
+    /// </summary>
+    /// <returns>A random spped in pixels per second.</returns>
+    protected float GetRandomSpeed()
+    {
+      return _speedVariation == 0.0f ? _speed : _speed + (_rand.RandomFloat() * _speed * _speedVariation);
+    }
+
+    /// <summary>
     /// Calculates a random velocity vector for a new particle taking into account the
     /// configured angle and speed and the corresponding variations.
     /// </summary>
     /// <returns>The direction vector scaled by the speed.</returns>
-    protected Vector GetRandomVelocity()
+    protected virtual Vector GetRandomVelocity()
     {
-      float angle = _angleVariation == 0.0f ? _angle : ((_angle / 180.0f) * _pi) + (_rand.RandomFloat() * _pi * _angleVariation);
-      float speed = _speedVariation == 0.0f ? _speed : _speed + (_rand.RandomFloat() * _speed * _speedVariation);
+      float angle = GetRandomAngle();
+      float speed = GetRandomSpeed();
       return new Vector((float)Math.Cos(angle) * speed, (float)Math.Sin(angle) * speed);
     }
 
