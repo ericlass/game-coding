@@ -8,14 +8,14 @@ namespace OkuTest
 {
   public class ParticleTestGame : OkuGame
   {
-    private ParticleSystem<PointEmitter, DefaultParticleController, PointParticleRenderer> _system = null;
+    private ParticleSystem<PointEmitter, DefaultParticleController, LineParticleRenderer> _system = null;
     private ForceEffector _eff = null;
 
     public override void Initialize()
     {
       OkuDrivers.Renderer.ClearColor = Color.White;
 
-      _system = new ParticleSystem<PointEmitter, DefaultParticleController, PointParticleRenderer>(new PointEmitter(), new DefaultParticleController(), new PointParticleRenderer());
+      _system = new ParticleSystem<PointEmitter, DefaultParticleController, LineParticleRenderer>(new PointEmitter(), new DefaultParticleController(), new LineParticleRenderer());
       _system.Emitter.Center = new Vector(0, 0);
       _system.Emitter.BirthRate = 200.0f;
       _system.Emitter.Angle = -90;
@@ -23,7 +23,8 @@ namespace OkuTest
       _system.Emitter.Speed = 250;
       _system.Emitter.SpeedVariation = 0.2f;
       _system.Emitter.Color = Color.Blue;
-      _system.Renderer.PointSize = 3;
+
+      //_system.Renderer.PointSize = 3;
 
       _eff = new ForceEffector(new Quad(-300, 300, -300, 300));
       _eff.Force = new Vector(0, 200);
@@ -45,7 +46,7 @@ namespace OkuTest
 
     public override void Render()
     {
-      OkuDrivers.Renderer.DrawLines(_eff.Area.GetVertices(), 1, Color.Red, VertexInterpretation.PolygonClosed);
+      OkuDrivers.Renderer.DrawLines(_eff.Area.GetVertices(), Color.Red, 4, 1, VertexInterpretation.PolygonClosed);
       _system.Draw();      
     }
 

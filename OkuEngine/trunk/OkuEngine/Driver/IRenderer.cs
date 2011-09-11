@@ -148,10 +148,11 @@ namespace OkuEngine
     /// How the vertices are interpreted is specified by interpretation.
     /// </summary>
     /// <param name="vertices">The vertices to draw lines with.</param>
-    /// <param name="width">The width of the lines in pixel.</param>
     /// <param name="color">The color of the lines.</param>
+    /// <param name="count">The number of lines to draw from the given array.</param>
+    /// <param name="width">The width of the lines in pixel.</param>
     /// <param name="interpretation">Specifies how to interpret the vertices.</param>
-    void DrawLines(Vector[] vertices, float width, Color color, VertexInterpretation interpretation);
+    void DrawLines(Vector[] vertices, Color color, int count, float width, VertexInterpretation interpretation);
 
     /// <summary>
     /// Draws a series of lines using the given vertices with the given width and colors.
@@ -159,9 +160,10 @@ namespace OkuEngine
     /// </summary>
     /// <param name="vertices">The vertices to draw the lines with.</param>
     /// <param name="colors">The colors belonging to the vertices. Has to be same lentgh as vertices.</param>
+    /// <param name="count">The number of lines to draw from the given array.</param>
     /// <param name="width">The width of the lines in pixels.</param>
     /// <param name="interpretation">Specifies how to interpret the vertices.</param>
-    void DrawLines(Vector[] vertices, Color[] colors, float width, VertexInterpretation interpretation);
+    void DrawLines(Vector[] vertices, Color[] colors, int count, float width, VertexInterpretation interpretation);
 
     /// <summary>
     /// Draws a point at the given point p with the given size and color.
@@ -175,17 +177,19 @@ namespace OkuEngine
     /// Draws a series of points at the given vertices with the given size and color.
     /// </summary>
     /// <param name="points">The center of the points in world space pixels.</param>
-    /// <param name="size">The size of the points in pixels.</param>
     /// <param name="color">The color of the points.</param>
-    void DrawPoints(Vector[] points, float size, Color color);
+    /// <param name="count">The number of points to draw from the given array.</param>
+    /// <param name="size">The size of the points in pixels.</param>
+    void DrawPoints(Vector[] points, Color color, int count, float size);
 
     /// <summary>
     /// Draws a series of points at the given vertices with the given size and color.
     /// </summary>
     /// <param name="points">The center of the points in world space pixels.</param>
     /// <param name="colors">The color values belonging to the points. Must be same length as points.</param>
+    /// <param name="count">The number of points to draw from the given array.</param>
     /// <param name="size">The size of the points in pixels.</param>
-    void DrawPoints(Vector[] points, Color[] colors, float size);
+    void DrawPoints(Vector[] points, Color[] colors, int count, float size);
 
     /// <summary>
     /// Draws a generic mesh using the given parameters.
@@ -193,9 +197,10 @@ namespace OkuEngine
     /// <param name="points">The coordinates of the vertices of the mesh in world space. Must not be null.</param>
     /// <param name="texCoords">The normalized texture coordinates of the vertices. Must be same length as points. If null, no texture is applied.</param>
     /// <param name="colors">The colors of the vertices. Must be same length as points. If null, white is used as default color.</param>
+    /// <param name="count">The number of points to draw from the given array.</param>
     /// <param name="mode">The mode used to create polygons from the given vertices.</param>
     /// <param name="texture">The texture to be applied. If not null, texCoords must also be given.</param>
-    void DrawMesh(Vector[] points, Vector[] texCoords, Color[] colors, MeshMode mode, ImageContent texture);
+    void DrawMesh(Vector[] points, Vector[] texCoords, Color[] colors, int count, MeshMode mode, ImageContent texture);
 
     /// <summary>
     /// Initializes image content which means that textures are created for them.

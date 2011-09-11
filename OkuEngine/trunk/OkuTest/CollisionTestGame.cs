@@ -104,8 +104,8 @@ namespace OkuTest
 
     public override void Render()
     {
-      OkuDrivers.Renderer.DrawLines(_transformed1, 1, OkuEngine.Color.Red, VertexInterpretation.PolygonClosed);
-      OkuDrivers.Renderer.DrawLines(_transformed2, 1, OkuEngine.Color.Blue, VertexInterpretation.PolygonClosed);
+      OkuDrivers.Renderer.DrawLines(_transformed1, OkuEngine.Color.Red, _transformed1.Length, 1, VertexInterpretation.PolygonClosed);
+      OkuDrivers.Renderer.DrawLines(_transformed2, OkuEngine.Color.Blue, _transformed2.Length, 1, VertexInterpretation.PolygonClosed);
 
       float x = 500;
       float y = 500;

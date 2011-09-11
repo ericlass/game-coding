@@ -126,7 +126,7 @@ namespace OkuTest
     {
       _poly.Draw();
 
-      OkuDrivers.Renderer.DrawPoints(_poly.Content.Positions, _poly.Content.Colors, 10);
+      OkuDrivers.Renderer.DrawPoints(_poly.Content.Positions, _poly.Content.Colors, _poly.Content.Positions.Length, 10);
 
       _smiley.Draw(_pos1, _rotation);
       _mesh.Draw();
@@ -135,7 +135,7 @@ namespace OkuTest
 
       Vector[] transformed = new Vector[_guiText.Vertices.Positions.Length];
       OkuDrivers.Renderer.ViewPort.ScreenSpaceMatrix.Transform(_guiText.Vertices.Positions, transformed);
-      OkuDrivers.Renderer.DrawMesh(transformed, _guiText.Vertices.TexCoords, _guiText.Vertices.Colors, _guiText.Mode, _guiText.Texture);
+      OkuDrivers.Renderer.DrawMesh(transformed, _guiText.Vertices.TexCoords, _guiText.Vertices.Colors, _guiText.Vertices.Positions.Length, _guiText.Mode, _guiText.Texture);
     }
 
   }

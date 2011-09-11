@@ -7,9 +7,33 @@ namespace OkuEngine
 {
   public class LineParticleRenderer : IParticleRenderer
   {
+    private ArrayList<Vector> _vertices = new ArrayList<Vector>();
+    private ArrayList<Color> _colors = new ArrayList<Color>();
+
     public void Render(List<Particle> particles)
     {
-      List<Vector> points = new List<Vector>();
+      _vertices.AsureCapacity(particles.Count * 2);
+      _colors.AsureCapacity(particles.Count * 2);
+
+      int index = 0;
+      for (int i = 0; i < particles.Count; i++)
+      {
+        Particle p = particles[i];
+        if (!p.IsDead)
+        {
+          _vertices[index] = p.Position;
+          _colors[index] = p.Color;
+          index++;
+          _vertices[index] = p.OldPosition;
+          _colors[index] = p.Color;
+          index++;
+        }
+      }
+
+      OkuDrivers.Renderer.DrawLines(_vertices.InternalArray, _colors.InternalArray, index, 1, VertexInterpretation.LineSegments);
+
+
+      /*List<Vector> points = new List<Vector>();
       List<Color> colors = new List<Color>();
       foreach (Particle p in particles)
       {
@@ -22,7 +46,7 @@ namespace OkuEngine
         }
       }
 
-      OkuDrivers.Renderer.DrawLines(points.ToArray(), colors.ToArray(), 1, VertexInterpretation.LineSegments);
+      OkuDrivers.Renderer.DrawLines(points.ToArray(), colors.ToArray(), points.Count, 1, VertexInterpretation.LineSegments);*/
     }
 
   }

@@ -57,7 +57,7 @@ namespace OkuEngine
 
     public void Draw()
     {
-      OkuDrivers.Renderer.DrawMesh(_vertices.Positions, _vertices.TexCoords, _vertices.Colors, _mode, _texture);
+      OkuDrivers.Renderer.DrawMesh(_vertices.Positions, _vertices.TexCoords, _vertices.Colors, _vertices.Positions.Length, _mode, _texture);
     }
 
     //TODO: static functions to create default geometry like quads, circles...

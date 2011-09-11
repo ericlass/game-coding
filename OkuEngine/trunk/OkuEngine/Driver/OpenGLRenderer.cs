@@ -500,15 +500,7 @@ namespace OkuEngine
       } 
     }
 
-    /// <summary>
-    /// Draws a series of lines using the given vertices with the given width and color.
-    /// How the vertices are interpreted is specified by interpretation.
-    /// </summary>
-    /// <param name="vertices">The vertices to draw lines with.</param>
-    /// <param name="width">The width of the lines in pixel.</param>
-    /// <param name="color">The color of the lines.</param>
-    /// <param name="interpretation">Specifies how to interpret the vertices.</param>
-    public void DrawLines(Vector[] vertices, float width, Color color, VertexInterpretation interpretation)
+    public void DrawLines(Vector[] vertices, Color color, int count, float width, VertexInterpretation interpretation)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
       try
@@ -521,7 +513,7 @@ namespace OkuEngine
         //Draw the lines
         Gl.glColor4ub(color.R, color.G, color.B, color.A);
         SetPointers(vertices, null, null);
-        Gl.glDrawArrays(primitive, 0, vertices.Length);
+        Gl.glDrawArrays(primitive, 0, count);
       }
       finally
       {
@@ -529,7 +521,7 @@ namespace OkuEngine
       }   
     }
 
-    public void DrawLines(Vector[] vertices, Color[] colors, float width, VertexInterpretation interpretation)
+    public void DrawLines(Vector[] vertices, Color[] colors, int count, float width, VertexInterpretation interpretation)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
       try
@@ -540,7 +532,7 @@ namespace OkuEngine
         int primitive = VertexIntToGLPrimitive(interpretation);
 
         SetPointers(vertices, null, colors);
-        Gl.glDrawArrays(primitive, 0, vertices.Length);
+        Gl.glDrawArrays(primitive, 0, count);
       }
       finally
       {
@@ -575,7 +567,7 @@ namespace OkuEngine
       }
     }
 
-    public void DrawPoints(Vector[] points, float size, Color color)
+    public void DrawPoints(Vector[] points, Color color, int count, float size)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
 
@@ -585,7 +577,7 @@ namespace OkuEngine
 
         Gl.glColor4ub(color.R, color.G, color.B, color.A);
         SetPointers(points, null, null);
-        Gl.glDrawArrays(Gl.GL_POINTS, 0, points.Length);
+        Gl.glDrawArrays(Gl.GL_POINTS, 0, count);
       }
       finally
       {
@@ -593,7 +585,7 @@ namespace OkuEngine
       }
     }
 
-    public void DrawPoints(Vector[] points, Color[] colors, float size)
+    public void DrawPoints(Vector[] points, Color[] colors, int count, float size)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
 
@@ -602,7 +594,7 @@ namespace OkuEngine
         Gl.glPointSize(size);
 
         SetPointers(points, null, colors);
-        Gl.glDrawArrays(Gl.GL_POINTS, 0, points.Length);
+        Gl.glDrawArrays(Gl.GL_POINTS, 0, count);
       }
       finally
       {
@@ -610,7 +602,7 @@ namespace OkuEngine
       }
     }
 
-    public void DrawMesh(Vector[] points, Vector[] texCoords, Color[] colors, MeshMode mode, ImageContent texture)
+    public void DrawMesh(Vector[] points, Vector[] texCoords, Color[] colors, int count, MeshMode mode, ImageContent texture)
     {
       if (texture != null)
       {
@@ -626,7 +618,7 @@ namespace OkuEngine
       int primitive = MeshModeToGLPrimitive(mode);
 
       SetPointers(points, texCoords, colors);
-      Gl.glDrawArrays(primitive, 0, points.Length);
+      Gl.glDrawArrays(primitive, 0, count);
     }
 
     /// <summary>
