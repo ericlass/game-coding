@@ -23,25 +23,18 @@ namespace OkuTest
 
       _map = new Tilemap(mapWidth, mapHeight, 32);
       _map.Origin = new Vector(50, 50);
-      _map.TileImages = ImageContent.LoadSheet(".\\content\\tilesheet.png", 32);
+      _map.TileImages = ImageContent.LoadSheet(".\\content\\realtiles.bmp", 32);
 
       Random rand = new Random();
 
-      /*for (int y = 0; y < mapHeight; y++)
-      {
-        for (int x = 0; x < mapWidth; x++)
-        {
-          byte tileType = (byte)(rand.Next(5) + 1);
-          _map[x, y] = new Tile(tileType, tileType);
-        }
-      }*/
+      ushort[] tiles = new ushort[] { 4, 4, 8, 6, 0, 2 };
 
-      for (int i = 0; i < 50; i++)
+      for (int i = 0; i < 150; i++)
       {
         byte tileType = (byte)rand.Next(6);
         int x = rand.Next(mapWidth);
         int y = rand.Next(mapHeight);
-        _map[x, y] = new Tile(tileType, tileType);
+        _map[x, y] = new Tile(tileType, tiles[tileType]);
       }
 
       OkuDrivers.Renderer.ClearColor = Color.White;

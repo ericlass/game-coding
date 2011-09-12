@@ -10,6 +10,8 @@ namespace OkuEngine
   /// </summary>
   public static class Intersections
   {
+    private static DynamicArray<Vector> _vectorBuffer = new DynamicArray<Vector>(100);
+
     /// <summary>
     /// Checks for intersection of two line segments specified by the given
     /// coordinates. The line segments are formed like ((x1,y1),(x2,y2)) and 
@@ -180,23 +182,12 @@ namespace OkuEngine
     {
       mtd = Vector.Zero;
 
-      List<Vector> normalAxes = new List<Vector>(poly1.Length + poly2.Length);
+      int count = poly1.Length + poly2.Length;
+      _vectorBuffer.AsureCapacity(count);
+      Vector[] normalAxes = _vectorBuffer.InternalArray;
 
-      //Get normals of first poly
-      for (int i = 0; i < poly1.Length; i++)
-      {
-        int j = (i + 1) % poly1.Length;
-        Vector vec = poly1[j] - poly1[i];
-        normalAxes.Add(vec.GetNormal());
-      }
-
-      //Get normals of second poly
-      for (int i = 0; i < poly2.Length; i++)
-      {
-        int j = (i + 1) % poly2.Length;
-        Vector vec = poly2[j] - poly2[i];
-        normalAxes.Add(vec.GetNormal());
-      }
+      OkuMath.GetNormals(poly1, normalAxes, 0);
+      OkuMath.GetNormals(poly2, normalAxes, poly1.Length);
 
       Vector separation = new Vector();
       float minOverlap = float.MaxValue;
@@ -206,8 +197,10 @@ namespace OkuEngine
       float min2 = float.MaxValue;
       float max2 = float.MinValue;
 
-      foreach (Vector axis in normalAxes)
+      for (int i = 0; i < count; i++)
       {
+        Vector axis = normalAxes[i];
+
         GetProjectedBounds(axis, poly1, out min1, out max1);
         GetProjectedBounds(axis, poly2, out min2, out max2);
 
@@ -227,6 +220,9 @@ namespace OkuEngine
           if (Math.Abs(mtdValue) < Math.Abs(minOverlap))
           {
             minOverlap = mtdValue;
+            //Early exit. If minimum overlap is 0.0 then there really is no intersection.
+            if (minOverlap == 0.0f)
+              return false;
             separation = axis;
           }
         }
@@ -246,14 +242,12 @@ namespace OkuEngine
     /// <param name="max">The maximum projection value is returned in this parameter.</param>
     private static void GetProjectedBounds(Vector axis, Vector[] poly, out float min, out float max)
     {
-      if (poly.Length < 1)
-        throw new ArgumentException("Poly must have at least one vector!");
-
       min = float.MaxValue;
       max = float.MinValue;
-      foreach (Vector vec in poly)
+      for (int i = 0; i < poly.Length; i++)
+      //foreach (Vector vec in poly)
       {
-        float projected = axis.ProjectScalar(vec);
+        float projected = axis.ProjectScalar(poly[i]);
         min = Math.Min(min, projected);
         max = Math.Max(max, projected);
       }

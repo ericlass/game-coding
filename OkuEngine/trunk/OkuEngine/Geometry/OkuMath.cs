@@ -21,6 +21,22 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Calculates the normals for a closed polygon shape. The normals are written to
+    /// the given normals array starting at the given start index.
+    /// </summary>
+    /// <param name="polygon">The points of the polygon.</param>
+    /// <param name="normals">The normals array the results are written to.</param>
+    /// <param name="start">The start index in the normals array where the normals are written to.</param>
+    public static void GetNormals(Vector[] polygon, Vector[] normals, int start)
+    {
+      for (int i = 0; i < polygon.Length; i++)
+      {
+        int j = (i + 1) % polygon.Length;
+        normals[start + i] = GetNormal(polygon[i], polygon[j]);
+      }
+    }
+
+    /// <summary>
     /// Interpolates linearly between the two given points.
     /// </summary>
     /// <param name="start">The start point.</param>
@@ -29,7 +45,7 @@ namespace OkuEngine
     /// <returns></returns>
     public static Vector LinearInterpolate(Vector start, Vector end, float t)
     {
-      return start + ((end - start) * t);
+      return new Vector(start.X + ((end.X - start.X) * t), start.Y + ((end.Y - start.Y) * t));
     }
 
   }
