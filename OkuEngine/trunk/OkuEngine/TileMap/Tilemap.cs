@@ -10,12 +10,12 @@ namespace OkuEngine
   public class Tilemap
   {
     //Constants to determine the collision shape of tiles
-    private const byte TILE_COLLISION_NONE = 0;
-    private const byte TILE_COLLISION_FULL = 1;
-    private const byte TILE_COLLISION_LEFT_TOP = 2;
-    private const byte TILE_COLLISION_RIGHT_TOP = 3;
-    private const byte TILE_COLLISION_RIGHT_BOTTOM = 4;
-    private const byte TILE_COLLISION_LEFT_BOTTOM = 5;
+    public const byte TILE_COLLISION_NONE = 0;
+    public const byte TILE_COLLISION_FULL = 1;
+    public const byte TILE_COLLISION_LEFT_TOP = 2;
+    public const byte TILE_COLLISION_RIGHT_TOP = 3;
+    public const byte TILE_COLLISION_RIGHT_BOTTOM = 4;
+    public const byte TILE_COLLISION_LEFT_BOTTOM = 5;
 
     //List that contains a list of line segments for each collision shape that can be used to find the collision point of a line segment with a tile.
     private List<List<LineSegment>> _bounds = new List<List<LineSegment>>()

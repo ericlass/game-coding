@@ -101,6 +101,7 @@
     <Compile Include="Particles\ParticleSystem.cs" />
     <Compile Include="Particles\PointEmitter.cs" />
     <Compile Include="Particles\PointParticleRenderer.cs" />
+    <Compile Include="PerlinNoise.cs" />
     <Compile Include="Scene\SceneGraph.cs" />
     <Compile Include="Scene\SceneNode.cs" />
     <Compile Include="Scene\SceneNodeList.cs" />
