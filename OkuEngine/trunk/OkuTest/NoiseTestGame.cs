@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using OkuEngine;
 
 namespace OkuTest
 {
   public class NoiseTestGame : OkuGame
   {
-    private PerlinNoise _noise = new PerlinNoise(3);
-    private float _zoom = 1.0f;
+    private PerlinNoise _noise = new PerlinNoise(1);
+    private float _zoom = 100.0f;
     private int _octaves = 5;
 
     private ImageContent _content = null;
@@ -16,34 +17,57 @@ namespace OkuTest
     private Bitmap GetNoiseTexture(float zoom)
     {
       Bitmap image = new Bitmap(512, 512, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-      for (int y = 0; y < image.Height; y++)
+      BitmapData data = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+
+      int i = 0;
+      int x = 0;
+      int y = 0;
+      unsafe
       {
-        float zy = y / zoom;
-        for (int x = 0; x < image.Width; x++)
+        int* p = (int*)data.Scan0.ToPointer();
+        float min = float.MaxValue;
+        float max = float.MinValue;
+
+        while (i < (image.Width * image.Height))
         {
+
+          x = i % image.Width;
+          y = i / image.Width;
+
+          float zy = y / zoom;
           float zx = x / zoom;
 
           /*float dens = y - 128;
-          dens += _noise.Noise(zx, zy, _octaves) * 20;
-          int value = (int)Math.Max(0, Math.Min(255, dens));*/
+          dens += ((_noise.Noise(zx, zy, _octaves, _zoom) + 1.0f) / 2.0f) * 60;
+          int value = (int)Math.Max(0, Math.Min(255, dens));
 
-          int value = Math.Max(0, Math.Min(255, (int)(_noise.Noise(zx, zy, _octaves) * 128 + 128)));
-
-          /*if (value >= 128)
+          if (value >= 128)
             value = 255;
           if (value < 128)
             value = 0;*/
 
-          image.SetPixel(x, y, System.Drawing.Color.FromArgb(value, value, value));
+          float noise = _noise.Noise(zx, zy, _octaves, _zoom);
+          min = Math.Min(min, noise);
+          max = Math.Max(max, noise);
+          int value = Math.Max(0, Math.Min(255, (int)(noise * 128 + 128)));
+
+          *p = System.Drawing.Color.FromArgb(value, value, value).ToArgb();
+
+          p++;
+          i++;
         }
+
+        OkuDrivers.Renderer.MainForm.Text = "Min: " + min + "; Max: " + max;
       }
+
+      image.UnlockBits(data);
+
       return image;
     }
     
     public override void Initialize()
     {
       _content = new ImageContent(GetNoiseTexture(_zoom));
-      OkuDrivers.Renderer.MainForm.Text = "Done";
     }
 
     public override void Update(float dt)
@@ -61,11 +85,19 @@ namespace OkuTest
         _zoom /= zoomFactor;
         zoomed = true;
       }
+      if (OkuDrivers.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.Divide))
+      {
+        _octaves -= 1;
+        zoomed = true;
+      }
+      if (OkuDrivers.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.Multiply))
+      {
+        _octaves += 1;
+        zoomed = true;
+      }
 
       if (zoomed)
-      {
         _content.Update(0, 0, _content.Width, _content.Height, GetNoiseTexture(_zoom));
-      }
     }
 
     public override void Render()

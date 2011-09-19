@@ -43,9 +43,44 @@ namespace OkuEngine
     /// <param name="end">The end point.</param>
     /// <param name="t">A value in the range 0.0 - 1.0 where 0.0 means start and 1.0 means end.</param>
     /// <returns></returns>
-    public static Vector LinearInterpolate(Vector start, Vector end, float t)
+    public static Vector InterpolateLinear(Vector start, Vector end, float t)
     {
       return new Vector(start.X + ((end.X - start.X) * t), start.Y + ((end.Y - start.Y) * t));
+    }
+
+    /// <summary>
+    /// Interpolates between a and b using cosine interpolation. m controls the amount of interpolation.
+    /// </summary>
+    /// <param name="a">The first value.</param>
+    /// <param name="b">The second value.</param>
+    /// <param name="m">The control paramters.</param>
+    /// <returns>The interpolated value.</returns>
+    public static float InterpolateCosine(float a, float b, float m)
+    {
+      float f = (1.0f - (float)Math.Cos(m * 3.1415927f)) * 0.5f;
+      return a * (1.0f - f) + b * f;
+    }
+
+    /// <summary>
+    /// Interpolates a value between y1 and y2 taking into account y0 and y3.
+    /// </summary>
+    /// <param name="y0">The first value.</param>
+    /// <param name="y1">The second value.</param>
+    /// <param name="y2">The third value.</param>
+    /// <param name="y3">The fourth value.</param>
+    /// <param name="m">The control paramter.</param>
+    /// <returns>The interpolated value.</returns>
+    public static float InterpolateCubic(float y0, float y1, float y2, float y3, float m)
+    {
+      float a0, a1, a2, a3, m2;
+
+      m2 = m * m;
+      a0 = y3 - y2 - y0 + y1;
+      a1 = y0 - y1 - a0;
+      a2 = y2 - y0;
+      a3 = y1;
+
+      return (a0 * m * m2 + a1 * m2 + a2 * m + a3);
     }
 
   }

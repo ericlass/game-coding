@@ -84,7 +84,7 @@ namespace OkuEngine
     private Vector GetRandomPosition()
     {
       float t = (float)_rand.NextDouble();
-      return OkuMath.LinearInterpolate(_start, _end, t);
+      return OkuMath.InterpolateLinear(_start, _end, t);
     }
 
     public override void Emit(List<Particle> particles, float dt)

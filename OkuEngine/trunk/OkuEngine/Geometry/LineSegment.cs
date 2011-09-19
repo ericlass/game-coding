@@ -71,7 +71,7 @@ namespace OkuEngine
     /// <returns>The interpolated point on the line segment.</returns>
     public Vector GetPointAt(float factor)
     {
-      return OkuMath.LinearInterpolate(_start, _end, factor);
+      return OkuMath.InterpolateLinear(_start, _end, factor);
     }
 
   }

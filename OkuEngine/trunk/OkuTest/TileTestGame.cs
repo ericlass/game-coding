@@ -30,7 +30,7 @@ namespace OkuTest
       {
         for (int x = 0; x < mapWidth; x++)
         {
-          float value = noise.Noise(x, y, 5);
+          float value = noise.Noise(x, y, 5, 100);
           if (value > 0.0f)
             _map[x, y] = new Tile(Tilemap.TILE_COLLISION_FULL, 4);
           else
