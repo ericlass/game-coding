@@ -30,6 +30,15 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Gets or sets the random seed that is used when generating the noise.
+    /// </summary>
+    public int Seed
+    {
+      get { return _seed; }
+      set { _seed = value; }
+    }
+
+    /// <summary>
     /// Finds the unsmoothed noise value for the given coordinates.
     /// </summary>
     /// <param name="x">The x component.</param>
