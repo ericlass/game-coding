@@ -28,6 +28,16 @@ namespace OkuEngine
       new List<LineSegment>() { new LineSegment(0, 0, 1, 1), new LineSegment(1, 1, 0, 1), new LineSegment(0, 1, 0, 0) },
     };
 
+    private List<Vector[]> _bounds2 = new List<Vector[]>()
+    {
+      new Vector[] { },
+      new Vector[] { new Vector(0, 0), new Vector(1, 0), new Vector(1, 1), new Vector(0, 1) },
+      new Vector[] { new Vector(0, 0), new Vector(1, 0), new Vector(0, 1) },
+      new Vector[] { new Vector(0, 0), new Vector(1, 0), new Vector(1, 1) },
+      new Vector[] { new Vector(0, 1), new Vector(1, 0), new Vector(1, 1) },
+      new Vector[] { new Vector(0, 0), new Vector(1, 1), new Vector(0, 1) }
+    };
+
     //The main tiles
     private Tile[,] _tiles = null;
 
@@ -87,10 +97,11 @@ namespace OkuEngine
     /// <summary>
     /// Calculates the first intersection of the line segment with a collision tile.
     /// </summary>
-    /// <param name="line">The line in world space coordinates.</param>
+    /// <param name="p1">The start point of the line segment.</param>
+    /// <param name="p2">The end point of the line segment.</param>
     /// <param name="ip">The intersection point in world space coordinates is returned in this parameter.</param>
     /// <returns>If there is an intersection, true is returned. Otherwise false.</returns>
-    public bool GetIntersection(LineSegment line, out Vector ip)
+    public bool GetIntersection(Vector p1, Vector p2, out Vector ip)
     {
       ip = Vector.Zero;
 
@@ -106,20 +117,20 @@ namespace OkuEngine
       float mapTop = _origin.Y;
       float mapBottom = mapTop + _mapHeight;
 
-      if (line.Start.X >= mapLeft && line.Start.X < mapRight &&
-        line.Start.Y >= mapTop && line.Start.Y < mapBottom)
+      if (p1.X >= mapLeft && p1.X < mapRight &&
+        p1.Y >= mapTop && p1.Y < mapBottom)
       {
         //If line origin is inside tilemap
-        lineOrgMapPixelSpace.X = line.Start.X - mapLeft;
-        lineOrgMapPixelSpace.Y = line.Start.Y - mapTop;
+        lineOrgMapPixelSpace.X = p1.X - mapLeft;
+        lineOrgMapPixelSpace.Y = p1.Y - mapTop;
       }
       else
       {
         //If line oprigin is outside of tilemap, get first intersection with tilemap
         float t = 0;
-        if (Intersections.LineSegmentAABB(line.Start.X, line.Start.Y, line.End.X, line.End.Y, mapLeft, mapRight, mapTop, mapBottom, out t, float.MaxValue))
+        if (Intersections.LineSegmentAABB(p1.X, p1.Y, p2.X, p2.Y, mapLeft, mapRight, mapTop, mapBottom, out t, float.MaxValue))
         {
-          Vector p = line.GetPointAt(t);
+          Vector p = OkuMath.InterpolateLinear(p1, p2, t);
           lineOrgMapPixelSpace.X = p.X - mapLeft;
           lineOrgMapPixelSpace.Y = p.Y - mapTop;
         }
@@ -128,7 +139,7 @@ namespace OkuEngine
       }
 
       //Calculate line direction
-      Vector lineDir = line.End - line.Start;
+      Vector lineDir = p2 - p1;
       lineDir.Normalize();
 
       //Calculate tile coordinates of line origin
@@ -150,35 +161,33 @@ namespace OkuEngine
       float tDeltaY = lineDir.Y != 0.0f ? Math.Abs(_tileSize / lineDir.Y) : 0.0f;
 
       //Precalculate line position in tile map tile space
-      LineSegment lineMapTileSpace = new LineSegment(
-        (line.Start.X - mapLeft) / _tileSize,
-        (line.Start.Y - mapTop) / _tileSize,
-        (line.End.X - mapLeft) / _tileSize,
-        (line.End.Y - mapTop) / _tileSize
-      );
+      Vector lineMapTileSpaceStart = new Vector((p1.X - mapLeft) / _tileSize, (p1.Y - mapTop) / _tileSize);
+      Vector lineMapTileSpaceEnd = new Vector((p2.X - mapLeft) / _tileSize, (p2.Y - mapTop) / _tileSize);
 
-      List<LineSegment> shape = null;
+      Vector lineTileTileSpaceStart = new Vector();
+      Vector lineTileTileSpaceEnd = new Vector();
+
+      Vector[] shape = null;
       while (true)
       {
-        shape = _bounds[_tiles[vx, vy].Collision];
+        shape = _bounds2[_tiles[vx, vy].Collision];
 
         //Compute line segment in local tile tile space
-        LineSegment lineTileTileSpace = new LineSegment(
-            lineMapTileSpace.Start.X - vx,
-            lineMapTileSpace.Start.Y - vy,
-            lineMapTileSpace.End.X - vx,
-            lineMapTileSpace.End.Y - vy
-          );
+        lineTileTileSpaceStart.X = lineMapTileSpaceStart.X - vx;
+        lineTileTileSpaceStart.Y = lineMapTileSpaceStart.Y - vy;
+        lineTileTileSpaceEnd.X = lineMapTileSpaceEnd.X - vx;
+        lineTileTileSpaceEnd.Y = lineMapTileSpaceEnd.Y - vy;
 
         //Check if shape and line segment do intersect
-        if (shape != null && shape.Count > 0)
+        if (shape != null && shape.Length > 0)
         {
           float minT = float.MaxValue;
           bool intersects = false;
-          foreach (LineSegment shapeSegment in shape)
+          for (int i = 0; i < shape.Length; i++)
           {
+            int j = (i + 1) % shape.Length;
             float t = 0;
-            if (Intersections.LineSegments(lineTileTileSpace, shapeSegment, out t, minT))
+            if (Intersections.LineSegments(lineTileTileSpaceStart, lineTileTileSpaceEnd, shape[i], shape[j], out t, minT))
             {
               minT = t;
               intersects = true;
@@ -187,7 +196,7 @@ namespace OkuEngine
 
           if (intersects)
           {
-            ip = line.GetPointAt(minT);
+            ip = OkuMath.InterpolateLinear(p1, p2, minT);
             return true;
           }
         }

@@ -24,6 +24,17 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Creates a new line segment and initializes it's fields to the given values.
+    /// </summary>
+    /// <param name="p1">The start point of the line segment.</param>
+    /// <param name="p2">The end point of the line segment.</param>
+    public LineSegment(Vector p1, Vector p2)
+    {
+      _start = p1;
+      _end = p2;
+    }
+
+    /// <summary>
     /// Gets or sets the start point of the line segment.
     /// </summary>
     public Vector Start

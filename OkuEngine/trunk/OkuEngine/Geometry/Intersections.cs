@@ -65,6 +65,21 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Checks if the line segments defined by [p1,p2] and [p3,p4] intersect.
+    /// </summary>
+    /// <param name="p1">The start of the first line.</param>
+    /// <param name="p2">The end of the first line.</param>
+    /// <param name="p3">The start of the second line.</param>
+    /// <param name="p4">The end of the second line.</param>
+    /// <param name="factor">Contains the line formula control value, if there is an intersection.</param>
+    /// <param name="minT">The minimum line formaula control value that has to be reached.</param>
+    /// <returns>True if the line segments intersect, otherwise false.</returns>
+    public static bool LineSegments(Vector p1, Vector p2, Vector p3, Vector p4, out float factor, float minT)
+    {
+      return LineSegments(p1.X, p1.Y, p2.X, p2.Y, p3.X, p3.Y, p4.X, p4.Y, out factor, minT);
+    }
+
+    /// <summary>
     /// Checks for intersection of a line segment and an axis aligned boudning box. The line segment
     /// if given by ((x1,y1),(x2,y2)). The bounding box is given by left, right, top and bottom.
     /// </summary>

@@ -17,7 +17,7 @@ namespace OkuTest
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
 
-      OkuGame game = new NoiseTestGame();
+      OkuGame game = new TileTestGame();
       game.Run();
     }
 
