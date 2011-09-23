@@ -17,7 +17,7 @@ namespace OkuTest
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
 
-      OkuGame game = new TileTestGame();
+      OkuGame game = new PlatformGame();
       game.Run();
     }
 

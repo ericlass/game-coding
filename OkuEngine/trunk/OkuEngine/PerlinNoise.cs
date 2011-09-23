@@ -116,7 +116,9 @@ namespace OkuEngine
       float zoom = (float)Math.Pow(2, octaves);
       for (int i = 0; i < octaves; i++)
       {
-        float value = CubicNoise(x * zoom, y * zoom) * factor;
+        float zx = x / size;
+        float zy = y / size;
+        float value = CubicNoise(zx * zoom, zy * zoom) * factor;
         result += value;
         zoom /= 2.02f;
         factor *= 2;

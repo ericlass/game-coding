@@ -73,6 +73,22 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Gets the width of the tile map in tiles.
+    /// </summary>
+    public int Width
+    {
+      get { return _tiles.GetLength(0); }
+    }
+
+    /// <summary>
+    /// Gets the height of the tile map in tiles.
+    /// </summary>
+    public int Height
+    {
+      get { return _tiles.GetLength(1); }
+    }
+
+    /// <summary>
     /// Gets or sets the tile at a specific location in the tile map.
     /// </summary>
     /// <param name="x">The x coordinate of the tile.</param>
@@ -231,9 +247,11 @@ namespace OkuEngine
         for (int x = 0; x < _tiles.GetLength(0); x++)
         {
           Tile tile = _tiles[x, y];
+          Vector position = Vector.Zero;
           if (tile.Collision > TILE_COLLISION_NONE && (tile.Image >= 0 && tile.Image < _tileImages.Count))
           {
-            Vector position = new Vector((x * _tileSize) + _origin.X + (_tileSize / 2.0f), (y * _tileSize) + _origin.Y + (_tileSize / 2.0f));
+            position.X = (x * _tileSize) + _origin.X + (_tileSize / 2.0f);
+            position.Y = (y * _tileSize) + _origin.Y + (_tileSize / 2.0f);
             OkuDrivers.Renderer.DrawImage(_tileImages[tile.Image], position);
           }
         }

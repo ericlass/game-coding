@@ -34,11 +34,8 @@ namespace OkuTest
           x = i % image.Width;
           y = i / image.Width;
 
-          float zy = y / zoom;
-          float zx = x / zoom;
-
           /*float dens = y - 128;
-          dens += ((_noise.Noise(zx, zy, _octaves, _zoom) + 1.0f) / 2.0f) * 60;
+          dens += ((_noise.Noise(x, y, _octaves, _zoom) + 1.0f) / 2.0f) * 60;
           int value = (int)Math.Max(0, Math.Min(255, dens));
 
           if (value >= 128)
@@ -46,7 +43,7 @@ namespace OkuTest
           if (value < 128)
             value = 0;*/
 
-          float noise = _noise.Noise(zx, zy, _octaves, _zoom);
+          float noise = _noise.Noise(x, y, _octaves, _zoom);
           min = Math.Min(min, noise);
           max = Math.Max(max, noise);
           int value = Math.Max(0, Math.Min(255, (int)(noise * 128 + 128)));
