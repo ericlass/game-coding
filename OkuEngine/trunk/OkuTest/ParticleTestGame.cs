@@ -51,7 +51,7 @@ namespace OkuTest
 
     public override void Render()
     {
-      OkuDrivers.Renderer.DrawLines(_eff.Area.GetVertices(), Color.Red, 4, 1, VertexInterpretation.PolygonClosed);
+      //OkuDrivers.Renderer.DrawLines(_eff.Area.GetVertices(), Color.Red, 4, 1, VertexInterpretation.PolygonClosed);
 
       if (_system.Emitter is LineEmitter)
       {

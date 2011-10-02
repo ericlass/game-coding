@@ -18,17 +18,7 @@ namespace OkuEngine
     public const byte TILE_COLLISION_LEFT_BOTTOM = 5;
 
     //List that contains a list of line segments for each collision shape that can be used to find the collision point of a line segment with a tile.
-    private List<List<LineSegment>> _bounds = new List<List<LineSegment>>()
-    {
-      new List<LineSegment>() {  },
-      new List<LineSegment>() { new LineSegment(0, 0, 1, 0), new LineSegment(1, 0, 1, 1), new LineSegment(1, 1, 0, 1), new LineSegment(0, 1, 0, 0)},
-      new List<LineSegment>() { new LineSegment(0, 0, 1, 0), new LineSegment(1, 0, 0, 1), new LineSegment(0, 1, 0, 0) },
-      new List<LineSegment>() { new LineSegment(0, 0, 1, 0), new LineSegment(1, 0, 1, 1), new LineSegment(1, 1, 0, 0) },
-      new List<LineSegment>() { new LineSegment(0, 1, 1, 0), new LineSegment(1, 0, 1, 1), new LineSegment(1, 1, 0, 1) },
-      new List<LineSegment>() { new LineSegment(0, 0, 1, 1), new LineSegment(1, 1, 0, 1), new LineSegment(0, 1, 0, 0) },
-    };
-
-    private List<Vector[]> _bounds2 = new List<Vector[]>()
+    private List<Vector[]> _bounds = new List<Vector[]>()
     {
       new Vector[] { },
       new Vector[] { new Vector(0, 0), new Vector(1, 0), new Vector(1, 1), new Vector(0, 1) },
@@ -111,13 +101,90 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Transform the given world coordinates into tile coordinates.
+    /// </summary>
+    /// <param name="world">The world coordinate to transform.</param>
+    /// <param name="x">The x index is returned in this parameter.</param>
+    /// <param name="y">The y index is returned in this parameter.</param>
+    private void WorldToTile(float wx, float wy, out int x, out int y)
+    {
+      x = (int)Math.Min(_tiles.GetLength(0) - 1, Math.Max(0, (wx - _origin.X) / _tileSize));
+      y = (int)Math.Min(_tiles.GetLength(1) - 1, Math.Max(0, (wy - _origin.Y) / _tileSize));
+    }
+
+    public bool IntersectAABB(Vector min, Vector max, out Vector mtd)
+    {
+      mtd = Vector.Zero;
+
+      if (max.X < _origin.X || max.Y < _origin.Y || min.X > (_origin.X + _mapWidth) || min.Y > (_origin.Y + _mapHeight))
+        return false;
+
+      int left, right, top, bottom;
+      WorldToTile(min.X, min.Y, out left, out top);
+      WorldToTile(max.X, max.Y, out right, out bottom);
+
+      Vector minTileSpace = new Vector((min.X - _origin.X) / _tileSize, (min.Y - _origin.Y) / _tileSize);
+      Vector maxTileSpace = new Vector((max.X - _origin.X) / _tileSize, (max.Y - _origin.Y) / _tileSize);
+
+      Vector minTileTileSpace = new Vector();
+      Vector maxTileTileSpace = new Vector();
+
+      Vector[] aabbVertices = new Vector[4];
+
+      Vector td = new Vector(float.MaxValue, float.MaxValue);
+
+      bool result = false;
+
+      for (int y = top; y <= bottom; y++)
+      {
+        minTileTileSpace.Y = minTileSpace.Y - y;
+        maxTileTileSpace.Y = maxTileSpace.Y - y;
+        for (int x = left; x <= right; x++)
+        {
+          minTileTileSpace.X = minTileSpace.X - x;
+          maxTileTileSpace.X = maxTileSpace.X - x;
+
+          Vector p = aabbVertices[0];
+          p.X = minTileTileSpace.X;
+          p.Y = minTileTileSpace.Y;
+          aabbVertices[0] = p;
+
+          p = aabbVertices[1];
+          p.X = maxTileTileSpace.X;
+          p.Y = minTileTileSpace.Y;
+          aabbVertices[1] = p;
+
+          p = aabbVertices[2];
+          p.X = maxTileTileSpace.X;
+          p.Y = maxTileTileSpace.Y;
+          aabbVertices[2] = p;
+
+          p = aabbVertices[3];
+          p.X = minTileTileSpace.X;
+          p.Y = maxTileTileSpace.Y;
+          aabbVertices[3] = p;
+
+          byte col = _tiles[x, y].Collision;
+          if (col > TILE_COLLISION_NONE && Intersections.Intersect(_bounds[col], aabbVertices, out td))
+          {
+            mtd += td *_tileSize;
+            result = true;
+          }
+
+        }
+      }
+
+      return result;
+    }
+
+    /// <summary>
     /// Calculates the first intersection of the line segment with a collision tile.
     /// </summary>
     /// <param name="p1">The start point of the line segment.</param>
     /// <param name="p2">The end point of the line segment.</param>
-    /// <param name="ip">The intersection point in world space coordinates is returned in this parameter.</param>
+    /// <param name="ip">The point of intersection is returned in this parameter.</param>
     /// <returns>If there is an intersection, true is returned. Otherwise false.</returns>
-    public bool GetIntersection(Vector p1, Vector p2, out Vector ip)
+    public bool IntersectLineSegment(Vector p1, Vector p2, out Vector ip)
     {
       ip = Vector.Zero;
 
@@ -186,7 +253,7 @@ namespace OkuEngine
       Vector[] shape = null;
       while (true)
       {
-        shape = _bounds2[_tiles[vx, vy].Collision];
+        shape = _bounds[_tiles[vx, vy].Collision];
 
         //Compute line segment in local tile tile space
         lineTileTileSpaceStart.X = lineMapTileSpaceStart.X - vx;
@@ -242,9 +309,13 @@ namespace OkuEngine
     /// </summary>
     public void Draw()
     {
-      for (int y = 0; y < _tiles.GetLength(1); y++)
+      int left, right, top, bottom;
+      WorldToTile(OkuDrivers.Renderer.ViewPort.Left, OkuDrivers.Renderer.ViewPort.Top, out left, out top);
+      WorldToTile(OkuDrivers.Renderer.ViewPort.Right, OkuDrivers.Renderer.ViewPort.Bottom, out right, out bottom);
+
+      for (int y = top; y <= bottom; y++)
       {
-        for (int x = 0; x < _tiles.GetLength(0); x++)
+        for (int x = left; x <= right; x++)
         {
           Tile tile = _tiles[x, y];
           Vector position = Vector.Zero;

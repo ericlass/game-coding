@@ -21,6 +21,21 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Calculates the left hand normal of a line segment defined by the given coordinates.
+    /// </summary>
+    /// <param name="x1">The x coordinate of the start point.</param>
+    /// <param name="y1">The y coordinate of the start point.</param>
+    /// <param name="x2">The x coordinate of the end point.</param>
+    /// <param name="y2">The y coordinate of the end point.</param>
+    /// <returns>The normalized left hand normal.</returns>
+    public static Vector GetNormal(float x1, float y1, float x2, float y2)
+    {
+      Vector result = new Vector(y2 - y1, -(x2 - x1));
+      result.Normalize();
+      return result;
+    }
+
+    /// <summary>
     /// Calculates the normals for a closed polygon shape. The normals are written to
     /// the given normals array starting at the given start index.
     /// </summary>
@@ -81,6 +96,16 @@ namespace OkuEngine
       a3 = y1;
 
       return (a0 * m * m2 + a1 * m2 + a2 * m + a3);
+    }
+
+    /// <summary>
+    /// Gets the next integer value above the given value.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>The next integer value above the given value.</returns>
+    public static int Ceiling(float value)
+    {
+      return (int)(value + 1.0f);
     }
 
   }

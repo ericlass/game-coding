@@ -53,6 +53,15 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Gets the squared length of the vector. This is not the real length but can be used for comparison
+    /// as it is faster to calculate.
+    /// </summary>
+    public float SquaredMagnitude
+    {
+      get { return X * X + Y * Y; }
+    }
+
+    /// <summary>
     /// Adds the values of the given vector to this vector.
     /// </summary>
     /// <param name="other">The vector to be added.</param>
@@ -166,6 +175,17 @@ namespace OkuEngine
     public static Vector operator /(Vector vec1, Vector vec2)
     {
       return new Vector(vec1.X / vec2.X, vec1.Y / vec2.Y);
+    }
+
+    /// <summary>
+    /// Divides the components of the given vector by the given value.
+    /// </summary>
+    /// <param name="vec">The vector.</param>
+    /// <param name="value">The dividend.</param>
+    /// <returns>The result of the division as a new vector.</returns>
+    public static Vector operator /(Vector vec, float value)
+    {
+      return new Vector(vec.X / value, vec.Y / value);
     }
 
     /// <summary>

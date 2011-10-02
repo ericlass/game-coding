@@ -9,7 +9,7 @@ namespace OkuEngine
   {
     private bool _enabled = true;
     private Vector _force = Vector.Zero;
-    private Quad _area = null;
+    private Quad _area;
 
     public ForceEffector()
     {

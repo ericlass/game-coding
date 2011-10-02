@@ -10,8 +10,11 @@ namespace OkuTest
     private Tilemap _tileMap = null;
     private Vector[] _playerBB = null;
     private Vector[] _transformedPlayer = null;
+    private Vector _lastPos = new Vector(8, 0);
     private Vector _playerPos = new Vector(8, 0);
+    private float _lastDt = 0.001f;
     private Matrix3 _tranform = new Matrix3();
+    private Vector _gravity = new Vector(0.0f, 250);
 
     public override void Initialize()
     {
@@ -26,7 +29,7 @@ namespace OkuTest
       _tileMap = new Tilemap(320, 48, 16);
       _tileMap.TileImages = new List<ImageContent>() { _tile };
 
-      PerlinNoise noise = new PerlinNoise(3);
+      PerlinNoise noise = new PerlinNoise(4);
       for (int y = 0; y < _tileMap.Height; y++)
       {
         for (int x = 0; x < _tileMap.Width; x++)
@@ -54,17 +57,40 @@ namespace OkuTest
 
       OkuDrivers.Renderer.ViewPort.Left += dx;
 
-      //TODO: Apply forces to player
+      Vector a = _gravity;
+
+      if (OkuDrivers.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.Up))
+        a.Y = -10000;
+
+      // Time corrected verlet integration
+      Vector newPos = _playerPos + (_playerPos - _lastPos) * (dt / _lastDt) + a * dt * dt;
+
+      if (OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Right))
+        newPos.X += 10 * dt;
+
+      _lastPos = _playerPos;
+      _playerPos = newPos;
+      _lastDt = dt;
 
       _tranform.LoadIdentity();
       _tranform.Translate(_playerPos);
       _tranform.Transform(_playerBB, _transformedPlayer);
+
+      Vector mtd = Vector.Zero;
+      if (_tileMap.IntersectAABB(_transformedPlayer[0], _transformedPlayer[2], out mtd))
+      {
+        _playerPos += mtd;
+        _lastPos = _playerPos;
+        _tranform.LoadIdentity();
+        _tranform.Translate(_playerPos);
+        _tranform.Transform(_playerBB, _transformedPlayer);
+      }
     }
 
     public override void Render()
     {
-      OkuDrivers.Renderer.DrawLines(_transformedPlayer, Color.Blue, _transformedPlayer.Length, 2, VertexInterpretation.PolygonClosed);
       _tileMap.Draw();
+      OkuDrivers.Renderer.DrawLines(_transformedPlayer, Color.Blue, _transformedPlayer.Length, 2, VertexInterpretation.PolygonClosed);      
     }
 
   }

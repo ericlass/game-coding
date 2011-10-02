@@ -54,7 +54,7 @@ namespace OkuTest
       }
       
       //_intersect = _map.GetIntersection(new LineSegment( _line[0], _line[1]), out _colPoint);
-      _intersect = _map.GetIntersection(_line[0], _line[1], out _colPoint);
+      _intersect = _map.IntersectLineSegment(_line[0], _line[1], out _colPoint);
 
       float speed = 300 * dt;
       float dx = 0;
