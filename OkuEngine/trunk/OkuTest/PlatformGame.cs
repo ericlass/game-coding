@@ -10,11 +10,10 @@ namespace OkuTest
     private Tilemap _tileMap = null;
     private Vector[] _playerBB = null;
     private Vector[] _transformedPlayer = null;
-    private Vector _lastPos = new Vector(8, 0);
-    private Vector _playerPos = new Vector(8, 0);
-    private float _lastDt = 0.001f;
+    private Vector _playerPos = new Vector(16, 16);
+    private Vector _playerVelocity = new Vector(0, 0);
     private Matrix3 _tranform = new Matrix3();
-    private Vector _gravity = new Vector(0.0f, 250);
+    private bool _jumping = false;
 
     public override void Initialize()
     {
@@ -26,16 +25,21 @@ namespace OkuTest
       _tranform.LoadIdentity();
 
       _tile = new ImageContent(".\\content\\orange_tile.png");
-      _tileMap = new Tilemap(320, 48, 16);
+      _tileMap = new Tilemap(640, 48, 16);
       _tileMap.TileImages = new List<ImageContent>() { _tile };
 
-      PerlinNoise noise = new PerlinNoise(4);
+      PerlinNoise noise = new PerlinNoise(6);
       for (int y = 0; y < _tileMap.Height; y++)
       {
         for (int x = 0; x < _tileMap.Width; x++)
         {
-          float dens = y - (_tileMap.Height * 0.85f);
-          float value = ((noise.Noise(x, y, 4, 50) + 1.0f) / 2.0f) * 30;
+          //Terrain
+          //float dens = y - (_tileMap.Height * 0.5f);
+
+          //Corridor
+          float dens = Math.Abs((_tileMap.Height / 2) - y) - _tileMap.Height / 5;
+
+          float value = noise.Noise(x, y, 4, 50) * 10;
           dens += value;
 
           if (dens > 0)
@@ -44,6 +48,7 @@ namespace OkuTest
             _tileMap[x, y] = new Tile(Tilemap.TILE_COLLISION_NONE, 0);
         }
       }
+
     }
 
     public override void Update(float dt)
@@ -57,20 +62,22 @@ namespace OkuTest
 
       OkuDrivers.Renderer.ViewPort.Left += dx;
 
-      Vector a = _gravity;
-
-      if (OkuDrivers.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.Up))
-        a.Y = -10000;
-
-      // Time corrected verlet integration
-      Vector newPos = _playerPos + (_playerPos - _lastPos) * (dt / _lastDt) + a * dt * dt;
-
+      speed = 200 * dt;
+      _playerVelocity.X = 0;
       if (OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Right))
-        newPos.X += 10 * dt;
+        _playerVelocity.X = speed;
+      if (OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Left))
+        _playerVelocity.X = -speed;
 
-      _lastPos = _playerPos;
-      _playerPos = newPos;
-      _lastDt = dt;
+      _playerVelocity.Y += 5 * dt;
+
+      if (!_jumping && OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Up))
+      {
+        _jumping = true;
+        _playerVelocity.Y = -500 * dt;
+      }
+
+      _playerPos += _playerVelocity;
 
       _tranform.LoadIdentity();
       _tranform.Translate(_playerPos);
@@ -80,11 +87,17 @@ namespace OkuTest
       if (_tileMap.IntersectAABB(_transformedPlayer[0], _transformedPlayer[2], out mtd))
       {
         _playerPos += mtd;
-        _lastPos = _playerPos;
+        _jumping = false;
+        _playerVelocity.Y = 0;
+
         _tranform.LoadIdentity();
         _tranform.Translate(_playerPos);
         _tranform.Transform(_playerBB, _transformedPlayer);
       }
+
+      Vector center = OkuDrivers.Renderer.ViewPort.Center;
+      center.X = _transformedPlayer[0].X;
+      OkuDrivers.Renderer.ViewPort.Center = center;
     }
 
     public override void Render()
