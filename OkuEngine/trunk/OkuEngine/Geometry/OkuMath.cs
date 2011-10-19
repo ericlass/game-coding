@@ -108,5 +108,47 @@ namespace OkuEngine
       return (int)(value + 1.0f);
     }
 
+    /// <summary>
+    /// Calculates the bouding box for the given polygon. If the polygon does not change
+    /// the bounding box should not be recalculated everytime it is needed. Cache it.
+    /// </summary>
+    /// <param name="polygon">The polygon to get the bounding box for.</param>
+    /// <param name="min">Returns the minimum vector of the bounding box.</param>
+    /// <param name="max">Returns the maximum vector of the bounding box.</param>
+    public static void BoundingBox(Vector[] polygon, out Vector min, out Vector max)
+    {
+      min.X = float.MaxValue;
+      min.Y = float.MaxValue;
+      max.X = float.MinValue;
+      max.Y = float.MinValue;
+
+      for (int i = 0; i < polygon.Length; i++)
+      {
+        Vector vert = polygon[i];
+        min.X = Math.Min(min.X, vert.X);
+        min.Y = Math.Min(min.Y, vert.Y);
+        max.X = Math.Max(max.X, vert.X);
+        max.Y = Math.Max(max.Y, vert.Y);
+      }
+    }
+
+    /// <summary>
+    /// Gets the swept AABB of the AABB defined by min and max if it was translated
+    /// by the given translation vector.
+    /// </summary>
+    /// <param name="min">The minimum vector of the AABB. The result is also returned here.</param>
+    /// <param name="max">The maximum vector of the AABB. The result is also returned here.</param>
+    /// <param name="translation">The translation of the AABB.</param>
+    public static void GetSweptAABB(ref Vector min, ref Vector max, Vector translation)
+    {
+      Vector minT = min + translation;
+      Vector maxT = max + translation;
+
+      min.X = Math.Min(min.X, minT.X);
+      min.Y = Math.Min(min.Y, minT.Y);
+      max.X = Math.Max(max.X, maxT.X);
+      max.Y = Math.Max(max.Y, maxT.Y);
+    }
+
   }
 }

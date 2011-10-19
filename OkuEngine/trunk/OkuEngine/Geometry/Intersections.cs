@@ -80,7 +80,7 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Checks for intersection of a line segment and an axis aligned boudning box. The line segment
+    /// Checks for intersection of a line segment and an axis aligned bounding box. The line segment
     /// if given by ((x1,y1),(x2,y2)). The bounding box is given by left, right, top and bottom.
     /// </summary>
     /// <param name="x1">The x component of the line segments first point.</param>
@@ -266,6 +266,52 @@ namespace OkuEngine
         min = Math.Min(min, projected);
         max = Math.Max(max, projected);
       }
+    }
+
+    /// <summary>
+    /// Checks if the bounding boxes defined by the given vectors are overlapping.
+    /// </summary>
+    /// <param name="min1">The minimum vector of the first bounding box.</param>
+    /// <param name="max1">The maximum vector of the first bounding box.</param>
+    /// <param name="min2">The minimum vector of the second bounding box.</param>
+    /// <param name="max2">The maximum vector of the second bounding box.</param>
+    /// <returns>True if the bounding boxes intersect, else false.</returns>
+    public static bool AABBs(Vector min1, Vector max1, Vector min2, Vector max2)
+    {
+      if (min1.X > max2.X)
+        return false;
+      if (max1.X < min2.X)
+        return false;
+      if (min1.Y > max2.Y)
+        return false;
+      if (max1.Y < min2.Y)
+        return false;
+      return true;
+    }
+
+    /// <summary>
+    /// Calculates the closest intersection of the ray defined by start and end with the given 
+    /// polygon.
+    /// </summary>
+    /// <param name="start">The start point of the ray.</param>
+    /// <param name="end">The end point of the ray.</param>
+    /// <param name="polygon">The polygon.</param>
+    /// <param name="mtd">If an intersection is present, the ray control value of the intersection point is returned here.</param>
+    /// <returns>True if the ray intersects the polygon, else false.</returns>
+    public static bool RayPolygon(Vector start, Vector end, Vector[] polygon, out float mtd)
+    {
+      mtd = float.MaxValue;
+      bool result = false;
+      float lmtd = float.MaxValue;
+      for (int i = 0; i < polygon.Length - 1; i++)
+      {
+        if (LineSegments(start, end, polygon[i], polygon[i + 1], out lmtd, mtd))
+        {
+          mtd = Math.Min(mtd, lmtd);
+          result = true;
+        }
+      }
+      return result;
     }
 
   }

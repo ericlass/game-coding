@@ -4,16 +4,17 @@ using OkuEngine;
 
 namespace OkuTest
 {
-  public class PlatformGame : OkuGame
+  public class PlatformTileGame : OkuGame
   {
     private ImageContent _tile = null;
     private Tilemap _tileMap = null;
     private Vector[] _playerBB = null;
     private Vector[] _transformedPlayer = null;
-    private Vector _playerPos = new Vector(16, 16);
+    private Vector _playerPos = new Vector(16, 368);
     private Vector _playerVelocity = new Vector(0, 0);
     private Matrix3 _tranform = new Matrix3();
     private bool _jumping = false;
+    private Vector _mtd = Vector.Zero;
 
     public override void Initialize()
     {
@@ -87,13 +88,18 @@ namespace OkuTest
       if (_tileMap.IntersectAABB(_transformedPlayer[0], _transformedPlayer[2], out mtd))
       {
         _playerPos += mtd;
-        _jumping = false;
-        _playerVelocity.Y = 0;
+
+        if (_jumping && mtd.Y < 0.0f)
+          _jumping = false;
+
+        _playerVelocity = mtd.GetNormal().Project(_playerVelocity);
 
         _tranform.LoadIdentity();
         _tranform.Translate(_playerPos);
         _tranform.Transform(_playerBB, _transformedPlayer);
       }
+
+      _mtd = mtd;
 
       Vector center = OkuDrivers.Renderer.ViewPort.Center;
       center.X = _transformedPlayer[0].X;
@@ -103,7 +109,9 @@ namespace OkuTest
     public override void Render()
     {
       _tileMap.Draw();
-      OkuDrivers.Renderer.DrawLines(_transformedPlayer, Color.Blue, _transformedPlayer.Length, 2, VertexInterpretation.PolygonClosed);      
+      OkuDrivers.Renderer.DrawLines(_transformedPlayer, Color.Blue, _transformedPlayer.Length, 2, VertexInterpretation.PolygonClosed);
+      OkuDrivers.Renderer.DrawLine(_playerPos, _playerPos + (_playerVelocity * 20), 2, Color.Green);
+      OkuDrivers.Renderer.DrawLine(_playerPos, _playerPos + (_mtd * 20), 2, Color.Red);
     }
 
   }
