@@ -112,6 +112,13 @@ namespace OkuEngine
       y = (int)Math.Min(_tiles.GetLength(1) - 1, Math.Max(0, (wy - _origin.Y) / _tileSize));
     }
 
+    /// <summary>
+    /// Checks for intersection of the given AABB with the tiles in the tile map.
+    /// </summary>
+    /// <param name="min">The minimum vector of the AABB.</param>
+    /// <param name="max">The maximum vector of the AABB.</param>
+    /// <param name="mtd">The minimum translation distance to move the tiles and the AABB apart is returned here.</param>
+    /// <returns>True if the AABB intersects with the tiles, else false.</returns>
     public bool IntersectAABB(Vector min, Vector max, out Vector mtd)
     {
       mtd = Vector.Zero;
@@ -255,15 +262,15 @@ namespace OkuEngine
       {
         shape = _bounds[_tiles[vx, vy].Collision];
 
-        //Compute line segment in local tile tile space
-        lineTileTileSpaceStart.X = lineMapTileSpaceStart.X - vx;
-        lineTileTileSpaceStart.Y = lineMapTileSpaceStart.Y - vy;
-        lineTileTileSpaceEnd.X = lineMapTileSpaceEnd.X - vx;
-        lineTileTileSpaceEnd.Y = lineMapTileSpaceEnd.Y - vy;
-
         //Check if shape and line segment do intersect
         if (shape != null && shape.Length > 0)
         {
+          //Compute line segment in local tile tile space
+          lineTileTileSpaceStart.X = lineMapTileSpaceStart.X - vx;
+          lineTileTileSpaceStart.Y = lineMapTileSpaceStart.Y - vy;
+          lineTileTileSpaceEnd.X = lineMapTileSpaceEnd.X - vx;
+          lineTileTileSpaceEnd.Y = lineMapTileSpaceEnd.Y - vy;
+
           float minT = float.MaxValue;
           bool intersects = false;
           for (int i = 0; i < shape.Length; i++)
@@ -287,17 +294,17 @@ namespace OkuEngine
         //Traverse through tile map
         if (tMaxX < tMaxY)
         {
-          vx = vx + stepX;
+          vx += stepX;
           if (vx == outX)
             return false;
-          tMaxX = tMaxX + tDeltaX;
+          tMaxX += tDeltaX;
         }
         else
         {
-          vy = vy + stepY;
+          vy += stepY;
           if (vy == outY)
             return false;
-          tMaxY = tMaxY + tDeltaY;
+          tMaxY += tDeltaY;
         }
       }
     }

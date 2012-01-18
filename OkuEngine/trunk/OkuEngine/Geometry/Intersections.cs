@@ -81,7 +81,7 @@ namespace OkuEngine
 
     /// <summary>
     /// Checks for intersection of a line segment and an axis aligned bounding box. The line segment
-    /// if given by ((x1,y1),(x2,y2)). The bounding box is given by left, right, top and bottom.
+    /// is given by ((x1,y1),(x2,y2)). The bounding box is given by left, right, top and bottom.
     /// </summary>
     /// <param name="x1">The x component of the line segments first point.</param>
     /// <param name="y1">The x component of the line segments first point.</param>

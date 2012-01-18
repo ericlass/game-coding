@@ -83,6 +83,7 @@ namespace OkuEngine
     {
       OkuData.Globals.Set<int>(OkuConstants.VarScreenWidth, 1024);
       OkuData.Globals.Set<int>(OkuConstants.VarScreenHeight, 768);
+      OkuData.Globals.Set<bool>(OkuConstants.VarFullscreen, false);
     }
 
     /// <summary>
@@ -98,6 +99,8 @@ namespace OkuEngine
           OkuData.Globals.Set<int>(OkuConstants.VarScreenWidth, config.GetInt(OkuConstants.VarScreenWidth));
         if (config.Contains(OkuConstants.VarScreenHeight))
           OkuData.Globals.Set<int>(OkuConstants.VarScreenHeight, config.GetInt(OkuConstants.VarScreenHeight));
+        if (config.Contains(OkuConstants.VarScreenWidth))
+          OkuData.Globals.Set<bool>(OkuConstants.VarFullscreen, config.GetBool(OkuConstants.VarFullscreen));
       }
     }
 

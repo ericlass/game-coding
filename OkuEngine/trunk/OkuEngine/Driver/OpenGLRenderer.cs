@@ -70,6 +70,8 @@ namespace OkuEngine
     /// </summary>
     public void Initialize()
     {
+      _fullscreen = OkuData.Globals.Get<bool>(OkuConstants.VarFullscreen);
+
       int screenWidth = OkuData.Globals.GetDef<int>(OkuConstants.VarScreenWidth, 800);
       int screenHeight = OkuData.Globals.GetDef<int>(OkuConstants.VarScreenHeight, 600);
 

@@ -89,9 +89,10 @@ namespace OkuEngine
     public void LoadString(string str)
     {
       StringReader reader = new StringReader(str);
-      string line = reader.ReadLine().Trim();
+      string line = reader.ReadLine();
       while (line != null)
       {
+        line = line.Trim();
         if (!line.StartsWith("#"))
         {
           string[] parts = line.Split('=');
@@ -100,7 +101,7 @@ namespace OkuEngine
           else
             ; //TODO: Log warning
         }
-        line = reader.ReadLine().Trim();
+        line = reader.ReadLine();
       }
       reader.Close();
     }
@@ -314,6 +315,22 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Sets the given boolean value in the internal buffer. If the internal buffer
+    /// does not contain a value with the given name, the value is added to it.
+    /// If the internal buffer already contains a value with the given name,
+    /// the value is updated.
+    /// </summary>
+    /// <param name="name">The name of the value.</param>
+    /// <param name="value">The boolean value.</param>
+    public void SetBool(string name, bool value)
+    {
+      if (_values.ContainsKey(name))
+        _values[name] = value.ToString();
+      else
+        _values.Add(name, value.ToString());
+    }
+
+    /// <summary>
     /// Get the string value with the given name from the internal buffer.
     /// </summary>
     /// <param name="name">The name of the value.</param>
@@ -383,6 +400,19 @@ namespace OkuEngine
       result.V11 = (float)StrToFloat(parts[4]);
       result.V12 = (float)StrToFloat(parts[5]);
       return result;
+    }
+
+    /// <summary>
+    /// Gets the boolean value with the given name from the internal buffer.
+    /// </summary>
+    /// <param name="name">The of the the value.</param>
+    /// <returns>The value of the boolean value or false if there no such value or the value could not be parsed.</returns>
+    public bool GetBool(string name)
+    {
+      bool result;
+      if (_values.ContainsKey(name) && Boolean.TryParse(_values[name], out result))
+        return result;
+      return false; //Return false by default
     }
 
     /// <summary>

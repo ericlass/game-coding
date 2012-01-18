@@ -10,26 +10,30 @@ namespace OkuTest
   {
     private Vector[] _floor = null;
     private Vector[] _ceiling = null;
+    private int wallPoints = 200;
 
     private Vector[] _player = null;
     private Vector[] _transformedPlayer = null;
     private Vector[] _collidedPlayer = null;
     private Vector _playerPos = new Vector(193, 153);
     private Matrix3 _transform = Matrix3.Indentity;
-    private Vector _trans = new Vector(0, 50);
+    private Vector _trans = new Vector(40, 80);
     private bool _collision = false;
     private Vector _collisionDistance = Vector.Zero;
 
     public override void Initialize()
     {
+      CollisionWorld world = new CollisionWorld();
+      world.GetLinesOnLine(new Vector(50, 50), new Vector(150, 150));
+
       OkuDrivers.Renderer.ClearColor = Color.White;
 
-      _floor = new Vector[100];
+      _floor = new Vector[wallPoints];
       _ceiling = new Vector[_floor.Length];
       PerlinNoise noise = new PerlinNoise();
       for (int i = 0; i < _floor.Length; i++)
       {
-        float x = i * 50.0f;
+        float x = i * (5000.0f / wallPoints);
         float y = 200.0f + noise.Noise(x, 0, 2, 100) * 50.0f;
         Vector value = _floor[i];
         value.X = x;
@@ -43,7 +47,8 @@ namespace OkuTest
         _ceiling[i] = value;
       }
 
-      _player = PolygonFactory.Box(-25, 25, -50, 50);
+      //_player = PolygonFactory.Box(-25, 25, -50, 50);
+      _player = PolygonFactory.Circle(0, 0, 25, 12);
       _transformedPlayer = new Vector[_player.Length];
       _collidedPlayer = new Vector[_player.Length];
     }

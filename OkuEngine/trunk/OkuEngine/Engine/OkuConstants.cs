@@ -10,7 +10,7 @@ namespace OkuEngine
     public const string ConfigFilename  = "oku.conf";
     public const string VarScreenWidth  = "screen.width";
     public const string VarScreenHeight = "screen.height";
-
+    public const string VarFullscreen = "fullscreen";
 
   }
 }
