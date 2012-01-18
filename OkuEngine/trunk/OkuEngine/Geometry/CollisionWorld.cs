@@ -39,7 +39,7 @@ namespace OkuEngine
       long key = GetKey(x, y);
       if (_grid.ContainsKey(key))
       {
-        // Change grid ti contain HashSet instead of list
+        // Change grid to contain HashSet instead of list
         //
       }
     }
