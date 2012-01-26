@@ -47,6 +47,21 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Creates a new viewport with the given boundaries.
+    /// The boundaries are inclusive.
+    /// </summary>
+    /// <param name="left">The left bound of the viewport.</param>
+    /// <param name="top">The top bound of the viewport.</param>
+    /// <param name="right">The right bound of the viewport.</param>
+    /// <param name="bottom">The bottom bound of the viewport.</param>
+    public ViewPort(int left, int top, int right, int bottom)
+    {
+      _halfWidth = (right - left) / 2.0f;
+      _halfHeight = (bottom - top) / 2.0f;
+      _center = new Vector(left + _halfWidth, top + _halfHeight);
+    }
+
+    /// <summary>
     /// Event that is triggered when any parameter of the viewport is changed.
     /// The renderer should listen to this event and change the view of the scene
     /// accordingly.

@@ -23,6 +23,7 @@ namespace OkuEngine
     private IntPtr _dc = IntPtr.Zero;
     private IntPtr _rc = IntPtr.Zero;
     private Dictionary<int, int> _textures = new Dictionary<int, int>();
+    private TextureFilter _texFilter = TextureFilter.Linear;
 
     /// <summary>
     /// Gets or sets if the application should be run in fullscreen or not.
@@ -54,12 +55,32 @@ namespace OkuEngine
       get { return _form; }
     }
 
+    /// <summary>
+    /// Gets or sets the viewport.
+    /// </summary>
     public ViewPort ViewPort
     {
       get { return _viewPort; }
-      set { _viewPort = value; }
+      set 
+      {
+        _viewPort = value;
+        UpdateGLViewPort();
+      }
     }
 
+    /// <summary>
+    /// Gets or sets the texture filtering method.
+    /// </summary>
+    public TextureFilter TextureFilter
+    {
+      get { return _texFilter; }
+      set { _texFilter = value; }
+    }
+
+    /// <summary>
+    /// Method for handling changes on the viewport.
+    /// </summary>
+    /// <param name="sender"></param>
     private void _viewPort_Change(ViewPort sender)
     {
       UpdateGLViewPort();
@@ -116,9 +137,6 @@ namespace OkuEngine
 
       Gl.glHint(Gl.GL_PERSPECTIVE_CORRECTION_HINT, Gl.GL_NICEST);
 
-      /*Gl.glMatrixMode(Gl.GL_PROJECTION);
-      Gl.glLoadIdentity();
-      Gl.glOrtho(0, _form.ClientSize.Width, _form.ClientSize.Height, 0, -1, 1);*/
       UpdateGLViewPort();
 
       Gl.glEnable(Gl.GL_ALPHA_TEST);
@@ -157,6 +175,24 @@ namespace OkuEngine
       Wgl.wglMakeCurrent(IntPtr.Zero, IntPtr.Zero);
       Wgl.wglDeleteContext(_rc);
       User.ReleaseDC(_handle, _dc);
+    }
+
+    /// <summary>
+    /// Converts the currently set texture filter method
+    /// to an int to be used for OpenGL.
+    /// </summary>
+    /// <returns>The value of the OpenGL texture filter constant.</returns>
+    private int GetGLTexFilter()
+    {
+      switch (_texFilter)
+      {
+        case TextureFilter.NearestNeighbor:
+          return Gl.GL_NEAREST;
+        case TextureFilter.Linear:
+          return Gl.GL_LINEAR;
+        default:
+          throw new ArgumentException("Texure filter " + _texFilter + " not supported in OpenGlRenderer!");
+      }
     }
 
     /// <summary>
@@ -210,8 +246,8 @@ namespace OkuEngine
       Gl.glGenTextures(1, out textureId);
       Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
       Gl.glTexImage2D(Gl.GL_TEXTURE_2D, 0, 4, width, height, 0, Gl.GL_BGRA, Gl.GL_UNSIGNED_BYTE, data);
-      Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, Gl.GL_LINEAR);
-      Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, Gl.GL_LINEAR);
+      Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, GetGLTexFilter());
+      Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, GetGLTexFilter());
 
       if (_textures.ContainsKey(content.ContentId))
         ReleaseContent(content);
@@ -233,8 +269,8 @@ namespace OkuEngine
       Gl.glGenTextures(1, out textureId);
       Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
       Gl.glTexImage2D(Gl.GL_TEXTURE_2D, 0, 4, image.Width, image.Height, 0, Gl.GL_BGRA, Gl.GL_UNSIGNED_BYTE, bmData.Scan0);
-      Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, Gl.GL_LINEAR);
-      Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, Gl.GL_LINEAR);
+      Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, GetGLTexFilter());
+      Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, GetGLTexFilter());
 
       image.UnlockBits(bmData);
 

@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnimationTestGame.cs" />
     <Compile Include="CollisionTestGame.cs" />
     <Compile Include="NoiseTestGame.cs" />
     <Compile Include="ParticleTestGame.cs" />

@@ -17,7 +17,7 @@ namespace OkuTest
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
 
-      OkuGame game = new PlatformPolygonGame();
+      OkuGame game = new AnimationTestGame();
       game.Run();
     }
 

@@ -56,6 +56,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionHandler.cs" />
+    <Compile Include="Animation.cs" />
+    <Compile Include="AnimationFrame.cs" />
     <Compile Include="ArrayList.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="ConfigFile.cs" />
@@ -65,6 +67,7 @@
     <Compile Include="DisplayMode.cs" />
     <Compile Include="Content\ImageContent.cs" />
     <Compile Include="Driver\MeshMode.cs" />
+    <Compile Include="Driver\TextureFilter.cs" />
     <Compile Include="Driver\VertexInterpretation.cs" />
     <Compile Include="Driver\ViewPort.cs" />
     <Compile Include="Geometry\CollisionWorld.cs" />

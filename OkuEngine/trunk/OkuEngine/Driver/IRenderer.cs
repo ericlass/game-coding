@@ -30,6 +30,12 @@ namespace OkuEngine
     ViewPort ViewPort { get; set; }
 
     /// <summary>
+    /// Gets or sets the texture filter used for interpolating textures when they
+    /// are minimized or maximized.
+    /// </summary>
+    TextureFilter TextureFilter { get; set; }
+
+    /// <summary>
     /// Is called once at the start of the application. It should do all necessary initialization
     /// that is needed by the renderer. It has to create the form that is used to display the game.
     /// </summary>
