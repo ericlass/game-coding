@@ -36,6 +36,18 @@ namespace OkuEngine
     private Dictionary<int, ImageContent> _colorBufferContent = new Dictionary<int, ImageContent>(); //Maps color buffer opengl name to image content
     private int _renderBuffer = 0; //The opengl name of the depth buffer. It is reused for every pass.
 
+    private int _vertexShader = -1;
+    private String _defaultVertexShader =
+      "varying vec2 Texcoord;\n" +
+      "\n" +
+      "void main( void )\n" +
+      "{\n" +
+      "  gl_Position = ftransform();\n" +
+      "  Texcoord    = gl_MultiTexCoord0.xy;\n" +
+      "  gl_FrontColor = gl_Color;\n" +
+      "}";
+    private Dictionary<int, int> _shaderPrograms = new Dictionary<int, int>(); //Maps content ids to shader program names
+
     /// <summary>
     /// Gets or sets if the application should be run in fullscreen or not.
     /// </summary>
@@ -461,6 +473,97 @@ namespace OkuEngine
         int texId = _textures[content.ContentId];
         Gl.glDeleteTextures(1, ref texId);
         _textures.Remove(content.ContentId);
+      }
+    }
+
+    private int GetVertexShader()
+    {
+      if (_vertexShader <= 0)
+      {
+        _vertexShader = Gl.glCreateShader(Gl.GL_VERTEX_SHADER);
+        string[] lines = _defaultVertexShader.Split('\n');
+        Gl.glShaderSource(_vertexShader, lines.Length, lines, null);
+        Gl.glCompileShader(_vertexShader);
+      }
+      return _vertexShader;
+    }
+
+    /// <summary>
+    /// Intializes the given pixel shader by compiling and linking it.
+    /// The source must already be attached to the given content.
+    /// </summary>
+    /// <param name="content">The pixel shader content to be initialized.</param>
+    public void InitShaderContent(PixelShaderContent content)
+    {
+      if (!_shaderPrograms.ContainsKey(content.ContentId))
+      {
+        if (content.Source != null)
+        {
+          string[] lines = content.Source.Split('\n');
+          int pixelShader = Gl.glCreateShader(Gl.GL_FRAGMENT_SHADER);
+          Gl.glShaderSource(pixelShader, lines.Length, lines, null);
+          Gl.glCompileShader(pixelShader);
+
+          int program = Gl.glCreateProgram();
+          Gl.glAttachShader(program, GetVertexShader());
+          Gl.glAttachShader(program, pixelShader);
+
+          Gl.glLinkProgram(program);
+
+          _shaderPrograms.Add(content.ContentId, program);
+        }
+        else
+        {
+          //TODO: throw exception
+        }
+      }
+    }
+
+    /// <summary>
+    /// Enables the given pixel shader. If null is passed shaders are disabled.
+    /// </summary>
+    /// <param name="content">The shader content to use.</param>
+    public void UseShader(PixelShaderContent content)
+    {
+      if (content != null)
+      {
+        if (_shaderPrograms.ContainsKey(content.ContentId))
+        {
+          int program = _shaderPrograms[content.ContentId];
+          Gl.glUseProgram(program);
+        }
+        else
+        {
+          //TODO: throw exception
+        }
+      }
+      else
+      {
+        Gl.glUseProgram(0);
+      }
+    }
+
+    /// <summary>
+    /// Sets the given texture to the variable of the given shader.
+    /// </summary>
+    /// <param name="shader">The shader.</param>
+    /// <param name="name">The name of the variable.</param>
+    /// <param name="texture">The texture to set.</param>
+    public void SetShaderTexture(PixelShaderContent shader, string name, ImageContent texture)
+    {
+      if (_shaderPrograms.ContainsKey(shader.ContentId))
+      {
+        int program = _shaderPrograms[shader.ContentId];
+        int location = Gl.glGetUniformLocation(program, name);
+
+        Gl.glActiveTexture(Gl.GL_TEXTURE0 + 1);
+        Gl.glBindTexture(Gl.GL_TEXTURE_2D, _textures[texture.ContentId]);
+        Gl.glUniform1i(location, 1);
+        Gl.glActiveTexture(Gl.GL_TEXTURE0);
+      }
+      else
+      {
+        //TODO: throw exception
       }
     }
 

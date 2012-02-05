@@ -62,6 +62,7 @@
     <Compile Include="Color.cs" />
     <Compile Include="ConfigFile.cs" />
     <Compile Include="Content\Content.cs" />
+    <Compile Include="Content\PixelShaderContent.cs" />
     <Compile Include="Content\VisualContent.cs" />
     <Compile Include="Display.cs" />
     <Compile Include="DisplayMode.cs" />

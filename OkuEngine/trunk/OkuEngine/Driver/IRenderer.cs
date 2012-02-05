@@ -303,5 +303,26 @@ namespace OkuEngine
     /// </summary>
     /// <param name="content">The content to release.</param>
     void ReleaseContent(ImageContent content);
+
+    /// <summary>
+    /// Intializes the given pixel shader by compiling and linking it.
+    /// The source must already be attached to the given content.
+    /// </summary>
+    /// <param name="content">The pixel shader content to be initialized.</param>
+    void InitShaderContent(PixelShaderContent content);
+
+    /// <summary>
+    /// Enables the given pixel shader. If null is passed shaders are disabled.
+    /// </summary>
+    /// <param name="content">The shader content to use.</param>
+    void UseShader(PixelShaderContent content);
+
+    /// <summary>
+    /// Sets the given texture to the variable of the given shader.
+    /// </summary>
+    /// <param name="shader">The shader.</param>
+    /// <param name="name">The name of the variable.</param>
+    /// <param name="texture">The texture to set.</param>
+    void SetShaderTexture(PixelShaderContent shader, string name, ImageContent texture);
   }
 }

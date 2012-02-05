@@ -19,6 +19,7 @@ namespace OkuTest
     private SpriteFont _font = null;
     private MeshInstance _text = null;
     private MeshInstance _guiText = null;
+    private PixelShaderContent _shader = null;
 
     public override void Setup(ref RendererParams renderParams)
     {
@@ -90,6 +91,12 @@ namespace OkuTest
         "amet.", 50, 500, Color.Black);
 
       _guiText = _font.GetStringMesh("Ammo: 100", 5, 5, Color.Black);
+
+      //Default shader
+      //_shader = new PixelShaderContent("uniform sampler2D texture;\nvarying vec2 Texcoord;\n\nvoid main( void )\n{\n  gl_FragColor = texture2D(texture, Texcoord) * gl_Color;   \n}");
+
+      //Invert shader
+      _shader = new PixelShaderContent("uniform sampler2D texture;\nvarying vec2 Texcoord;\n\nvoid main( void )\n{\n  vec4 color = texture2D(texture, Texcoord);\n  gl_FragColor = vec4(1.0 - color.r, 1.0 - color.g, 1.0 - color.b, color.a) * gl_Color;\n}");
     }
 
     public override void Update(float dt)
@@ -150,7 +157,11 @@ namespace OkuTest
           break;
 
         case 1:
-          OkuDrivers.Renderer.DrawScreenAlignedQuad(OkuDrivers.Renderer.GetPassResult(pass - 1, 0), Color.Blue);
+          OkuDrivers.Renderer.UseShader(_shader);
+          ImageContent passResult = OkuDrivers.Renderer.GetPassResult(pass - 1, 0);
+          OkuDrivers.Renderer.SetShaderTexture(_shader, "texture", passResult);
+          OkuDrivers.Renderer.DrawScreenAlignedQuad(passResult);
+          OkuDrivers.Renderer.UseShader(null);
           //_smiley.Draw(_pos1, _rotation);
           break;
           
