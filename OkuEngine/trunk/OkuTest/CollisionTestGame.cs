@@ -102,7 +102,7 @@ namespace OkuTest
 
     private Vector _pos = new Vector(512, 384);
 
-    public override void Render()
+    public override void Render(int pass)
     {
       OkuDrivers.Renderer.DrawLines(_transformed1, OkuEngine.Color.Red, _transformed1.Length, 1, VertexInterpretation.PolygonClosed);
       OkuDrivers.Renderer.DrawLines(_transformed2, OkuEngine.Color.Blue, _transformed2.Length, 1, VertexInterpretation.PolygonClosed);

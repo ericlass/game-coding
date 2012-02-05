@@ -10,6 +10,10 @@ namespace OkuEngine
     private int _width = 0;
     private int _height = 0;
 
+    public ImageContent()
+    {
+    }
+
     public ImageContent(string filename)
     {
       FileStream stream = new FileStream(filename, FileMode.Open);

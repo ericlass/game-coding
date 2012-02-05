@@ -49,7 +49,7 @@ namespace OkuTest
       Thread.Sleep(10);
     }
 
-    public override void Render()
+    public override void Render(int pass)
     {
       //OkuDrivers.Renderer.DrawLines(_eff.Area.GetVertices(), Color.Red, 4, 1, VertexInterpretation.PolygonClosed);
 

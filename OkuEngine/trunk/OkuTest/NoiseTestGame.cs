@@ -97,7 +97,7 @@ namespace OkuTest
         _content.Update(0, 0, _content.Width, _content.Height, GetNoiseTexture(_zoom));
     }
 
-    public override void Render()
+    public override void Render(int pass)
     {
       OkuDrivers.Renderer.DrawImage(_content, Vector.Zero);
       OkuDrivers.Renderer.DrawPoint(Vector.Zero, 3, OkuEngine.Color.Red);

@@ -105,15 +105,30 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Used to setup parameters for the whole engine.
+    /// </summary>
+    /// <param name="renderParams">The parameter for the renderer.</param>
+    public virtual void Setup(ref RendererParams renderParams)
+    {
+      renderParams.ClearColor = Color.Black;
+      renderParams.Fullscreen = OkuData.Globals.Get<bool>(OkuConstants.VarFullscreen);
+      renderParams.Width = OkuData.Globals.Get<int>(OkuConstants.VarScreenWidth);
+      renderParams.Height = OkuData.Globals.Get<int>(OkuConstants.VarScreenHeight);
+    }
+
+    /// <summary>
     /// Triggers the initialization of all engine parts.
     /// </summary>
     public void DoInitialize()
     {
       InitDefaultConfig();
       LoadConfigFile();
+
+      RendererParams renderParams = new RendererParams();
+      Setup(ref renderParams);
       
       OkuDrivers.Renderer = new OpenGLRenderer();
-      OkuDrivers.Renderer.Initialize();
+      OkuDrivers.Renderer.Initialize(renderParams);
 
       OkuDrivers.SoundEngine = new OpenALSoundEngine();
       OkuDrivers.SoundEngine.Initialize();
@@ -157,16 +172,28 @@ namespace OkuEngine
     /// </summary>
     public void DoRender()
     {
-      OkuDrivers.Renderer.Begin();
-      Render();
-      OkuDrivers.Renderer.End();
+      if (OkuDrivers.Renderer.RenderPasses > 0)
+      {
+        for (int i = 0; i < OkuDrivers.Renderer.RenderPasses; i++)
+        {
+          OkuDrivers.Renderer.Begin(i);
+          Render(i);
+          OkuDrivers.Renderer.End(i);
+        }
+      }
+      else
+      {
+        OkuDrivers.Renderer.Begin(0);
+        Render(0);
+        OkuDrivers.Renderer.End(0);
+      }
     }
 
     /// <summary>
     /// Can be overriden to add custom rendering code. This method is called every
     /// frame just after the Update method.
     /// </summary>
-    public virtual void Render()
+    public virtual void Render(int pass)
     {
     }
 

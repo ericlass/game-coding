@@ -72,7 +72,7 @@ namespace OkuTest
       OkuDrivers.Renderer.ViewPort.Top += dy;
     }
 
-    public override void Render()
+    public override void Render(int pass)
     {
       _map.Draw();
       OkuDrivers.Renderer.DrawLine(_line[0], _line[1], 2, Color.Red);

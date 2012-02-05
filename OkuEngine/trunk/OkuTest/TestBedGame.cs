@@ -20,9 +20,17 @@ namespace OkuTest
     private MeshInstance _text = null;
     private MeshInstance _guiText = null;
 
+    public override void Setup(ref RendererParams renderParams)
+    {
+      renderParams.ClearColor = Color.White;
+      renderParams.Fullscreen = false;
+      renderParams.Width = 1024;
+      renderParams.Height = 768;
+      renderParams.Passes = 2;
+    }
+
     public override void Initialize()
     {
-      OkuDrivers.Renderer.ClearColor = Color.Silver;
       OkuDrivers.Renderer.ViewPort.Center = new Vector(OkuDrivers.Renderer.ViewPort.Width / 2, OkuDrivers.Renderer.ViewPort.Height / 2);
 
       ImageContent content = new ImageContent(".\\content\\smiley.png");
@@ -122,20 +130,34 @@ namespace OkuTest
       OkuDrivers.Renderer.ViewPort.Scale = scale;
     }
 
-    public override void Render()
+    public override void Render(int pass)
     {
-      _poly.Draw();
+      switch (pass)
+      {
+        case 0:
+          _poly.Draw();
 
-      OkuDrivers.Renderer.DrawPoints(_poly.Content.Positions, _poly.Content.Colors, _poly.Content.Positions.Length, 10);
+          OkuDrivers.Renderer.DrawPoints(_poly.Content.Positions, _poly.Content.Colors, _poly.Content.Positions.Length, 10);
 
-      _smiley.Draw(_pos1, _rotation);
-      _mesh.Draw();
+          _smiley.Draw(_pos1, _rotation);
+          _mesh.Draw();
 
-      _text.Draw();
+          _text.Draw();
 
-      Vector[] transformed = new Vector[_guiText.Vertices.Positions.Length];
-      OkuDrivers.Renderer.ViewPort.ScreenSpaceMatrix.Transform(_guiText.Vertices.Positions, transformed);
-      OkuDrivers.Renderer.DrawMesh(transformed, _guiText.Vertices.TexCoords, _guiText.Vertices.Colors, _guiText.Vertices.Positions.Length, _guiText.Mode, _guiText.Texture);
+          Vector[] transformed = new Vector[_guiText.Vertices.Positions.Length];
+          OkuDrivers.Renderer.ViewPort.ScreenSpaceMatrix.Transform(_guiText.Vertices.Positions, transformed);
+          OkuDrivers.Renderer.DrawMesh(transformed, _guiText.Vertices.TexCoords, _guiText.Vertices.Colors, _guiText.Vertices.Positions.Length, _guiText.Mode, _guiText.Texture);
+          break;
+
+        case 1:
+          OkuDrivers.Renderer.DrawScreenAlignedQuad(OkuDrivers.Renderer.GetPassResult(pass - 1, 0), Color.Blue);
+          //_smiley.Draw(_pos1, _rotation);
+          break;
+          
+        default:
+          break;
+      }
+      
     }
 
   }

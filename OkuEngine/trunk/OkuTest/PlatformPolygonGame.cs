@@ -92,7 +92,7 @@ namespace OkuTest
       _transform.Transform(_player, _transformedPlayer);*/
     }
 
-    public override void Render()
+    public override void Render(int pass)
     {
       OkuDrivers.Renderer.DrawLines(_floor, Color.Blue, _floor.Length, 1.0f, VertexInterpretation.Polygon);
       OkuDrivers.Renderer.DrawLines(_ceiling, Color.Red, _ceiling.Length, 1.0f, VertexInterpretation.Polygon);

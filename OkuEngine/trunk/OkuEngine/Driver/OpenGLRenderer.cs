@@ -17,13 +17,24 @@ namespace OkuEngine
     private bool _fullscreen = false;
     private Color _clearColor = Color.Black;
     private ViewPort _viewPort = null;
+    private int _screenWidth = 1024;
+    private int _screenHeight = 768;
 
     private Form _form = null;
     private IntPtr _handle = IntPtr.Zero;
     private IntPtr _dc = IntPtr.Zero;
     private IntPtr _rc = IntPtr.Zero;
-    private Dictionary<int, int> _textures = new Dictionary<int, int>();
+    private Dictionary<int, int> _textures = new Dictionary<int, int>(); //Maps content id to opengl texture names
     private TextureFilter _texFilter = TextureFilter.Linear;
+
+    private int _renderPasses = 0; //The number of render passes. 0 means default rendering is done without any frame buffers.
+    private int[] _passTargets = null; //The number of render targets for each pass.
+    private int _currentPass = 0;
+
+    private int _fbo = 0; //The opengl name of the frame buffer object
+    private int[,] _colorBuffers = null; //The opengl names for the color buffers for each render pass
+    private Dictionary<int, ImageContent> _colorBufferContent = new Dictionary<int, ImageContent>(); //Maps color buffer opengl name to image content
+    private int _renderBuffer = 0; //The opengl name of the depth buffer. It is reused for every pass.
 
     /// <summary>
     /// Gets or sets if the application should be run in fullscreen or not.
@@ -77,6 +88,49 @@ namespace OkuEngine
       set { _texFilter = value; }
     }
 
+    public int RenderPasses
+    {
+      get { return _renderPasses; }
+    }
+
+    /// <summary>
+    /// Gets the number of render targets for the given pass.
+    /// </summary>
+    /// <param name="pass">The index of the render pass.</param>
+    /// <returns>The number of render targets the given pass has.</returns>
+    public int GetNumPassTargets(int pass)
+    {
+      return _passTargets[pass];
+    }
+
+    /// <summary>
+    /// Gets the rendered image of the given pass for the given target.
+    /// </summary>
+    /// <param name="pass">The index of the render pass.</param>
+    /// <param name="target">The index of the render target.</param>
+    /// <returns>The rendered image of the given pass for the given target.</returns>
+    public ImageContent GetPassResult(int pass, int target)
+    {
+      int buffer = _colorBuffers[pass, target];
+      ImageContent result = null;
+      if (buffer > 0)
+      {
+        if (!_colorBufferContent.ContainsKey(buffer))
+        {
+          result = new ImageContent();
+          result.Width = _screenWidth;
+          result.Height = _screenHeight;
+          _textures.Add(result.ContentId, buffer);
+          _colorBufferContent.Add(buffer, result);
+        }
+        else
+        {
+          result = _colorBufferContent[buffer];
+        }
+      }
+      return result;
+    }
+
     /// <summary>
     /// Method for handling changes on the viewport.
     /// </summary>
@@ -87,20 +141,98 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Create an fbo with a corresponding color render buffer.
+    /// </summary>
+    /// <param name="width">The width of the render buffer.</param>
+    /// <param name="height">The height of the render buffer.</param>
+    /// <returns>True if the render buffer was created correctly, else False.</returns>
+    private bool CreateFrameBuffer(int width, int height)
+    {
+      for (int i = 0; i < _renderPasses; i++)
+      {
+        for (int j = 0; j < _passTargets[i]; j++)
+        {
+          //Create render target texture
+          int textureId = 0;
+          Gl.glGenTextures(1, out textureId);
+          _colorBuffers[i,j] = textureId;
+          Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
+          Gl.glTexImage2D(Gl.GL_TEXTURE_2D, 0, 4, width, height, 0, Gl.GL_RGBA, Gl.GL_UNSIGNED_BYTE, null);
+          Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, GetGLTexFilter());
+          Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, GetGLTexFilter());
+          Gl.glBindTexture(Gl.GL_TEXTURE_2D, 0);
+        }     
+      }
+
+      //Create render buffer and it's storage
+      int renderBuffer = 0;
+      Gl.glGenRenderbuffersEXT(1, out renderBuffer);
+      _renderBuffer = renderBuffer;
+      Gl.glBindRenderbufferEXT(Gl.GL_RENDERBUFFER_EXT, _renderBuffer);
+      Gl.glRenderbufferStorageEXT(Gl.GL_RENDERBUFFER_EXT, Gl.GL_DEPTH_COMPONENT, width, height);
+      Gl.glBindRenderbufferEXT(Gl.GL_RENDERBUFFER_EXT, 0);
+
+      //Create frame buffer object
+      int fbo = 0;
+      Gl.glGenFramebuffersEXT(1, out fbo);
+      _fbo = fbo;
+      Gl.glBindFramebufferEXT(Gl.GL_FRAMEBUFFER_EXT, _fbo);
+
+      //Bind color buffer to fbo
+      for (int i = 0; i < _passTargets[0]; i++)
+      {
+        Gl.glFramebufferTexture2DEXT(Gl.GL_FRAMEBUFFER_EXT, Gl.GL_COLOR_ATTACHMENT0_EXT + i, Gl.GL_TEXTURE_2D, _colorBuffers[0, i], 0);
+      }      
+
+      //Bind color buffer to fbo
+      Gl.glFramebufferRenderbufferEXT(Gl.GL_FRAMEBUFFER_EXT, Gl.GL_DEPTH_ATTACHMENT_EXT, Gl.GL_RENDERBUFFER_EXT, _renderBuffer);
+
+      //Check if fbo is set up correctly
+      int result = Gl.glCheckFramebufferStatusEXT(Gl.GL_FRAMEBUFFER_EXT);
+
+      //Unbind fbo again
+      Gl.glBindFramebufferEXT(Gl.GL_FRAMEBUFFER_EXT, 0);
+
+      return result == Gl.GL_FRAMEBUFFER_COMPLETE_EXT;
+    }
+
+    /// <summary>
     /// Initializes the renderer. This includes creating the form and intitializing OpenGL.
     /// </summary>
-    public void Initialize()
+    public void Initialize(RendererParams parameters)
     {
-      _fullscreen = OkuData.Globals.Get<bool>(OkuConstants.VarFullscreen);
+      //Process parameters
+      _fullscreen = parameters.Fullscreen;
 
-      int screenWidth = OkuData.Globals.GetDef<int>(OkuConstants.VarScreenWidth, 800);
-      int screenHeight = OkuData.Globals.GetDef<int>(OkuConstants.VarScreenHeight, 600);
+      _screenWidth = parameters.Width;
+      _screenHeight = parameters.Height;
 
-      _viewPort = new ViewPort(screenWidth, screenHeight);
+      _renderPasses = parameters.Passes;
+      _passTargets = new int[_renderPasses];
+      int maxTargets = -1;
+      for (int i = 0; i < _renderPasses; i++)
+      {
+        int targets = 1;
+        
+        //Check that targets are given at all and that a number is given for the current pass
+        if (parameters.PassTargets != null && i < parameters.PassTargets.Length)
+          targets = parameters.PassTargets[i];
+
+        _passTargets[i] = targets;
+        maxTargets = Math.Max(maxTargets, targets);
+      }
+      _colorBuffers = new int[_renderPasses, maxTargets];
+
+      _clearColor = parameters.ClearColor;
+
+      //Create view port
+      _viewPort = new ViewPort(parameters.Width, parameters.Height);
       _viewPort.Change += new ViewPortChangeEventHandler(_viewPort_Change);
 
+      //Create and setup form
       _form = new Form();
-      _form.ClientSize = new System.Drawing.Size(screenWidth, screenHeight);
+      _form.ClientSize = new System.Drawing.Size(_screenWidth, _screenHeight);
+      _form.FormBorderStyle = FormBorderStyle.FixedSingle;
       _form.Resize += new EventHandler(_form_Resize);
 
       if (_fullscreen)
@@ -113,6 +245,7 @@ namespace OkuEngine
       _form.Show();
       _handle = _form.Handle;
 
+      //Create and set pixel format descriptor
       _dc = User.GetDC(_handle);
 
       Gdi.PIXELFORMATDESCRIPTOR pfd = new Gdi.PIXELFORMATDESCRIPTOR();
@@ -130,9 +263,11 @@ namespace OkuEngine
       int format = Gdi.ChoosePixelFormat(_dc, ref pfd);
       Gdi.SetPixelFormat(_dc, format, ref pfd);
 
+      //Active rendering context
       _rc = Wgl.wglCreateContext(_dc);
       Wgl.wglMakeCurrent(_dc, _rc);
 
+      //Setup OpenGL
       Gl.glEnable(Gl.GL_TEXTURE_2D);
 
       Gl.glHint(Gl.GL_PERSPECTIVE_CORRECTION_HINT, Gl.GL_NICEST);
@@ -156,6 +291,9 @@ namespace OkuEngine
       Gl.glEnableClientState(Gl.GL_VERTEX_ARRAY);
       Gl.glEnableClientState(Gl.GL_TEXTURE_COORD_ARRAY);
       Gl.glEnableClientState(Gl.GL_COLOR_ARRAY);
+
+      if (_renderPasses > 0)
+        CreateFrameBuffer(_screenWidth, _screenHeight);
     }
 
     /// <summary>
@@ -375,8 +513,18 @@ namespace OkuEngine
     /// <summary>
     /// Starts the rendering process. Clears the screen with the setup clear color.
     /// </summary>
-    public void Begin()
+    public void Begin(int pass)
     {
+      if (_renderPasses > 0)
+      {
+        Gl.glBindFramebufferEXT(Gl.GL_FRAMEBUFFER_EXT, _fbo);
+        //Bind color buffers to fbo
+        for (int i = 0; i < _passTargets[0]; i++)
+        {
+          Gl.glFramebufferTexture2DEXT(Gl.GL_FRAMEBUFFER_EXT, Gl.GL_COLOR_ATTACHMENT0_EXT + i, Gl.GL_TEXTURE_2D, _colorBuffers[pass, i], 0);
+        }
+      }
+
       Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
     }
 
@@ -508,6 +656,48 @@ namespace OkuEngine
       Gl.glEnd();
 
       Gl.glPopMatrix();
+    }
+
+    /// <summary>
+    /// Draws the given image content on a screen aligned quad so it fills the whole screen.
+    /// </summary>
+    /// <param name="content">The content to be drawn.</param>
+    public void DrawScreenAlignedQuad(ImageContent content)
+    {
+      DrawScreenAlignedQuad(content, Color.White);
+    }
+
+    /// <summary>
+    /// Draws the given image content on a screen aligned quad so it fills the whole 
+    /// screen using the given tint color.
+    /// </summary>
+    /// <param name="content">The content to be drawn.</param>
+    /// <param name="tint">The color tint the image with.</param>
+    public void DrawScreenAlignedQuad(ImageContent content, Color tint)
+    {
+      int textureId = _textures[content.ContentId];
+
+      Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
+
+      Gl.glBegin(Gl.GL_QUADS);
+
+      Gl.glColor4ub(tint.R, tint.G, tint.B, tint.A);
+
+      Gl.glTexCoord2f(0, 1);
+      Gl.glVertex2f(_viewPort.Left, _viewPort.Top);
+
+      Gl.glTexCoord2f(1, 1);
+      Gl.glVertex2f(_viewPort.Right, _viewPort.Top);
+
+      Gl.glTexCoord2f(1, 0);
+      Gl.glVertex2f(_viewPort.Right, _viewPort.Bottom);
+
+      Gl.glTexCoord2f(0, 0);
+      Gl.glVertex2f(_viewPort.Left, _viewPort.Bottom);
+
+      Gl.glEnd();
+
+      Gl.glBindTexture(Gl.GL_TEXTURE_2D, 0);
     }
 
     /// <summary>
@@ -700,10 +890,29 @@ namespace OkuEngine
     /// Finished the drawing process. The drawing operations are flushed and the 
     /// offscreen buffer is swapped to the screen.
     /// </summary>
-    public void End()
+    public void End(int pass)
     {
-      Gl.glFlush();
-      Gdi.SwapBuffers(_dc);
+      //Check if this is the last pass
+      if (_renderPasses > 0)
+      {
+        if (pass == (_renderPasses - 1))
+        {
+          //Unbind frame buffer as it is not needed anymore
+          Gl.glBindFramebufferEXT(Gl.GL_FRAMEBUFFER_EXT, 0);
+
+          ImageContent content = GetPassResult(pass, 0);
+
+          DrawScreenAlignedQuad(content);
+
+          Gl.glFlush();
+          Gdi.SwapBuffers(_dc);
+        }
+      }
+      else
+      {
+        Gl.glFlush();
+        Gdi.SwapBuffers(_dc);
+      }
     }
 
   }

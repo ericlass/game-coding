@@ -67,6 +67,7 @@
     <Compile Include="DisplayMode.cs" />
     <Compile Include="Content\ImageContent.cs" />
     <Compile Include="Driver\MeshMode.cs" />
+    <Compile Include="Driver\RendererParams.cs" />
     <Compile Include="Driver\TextureFilter.cs" />
     <Compile Include="Driver\VertexInterpretation.cs" />
     <Compile Include="Driver\ViewPort.cs" />

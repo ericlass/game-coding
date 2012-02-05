@@ -36,10 +36,30 @@ namespace OkuEngine
     TextureFilter TextureFilter { get; set; }
 
     /// <summary>
+    /// Gets the number of render passes that are performed.
+    /// </summary>
+    int RenderPasses { get; }
+
+    /// <summary>
+    /// Gets the number of render targets for the given pass.
+    /// </summary>
+    /// <param name="pass">The index of the render pass.</param>
+    /// <returns>The number of render targets the given pass has.</returns>
+    int GetNumPassTargets(int pass);
+
+    /// <summary>
+    /// Gets the rendered image of the given pass for the given target.
+    /// </summary>
+    /// <param name="pass">The index of the render pass.</param>
+    /// <param name="target">The index of the render target.</param>
+    /// <returns>The rendered image of the given pass for the given target.</returns>
+    ImageContent GetPassResult(int pass, int target);
+
+    /// <summary>
     /// Is called once at the start of the application. It should do all necessary initialization
     /// that is needed by the renderer. It has to create the form that is used to display the game.
     /// </summary>
-    void Initialize();
+    void Initialize(RendererParams parameters);
 
     /// <summary>
     /// Is called each frame during the update process. This must not do any rendering. It should
@@ -58,13 +78,13 @@ namespace OkuEngine
     /// Is called once each frame right after the updating process. It should do all things that are necessary
     /// for the renderer to be able to render things.
     /// </summary>
-    void Begin();
+    void Begin(int pass);
 
     /// <summary>
     /// Is called once each frame to finish the rendering process. It should finalize the rendering process.
     /// For example it could swap the offscreen rendering surface to the screen.
     /// </summary>
-    void End();
+    void End(int pass);
 
 
     /// <summary>
@@ -139,6 +159,20 @@ namespace OkuEngine
     /// <param name="scale">The scale factors.</param>
     /// <param name="tint">A color that is used to tint the image with.</param>
     void DrawImage(ImageContent content, Vector position, float rotation, Vector scale, Color tint);
+
+    /// <summary>
+    /// Draws the given image content on a screen aligned quad so it fills the whole screen.
+    /// </summary>
+    /// <param name="content">The content to be drawn.</param>
+    void DrawScreenAlignedQuad(ImageContent content);
+
+    /// <summary>
+    /// Draws the given image content on a screen aligned quad so it fills the whole 
+    /// screen using the given tint color.
+    /// </summary>
+    /// <param name="content">The content to be drawn.</param>
+    /// <param name="tint">The color tint the image with.</param>
+    void DrawScreenAlignedQuad(ImageContent content, Color tint);
 
     /// <summary>
     /// Draws a line from start to end with the given width and color.

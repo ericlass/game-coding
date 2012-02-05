@@ -7,7 +7,10 @@ using Tao.OpenAl;
 
 namespace OkuEngine
 {
-  class OpenALSoundEngine : ISoundEngine
+  /// <summary>
+  /// Implements a sound engine using OpenAL.
+  /// </summary>
+  public class OpenALSoundEngine : ISoundEngine
   {
     private IntPtr _device;
     private IntPtr _context;
@@ -39,7 +42,6 @@ namespace OkuEngine
 
     public void Update(float dt)
     {
-      //CleanUpSources();
     }
 
     public void Finish()
@@ -157,20 +159,6 @@ namespace OkuEngine
 
       Al.alSourceStop(source);
     }
-
-    /*private void CleanUpSources()
-    {
-      foreach (KeyValuePair<int, int> kvp in _sources)
-      {
-        int src = kvp.Value;
-        int state = 0;
-        Al.alGetSourceiv(src, Al.AL_SOURCE_STATE, out state);
-        if (state != Al.AL_PLAYING && state != Al.AL_PAUSED)
-        {
-          Al.alDeleteSources(1, ref src);
-        }
-      }
-    }*/
 
     private int GetPlayableSource()
     {

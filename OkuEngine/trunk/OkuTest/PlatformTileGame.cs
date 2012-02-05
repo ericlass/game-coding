@@ -106,7 +106,7 @@ namespace OkuTest
       OkuDrivers.Renderer.ViewPort.Center = center;
     }
 
-    public override void Render()
+    public override void Render(int pass)
     {
       _tileMap.Draw();
       OkuDrivers.Renderer.DrawLines(_transformedPlayer, Color.Blue, _transformedPlayer.Length, 2, VertexInterpretation.PolygonClosed);

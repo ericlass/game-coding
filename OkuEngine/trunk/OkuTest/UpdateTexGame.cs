@@ -42,7 +42,7 @@ namespace OkuTest
       _lastTime = currentTime;
     }
 
-    public override void Render()
+    public override void Render(int pass)
     {
       OkuDrivers.Renderer.DrawImage(_content, new Vector(50, 50));
     }
