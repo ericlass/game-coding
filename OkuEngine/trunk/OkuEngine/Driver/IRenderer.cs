@@ -324,5 +324,15 @@ namespace OkuEngine
     /// <param name="name">The name of the variable.</param>
     /// <param name="texture">The texture to set.</param>
     void SetShaderTexture(PixelShaderContent shader, string name, ImageContent texture);
+
+    /// <summary>
+    /// Sets the float values to a uniform variable in the given shader.
+    /// The length of the given array determines the type of the shader
+    /// variable (vec1, vec2, vec3, vec4).
+    /// </summary>
+    /// <param name="shader">The shader to set the variable at.</param>
+    /// <param name="name">The name of the variable.</param>
+    /// <param name="values">The float values to set.</param>
+    void SetShaderFloat(PixelShaderContent shader, string name, float[] values);
   }
 }

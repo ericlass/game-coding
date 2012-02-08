@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Text;
 using Tao.OpenGl;
 using Tao.Platform.Windows;
 
@@ -66,7 +67,7 @@ namespace OkuEngine
       set 
       { 
         _clearColor = value;
-        Gl.glClearColor(_clearColor.R / 255.0f, _clearColor.G / 255.0f, _clearColor.B / 255.0f, 1);
+        Gl.glClearColor(_clearColor.R / 255.0f, _clearColor.G / 255.0f, _clearColor.B / 255.0f, _clearColor.A / 255.0f);
       }
     }
 
@@ -169,7 +170,7 @@ namespace OkuEngine
           Gl.glGenTextures(1, out textureId);
           _colorBuffers[i,j] = textureId;
           Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
-          Gl.glTexImage2D(Gl.GL_TEXTURE_2D, 0, 4, width, height, 0, Gl.GL_RGBA, Gl.GL_UNSIGNED_BYTE, null);
+          Gl.glTexImage2D(Gl.GL_TEXTURE_2D, 0, 4, width, height, 0, Gl.GL_BGRA, Gl.GL_UNSIGNED_BYTE, null);
           Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, GetGLTexFilter());
           Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, GetGLTexFilter());
           Gl.glBindTexture(Gl.GL_TEXTURE_2D, 0);
@@ -221,7 +222,7 @@ namespace OkuEngine
 
       _renderPasses = parameters.Passes;
       _passTargets = new int[_renderPasses];
-      int maxTargets = -1;
+      int maxTargets = 0;
       for (int i = 0; i < _renderPasses; i++)
       {
         int targets = 1;
@@ -292,7 +293,7 @@ namespace OkuEngine
       Gl.glEnable(Gl.GL_BLEND);
       Gl.glBlendFunc(Gl.GL_SRC_ALPHA, Gl.GL_ONE_MINUS_SRC_ALPHA);
 
-      Gl.glClearColor(_clearColor.R / 255.0f, _clearColor.G / 255.0f, _clearColor.B / 255.0f, 1);
+      Gl.glClearColor(_clearColor.R / 255.0f, _clearColor.G / 255.0f, _clearColor.B / 255.0f, _clearColor.A / 255.0f);
 
       Gl.glLineWidth(1.0f);
       Gl.glEnable(Gl.GL_LINE_SMOOTH);
@@ -488,6 +489,24 @@ namespace OkuEngine
       return _vertexShader;
     }
 
+    private String GetShaderInfoLog(int shader)
+    {
+      int length = 0;
+      StringBuilder builder = new StringBuilder();
+
+      int[] lengths = new int[1];
+      Gl.glGetObjectParameterivARB(shader, Gl.GL_INFO_LOG_LENGTH, lengths);
+      length = lengths[0];
+
+      if (length > 1)
+      {
+        builder.Capacity = length;
+        Gl.glGetInfoLogARB(shader, length, lengths, builder);
+        //throw new ArgumentException(builder.ToString());
+      }
+      return builder.ToString();
+    }
+
     /// <summary>
     /// Intializes the given pixel shader by compiling and linking it.
     /// The source must already be attached to the given content.
@@ -509,6 +528,8 @@ namespace OkuEngine
           Gl.glAttachShader(program, pixelShader);
 
           Gl.glLinkProgram(program);
+
+          System.Diagnostics.Debug.WriteLine(GetShaderInfoLog(program));
 
           _shaderPrograms.Add(content.ContentId, program);
         }
@@ -560,6 +581,41 @@ namespace OkuEngine
         Gl.glBindTexture(Gl.GL_TEXTURE_2D, _textures[texture.ContentId]);
         Gl.glUniform1i(location, 1);
         Gl.glActiveTexture(Gl.GL_TEXTURE0);
+      }
+      else
+      {
+        //TODO: throw exception
+      }
+    }
+
+    public void SetShaderFloat(PixelShaderContent shader, string name, float[] values)
+    {
+      if (_shaderPrograms.ContainsKey(shader.ContentId))
+      {
+        int program = _shaderPrograms[shader.ContentId];
+        int location = Gl.glGetUniformLocation(program, name);
+        switch (values.Length)
+        {
+          case 1:
+            Gl.glUniform1f(location, values[0]);
+            break;
+
+          case 2:
+            Gl.glUniform2f(location, values[0], values[1]);
+            int test = Gl.glGetError();
+            break;
+
+          case 3:
+            Gl.glUniform3f(location, values[0], values[1], values[2]);
+            break;
+
+          case 4:
+            Gl.glUniform4f(location, values[0], values[1], values[2], values[3]);
+            break;
+
+          default:
+            break;
+        }
       }
       else
       {
@@ -786,16 +842,16 @@ namespace OkuEngine
 
       Gl.glColor4ub(tint.R, tint.G, tint.B, tint.A);
 
-      Gl.glTexCoord2f(0, 1);
+      Gl.glTexCoord2f(0, 0);
       Gl.glVertex2f(_viewPort.Left, _viewPort.Top);
 
-      Gl.glTexCoord2f(1, 1);
+      Gl.glTexCoord2f(1, 0);
       Gl.glVertex2f(_viewPort.Right, _viewPort.Top);
 
-      Gl.glTexCoord2f(1, 0);
+      Gl.glTexCoord2f(1, 1);
       Gl.glVertex2f(_viewPort.Right, _viewPort.Bottom);
 
-      Gl.glTexCoord2f(0, 0);
+      Gl.glTexCoord2f(0, 1);
       Gl.glVertex2f(_viewPort.Left, _viewPort.Bottom);
 
       Gl.glEnd();
