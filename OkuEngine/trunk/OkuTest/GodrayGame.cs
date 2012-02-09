@@ -30,7 +30,7 @@ namespace OkuTest
         "uniform sampler2D tex;\n" +
         "uniform vec2 lightPos;\n" +
         "\n" +
-        "const int numSamples = 128;\n" +
+        "const int numSamples = 64;\n" +
         "const float decay = 0.985;\n" +
         "\n" +
         "varying vec2 Texcoord;\n" +
