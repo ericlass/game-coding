@@ -685,6 +685,8 @@ namespace OkuEngine
       }
 
       Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
+      Gl.glMatrixMode(Gl.GL_MODELVIEW);
+      Gl.glLoadIdentity();
     }
 
     /// <summary>
@@ -814,6 +816,8 @@ namespace OkuEngine
 
       Gl.glEnd();
 
+      Gl.glBindTexture(Gl.GL_TEXTURE_2D, 0);
+
       Gl.glPopMatrix();
     }
 
@@ -842,16 +846,16 @@ namespace OkuEngine
 
       Gl.glColor4ub(tint.R, tint.G, tint.B, tint.A);
 
-      Gl.glTexCoord2f(0, 0);
+      Gl.glTexCoord2f(0, 1);
       Gl.glVertex2f(_viewPort.Left, _viewPort.Top);
 
-      Gl.glTexCoord2f(1, 0);
+      Gl.glTexCoord2f(1, 1);
       Gl.glVertex2f(_viewPort.Right, _viewPort.Top);
 
-      Gl.glTexCoord2f(1, 1);
+      Gl.glTexCoord2f(1, 0);
       Gl.glVertex2f(_viewPort.Right, _viewPort.Bottom);
 
-      Gl.glTexCoord2f(0, 1);
+      Gl.glTexCoord2f(0, 0);
       Gl.glVertex2f(_viewPort.Left, _viewPort.Bottom);
 
       Gl.glEnd();
