@@ -25,16 +25,6 @@ namespace OkuEngine
     private Matrix3 _screenToWorld = Matrix3.Indentity;
 
     /// <summary>
-    /// Creates a new viewport centered at world space coordinates (0,0)
-    /// and width and height set to the screen resolution.
-    /// </summary>
-    public ViewPort()
-    {
-      _halfWidth = OkuData.Globals.Get<int>(OkuConstants.VarScreenWidth) / 2.0f;
-      _halfHeight = OkuData.Globals.Get<int>(OkuConstants.VarScreenHeight) / 2.0f;
-    }
-
-    /// <summary>
     /// Create a new viewport centered at the world space coordinate (0,0)
     /// and width the given width and height.
     /// </summary>
@@ -57,8 +47,8 @@ namespace OkuEngine
     public ViewPort(int left, int top, int right, int bottom)
     {
       _halfWidth = (right - left) / 2.0f;
-      _halfHeight = (bottom - top) / 2.0f;
-      _center = new Vector(left + _halfWidth, top + _halfHeight);
+      _halfHeight = (top - bottom) / 2.0f;
+      _center = new Vector(left + _halfWidth, bottom + _halfHeight);
     }
 
     /// <summary>
@@ -123,10 +113,10 @@ namespace OkuEngine
     /// </summary>
     public float Top
     {
-      get { return _center.Y - (_halfHeight * _scale.Y); }
+      get { return _center.Y + (_halfHeight * _scale.Y); }
       set 
       { 
-        _center.Y = value + (_halfHeight * _scale.Y);
+        _center.Y = value - (_halfHeight * _scale.Y);
         OnChange(this);
       }
     }
@@ -149,10 +139,10 @@ namespace OkuEngine
     /// </summary>
     public float Bottom
     {
-      get { return _center.Y + (_halfHeight * _scale.Y); }
+      get { return _center.Y - (_halfHeight * _scale.Y); }
       set
       {
-        _center.Y = value - (_halfHeight * _scale.Y);
+        _center.Y = value + (_halfHeight * _scale.Y);
         OnChange(this);
       }
     }
@@ -184,7 +174,7 @@ namespace OkuEngine
         if (!_matrixEffective)
         {
           _screenToWorld.LoadIdentity();
-          _screenToWorld.Translate(Left, Top);
+          _screenToWorld.Translate(Left, Bottom);
           _screenToWorld.Scale(_scale);
         }
         return _screenToWorld;

@@ -134,25 +134,26 @@ namespace OkuEngine
     {
       PrepareChars(text);
 
-      float left = offsetX;
-      float top = offsetY;
-      float bottom = top + _font.Height;      
-
-      float textureSize = _texWidth;
-
-      float texBottom = _font.Height / (float)_texHeight;
-
       List<Vector> positions = new List<Vector>();
       List<Vector> texCoords = new List<Vector>();
       List<Color> colors = new List<Color>();
-      
+
+      float left = offsetX;
+      float top = offsetY;
+      float bottom = top - _font.Height;      
+
+      float textureSize = _texWidth;
+
+      float texTop = 0f;
+      float texBottom = (_font.Height / (float)_texHeight);
+
       foreach (char current in text)
       {
         if (current == '\n')
         {
-          top += _font.Height;
           left = offsetX;
-          bottom = top + _font.Height;
+          top -= _font.Height;          
+          bottom = top - _font.Height;
         }
         else if (current >= ' ')
         {
@@ -163,11 +164,11 @@ namespace OkuEngine
           float right = left + dims.Width;
 
           positions.Add(new Vector(left, top));
-          texCoords.Add(new Vector(texLeft, 0));
+          texCoords.Add(new Vector(texLeft, texTop));
           colors.Add(color);
 
           positions.Add(new Vector(right, top));
-          texCoords.Add(new Vector(texRight, 0));
+          texCoords.Add(new Vector(texRight, texTop));
           colors.Add(color);
 
           positions.Add(new Vector(right, bottom));
@@ -183,7 +184,7 @@ namespace OkuEngine
       }
 
       VertexContent content = new VertexContent(positions.ToArray(), texCoords.ToArray(), colors.ToArray());
-      return  new MeshInstance(content, _fontSheetContent, MeshMode.Quads);
+      return new MeshInstance(content, _fontSheetContent, MeshMode.Quads);
     }
 
   }

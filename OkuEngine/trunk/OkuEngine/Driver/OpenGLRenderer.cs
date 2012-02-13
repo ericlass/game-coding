@@ -305,6 +305,8 @@ namespace OkuEngine
       Gl.glEnableClientState(Gl.GL_TEXTURE_COORD_ARRAY);
       Gl.glEnableClientState(Gl.GL_COLOR_ARRAY);
 
+      Gl.glFrontFace(Gl.GL_CW);
+
       if (_renderPasses > 0)
         CreateFrameBuffer(_screenWidth, _screenHeight);
     }
@@ -366,7 +368,6 @@ namespace OkuEngine
       Gl.glMatrixMode(Gl.GL_PROJECTION);
       Gl.glLoadIdentity();
       Gl.glOrtho(_viewPort.Left, _viewPort.Right, _viewPort.Bottom, _viewPort.Top, -1, 1);
-      //Gl.glOrtho(0, _form.ClientSize.Width, _form.ClientSize.Height, 0, -1, 1);
     }
 
     /// <summary>
@@ -802,16 +803,16 @@ namespace OkuEngine
 
       Gl.glColor4ub(tint.R, tint.G, tint.B, tint.A);
 
-      Gl.glTexCoord2f(0, 0);
+      Gl.glTexCoord2f(0, 1);
       Gl.glVertex2f(-halfWidth, -halfHeight);
 
-      Gl.glTexCoord2f(1, 0);
+      Gl.glTexCoord2f(1, 1);
       Gl.glVertex2f(halfWidth, -halfHeight);
 
-      Gl.glTexCoord2f(1, 1);
+      Gl.glTexCoord2f(1, 0);
       Gl.glVertex2f(halfWidth, halfHeight);
 
-      Gl.glTexCoord2f(0, 1);
+      Gl.glTexCoord2f(0, 0);
       Gl.glVertex2f(-halfWidth, halfHeight);
 
       Gl.glEnd();

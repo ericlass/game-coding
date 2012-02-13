@@ -17,7 +17,7 @@ namespace OkuTest
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
 
-      OkuGame game = new GodrayGame();
+      OkuGame game = new TestBedGame();
       game.Run();
     }
 
