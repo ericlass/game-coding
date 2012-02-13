@@ -30,7 +30,7 @@ namespace OkuTest
         "uniform sampler2D tex;\n" +
         "uniform vec2 lightPos;\n" +
         "\n" +
-        "const int numSamples = 64;\n" +
+        "const int numSamples = 96;\n" +
         "const float decay = 0.985;\n" +
         "\n" +
         "varying vec2 Texcoord;\n" +
@@ -54,18 +54,24 @@ namespace OkuTest
 
     public override void Update(float dt)
     {
+      //Get mouse position in window client coordinates
       Point m = OkuDrivers.Renderer.MainForm.PointToClient(new Point(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y));
-      _mousePos.X = OkuDrivers.Renderer.ViewPort.Left + m.X;
-      _mousePos.Y = OkuDrivers.Renderer.ViewPort.Top + m.Y;
-      //_mousePos = new Vector(-256, 0);
 
+      //Calculate mouse coordinates in world space
+      _mousePos.X = OkuDrivers.Renderer.ViewPort.Left + m.X;
+      _mousePos.Y = OkuDrivers.Renderer.ViewPort.Top - m.Y;
+
+      //Get width and height of view
       float viewWidth = OkuDrivers.Renderer.ViewPort.Width;
-      float lightX = _mousePos.X - OkuDrivers.Renderer.ViewPort.Left;
       float viewHeight = OkuDrivers.Renderer.ViewPort.Height;
-      float lightY = _mousePos.Y - OkuDrivers.Renderer.ViewPort.Top;
+
+      //Get mouse (light) position in view space
+      float lightX = _mousePos.X - OkuDrivers.Renderer.ViewPort.Left;
+      float lightY = _mousePos.Y - OkuDrivers.Renderer.ViewPort.Bottom;
+
+      //Convert view space light coordinates to texture space
       _lightPos.X = lightX / viewWidth;
       _lightPos.Y = lightY / viewHeight;
-      _lightPos.Y = 1.0f - _lightPos.Y;
     }
 
     public override void Render(int pass)
@@ -79,7 +85,6 @@ namespace OkuTest
 
         case 1:
           OkuDrivers.Renderer.UseShader(_rayShader);
-          //OkuDrivers.Renderer.SetShaderFloat(_rayShader, "lightPos", new float[] { 0.9f, 0.9f });
           OkuDrivers.Renderer.SetShaderFloat(_rayShader, "lightPos", new float[] { _lightPos.X, _lightPos.Y });
           OkuDrivers.Renderer.SetShaderTexture(_rayShader, "tex", OkuDrivers.Renderer.GetPassResult(0, 0));
 

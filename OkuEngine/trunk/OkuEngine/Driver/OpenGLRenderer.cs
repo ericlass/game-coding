@@ -416,6 +416,7 @@ namespace OkuEngine
     {
       int textureId = 0;
 
+      image.RotateFlip(RotateFlipType.RotateNoneFlipY); //Important!!! OpenGl assumes the data pointer to point to the lower left corner of the image. So flip the image horizontaly to avoid problems.
       BitmapData bmData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
 
       Gl.glGenTextures(1, out textureId);
@@ -804,16 +805,16 @@ namespace OkuEngine
       Gl.glColor4ub(tint.R, tint.G, tint.B, tint.A);
 
       Gl.glTexCoord2f(0, 1);
-      Gl.glVertex2f(-halfWidth, -halfHeight);
+      Gl.glVertex2f(-halfWidth, halfHeight);
 
       Gl.glTexCoord2f(1, 1);
-      Gl.glVertex2f(halfWidth, -halfHeight);
-
-      Gl.glTexCoord2f(1, 0);
       Gl.glVertex2f(halfWidth, halfHeight);
 
+      Gl.glTexCoord2f(1, 0);
+      Gl.glVertex2f(halfWidth, -halfHeight);
+
       Gl.glTexCoord2f(0, 0);
-      Gl.glVertex2f(-halfWidth, halfHeight);
+      Gl.glVertex2f(-halfWidth, -halfHeight);
 
       Gl.glEnd();
 

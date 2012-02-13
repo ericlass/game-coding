@@ -15,9 +15,9 @@ namespace OkuTest
     private Vector[] _player = null;
     private Vector[] _transformedPlayer = null;
     private Vector[] _collidedPlayer = null;
-    private Vector _playerPos = new Vector(193, 153);
+    private Vector _playerPos = new Vector(193, -123);
     private Matrix3 _transform = Matrix3.Indentity;
-    private Vector _trans = new Vector(40, 80);
+    private Vector _trans = new Vector(40, -80);
     private bool _collision = false;
     private Vector _collisionDistance = Vector.Zero;
 
@@ -34,13 +34,13 @@ namespace OkuTest
       for (int i = 0; i < _floor.Length; i++)
       {
         float x = i * (5000.0f / wallPoints);
-        float y = 200.0f + noise.Noise(x, 0, 2, 100) * 50.0f;
+        float y = -200.0f + noise.Noise(x, 0, 2, 100) * 50.0f;
         Vector value = _floor[i];
         value.X = x;
         value.Y = y;
         _floor[i] = value;
 
-        y = -200.0f + noise.Noise(x, 500, 2, 100) * 50.0f;
+        y = 200.0f + noise.Noise(x, 500, 2, 100) * 50.0f;
         value = _ceiling[i];
         value.X = x;
         value.Y = y;
@@ -67,9 +67,9 @@ namespace OkuTest
       if (OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Right))
         _playerPos.X += speed;
       if (OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Up))
-        _playerPos.Y -= speed;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Down))
         _playerPos.Y += speed;
+      if (OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Down))
+        _playerPos.Y -= speed;
 
       _transform.LoadIdentity();
       _transform.Translate(_playerPos);

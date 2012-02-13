@@ -44,14 +44,13 @@ namespace OkuTest
     public override void Initialize()
     {
       OkuDrivers.Renderer.ClearColor = OkuEngine.Color.White;
-      OkuDrivers.Renderer.ViewPort.Center = new Vector(OkuDrivers.Renderer.ViewPort.Width / 2, OkuDrivers.Renderer.ViewPort.Height / 2);
 
-      SpriteFont font = new SpriteFont("Arial", 12, FontStyle.Regular, false);
-      _strIntersect = font.GetStringMesh("Intersection", 5, 5, OkuEngine.Color.Red);
-      _strNoIntersect = font.GetStringMesh("No Intersection", 5, 5, OkuEngine.Color.Black);
+      SpriteFont font = new SpriteFont("Calibri", 12, FontStyle.Regular, false);
+      _strIntersect = font.GetStringMesh("Intersection", OkuDrivers.Renderer.ViewPort.Left + 5, OkuDrivers.Renderer.ViewPort.Top - 5, OkuEngine.Color.Red);
+      _strNoIntersect = font.GetStringMesh("No Intersection", OkuDrivers.Renderer.ViewPort.Left + 5, OkuDrivers.Renderer.ViewPort.Top - 5, OkuEngine.Color.Black);
 
-      _transform1.Translation = new Vector(100, 150);
-      _transform2.Translation = new Vector(300, 150);
+      _transform1.Translation = new Vector(-100, 0);
+      _transform2.Translation = new Vector(200, 00);
 
       _transformed1 = new Vector[_box1.Length];
       _transformed2 = new Vector[_box2.Length];
@@ -65,23 +64,25 @@ namespace OkuTest
     {
       float transSpeed = 100;
       float rotSpeed = 90;
+      float step = transSpeed * dt;
 
       float dx = 0;
       float dy = 0;
       if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Left))
-        dx += (-transSpeed) * dt;
+        dx -= step;
       if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Right))
-        dx += transSpeed * dt;
+        dx += step;
       if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Up))
-        dy += (-transSpeed) * dt;
+        dy += step;
       if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Down))
-        dy += transSpeed * dt;
+        dy -= step;
 
       float rotation = 0;
+      step = rotSpeed * dt;
       if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.NumPad4))
-        rotation += rotSpeed * dt;
+        rotation -= step;
       if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.NumPad6))
-        rotation += (-rotSpeed) * dt;
+        rotation += step;
 
       _transform2.Rotation += rotation;
       _transform2.Translation += new Vector(dx, dy);

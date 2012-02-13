@@ -21,7 +21,7 @@ namespace OkuTest
       _system.Emitter.End = new Vector(100, 0);
       _system.Emitter.NormalDirection = false;
       _system.Emitter.BirthRate = 200.0f;
-      _system.Emitter.Angle = -90;
+      _system.Emitter.Angle = 90;
       _system.Emitter.AngleVariation = 0.05f;
       _system.Emitter.Speed = 250;
       _system.Emitter.SpeedVariation = 0.2f;
@@ -30,7 +30,7 @@ namespace OkuTest
       _system.Renderer.PointSize = 3;
 
       _eff = new ForceEffector(new Quad(-300, 300, -300, 300));
-      _eff.Force = new Vector(0, 200);
+      _eff.Force = new Vector(0, -200);
       _system.Effectors.Add(_eff);
     }
 
@@ -40,9 +40,9 @@ namespace OkuTest
 
       float torque = 90 * dt;
       if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Left))
-        _system.Emitter.Angle -= torque;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Right))
         _system.Emitter.Angle += torque;
+      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Right))
+        _system.Emitter.Angle -= torque;
 
       _system.Update(dt);
 

@@ -9,9 +9,9 @@ namespace OkuTest
 {
   public class TestBedGame : OkuGame
   {
-    private ImageInstance _smiley = null;
+    private ImageContent _smiley = null;
     private float _rotation = 0.0f;
-    private Vector _pos1 = new Vector(0, 0);
+    private Vector _pos1 = new Vector(0, 50);
 
     private PolygonInstance _poly = null;
     private SoundInstance _sound = null;
@@ -27,16 +27,14 @@ namespace OkuTest
       renderParams.Fullscreen = false;
       renderParams.Width = 1024;
       renderParams.Height = 768;
-      //renderParams.Passes = 2;
+      renderParams.Passes = 2;
     }
 
     public override void Initialize()
     {
       //OkuDrivers.Renderer.ViewPort.Center = new Vector(OkuDrivers.Renderer.ViewPort.Width / 2, OkuDrivers.Renderer.ViewPort.Height / 2);
 
-      ImageContent content = new ImageContent(".\\content\\smiley.png");
-      _smiley = new ImageInstance(content);
-      _smiley.TintColor = Color.Green;
+      _smiley = new ImageContent(".\\content\\smiley.png");
 
       Vector[] verts = new Vector[50];
       Color[] colors = new Color[verts.Length];
@@ -71,7 +69,7 @@ namespace OkuTest
 
         verts[i] = new Vector(x, y);
         colors[i] = Color.RandomColor(rand);
-        texCoords[i] = new Vector((float)i / numVerts, ((i + 1) % 2));
+        texCoords[i] = new Vector((float)i / numVerts, (i % 2));
       }
       polyContent = new VertexContent(verts, texCoords, colors);
       _mesh = new MeshInstance(polyContent);
@@ -81,15 +79,15 @@ namespace OkuTest
 
       _mesh.Texture = car;
 
-      _font = new SpriteFont("Arial", 12, System.Drawing.FontStyle.Regular, true);
-      _text = _font.GetStringMesh("AB\nCD", 0, 0, Color.Black);
-      /*_text = _font.GetStringMesh(
+      _font = new SpriteFont("Calibri", 12, System.Drawing.FontStyle.Regular, true);
+      //_text = _font.GetStringMesh("AB\nCD", 0, 0, Color.Black);
+      _text = _font.GetStringMesh(
         "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore\n" +
         "aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,\n" +
         "no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,\n" +
         "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et\n" +
         "accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit\n" +
-        "amet.", 0, 0, Color.Black);*/
+        "amet.", 0, 0, Color.Black);
 
       _guiText = _font.GetStringMesh("Ammo: 100", 5, 5, Color.Black);
 
@@ -134,8 +132,8 @@ namespace OkuTest
       if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.NumPad0))
         scale = Vector.One;
       
-      OkuDrivers.Renderer.ViewPort.Center = center;
-      OkuDrivers.Renderer.ViewPort.Scale = scale;
+      //OkuDrivers.Renderer.ViewPort.Center = center;
+      //OkuDrivers.Renderer.ViewPort.Scale = scale;
     }
 
     public override void Render(int pass)
@@ -147,7 +145,7 @@ namespace OkuTest
 
           OkuDrivers.Renderer.DrawPoints(_poly.Content.Positions, _poly.Content.Colors, _poly.Content.Positions.Length, 10);
 
-          _smiley.Draw(_pos1);
+          OkuDrivers.Renderer.DrawImage(_smiley, _pos1);
           _mesh.Draw();
 
           _text.Draw();

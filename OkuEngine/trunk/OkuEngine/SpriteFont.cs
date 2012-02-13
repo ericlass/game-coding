@@ -144,8 +144,8 @@ namespace OkuEngine
 
       float textureSize = _texWidth;
 
-      float texTop = 0f;
-      float texBottom = (_font.Height / (float)_texHeight);
+      float texTop = 1f;
+      float texBottom = texTop - (_font.Height / (float)_texHeight);
 
       foreach (char current in text)
       {
