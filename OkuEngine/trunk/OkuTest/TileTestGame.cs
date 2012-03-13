@@ -16,13 +16,11 @@ namespace OkuTest
 
     public override void Initialize()
     {
-      OkuDrivers.Renderer.ViewPort.Center = new Vector(OkuDrivers.Renderer.ViewPort.Width / 2, OkuDrivers.Renderer.ViewPort.Height / 2);
-
       int mapWidth = 16;
       int mapHeight = 16;
 
       _map = new Tilemap(mapWidth, mapHeight, 32);
-      _map.Origin = new Vector(50, 50);
+      _map.Origin = new Vector(mapWidth * -16, mapHeight * -16); //OkuDrivers.Renderer.ViewPort.ScreenSpaceMatrix.Transform(new Vector(5, 5));
       _map.TileImages = ImageContent.LoadSheet(".\\content\\realtiles.bmp", 32);
 
       Random rand = new Random();
@@ -44,13 +42,18 @@ namespace OkuTest
     {
       if (OkuDrivers.Input.Mouse.ButtonIsDown(MouseButton.Left))
       {
-        System.Drawing.Point p = OkuDrivers.Renderer.MainForm.PointToClient(new System.Drawing.Point(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y));
-        _line[0] = new Vector(p.X, p.Y);
+        _line[0] = OkuDrivers.Renderer.ScreenToWorld(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
       }
       if (OkuDrivers.Input.Mouse.ButtonIsDown(MouseButton.Right))
       {
-        System.Drawing.Point p = OkuDrivers.Renderer.MainForm.PointToClient(new System.Drawing.Point(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y));
-        _line[1] = new Vector(p.X, p.Y);
+        _line[1] = OkuDrivers.Renderer.ScreenToWorld(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
+      }
+      if (OkuDrivers.Input.Keyboard.KeyPressed(Keys.Space))
+      {
+        Random rand = new Random(System.Environment.TickCount);
+        OkuDrivers.Renderer.ViewPort.Left -= rand.RandomFloat() * 50.0f;
+        OkuDrivers.Renderer.ViewPort.Top -= rand.RandomFloat() * 50.0f;
+        OkuDrivers.Renderer.ViewPort.Scale = new Vector(rand.RandomFloat(), rand.RandomFloat());
       }
       
       //_intersect = _map.GetIntersection(new LineSegment( _line[0], _line[1]), out _colPoint);

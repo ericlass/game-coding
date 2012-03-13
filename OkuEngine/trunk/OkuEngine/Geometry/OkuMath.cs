@@ -109,6 +109,16 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Gets the next integer value &lt;= the given value.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>The next integer value &lt;= the given value.</returns>
+    public static int Floor(float value)
+    {
+      return (int)value;
+    }
+
+    /// <summary>
     /// Calculates the bouding box for the given polygon. If the polygon does not change
     /// the bounding box should not be recalculated everytime it is needed. Cache it.
     /// </summary>

@@ -334,5 +334,13 @@ namespace OkuEngine
     /// <param name="name">The name of the variable.</param>
     /// <param name="values">The float values to set.</param>
     void SetShaderFloat(PixelShaderContent shader, string name, float[] values);
+
+    /// <summary>
+    /// Converts the given screen pixel coordinates to world coordinates.
+    /// </summary>
+    /// <param name="x">The x coordinate of the pixel.</param>
+    /// <param name="y">The y coordinate of the pixel.</param>
+    /// <returns>The world space coordinates of the given pixel. Note that this can be outside of the window in windowed mode.</returns>
+    Vector ScreenToWorld(int x, int y);
   }
 }

@@ -75,6 +75,7 @@
     <Compile Include="Geometry\CollisionWorld.cs" />
     <Compile Include="Geometry\ContinuousCollision.cs" />
     <Compile Include="Geometry\OkuMath.cs" />
+    <Compile Include="Geometry\SpatialHashMap.cs" />
     <Compile Include="OkuExtensions.cs" />
     <Compile Include="Geometry\Intersections.cs" />
     <Compile Include="Geometry\PolygonFactory.cs" />

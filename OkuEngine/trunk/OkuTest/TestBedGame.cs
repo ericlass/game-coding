@@ -32,8 +32,6 @@ namespace OkuTest
 
     public override void Initialize()
     {
-      //OkuDrivers.Renderer.ViewPort.Center = new Vector(OkuDrivers.Renderer.ViewPort.Width / 2, OkuDrivers.Renderer.ViewPort.Height / 2);
-
       _smiley = new ImageContent(".\\content\\smiley.png");
 
       Vector[] verts = new Vector[50];
@@ -81,15 +79,16 @@ namespace OkuTest
 
       _font = new SpriteFont("Calibri", 12, System.Drawing.FontStyle.Regular, true);
       //_text = _font.GetStringMesh("AB\nCD", 0, 0, Color.Black);
+
+      _guiText = _font.GetStringMesh("Ammo: 100", 3, 768, Color.Black);
+
       _text = _font.GetStringMesh(
         "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore\n" +
         "aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,\n" +
         "no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,\n" +
         "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et\n" +
         "accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit\n" +
-        "amet.", 0, 0, Color.Black);
-
-      _guiText = _font.GetStringMesh("Ammo: 100", 5, 5, Color.Black);
+        "amet.", 0, 0, Color.Black);      
 
       //Default shader
       //_shader = new PixelShaderContent("uniform sampler2D texture;\nvarying vec2 Texcoord;\n\nvoid main( void )\n{\n  gl_FragColor = texture2D(texture, Texcoord) * gl_Color;   \n}");
@@ -132,8 +131,8 @@ namespace OkuTest
       if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.NumPad0))
         scale = Vector.One;
       
-      //OkuDrivers.Renderer.ViewPort.Center = center;
-      //OkuDrivers.Renderer.ViewPort.Scale = scale;
+      OkuDrivers.Renderer.ViewPort.Center = center;
+      OkuDrivers.Renderer.ViewPort.Scale = scale;
     }
 
     public override void Render(int pass)
@@ -156,11 +155,11 @@ namespace OkuTest
           break;
 
         case 1:
-          OkuDrivers.Renderer.UseShader(_shader);
+          //OkuDrivers.Renderer.UseShader(_shader);
           ImageContent passResult = OkuDrivers.Renderer.GetPassResult(pass - 1, 0);
-          OkuDrivers.Renderer.SetShaderTexture(_shader, "texture", passResult);
+          //OkuDrivers.Renderer.SetShaderTexture(_shader, "texture", passResult);
           OkuDrivers.Renderer.DrawScreenAlignedQuad(passResult);
-          OkuDrivers.Renderer.UseShader(null);
+          //OkuDrivers.Renderer.UseShader(null);
           //_smiley.Draw(_pos1, _rotation);
           break;
           

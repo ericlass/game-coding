@@ -103,7 +103,7 @@ namespace OkuEngine
       get { return _center.X - (_halfWidth * _scale.X); }
       set 
       { 
-        _center.X = value + (_halfWidth * _scale.Y);
+        _center.X = value + (_halfWidth * _scale.X);
         OnChange(this);
       }
     }
@@ -173,9 +173,15 @@ namespace OkuEngine
       {
         if (!_matrixEffective)
         {
+          Matrix3 m = Matrix3.CreateScale(1.0f, -1.0f);
+
           _screenToWorld.LoadIdentity();
-          _screenToWorld.Translate(Left, Bottom);
+          _screenToWorld.Translate(Left, -Top);
           _screenToWorld.Scale(_scale);
+
+          _screenToWorld = Matrix3.Multiply(m, _screenToWorld);
+
+          _matrixEffective = true;
         }
         return _screenToWorld;
       }

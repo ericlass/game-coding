@@ -123,6 +123,7 @@ namespace OkuEngine
 
       if (updated)
       {
+        _fontSheet.Save("D:\\sheet.png");
         if (_fontSheetContent == null)
           _fontSheetContent = new ImageContent(_fontSheet);
         else

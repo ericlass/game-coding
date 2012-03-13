@@ -21,11 +21,11 @@ namespace OkuEngine
     private List<Vector[]> _bounds = new List<Vector[]>()
     {
       new Vector[] { },
-      new Vector[] { new Vector(0, 0), new Vector(1, 0), new Vector(1, 1), new Vector(0, 1) },
-      new Vector[] { new Vector(0, 0), new Vector(1, 0), new Vector(0, 1) },
-      new Vector[] { new Vector(0, 0), new Vector(1, 0), new Vector(1, 1) },
-      new Vector[] { new Vector(0, 1), new Vector(1, 0), new Vector(1, 1) },
-      new Vector[] { new Vector(0, 0), new Vector(1, 1), new Vector(0, 1) }
+      new Vector[] { new Vector(0, 1), new Vector(1, 1), new Vector(1, 0), new Vector(0, 0) },
+      new Vector[] { new Vector(0, 1), new Vector(1, 1), new Vector(0, 0) },
+      new Vector[] { new Vector(0, 1), new Vector(1, 1), new Vector(1, 0) },
+      new Vector[] { new Vector(0, 0), new Vector(1, 1), new Vector(1, 0) },
+      new Vector[] { new Vector(0, 1), new Vector(1, 0), new Vector(0, 0) }
     };
 
     //The main tiles
@@ -101,7 +101,7 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Transform the given world coordinates into tile coordinates.
+    /// Transforms the given world coordinates into tile coordinates.
     /// </summary>
     /// <param name="world">The world coordinate to transform.</param>
     /// <param name="x">The x index is returned in this parameter.</param>
@@ -320,7 +320,7 @@ namespace OkuEngine
       WorldToTile(OkuDrivers.Renderer.ViewPort.Left, OkuDrivers.Renderer.ViewPort.Top, out left, out top);
       WorldToTile(OkuDrivers.Renderer.ViewPort.Right, OkuDrivers.Renderer.ViewPort.Bottom, out right, out bottom);
 
-      for (int y = top; y <= bottom; y++)
+      for (int y = bottom; y <= top; y++)
       {
         for (int x = left; x <= right; x++)
         {

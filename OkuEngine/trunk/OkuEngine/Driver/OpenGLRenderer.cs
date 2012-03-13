@@ -384,7 +384,8 @@ namespace OkuEngine
 
     /// <summary>
     /// Initializes image content from raw data which is represented by a byte array.
-    /// The data is expected to only contain pixel data.
+    /// The data is expected to only contain pixel data. The origin of the given bitmap
+    /// is expected to be in the lower left corner.
     /// </summary>
     /// <param name="content">The content to be initialized.</param>
     /// <param name="data">The pixel data.</param>
@@ -416,8 +417,10 @@ namespace OkuEngine
     {
       int textureId = 0;
 
-      image.RotateFlip(RotateFlipType.RotateNoneFlipY); //Important!!! OpenGl assumes the data pointer to point to the lower left corner of the image. So flip the image horizontaly to avoid problems.
-      BitmapData bmData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+      Bitmap flippedImg = new Bitmap(image);
+
+      flippedImg.RotateFlip(RotateFlipType.RotateNoneFlipY); //Important!!! OpenGl assumes the data pointer to point to the lower left corner of the image. So flip the image horizontaly to avoid problems.
+      BitmapData bmData = flippedImg.LockBits(new Rectangle(0, 0, flippedImg.Width, flippedImg.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
 
       Gl.glGenTextures(1, out textureId);
       Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
@@ -425,15 +428,17 @@ namespace OkuEngine
       Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, GetGLTexFilter());
       Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, GetGLTexFilter());
 
-      image.UnlockBits(bmData);
+      flippedImg.UnlockBits(bmData);
 
       if (_textures.ContainsKey(content.ContentId))
         ReleaseContent(content);
 
       _textures.Add(content.ContentId, textureId);
 
-      content.Width = image.Width;
-      content.Height = image.Height;
+      content.Width = flippedImg.Width;
+      content.Height = flippedImg.Height;
+
+      flippedImg.Dispose();
     }
 
     public void UpdateContent(ImageContent content, int x, int y, int width, int height, byte[] rawData)
@@ -456,12 +461,15 @@ namespace OkuEngine
       else
         return;
 
-      BitmapData bmData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+      Bitmap flippedImg = new Bitmap(image);
+      flippedImg.RotateFlip(RotateFlipType.RotateNoneFlipY); //Important!!! OpenGl assumes the data pointer to point to the lower left corner of the image. So flip the image horizontaly to avoid problems.
+
+      BitmapData bmData = flippedImg.LockBits(new Rectangle(0, 0, flippedImg.Width, flippedImg.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
 
       Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
       Gl.glTexSubImage2D(Gl.GL_TEXTURE_2D, 0, x, y, width, height, Gl.GL_BGRA, Gl.GL_UNSIGNED_BYTE, bmData.Scan0);
 
-      image.UnlockBits(bmData);
+      flippedImg.UnlockBits(bmData);
     }
 
     /// <summary>
@@ -1078,6 +1086,14 @@ namespace OkuEngine
         Gl.glFlush();
         Gdi.SwapBuffers(_dc);
       }
+    }
+    
+    public Vector ScreenToWorld(int x, int y)
+    {
+      Point client = MainForm.PointToClient(new Point(x, y));
+      Vector vec = new Vector(client.X, client.Y);
+      ViewPort.ScreenSpaceMatrix.Transform(ref vec);
+      return vec;
     }
 
   }
