@@ -43,10 +43,12 @@ namespace OkuTest
       if (OkuDrivers.Input.Mouse.ButtonIsDown(MouseButton.Left))
       {
         _line[0] = OkuDrivers.Renderer.ScreenToWorld(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
+        //_line[0] = OkuDrivers.Renderer.ViewPort.ScreenSpaceMatrix.Transform(_line[0]);
       }
       if (OkuDrivers.Input.Mouse.ButtonIsDown(MouseButton.Right))
       {
         _line[1] = OkuDrivers.Renderer.ScreenToWorld(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
+        //_line[1] = OkuDrivers.Renderer.ViewPort.ScreenSpaceMatrix.Transform(_line[1]);
       }
       if (OkuDrivers.Input.Keyboard.KeyPressed(Keys.Space))
       {

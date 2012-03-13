@@ -173,13 +173,13 @@ namespace OkuEngine
       {
         if (!_matrixEffective)
         {
-          Matrix3 m = Matrix3.CreateScale(1.0f, -1.0f);
+          //Matrix3 m = Matrix3.CreateScale(1.0f, -1.0f);
 
           _screenToWorld.LoadIdentity();
-          _screenToWorld.Translate(Left, -Top);
+          _screenToWorld.Translate(Left, Bottom);
           _screenToWorld.Scale(_scale);
 
-          _screenToWorld = Matrix3.Multiply(m, _screenToWorld);
+          //_screenToWorld = Matrix3.Multiply(m, _screenToWorld);
 
           _matrixEffective = true;
         }

@@ -336,6 +336,15 @@ namespace OkuEngine
     void SetShaderFloat(PixelShaderContent shader, string name, float[] values);
 
     /// <summary>
+    /// Converts the given screen pixel coordinates to window client coordinates.
+    /// The origin for these coordinates is in the lower left corner.
+    /// </summary>
+    /// <param name="x">The x coordinate of the pixel.</param>
+    /// <param name="y">The y coordinate of the pixel.</param>
+    /// <returns>The client space coordinates of the given pixel. Note that this can be outside of the window in windowed mode.</returns>
+    Vector ScreenToClient(int x, int y);
+
+    /// <summary>
     /// Converts the given screen pixel coordinates to world coordinates.
     /// </summary>
     /// <param name="x">The x coordinate of the pixel.</param>

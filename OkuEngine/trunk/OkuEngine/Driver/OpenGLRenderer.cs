@@ -1088,12 +1088,15 @@ namespace OkuEngine
       }
     }
     
-    public Vector ScreenToWorld(int x, int y)
+    public Vector ScreenToClient(int x, int y)
     {
       Point client = MainForm.PointToClient(new Point(x, y));
-      Vector vec = new Vector(client.X, client.Y);
-      ViewPort.ScreenSpaceMatrix.Transform(ref vec);
-      return vec;
+      return new Vector(client.X, MainForm.ClientSize.Height - client.Y);
+    }
+
+    public Vector ScreenToWorld(int x, int y)
+    {
+      return _viewPort.ScreenSpaceMatrix.Transform(ScreenToClient(x, y));
     }
 
   }
