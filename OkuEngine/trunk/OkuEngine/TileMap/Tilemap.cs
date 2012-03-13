@@ -142,7 +142,7 @@ namespace OkuEngine
 
       bool result = false;
 
-      for (int y = top; y <= bottom; y++)
+      for (int y = bottom; y <= top; y++)
       {
         minTileTileSpace.Y = minTileSpace.Y - y;
         maxTileTileSpace.Y = maxTileSpace.Y - y;

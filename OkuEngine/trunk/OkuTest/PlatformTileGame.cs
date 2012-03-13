@@ -10,7 +10,7 @@ namespace OkuTest
     private Tilemap _tileMap = null;
     private Vector[] _playerBB = null;
     private Vector[] _transformedPlayer = null;
-    private Vector _playerPos = new Vector(16, 368);
+    private Vector _playerPos = new Vector(16, 0);
     private Vector _playerVelocity = new Vector(0, 0);
     private Matrix3 _tranform = new Matrix3();
     private bool _jumping = false;
@@ -18,15 +18,13 @@ namespace OkuTest
 
     public override void Initialize()
     {
-      OkuDrivers.Renderer.ViewPort.Left = 0;
-      OkuDrivers.Renderer.ViewPort.Top = 0;
-
-      _playerBB = new Vector[] { new Vector(-8, -16), new Vector(8, -16), new Vector(8, 16), new Vector(-8, 16) };
+      _playerBB = new Vector[] { new Vector(-8, 16), new Vector(8, 16), new Vector(8, -16), new Vector(-8, -16) };
       _transformedPlayer = new Vector[_playerBB.Length];
       _tranform.LoadIdentity();
 
       _tile = new ImageContent(".\\content\\orange_tile.png");
       _tileMap = new Tilemap(640, 48, 16);
+      _tileMap.Origin = new Vector(-512, -384);
       _tileMap.TileImages = new List<ImageContent>() { _tile };
 
       PerlinNoise noise = new PerlinNoise(6);
@@ -70,12 +68,12 @@ namespace OkuTest
       if (OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Left))
         _playerVelocity.X = -speed;
 
-      _playerVelocity.Y += 5 * dt;
+      _playerVelocity.Y -= 5 * dt;
 
       if (!_jumping && OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Up))
       {
         _jumping = true;
-        _playerVelocity.Y = -500 * dt;
+        _playerVelocity.Y = 500 * dt;
       }
 
       _playerPos += _playerVelocity;
@@ -89,7 +87,7 @@ namespace OkuTest
       {
         _playerPos += mtd;
 
-        if (_jumping && mtd.Y < 0.0f)
+        if (_jumping && mtd.Y > 0.0f)
           _jumping = false;
 
         _playerVelocity = mtd.GetNormal().Project(_playerVelocity);
