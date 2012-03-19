@@ -56,8 +56,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionHandler.cs" />
-    <Compile Include="Animation.cs" />
-    <Compile Include="AnimationFrame.cs" />
+    <Compile Include="Animation\Animation.cs" />
+    <Compile Include="Animation\AnimationFrame.cs" />
+    <Compile Include="Animation\Easing.cs" />
+    <Compile Include="Animation\EasingController.cs" />
     <Compile Include="ArrayList.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="ConfigFile.cs" />

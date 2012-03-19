@@ -57,10 +57,22 @@ namespace OkuEngine
     /// <param name="start">The start point.</param>
     /// <param name="end">The end point.</param>
     /// <param name="t">A value in the range 0.0 - 1.0 where 0.0 means start and 1.0 means end.</param>
-    /// <returns></returns>
+    /// <returns>The interpolated vector.</returns>
     public static Vector InterpolateLinear(Vector start, Vector end, float t)
     {
       return new Vector(start.X + ((end.X - start.X) * t), start.Y + ((end.Y - start.Y) * t));
+    }
+
+    /// <summary>
+    /// Interpolates linearly between the two given values.
+    /// </summary>
+    /// <param name="start">The start value.</param>
+    /// <param name="end">The end value.</param>
+    /// <param name="t">A value in the range 0.0 - 1.0 where 0.0 means start and 1.0 means end.</param>
+    /// <returns>The interpolated value.</returns>
+    public static float InterpolateLinear(float start, float end, float t)
+    {
+      return start + (end - start) * t;
     }
 
     /// <summary>
