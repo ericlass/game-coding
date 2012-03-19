@@ -17,7 +17,7 @@ namespace OkuTest
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
 
-      OkuGame game = new EasingTestGame();
+      OkuGame game = new InertiaTestGame();
       game.Run();
     }
 
