@@ -37,6 +37,8 @@ namespace OkuEngine
     private Dictionary<int, ImageContent> _colorBufferContent = new Dictionary<int, ImageContent>(); //Maps color buffer opengl name to image content
     private int _renderBuffer = 0; //The opengl name of the depth buffer. It is reused for every pass.
 
+    Dictionary<KeyValuePair<int, string>, int> _uniformLocations = null;
+
     private int _vertexShader = -1;
     private String _defaultVertexShader =
       "varying vec2 Texcoord;\n" +
@@ -574,6 +576,29 @@ namespace OkuEngine
       }
     }
 
+    private int GetUniformLocation(PixelShaderContent shader, string name)
+    {
+      if (_uniformLocations == null)
+        _uniformLocations = new Dictionary<KeyValuePair<int, string>, int>();
+
+      if (_shaderPrograms.ContainsKey(shader.ContentId))
+      {
+        int program = _shaderPrograms[shader.ContentId];
+        KeyValuePair<int, string> key = new KeyValuePair<int,string>(program, name);
+        if (_uniformLocations.ContainsKey(key))
+        {
+          return _uniformLocations[key];
+        }
+        else
+        {
+          int location = Gl.glGetUniformLocation(program, name);
+          _uniformLocations.Add(key, location);
+          return location;
+        }
+      }
+      return 0;
+    }
+
     /// <summary>
     /// Sets the given texture to the variable of the given shader.
     /// </summary>
@@ -584,8 +609,9 @@ namespace OkuEngine
     {
       if (_shaderPrograms.ContainsKey(shader.ContentId))
       {
-        int program = _shaderPrograms[shader.ContentId];
-        int location = Gl.glGetUniformLocation(program, name);
+        //int program = _shaderPrograms[shader.ContentId];
+        //int location = Gl.glGetUniformLocation(program, name);
+        int location = GetUniformLocation(shader, name);
 
         Gl.glActiveTexture(Gl.GL_TEXTURE0 + 1);
         Gl.glBindTexture(Gl.GL_TEXTURE_2D, _textures[texture.ContentId]);
@@ -602,8 +628,10 @@ namespace OkuEngine
     {
       if (_shaderPrograms.ContainsKey(shader.ContentId))
       {
-        int program = _shaderPrograms[shader.ContentId];
-        int location = Gl.glGetUniformLocation(program, name);
+        //int program = _shaderPrograms[shader.ContentId];
+        //int location = Gl.glGetUniformLocation(program, name);
+        int location = GetUniformLocation(shader, name);
+
         switch (values.Length)
         {
           case 1:

@@ -187,5 +187,24 @@ namespace OkuEngine
       }
     }
 
+    /// <summary>
+    /// Check if the given point is inside of the viewport.
+    /// </summary>
+    /// <param name="p">The point to check.</param>
+    /// <returns>True if the point is inside the viewport, else False.</returns>
+    public bool Contains(Vector p)
+    {
+      if (p.X > Right)
+        return false;
+      if (p.X < Left)
+        return false;
+      if (p.Y > Top)
+        return false;
+      if (p.Y < Bottom)
+        return false;
+
+      return true;
+    }
+
   }
 }

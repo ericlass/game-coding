@@ -18,8 +18,8 @@ namespace OkuEngine
 
     public Quad(float left, float right, float top, float bottom)
     {
-      Min = new Vector(left, top);
-      Max = new Vector(right, bottom);
+      Min = new Vector(left, bottom);
+      Max = new Vector(right, top);
     }
 
     public Vector[] GetNormals()

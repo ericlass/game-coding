@@ -5,6 +5,10 @@ using System.Text;
 
 namespace OkuEngine
 {
+  /// <summary>
+  /// Internal sequence class that is used to generate content ids and 
+  /// other artifical ids.
+  /// </summary>
   static class KeySequence
   {
     public const int InvalidKey = -1;

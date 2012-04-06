@@ -66,6 +66,9 @@
     <Compile Include="ConfigFile.cs" />
     <Compile Include="Content\Content.cs" />
     <Compile Include="Content\PixelShaderContent.cs" />
+    <Compile Include="VirtualFileSystem\VirtualFile.cs" />
+    <Compile Include="VirtualFileSystem\VirtualFileSystem.cs" />
+    <Compile Include="VirtualFileSystem\VirtualFileType.cs" />
     <Compile Include="Content\VisualContent.cs" />
     <Compile Include="Display.cs" />
     <Compile Include="DisplayMode.cs" />

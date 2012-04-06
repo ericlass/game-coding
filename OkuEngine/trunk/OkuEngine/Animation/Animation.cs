@@ -88,5 +88,27 @@ namespace OkuEngine
       get { return _frames[_currentFrame].Image; }
     }
 
+    /// <summary>
+    /// Gets the index of the current frame that should be displayed.
+    /// </summary>
+    public int CurrentImageIndex
+    {
+      get { return _currentFrame; }
+    }
+
+    /// <summary>
+    /// Determines if the animations last frame has been reached.
+    /// For looped animations this is always false.
+    /// </summary>
+    public bool IsFinished
+    {
+      get
+      {
+        if (!_loop)
+          return _currentFrame >= _frames.Count - 1;
+        return false;
+      }
+    }
+
   }
 }
