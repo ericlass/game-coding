@@ -20,13 +20,94 @@ namespace OkuEngine
     {
       Vector mousePos = OkuDrivers.Renderer.ScreenToWorld(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
 
-      Widget lastHot = _hotWidget;
+      //Find new hot widget
+      Widget newHot = null;
+      foreach (Widget widget in _widgets)
+      {
+        widget.Update(dt);
+        if (Intersections.PointInAABB(mousePos, widget.Area.Min, widget.Area.Max))
+        {
+          newHot = widget;
+          break;
+        }
+      }
+
+      //If hot widget has changed, update
+      if (newHot != _hotWidget)
+      {
+        if (_hotWidget != null)
+          _hotWidget.MouseLeave();
+
+        
+        if (newHot != null)
+          newHot.MouseEnter();
+      }
+
+      if (newHot != null)
+      {
+        //Handle down and up of other mouse buttons
+        List<MouseButton> pressedButtons = OkuDrivers.Input.Mouse.GetPressedButtons();
+        foreach (MouseButton btn in pressedButtons)
+          _hotWidget.MouseDown(btn);
+
+        List<MouseButton> raisedButtons = OkuDrivers.Input.Mouse.GetRaisedButtons();
+        foreach (MouseButton btn in raisedButtons)
+          _hotWidget.MouseUp(btn);
+
+        Widget lastActive = _activeWidget;
+        //Check for active widget
+        if (OkuDrivers.Input.Mouse.ButtonPressed(MouseButton.Left))
+        {
+          if (_activeWidget == null)
+          {
+            _activeWidget = newHot;
+            _activeWidget.Activate();
+          }
+          else
+          {
+            if (_activeWidget != newHot)
+            {
+              _activeWidget.Deactivate();
+
+              _activeWidget = newHot;
+              _activeWidget.Activate();
+            }
+          }
+        }
+
+        //Check for focused widget
+        if (OkuDrivers.Input.Mouse.ButtonRaised(MouseButton.Left))
+        {
+          if (lastActive != null && lastActive == newHot)
+          {
+            if (_focusedWidget == null)
+            {
+              _focusedWidget = newHot;
+              _focusedWidget.Focus();
+            }
+            else
+            {
+              if (_focusedWidget != newHot)
+              {
+                _focusedWidget.Unfocus();
+
+                _focusedWidget = newHot;
+                _focusedWidget.Focus();
+              }
+            }
+          }
+        }
+      }
+
+      _hotWidget = newHot;
+
+      /*Widget lastHot = _hotWidget;
       Widget lastActive = _activeWidget;
       Widget lastFocused = _focusedWidget;
 
-      /*_hotWidget = null;
+      _hotWidget = null;
       _activeWidget = null;
-      _focusedWidget = null;*/
+      _focusedWidget = null;
 
       //Check mouse events for every widget
       foreach (Widget widget in _widgets)
@@ -106,7 +187,7 @@ namespace OkuEngine
         }
       }
 
-      /*if (_hotWidget == null && lastHot != null)
+      if (_hotWidget == null && lastHot != null)
         _hotWidget = lastHot;
 
       if (_activeWidget == null && lastActive != null)

@@ -172,5 +172,21 @@ namespace OkuEngine
       max.Y = Math.Max(max.Y, maxT.Y);
     }
 
+    /// <summary>
+    /// Clamps the given value to the given min and max values.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <param name="min">The allowed minimum value.</param>
+    /// <param name="max">The allowed maximum value.</param>
+    /// <returns>The clamped value.</returns>
+    public static float Clamp(float value, float min, float max)
+    {
+      if (value < min)
+        return min;
+      if (value > max)
+        return max;
+      return value;
+    }
+
   }
 }

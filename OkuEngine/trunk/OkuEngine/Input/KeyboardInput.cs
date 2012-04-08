@@ -138,12 +138,13 @@ namespace OkuEngine
       if (!_pressedKeysValid)
       {
         _pressedKeys.Clear();
-        foreach (Keys key in Enum.GetValues(typeof(Keys)))
+        //Loop through keys. Start with eight, the first keyboard key. Keys below 8 are mouse buttons.
+        for (int i = 8; i < _state.Length; i++)
         {
+          Keys key = (Keys)i;
           if (KeyPressed(key))
             _pressedKeys.Add(key);
         }
-        _pressedKeysValid = true;
       }
       return _pressedKeys;
     }
@@ -157,8 +158,10 @@ namespace OkuEngine
       if (!_raisedKeysValid)
       {
         _raisedKeys.Clear();
-        foreach (Keys key in Enum.GetValues(typeof(Keys)))
+        //Loop through keys. Start with eight, the first keyboard key. Keys below 8 are mouse buttons.
+        for (int i = 8; i < _state.Length; i++)
         {
+          Keys key = (Keys)i;
           if (KeyRaised(key))
             _raisedKeys.Add(key);
         }

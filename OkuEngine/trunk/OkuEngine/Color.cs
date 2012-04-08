@@ -102,6 +102,7 @@ namespace OkuEngine
     /// <returns></returns>
     public static Color Blend(Color col1, Color col2, float ratio)
     {
+      ratio = OkuMath.Clamp(ratio, 0.0f, 1.0f);
       float invRatio = 1.0f - ratio;
       return new Color(
         (byte)(col1.R * invRatio + col2.R * ratio),

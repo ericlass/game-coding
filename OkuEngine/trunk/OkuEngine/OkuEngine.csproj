@@ -66,7 +66,7 @@
     <Compile Include="ConfigFile.cs" />
     <Compile Include="Content\Content.cs" />
     <Compile Include="Content\PixelShaderContent.cs" />
-    <Compile Include="GUI\Button.cs" />
+    <Compile Include="GUI\ButtonWidget.cs" />
     <Compile Include="GUI\ImmediateModeGui.cs" />
     <Compile Include="GUI\Widget.cs" />
     <Compile Include="VirtualFileSystem\VirtualFile.cs" />

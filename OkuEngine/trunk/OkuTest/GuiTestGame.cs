@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
+using System.Windows.Forms;
 using OkuEngine;
 
 namespace OkuTest
@@ -7,7 +9,6 @@ namespace OkuTest
   public class GuiTestGame : OkuGame
   {
     private ImmediateModeGui _gui = null;
-    private Button _button = null;
 
     public override void Setup(ref RendererParams renderParams)
     {
@@ -19,13 +20,17 @@ namespace OkuTest
 
     public override void Initialize()
     {
-      _button = new Button();
-      _button.Area = new Quad(-50, 50, 20, -20);
-
-      Intersections.PointInAABB(Vector.Zero, _button.Area.Min, _button.Area.Max);
-
       _gui = new ImmediateModeGui();
-      _gui.AddWidget(_button);
+
+      ButtonWidget button = new ButtonWidget();
+      button.Area = new Quad(-50, 50, 20, -20);
+
+      _gui.AddWidget(button);
+
+      button = new OkuEngine.ButtonWidget();
+      button.Area = new Quad(-50, 50, -120, -160);
+            
+      _gui.AddWidget(button);
     }
 
     public override void Update(float dt)

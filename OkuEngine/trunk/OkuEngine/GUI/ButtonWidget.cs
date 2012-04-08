@@ -5,13 +5,14 @@ using System.Text;
 
 namespace OkuEngine
 {
-  public class Button : Widget
+  public class ButtonWidget : Widget
   {
-    private const float _blendTime = 0.5f;
+    private const float _blendTime = 0.2f;
     private float _currentTime = 0.0f;
     private Color _startColor = Color.Black;
     private Color _endColor = Color.Blue;
     private Color _currentColor = Color.Blue;
+    private bool _focused = false;
 
     private Color _color = Color.Blue;
     private Color _hotColor = Color.Cyan;
@@ -34,7 +35,7 @@ namespace OkuEngine
       if (_currentTime > 0.0f)
       {
         _currentTime -= dt;
-        float ratio = _currentTime / _blendTime;
+        float ratio = 1.0f - (_currentTime / _blendTime);
         _currentColor = Color.Blend(_startColor, _endColor, ratio);
       }
       else
@@ -48,30 +49,33 @@ namespace OkuEngine
       Vector[] vertices = new Vector[] { Area.Min, new Vector(Area.Min.X, Area.Max.Y), Area.Max, new Vector(Area.Max.X, Area.Min.Y) };
       Color[] colors = new Color[] { _currentColor, _currentColor, _currentColor, _currentColor };
       OkuDrivers.Renderer.DrawMesh(vertices, null, colors, vertices.Length, MeshMode.Quads, null);
+
+      if (_focused)
+        OkuDrivers.Renderer.DrawLines(vertices, Color.Magenta, vertices.Length, 2.0f, VertexInterpretation.PolygonClosed);
     }
 
     public override void MouseEnter()
     {
-      _startColor = _color;
+      _startColor = _currentColor;
       _endColor = _hotColor;
       _currentTime = _blendTime;
     }
 
     public override void MouseLeave()
     {
-      _startColor = _hotColor;
+      _startColor = _currentColor;
       _endColor = _color;
       _currentTime = _blendTime;
     }
 
     public override void MouseDown(MouseButton button)
     {
-      throw new NotImplementedException();
+      
     }
 
     public override void MouseUp(MouseButton button)
     {
-      throw new NotImplementedException();
+      
     }
 
     public override void KeyDown(System.Windows.Forms.Keys key)
@@ -86,22 +90,22 @@ namespace OkuEngine
 
     public override void Activate()
     {
-      throw new NotImplementedException();
+      
     }
 
     public override void Deactivate()
     {
-      throw new NotImplementedException();
+      
     }
 
     public override void Focus()
     {
-      throw new NotImplementedException();
+      _focused = true;
     }
 
     public override void Unfocus()
     {
-      throw new NotImplementedException();
+      _focused = false;
     }
   }
 }
