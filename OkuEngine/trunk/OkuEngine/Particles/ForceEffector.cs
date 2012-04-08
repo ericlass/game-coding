@@ -41,7 +41,7 @@ namespace OkuEngine
 
     public void Effect(Particle particle, float dt)
     {
-      if (_area.PointInside(particle.Position))
+      if (Intersections.PointInAABB(particle.Position, _area.Min, _area.Max))
         particle.Velocity += _force * dt;
     }
 

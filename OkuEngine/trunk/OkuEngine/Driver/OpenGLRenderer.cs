@@ -244,21 +244,28 @@ namespace OkuEngine
       _viewPort = new ViewPort(parameters.Width, parameters.Height);
       _viewPort.Change += new ViewPortChangeEventHandler(_viewPort_Change);
 
-      //Create and setup form
-      _form = new Form();
-      _form.ClientSize = new System.Drawing.Size(_screenWidth, _screenHeight);
-      _form.FormBorderStyle = FormBorderStyle.FixedSingle;
-      _form.Resize += new EventHandler(_form_Resize);
-
-      if (_fullscreen)
+      //Create and setup form if no display handle was given
+      if (parameters.DisplayHandle == IntPtr.Zero)
       {
-        _form.FormBorderStyle = FormBorderStyle.None;
-        _form.WindowState = FormWindowState.Maximized;
-        _form.TopMost = true;
-      }
+        _form = new Form();
+        _form.ClientSize = new System.Drawing.Size(_screenWidth, _screenHeight);
+        _form.FormBorderStyle = FormBorderStyle.FixedSingle;
+        _form.Resize += new EventHandler(_form_Resize);
 
-      _form.Show();
-      _handle = _form.Handle;
+        if (_fullscreen)
+        {
+          _form.FormBorderStyle = FormBorderStyle.None;
+          _form.WindowState = FormWindowState.Maximized;
+          _form.TopMost = true;
+        }
+
+        _form.Show();
+        _handle = _form.Handle;
+      }
+      else
+      {
+        _handle = parameters.DisplayHandle;
+      }
 
       //Create and set pixel format descriptor
       _dc = User.GetDC(_handle);

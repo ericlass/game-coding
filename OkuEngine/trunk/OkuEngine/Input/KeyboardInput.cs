@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -11,6 +12,12 @@ namespace OkuEngine
   {
     private byte[] _lastState = new byte[256];
     private byte[] _state = new byte[256];
+
+    private bool _pressedKeysValid = false;
+    private List<Keys> _pressedKeys = new List<Keys>();
+
+    private bool _raisedKeysValid = false;
+    private List<Keys> _raisedKeys = new List<Keys>();
 
     /// <summary>
     /// Creates a new keyboard input.
@@ -27,6 +34,9 @@ namespace OkuEngine
     {
       Array.Copy(_state, _lastState, _state.Length);
       User32.GetKeyboardState(_state);
+
+      _pressedKeysValid = false;
+      _raisedKeysValid = false;
     }
 
     /// <summary>
@@ -117,6 +127,44 @@ namespace OkuEngine
         byte mask = 1;
         return (_state[(int)(Keys.NumLock)] & mask) == mask;
       }
+    }
+
+    /// <summary>
+    /// Gets the buttons that have been pressed down since the last frame.
+    /// </summary>
+    /// <returns>A list of the buttons that have been pressed down.</returns>
+    public List<Keys> GetPressedButtons()
+    {
+      if (!_pressedKeysValid)
+      {
+        _pressedKeys.Clear();
+        foreach (Keys key in Enum.GetValues(typeof(Keys)))
+        {
+          if (KeyPressed(key))
+            _pressedKeys.Add(key);
+        }
+        _pressedKeysValid = true;
+      }
+      return _pressedKeys;
+    }
+
+    /// <summary>
+    /// Gets the buttons that have been raised up since the last frame.
+    /// </summary>
+    /// <returns>A list of the buttons that have been raised up.</returns>
+    public List<Keys> GetRaisedButtons()
+    {
+      if (!_raisedKeysValid)
+      {
+        _raisedKeys.Clear();
+        foreach (Keys key in Enum.GetValues(typeof(Keys)))
+        {
+          if (KeyRaised(key))
+            _raisedKeys.Add(key);
+        }
+        _raisedKeysValid = true;
+      }
+      return _raisedKeys;
     }
 
   }

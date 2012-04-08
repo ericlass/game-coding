@@ -73,14 +73,41 @@ namespace OkuEngine
       return new Color((byte)(col1.R + col2.R), (byte)(col1.R + col2.R), (byte)(col1.R + col2.R));
     }
 
+    /// <summary>
+    /// Compares this color with the given color.
+    /// </summary>
+    /// <param name="other">The color to compare with.</param>
+    /// <returns>True if the two colors R, G, B and A values are equal, else false.</returns>
     public bool Equals(Color other)
     {
       return (R == other.R) && (G == other.G) && (B == other.B) && (A == other.A);
     }
 
+    /// <summary>
+    /// Compares this color with the given one without checking the Alpha component.
+    /// </summary>
+    /// <param name="other">The color to compare with.</param>
+    /// <returns>True if the two colors R, G and B values are equal, else false.</returns>
     public bool EqualsColor(Color other)
     {
       return (R == other.R) && (G == other.G) && (B == other.B);
+    }
+
+    /// <summary>
+    /// Blends the to given colors by the given ratio.
+    /// </summary>
+    /// <param name="col1">The first color.</param>
+    /// <param name="col2">The second color.</param>
+    /// <param name="ratio">The mixing ration. Must be in the range [0.0 - 1.0]. 0.0 means col1, 1.0 col2.</param>
+    /// <returns></returns>
+    public static Color Blend(Color col1, Color col2, float ratio)
+    {
+      float invRatio = 1.0f - ratio;
+      return new Color(
+        (byte)(col1.R * invRatio + col2.R * ratio),
+        (byte)(col1.G * invRatio + col2.G * ratio),
+        (byte)(col1.B * invRatio + col2.B * ratio),
+        (byte)(col1.A * invRatio + col2.A * ratio));
     }
 
   }

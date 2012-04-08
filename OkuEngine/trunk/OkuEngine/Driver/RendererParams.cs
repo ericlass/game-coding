@@ -10,5 +10,6 @@ namespace OkuEngine
     public Color ClearColor;
     public int Passes;
     public int[] PassTargets;
+    public IntPtr DisplayHandle;
   }
 }

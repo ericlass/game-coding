@@ -114,6 +114,7 @@ namespace OkuEngine
       renderParams.Fullscreen = OkuData.Globals.Get<bool>(OkuConstants.VarFullscreen);
       renderParams.Width = OkuData.Globals.Get<int>(OkuConstants.VarScreenWidth);
       renderParams.Height = OkuData.Globals.Get<int>(OkuConstants.VarScreenHeight);
+      renderParams.DisplayHandle = IntPtr.Zero;
     }
 
     /// <summary>
@@ -125,6 +126,7 @@ namespace OkuEngine
       LoadConfigFile();
 
       RendererParams renderParams = new RendererParams();
+      renderParams.DisplayHandle = IntPtr.Zero;
       Setup(ref renderParams);
       
       OkuDrivers.Renderer = new OpenGLRenderer();

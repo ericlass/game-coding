@@ -23,7 +23,13 @@ namespace OkuEngine
     private User32.Point _lastPos = new User32.Point();
     private User32.Point _position = new User32.Point();
     private byte[] _lastButtonState = new byte[256];
-    private byte[] _buttonState = new byte[256];    
+    private byte[] _buttonState = new byte[256];
+
+    private bool _pressedButtonsValid = false;
+    private List<MouseButton> _pressedButtons = new List<MouseButton>();
+
+    private bool _raisedButtonsValid = false;
+    private List<MouseButton> _raisedButtons = new List<MouseButton>();
 
     /// <summary>
     /// Creates a new mouse input.
@@ -41,6 +47,9 @@ namespace OkuEngine
       User32.GetCursorPos(ref _position);
       Array.Copy(_buttonState, _lastButtonState, _buttonState.Length);
       User32.GetKeyboardState(_buttonState);
+
+      _pressedButtonsValid = false;
+      _raisedButtonsValid = false;
     }
 
     /// <summary>
@@ -127,6 +136,44 @@ namespace OkuEngine
     public bool ButtonRaised(MouseButton button)
     {
       return ButtonIsDown(button, _lastButtonState) && !ButtonIsDown(button, _buttonState);
+    }
+
+    /// <summary>
+    /// Gets the buttons that have been pressed down since the last frame.
+    /// </summary>
+    /// <returns>A list of the buttons that have been pressed down.</returns>
+    public List<MouseButton> GetPressedButtons()
+    {
+      if (!_pressedButtonsValid)
+      {
+        _pressedButtons.Clear();
+        foreach (MouseButton btn in Enum.GetValues(typeof(MouseButton)))
+        {
+          if (ButtonPressed(btn))
+            _pressedButtons.Add(btn);
+        }
+        _pressedButtonsValid = true;
+      }
+      return _pressedButtons;
+    }
+
+    /// <summary>
+    /// Gets the buttons that have been raised up since the last frame.
+    /// </summary>
+    /// <returns>A list of the buttons that have been raised up.</returns>
+    public List<MouseButton> GetRaisedButtons()
+    {
+      if (!_raisedButtonsValid)
+      {
+        _raisedButtons.Clear();
+        foreach (MouseButton btn in Enum.GetValues(typeof(MouseButton)))
+        {
+          if (ButtonRaised(btn))
+            _raisedButtons.Add(btn);
+        }
+        _raisedButtonsValid = true;
+      }
+      return _raisedButtons;
     }
 
   }

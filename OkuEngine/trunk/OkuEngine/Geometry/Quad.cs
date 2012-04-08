@@ -33,12 +33,6 @@ namespace OkuEngine
       };
     }
 
-    public bool PointInside(Vector p)
-    {
-      return (p.X >= Min.X) && (p.X <= Max.X) &&
-             (p.Y >= Min.Y) && (p.Y <= Max.Y);
-    }
-
     //TODO: OKU-3 - Add geometric functions like "intersect" and so on
 
   }
