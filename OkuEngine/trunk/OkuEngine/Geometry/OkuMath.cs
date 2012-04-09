@@ -188,5 +188,43 @@ namespace OkuEngine
       return value;
     }
 
+    /// <summary>
+    /// Calculates the center of the given polygon.
+    /// </summary>
+    /// <param name="polygon"></param>
+    /// <returns></returns>
+    public static Vector GetCenter(Vector[] polygon)
+    {
+      Vector min;
+      Vector max;
+      BoundingBox(polygon, out min, out max);
+      return (min + max) * 0.5f;
+    }
+
+    /// <summary>
+    /// Recalculates the given polygon or point cloud so that all
+    /// vertices positions are realtive to the center of the polygon.
+    /// </summary>
+    /// <param name="polygon">The polygon to center.</param>
+    public static void CenterOrigin(Vector[] polygon)
+    {
+      CenterAt(polygon, Vector.Zero);
+    }
+
+    /// <summary>
+    /// Center the given polygon vertices at the given center.
+    /// That means that all vertices are now relative to the
+    /// given center.
+    /// </summary>
+    /// <param name="polygon">The polygon to be centered.</param>
+    /// <param name="center">The new center of the polygon.</param>
+    public static void CenterAt(Vector[] polygon, Vector center)
+    {
+      Vector currentCenter = GetCenter(polygon);
+      Vector offset = center - currentCenter;
+      for (int i = 0; i < polygon.Length; i++)
+        polygon[i] += offset;
+    }
+
   }
 }

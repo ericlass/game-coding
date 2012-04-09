@@ -9,7 +9,15 @@ namespace OkuEngine
     private int _id = KeySequence.NextValue;
     private Quad _area = new Quad();
 
-    public Quad Area
+    private WidgetContainer _container = null;
+
+    public WidgetContainer Container
+    {
+      get { return _container; }
+      set { _container = value; }
+    }
+
+    public virtual Quad Area
     {
       get { return _area; }
       set { _area = value; }

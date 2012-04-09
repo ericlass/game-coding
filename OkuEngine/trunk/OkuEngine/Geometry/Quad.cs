@@ -22,6 +22,11 @@ namespace OkuEngine
       Max = new Vector(right, top);
     }
 
+    public Vector GetCenter()
+    {
+      return (Min + Max) * 0.5f;
+    }
+
     public Vector[] GetNormals()
     {
       //TODO: Make this lazy just like the vertices

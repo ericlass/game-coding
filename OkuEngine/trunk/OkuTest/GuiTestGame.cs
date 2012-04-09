@@ -8,11 +8,11 @@ namespace OkuTest
 {
   public class GuiTestGame : OkuGame
   {
-    private ImmediateModeGui _gui = null;
+    private WidgetContainer _gui = null;
 
     public override void Setup(ref RendererParams renderParams)
     {
-      renderParams.ClearColor = Color.Black;
+      renderParams.ClearColor = new Color(51, 51, 51);
       renderParams.Fullscreen = false;
       renderParams.Width = 1024;
       renderParams.Height = 768;
@@ -20,15 +20,17 @@ namespace OkuTest
 
     public override void Initialize()
     {
-      _gui = new ImmediateModeGui();
+      _gui = new WidgetContainer( new SpriteFont("Arial", 10, System.Drawing.FontStyle.Regular, true));
 
       ButtonWidget button = new ButtonWidget();
-      button.Area = new Quad(-50, 50, 20, -20);
+      button.Area = new Quad(-50, 50, 15, -15);
+      button.Text = "Button 1";
 
       _gui.AddWidget(button);
 
       button = new OkuEngine.ButtonWidget();
-      button.Area = new Quad(-50, 50, -120, -160);
+      button.Area = new Quad(-50, 50, -30, -60);
+      button.Text = "Button 2";
             
       _gui.AddWidget(button);
     }
