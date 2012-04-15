@@ -5,6 +5,10 @@ using System.Windows.Forms;
 
 namespace OkuEngine
 {
+  /// <summary>
+  /// Container for GUI widgets that manages updaing an rendering widget.
+  /// Every widget has to added to a container to work.
+  /// </summary>
   public class WidgetContainer
   {
     private List<Widget> _widgets = new List<Widget>();
@@ -14,45 +18,80 @@ namespace OkuEngine
     private SpriteFont _font = null;
     private ColorMap _colorMap = ColorMap.Flash;
 
+    /// <summary>
+    /// Creates a new widget container with the system default font.
+    /// </summary>
     public WidgetContainer()
     {
       _font = new SpriteFont(SystemFonts.DefaultFont.Name, SystemFonts.DefaultFont.Size, SystemFonts.DefaultFont.Style, true);
     }
 
+    /// <summary>
+    /// Creates a new widget container with the given font.
+    /// </summary>
+    /// <param name="font">The font to use.</param>
     public WidgetContainer(SpriteFont font)
     {
       _font = font;
     }
 
+    /// <summary>
+    /// Gets the font that is used by all widgets
+    /// that are managed by thios container.
+    /// </summary>
     public SpriteFont Font
     {
       get { return _font; }
     }
 
+    /// <summary>
+    /// Gets the widget that is currently "hot".
+    /// Hot means that the mouse cursor is currently hovering over it.
+    /// </summary>
     public Widget HotWidget
     {
       get { return _hotWidget; }
-      set { _hotWidget = value; }
     }
 
+    /// <summary>
+    /// Gets or sets the widget that is currently active.
+    /// A widget is active if the left mouse button was pressed
+    /// down while the widget was hot. The widget stays active
+    /// until the left mouse button is raised.
+    /// </summary>
     public Widget ActiveWidget
     {
       get { return _activeWidget; }
       set { _activeWidget = value; }
     }
 
+    /// <summary>
+    /// Gets or sets the widget that is currently focused.
+    /// A widget is focused if the left mouse button was pressed 
+    /// down and raised while the widget was hot.
+    /// The focused widget also gets keyboard input forwarded.
+    /// </summary>
     public Widget FocusedWidget
     {
       get { return _focusedWidget; }
       set { _focusedWidget = value; }
     }
 
+    /// <summary>
+    /// Gets or sets the current color map.
+    /// The color map defines the colors that are used to draw
+    /// all widgets that are in this container.
+    /// </summary>
     public ColorMap ColorMap
     {
       get { return _colorMap; }
       set { _colorMap = value; }
     }
 
+    /// <summary>
+    /// Adds the given widget to this container.
+    /// </summary>
+    /// <param name="widget">The widget to add.</param>
     public void AddWidget(Widget widget)
     {
       _widgets.Add(widget);
@@ -60,6 +99,21 @@ namespace OkuEngine
       widget.Init();
     }
 
+    /// <summary>
+    /// Removes the given widget from this container.
+    /// </summary>
+    /// <param name="widget">The widget to be removed.</param>
+    public void Remove(Widget widget)
+    {
+      _widgets.Remove(widget);
+    }
+
+    /// <summary>
+    /// Updates the widgets and their states.
+    /// Has to be passed every frame passing the time
+    /// passed since the last frame.
+    /// </summary>
+    /// <param name="dt">The time passed since the last frame.</param>
     public void Update(float dt)
     {
       Vector mousePos = OkuDrivers.Renderer.ScreenToWorld(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
@@ -163,6 +217,9 @@ namespace OkuEngine
       }
     }
 
+    /// <summary>
+    /// Renders all widget that are in this container.
+    /// </summary>
     public void Render()
     {
       foreach (Widget widget in _widgets)

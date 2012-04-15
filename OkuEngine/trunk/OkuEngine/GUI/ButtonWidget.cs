@@ -5,6 +5,9 @@ using System.Text;
 
 namespace OkuEngine
 {
+  /// <summary>
+  /// Defines a widget in the form of a button that can be clicked.
+  /// </summary>
   public class ButtonWidget : Widget
   {
     private Color _currentColorLow = Color.Black;
@@ -20,6 +23,9 @@ namespace OkuEngine
     private Vector[] _focusRect = new Vector[4];
     private Color[] _colors = new Color[4];
 
+    /// <summary>
+    /// The text to display on the button.
+    /// </summary>
     public String Text
     {
       get { return _text; }
@@ -30,6 +36,9 @@ namespace OkuEngine
       }
     }
 
+    /// <summary>
+    /// Gets or sets the area of the button.
+    /// </summary>
     public override Quad Area
     {
       set
@@ -49,23 +58,36 @@ namespace OkuEngine
       }
     }
 
+    /// <summary>
+    /// Gets if the button was clicked.
+    /// </summary>
     public bool Clicked
     {
       get { return _clicked; }
-      set { _clicked = value; }
     }
 
+    /// <summary>
+    /// Initializes the button after it has been added to a container.
+    /// </summary>
     public override void Init()
     {
       _currentColorHigh = Container.ColorMap.WidgetHigh;
       _currentColorLow = Container.ColorMap.WidgetLow;
     }
 
+    /// <summary>
+    /// Updates the buttons state.
+    /// </summary>
+    /// <param name="dt">The time passed since the last frame.</param>
     public override void Update(float dt)
     {
       _clicked = false;
     }
 
+    /// <summary>
+    /// Lazyly gets the mesh for the text.
+    /// </summary>
+    /// <returns>The mesh for the text.</returns>
     private MeshInstance GetTextMesh()
     {
       if (!_textValid || _textMesh == null)
@@ -77,6 +99,9 @@ namespace OkuEngine
       return _textMesh;
     }
 
+    /// <summary>
+    /// Renders the button depending on its state.
+    /// </summary>
     public override void Render()
     {
       _colors[0] = _currentColorLow;

@@ -5,40 +5,68 @@ using System.Text;
 
 namespace OkuEngine
 {
+  /// <summary>
+  /// Defines an axis alligned quad by its min and max vectors.
+  /// </summary>
   public struct Quad
   {
+    /// <summary>
+    /// The min vector.
+    /// </summary>
     public Vector Min;
+    /// <summary>
+    /// The max vector.
+    /// </summary>
     public Vector Max;
 
+    /// <summary>
+    /// Create a new quad with the given vectors.
+    /// </summary>
+    /// <param name="min">The min vector.</param>
+    /// <param name="max">The max vector.</param>
     public Quad(Vector min, Vector max)
     {
       Min = min;
       Max = max;
     }
 
+    /// <summary>
+    /// Creates a new quad with the given values.
+    /// </summary>
+    /// <param name="left">The left border of the quad.</param>
+    /// <param name="right">The right border of the quad.</param>
+    /// <param name="top">The top border of the quad.</param>
+    /// <param name="bottom">The bottom border of the quad.</param>
     public Quad(float left, float right, float top, float bottom)
     {
       Min = new Vector(left, bottom);
       Max = new Vector(right, top);
     }
 
+    /// <summary>
+    /// Calculates the center of the quad.
+    /// </summary>
+    /// <returns>The center point of the quad.</returns>
     public Vector GetCenter()
     {
       return (Min + Max) * 0.5f;
     }
 
-    public Vector[] GetNormals()
+    /// <summary>
+    /// Gets the width of the quad.
+    /// </summary>
+    public float Width
     {
-      //TODO: Make this lazy just like the vertices
-      return new Vector[4] {
-        OkuMath.GetNormal(Min.X, Min.Y, Max.X, Min.Y),
-        OkuMath.GetNormal(Max.X, Min.Y, Max.X, Max.Y),
-        Vector.FromPoints(Max.X, Max.Y, Min.X, Max.Y).GetNormal(),
-        Vector.FromPoints(Min.X, Max.Y, Min.X, Min.Y).GetNormal()
-      };
+      get { return Max.X - Min.X; }
     }
 
-    //TODO: OKU-3 - Add geometric functions like "intersect" and so on
+    /// <summary>
+    /// Gets the height of the quad.
+    /// </summary>
+    public float Height
+    {
+      get { return Max.Y - Min.Y; }
+    }
 
   }
 }

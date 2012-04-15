@@ -10,6 +10,7 @@ namespace OkuTest
   {
     private WidgetContainer _gui = null;
     private ButtonWidget _button = null;
+    private ProgressBarWidget _progress = null;
 
     public override void Setup(ref RendererParams renderParams)
     {
@@ -35,6 +36,19 @@ namespace OkuTest
       button.Text = "Button 2";
             
       _gui.AddWidget(button);
+
+      LabelWidget label = new LabelWidget();
+      label.Area = new Quad(-50, 50, 90, 90);
+      label.Text = "Label 1";
+
+      _gui.AddWidget(label);
+
+      _progress = new ProgressBarWidget();
+      _progress.Area = new Quad(-100, 100, 45, 25);
+
+      _progress.Position = 40;
+
+      _gui.AddWidget(_progress);
     }
 
     public override void Update(float dt)
@@ -51,6 +65,12 @@ namespace OkuTest
       String focusedText = _gui.FocusedWidget != null ? _gui.FocusedWidget.ID.ToString() : "None";
 
       OkuDrivers.Renderer.MainForm.Text = "H: " + hotText + "; A: " + activeText + "; F: " + focusedText;
+
+      if (OkuDrivers.Input.Keyboard.KeyPressed(Keys.Add))
+        _progress.Position = Math.Min(_progress.Position + 5, _progress.Max);
+
+      if (OkuDrivers.Input.Keyboard.KeyPressed(Keys.Subtract))
+        _progress.Position = Math.Max(_progress.Position - 5, _progress.Min);
     }
 
     public override void Render(int pass)
