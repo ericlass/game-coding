@@ -9,6 +9,7 @@ namespace OkuTest
   public class GuiTestGame : OkuGame
   {
     private WidgetContainer _gui = null;
+    private ButtonWidget _button = null;
 
     public override void Setup(ref RendererParams renderParams)
     {
@@ -25,6 +26,7 @@ namespace OkuTest
       ButtonWidget button = new ButtonWidget();
       button.Area = new Quad(-50, 50, 15, -15);
       button.Text = "Button 1";
+      _button = button;
 
       _gui.AddWidget(button);
 
@@ -38,6 +40,17 @@ namespace OkuTest
     public override void Update(float dt)
     {
       _gui.Update(dt);
+
+      if (_button.Clicked)
+      {
+        OkuDrivers.Renderer.ViewPort.Scale *= -1;
+      }
+
+      String hotText = _gui.HotWidget != null ? _gui.HotWidget.ID.ToString() : "None";
+      String activeText = _gui.ActiveWidget != null ? _gui.ActiveWidget.ID.ToString() : "None";
+      String focusedText = _gui.FocusedWidget != null ? _gui.FocusedWidget.ID.ToString() : "None";
+
+      OkuDrivers.Renderer.MainForm.Text = "H: " + hotText + "; A: " + activeText + "; F: " + focusedText;
     }
 
     public override void Render(int pass)

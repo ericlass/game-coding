@@ -44,5 +44,9 @@ namespace OkuEngine
     public abstract void Focus();
     public abstract void Unfocus();
 
+    public virtual void Init()
+    {
+    }
+
   }
 }

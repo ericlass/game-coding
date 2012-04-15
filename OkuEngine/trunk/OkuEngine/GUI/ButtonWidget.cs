@@ -7,52 +7,18 @@ namespace OkuEngine
 {
   public class ButtonWidget : Widget
   {
-    private const float _blendTime = 0.2f;
-    private float _currentTime = 0.0f;
-    private Color _startColor = Color.Black;
-    private Color _endColor = new Color(71, 71, 71);
-    private Color _currentColor = new Color(71, 71, 71);
-
+    private Color _currentColorLow = Color.Black;
+    private Color _currentColorHigh = Color.Silver;
     private bool _focused = false;
+    private bool _active = false;
+    private bool _clicked = false;
 
     private String _text = null;
     private bool _textValid = false;
     private MeshInstance _textMesh = null;
-
-    private Color _color = new Color(71, 71, 71);
-    private Color _hotColor = new Color(101, 101, 101);
-    private Color _fontColor = Color.White;
-    private Color _borderColor = new Color(31, 31, 31);
-    private Color _activeColor = Color.Blend(new Color(101, 101, 101), Color.Blue, 0.5f);
-
-    public Color ActiveColor
-    {
-      get { return _activeColor; }
-      set { _activeColor = value; }
-    }
-
-    public Color BorderColor
-    {
-      get { return _borderColor; }
-      set { _borderColor = value; }
-    }
-
-    public Color HotColor
-    {
-      get { return _hotColor; }
-      set { _hotColor = value; }
-    }    
-
-    public Color Color
-    {
-      get { return _color; }
-      set { _color = value; }
-    }
-
-    public float BlendTime
-    {
-      get { return _blendTime; }
-    }
+    private Vector[] _vertices = new Vector[4];
+    private Vector[] _focusRect = new Vector[4];
+    private Color[] _colors = new Color[4];
 
     public String Text
     {
@@ -64,25 +30,47 @@ namespace OkuEngine
       }
     }
 
+    public override Quad Area
+    {
+      set
+      {
+        base.Area = value;
+        //If area is changed, recalculate vertices
+        _vertices[0] = Area.Min;
+        _vertices[1] = new Vector(Area.Min.X, Area.Max.Y);
+        _vertices[2] = Area.Max;
+        _vertices[3] = new Vector(Area.Max.X, Area.Min.Y);
+
+        float inset = 3;
+        _focusRect[0] = new Vector(Area.Min.X + inset, Area.Min.Y + inset);
+        _focusRect[1] = new Vector(Area.Min.X + inset, Area.Max.Y - inset);
+        _focusRect[2] = new Vector(Area.Max.X - inset, Area.Max.Y - inset);
+        _focusRect[3] = new Vector(Area.Max.X - inset, Area.Min.Y + inset);
+      }
+    }
+
+    public bool Clicked
+    {
+      get { return _clicked; }
+      set { _clicked = value; }
+    }
+
+    public override void Init()
+    {
+      _currentColorHigh = Container.ColorMap.WidgetHigh;
+      _currentColorLow = Container.ColorMap.WidgetLow;
+    }
+
     public override void Update(float dt)
     {
-      if (_currentTime > 0.0f)
-      {
-        _currentTime -= dt;
-        float ratio = 1.0f - (_currentTime / _blendTime);
-        _currentColor = Color.Blend(_startColor, _endColor, ratio);
-      }
-      else
-      {
-        _currentColor = _endColor;
-      }
+      _clicked = false;
     }
 
     private MeshInstance GetTextMesh()
     {
       if (!_textValid || _textMesh == null)
       {
-        _textMesh = Container.Font.GetStringMesh(_text, 0, 0, _fontColor);
+        _textMesh = Container.Font.GetStringMesh(_text, 0, 0, Container.ColorMap.FontHigh);
         OkuMath.CenterAt(_textMesh.Vertices.Positions, Area.GetCenter());
         _textValid = true;
       }
@@ -91,40 +79,49 @@ namespace OkuEngine
 
     public override void Render()
     {
-      Vector[] vertices = new Vector[] { Area.Min, new Vector(Area.Min.X, Area.Max.Y), Area.Max, new Vector(Area.Max.X, Area.Min.Y) };
-      Color[] colors = new Color[] { _currentColor, _currentColor, _currentColor, _currentColor };
-      OkuDrivers.Renderer.DrawMesh(vertices, null, colors, vertices.Length, MeshMode.Quads, null);
-      OkuDrivers.Renderer.DrawLines(vertices, _borderColor, vertices.Length, 1.0f, VertexInterpretation.PolygonClosed);
+      _colors[0] = _currentColorLow;
+      _colors[1] = _currentColorHigh;
+      _colors[2] = _currentColorHigh;
+      _colors[3] = _currentColorLow;
 
+      OkuDrivers.Renderer.DrawMesh(_vertices, null, _colors, _vertices.Length, MeshMode.Quads, null);
+      OkuDrivers.Renderer.DrawLines(_vertices, Container.ColorMap.BorderHigh, _vertices.Length, 1.0f, VertexInterpretation.PolygonClosed);
+      
       GetTextMesh().Draw();
+
+      if (_focused)
+        OkuDrivers.Renderer.DrawLines(_focusRect, Container.ColorMap.FontLow, _focusRect.Length, 0.5f, VertexInterpretation.PolygonClosed);
     }
 
     public override void MouseEnter()
     {
-      _startColor = _currentColor;
-      _endColor = _hotColor;
-      _currentTime = _blendTime;
+      if (!_active)
+      {
+        _currentColorHigh = Container.ColorMap.HotHigh;
+        _currentColorLow = Container.ColorMap.HotLow;
+      }
     }
 
     public override void MouseLeave()
     {
-      _startColor = _currentColor;
-      _endColor = _color;
-      _currentTime = _blendTime;
+      if (!_active)
+      {
+        _currentColorHigh = Container.ColorMap.WidgetHigh;
+        _currentColorLow = Container.ColorMap.WidgetLow;
+      }
     }
 
     public override void MouseDown(MouseButton button)
     {
-      _startColor = _currentColor;
-      _endColor = _activeColor;
-      _currentTime = _blendTime;
+      _currentColorHigh = Container.ColorMap.ActiveHigh;
+      _currentColorLow = Container.ColorMap.ActiveLow;
     }
 
     public override void MouseUp(MouseButton button)
     {
-      _startColor = _currentColor;
-      _endColor = _hotColor;
-      _currentTime = _blendTime;
+      _currentColorHigh = Container.ColorMap.HotHigh;
+      _currentColorLow = Container.ColorMap.HotLow;
+      _clicked = _active;
     }
 
     public override void KeyDown(Keys key)
@@ -137,10 +134,14 @@ namespace OkuEngine
 
     public override void Activate()
     {
+      _active = true;
     }
 
     public override void Deactivate()
     {
+      _active = false;
+      _currentColorHigh = Container.ColorMap.WidgetHigh;
+      _currentColorLow = Container.ColorMap.WidgetLow;
     }
 
     public override void Focus()

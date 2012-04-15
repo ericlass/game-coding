@@ -12,6 +12,7 @@ namespace OkuEngine
     private Widget _activeWidget = null; //The widget the left mouse button was pressed down on
     private Widget _focusedWidget = null; //The widget the left mouse button was pressed down AND raised up on
     private SpriteFont _font = null;
+    private ColorMap _colorMap = ColorMap.Flash;
 
     public WidgetContainer()
     {
@@ -28,10 +29,35 @@ namespace OkuEngine
       get { return _font; }
     }
 
+    public Widget HotWidget
+    {
+      get { return _hotWidget; }
+      set { _hotWidget = value; }
+    }
+
+    public Widget ActiveWidget
+    {
+      get { return _activeWidget; }
+      set { _activeWidget = value; }
+    }
+
+    public Widget FocusedWidget
+    {
+      get { return _focusedWidget; }
+      set { _focusedWidget = value; }
+    }
+
+    public ColorMap ColorMap
+    {
+      get { return _colorMap; }
+      set { _colorMap = value; }
+    }
+
     public void AddWidget(Widget widget)
     {
       _widgets.Add(widget);
       widget.Container = this;
+      widget.Init();
     }
 
     public void Update(float dt)
@@ -128,6 +154,12 @@ namespace OkuEngine
         List<Keys> raisedKeys = OkuDrivers.Input.Keyboard.GetRaisedButtons();
         foreach (Keys key in raisedKeys)
           _focusedWidget.KeyUp(key);
+      }
+
+      if (_activeWidget != null && OkuDrivers.Input.Mouse.ButtonRaised(MouseButton.Left))
+      {
+        _activeWidget.Deactivate();
+        _activeWidget = null;
       }
     }
 
