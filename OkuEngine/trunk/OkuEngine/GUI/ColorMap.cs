@@ -11,16 +11,16 @@ namespace OkuEngine
   public class ColorMap
   {
     private Color _backGround;
-    private Color _widgetLow;
-    private Color _widgetHigh;
-    private Color _hotLow;
-    private Color _hotHigh;
-    private Color _activeLow;
-    private Color _activeHigh;
-    private Color _borderLow;
-    private Color _borderHigh;
-    private Color _fontLow;
-    private Color _fontHigh;
+    private Color _widgetDark;
+    private Color _widgetLight;
+    private Color _hotDark;
+    private Color _hotLight;
+    private Color _activeDark;
+    private Color _activeLight;
+    private Color _borderDark;
+    private Color _borderLight;
+    private Color _fontDark;
+    private Color _fontLight;
 
     /// <summary>
     /// Creates a new color map where all colors are black.
@@ -33,29 +33,29 @@ namespace OkuEngine
     /// Creates a new color map with the givne colors.
     /// </summary>
     /// <param name="backGround">The color for the background.</param>
-    /// <param name="widgetLow">The low color for widgets.</param>
-    /// <param name="widgetHigh">The high color for widgets.</param>
-    /// <param name="hotLow">The low color for hot widgets.</param>
-    /// <param name="hotHigh">The high color for hot widgets.</param>
-    /// <param name="activeLow">The low color for active widgets.</param>
-    /// <param name="activeHigh">The high color for active widgets.</param>
-    /// <param name="borderLow">The low color for widget borders.</param>
-    /// <param name="borderHigh">The high color for widget borders.</param>
-    /// <param name="fontLow">The low color for the widget font.</param>
-    /// <param name="fontHigh">The high color for the widget font.</param>
-    public ColorMap(Color backGround, Color widgetLow, Color widgetHigh, Color hotLow, Color hotHigh, Color activeLow, Color activeHigh, Color borderLow, Color borderHigh, Color fontLow, Color fontHigh)
+    /// <param name="widgetDark">The dark color for widgets.</param>
+    /// <param name="widgetLight">The light color for widgets.</param>
+    /// <param name="hotDark">The dark color for hot widgets.</param>
+    /// <param name="hotLight">The light color for hot widgets.</param>
+    /// <param name="activeDark">The dark color for active widgets.</param>
+    /// <param name="activeLight">The light color for active widgets.</param>
+    /// <param name="borderDark">The dark color for widget borders.</param>
+    /// <param name="borderLight">The light color for widget borders.</param>
+    /// <param name="fontDark">The dark color for the widget font.</param>
+    /// <param name="fontLight">The light color for the widget font.</param>
+    public ColorMap(Color backGround, Color widgetDark, Color widgetLight, Color hotDark, Color hotLight, Color activeDark, Color activeLight, Color borderDark, Color borderLight, Color fontDark, Color fontLight)
     {
       _backGround = backGround;
-      _widgetLow = widgetLow;
-      _widgetHigh = widgetHigh;
-      _hotLow = hotLow;
-      _hotHigh = hotHigh;
-      _activeLow = activeLow;
-      _activeHigh = activeHigh;
-      _borderLow = borderLow;
-      _borderHigh = borderHigh;
-      _fontLow = fontLow;
-      _fontHigh = fontHigh;
+      _widgetDark = widgetDark;
+      _widgetLight = widgetLight;
+      _hotDark = hotDark;
+      _hotLight = hotLight;
+      _activeDark = activeDark;
+      _activeLight = activeLight;
+      _borderDark = borderDark;
+      _borderLight = borderLight;
+      _fontDark = fontDark;
+      _fontLight = fontLight;
     }
 
     /// <summary>
@@ -68,93 +68,93 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Gets the sets the low color for widgets.
+    /// Gets the sets the dark color for widgets.
     /// </summary>
-    public Color WidgetLow
+    public Color WidgetDark
     {
-      get { return _widgetLow; }
-      set { _widgetLow = value; }
+      get { return _widgetDark; }
+      set { _widgetDark = value; }
     }
 
     /// <summary>
-    /// Gets the sets the high color for widgets.
+    /// Gets the sets the light color for widgets.
     /// </summary>
-    public Color WidgetHigh
+    public Color WidgetLight
     {
-      get { return _widgetHigh; }
-      set { _widgetHigh = value; }
+      get { return _widgetLight; }
+      set { _widgetLight = value; }
     }
     
     /// <summary>
-    /// Gets or sets the low color for hot widgets.
+    /// Gets or sets the dark color for hot widgets.
     /// </summary>
-    public Color HotLow
+    public Color HotDark
     {
-      get { return _hotLow; }
-      set { _hotLow = value; }
+      get { return _hotDark; }
+      set { _hotDark = value; }
     }
 
     /// <summary>
-    /// Gets or sets the high color for hot widgets.
+    /// Gets or sets the light color for hot widgets.
     /// </summary>
-    public Color HotHigh
+    public Color HotLight
     {
-      get { return _hotHigh; }
-      set { _hotHigh = value; }
+      get { return _hotLight; }
+      set { _hotLight = value; }
     }
 
     /// <summary>
-    /// Gets or sets the low color for active widgets.
+    /// Gets or sets the dark color for active widgets.
     /// </summary>
-    public Color ActiveLow
+    public Color ActiveDark
     {
-      get { return _activeLow; }
-      set { _activeLow = value; }
+      get { return _activeDark; }
+      set { _activeDark = value; }
     }
 
     /// <summary>
-    /// Gets or sets the high color for active widgets.
+    /// Gets or sets the light color for active widgets.
     /// </summary>
-    public Color ActiveHigh
+    public Color ActiveLight
     {
-      get { return _activeHigh; }
-      set { _activeHigh = value; }
+      get { return _activeLight; }
+      set { _activeLight = value; }
     }
     
     /// <summary>
-    /// Gets or sets the low color for widget borders.
+    /// Gets or sets the dark color for widget borders.
     /// </summary>
-    public Color BorderLow
+    public Color BorderDark
     {
-      get { return _borderLow; }
-      set { _borderLow = value; }
+      get { return _borderDark; }
+      set { _borderDark = value; }
     }
 
     /// <summary>
-    /// Gets or sets the high color for widget borders.
+    /// Gets or sets the light color for widget borders.
     /// </summary>
-    public Color BorderHigh
+    public Color BorderLight
     {
-      get { return _borderHigh; }
-      set { _borderHigh = value; }
+      get { return _borderLight; }
+      set { _borderLight = value; }
     }
 
     /// <summary>
-    /// Gets or sets the low color for the widget font.
+    /// Gets or sets the dark color for the widget font.
     /// </summary>
-    public Color FontLow
+    public Color FontDark
     {
-      get { return _fontLow; }
-      set { _fontLow = value; }
+      get { return _fontDark; }
+      set { _fontDark = value; }
     }
 
     /// <summary>
-    /// Gets or sets the high color for the widget font.
+    /// Gets or sets the light color for the widget font.
     /// </summary>
-    public Color FontHigh
+    public Color FontLight
     {
-      get { return _fontHigh; }
-      set { _fontHigh = value; }
+      get { return _fontLight; }
+      set { _fontLight = value; }
     }
 
     /// <summary>

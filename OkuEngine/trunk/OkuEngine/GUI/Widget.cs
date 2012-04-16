@@ -26,10 +26,21 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets the area of the widget.
     /// </summary>
-    public virtual Quad Area
+    public Quad Area
     {
       get { return _area; }
-      set { _area = value; }
+      set
+      {
+        _area = value;
+        AreaChange();
+      }
+    }
+
+    /// <summary>
+    /// Is called when the area of the widget changes.
+    /// </summary>
+    protected virtual void AreaChange()
+    {
     }
 
     /// <summary>

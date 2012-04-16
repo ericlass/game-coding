@@ -13,7 +13,7 @@ namespace OkuEngine
 
     public ForceEffector()
     {
-      _area = new Quad(-10, 10, 10, -10);
+      _area = new Quad(-10, -10, 20, 20);
     }
 
     public ForceEffector(Quad area)

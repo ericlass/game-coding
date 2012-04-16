@@ -45,20 +45,13 @@ namespace OkuEngine
       set { _position = value; }
     }
 
-    /// <summary>
-    /// Gets the area of this progress bar.
-    /// </summary>
-    public override Quad Area
+    protected override void AreaChange()
     {
-      set
-      {
-        base.Area = value;
-        //If area is changed, recalculate vertices
-        _vertices[0] = Area.Min;
-        _vertices[1] = new Vector(Area.Min.X, Area.Max.Y);
-        _vertices[2] = Area.Max;
-        _vertices[3] = new Vector(Area.Max.X, Area.Min.Y);
-      }
+      //If area is changed, recalculate vertices
+      _vertices[0] = Area.Min;
+      _vertices[1] = new Vector(Area.Min.X, Area.Max.Y);
+      _vertices[2] = Area.Max;
+      _vertices[3] = new Vector(Area.Max.X, Area.Min.Y);
     }
 
     public override void Update(float dt)
@@ -70,10 +63,10 @@ namespace OkuEngine
     /// </summary>
     public override void Render()
     {
-      _colors[0] = Container.ColorMap.WidgetHigh;
-      _colors[1] = Container.ColorMap.WidgetLow;
-      _colors[2] = Container.ColorMap.WidgetLow;
-      _colors[3] = Container.ColorMap.WidgetHigh;
+      _colors[0] = Container.ColorMap.WidgetLight;
+      _colors[1] = Container.ColorMap.WidgetDark;
+      _colors[2] = Container.ColorMap.WidgetDark;
+      _colors[3] = Container.ColorMap.WidgetLight;
 
       OkuDrivers.Renderer.DrawMesh(_vertices, null, _colors, _vertices.Length, MeshMode.Quads, null);
 
@@ -87,15 +80,15 @@ namespace OkuEngine
         _progressRect[2] = new Vector(right, Area.Max.Y);
         _progressRect[3] = new Vector(right, Area.Min.Y);
 
-        _colors[0] = Container.ColorMap.ActiveLow;
-        _colors[1] = Container.ColorMap.ActiveHigh;
-        _colors[2] = Container.ColorMap.ActiveHigh;
-        _colors[3] = Container.ColorMap.ActiveLow;
+        _colors[0] = Container.ColorMap.ActiveDark;
+        _colors[1] = Container.ColorMap.ActiveLight;
+        _colors[2] = Container.ColorMap.ActiveLight;
+        _colors[3] = Container.ColorMap.ActiveDark;
 
         OkuDrivers.Renderer.DrawMesh(_progressRect, null, _colors, _progressRect.Length, MeshMode.Quads, null);
       }
 
-      OkuDrivers.Renderer.DrawLines(_vertices, Container.ColorMap.BorderHigh, _vertices.Length, 1.0f, VertexInterpretation.PolygonClosed);
+      OkuDrivers.Renderer.DrawLines(_vertices, Container.ColorMap.BorderLight, _vertices.Length, 1.0f, VertexInterpretation.PolygonClosed);
     }
 
     public override void MouseEnter() { }

@@ -70,6 +70,7 @@
     <Compile Include="GUI\ColorMap.cs" />
     <Compile Include="GUI\LabelWidget.cs" />
     <Compile Include="GUI\ProgressBarWidget.cs" />
+    <Compile Include="GUI\TextBoxWidget.cs" />
     <Compile Include="GUI\WidgetContainer.cs" />
     <Compile Include="GUI\Widget.cs" />
     <Compile Include="VirtualFileSystem\VirtualFile.cs" />

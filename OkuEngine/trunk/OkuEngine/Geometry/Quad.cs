@@ -37,10 +37,10 @@ namespace OkuEngine
     /// <param name="right">The right border of the quad.</param>
     /// <param name="top">The top border of the quad.</param>
     /// <param name="bottom">The bottom border of the quad.</param>
-    public Quad(float left, float right, float top, float bottom)
+    public Quad(float left, float bottom, float width, float height)
     {
       Min = new Vector(left, bottom);
-      Max = new Vector(right, top);
+      Max = new Vector(left + width, bottom + height);
     }
 
     /// <summary>

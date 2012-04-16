@@ -22,7 +22,7 @@ namespace OkuEngine
     public static Color Silver = new Color(192, 192, 192);
     public static Color Magenta = new Color(255, 0, 255);
     public static Color Cyan = new Color(0, 255, 255);
-    public static Color Yellow = new Color(255, 255, 0);
+    public static Color Yeldark = new Color(255, 255, 0);
     public static Color Transparent = new Color(0, 0, 0, 0);
 
     /// <summary>
@@ -91,6 +91,26 @@ namespace OkuEngine
     public bool EqualsColor(Color other)
     {
       return (R == other.R) && (G == other.G) && (B == other.B);
+    }
+
+    /// <summary>
+    /// Calculates the objective brightness of the color.
+    /// </summary>
+    /// <returns>The brightness in the range [0.0 - 255,0]</returns>
+    public float GetBrightness()
+    {
+      return R * 0.2126f + G * 0.7152f + B * 0.0722f;
+    }
+
+    /// <summary>
+    /// Calculates the brightness of the color like
+    /// perceived by the human eye. Note that this is
+    /// sdarker than <code>GetBrightness</code>.
+    /// </summary>
+    /// <returns></returns>
+    public float GetPerceivedBrightness()
+    {
+      return (float)Math.Sqrt(R * R * 0.241f + G * G * 0.691f + B * B * 0.068f);
     }
 
     /// <summary>

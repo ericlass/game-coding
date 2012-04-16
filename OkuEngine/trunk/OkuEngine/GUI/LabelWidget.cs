@@ -27,6 +27,11 @@ namespace OkuEngine
       }
     }
 
+    protected override void AreaChange()
+    {
+      _textValid = false;
+    }
+
     /// <summary>
     /// Lazyly gets the mesh for the text.
     /// </summary>
@@ -35,7 +40,7 @@ namespace OkuEngine
     {
       if (!_textValid || _textMesh == null)
       {
-        _textMesh = Container.Font.GetStringMesh(_text, Area.Min.X, Area.Min.Y, Container.ColorMap.FontHigh);
+        _textMesh = Container.Font.GetStringMesh(_text, Area.Min.X, Area.Min.Y, Container.ColorMap.FontLight);
         _textValid = true;
       }
       return _textMesh;

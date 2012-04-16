@@ -10,8 +10,8 @@ namespace OkuEngine
   /// </summary>
   public class ButtonWidget : Widget
   {
-    private Color _currentColorLow = Color.Black;
-    private Color _currentColorHigh = Color.Silver;
+    private Color _currentColorDark = Color.Black;
+    private Color _currentColorLight = Color.Silver;
     private bool _focused = false;
     private bool _active = false;
     private bool _clicked = false;
@@ -36,26 +36,19 @@ namespace OkuEngine
       }
     }
 
-    /// <summary>
-    /// Gets or sets the area of the button.
-    /// </summary>
-    public override Quad Area
+    protected override void AreaChange()
     {
-      set
-      {
-        base.Area = value;
-        //If area is changed, recalculate vertices
-        _vertices[0] = Area.Min;
-        _vertices[1] = new Vector(Area.Min.X, Area.Max.Y);
-        _vertices[2] = Area.Max;
-        _vertices[3] = new Vector(Area.Max.X, Area.Min.Y);
+      //If area is changed, recalculate vertices
+      _vertices[0] = Area.Min;
+      _vertices[1] = new Vector(Area.Min.X, Area.Max.Y);
+      _vertices[2] = Area.Max;
+      _vertices[3] = new Vector(Area.Max.X, Area.Min.Y);
 
-        float inset = 3;
-        _focusRect[0] = new Vector(Area.Min.X + inset, Area.Min.Y + inset);
-        _focusRect[1] = new Vector(Area.Min.X + inset, Area.Max.Y - inset);
-        _focusRect[2] = new Vector(Area.Max.X - inset, Area.Max.Y - inset);
-        _focusRect[3] = new Vector(Area.Max.X - inset, Area.Min.Y + inset);
-      }
+      float inset = 3;
+      _focusRect[0] = new Vector(Area.Min.X + inset, Area.Min.Y + inset);
+      _focusRect[1] = new Vector(Area.Min.X + inset, Area.Max.Y - inset);
+      _focusRect[2] = new Vector(Area.Max.X - inset, Area.Max.Y - inset);
+      _focusRect[3] = new Vector(Area.Max.X - inset, Area.Min.Y + inset);
     }
 
     /// <summary>
@@ -71,8 +64,8 @@ namespace OkuEngine
     /// </summary>
     public override void Init()
     {
-      _currentColorHigh = Container.ColorMap.WidgetHigh;
-      _currentColorLow = Container.ColorMap.WidgetLow;
+      _currentColorLight = Container.ColorMap.WidgetLight;
+      _currentColorDark = Container.ColorMap.WidgetDark;
     }
 
     /// <summary>
@@ -92,7 +85,7 @@ namespace OkuEngine
     {
       if (!_textValid || _textMesh == null)
       {
-        _textMesh = Container.Font.GetStringMesh(_text, 0, 0, Container.ColorMap.FontHigh);
+        _textMesh = Container.Font.GetStringMesh(_text, 0, 0, Container.ColorMap.FontLight);
         OkuMath.CenterAt(_textMesh.Vertices.Positions, Area.GetCenter());
         _textValid = true;
       }
@@ -104,26 +97,26 @@ namespace OkuEngine
     /// </summary>
     public override void Render()
     {
-      _colors[0] = _currentColorLow;
-      _colors[1] = _currentColorHigh;
-      _colors[2] = _currentColorHigh;
-      _colors[3] = _currentColorLow;
+      _colors[0] = _currentColorDark;
+      _colors[1] = _currentColorLight;
+      _colors[2] = _currentColorLight;
+      _colors[3] = _currentColorDark;
 
       OkuDrivers.Renderer.DrawMesh(_vertices, null, _colors, _vertices.Length, MeshMode.Quads, null);
-      OkuDrivers.Renderer.DrawLines(_vertices, Container.ColorMap.BorderHigh, _vertices.Length, 1.0f, VertexInterpretation.PolygonClosed);
+      OkuDrivers.Renderer.DrawLines(_vertices, Container.ColorMap.BorderLight, _vertices.Length, 1.0f, VertexInterpretation.PolygonClosed);
       
       GetTextMesh().Draw();
 
       if (_focused)
-        OkuDrivers.Renderer.DrawLines(_focusRect, Container.ColorMap.FontLow, _focusRect.Length, 0.5f, VertexInterpretation.PolygonClosed);
+        OkuDrivers.Renderer.DrawLines(_focusRect, Container.ColorMap.FontDark, _focusRect.Length, 0.5f, VertexInterpretation.PolygonClosed);
     }
 
     public override void MouseEnter()
     {
       if (!_active)
       {
-        _currentColorHigh = Container.ColorMap.HotHigh;
-        _currentColorLow = Container.ColorMap.HotLow;
+        _currentColorLight = Container.ColorMap.HotLight;
+        _currentColorDark = Container.ColorMap.HotDark;
       }
     }
 
@@ -131,21 +124,21 @@ namespace OkuEngine
     {
       if (!_active)
       {
-        _currentColorHigh = Container.ColorMap.WidgetHigh;
-        _currentColorLow = Container.ColorMap.WidgetLow;
+        _currentColorLight = Container.ColorMap.WidgetLight;
+        _currentColorDark = Container.ColorMap.WidgetDark;
       }
     }
 
     public override void MouseDown(MouseButton button)
     {
-      _currentColorHigh = Container.ColorMap.ActiveHigh;
-      _currentColorLow = Container.ColorMap.ActiveLow;
+      _currentColorLight = Container.ColorMap.ActiveLight;
+      _currentColorDark = Container.ColorMap.ActiveDark;
     }
 
     public override void MouseUp(MouseButton button)
     {
-      _currentColorHigh = Container.ColorMap.HotHigh;
-      _currentColorLow = Container.ColorMap.HotLow;
+      _currentColorLight = Container.ColorMap.HotLight;
+      _currentColorDark = Container.ColorMap.HotDark;
       _clicked = _active;
     }
 
@@ -165,8 +158,8 @@ namespace OkuEngine
     public override void Deactivate()
     {
       _active = false;
-      _currentColorHigh = Container.ColorMap.WidgetHigh;
-      _currentColorLow = Container.ColorMap.WidgetLow;
+      _currentColorLight = Container.ColorMap.WidgetLight;
+      _currentColorDark = Container.ColorMap.WidgetDark;
     }
 
     public override void Focus()

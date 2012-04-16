@@ -29,7 +29,7 @@ namespace OkuTest
 
       _system.Renderer.PointSize = 3;
 
-      _eff = new ForceEffector(new Quad(-300, 300, -300, 300));
+      _eff = new ForceEffector(new Quad(-300, -300, 600, 600));
       _eff.Force = new Vector(0, -200);
       _system.Effectors.Add(_eff);
     }
