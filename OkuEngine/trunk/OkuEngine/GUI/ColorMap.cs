@@ -21,6 +21,8 @@ namespace OkuEngine
     private Color _borderLight;
     private Color _fontDark;
     private Color _fontLight;
+    private Color _windowDark;
+    private Color _windowLight;
 
     /// <summary>
     /// Creates a new color map where all colors are black.
@@ -43,7 +45,7 @@ namespace OkuEngine
     /// <param name="borderLight">The light color for widget borders.</param>
     /// <param name="fontDark">The dark color for the widget font.</param>
     /// <param name="fontLight">The light color for the widget font.</param>
-    public ColorMap(Color backGround, Color widgetDark, Color widgetLight, Color hotDark, Color hotLight, Color activeDark, Color activeLight, Color borderDark, Color borderLight, Color fontDark, Color fontLight)
+    public ColorMap(Color backGround, Color widgetDark, Color widgetLight, Color hotDark, Color hotLight, Color activeDark, Color activeLight, Color borderDark, Color borderLight, Color fontDark, Color fontLight, Color windowDark, Color windowLight)
     {
       _backGround = backGround;
       _widgetDark = widgetDark;
@@ -56,6 +58,8 @@ namespace OkuEngine
       _borderLight = borderLight;
       _fontDark = fontDark;
       _fontLight = fontLight;
+      _windowDark = windowDark;
+      _windowLight = windowLight;
     }
 
     /// <summary>
@@ -158,6 +162,35 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Gets or set the light color for windows like text boxes.
+    /// </summary>
+    public Color WindowDark
+    {
+      get { return _windowDark; }
+      set { _windowDark = value; }
+    }
+
+    /// <summary>
+    /// Gets or set the bright color for windows like text boxes.
+    /// </summary>
+    public Color WindowLight
+    {
+      get { return _windowLight; }
+      set { _windowLight = value; }
+    }
+
+    /// <summary>
+    /// Gets the font color that has more contrast on
+    /// the given background color.
+    /// </summary>
+    /// <param name="background">The background color of the text.</param>
+    /// <returns>Either the dark or light font color, depending on the given background color.</returns>
+    public Color GetContrastFontColor(Color background)
+    {
+      return Color.GetContrastColor(background, _fontLight, _fontDark);
+    }
+
+    /// <summary>
     /// A predefined color map that looks quite like the flash GUI.
     /// </summary>
     public static ColorMap Flash = new ColorMap(
@@ -170,8 +203,10 @@ namespace OkuEngine
       new Color(102, 163, 226),
       new Color(20, 20, 20),
       new Color(20, 20, 20),
-      Color.Silver,
-      Color.White);
+      Color.Black,
+      Color.White,
+      new Color(113, 113, 113),
+      new Color(198, 198, 198));
 
   }
 }

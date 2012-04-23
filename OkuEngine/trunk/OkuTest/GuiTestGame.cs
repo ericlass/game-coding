@@ -44,12 +44,16 @@ namespace OkuTest
       _gui.AddWidget(label);
 
       _progress = new ProgressBarWidget();
-      _progress.Area = new Quad(-100, 100, 45, 25);
       _progress.Area = new Quad(-100, 25, 200, 20);
 
       _progress.Position = 40;
 
       _gui.AddWidget(_progress);
+
+      TextBoxWidget text = new TextBoxWidget();
+      text.Area = new Quad(-100, 125, 200, 20);
+
+      _gui.AddWidget(text);
     }
 
     public override void Update(float dt)

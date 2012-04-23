@@ -131,5 +131,20 @@ namespace OkuEngine
         (byte)(col1.A * invRatio + col2.A * ratio));
     }
 
+    /// <summary>
+    /// Gets the color that has more contrast on backgroundColor.
+    /// </summary>
+    /// <param name="backgroundColor">The color of the background.</param>
+    /// <param name="bright">A bright color for dark backgrounds.</param>
+    /// <param name="dark">A dark color for bright backgrounds.</param>
+    /// <returns>Either the bright color or the dak color, depending on the brightness of the background color.</returns>
+    public static Color GetContrastColor(Color backgroundColor, Color bright, Color dark)
+    {
+      if (backgroundColor.GetPerceivedBrightness() < 130)
+        return bright;
+      else
+        return dark;
+    }
+
   }
 }

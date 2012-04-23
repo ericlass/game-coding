@@ -19,6 +19,9 @@ namespace OkuEngine
     private bool _raisedKeysValid = false;
     private List<Keys> _raisedKeys = new List<Keys>();
 
+    private char _zero = new char();
+    private byte[] _pressedChars = new byte[2];
+
     /// <summary>
     /// Creates a new keyboard input.
     /// </summary>
@@ -168,6 +171,23 @@ namespace OkuEngine
         _raisedKeysValid = true;
       }
       return _raisedKeys;
+    }
+
+    /// <summary>
+    /// Converts the given virtual key code to an ascii character.
+    /// </summary>
+    /// <param name="key">The virtual key code.</param>
+    /// <returns>The char for the given key code or 0 if the given key has no char.</returns>
+    public char KeyToChar(Keys key)
+    {
+      uint virtKey = (uint)(key & Keys.KeyCode);
+      //uint virtKey = (uint)key;
+      uint scancode = User32.MapVirtualKey(virtKey, 0);
+
+      if (User32.ToAscii(virtKey, scancode, this._state, _pressedChars, 0) == 1)
+        return (char)_pressedChars[0];
+      else
+        return _zero;
     }
 
   }

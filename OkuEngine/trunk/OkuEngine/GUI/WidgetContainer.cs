@@ -17,6 +17,7 @@ namespace OkuEngine
     private Widget _focusedWidget = null; //The widget the left mouse button was pressed down AND raised up on
     private SpriteFont _font = null;
     private ColorMap _colorMap = ColorMap.Flash;
+    private float _cursorBlinkTime = 0.5f;
 
     /// <summary>
     /// Creates a new widget container with the system default font.
@@ -33,6 +34,16 @@ namespace OkuEngine
     public WidgetContainer(SpriteFont font)
     {
       _font = font;
+    }
+
+    /// <summary>
+    /// Gets or sets the time that passes between cursor
+    /// states (Visible/Not Visible).
+    /// </summary>
+    public float CursorBlinkTime
+    {
+      get { return _cursorBlinkTime; }
+      set { _cursorBlinkTime = value; }
     }
 
     /// <summary>

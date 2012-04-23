@@ -50,5 +50,11 @@ namespace OkuEngine
     [DllImport("User32.dll")]
     public static extern bool GetCursorPos(ref Point pos);
 
+    [DllImport("User32.dll")]
+    public static extern int ToAscii(uint virtKey, uint scanCode, byte[] keyState, byte[] characters, uint flags);
+
+    [DllImport("User32.dll")]
+    public static extern uint MapVirtualKey(uint code, uint mapType);
+
   }
 }

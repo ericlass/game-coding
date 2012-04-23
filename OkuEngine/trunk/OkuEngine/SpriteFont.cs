@@ -72,6 +72,11 @@ namespace OkuEngine
       get { return _antiAlias; }
     }
 
+    public int Height
+    {
+      get { return _font.Height; }
+    }
+
     private int NextPowerOfTwo(int number)
     {
       int num = number;
@@ -186,6 +191,46 @@ namespace OkuEngine
 
       VertexContent content = new VertexContent(positions.ToArray(), texCoords.ToArray(), colors.ToArray());
       return new MeshInstance(content, _fontSheetContent, MeshMode.Quads);
+    }
+
+    /// <summary>
+    /// Gets the width of the given text in world units.
+    /// </summary>
+    /// <param name="text">The text.</param>
+    /// <returns>The width of the text.</returns>
+    public float GetTextWidth(string text)
+    {
+      PrepareChars(text);
+
+      //TODO: Handle line breaks
+      float result = 0.0f;
+      foreach (char c in text)
+      {
+        CharDimensions dims = _chars[c];
+        result += dims.Width;
+      }
+      return result;
+    }
+
+    /// <summary>
+    /// Gets the width of the first count character of text
+    /// in world units.
+    /// </summary>
+    /// <param name="text">The text.</param>
+    /// <param name="count">The number of characters.</param>
+    /// <returns>The width of the first count charaters.</returns>
+    public float GetTextWidth(string text, int count)
+    {
+      PrepareChars(text);
+
+      //TODO: Handle line breaks
+      float result = 0.0f;
+      for (int i = 0; i < count; i++)
+      {
+        CharDimensions dims = _chars[text[i]];
+        result += dims.Width;
+      }
+      return result;
     }
 
   }
