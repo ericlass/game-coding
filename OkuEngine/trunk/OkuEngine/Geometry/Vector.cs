@@ -262,13 +262,7 @@ namespace OkuEngine
     /// <returns>A string representation of the vector.</returns>
     public override string ToString()
     {
-      StringBuilder result = new StringBuilder();
-      result.Append("[");
-      result.Append(X);
-      result.Append(',');
-      result.Append(Y);
-      result.Append("]");
-      return result.ToString();
+      return Converter.FloatToString(X) + ',' + Converter.FloatToString(Y);
     }
 
     /// <summary>
@@ -380,6 +374,30 @@ namespace OkuEngine
     public bool IsZero()
     {
       return (X == 0.0f) && (Y == 0.0f);
+    }
+
+    /// <summary>
+    /// Tries to parse the given string into a vector.
+    /// The string is expected to be in the format "X,Y"
+    /// like it is created by the ToString method.
+    /// </summary>
+    /// <param name="str">The string to be parsed.</param>
+    /// <param name="vec">The aprsed vector is returned here.</param>
+    /// <returns>True if the str was parsed successfully, False if the 
+    /// given string is null or has a wrong format.</returns>
+    public static bool TryParse(string str, ref Vector vec)
+    {
+      if (str != null)
+      {
+        string[] parts = str.Split(',');
+        if (parts.Length == 2)
+        {
+          vec.X = Converter.StrToFloat(parts[0].Trim());
+          vec.Y = Converter.StrToFloat(parts[1].Trim());
+          return true;
+        }
+      }
+      return false;
     }
 
   }

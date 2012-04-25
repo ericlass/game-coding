@@ -114,6 +114,15 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Converts the color into a string in the format "R,G,B,A".
+    /// </summary>
+    /// <returns>The color as a string.</returns>
+    public override string ToString()
+    {
+      return R + "," + G + "," + B + "," + A;
+    }
+
+    /// <summary>
     /// Blends the to given colors by the given ratio.
     /// </summary>
     /// <param name="col1">The first color.</param>
@@ -144,6 +153,48 @@ namespace OkuEngine
         return bright;
       else
         return dark;
+    }
+
+    /// <summary>
+    /// Tries to parse the given string into a color.
+    /// The string is expected to be in the format
+    /// "R,G,B,A" like it is produced by ToString.
+    /// </summary>
+    /// <param name="str"></param>
+    /// <param name="color"></param>
+    /// <returns></returns>
+    public static bool TryParse(string str, ref Color color)
+    {
+      if (str != null)
+      {
+        string[] parts = str.Split(',');
+        if (parts.Length == 4)
+        {
+          byte value = 0;
+          if (byte.TryParse(parts[0].Trim(), out value))
+            color.R = value;
+          else
+            return false;
+
+          if (byte.TryParse(parts[1].Trim(), out value))
+            color.G = value;
+          else
+            return false;
+
+          if (byte.TryParse(parts[2].Trim(), out value))
+            color.B = value;
+          else
+            return false;
+
+          if (byte.TryParse(parts[3].Trim(), out value))
+            color.A = value;
+          else
+            return false;
+
+          return true;
+        }
+      }
+      return false;
     }
 
   }

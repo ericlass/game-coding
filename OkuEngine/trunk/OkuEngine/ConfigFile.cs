@@ -23,34 +23,6 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Converts the given float value to a string. The decimal separator will always be ".".
-    /// </summary>
-    /// <param name="value">The float to be converted.</param>
-    /// <returns>The string represenation of the given float value.</returns>
-    private string FloatToString(double value)
-    {
-      string result = value.ToString("0");
-      result += "." + value.ToString(".0##################################").Substring(1);
-      return result;
-    }
-
-    /// <summary>
-    /// Converts the given string to a float value. The decimal separator has to be a ".".
-    /// </summary>
-    /// <param name="str">The string to be converted to a float.</param>
-    /// <returns>The converted float value.</returns>
-    private double StrToFloat(string str)
-    {
-      string[] parts = str.Split('.');
-      double result = double.Parse(parts[0]);
-      double fraction = double.Parse(parts[1]);
-      while (fraction > 0.0)
-        fraction /= 10.0;
-      result += fraction;
-      return result;
-    }
-
-    /// <summary>
     /// Creates a string containing the key and the value of a key value pair in
     /// the format "key"="value".
     /// </summary>
@@ -246,9 +218,9 @@ namespace OkuEngine
     public void SetFloat(string name, float value)
     {
       if (_values.ContainsKey(name))
-        _values[name] = FloatToString(value);
+        _values[name] =  Converter.FloatToString(value);
       else
-        _values.Add(name, FloatToString(value));
+        _values.Add(name, Converter.FloatToString(value));
     }
 
     /// <summary>
@@ -262,9 +234,9 @@ namespace OkuEngine
     public void SetDouble(string name, double value)
     {
       if (_values.ContainsKey(name))
-        _values[name] = FloatToString(value);
+        _values[name] = Converter.FloatToString((float)value);
       else
-        _values.Add(name, FloatToString(value));
+        _values.Add(name, Converter.FloatToString((float)value));
     }
 
     /// <summary>
@@ -277,7 +249,7 @@ namespace OkuEngine
     /// <param name="value">The vector.</param>
     public void SetVector(string name, Vector value)
     {
-      string str = FloatToString(value.X) + "," + FloatToString(value.Y);
+      string str = Converter.FloatToString(value.X) + "," + Converter.FloatToString(value.Y);
       if (_values.ContainsKey(name))
         _values[name] = str;
       else
@@ -296,17 +268,17 @@ namespace OkuEngine
     {
       StringBuilder builder = new StringBuilder();
 
-      builder.Append(FloatToString(value.V00));
+      builder.Append(Converter.FloatToString(value.V00));
       builder.Append(",");
-      builder.Append(FloatToString(value.V01));
+      builder.Append(Converter.FloatToString(value.V01));
       builder.Append(",");
-      builder.Append(FloatToString(value.V02));
+      builder.Append(Converter.FloatToString(value.V02));
       builder.Append(",");
-      builder.Append(FloatToString(value.V10));
+      builder.Append(Converter.FloatToString(value.V10));
       builder.Append(",");
-      builder.Append(FloatToString(value.V11));
+      builder.Append(Converter.FloatToString(value.V11));
       builder.Append(",");
-      builder.Append(FloatToString(value.V12));
+      builder.Append(Converter.FloatToString(value.V12));
 
       if (_values.ContainsKey(name))
         _values[name] = builder.ToString();
@@ -357,7 +329,7 @@ namespace OkuEngine
     /// <returns>The float value with the given name.</returns>
     public float GetFloat(string name)
     {
-      return (float)StrToFloat(_values[name]);
+      return (float)Converter.StrToFloat(_values[name]);
     }
 
     /// <summary>
@@ -367,7 +339,7 @@ namespace OkuEngine
     /// <returns>The double value with the given name.</returns>
     public double GetDouble(string name)
     {
-      return StrToFloat(_values[name]);
+      return Converter.StrToFloat(_values[name]);
     }
 
     /// <summary>
@@ -379,8 +351,8 @@ namespace OkuEngine
     {
       string[] parts = _values[name].Split(',');
       Vector result = new Vector();
-      result.X = (float)StrToFloat(parts[0]);
-      result.Y = (float)StrToFloat(parts[1]);
+      result.X = (float)Converter.StrToFloat(parts[0]);
+      result.Y = (float)Converter.StrToFloat(parts[1]);
       return result;
     }
 
@@ -393,12 +365,12 @@ namespace OkuEngine
     {
       string[] parts = _values[name].Split(',');
       Matrix3 result = new Matrix3();
-      result.V00 = (float)StrToFloat(parts[0]);
-      result.V01 = (float)StrToFloat(parts[1]);
-      result.V02 = (float)StrToFloat(parts[2]);
-      result.V10 = (float)StrToFloat(parts[3]);
-      result.V11 = (float)StrToFloat(parts[4]);
-      result.V12 = (float)StrToFloat(parts[5]);
+      result.V00 = (float)Converter.StrToFloat(parts[0]);
+      result.V01 = (float)Converter.StrToFloat(parts[1]);
+      result.V02 = (float)Converter.StrToFloat(parts[2]);
+      result.V10 = (float)Converter.StrToFloat(parts[3]);
+      result.V11 = (float)Converter.StrToFloat(parts[4]);
+      result.V12 = (float)Converter.StrToFloat(parts[5]);
       return result;
     }
 

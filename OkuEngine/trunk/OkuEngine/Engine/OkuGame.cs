@@ -45,7 +45,9 @@ namespace OkuEngine
         if (User32.PeekMessage(out msg, hRef, 0, 0, 1))
         {
           if (msg.msg == User32.WM_QUIT)
+          {
             break;
+          }
           else
           {
             User32.TranslateMessage(ref msg);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace OkuEngine
@@ -16,5 +15,35 @@ namespace OkuEngine
     {
       return (float)rand.NextDouble() * 2.0f - 1.0f;
     }
+
+    /// <summary>
+    /// Converts the vector array to a string.
+    /// </summary>
+    /// <param name="vectors">The vector array to be converted.</param>
+    /// <returns>The string representation of the vector array.</returns>
+    public static string ToOkuString(this Vector[] vectors)
+    {
+      StringBuilder builder = new StringBuilder();
+      for (int i = 0; i < vectors.Length; i++)
+      {
+        if (i > 0)
+          builder.Append(";");
+        builder.Append(vectors[i].ToString());
+      }
+      return builder.ToString();
+    }
+
+    public static string ToOkuString(this Color[] colors)
+    {
+      StringBuilder builder = new StringBuilder();
+      for (int i = 0; i < colors.Length; i++)
+      {
+        if (i > 0)
+          builder.Append(";");
+        builder.Append(colors[i].ToString());
+      }
+      return builder.ToString();
+    }
+
   }
 }

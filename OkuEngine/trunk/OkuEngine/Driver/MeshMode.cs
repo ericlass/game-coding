@@ -5,6 +5,10 @@ namespace OkuEngine
   public enum MeshMode
   {
     /// <summary>
+    /// Undefined mesh mode.
+    /// </summary>
+    None,
+    /// <summary>
     /// Every group of three vertices are treated as one triangle. 
     /// So a vertex list with 6 vertices will result in two seperate triangles.
     /// </summary>

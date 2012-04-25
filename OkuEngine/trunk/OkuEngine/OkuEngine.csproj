@@ -66,6 +66,7 @@
     <Compile Include="ConfigFile.cs" />
     <Compile Include="Content\Content.cs" />
     <Compile Include="Content\PixelShaderContent.cs" />
+    <Compile Include="Converter.cs" />
     <Compile Include="GUI\ButtonWidget.cs" />
     <Compile Include="GUI\ColorMap.cs" />
     <Compile Include="GUI\LabelWidget.cs" />
