@@ -31,6 +31,8 @@ namespace OkuEngine
     private bool _raisedButtonsValid = false;
     private List<MouseButton> _raisedButtons = new List<MouseButton>();
 
+    private float _wheelDelta = 0;
+
     /// <summary>
     /// Creates a new mouse input.
     /// </summary>
@@ -174,6 +176,23 @@ namespace OkuEngine
         _raisedButtonsValid = true;
       }
       return _raisedButtons;
+    }
+
+    /// <summary>
+    /// Gets the amount of lines the mouse wheel has scrolled.
+    /// </summary>
+    public float WheelDelta
+    {
+      get { return _wheelDelta; }
+      set { _wheelDelta = value; }
+    }
+
+    /// <summary>
+    /// Gets if the mouse wheel has been scrolled or not.
+    /// </summary>
+    public bool WheelSpinned
+    {
+      get { return _wheelDelta != 0.0f; }
     }
 
   }

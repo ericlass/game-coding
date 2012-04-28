@@ -14,6 +14,8 @@ namespace OkuEngine
   /// </summary>
   public class OkuGame
   {
+    private int _mouseDelta = 0;
+
     /// <summary>
     /// Creates a new game.
     /// </summary>
@@ -47,6 +49,10 @@ namespace OkuEngine
           if (msg.msg == User32.WM_QUIT)
           {
             break;
+          }
+          else if (msg.msg == User32.WM_MOUSEWHEEL)
+          {
+            _mouseDelta = (int)(msg.wParam) >> 16;
           }
           else
           {
@@ -158,6 +164,8 @@ namespace OkuEngine
       OkuData.Globals.Set<float>("oku.timedelta", dt);
       OkuDrivers.SoundEngine.Update(dt);
       OkuDrivers.Input.Update();
+      OkuDrivers.Input.Mouse.WheelDelta = _mouseDelta / 120.0f;
+      _mouseDelta = 0;
 
       Update(dt);
     }

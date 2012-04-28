@@ -31,8 +31,6 @@ namespace OkuShaper
       renderParams.ClearColor = ColorMap.Flash.BackGround;
       renderParams.Width = 1280;
       renderParams.Height = 800;
-      renderParams.Passes = 2;
-      renderParams.PassTargets = new int[] { 1, 1 };
     }
 
     public override void Initialize()
@@ -107,27 +105,19 @@ namespace OkuShaper
 
     public override void Render(int pass)
     {
-      if (pass == 0)
+      if (_image != null)
       {
-        if (_image != null)
-        {
-          OkuDrivers.Renderer.DrawImage(_image, Vector.Zero);
-          OkuDrivers.Renderer.DrawLines(_imageBox, Color.Silver, _imageBox.Length, 2.0f, VertexInterpretation.PolygonClosed);
-        }
-
-        OkuDrivers.Renderer.DrawLine(Vector.Zero, new Vector(25, 0), 1.0f, Color.Red);
-        OkuDrivers.Renderer.DrawLine(Vector.Zero, new Vector(0, 25), 1.0f, Color.Green);
+        OkuDrivers.Renderer.DrawImage(_image, Vector.Zero);
+        OkuDrivers.Renderer.DrawLines(_imageBox, Color.Silver, _imageBox.Length, 2.0f, VertexInterpretation.PolygonClosed);
       }
-      else if (pass == 1)
-      {
-        Vector center = OkuDrivers.Renderer.ViewPort.Center;
-        OkuDrivers.Renderer.ViewPort.Center = Vector.Zero;
 
-        OkuDrivers.Renderer.DrawScreenAlignedQuad(OkuDrivers.Renderer.GetPassResult(0, 0), Color.White);
-        _gui.Render();
+      OkuDrivers.Renderer.DrawLine(Vector.Zero, new Vector(25, 0), 1.0f, Color.Red);
+      OkuDrivers.Renderer.DrawLine(Vector.Zero, new Vector(0, 25), 1.0f, Color.Green);
 
-        OkuDrivers.Renderer.ViewPort.Center = center;
-      }
+      if (OkuDrivers.Input.Mouse.WheelDelta != 0)
+        OkuDrivers.Renderer.Display.Text = OkuDrivers.Input.Mouse.WheelDelta.ToString();
+
+      _gui.Render();
     }
 
   }
