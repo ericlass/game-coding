@@ -22,7 +22,7 @@ namespace OkuEngine
     /// <summary>
     /// Gets the form that is used to render the game to.
     /// </summary>
-    Form MainForm { get; }
+    Control Display { get; }
 
     /// <summary>
     /// Gets or sets the current viewport that is rendered to the screen.
@@ -351,5 +351,16 @@ namespace OkuEngine
     /// <param name="y">The y coordinate of the pixel.</param>
     /// <returns>The world space coordinates of the given pixel. Note that this can be outside of the window in windowed mode.</returns>
     Vector ScreenToWorld(int x, int y);
+
+    /// <summary>
+    /// Set the renderer to screen space mode. In this mode
+    /// all draw calls are done in screen space.
+    /// </summary>
+    void BeginScreenSpace();
+
+    /// <summary>
+    /// Ends the screen space mode.
+    /// </summary>
+    void EndScreenSpace();
   }
 }

@@ -62,6 +62,7 @@
     <Compile Include="ParticleTestGame.cs" />
     <Compile Include="PlatformPolygonGame.cs" />
     <Compile Include="PlatformTileGame.cs" />
+    <Compile Include="ScreenSpaceTest.cs" />
     <Compile Include="SpatialHashGame.cs" />
     <Compile Include="TestBedGame.cs" />
     <Compile Include="Program.cs" />

@@ -21,7 +21,7 @@ namespace OkuEngine
     private int _screenWidth = 1024;
     private int _screenHeight = 768;
 
-    private Form _form = null;
+    private Control _display = null;
     private IntPtr _handle = IntPtr.Zero;
     private IntPtr _dc = IntPtr.Zero;
     private IntPtr _rc = IntPtr.Zero;
@@ -76,9 +76,9 @@ namespace OkuEngine
     /// <summary>
     /// Gets the form that is used to draw on.
     /// </summary>
-    public Form MainForm
+    public Control Display
     {
-      get { return _form; }
+      get { return _display; }
     }
 
     /// <summary>
@@ -245,27 +245,29 @@ namespace OkuEngine
       _viewPort.Change += new ViewPortChangeEventHandler(_viewPort_Change);
 
       //Create and setup form if no display handle was given
-      if (parameters.DisplayHandle == IntPtr.Zero)
+      if (parameters.Display == null)
       {
-        _form = new Form();
-        _form.ClientSize = new System.Drawing.Size(_screenWidth, _screenHeight);
-        _form.FormBorderStyle = FormBorderStyle.FixedSingle;
-        _form.Resize += new EventHandler(_form_Resize);
+        Form form = new Form();
+        form.ClientSize = new System.Drawing.Size(_screenWidth, _screenHeight);
+        form.FormBorderStyle = FormBorderStyle.FixedSingle;        
 
         if (_fullscreen)
         {
-          _form.FormBorderStyle = FormBorderStyle.None;
-          _form.WindowState = FormWindowState.Maximized;
-          _form.TopMost = true;
+          form.FormBorderStyle = FormBorderStyle.None;
+          form.WindowState = FormWindowState.Maximized;
+          form.TopMost = true;
         }
 
-        _form.Show();
-        _handle = _form.Handle;
+        form.Show();
+        _display = form;
       }
       else
       {
-        _handle = parameters.DisplayHandle;
+        _display = parameters.Display;
       }
+
+      _display.Resize += new EventHandler(_form_Resize);
+      _handle = _display.Handle;
 
       //Create and set pixel format descriptor
       _dc = User.GetDC(_handle);
@@ -364,7 +366,7 @@ namespace OkuEngine
     /// <param name="e">The event arguments.</param>
     private void _form_Resize(object sender, EventArgs e)
     {
-      Gl.glViewport(0, 0, _form.ClientSize.Width, _form.ClientSize.Height);
+      Gl.glViewport(0, 0, _display.ClientSize.Width, _display.ClientSize.Height);
 
       UpdateGLViewPort();
 
@@ -1125,13 +1127,25 @@ namespace OkuEngine
     
     public Vector ScreenToClient(int x, int y)
     {
-      Point client = MainForm.PointToClient(new Point(x, y));
-      return new Vector(client.X, MainForm.ClientSize.Height - client.Y);
+      Point client = Display.PointToClient(new Point(x, y));
+      return new Vector(client.X, Display.ClientSize.Height - client.Y);
     }
 
     public Vector ScreenToWorld(int x, int y)
     {
       return _viewPort.ScreenSpaceMatrix.Transform(ScreenToClient(x, y));
+    }
+
+    public void BeginScreenSpace()
+    {
+      Gl.glMatrixMode(Gl.GL_PROJECTION);
+      Gl.glLoadIdentity();
+      Gl.glOrtho(0, _screenWidth, 0, _screenHeight, -1, 1);
+    }
+
+    public void EndScreenSpace()
+    {
+      UpdateGLViewPort();
     }
 
   }

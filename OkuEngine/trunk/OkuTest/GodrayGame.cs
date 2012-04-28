@@ -55,7 +55,7 @@ namespace OkuTest
     public override void Update(float dt)
     {
       //Get mouse position in window client coordinates
-      Point m = OkuDrivers.Renderer.MainForm.PointToClient(new Point(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y));
+      Point m = OkuDrivers.Renderer.Display.PointToClient(new Point(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y));
 
       //Calculate mouse coordinates in world space
       _mousePos.X = OkuDrivers.Renderer.ViewPort.Left + m.X;

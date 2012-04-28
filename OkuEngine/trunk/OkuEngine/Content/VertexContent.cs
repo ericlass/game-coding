@@ -117,12 +117,12 @@ namespace OkuEngine
     /// Loads a vertex data from a file.
     /// </summary>
     /// <param name="filename">The name and path of the file.</param>
-    public void LoadFromFile(string filename)
+    public void Load(string filename)
     {
       FileStream stream = new FileStream(filename, FileMode.Open);
       try
       {
-        LoadFromStream(stream);
+        Load(stream);
       }
       finally
       {
@@ -134,7 +134,7 @@ namespace OkuEngine
     /// Loads a vertex data from a stream.
     /// </summary>
     /// <param name="stream">The stream to load the vertex data from.</param>
-    public void LoadFromStream(Stream stream)
+    public void Load(Stream stream)
     {
       _positions = null;
       _colors = null;
@@ -168,12 +168,12 @@ namespace OkuEngine
     /// Saves the vertex data to the given file.
     /// </summary>
     /// <param name="filename">The name and path of the file.</param>
-    public void SaveToFile(string filename)
+    public void Save(string filename)
     {
       FileStream stream = new FileStream(filename, FileMode.OpenOrCreate);
       try
       {
-        SaveToStream(stream);
+        Save(stream);
       }
       finally
       {
@@ -185,7 +185,7 @@ namespace OkuEngine
     /// Saves the vertex data to the given stream.
     /// </summary>
     /// <param name="stream">The stream to save to.</param>
-    public void SaveToStream(Stream stream)
+    public void Save(Stream stream)
     {
       StreamWriter writer = new StreamWriter(stream);
 

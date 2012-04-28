@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OkuEngine.Geometry
+namespace OkuEngine
 {
   public class SpatialHashMap<T>
   {

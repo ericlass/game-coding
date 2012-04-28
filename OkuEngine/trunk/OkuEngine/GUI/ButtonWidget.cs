@@ -104,11 +104,13 @@ namespace OkuEngine
 
       OkuDrivers.Renderer.DrawMesh(_vertices, null, _colors, _vertices.Length, MeshMode.Quads, null);
       OkuDrivers.Renderer.DrawLines(_vertices, Container.ColorMap.BorderLight, _vertices.Length, 1.0f, VertexInterpretation.PolygonClosed);
-      
+
       GetTextMesh().Draw();
 
       if (_focused)
+      {
         OkuDrivers.Renderer.DrawLines(_focusRect, Container.ColorMap.FontDark, _focusRect.Length, 0.5f, VertexInterpretation.PolygonClosed);
+      }
     }
 
     public override void MouseEnter()

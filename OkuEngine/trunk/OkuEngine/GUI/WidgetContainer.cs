@@ -6,7 +6,7 @@ using System.Windows.Forms;
 namespace OkuEngine
 {
   /// <summary>
-  /// Container for GUI widgets that manages updaing an rendering widget.
+  /// Container for GUI widgets that manages updating an rendering widget.
   /// Every widget has to added to a container to work.
   /// </summary>
   public class WidgetContainer
@@ -127,7 +127,7 @@ namespace OkuEngine
     /// <param name="dt">The time passed since the last frame.</param>
     public void Update(float dt)
     {
-      Vector mousePos = OkuDrivers.Renderer.ScreenToWorld(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
+      Vector mousePos = OkuDrivers.Renderer.ScreenToClient(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
 
       //Find new hot widget
       Widget newHot = null;
@@ -230,11 +230,14 @@ namespace OkuEngine
 
     /// <summary>
     /// Renders all widget that are in this container.
+    /// The widgets are always rendered in screen space.
     /// </summary>
     public void Render()
     {
+      OkuDrivers.Renderer.BeginScreenSpace();
       foreach (Widget widget in _widgets)
         widget.Render();
+      OkuDrivers.Renderer.EndScreenSpace();
     }
 
   }

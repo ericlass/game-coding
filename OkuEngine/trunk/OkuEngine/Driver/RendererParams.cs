@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 
 namespace OkuEngine
 {
@@ -10,6 +11,6 @@ namespace OkuEngine
     public Color ClearColor;
     public int Passes;
     public int[] PassTargets;
-    public IntPtr DisplayHandle;
+    public Control Display;
   }
 }

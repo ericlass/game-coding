@@ -72,7 +72,7 @@ namespace OkuTest
       }
 
       float time = passed / (float)freq;
-      OkuDrivers.Renderer.MainForm.Text = time.ToString();
+      OkuDrivers.Renderer.Display.Text = time.ToString();
 
       if (OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Right))
         _control = Math.Min(1.0f, _control + dt);

@@ -35,11 +35,11 @@ namespace OkuEngine
       Kernel32.QueryPerformanceCounter(out tick2);
 
       User32.NativeMessage msg = new User32.NativeMessage();
-      HandleRef hRef = new HandleRef(OkuDrivers.Renderer.MainForm, OkuDrivers.Renderer.MainForm.Handle);
+      HandleRef hRef = new HandleRef(OkuDrivers.Renderer.Display, OkuDrivers.Renderer.Display.Handle);
 
       while (true)
       {
-        if (!OkuDrivers.Renderer.MainForm.Created)
+        if (!OkuDrivers.Renderer.Display.Created)
           break;
 
         if (User32.PeekMessage(out msg, hRef, 0, 0, 1))
@@ -116,7 +116,7 @@ namespace OkuEngine
       renderParams.Fullscreen = OkuData.Globals.Get<bool>(OkuConstants.VarFullscreen);
       renderParams.Width = OkuData.Globals.Get<int>(OkuConstants.VarScreenWidth);
       renderParams.Height = OkuData.Globals.Get<int>(OkuConstants.VarScreenHeight);
-      renderParams.DisplayHandle = IntPtr.Zero;
+      renderParams.Display = null;
     }
 
     /// <summary>
@@ -128,7 +128,7 @@ namespace OkuEngine
       LoadConfigFile();
 
       RendererParams renderParams = new RendererParams();
-      renderParams.DisplayHandle = IntPtr.Zero;
+      renderParams.Display = null;
       Setup(ref renderParams);
       
       OkuDrivers.Renderer = new OpenGLRenderer();

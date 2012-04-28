@@ -24,7 +24,7 @@ namespace OkuTest
 
     public override void Initialize()
     {
-      OkuDrivers.Renderer.MainForm.Text = "Inertia Test";
+      OkuDrivers.Renderer.Display.Text = "Inertia Test";
 
       _image = new ImageContent(".\\content\\yinyang.png");
       _angleInertia = new InertialMovement();

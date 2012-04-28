@@ -54,7 +54,7 @@ namespace OkuTest
           i++;
         }
 
-        OkuDrivers.Renderer.MainForm.Text = "Min: " + min + "; Max: " + max;
+        OkuDrivers.Renderer.Display.Text = "Min: " + min + "; Max: " + max;
       }
 
       image.UnlockBits(data);

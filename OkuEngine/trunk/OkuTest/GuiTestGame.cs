@@ -69,7 +69,7 @@ namespace OkuTest
       String activeText = _gui.ActiveWidget != null ? _gui.ActiveWidget.ID.ToString() : "None";
       String focusedText = _gui.FocusedWidget != null ? _gui.FocusedWidget.ID.ToString() : "None";
 
-      OkuDrivers.Renderer.MainForm.Text = "H: " + hotText + "; A: " + activeText + "; F: " + focusedText;
+      OkuDrivers.Renderer.Display.Text = "H: " + hotText + "; A: " + activeText + "; F: " + focusedText;
 
       if (OkuDrivers.Input.Keyboard.KeyPressed(Keys.Add))
         _progress.Position = Math.Min(_progress.Position + 5, _progress.Max);
