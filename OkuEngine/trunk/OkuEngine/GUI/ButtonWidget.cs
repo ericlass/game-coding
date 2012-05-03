@@ -16,8 +16,11 @@ namespace OkuEngine
     private bool _active = false;
     private bool _clicked = false;
 
+    private ImageContent _glyph = null;
+    private Vector _glyphPos = Vector.Zero;
+
     private String _text = null;
-    private bool _textValid = false;
+    private bool _refreshNeeded = true;
     private MeshInstance _textMesh = null;
     private Vector[] _vertices = new Vector[4];
     private Vector[] _focusRect = new Vector[4];
@@ -32,7 +35,20 @@ namespace OkuEngine
       set 
       { 
         _text = value;
-        _textValid = false;
+        _refreshNeeded = true;
+      }
+    }
+
+    /// <summary>
+    /// Gets or sets an icon image that is displayed on the button left to the text.
+    /// </summary>
+    public ImageContent Glyph
+    {
+      get { return _glyph; }
+      set 
+      {
+        _glyph = value;
+        _refreshNeeded = true;
       }
     }
 
@@ -49,6 +65,8 @@ namespace OkuEngine
       _focusRect[1] = new Vector(Area.Min.X + inset, Area.Max.Y - inset);
       _focusRect[2] = new Vector(Area.Max.X - inset, Area.Max.Y - inset);
       _focusRect[3] = new Vector(Area.Max.X - inset, Area.Min.Y + inset);
+
+      _refreshNeeded = true;
     }
 
     /// <summary>
@@ -78,18 +96,49 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Lazyly gets the mesh for the text.
+    /// Refreshes text and recalculates glyph and text positions if needed.
     /// </summary>
-    /// <returns>The mesh for the text.</returns>
-    private MeshInstance GetTextMesh()
+    private void Refresh()
     {
-      if (!_textValid || _textMesh == null)
+      if (_refreshNeeded)
       {
-        _textMesh = Container.Font.GetStringMesh(_text, 0, 0, Container.ColorMap.FontLight);
-        OkuMath.CenterAt(_textMesh.Vertices.Positions, Area.GetCenter());
-        _textValid = true;
+        _textMesh = null;
+
+        bool hasText = _text != null && _text.Length > 0;
+        bool hasGlyph = _glyph != null && _glyph.Width > 0 && _glyph.Height > 0;
+
+        float textWidth = 0;
+        float glyphWidth = 0;
+        float totalWidth = 0;
+        if (hasText)
+        {
+          _textMesh = Container.Font.GetStringMesh(_text, 0, 0, Container.ColorMap.FontLight);
+          textWidth = _textMesh.Vertices.Positions[_textMesh.Vertices.Positions.Length - 2].X - _textMesh.Vertices.Positions[0].X;
+          totalWidth += textWidth;
+        }
+
+        if (hasGlyph)
+        {
+          glyphWidth = _glyph.Width;
+          totalWidth += glyphWidth;
+        }
+
+        if (hasText && hasGlyph)
+          totalWidth += 5;
+
+        Vector center = Area.GetCenter();
+
+        if (hasText)
+          OkuMath.CenterAt(_textMesh.Vertices.Positions, new Vector(center.X + (totalWidth / 2.0f) - (textWidth / 2.0f), center.Y));
+
+        if (hasGlyph)
+        {
+          _glyphPos.X = center.X - (totalWidth / 2.0f) + (glyphWidth / 2.0f);
+          _glyphPos.Y = center.Y;
+        }
+
+        _refreshNeeded = false;
       }
-      return _textMesh;
     }
 
     /// <summary>
@@ -97,6 +146,8 @@ namespace OkuEngine
     /// </summary>
     public override void Render()
     {
+      Refresh();
+
       _colors[0] = _currentColorDark;
       _colors[1] = _currentColorLight;
       _colors[2] = _currentColorLight;
@@ -105,12 +156,14 @@ namespace OkuEngine
       OkuDrivers.Renderer.DrawMesh(_vertices, null, _colors, _vertices.Length, MeshMode.Quads, null);
       OkuDrivers.Renderer.DrawLines(_vertices, Container.ColorMap.BorderLight, _vertices.Length, 1.0f, VertexInterpretation.PolygonClosed);
 
-      GetTextMesh().Draw();
+      if (_textMesh != null)
+        _textMesh.Draw();
+
+      if (_glyph != null)
+        OkuDrivers.Renderer.DrawImage(_glyph, _glyphPos);
 
       if (_focused)
-      {
         OkuDrivers.Renderer.DrawLines(_focusRect, Container.ColorMap.FontDark, _focusRect.Length, 0.5f, VertexInterpretation.PolygonClosed);
-      }
     }
 
     public override void MouseEnter()

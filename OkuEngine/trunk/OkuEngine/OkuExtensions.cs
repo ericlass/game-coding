@@ -33,6 +33,11 @@ namespace OkuEngine
       return builder.ToString();
     }
 
+    /// <summary>
+    /// Converts the color array to a string.
+    /// </summary>
+    /// <param name="colors">The color array to convert.</param>
+    /// <returns>A string representation of the color array.</returns>
     public static string ToOkuString(this Color[] colors)
     {
       StringBuilder builder = new StringBuilder();
@@ -43,6 +48,32 @@ namespace OkuEngine
         builder.Append(colors[i].ToString());
       }
       return builder.ToString();
+    }
+
+    /// <summary>
+    /// Calculates the point in the array that is closest to the given point.
+    /// </summary>
+    /// <param name="vectors">The array of vectors.</param>
+    /// <param name="point">The point to find the closest point for.</param>
+    /// <param name="distance">The distance is of the closest point is returned here.</param>
+    /// <returns>The index of the closest point. -1 if vectors does not contain any points.</returns>
+    public static int ClosestPoint(this Vector[] vectors, Vector point, out float distance)
+    {
+      distance = 0.0f;
+
+      int closest = -1;
+      float nearest = float.MaxValue;
+      for (int i = 0; i < vectors.Length; i++)
+      {
+        float dist = (vectors[i] - point).Magnitude;
+        if (dist < nearest)
+        {
+          nearest = dist;
+          closest = i;
+        }
+      }
+      distance = nearest;
+      return closest;
     }
 
   }

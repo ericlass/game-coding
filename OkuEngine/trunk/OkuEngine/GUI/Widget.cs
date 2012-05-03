@@ -11,6 +11,7 @@ namespace OkuEngine
   {
     private int _id = KeySequence.NextValue;
     private Quad _area = new Quad();
+    private string _hintText = null;
 
     private WidgetContainer _container = null;
 
@@ -34,6 +35,16 @@ namespace OkuEngine
         _area = value;
         AreaChange();
       }
+    }
+
+    /// <summary>
+    /// Gets or sets the text that is displayed in the hint.
+    /// Null means: display no hint.
+    /// </summary>
+    public string HintText
+    {
+      get { return _hintText; }
+      set { _hintText = value; }
     }
 
     /// <summary>

@@ -61,6 +61,14 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Clear the dynamic array.
+    /// </summary>
+    public void Clear()
+    {
+      _count = 0;
+    }
+
+    /// <summary>
     /// Gets or sets the current size of the internal array. Note that settings the capacity
     /// trigger resizing the internal which really creates a new one.
     /// </summary>

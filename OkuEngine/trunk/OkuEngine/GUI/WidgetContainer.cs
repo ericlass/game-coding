@@ -146,7 +146,7 @@ namespace OkuEngine
         if (_hotWidget != null)
           _hotWidget.MouseLeave();
 
-        
+
         if (newHot != null)
           newHot.MouseEnter();
       }

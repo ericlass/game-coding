@@ -25,33 +25,36 @@ namespace OkuTest
       _gui = new WidgetContainer( new SpriteFont("Arial", 10, System.Drawing.FontStyle.Regular, true));
 
       ButtonWidget button = new ButtonWidget();
-      button.Area = new Quad(-50, -15, 100, 30);
+      button.Area = new Quad(5, 5, 100, 30);
       button.Text = "Button 1";
       _button = button;
 
       _gui.AddWidget(button);
 
+      ImageContent glyph = new ImageContent(".\\content\\orange_tile.png");
+
       button = new OkuEngine.ButtonWidget();
-      button.Area = new Quad(-50, -60, 100, 30);
+      button.Area = new Quad(5, 40, 100, 30);
       button.Text = "Button 2";
+      button.Glyph = glyph;
             
       _gui.AddWidget(button);
 
       LabelWidget label = new LabelWidget();
-      label.Area = new Quad(-50, 90, 100, 0);
+      label.Area = new Quad(5, 90, 100, 0);
       label.Text = "Label 1";
 
       _gui.AddWidget(label);
 
       _progress = new ProgressBarWidget();
-      _progress.Area = new Quad(-100, 25, 200, 20);
+      _progress.Area = new Quad(5, 95, 200, 20);
 
       _progress.Position = 40;
 
       _gui.AddWidget(_progress);
 
       TextBoxWidget text = new TextBoxWidget();
-      text.Area = new Quad(-100, 125, 200, 20);
+      text.Area = new Quad(5, 120, 200, 20);
 
       _gui.AddWidget(text);
     }

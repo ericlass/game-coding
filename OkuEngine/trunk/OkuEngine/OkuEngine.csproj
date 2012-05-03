@@ -61,7 +61,7 @@
     <Compile Include="Animation\Easing.cs" />
     <Compile Include="Animation\EasingController.cs" />
     <Compile Include="Animation\InertialMovement.cs" />
-    <Compile Include="ArrayList.cs" />
+    <Compile Include="DynamicArray.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="ConfigFile.cs" />
     <Compile Include="Content\Content.cs" />
