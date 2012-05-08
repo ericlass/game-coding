@@ -70,6 +70,7 @@
     <Compile Include="Geometry\EarClipper.cs" />
     <Compile Include="GUI\ButtonWidget.cs" />
     <Compile Include="GUI\ColorMap.cs" />
+    <Compile Include="GUI\HintWidget.cs" />
     <Compile Include="GUI\LabelWidget.cs" />
     <Compile Include="GUI\ProgressBarWidget.cs" />
     <Compile Include="GUI\TextBoxWidget.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="GUI\Widget.cs" />
     <Compile Include="Properties.cs" />
     <Compile Include="PropertiesEntry.cs" />
+    <Compile Include="Shaper\PolyEditorWidget.cs" />
     <Compile Include="Shaper\Shape.cs" />
     <Compile Include="VirtualFileSystem\VirtualFile.cs" />
     <Compile Include="VirtualFileSystem\VirtualFileSystem.cs" />

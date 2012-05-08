@@ -197,14 +197,6 @@ namespace OkuEngine
       _clicked = _active;
     }
 
-    public override void KeyDown(Keys key)
-    {
-    }
-
-    public override void KeyUp(System.Windows.Forms.Keys key)
-    {
-    }
-
     public override void Activate()
     {
       _active = true;

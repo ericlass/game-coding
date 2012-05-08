@@ -27,6 +27,7 @@ namespace OkuTest
       ButtonWidget button = new ButtonWidget();
       button.Area = new Quad(5, 5, 100, 30);
       button.Text = "Button 1";
+      button.HintText = "Hint 1";
       _button = button;
 
       _gui.AddWidget(button);
@@ -36,6 +37,7 @@ namespace OkuTest
       button = new OkuEngine.ButtonWidget();
       button.Area = new Quad(5, 40, 100, 30);
       button.Text = "Button 2";
+      button.HintText = "Hint 2";
       button.Glyph = glyph;
             
       _gui.AddWidget(button);
@@ -72,7 +74,7 @@ namespace OkuTest
       String activeText = _gui.ActiveWidget != null ? _gui.ActiveWidget.ID.ToString() : "None";
       String focusedText = _gui.FocusedWidget != null ? _gui.FocusedWidget.ID.ToString() : "None";
 
-      OkuDrivers.Renderer.Display.Text = "H: " + hotText + "; A: " + activeText + "; F: " + focusedText;
+      //OkuDrivers.Renderer.Display.Text = "H: " + hotText + "; A: " + activeText + "; F: " + focusedText;
 
       if (OkuDrivers.Input.Keyboard.KeyPressed(Keys.Add))
         _progress.Position = Math.Min(_progress.Position + 5, _progress.Max);
@@ -84,8 +86,8 @@ namespace OkuTest
     public override void Render(int pass)
     {
       _gui.Render();
-      Vector mousePos = OkuDrivers.Renderer.ScreenToWorld(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
-      OkuDrivers.Renderer.DrawPoint(mousePos, 4.0f, Color.Red);
+      //Vector mousePos = OkuDrivers.Renderer.ScreenToWorld(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
+      //OkuDrivers.Renderer.DrawPoint(mousePos, 4.0f, Color.Red);
     }
 
   }

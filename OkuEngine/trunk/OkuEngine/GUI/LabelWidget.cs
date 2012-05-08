@@ -32,15 +32,20 @@ namespace OkuEngine
       _textValid = false;
     }
 
+    protected virtual Color GetFontColor()
+    {
+      return Container.ColorMap.FontLight;
+    }
+
     /// <summary>
     /// Lazyly gets the mesh for the text.
     /// </summary>
     /// <returns>The mesh for the text.</returns>
-    private MeshInstance GetTextMesh()
+    protected MeshInstance GetTextMesh()
     {
       if (!_textValid || _textMesh == null)
       {
-        _textMesh = Container.Font.GetStringMesh(_text, Area.Min.X, Area.Min.Y, Container.ColorMap.FontLight);
+        _textMesh = Container.Font.GetStringMesh(_text, Area.Min.X, Area.Min.Y, GetFontColor());
         _textValid = true;
       }
       return _textMesh;
@@ -62,44 +67,5 @@ namespace OkuEngine
       GetTextMesh().Draw();
     }
 
-    public override void MouseEnter()
-    {
-    }
-
-    public override void MouseLeave()
-    {
-    }
-
-    public override void MouseDown(MouseButton button)
-    {
-    }
-
-    public override void MouseUp(MouseButton button)
-    {
-    }
-
-    public override void KeyDown(System.Windows.Forms.Keys key)
-    {
-    }
-
-    public override void KeyUp(System.Windows.Forms.Keys key)
-    {
-    }
-
-    public override void Activate()
-    {
-    }
-
-    public override void Deactivate()
-    {
-    }
-
-    public override void Focus()
-    {
-    }
-
-    public override void Unfocus()
-    {
-    }
   }
 }

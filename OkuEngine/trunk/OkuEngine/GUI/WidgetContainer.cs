@@ -15,9 +15,12 @@ namespace OkuEngine
     private Widget _hotWidget = null; //The widget that the mouse hovers over.
     private Widget _activeWidget = null; //The widget the left mouse button was pressed down on
     private Widget _focusedWidget = null; //The widget the left mouse button was pressed down AND raised up on
+    private HintWidget _hint = null; 
     private SpriteFont _font = null;
     private ColorMap _colorMap = ColorMap.Flash;
     private float _cursorBlinkTime = 0.5f;
+    private float _hoverTime = 0.0f;
+    private Vector _hintPos = Vector.Zero;
 
     /// <summary>
     /// Creates a new widget container with the system default font.
@@ -100,6 +103,23 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Gets the hint widget.
+    /// </summary>
+    private HintWidget Hint
+    {
+      get
+      {
+        if (_hint == null)
+        {
+          _hint = new HintWidget();
+          _hint.Visible = false;
+          AddWidget(_hint);
+        }
+        return _hint;
+      }
+    }
+
+    /// <summary>
     /// Adds the given widget to this container.
     /// </summary>
     /// <param name="widget">The widget to add.</param>
@@ -127,16 +147,27 @@ namespace OkuEngine
     /// <param name="dt">The time passed since the last frame.</param>
     public void Update(float dt)
     {
-      Vector mousePos = OkuDrivers.Renderer.ScreenToClient(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
+      //Get mouse position in screen space
+      Vector mousePos = OkuDrivers.Renderer.ScreenToDisplay(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
+
+      //Update hint position
+      if (!Hint.Visible)
+      {
+        _hintPos = mousePos;
+        _hintPos.Y -= 20;
+      }
 
       //Find new hot widget
       Widget newHot = null;
       foreach (Widget widget in _widgets)
       {
-        widget.Update(dt);
-        if (newHot == null && Intersections.PointInAABB(mousePos, widget.Area.Min, widget.Area.Max))
+        if (widget != Hint)
         {
-          newHot = widget;
+          widget.Update(dt);
+          if (newHot == null && Intersections.PointInAABB(mousePos, widget.Area.Min, widget.Area.Max))
+          {
+            newHot = widget;
+          }
         }
       }
 
@@ -205,6 +236,12 @@ namespace OkuEngine
             }
           }
         }
+
+        //Forward mouse wheel scrolling
+        if (OkuDrivers.Input.Mouse.WheelSpinned)
+        {
+          newHot.MouseWheel(OkuDrivers.Input.Mouse.WheelDelta);
+        }
       }
 
       _hotWidget = newHot;
@@ -221,10 +258,28 @@ namespace OkuEngine
           _focusedWidget.KeyUp(key);
       }
 
+      //Deactivate active widget if mouse button is raised
       if (_activeWidget != null && OkuDrivers.Input.Mouse.ButtonRaised(MouseButton.Left))
       {
         _activeWidget.Deactivate();
         _activeWidget = null;
+      }
+
+      //Handle display and update of hint
+      if (newHot != null && newHot == _hotWidget)
+      {
+        _hoverTime -= dt;
+        if (!Hint.Visible && newHot != null && _hoverTime <= 0.0f && newHot.HintText != null && newHot.HintText.Length > 0)
+        {
+          Hint.Text = newHot.HintText;
+          Hint.Area = new Quad(_hintPos, Vector.Zero);
+          Hint.Visible = true;
+        }
+      }
+      else
+      {
+        _hoverTime = 0.5f;
+        Hint.Visible = false;
       }
     }
 
@@ -236,7 +291,11 @@ namespace OkuEngine
     {
       OkuDrivers.Renderer.BeginScreenSpace();
       foreach (Widget widget in _widgets)
-        widget.Render();
+      {
+        if (widget.Visible)
+          widget.Render();
+      }
+
       OkuDrivers.Renderer.EndScreenSpace();
     }
 

@@ -7,11 +7,12 @@ namespace OkuEngine
   /// <summary>
   /// Base class for all widgets.
   /// </summary>
-  public abstract class Widget
+  public class Widget
   {
     private int _id = KeySequence.NextValue;
     private Quad _area = new Quad();
     private string _hintText = null;
+    private bool _visible = true;
 
     private WidgetContainer _container = null;
 
@@ -48,6 +49,15 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Gets or sets if the widget is visible or not.
+    /// </summary>
+    public bool Visible
+    {
+      get { return _visible; }
+      set { _visible = value; }
+    }
+
+    /// <summary>
     /// Is called when the area of the widget changes.
     /// </summary>
     protected virtual void AreaChange()
@@ -66,68 +76,100 @@ namespace OkuEngine
     /// Is called every frame to enable widgets to do animations.
     /// </summary>
     /// <param name="dt">The time passed since the last frame in seconds.</param>
-    public abstract void Update(float dt);
+    public virtual void Update(float dt)
+    {
+    }
 
     /// <summary>
     /// Is called when the widget has to render itself.
     /// </summary>
-    public abstract void Render();
+    public virtual void Render()
+    {
+    }
 
     /// <summary>
     /// Is called when the mouse cursor enters the area of the widget.
     /// </summary>
-    public abstract void MouseEnter();
+    public virtual void MouseEnter()
+    {
+    }
 
     /// <summary>
     /// Is called when the mouse cursor leaves the area of the widget.
     /// </summary>
-    public abstract void MouseLeave();
+    public virtual void MouseLeave()
+    {
+    }
 
     /// <summary>
     /// Is called when the mouse cursor is in the widgets area and 
     /// a mouse button is pressed down.
     /// </summary>
     /// <param name="button">The mouse button that was pressed.</param>
-    public abstract void MouseDown(MouseButton button);
+    public virtual void MouseDown(MouseButton button)
+    {
+    }
 
     /// <summary>
     /// Is called when the mouse cursor is in the widgets area and 
     /// a mouse button is raised up.
     /// </summary>
     /// <param name="button">The mouse button that was raised.</param>
-    public abstract void MouseUp(MouseButton button);
+    public virtual void MouseUp(MouseButton button)
+    {
+    }
+
+    /// <summary>
+    /// Is called when the mouse wheel was scrolled up or down.
+    /// </summary>
+    /// <param name="delta">Determines how far the wheel has been scrolled in which direction. Positive means forward, Negative means backwards scrolling.</param>
+    public virtual void MouseWheel(float delta)
+    {
+    }
 
     /// <summary>
     /// Is called when the widget is focused and a keyboard key is pressed.
     /// </summary>
     /// <param name="key">The key that was pressed.</param>
-    public abstract void KeyDown(Keys key);
+    public virtual void KeyDown(Keys key)
+    {
+    }
 
     /// <summary>
     /// Is called when the widget is focused and a keyboard key is raised up.
     /// </summary>
     /// <param name="key">The key that was raised.</param>
-    public abstract void KeyUp(Keys key);
+    public virtual void KeyUp(Keys key)
+    {
+    }
 
     /// <summary>
     /// Is called when the widget is activated.
     /// </summary>
-    public abstract void Activate();
+    public virtual void Activate()
+    {
+    }
 
     /// <summary>
     /// Is called when the widget is deactivated.
     /// </summary>
-    public abstract void Deactivate();
+    public virtual void Deactivate()
+    {
+    }
 
     /// <summary>
     /// Is called when the widget is focused.
     /// </summary>
-    public abstract void Focus();
+    public virtual void Focus()
+    {
+    }
 
     /// <summary>
     /// Is called when the widget is unfocused.
     /// </summary>
-    public abstract void Unfocus();
+    public virtual void Unfocus()
+    {
+    }
 
     /// <summary>
     /// Is called once when the widget is added to the container.

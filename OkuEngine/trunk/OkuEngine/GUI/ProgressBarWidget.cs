@@ -54,10 +54,6 @@ namespace OkuEngine
       _vertices[3] = new Vector(Area.Max.X, Area.Min.Y);
     }
 
-    public override void Update(float dt)
-    {
-    }
-
     /// <summary>
     /// Renders the progress bar.
     /// </summary>
@@ -91,15 +87,5 @@ namespace OkuEngine
       OkuDrivers.Renderer.DrawLines(_vertices, Container.ColorMap.BorderLight, _vertices.Length, 1.0f, VertexInterpretation.PolygonClosed);
     }
 
-    public override void MouseEnter() { }
-    public override void MouseLeave() { }
-    public override void MouseDown(MouseButton button) { }
-    public override void MouseUp(MouseButton button) { }
-    public override void KeyDown(System.Windows.Forms.Keys key) { }
-    public override void KeyUp(System.Windows.Forms.Keys key) { }
-    public override void Activate() { }
-    public override void Deactivate() { }
-    public override void Focus() { }
-    public override void Unfocus() { }
   }
 }

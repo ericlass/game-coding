@@ -1125,7 +1125,7 @@ namespace OkuEngine
       }
     }
     
-    public Vector ScreenToClient(int x, int y)
+    public Vector ScreenToDisplay(int x, int y)
     {
       Point client = Display.PointToClient(new Point(x, y));
       return new Vector(client.X, Display.ClientSize.Height - client.Y);
@@ -1133,7 +1133,7 @@ namespace OkuEngine
 
     public Vector ScreenToWorld(int x, int y)
     {
-      return _viewPort.ScreenSpaceMatrix.Transform(ScreenToClient(x, y));
+      return _viewPort.ScreenSpaceMatrix.Transform(ScreenToDisplay(x, y));
     }
 
     public void BeginScreenSpace()

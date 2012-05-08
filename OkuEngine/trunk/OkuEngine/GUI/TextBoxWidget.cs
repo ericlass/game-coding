@@ -96,19 +96,10 @@ namespace OkuEngine
       }
     }
 
-    public override void MouseEnter() { }
-    public override void MouseLeave() { }
-    public override void MouseDown(MouseButton button) { }
-    public override void MouseUp(MouseButton button) { }
-
     public override void KeyDown(Keys key)
     {
       _textMeshValid = !_processor.ProcessKey(key);
     }
-
-    public override void KeyUp(Keys key) { }
-    public override void Activate() { }
-    public override void Deactivate() { }
 
     public override void Focus()
     {
