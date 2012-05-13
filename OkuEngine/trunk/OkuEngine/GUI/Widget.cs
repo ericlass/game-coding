@@ -73,6 +73,26 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Computes the location of the given display space point in client (widget) space.
+    /// </summary>
+    /// <param name="point">The display space point to convert.</param>
+    /// <returns>The location of the given display space point in client space.</returns>
+    public Vector PointToClient(Vector point)
+    {
+      return point - _area.Min;
+    }
+
+    /// <summary>
+    /// Computes the location of the given client point in display space.
+    /// </summary>
+    /// <param name="point">The client space point to convert.</param>
+    /// <returns>The location of the given client space point in display space.</returns>
+    public Vector PointToDisplay(Vector point)
+    {
+      return _area.Min + point;
+    }
+
+    /// <summary>
     /// Is called every frame to enable widgets to do animations.
     /// </summary>
     /// <param name="dt">The time passed since the last frame in seconds.</param>
@@ -82,8 +102,9 @@ namespace OkuEngine
 
     /// <summary>
     /// Is called when the widget has to render itself.
+    /// <param name="canvas">The drawing canvas the widget can draw to.</param>
     /// </summary>
-    public virtual void Render()
+    public virtual void Render(Canvas canvas)
     {
     }
 

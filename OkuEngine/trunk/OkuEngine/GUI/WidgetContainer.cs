@@ -21,6 +21,7 @@ namespace OkuEngine
     private float _cursorBlinkTime = 0.5f;
     private float _hoverTime = 0.0f;
     private Vector _hintPos = Vector.Zero;
+    private Canvas _canvas = new Canvas(new Quad());
 
     /// <summary>
     /// Creates a new widget container with the system default font.
@@ -293,7 +294,10 @@ namespace OkuEngine
       foreach (Widget widget in _widgets)
       {
         if (widget.Visible)
-          widget.Render();
+        {
+          _canvas.Area = widget.Area;
+          widget.Render(_canvas);
+        }
       }
 
       OkuDrivers.Renderer.EndScreenSpace();

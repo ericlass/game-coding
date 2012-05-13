@@ -48,43 +48,43 @@ namespace OkuEngine
     protected override void AreaChange()
     {
       //If area is changed, recalculate vertices
-      _vertices[0] = Area.Min;
-      _vertices[1] = new Vector(Area.Min.X, Area.Max.Y);
-      _vertices[2] = Area.Max;
-      _vertices[3] = new Vector(Area.Max.X, Area.Min.Y);
+      _vertices[0] = Vector.Zero;
+      _vertices[1] = new Vector(0, Area.Height);
+      _vertices[2] = new Vector(Area.Width, Area.Height);
+      _vertices[3] = new Vector(Area.Width, 0);
     }
 
     /// <summary>
     /// Renders the progress bar.
     /// </summary>
-    public override void Render()
+    public override void Render(Canvas canvas)
     {
       _colors[0] = Container.ColorMap.WidgetLight;
       _colors[1] = Container.ColorMap.WidgetDark;
       _colors[2] = Container.ColorMap.WidgetDark;
       _colors[3] = Container.ColorMap.WidgetLight;
 
-      OkuDrivers.Renderer.DrawMesh(_vertices, null, _colors, _vertices.Length, MeshMode.Quads, null);
+      canvas.DrawMesh(_vertices, null, _colors, _vertices.Length, MeshMode.Quads, null);
 
       if (_position > _min)
       {
         float ratio = _position / _max;
-        float right = Area.Min.X + (Area.Width * ratio);
+        float right = Area.Width * ratio;
 
         _progressRect[0] = _vertices[0];
         _progressRect[1] = _vertices[1];
-        _progressRect[2] = new Vector(right, Area.Max.Y);
-        _progressRect[3] = new Vector(right, Area.Min.Y);
+        _progressRect[2] = new Vector(right, Area.Height);
+        _progressRect[3] = new Vector(right, 0);
 
         _colors[0] = Container.ColorMap.ActiveDark;
         _colors[1] = Container.ColorMap.ActiveLight;
         _colors[2] = Container.ColorMap.ActiveLight;
         _colors[3] = Container.ColorMap.ActiveDark;
 
-        OkuDrivers.Renderer.DrawMesh(_progressRect, null, _colors, _progressRect.Length, MeshMode.Quads, null);
+        canvas.DrawMesh(_progressRect, null, _colors, _progressRect.Length, MeshMode.Quads, null);
       }
 
-      OkuDrivers.Renderer.DrawLines(_vertices, Container.ColorMap.BorderLight, _vertices.Length, 1.0f, VertexInterpretation.PolygonClosed);
+      canvas.DrawLines(_vertices, Container.ColorMap.BorderLight, _vertices.Length, 1.0f, VertexInterpretation.PolygonClosed);
     }
 
   }

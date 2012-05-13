@@ -1,0 +1,142 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace OkuEngine
+{
+  /// <summary>
+  /// Used to draw to a specific rectangle area in display space.
+  /// The area to be used is given in the Area property.
+  /// All drawing is clipped to the drawing area.
+  /// </summary>
+  public class Canvas
+  {
+    private Quad _area;
+    private DynamicArray<Vector> _vertices = new DynamicArray<Vector>();
+    private DynamicArray<Color> _colors = new DynamicArray<Color>();
+
+    /// <summary>
+    /// Creates a new Canvas with the given area.
+    /// </summary>
+    /// <param name="area"></param>
+    public Canvas(Quad area)
+    {
+      _area = area;
+    }
+    
+    /// <summary>
+    /// Gets or sets the drawing area.
+    /// </summary>
+    public Quad Area
+    {
+      get { return _area; }
+      set { _area = value; }
+    }
+
+    /// <summary>
+    /// Fills thea area defined by the given vectors.
+    /// </summary>
+    /// <param name="min">The minimum vector.</param>
+    /// <param name="max">The maximum vector.</param>
+    /// <param name="color">The color of the rectangle.</param>
+    public void FillRect(Vector min, Vector max, Color color)
+    {
+      //Convert to display space
+      min += _area.Min;
+      max += _area.Min;
+
+      //TODO: Clipping
+
+      _vertices.Clear();
+      _vertices.Add(min);
+      _vertices.Add(new Vector(min.X, max.Y));
+      _vertices.Add(max);
+      _vertices.Add(new Vector(max.X, min.Y));
+
+      _colors.Clear();
+      for (int i = 0; i < 4; i++)
+        _colors.Add(color);
+
+      OkuDrivers.Renderer.DrawMesh(_vertices.InternalArray, null, _colors.InternalArray, 4, MeshMode.Quads, null);
+    }
+
+    /// <summary>
+    /// Draws a generic mesh using the given parameters.
+    /// </summary>
+    /// <param name="points">The coordinates of the vertices of the mesh in world space. Must not be null.</param>
+    /// <param name="texCoords">The normalized texture coordinates of the vertices. Must be same length as points. If null, no texture is applied.</param>
+    /// <param name="colors">The colors of the vertices. Must be same length as points. If null, white is used as default color.</param>
+    /// <param name="count">The number of points to draw from the given array.</param>
+    /// <param name="mode">The mode used to create polygons from the given vertices.</param>
+    /// <param name="texture">The texture to be applied. If not null, texCoords must also be given.</param>
+    public void DrawMesh(Vector[] points, Vector[] texCoords, Color[] colors, int count, MeshMode mode, ImageContent texture)
+    {
+      _vertices.Clear();
+      int min = Math.Min(points.Length, count);
+      for (int i = 0; i < min; i++)
+        _vertices.Add(points[i] + _area.Min);
+
+      //TODO: Clipping
+
+      OkuDrivers.Renderer.DrawMesh(_vertices.InternalArray, texCoords, colors, count, mode, texture);
+    }
+
+    /// <summary>
+    /// Draws the given mesh instance.
+    /// </summary>
+    /// <param name="mesh">The mesh to be drawn.</param>
+    public void DrawMesh(MeshInstance mesh)
+    {
+      DrawMesh(mesh.Vertices.Positions, mesh.Vertices.TexCoords, mesh.Vertices.Colors, mesh.Vertices.Positions.Length, mesh.Mode, mesh.Texture);
+    }
+
+    /// <summary>
+    /// Draws the given image content at the given position.
+    /// </summary>
+    /// <param name="content">The content to be drawn.</param>
+    /// <param name="position">The position to draw the image to in screen space pixels.</param>
+    public void DrawImage(ImageContent image, Vector position)
+    {
+      position += _area.Min;
+      //TODO: Clipping
+      OkuDrivers.Renderer.DrawImage(image, position);
+    }
+
+    /// <summary>
+    /// Draws a line from start to end with the given width and color.
+    /// </summary>
+    /// <param name="start">The start of the line.</param>
+    /// <param name="end">The end of the line.</param>
+    /// <param name="width">The width of the line in pixels.</param>
+    /// <param name="color">The color of the line.</param>
+    public void DrawLine(Vector start, Vector end, float width, Color color)
+    {
+      start += _area.Min;
+      end += _area.Min;
+      //TODO: Clipping
+      OkuDrivers.Renderer.DrawLine(start, end, width, color);
+    }
+
+    /// <summary>
+    /// Draws a series of lines using the given vertices with the given width and color.
+    /// How the vertices are interpreted is specified by interpretation.
+    /// </summary>
+    /// <param name="vertices">The vertices to draw lines with.</param>
+    /// <param name="color">The color of the lines.</param>
+    /// <param name="count">The number of lines to draw from the given array.</param>
+    /// <param name="width">The width of the lines in pixel.</param>
+    /// <param name="interpretation">Specifies how to interpret the vertices.</param>
+    public void DrawLines(Vector[] vertices, Color color, int count, float width, VertexInterpretation interpretation)
+    {
+      _vertices.Clear();
+      int min = Math.Min(vertices.Length, count);
+      for (int i = 0; i < min; i++)
+        _vertices.Add(vertices[i] + _area.Min);
+
+      //TODO: Clipping
+      OkuDrivers.Renderer.DrawLines(_vertices.InternalArray, color, count, width, interpretation);
+    }
+
+  }
+}

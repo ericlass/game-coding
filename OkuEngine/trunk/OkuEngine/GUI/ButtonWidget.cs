@@ -55,16 +55,16 @@ namespace OkuEngine
     protected override void AreaChange()
     {
       //If area is changed, recalculate vertices
-      _vertices[0] = Area.Min;
-      _vertices[1] = new Vector(Area.Min.X, Area.Max.Y);
-      _vertices[2] = Area.Max;
-      _vertices[3] = new Vector(Area.Max.X, Area.Min.Y);
+      _vertices[0] = Vector.Zero;
+      _vertices[1] = new Vector(0, Area.Height);
+      _vertices[2] = new Vector(Area.Width, Area.Height);
+      _vertices[3] = new Vector(Area.Width, 0);
 
       float inset = 3;
-      _focusRect[0] = new Vector(Area.Min.X + inset, Area.Min.Y + inset);
-      _focusRect[1] = new Vector(Area.Min.X + inset, Area.Max.Y - inset);
-      _focusRect[2] = new Vector(Area.Max.X - inset, Area.Max.Y - inset);
-      _focusRect[3] = new Vector(Area.Max.X - inset, Area.Min.Y + inset);
+      _focusRect[0] = new Vector(_vertices[0].X + inset, _vertices[0].Y + inset);
+      _focusRect[1] = new Vector(_vertices[1].X + inset, _vertices[1].Y - inset);
+      _focusRect[2] = new Vector(_vertices[2].X - inset, _vertices[2].Y - inset);
+      _focusRect[3] = new Vector(_vertices[3].X - inset, _vertices[3].Y + inset);
 
       _refreshNeeded = true;
     }
@@ -126,7 +126,7 @@ namespace OkuEngine
         if (hasText && hasGlyph)
           totalWidth += 5;
 
-        Vector center = Area.GetCenter();
+        Vector center = new Vector(Area.Width / 2.0f, Area.Height / 2.0f);
 
         if (hasText)
           OkuMath.CenterAt(_textMesh.Vertices.Positions, new Vector(center.X + (totalWidth / 2.0f) - (textWidth / 2.0f), center.Y));
@@ -144,7 +144,7 @@ namespace OkuEngine
     /// <summary>
     /// Renders the button depending on its state.
     /// </summary>
-    public override void Render()
+    public override void Render(Canvas canvas)
     {
       Refresh();
 
@@ -153,17 +153,17 @@ namespace OkuEngine
       _colors[2] = _currentColorLight;
       _colors[3] = _currentColorDark;
 
-      OkuDrivers.Renderer.DrawMesh(_vertices, null, _colors, _vertices.Length, MeshMode.Quads, null);
-      OkuDrivers.Renderer.DrawLines(_vertices, Container.ColorMap.BorderLight, _vertices.Length, 1.0f, VertexInterpretation.PolygonClosed);
+      canvas.DrawMesh(_vertices, null, _colors, _vertices.Length, MeshMode.Quads, null);
+      canvas.DrawLines(_vertices, Container.ColorMap.BorderLight, _vertices.Length, 1.0f, VertexInterpretation.PolygonClosed);
 
       if (_textMesh != null)
-        _textMesh.Draw();
+        canvas.DrawMesh(_textMesh);
 
       if (_glyph != null)
-        OkuDrivers.Renderer.DrawImage(_glyph, _glyphPos);
+        canvas.DrawImage(_glyph, _glyphPos);
 
       if (_focused)
-        OkuDrivers.Renderer.DrawLines(_focusRect, Container.ColorMap.FontDark, _focusRect.Length, 0.5f, VertexInterpretation.PolygonClosed);
+        canvas.DrawLines(_focusRect, Container.ColorMap.FontDark, _focusRect.Length, 0.5f, VertexInterpretation.PolygonClosed);
     }
 
     public override void MouseEnter()

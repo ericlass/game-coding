@@ -70,12 +70,12 @@ namespace OkuEngine.Shaper
 
     private Vector DisplayToPoly(Vector point)
     {
-      return ClientToPoly(point - Area.Min);
+      return ClientToPoly( PointToClient(point));
     }
 
     private Vector PolyToDisplay(Vector point)
     {
-      return PolyToClient(point) + Area.Min;
+      return PointToDisplay(PolyToClient(point));
     }
 
     public override void Update(float dt)
@@ -89,7 +89,7 @@ namespace OkuEngine.Shaper
       }
     }
 
-    public override void Render()
+    public override void Render(Canvas canvas)
     {
       OkuDrivers.Renderer.DrawLines(_vertices, Container.ColorMap.BorderLight, _vertices.Length, 1.0f, VertexInterpretation.PolygonClosed);
       if (_hot)

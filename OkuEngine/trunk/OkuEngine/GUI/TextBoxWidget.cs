@@ -39,18 +39,18 @@ namespace OkuEngine
     protected override void AreaChange()
     {
       //If area is changed, recalculate vertices
-      _vertices[0] = Area.Min;
-      _vertices[1] = new Vector(Area.Min.X, Area.Max.Y);
-      _vertices[2] = Area.Max;
-      _vertices[3] = new Vector(Area.Max.X, Area.Min.Y);
+      _vertices[0] = Vector.Zero;
+      _vertices[1] = new Vector(0, Area.Height);
+      _vertices[2] = new Vector(Area.Width, Area.Height);
+      _vertices[3] = new Vector(Area.Width, 0);
     }
 
     private MeshInstance GetTextMesh()
     {
       if (!_textMeshValid || _textMesh == null)
       {
-        _textOffset.X = Area.Min.X + 4;
-        _textOffset.Y = Area.Max.Y - ((Area.Height - Container.Font.Height) / 2.0f);
+        _textOffset.X = 4;
+        _textOffset.Y = Area.Height - (Area.Height - Container.Font.Height) / 2.0f;
 
         _textMesh = Container.Font.GetStringMesh(_processor.Text, _textOffset.X, _textOffset.Y, Container.ColorMap.GetContrastFontColor(Container.ColorMap.WindowLight));
         _textMeshValid = true;
@@ -71,17 +71,17 @@ namespace OkuEngine
       }
     }
 
-    public override void Render()
+    public override void Render(Canvas canvas)
     {
       _colors[0] = Container.ColorMap.WindowLight;
       _colors[1] = Container.ColorMap.WindowDark;
       _colors[2] = Container.ColorMap.WindowDark;
       _colors[3] = Container.ColorMap.WindowLight;
 
-      OkuDrivers.Renderer.DrawMesh(_vertices, null, _colors, _vertices.Length, MeshMode.Quads, null);
-      OkuDrivers.Renderer.DrawLines(_vertices, Container.ColorMap.BorderLight, _vertices.Length, 1.0f, VertexInterpretation.PolygonClosed);
+      canvas.DrawMesh(_vertices, null, _colors, _vertices.Length, MeshMode.Quads, null);
+      canvas.DrawLines(_vertices, Container.ColorMap.BorderLight, _vertices.Length, 1.0f, VertexInterpretation.PolygonClosed);
 
-      GetTextMesh().Draw();
+      canvas.DrawMesh(GetTextMesh());
 
       //Draw cursor only if widget is focused
       if (_focused && _cursorVisible)
@@ -92,7 +92,7 @@ namespace OkuEngine
 
         cursorX += _textOffset.X;
 
-        OkuDrivers.Renderer.DrawLine(new Vector(cursorX, _textOffset.Y), new Vector(cursorX, _textOffset.Y - Container.Font.Height), 1.0f, Color.Black);
+        canvas.DrawLine(new Vector(cursorX, _textOffset.Y), new Vector(cursorX, _textOffset.Y - Container.Font.Height), 1.0f, Color.Black);
       }
     }
 

@@ -45,7 +45,7 @@ namespace OkuEngine
     {
       if (!_textValid || _textMesh == null)
       {
-        _textMesh = Container.Font.GetStringMesh(_text, Area.Min.X, Area.Min.Y, GetFontColor());
+        _textMesh = Container.Font.GetStringMesh(_text, 0, 0, GetFontColor());
         _textValid = true;
       }
       return _textMesh;
@@ -62,9 +62,9 @@ namespace OkuEngine
     /// <summary>
     /// Renders the label.
     /// </summary>
-    public override void Render()
+    public override void Render(Canvas canvas)
     {
-      GetTextMesh().Draw();
+      canvas.DrawMesh(GetTextMesh());
     }
 
   }

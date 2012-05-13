@@ -69,6 +69,7 @@
     <Compile Include="Converter.cs" />
     <Compile Include="Geometry\EarClipper.cs" />
     <Compile Include="GUI\ButtonWidget.cs" />
+    <Compile Include="GUI\Canvas.cs" />
     <Compile Include="GUI\ColorMap.cs" />
     <Compile Include="GUI\HintWidget.cs" />
     <Compile Include="GUI\LabelWidget.cs" />

@@ -35,17 +35,17 @@ namespace OkuEngine
       _vertices[3].Y = min.Y;
     }
 
-    public override void Render()
+    public override void Render(Canvas canvas)
     {
       _colors[0] = Container.ColorMap.WindowLight;
       _colors[1] = Container.ColorMap.WindowLight;
       _colors[2] = Container.ColorMap.WindowLight;
       _colors[3] = Container.ColorMap.WindowLight;
 
-      OkuDrivers.Renderer.DrawMesh(_vertices, null, _colors, _vertices.Length, MeshMode.Quads, null);
-      OkuDrivers.Renderer.DrawLines(_vertices, Container.ColorMap.BorderLight, _vertices.Length, 1.0f, VertexInterpretation.PolygonClosed);
+      canvas.DrawMesh(_vertices, null, _colors, _vertices.Length, MeshMode.Quads, null);
+      canvas.DrawLines(_vertices, Container.ColorMap.BorderLight, _vertices.Length, 1.0f, VertexInterpretation.PolygonClosed);
 
-      base.Render();
+      base.Render(canvas);
     }
   }
 }

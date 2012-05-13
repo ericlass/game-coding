@@ -30,7 +30,6 @@ namespace OkuEngine
 
     private int _renderPasses = 0; //The number of render passes. 0 means default rendering is done without any frame buffers.
     private int[] _passTargets = null; //The number of render targets for each pass.
-    private int _currentPass = 0;
 
     private int _fbo = 0; //The opengl name of the frame buffer object
     private int[,] _colorBuffers = null; //The opengl names for the color buffers for each render pass
