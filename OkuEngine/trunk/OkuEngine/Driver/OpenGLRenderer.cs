@@ -1147,5 +1147,16 @@ namespace OkuEngine
       UpdateGLViewPort();
     }
 
+    public void SetScissorRectangle(int left, int right, int width, int height)
+    {
+      Gl.glEnable(Gl.GL_SCISSOR_TEST);
+      Gl.glScissor(left, right, width, height);
+    }
+
+    public void ClearScissorRectangle()
+    {
+      Gl.glDisable(Gl.GL_SCISSOR_TEST);
+    }
+
   }
 }

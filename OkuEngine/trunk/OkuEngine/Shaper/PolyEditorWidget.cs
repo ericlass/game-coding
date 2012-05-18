@@ -52,10 +52,10 @@ namespace OkuEngine.Shaper
 
     protected override void AreaChange()
     {
-      _vertices[0] = new Vector(Area.Min.X, Area.Max.Y);
-      _vertices[1] = Area.Max;
-      _vertices[2] = new Vector(Area.Max.X, Area.Min.Y);
-      _vertices[3] = Area.Min;
+      _vertices[0] = Vector.Zero;
+      _vertices[1] = new Vector(0, Area.Height);
+      _vertices[2] = new Vector(Area.Width, Area.Height);
+      _vertices[3] = new Vector(Area.Width, 0);
     }
 
     private Vector ClientToPoly(Vector point)
@@ -68,20 +68,10 @@ namespace OkuEngine.Shaper
       return (point * _viewScale) + _viewOffset;
     }
 
-    private Vector DisplayToPoly(Vector point)
-    {
-      return ClientToPoly( PointToClient(point));
-    }
-
-    private Vector PolyToDisplay(Vector point)
-    {
-      return PointToDisplay(PolyToClient(point));
-    }
-
     public override void Update(float dt)
     {
       Vector mouse = OkuDrivers.Renderer.ScreenToDisplay(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
-      _mousePos = DisplayToPoly(mouse);
+      _mousePos = PointToClient(mouse);
 
       if (_panning)
       {
@@ -91,12 +81,12 @@ namespace OkuEngine.Shaper
 
     public override void Render(Canvas canvas)
     {
-      OkuDrivers.Renderer.DrawLines(_vertices, Container.ColorMap.BorderLight, _vertices.Length, 1.0f, VertexInterpretation.PolygonClosed);
+      canvas.DrawLines(_vertices, Container.ColorMap.BorderLight, _vertices.Length, 1.0f, VertexInterpretation.PolygonClosed);
       if (_hot)
-        OkuDrivers.Renderer.DrawPoint(PolyToDisplay(_mousePos), 4.0f, Color.Red);
+        canvas.DrawPoint(_mousePos, 4.0f, Color.Red);
 
-      OkuDrivers.Renderer.DrawLine(PolyToDisplay(Vector.Zero), PolyToDisplay(new Vector(25, 0)), 1.0f, Color.Red);
-      OkuDrivers.Renderer.DrawLine(PolyToDisplay(Vector.Zero), PolyToDisplay(new Vector(0, 25)), 1.0f, Color.Green);
+      canvas.DrawLine(PolyToClient(Vector.Zero), PolyToClient(new Vector(25, 0)), 1.0f, Color.Red);
+      canvas.DrawLine(PolyToClient(Vector.Zero), PolyToClient(new Vector(0, 25)), 1.0f, Color.Green);
     }
 
     public override void MouseEnter()

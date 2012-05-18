@@ -9,14 +9,14 @@ namespace OkuEngine
   {
     private bool _enabled = true;
     private Vector _force = Vector.Zero;
-    private Quad _area;
+    private AABB _area;
 
     public ForceEffector()
     {
-      _area = new Quad(-10, -10, 20, 20);
+      _area = new AABB(-10, -10, 20, 20);
     }
 
-    public ForceEffector(Quad area)
+    public ForceEffector(AABB area)
     {
       _area = area;
     }
@@ -33,7 +33,7 @@ namespace OkuEngine
       set { _force = value; }
     }
 
-    public Quad Area
+    public AABB Area
     {
       get { return _area; }
       set { _area = value; }

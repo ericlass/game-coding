@@ -21,7 +21,7 @@ namespace OkuEngine
     private float _cursorBlinkTime = 0.5f;
     private float _hoverTime = 0.0f;
     private Vector _hintPos = Vector.Zero;
-    private Canvas _canvas = new Canvas(new Quad());
+    private Canvas _canvas = new Canvas(new AABB());
 
     /// <summary>
     /// Creates a new widget container with the system default font.
@@ -273,7 +273,7 @@ namespace OkuEngine
         if (!Hint.Visible && newHot != null && _hoverTime <= 0.0f && newHot.HintText != null && newHot.HintText.Length > 0)
         {
           Hint.Text = newHot.HintText;
-          Hint.Area = new Quad(_hintPos, Vector.Zero);
+          Hint.Area = new AABB(_hintPos, Vector.Zero);
           Hint.Visible = true;
         }
       }
@@ -296,10 +296,12 @@ namespace OkuEngine
         if (widget.Visible)
         {
           _canvas.Area = widget.Area;
+          OkuDrivers.Renderer.SetScissorRectangle((int)widget.Area.Min.X, (int)widget.Area.Min.Y, (int)widget.Area.Width, (int)widget.Area.Height);
           widget.Render(_canvas);
         }
       }
 
+      OkuDrivers.Renderer.ClearScissorRectangle();
       OkuDrivers.Renderer.EndScreenSpace();
     }
 

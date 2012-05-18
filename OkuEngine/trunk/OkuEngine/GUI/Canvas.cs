@@ -12,7 +12,7 @@ namespace OkuEngine
   /// </summary>
   public class Canvas
   {
-    private Quad _area;
+    private AABB _area;
     private DynamicArray<Vector> _vertices = new DynamicArray<Vector>();
     private DynamicArray<Color> _colors = new DynamicArray<Color>();
 
@@ -20,7 +20,7 @@ namespace OkuEngine
     /// Creates a new Canvas with the given area.
     /// </summary>
     /// <param name="area"></param>
-    public Canvas(Quad area)
+    public Canvas(AABB area)
     {
       _area = area;
     }
@@ -28,7 +28,7 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets the drawing area.
     /// </summary>
-    public Quad Area
+    public AABB Area
     {
       get { return _area; }
       set { _area = value; }
@@ -136,6 +136,19 @@ namespace OkuEngine
 
       //TODO: Clipping
       OkuDrivers.Renderer.DrawLines(_vertices.InternalArray, color, count, width, interpretation);
+    }
+
+    /// <summary>
+    /// Draws a point at the given point p with the given size and color.
+    /// </summary>
+    /// <param name="p">The center of the point in world space pixels.</param>
+    /// <param name="size">The size of the point in pixels.</param>
+    /// <param name="color">The color of the point.</param>
+    public void DrawPoint(Vector p, float size, Color color)
+    {
+      p += _area.Min;
+      //TODO: Clipping
+      OkuDrivers.Renderer.DrawPoint(p, size, color);
     }
 
   }

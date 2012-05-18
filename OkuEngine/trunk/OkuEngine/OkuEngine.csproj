@@ -118,7 +118,7 @@
     <Compile Include="Driver\OpenGLRenderer.cs" />
     <Compile Include="Content\VertexContent.cs" />
     <Compile Include="Instance\PolygonInstance.cs" />
-    <Compile Include="Geometry\Quad.cs" />
+    <Compile Include="Geometry\AABB.cs" />
     <Compile Include="Particles\DefaultParticleController.cs" />
     <Compile Include="Particles\ForceEffector.cs" />
     <Compile Include="Particles\IParticleController.cs" />

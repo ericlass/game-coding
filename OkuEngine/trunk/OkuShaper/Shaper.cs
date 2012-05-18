@@ -35,27 +35,27 @@ namespace OkuShaper
       _gui = new WidgetContainer(new SpriteFont("Calibri", 10.0f, System.Drawing.FontStyle.Bold, true));
 
       _newButton = new ButtonWidget();
-      _newButton.Area = new Quad(5, 774, 75, 21);
+      _newButton.Area = new AABB(5, 774, 75, 21);
       _newButton.Text = "New";
       _gui.AddWidget(_newButton);
 
       _loadButton = new ButtonWidget();
-      _loadButton.Area = new Quad(85, 774, 75, 21);
+      _loadButton.Area = new AABB(85, 774, 75, 21);
       _loadButton.Text = "Open";
       _gui.AddWidget(_loadButton);
 
       _saveButton = new ButtonWidget();
-      _saveButton.Area = new Quad(165, 774, 75, 21);
+      _saveButton.Area = new AABB(165, 774, 75, 21);
       _saveButton.Text = "Save";
       _gui.AddWidget(_saveButton);
 
       _imageButton = new ButtonWidget();
-      _imageButton.Area = new Quad(245, 774, 75, 21);
+      _imageButton.Area = new AABB(245, 774, 75, 21);
       _imageButton.Text = "Image";
       _gui.AddWidget(_imageButton);
 
       _editor = new PolyEditorWidget();
-      _editor.Area = new Quad(5, 5, 1270, 764);
+      _editor.Area = new AABB(5, 5, 1270, 764);
       _gui.AddWidget(_editor);
     }
 

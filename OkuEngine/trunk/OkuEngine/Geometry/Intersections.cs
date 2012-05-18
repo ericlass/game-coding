@@ -26,7 +26,7 @@ namespace OkuEngine
     /// <param name="x4">The x component of the second line segments second point.</param>
     /// <param name="y4">The y component of the second line segments second point.</param>
     /// <param name="factor">Contains the line formula control value, if there is an intersection.</param>
-    /// <param name="minT">The minimum line formaula control value that has to be reached.</param>
+    /// <param name="minT">The minimum line formula control value that has to be reached.</param>
     /// <returns>True if the line segments intersect, otherwise false.</returns>
     public static bool LineSegments(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, out float factor, float minT)
     {
@@ -57,7 +57,7 @@ namespace OkuEngine
     /// <param name="ls1">The first line segment.</param>
     /// <param name="ls2">The second line segment.</param>
     /// <param name="factor">Contains the line formula control value, if there is an intersection.</param>
-    /// <param name="minT">The minimum line formaula control value that has to be reached.</param>
+    /// <param name="minT">The minimum line formula control value that has to be reached.</param>
     /// <returns>True if the line segments intersect, otherwise false.</returns>
     public static bool LineSegments(LineSegment ls1, LineSegment ls2, out float factor, float minT)
     {
@@ -72,7 +72,7 @@ namespace OkuEngine
     /// <param name="p3">The start of the second line.</param>
     /// <param name="p4">The end of the second line.</param>
     /// <param name="factor">Contains the line formula control value, if there is an intersection.</param>
-    /// <param name="minT">The minimum line formaula control value that has to be reached.</param>
+    /// <param name="minT">The minimum line formula control value that has to be reached.</param>
     /// <returns>True if the line segments intersect, otherwise false.</returns>
     public static bool LineSegments(Vector p1, Vector p2, Vector p3, Vector p4, out float factor, float minT)
     {
@@ -92,7 +92,7 @@ namespace OkuEngine
     /// <param name="top">The top boundary of the bounding box.</param>
     /// <param name="bottom">The bottom boundary of the bounding box.</param>
     /// <param name="factor">Contains the line formula control value, if there is an intersection.</param>
-    /// <param name="minT">The minimum line formaula control value that has to be reached.</param>
+    /// <param name="minT">The minimum line formula control value that has to be reached.</param>
     /// <returns>True if the line segment intersects the bounding box, otherwise false.</returns>
     public static bool LineSegmentAABB(float x1, float y1, float x2, float y2, float left, float right, float top, float bottom, out float factor, float minT)
     {

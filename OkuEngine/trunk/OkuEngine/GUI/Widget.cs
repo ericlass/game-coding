@@ -10,7 +10,7 @@ namespace OkuEngine
   public class Widget
   {
     private int _id = KeySequence.NextValue;
-    private Quad _area = new Quad();
+    private AABB _area = new AABB();
     private string _hintText = null;
     private bool _visible = true;
 
@@ -28,7 +28,7 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets the area of the widget.
     /// </summary>
-    public Quad Area
+    public AABB Area
     {
       get { return _area; }
       set

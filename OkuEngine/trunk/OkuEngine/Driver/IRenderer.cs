@@ -362,5 +362,23 @@ namespace OkuEngine
     /// Ends the screen space mode.
     /// </summary>
     void EndScreenSpace();
+
+    /// <summary>
+    /// Sets a rectangular area of the screen where drawing will happen. 
+    /// Everything outside of the specified area will not be drawn and
+    /// kept form the previous frame.
+    /// The area is specified in display space pixel coordinates and are inclusive.
+    /// </summary>
+    /// <param name="left">The left border of the scissor rectangle.</param>
+    /// <param name="right">The right border of the scissor rectangle.</param>
+    /// <param name="width">The width of the scissor rectangle.</param>
+    /// <param name="height">The height of the scissor rectangle.</param>
+    void SetScissorRectangle(int left, int right, int width, int height);
+
+    /// <summary>
+    /// Clear the scissor rectangle so that thw whole screen is redrawn again.
+    /// </summary>
+    void ClearScissorRectangle();
+
   }
 }

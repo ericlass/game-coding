@@ -6,9 +6,9 @@ using System.Text;
 namespace OkuEngine
 {
   /// <summary>
-  /// Defines an axis alligned quad by its min and max vectors.
+  /// Defines an axis alligned box by its min and max vectors.
   /// </summary>
-  public struct Quad
+  public struct AABB
   {
     /// <summary>
     /// The min vector.
@@ -24,7 +24,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="min">The min vector.</param>
     /// <param name="max">The max vector.</param>
-    public Quad(Vector min, Vector max)
+    public AABB(Vector min, Vector max)
     {
       Min = min;
       Max = max;
@@ -37,7 +37,7 @@ namespace OkuEngine
     /// <param name="right">The right border of the quad.</param>
     /// <param name="top">The top border of the quad.</param>
     /// <param name="bottom">The bottom border of the quad.</param>
-    public Quad(float left, float bottom, float width, float height)
+    public AABB(float left, float bottom, float width, float height)
     {
       Min = new Vector(left, bottom);
       Max = new Vector(left + width, bottom + height);
@@ -66,6 +66,26 @@ namespace OkuEngine
     public float Height
     {
       get { return Max.Y - Min.Y; }
+    }
+
+    /// <summary>
+    /// Gets the four corner points of the AABB as a vector array.
+    /// </summary>
+    /// <returns>The four corner points in an array.</returns>
+    public Vector[] GetPoints()
+    {
+      return GetPoints(Min, Max);
+    }
+
+    /// <summary>
+    /// Gets the four corner points of the AABB as a vector array.
+    /// </summary>
+    /// <param name="min">The minimum vector of the AABB.</param>
+    /// <param name="max">The maximum vector of the AABB.</param>
+    /// <returns>The four corner points in an array.</returns>
+    public static Vector[] GetPoints(Vector min, Vector max)
+    {
+      return new Vector[] { min, new Vector(min.X, max.Y), max, new Vector(max.X, min.Y) };
     }
 
   }
