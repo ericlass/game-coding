@@ -126,7 +126,7 @@ namespace OkuEngine
         if (hasText && hasGlyph)
           totalWidth += 5;
 
-        Vector center = new Vector(Area.Width / 2.0f, Area.Height / 2.0f);
+        Vector center = new Vector((Area.Width / 2.0f) - 1.0f, Area.Height / 2.0f);
 
         if (hasText)
           OkuMath.CenterAt(_textMesh.Vertices.Positions, new Vector(center.X + (totalWidth / 2.0f) - (textWidth / 2.0f), center.Y));

@@ -78,8 +78,8 @@
     <Compile Include="GUI\TextProcessor.cs" />
     <Compile Include="GUI\WidgetContainer.cs" />
     <Compile Include="GUI\Widget.cs" />
-    <Compile Include="Properties.cs" />
-    <Compile Include="PropertiesEntry.cs" />
+    <Compile Include="PropertyMap.cs" />
+    <Compile Include="PropertyEntry.cs" />
     <Compile Include="Shaper\PolyEditorWidget.cs" />
     <Compile Include="Shaper\Shape.cs" />
     <Compile Include="VirtualFileSystem\VirtualFile.cs" />

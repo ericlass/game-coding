@@ -5,7 +5,7 @@ namespace OkuEngine
   /// <summary>
   /// Stores a string key value pair.
   /// </summary>
-  public class PropertiesEntry
+  public class PropertyEntry
   {
     private string _key = null;
     private string _value = null;
@@ -15,7 +15,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="key">The key.</param>
     /// <param name="value">The value.</param>
-    public PropertiesEntry(string key, string value)
+    public PropertyEntry(string key, string value)
     {
       _key = key;
       _value = value;

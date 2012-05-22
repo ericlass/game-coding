@@ -8,15 +8,15 @@ namespace OkuEngine
   /// <summary>
   /// Manages a set of string key value pairs.
   /// </summary>
-  public class Properties
+  public class PropertyMap
   {
-    private List<PropertiesEntry> _entries = new List<PropertiesEntry>();
+    private List<PropertyEntry> _entries = new List<PropertyEntry>();
     private Dictionary<string, int> _nameIndexes = new Dictionary<string, int>();
     
     /// <summary>
     /// Creates a new, empty properties manager.
     /// </summary>
-    public Properties()
+    public PropertyMap()
     {
     }
     
@@ -27,7 +27,7 @@ namespace OkuEngine
     /// <param name="value">The value. Can be null.</param>
     private void Add(string key, string value)
     {
-      _entries.Add(new PropertiesEntry(key, value));
+      _entries.Add(new PropertyEntry(key, value));
       _nameIndexes.Add(key, _entries.Count - 1);
     }
     
@@ -111,7 +111,7 @@ namespace OkuEngine
     public void Save(Stream stream)
     {
       StreamWriter writer = new StreamWriter(stream);
-      foreach (PropertiesEntry entry in _entries)
+      foreach (PropertyEntry entry in _entries)
       {
         writer.WriteLine(entry.ToString());
       }

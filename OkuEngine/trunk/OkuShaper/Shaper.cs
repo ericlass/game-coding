@@ -18,7 +18,6 @@ namespace OkuShaper
 
     private ImageContent _image = null;
     private string _imageFile = null;
-    private Vector[] _imageBox = null;
 
     private string _filename = null;
     private bool _modified = false;
@@ -37,21 +36,25 @@ namespace OkuShaper
       _newButton = new ButtonWidget();
       _newButton.Area = new AABB(5, 774, 75, 21);
       _newButton.Text = "New";
+      _newButton.Glyph = new ImageContent(OkuShaper.Properties.Resources.IconNew);
       _gui.AddWidget(_newButton);
 
       _loadButton = new ButtonWidget();
       _loadButton.Area = new AABB(85, 774, 75, 21);
       _loadButton.Text = "Open";
+      _loadButton.Glyph = new ImageContent(OkuShaper.Properties.Resources.IconOpen);
       _gui.AddWidget(_loadButton);
 
       _saveButton = new ButtonWidget();
       _saveButton.Area = new AABB(165, 774, 75, 21);
       _saveButton.Text = "Save";
+      _saveButton.Glyph = new ImageContent(OkuShaper.Properties.Resources.IconSave);
       _gui.AddWidget(_saveButton);
 
       _imageButton = new ButtonWidget();
       _imageButton.Area = new AABB(245, 774, 75, 21);
       _imageButton.Text = "Image";
+      _imageButton.Glyph = new ImageContent(OkuShaper.Properties.Resources.IconImage);
       _gui.AddWidget(_imageButton);
 
       _editor = new PolyEditorWidget();
@@ -71,12 +74,12 @@ namespace OkuShaper
         //Load background image
         if (_imageButton.Clicked)
         {
-          loadBackgroundImage();
+          LoadBackgroundImage();
         }
         //Clear scene when new button is clicked
         else if (_newButton.Clicked)
         {
-          //TODO: Clear points
+          _editor.Points.Clear();
           _imageFile = null;
           if (_image != null)
             OkuDrivers.Renderer.ReleaseContent(_image);
@@ -87,7 +90,7 @@ namespace OkuShaper
       }
     }
 
-    private void loadBackgroundImage()
+    private void LoadBackgroundImage()
     {
       OpenFileDialog openDialog = new OpenFileDialog();
       openDialog.Filter = "All Images|*.png;*.bmp;*.jpg;*.jpeg;*.gif;*.tiff;*.tif|PNG (*.png)|*.png|Bitmap (*.bmp)|*.bmp|JPEG (*.jpg, *.jpeg)|*.jpg;*.jpeg|GIF (*.gif)|*.gif|TIFF (*.tif, *.tiff)|*.tif;*.tiff|All Files (*.*)|*.*";
@@ -101,21 +104,15 @@ namespace OkuShaper
           OkuDrivers.Renderer.ReleaseContent(_image);
 
         _image = new ImageContent(openDialog.FileName);
-
-        float halfWidth = _image.Width / 2.0f;
-        float halfHeight = _image.Height / 2.0f;
-        _imageBox = PolygonFactory.Box(-halfWidth, halfWidth, halfHeight, -halfHeight);
+        _editor.BackgroundImage = _image;
       }
+
+      openDialog.Dispose();
+      Application.DoEvents();
     }
 
     public override void Render(int pass)
     {
-      if (_image != null)
-      {
-        OkuDrivers.Renderer.DrawImage(_image, Vector.Zero);
-        OkuDrivers.Renderer.DrawLines(_imageBox, Color.Silver, _imageBox.Length, 2.0f, VertexInterpretation.PolygonClosed);
-      }
-
       _gui.Render();
     }
 

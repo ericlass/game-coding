@@ -58,6 +58,18 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Gets the current mouse position in client space.
+    /// </summary>
+    public Vector MousePosition
+    {
+      get
+      {
+        Vector mouse = OkuDrivers.Renderer.ScreenToDisplay(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
+        return PointToClient(mouse);
+      }
+    }
+
+    /// <summary>
     /// Is called when the area of the widget changes.
     /// </summary>
     protected virtual void AreaChange()

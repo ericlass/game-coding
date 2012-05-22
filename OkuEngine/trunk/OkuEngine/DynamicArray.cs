@@ -107,6 +107,10 @@ namespace OkuEngine
       set { _internalArray[index] = value; }
     }
 
+    /// <summary>
+    /// Adds the given item to the end of the list.
+    /// </summary>
+    /// <param name="item">The item to be added.</param>
     public void Add(T item)
     {
       AsureCapacity(_count + 1);
@@ -114,11 +118,35 @@ namespace OkuEngine
       _count++;
     }
 
+    /// <summary>
+    /// Deletes the item at the given index from the list.
+    /// </summary>
+    /// <param name="index">The index of the item to delete.</param>
     public void Delete(int index)
     {
       for (int i = index; i < _internalArray.Length - 2; i++)
         _internalArray[i] = _internalArray[i + 1];
+      
       _count--;
+    }
+
+    /// <summary>
+    /// Insert the given item at the given index.
+    /// Existing items at indexes >= index are moved to make
+    /// place for the new item.
+    /// </summary>
+    /// <param name="item">The item to insert.</param>
+    /// <param name="index">The index to insert the item add.</param>
+    public void Insert(T item, int index)
+    {
+      //TODO: I can't get this working!
+      AsureCapacity(_count + 1);
+
+      for (int i = _count; i > index; i--)
+        _internalArray[i] = _internalArray[i - 1];
+
+      _internalArray[index] = item;
+      _count++;      
     }
 
   }

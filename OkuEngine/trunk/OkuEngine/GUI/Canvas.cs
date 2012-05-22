@@ -77,8 +77,6 @@ namespace OkuEngine
       for (int i = 0; i < min; i++)
         _vertices.Add(points[i] + _area.Min);
 
-      //TODO: Clipping
-
       OkuDrivers.Renderer.DrawMesh(_vertices.InternalArray, texCoords, colors, count, mode, texture);
     }
 
@@ -99,8 +97,13 @@ namespace OkuEngine
     public void DrawImage(ImageContent image, Vector position)
     {
       position += _area.Min;
-      //TODO: Clipping
       OkuDrivers.Renderer.DrawImage(image, position);
+    }
+
+    public void DrawImage(ImageContent image, Vector position, Vector scale)
+    {
+      position += _area.Min;
+      OkuDrivers.Renderer.DrawImage(image, position, scale);
     }
 
     /// <summary>
@@ -114,7 +117,6 @@ namespace OkuEngine
     {
       start += _area.Min;
       end += _area.Min;
-      //TODO: Clipping
       OkuDrivers.Renderer.DrawLine(start, end, width, color);
     }
 
@@ -134,7 +136,6 @@ namespace OkuEngine
       for (int i = 0; i < min; i++)
         _vertices.Add(vertices[i] + _area.Min);
 
-      //TODO: Clipping
       OkuDrivers.Renderer.DrawLines(_vertices.InternalArray, color, count, width, interpretation);
     }
 
@@ -147,8 +148,24 @@ namespace OkuEngine
     public void DrawPoint(Vector p, float size, Color color)
     {
       p += _area.Min;
-      //TODO: Clipping
       OkuDrivers.Renderer.DrawPoint(p, size, color);
+    }
+
+    /// <summary>
+    /// Draws a point at every position in the given points array.
+    /// </summary>
+    /// <param name="points">The points to draw.</param>
+    /// <param name="color">The color of the points.</param>
+    /// <param name="count">The number of points to draw.</param>
+    /// <param name="size">The size in pixels of the points.</param>
+    public void DrawPoints(Vector[] points, Color color, int count, float size)
+    {
+      _vertices.Clear();
+      int min = Math.Min(points.Length, count);
+      for (int i = 0; i < min; i++)
+        _vertices.Add(points[i] + _area.Min);
+
+      OkuDrivers.Renderer.DrawPoints(_vertices.InternalArray, color, count, size);
     }
 
   }
