@@ -98,6 +98,7 @@ namespace OkuEngine
     {
       FileStream stream = new FileStream(filename, FileMode.OpenOrCreate);
       try {
+        stream.SetLength(0);
         Save(stream);
       } finally {
         stream.Close();
@@ -166,7 +167,7 @@ namespace OkuEngine
       string line = reader.ReadLine();
       while (line != null)
       {
-        string[] parts = line.Split('=');
+        string[] parts = SplitKeyValue(line);
         
         string key = null;
         string value = null;

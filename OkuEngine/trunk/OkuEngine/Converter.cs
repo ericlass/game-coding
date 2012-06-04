@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Globalization;
 using System.Text;
 
 namespace OkuEngine
@@ -14,9 +14,13 @@ namespace OkuEngine
     /// <returns>The string represenation of the given float value.</returns>
     public static string FloatToString(float value)
     {
-      string result = value.ToString("0");
+      int num = (int)value;
+      int frac = (int)Math.Abs((value - num) * 1000000000.0f);
+      return num + "." + frac;
+
+      /*string result = value.ToString("0");
       result += "." + value.ToString(".0##################################").Substring(1);
-      return result;
+      return result;*/
     }
 
     /// <summary>

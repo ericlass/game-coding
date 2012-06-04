@@ -32,6 +32,17 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Creates a new dynamic array using the given data array.
+    /// In fact, the given array is cloned.
+    /// </summary>
+    /// <param name="data">The inital data array.</param>
+    public DynamicArray(T[] data)
+    {
+      _internalArray = (T[])data.Clone();
+      _count = data.Length;
+    }
+
+    /// <summary>
     /// Resizes the internal array to the given new size.
     /// </summary>
     /// <param name="newSize">The new size of the array.</param>
@@ -139,7 +150,6 @@ namespace OkuEngine
     /// <param name="index">The index to insert the item add.</param>
     public void Insert(T item, int index)
     {
-      //TODO: I can't get this working!
       AsureCapacity(_count + 1);
 
       for (int i = _count; i > index; i--)
@@ -147,6 +157,17 @@ namespace OkuEngine
 
       _internalArray[index] = item;
       _count++;      
+    }
+
+    /// <summary>
+    /// Gets a new array that is exactly Count items long.
+    /// </summary>
+    /// <returns>A new array that is exactly Count items long.</returns>
+    public T[] GetCollapsedArray()
+    {
+      T[] result = new T[_count];
+      Array.Copy(_internalArray, 0, result, 0, _count);
+      return result;
     }
 
   }

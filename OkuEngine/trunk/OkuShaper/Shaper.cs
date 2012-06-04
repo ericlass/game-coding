@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 using OkuEngine;
 using OkuEngine.Shaper;
 
@@ -17,10 +18,13 @@ namespace OkuShaper
     private PolyEditorWidget _editor = null;
 
     private ImageContent _image = null;
-    private string _imageFile = null;
+    private MemoryStream _imageStream = null;
 
     private string _filename = null;
     private bool _modified = false;
+
+    private const string ImageFileFilter = "All Images|*.png;*.bmp;*.jpg;*.jpeg;*.gif;*.tiff;*.tif|PNG (*.png)|*.png|Bitmap (*.bmp)|*.bmp|JPEG (*.jpg, *.jpeg)|*.jpg;*.jpeg|GIF (*.gif)|*.gif|TIFF (*.tif, *.tiff)|*.tif;*.tiff|All Files (*.*)|*.*";
+    private const string ShapeFileFilter = "Oku Shapes (*.oks)|*.oks|All Files (*.*)|*.*";
 
     public override void Setup(ref RendererParams renderParams)
     {
@@ -80,12 +84,40 @@ namespace OkuShaper
         else if (_newButton.Clicked)
         {
           _editor.Points.Clear();
-          _imageFile = null;
+
+          if (_imageStream != null)
+            _imageStream.Close();
+
+          _imageStream = null;
+
           if (_image != null)
             OkuDrivers.Renderer.ReleaseContent(_image);
+
           _image = null;
+
           _filename = null;
           _modified = false;
+        }
+        else if (_saveButton.Clicked)
+        {
+          SaveFileDialog dialog = new SaveFileDialog();
+          dialog.Filter = ShapeFileFilter;
+          dialog.Title = "Save Shape";
+          if (dialog.ShowDialog() == DialogResult.OK)
+          {
+            SaveFile(dialog.FileName);
+          }
+        }
+        else if (_loadButton.Clicked)
+        {
+          OpenFileDialog openDialog = new OpenFileDialog();
+          openDialog.Filter = ShapeFileFilter;
+          openDialog.Multiselect = false;
+          openDialog.Title = "Open Shape";
+          if (openDialog.ShowDialog() == DialogResult.OK)
+          {
+            LoadFile(openDialog.FileName);
+          }
         }
       }
     }
@@ -93,22 +125,71 @@ namespace OkuShaper
     private void LoadBackgroundImage()
     {
       OpenFileDialog openDialog = new OpenFileDialog();
-      openDialog.Filter = "All Images|*.png;*.bmp;*.jpg;*.jpeg;*.gif;*.tiff;*.tif|PNG (*.png)|*.png|Bitmap (*.bmp)|*.bmp|JPEG (*.jpg, *.jpeg)|*.jpg;*.jpeg|GIF (*.gif)|*.gif|TIFF (*.tif, *.tiff)|*.tif;*.tiff|All Files (*.*)|*.*";
+      openDialog.Filter = ImageFileFilter;
       openDialog.Multiselect = false;
       openDialog.Title = "Open Image";
       if (openDialog.ShowDialog() == DialogResult.OK)
       {
-        _imageFile = openDialog.FileName;
+        if (_imageStream != null)
+          _imageStream.Close();
+
+        FileStream file = new FileStream(openDialog.FileName, FileMode.Open);
+        try
+        {
+          MemoryStream memStream = new MemoryStream();
+          memStream.SetLength(file.Length);
+          file.Read(memStream.GetBuffer(), 0, (int)file.Length);
+          _imageStream = memStream;
+        }
+        finally
+        {
+          file.Close();
+        }
 
         if (_image != null)
           OkuDrivers.Renderer.ReleaseContent(_image);
 
-        _image = new ImageContent(openDialog.FileName);
+        _image = new ImageContent(_imageStream);
         _editor.BackgroundImage = _image;
       }
 
       openDialog.Dispose();
       Application.DoEvents();
+    }
+
+    private void SaveFile(string filename)
+    {
+      Shape.Save(filename, _editor.Points.GetCollapsedArray(), _imageStream);
+      _modified = false;
+      _filename = filename;
+    }
+
+    private void LoadFile(string filename)
+    {
+      Vector[] points;
+
+      if (_imageStream != null)
+        _imageStream.Close();
+
+      Shape.Load(filename, out points, out _imageStream);
+
+      if (_image != null)
+        OkuDrivers.Renderer.ReleaseContent(_image);
+
+      if (_imageStream != null)
+        _image = new ImageContent(_imageStream);
+      else
+        _image = null;
+
+      _editor.BackgroundImage = _image;
+
+      if (points != null)
+      {
+        _editor.Points = new DynamicArray<Vector>(points);
+      }
+
+      _modified = false;
+      _filename = filename;
     }
 
     public override void Render(int pass)
