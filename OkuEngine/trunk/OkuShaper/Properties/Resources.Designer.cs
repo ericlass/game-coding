@@ -87,5 +87,12 @@ namespace OkuShaper.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        internal static System.Drawing.Bitmap IconSaveAs {
+            get {
+                object obj = ResourceManager.GetObject("IconSaveAs", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

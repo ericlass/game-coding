@@ -14,6 +14,7 @@ namespace OkuShaper
     private ButtonWidget _newButton = null;
     private ButtonWidget _loadButton = null;
     private ButtonWidget _saveButton = null;
+    private ButtonWidget _saveAsButton = null;
     private ButtonWidget _imageButton = null;
     private PolyEditorWidget _editor = null;
 
@@ -37,6 +38,9 @@ namespace OkuShaper
     {
       _gui = new WidgetContainer(new SpriteFont("Calibri", 10.0f, System.Drawing.FontStyle.Bold, true));
 
+      Form form = (Form)OkuDrivers.Renderer.Display;
+      form.FormClosing += new FormClosingEventHandler(form_FormClosing);
+
       _newButton = new ButtonWidget();
       _newButton.Area = new AABB(5, 774, 75, 21);
       _newButton.Text = "New";
@@ -55,15 +59,47 @@ namespace OkuShaper
       _saveButton.Glyph = new ImageContent(OkuShaper.Properties.Resources.IconSave);
       _gui.AddWidget(_saveButton);
 
+      _saveAsButton = new ButtonWidget();
+      _saveAsButton.Area = new AABB(245, 774, 75, 21);
+      _saveAsButton.Text = "Save As";
+      _saveAsButton.Glyph = new ImageContent(OkuShaper.Properties.Resources.IconSaveAs);
+      _gui.AddWidget(_saveAsButton);
+
       _imageButton = new ButtonWidget();
-      _imageButton.Area = new AABB(245, 774, 75, 21);
+      _imageButton.Area = new AABB(325, 774, 75, 21);
       _imageButton.Text = "Image";
       _imageButton.Glyph = new ImageContent(OkuShaper.Properties.Resources.IconImage);
       _gui.AddWidget(_imageButton);
 
       _editor = new PolyEditorWidget();
       _editor.Area = new AABB(5, 5, 1270, 764);
+      _editor.Change += new EditorChangeDelegate(_editor_Change);
       _gui.AddWidget(_editor);
+
+      UpdateWindowTitle();
+    }
+
+    private void _editor_Change()
+    {
+      _modified = true;
+      UpdateWindowTitle();
+    }
+
+    private DialogResult ShowUnsavedDialog()
+    {
+      return MessageBox.Show("There are unsaved changes. Do you want to save now?", "Unsaved Changes", MessageBoxButtons.YesNoCancel);
+    }
+
+    private void form_FormClosing(object sender, FormClosingEventArgs e)
+    {
+      if (_modified)
+      {
+        DialogResult result = ShowUnsavedDialog();
+        if (result == DialogResult.Yes)
+          Save(false);
+        else if (result == DialogResult.Cancel)
+          e.Cancel = true;
+      }
     }
 
     public override void Update(float dt)
@@ -79,11 +115,22 @@ namespace OkuShaper
         if (_imageButton.Clicked)
         {
           LoadBackgroundImage();
+          UpdateWindowTitle();
         }
         //Clear scene when new button is clicked
         else if (_newButton.Clicked)
         {
+          if (_modified)
+          {
+            DialogResult result = ShowUnsavedDialog();
+            if (result == DialogResult.Yes)
+              Save(false);
+            else if (result == DialogResult.Cancel)
+              return;
+          }
+
           _editor.Points.Clear();
+          _editor.ResetView();
 
           if (_imageStream != null)
             _imageStream.Close();
@@ -97,27 +144,34 @@ namespace OkuShaper
 
           _filename = null;
           _modified = false;
+
+          UpdateWindowTitle();
         }
         else if (_saveButton.Clicked)
         {
-          SaveFileDialog dialog = new SaveFileDialog();
-          dialog.Filter = ShapeFileFilter;
-          dialog.Title = "Save Shape";
-          if (dialog.ShowDialog() == DialogResult.OK)
-          {
-            SaveFile(dialog.FileName);
-          }
+          Save(false);
+        }
+        else if (_saveAsButton.Clicked)
+        {
+          Save(true);
         }
         else if (_loadButton.Clicked)
         {
+          if (_modified)
+          {
+            DialogResult result = ShowUnsavedDialog();
+            if (result == DialogResult.Yes)
+              Save(false);
+            else if (result == DialogResult.Cancel)
+              return;
+          }
+            
           OpenFileDialog openDialog = new OpenFileDialog();
           openDialog.Filter = ShapeFileFilter;
           openDialog.Multiselect = false;
           openDialog.Title = "Open Shape";
           if (openDialog.ShowDialog() == DialogResult.OK)
-          {
-            LoadFile(openDialog.FileName);
-          }
+            LoadFile(openDialog.FileName);          
         }
       }
     }
@@ -151,10 +205,26 @@ namespace OkuShaper
 
         _image = new ImageContent(_imageStream);
         _editor.BackgroundImage = _image;
+        _modified = true;
+        UpdateWindowTitle();
+      }
+    }
+
+    private void Save(bool saveAs)
+    {
+      string filename = _filename;
+      if (saveAs || filename == null || !File.Exists(filename))
+      {
+        SaveFileDialog dialog = new SaveFileDialog();
+        dialog.Filter = ShapeFileFilter;
+        dialog.Title = "Save Shape";
+        if (dialog.ShowDialog() == DialogResult.OK)
+        {
+          filename = dialog.FileName;
+        }
       }
 
-      openDialog.Dispose();
-      Application.DoEvents();
+      SaveFile(filename);
     }
 
     private void SaveFile(string filename)
@@ -162,6 +232,7 @@ namespace OkuShaper
       Shape.Save(filename, _editor.Points.GetCollapsedArray(), _imageStream);
       _modified = false;
       _filename = filename;
+      UpdateWindowTitle();
     }
 
     private void LoadFile(string filename)
@@ -190,6 +261,22 @@ namespace OkuShaper
 
       _modified = false;
       _filename = filename;
+
+      UpdateWindowTitle();
+    }
+
+    private void UpdateWindowTitle()
+    {
+      string title = "Oku Shaper 1.0 - ";
+      if (_filename != null)
+        title += Path.GetFileName(_filename);
+      else
+        title += "Untitled";
+
+      if (_modified)
+        title += "*";
+
+      OkuDrivers.Renderer.Display.Text = title;
     }
 
     public override void Render(int pass)

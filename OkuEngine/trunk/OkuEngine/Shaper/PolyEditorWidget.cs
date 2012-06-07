@@ -5,6 +5,8 @@ using System.Text;
 
 namespace OkuEngine.Shaper
 {
+  public delegate void EditorChangeDelegate();
+
   public class PolyEditorWidget : Widget
   {
     private DynamicArray<Vector> _points = new DynamicArray<Vector>();
@@ -39,6 +41,14 @@ namespace OkuEngine.Shaper
     private bool _hot = false;    
 
     private Vector[] _vertices = new Vector[4];
+
+    public event EditorChangeDelegate Change;
+
+    private void DoChange()
+    {
+      if (Change != null)
+        Change();
+    }
 
     public DynamicArray<Vector> Points
     {
@@ -108,6 +118,7 @@ namespace OkuEngine.Shaper
       if (_dragging)
       {
         _points[_hotPoint] = mousePoly;
+        DoChange();
       }
       else
       {
@@ -224,12 +235,14 @@ namespace OkuEngine.Shaper
           _points.Insert(_cutPoint, _cutIndex + 1);
           _dragging = true;
           _hotPoint = _cutIndex + 1;
+          DoChange();
         }
         else
         {
           _points.Add(ClientToPoly(MousePosition));
           _dragging = true;
           _hotPoint = _points.Count - 1;
+          DoChange();
         }
       }
       else if (button == MouseButton.Right)
@@ -293,12 +306,16 @@ namespace OkuEngine.Shaper
 
       if (key == System.Windows.Forms.Keys.Delete)
       {
+        bool pointsRemoved = _selectedPoints.Count > 0;
         _selectedPoints.Sort();
         for (int i = _selectedPoints.Count - 1; i >= 0; i--)
         {
           _points.Delete(_selectedPoints[i]);
         }
         _selectedPoints.Clear();
+
+        if (pointsRemoved)
+          DoChange();
       }
       else if (key == System.Windows.Forms.Keys.A)
       {
@@ -311,6 +328,17 @@ namespace OkuEngine.Shaper
           }
         }
       }
+      else if (ctrl && key == System.Windows.Forms.Keys.NumPad0)
+      {
+        ResetView();
+      }
+    }
+
+    public void ResetView()
+    {
+      _viewOffset.X = Area.Width / 2.0f;
+      _viewOffset.Y = Area.Height / 2.0f;
+      _viewScale = 1.0f;
     }
 
   }
