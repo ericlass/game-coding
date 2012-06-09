@@ -109,7 +109,7 @@
     <Compile Include="Instance\VisualInstance.cs" />
     <Compile Include="KeySequence.cs" />
     <Compile Include="Geometry\LineSegment.cs" />
-    <Compile Include="Matrix3.cs" />
+    <Compile Include="Geometry\Matrix3.cs" />
     <Compile Include="Engine\OkuConstants.cs" />
     <Compile Include="Engine\OkuData.cs" />
     <Compile Include="Engine\OkuDrivers.cs" />
@@ -141,7 +141,7 @@
     <Compile Include="SpriteFont.cs" />
     <Compile Include="TileMap\Tile.cs" />
     <Compile Include="TileMap\Tilemap.cs" />
-    <Compile Include="Transformation.cs" />
+    <Compile Include="Geometry\Transformation.cs" />
     <Compile Include="Platform\User32.cs" />
     <Compile Include="VariableList.cs" />
     <Compile Include="Geometry\Vector.cs" />
