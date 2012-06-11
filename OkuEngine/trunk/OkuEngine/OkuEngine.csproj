@@ -85,7 +85,6 @@
     <Compile Include="VirtualFileSystem\VirtualFile.cs" />
     <Compile Include="VirtualFileSystem\VirtualFileSystem.cs" />
     <Compile Include="VirtualFileSystem\VirtualFileType.cs" />
-    <Compile Include="Content\VisualContent.cs" />
     <Compile Include="Display.cs" />
     <Compile Include="DisplayMode.cs" />
     <Compile Include="Content\ImageContent.cs" />

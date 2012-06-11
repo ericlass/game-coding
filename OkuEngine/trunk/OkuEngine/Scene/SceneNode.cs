@@ -16,7 +16,7 @@ namespace OkuEngine
     private SceneNodeList _children = new SceneNodeList();
     private Transformation _transform = new Transformation();
     private ActionHandler _actionHandler = new ActionHandler();
-    private VisualContent _content = null;
+    private Content _content = null;
     private Matrix3 _worldMatrix = Matrix3.Indentity;
 
     /// <summary>
@@ -30,7 +30,7 @@ namespace OkuEngine
     /// Creates a new scene node with the given content.
     /// </summary>
     /// <param name="content">The content of the new scene node.</param>
-    public SceneNode(VisualContent content)
+    public SceneNode(Content content)
     {
       _content = content;
     }
@@ -40,7 +40,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="parent">The parent node of the new scene node.</param>
     /// <param name="content">The content of the new scene node.</param>
-    public SceneNode(SceneNode parent, VisualContent content)
+    public SceneNode(SceneNode parent, Content content)
     {
       _parent = parent;
       _content = content;
@@ -91,7 +91,7 @@ namespace OkuEngine
     /// Gets or sets the content associated with the scene node. 
     /// Trying to set the content to null throws an <code>ArgumentException</code>.
     /// </summary>
-    public VisualContent Content
+    public Content Content
     {
       get { return _content; }
       set 

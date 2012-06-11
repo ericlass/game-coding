@@ -11,7 +11,7 @@ namespace OkuEngine
   /// The arrays are expected, but not forced, to be the same length.
   /// Use the Valid property to check if all non-null arrays have the same length. 
   /// </summary>
-  public class VertexContent : VisualContent
+  public class VertexContent
   {
     private Vector[] _positions = null;
     private Vector[] _texCoords = null;
@@ -111,92 +111,6 @@ namespace OkuEngine
         int colLength = _colors == null ? 0 : _colors.Length;
         return (_positions != null) && (posLength == texLength) && (texLength == colLength);
       }
-    }
-
-    /// <summary>
-    /// Loads a vertex data from a file.
-    /// </summary>
-    /// <param name="filename">The name and path of the file.</param>
-    public void Load(string filename)
-    {
-      FileStream stream = new FileStream(filename, FileMode.Open);
-      try
-      {
-        Load(stream);
-      }
-      finally
-      {
-        stream.Close();
-      }
-    }
-
-    /// <summary>
-    /// Loads a vertex data from a stream.
-    /// </summary>
-    /// <param name="stream">The stream to load the vertex data from.</param>
-    public void Load(Stream stream)
-    {
-      _positions = null;
-      _colors = null;
-      _texCoords = null;
-
-      StreamReader reader = new StreamReader(stream);
-      string line = reader.ReadLine();
-      while (line != null)
-      {
-        line = line.Trim().ToLower();
-        string[] keyValue = line.Split('=');
-
-        if (keyValue.Length == 2)
-        {
-          string key = keyValue[0].Trim();
-          string value = keyValue[1].Trim();
-
-          if (key == "pos")
-            _positions = Converter.ParseVectors(value);
-          else if (key == "col")
-            _colors = Converter.ParseColors(value);
-          else if (key == "tex")
-            _texCoords = Converter.ParseVectors(value);
-        }
-
-        line = reader.ReadLine();
-      }
-    }
-
-    /// <summary>
-    /// Saves the vertex data to the given file.
-    /// </summary>
-    /// <param name="filename">The name and path of the file.</param>
-    public void Save(string filename)
-    {
-      FileStream stream = new FileStream(filename, FileMode.OpenOrCreate);
-      try
-      {
-        Save(stream);
-      }
-      finally
-      {
-        stream.Close();
-      }
-    }
-
-    /// <summary>
-    /// Saves the vertex data to the given stream.
-    /// </summary>
-    /// <param name="stream">The stream to save to.</param>
-    public void Save(Stream stream)
-    {
-      StreamWriter writer = new StreamWriter(stream);
-
-      if (_positions != null)
-        writer.WriteLine("pos=" + _positions.ToOkuString());
-      if (_colors != null)
-        writer.WriteLine("col=" + _colors.ToOkuString());
-      if (_texCoords != null)
-        writer.WriteLine("tex=" + _texCoords.ToOkuString());
-
-      writer.Flush();
     }
 
   }

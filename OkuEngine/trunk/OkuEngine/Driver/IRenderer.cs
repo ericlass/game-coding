@@ -249,42 +249,8 @@ namespace OkuEngine
     /// is dropped and a new one is created. This can be used to update the content.
     /// </summary>
     /// <param name="content">The content to be initialized.</param>
-    /// <param name="data">The content data. This must be a stream that contains a complete image file like PNG, BMP or JPG.</param>
-    void InitContentFile(ImageContent content, Stream data);
-
-    /// <summary>
-    /// Initializes image content from raw data which is represented by a byte array.
-    /// The data is expected to only contain pixel data.
-    /// This method also sets the Width and Height properties of the content.
-    /// If the given content has already been initialized, the current texture
-    /// is dropped and a new one is created. This can be used to update the content.
-    /// </summary>
-    /// <param name="content">The content to be initialized.</param>
-    /// <param name="data">The pixel data.</param>
-    /// <param name="width">The width of the image.</param>
-    /// <param name="height">The height of the image.</param>
-    void InitContentRaw(ImageContent content, byte[] data, int width, int height);
-
-    /// <summary>
-    /// Initializes image content which means that textures are created for them.
-    /// This method also sets the Width and Height properties of the content.
-    /// If the given content has already been initialized, the current texture
-    /// is dropped and a new one is created. This can be used to update the content.
-    /// </summary>
-    /// <param name="content">The content to be initialized.</param>
     /// <param name="data">A bitmap containing the image data. Must be pixel format Format32bppArgb.</param>
-    void InitContentBitmap(ImageContent content, Bitmap image);
-
-    /// <summary>
-    /// Updates a region of the given image content with new image data.
-    /// </summary>
-    /// <param name="content">The content to be updated.</param>
-    /// <param name="x">The left bound of the region.</param>
-    /// <param name="y">The top bound of the region.</param>
-    /// <param name="width">The width of the region.</param>
-    /// <param name="height">The height of the region.</param>
-    /// <param name="rawData">The data to put into the region.</param>
-    void UpdateContent(ImageContent content, int x, int y, int width, int height, byte[] rawData);
+    void InitImageContent(ImageContent content, Bitmap image);
 
     /// <summary>
     /// Updates a region of the given image content with new image data.

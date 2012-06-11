@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace OkuEngine
 {
-  public class ImageContent : VisualContent
+  public class ImageContent : Content
   {
     private int _width = 0;
     private int _height = 0;
@@ -16,24 +17,37 @@ namespace OkuEngine
 
     public ImageContent(string filename)
     {
-      FileStream stream = new FileStream(filename, FileMode.Open);
-      OkuDrivers.Renderer.InitContentFile(this, stream);
-      stream.Close();
+      Bitmap bm = new Bitmap(filename);
+      _width = bm.Width;
+      _height = bm.Height;
+      OkuDrivers.Renderer.InitImageContent(this, bm);
     }
 
     public ImageContent(Stream fileStream)
     {
-      OkuDrivers.Renderer.InitContentFile(this, fileStream);
+      Bitmap bm = new Bitmap(fileStream);
+      _width = bm.Width;
+      _height = bm.Height;
+      OkuDrivers.Renderer.InitImageContent(this, bm);
     }
 
     public ImageContent(byte[] rawData, int width, int height)
     {
-      OkuDrivers.Renderer.InitContentRaw(this, rawData, width, height);
+      _width = width;
+      _height = height;
+
+      Bitmap bm = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+      
+      BitmapData data = bm.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+      Marshal.Copy(rawData, 0, data.Scan0, rawData.Length);
+      bm.UnlockBits(data);
+
+      OkuDrivers.Renderer.InitImageContent(this, bm);
     }
 
     public ImageContent(Bitmap image)
     {
-      OkuDrivers.Renderer.InitContentBitmap(this, image);
+      OkuDrivers.Renderer.InitImageContent(this, image);
     }
 
     public int Width
@@ -46,11 +60,6 @@ namespace OkuEngine
     {
       get { return _height; }
       set { _height = value; }
-    }
-
-    public void Update(int x, int y, int width, int height, byte[] rawData)
-    {
-      OkuDrivers.Renderer.UpdateContent(this, x, y, width, height, rawData);
     }
 
     public void Update(int x, int y, int width, int height, Bitmap image)

@@ -380,50 +380,7 @@ namespace OkuEngine
       Gl.glOrtho(_viewPort.Left, _viewPort.Right, _viewPort.Bottom, _viewPort.Top, -1, 1);
     }
 
-    /// <summary>
-    /// Initializes image content which means that OpenGL textures are created for them.
-    /// This method also sets the Width and Height properties of the content.
-    /// </summary>
-    /// <param name="content">The content to be initialized.</param>
-    /// <param name="data">The content data. This must be a stream that contains a complete image file like PNG, BMP or JPG.</param>
-    public void InitContentFile(ImageContent content, Stream data)
-    {
-      Bitmap tex = new Bitmap(data);
-      InitContentBitmap(content, tex);
-    }
-
-    /// <summary>
-    /// Initializes image content from raw data which is represented by a byte array.
-    /// The data is expected to only contain pixel data. The origin of the given bitmap
-    /// is expected to be in the lower left corner.
-    /// </summary>
-    /// <param name="content">The content to be initialized.</param>
-    /// <param name="data">The pixel data.</param>
-    /// <param name="width">The width of the image.</param>
-    /// <param name="height">The height of the image.</param>
-    public void InitContentRaw(ImageContent content, byte[] data, int width, int height)
-    {
-      //Load texture and set it's options
-      int textureId = 0;
-
-      Gl.glGenTextures(1, out textureId);
-      Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
-      Gl.glTexImage2D(Gl.GL_TEXTURE_2D, 0, 4, width, height, 0, Gl.GL_BGRA, Gl.GL_UNSIGNED_BYTE, data);
-      Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, GetGLTexFilter());
-      Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, GetGLTexFilter());
-
-      if (_textures.ContainsKey(content.ContentId))
-        ReleaseContent(content);
-
-      //Remember texture for this content
-      _textures.Add(content.ContentId, textureId);
-
-      //Write width and height to the content
-      content.Width = width;
-      content.Height = height;
-    }
-
-    public void InitContentBitmap(ImageContent content, Bitmap image)
+    public void InitImageContent(ImageContent content, Bitmap image)
     {
       int textureId = 0;
 
@@ -445,22 +402,7 @@ namespace OkuEngine
 
       _textures.Add(content.ContentId, textureId);
 
-      content.Width = flippedImg.Width;
-      content.Height = flippedImg.Height;
-
       flippedImg.Dispose();
-    }
-
-    public void UpdateContent(ImageContent content, int x, int y, int width, int height, byte[] rawData)
-    {
-      int textureId = 0;
-      if (_textures.ContainsKey(content.ContentId))
-        textureId = _textures[content.ContentId];
-      else
-        return;
-
-      Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
-      Gl.glTexSubImage2D(Gl.GL_TEXTURE_2D, 0, x, y, width, height, Gl.GL_BGRA, Gl.GL_UNSIGNED_BYTE, rawData);
     }
 
     public void UpdateContent(ImageContent content, int x, int y, int width, int height, Bitmap image)

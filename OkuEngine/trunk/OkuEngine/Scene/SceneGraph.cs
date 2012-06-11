@@ -91,7 +91,7 @@ namespace OkuEngine
     /// <param name="parent">The parent node of the new scene node. If null is given the internal root node is used.</param>
     /// <param name="content">The content.</param>
     /// <returns></returns>
-    private SceneNode AddInternal(SceneNode parent, VisualContent content)
+    private SceneNode AddInternal(SceneNode parent, Content content)
     {
       if (parent == null)
         parent = _root;
@@ -128,7 +128,7 @@ namespace OkuEngine
     /// <param name="parent">The parent node a the new node or null to use the internal root node.</param>
     /// <param name="content">The content of the new scene node.</param>
     /// <returns>The newly created scene node.</returns>
-    public SceneNode Add(SceneNode parent, VisualContent content)
+    public SceneNode Add(SceneNode parent, Content content)
     {
       if (content != null && content.ContentId < 0)
         throw new ArgumentException("Content id \"" + content.ContentId + "\" cannot be added! Content ids < 0 are reserved for system use!");
