@@ -346,5 +346,25 @@ namespace OkuEngine
     /// </summary>
     void ClearScissorRectangle();
 
+    /// <summary>
+    /// Applies the given transformation to the renderer. All
+    /// draw following draw calls will be affected by this transformation.
+    /// </summary>
+    /// <param name="translate">The translation.</param>
+    /// <param name="scale">The scale.</param>
+    /// <param name="rotate">The rotation.</param>
+    void ApplyTransform(Vector translate, Vector scale, float rotate);
+
+    /// <summary>
+    /// Pushes the current transformation on a stack so it can be restored later.
+    /// </summary>
+    void PushTransform();
+
+    /// <summary>
+    /// Pops the transformation that was last pushed onto the stack, 
+    /// making it the active one again.
+    /// </summary>
+    void PopTransform();
+
   }
 }

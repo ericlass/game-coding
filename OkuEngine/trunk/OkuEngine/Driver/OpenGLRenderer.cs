@@ -1100,5 +1100,26 @@ namespace OkuEngine
       Gl.glDisable(Gl.GL_SCISSOR_TEST);
     }
 
+    public void ApplyTransform(Vector translate, Vector scale, float rotate)
+    {
+      Gl.glMatrixMode(Gl.GL_MODELVIEW);
+
+      Gl.glTranslatef(translate.X, translate.Y, 0.0f);
+      Gl.glScalef(scale.X, scale.Y, 1.0f);
+      Gl.glRotatef(rotate, 0.0f, 0.0f, 1.0f);
+    }
+
+    public void PushTransform()
+    {
+      Gl.glMatrixMode(Gl.GL_MODELVIEW);
+      Gl.glPushMatrix();
+    }
+
+    public void PopTransform()
+    {
+      Gl.glMatrixMode(Gl.GL_MODELVIEW);
+      Gl.glPopMatrix();
+    }
+
   }
 }

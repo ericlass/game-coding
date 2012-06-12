@@ -87,6 +87,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="TileTestGame.cs" />
+    <Compile Include="TransformTestGame.cs" />
     <Compile Include="UpdateTexGame.cs" />
   </ItemGroup>
   <ItemGroup>
