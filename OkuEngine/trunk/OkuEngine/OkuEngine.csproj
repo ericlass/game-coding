@@ -67,6 +67,12 @@
     <Compile Include="Content\Content.cs" />
     <Compile Include="Content\PixelShaderContent.cs" />
     <Compile Include="Converter.cs" />
+    <Compile Include="GCC\Actor.cs" />
+    <Compile Include="GCC\ActorComponent.cs" />
+    <Compile Include="GCC\ActorComponentMap.cs" />
+    <Compile Include="GCC\ActorFactory.cs" />
+    <Compile Include="GCC\HealthPickup.cs" />
+    <Compile Include="GCC\TransformComponent.cs" />
     <Compile Include="Geometry\EarClipper.cs" />
     <Compile Include="GUI\ButtonWidget.cs" />
     <Compile Include="GUI\Canvas.cs" />
@@ -78,6 +84,7 @@
     <Compile Include="GUI\TextProcessor.cs" />
     <Compile Include="GUI\WidgetContainer.cs" />
     <Compile Include="GUI\Widget.cs" />
+    <Compile Include="OkuException.cs" />
     <Compile Include="PropertyMap.cs" />
     <Compile Include="PropertyEntry.cs" />
     <Compile Include="Shaper\PolyEditorWidget.cs" />

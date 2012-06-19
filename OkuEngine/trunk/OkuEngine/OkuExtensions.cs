@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Xml;
 
 namespace OkuEngine
 {
@@ -75,6 +76,30 @@ namespace OkuEngine
       }
       distance = nearest;
       return closest;
+    }
+
+    /// <summary>
+    /// Gets the attribute with the given name in float format.
+    /// If there is no attribute with the given name or its value cannot be
+    /// converted to a float, the given default is returned.
+    /// </summary>
+    /// <param name="attributes">The attributes to search in.</param>
+    /// <param name="name">The name of the attribute.</param>
+    /// <param name="defaultIfNull">The default value.</param>
+    /// <returns>The float value of the attribute, or the given default value if there is 
+    /// no attribute with the given name or its value cannot be converted to a float.</returns>
+    public static float GetFloat(this XmlAttributeCollection attributes, string name, float defaultIfNull)
+    {
+      float result = defaultIfNull;
+      foreach (XmlAttribute attrib in attributes)
+      {
+        if (attrib.Name == name)
+        {
+          result = Converter.StrToFloat(attrib.Value);
+          break;
+        }
+      }
+      return result;
     }
 
   }

@@ -55,6 +55,7 @@
     <Compile Include="AnimationTestGame.cs" />
     <Compile Include="CollisionTestGame.cs" />
     <Compile Include="EasingTestGame.cs" />
+    <Compile Include="GCCTestGame.cs" />
     <Compile Include="GodrayGame.cs" />
     <Compile Include="GuiTestGame.cs" />
     <Compile Include="InertiaTestGame.cs" />

@@ -31,10 +31,16 @@ namespace OkuEngine
     public static float StrToFloat(string str)
     {
       string[] parts = str.Split('.');
+      
       float result = float.Parse(parts[0]);
-      float fraction = float.Parse(parts[1]);
-      while (fraction > 0.0f)
+
+      float fraction = 0.0f;
+      if (parts.Length > 1)
+        fraction = float.Parse(parts[1]);
+
+      while (fraction >= 1.0f)
         fraction /= 10.0f;
+
       result += fraction;
       return result;
     }
