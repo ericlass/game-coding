@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 
-namespace OkuEngine.GCC
+namespace OkuEngine.GCC.Actor
 {
   public class Actor
   {
@@ -27,6 +27,10 @@ namespace OkuEngine.GCC
 
     public void PostInit()
     {
+      foreach (ActorComponent comp in Components.Values)
+      {
+        comp.PostInit();
+      }
     }
 
     public ActorComponent GetComponent(int componentId)

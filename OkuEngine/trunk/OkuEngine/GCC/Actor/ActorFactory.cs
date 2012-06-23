@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 
-namespace OkuEngine.GCC
+namespace OkuEngine.GCC.Actor
 {
   public class ActorFactory
   {
@@ -43,7 +43,6 @@ namespace OkuEngine.GCC
         {
           result.AddComponent(comp);
           comp.Owner = result;
-          comp.PostInit();
         }
 
         child = child.NextSibling;
