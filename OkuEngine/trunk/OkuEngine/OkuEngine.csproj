@@ -77,6 +77,13 @@
     <Compile Include="GCC\Processes\Process.cs" />
     <Compile Include="GCC\Processes\ProcessManager.cs" />
     <Compile Include="GCC\Processes\ProcessState.cs" />
+    <Compile Include="GCC\Resources\DefaultResourceLoader.cs" />
+    <Compile Include="GCC\Resources\FileSystemResourceFile.cs" />
+    <Compile Include="GCC\Resources\IResourceFile.cs" />
+    <Compile Include="GCC\Resources\IResourceLoader.cs" />
+    <Compile Include="GCC\Resources\Resource.cs" />
+    <Compile Include="GCC\Resources\ResourceCache.cs" />
+    <Compile Include="GCC\Resources\ResourceHandle.cs" />
     <Compile Include="Geometry\EarClipper.cs" />
     <Compile Include="GUI\ButtonWidget.cs" />
     <Compile Include="GUI\Canvas.cs" />
