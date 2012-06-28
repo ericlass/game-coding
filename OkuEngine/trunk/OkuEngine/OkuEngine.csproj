@@ -73,6 +73,12 @@
     <Compile Include="GCC\Actor\ActorFactory.cs" />
     <Compile Include="GCC\Actor\HealthPickup.cs" />
     <Compile Include="GCC\Actor\TransformComponent.cs" />
+    <Compile Include="GCC\Events\ActorDestroyEvent.cs" />
+    <Compile Include="GCC\Events\BaseEvent.cs" />
+    <Compile Include="GCC\Events\EventListenerDelegate.cs" />
+    <Compile Include="GCC\Events\EventManager.cs" />
+    <Compile Include="GCC\Events\EventTypes.cs" />
+    <Compile Include="GCC\Events\IEventManager.cs" />
     <Compile Include="GCC\Processes\DelayProcess.cs" />
     <Compile Include="GCC\Processes\Process.cs" />
     <Compile Include="GCC\Processes\ProcessManager.cs" />

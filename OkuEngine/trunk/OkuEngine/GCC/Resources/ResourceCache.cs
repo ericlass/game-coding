@@ -130,7 +130,6 @@ namespace OkuEngine.GCC.Resources
           return false;
 
         FreeOldestResource();
-        System.GC.Collect(); //WARNING: Might take forever!!!
       }
 
       return true;
@@ -139,7 +138,10 @@ namespace OkuEngine.GCC.Resources
     private Stream Allocate(long size)
     {
       if (!MakeRoom(size))
+      {
+        System.Diagnostics.Debug.WriteLine("RESOURCE CACHE IS OUT OF MEMORY!");
         return null;
+      }
 
       Stream result = new MemoryStream((int)size);
       _currentSize += size;

@@ -16,5 +16,6 @@ namespace OkuEngine
 
     [DllImport("Kernel32.dll")]
     public static extern bool QueryPerformanceFrequency(out long lpFrequency);
+
   }
 }

@@ -102,5 +102,12 @@ namespace OkuEngine
       return result;
     }
 
+    public static T PopFirst<T>(this List<T> list)
+    {
+      T result = list[0];
+      list.RemoveAt(0);
+      return result;
+    }
+
   }
 }

@@ -44,6 +44,9 @@ namespace OkuTest
       {
         Resource res = new Resource("AnjaFolie01.psd");
         ResourceHandle handle = cache.GetHandle(res);
+
+        res = new Resource("Samus.wav");
+        handle = cache.GetHandle(res);
       }
     }
 

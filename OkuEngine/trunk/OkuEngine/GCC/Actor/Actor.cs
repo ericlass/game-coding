@@ -7,7 +7,7 @@ namespace OkuEngine.GCC.Actor
 {
   public class Actor
   {
-    private int _actorId = 0;
+    private int _actorId = 0; //Actor id 0 is invalid
     private ActorComponentMap _components = null; //Is created lazylly in the getter. Some actors might not need it.
 
     public Actor(int actorId)
