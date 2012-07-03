@@ -29,27 +29,27 @@ namespace OkuEngine
 
     public void Draw(float x, float y)
     {
-      OkuDrivers.Renderer.DrawImage(_content, new Vector(x, y));
+      OkuManagers.Renderer.DrawImage(_content, new Vector(x, y));
     }
 
     public void Draw(Vector position)
     {
-      OkuDrivers.Renderer.DrawImage(_content, position, _tintColor);
+      OkuManagers.Renderer.DrawImage(_content, position, _tintColor);
     }
 
     public void Draw(Vector position, float rotation)
     {
-      OkuDrivers.Renderer.DrawImage(_content, position, rotation, _tintColor);
+      OkuManagers.Renderer.DrawImage(_content, position, rotation, _tintColor);
     }
 
     public void Draw(Vector position, Vector scale)
     {
-      OkuDrivers.Renderer.DrawImage(_content, position, scale, _tintColor);
+      OkuManagers.Renderer.DrawImage(_content, position, scale, _tintColor);
     }
 
     public void Draw(Vector position, float rotation, Vector scale)
     {
-      OkuDrivers.Renderer.DrawImage(_content, position, rotation, scale, _tintColor);
+      OkuManagers.Renderer.DrawImage(_content, position, rotation, scale, _tintColor);
     }
 
   }

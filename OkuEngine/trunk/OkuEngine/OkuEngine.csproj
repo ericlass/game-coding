@@ -61,9 +61,12 @@
     <Compile Include="Animation\Easing.cs" />
     <Compile Include="Animation\EasingController.cs" />
     <Compile Include="Animation\InertialMovement.cs" />
+    <Compile Include="Driver\Audio\NullSoundEngine.cs" />
+    <Compile Include="Driver\Audio\SoundEngineFactory.cs" />
+    <Compile Include="Driver\Renderer\NullRenderer.cs" />
+    <Compile Include="Driver\Renderer\RendererFactory.cs" />
     <Compile Include="DynamicArray.cs" />
     <Compile Include="Color.cs" />
-    <Compile Include="ConfigFile.cs" />
     <Compile Include="Content\Content.cs" />
     <Compile Include="Content\PixelShaderContent.cs" />
     <Compile Include="Converter.cs" />
@@ -89,7 +92,10 @@
     <Compile Include="GCC\Resources\IResourceLoader.cs" />
     <Compile Include="GCC\Resources\Resource.cs" />
     <Compile Include="GCC\Resources\ResourceCache.cs" />
+    <Compile Include="GCC\Resources\ResourceCacheParams.cs" />
     <Compile Include="GCC\Resources\ResourceHandle.cs" />
+    <Compile Include="GCC\Scripting\ScriptInstance.cs" />
+    <Compile Include="GCC\Scripting\ScriptManager.cs" />
     <Compile Include="Geometry\EarClipper.cs" />
     <Compile Include="GUI\ButtonWidget.cs" />
     <Compile Include="GUI\Canvas.cs" />
@@ -112,11 +118,10 @@
     <Compile Include="Display.cs" />
     <Compile Include="DisplayMode.cs" />
     <Compile Include="Content\ImageContent.cs" />
-    <Compile Include="Driver\MeshMode.cs" />
-    <Compile Include="Driver\RendererParams.cs" />
-    <Compile Include="Driver\TextureFilter.cs" />
-    <Compile Include="Driver\VertexInterpretation.cs" />
-    <Compile Include="Driver\ViewPort.cs" />
+    <Compile Include="Driver\Renderer\MeshMode.cs" />
+    <Compile Include="Driver\Renderer\TextureFilter.cs" />
+    <Compile Include="Driver\Renderer\VertexInterpretation.cs" />
+    <Compile Include="Driver\Renderer\ViewPort.cs" />
     <Compile Include="Geometry\CollisionWorld.cs" />
     <Compile Include="Geometry\ContinuousCollision.cs" />
     <Compile Include="Geometry\OkuMath.cs" />
@@ -127,18 +132,18 @@
     <Compile Include="Instance\MeshInstance.cs" />
     <Compile Include="Instance\ImageInstance.cs" />
     <Compile Include="Instance\ContentInstance.cs" />
-    <Compile Include="Driver\IRenderer.cs" />
-    <Compile Include="Driver\ISoundEngine.cs" />
+    <Compile Include="Driver\Renderer\IRenderer.cs" />
+    <Compile Include="Driver\Audio\ISoundEngine.cs" />
     <Compile Include="Instance\VisualInstance.cs" />
     <Compile Include="KeySequence.cs" />
     <Compile Include="Geometry\LineSegment.cs" />
     <Compile Include="Geometry\Matrix3.cs" />
     <Compile Include="Engine\OkuConstants.cs" />
     <Compile Include="Engine\OkuData.cs" />
-    <Compile Include="Engine\OkuDrivers.cs" />
+    <Compile Include="Engine\OkuManagers.cs" />
     <Compile Include="Engine\OkuGame.cs" />
-    <Compile Include="Driver\OpenALSoundEngine.cs" />
-    <Compile Include="Driver\OpenGLRenderer.cs" />
+    <Compile Include="Driver\Audio\OpenALSoundEngine.cs" />
+    <Compile Include="Driver\Renderer\OpenGLRenderer.cs" />
     <Compile Include="Content\VertexContent.cs" />
     <Compile Include="Instance\PolygonInstance.cs" />
     <Compile Include="Geometry\AABB.cs" />
@@ -177,6 +182,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WaveLoader.cs" />
     <Compile Include="Platform\Winmm.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Engine\okuconfig.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Engine\okuconfig.xsd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

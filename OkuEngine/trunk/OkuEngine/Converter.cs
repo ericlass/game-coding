@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using OkuEngine.Driver.Renderer;
 
 namespace OkuEngine
 {
@@ -17,10 +18,6 @@ namespace OkuEngine
       int num = (int)value;
       int frac = (int)Math.Abs((value - num) * 1000000000.0f);
       return num + "." + frac;
-
-      /*string result = value.ToString("0");
-      result += "." + value.ToString(".0##################################").Substring(1);
-      return result;*/
     }
 
     /// <summary>
@@ -79,7 +76,7 @@ namespace OkuEngine
       for (int i = 0; i < colors.Length; i++)
       {
         Color col = new Color();
-        if (Color.TryParse(colors[i], ref col))
+        if (Color.TryParse(colors[i], out col))
           result.Add(col);
       }
       return result.ToArray();
@@ -98,6 +95,26 @@ namespace OkuEngine
           return mode;
       }
       return MeshMode.None;
+    }
+
+    /// <summary>
+    /// Converts the given string to a boolean value.
+    /// "yes" is converted to true and "no" is converted to false.
+    /// If the string is neither "yes" nor "no", defaultIfNull is returned.
+    /// </summary>
+    /// <param name="str">The string to be converted.</param>
+    /// <param name="defaultIfNull">The default value to return when the string cannot be converted to boolean.</param>
+    /// <returns>True if the given string is "yes", false if it is "no" or defaultIfNull if it could bot be converted.</returns>
+    public static bool StrToBool(string str, bool defaultIfNull)
+    {
+      if (str != null)
+      {
+        if (str.Equals("yes", StringComparison.CurrentCultureIgnoreCase))
+          return true;
+        else if (str.Equals("no", StringComparison.CurrentCultureIgnoreCase))
+          return false;
+      }
+      return defaultIfNull;
     }
 
   }

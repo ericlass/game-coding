@@ -149,7 +149,7 @@ namespace OkuEngine
     public void Update(float dt)
     {
       //Get mouse position in screen space
-      Vector mousePos = OkuDrivers.Renderer.ScreenToDisplay(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
+      Vector mousePos = OkuManagers.Renderer.ScreenToDisplay(OkuManagers.Input.Mouse.X, OkuManagers.Input.Mouse.Y);
 
       //Update hint position
       if (!Hint.Visible)
@@ -186,17 +186,17 @@ namespace OkuEngine
       if (newHot != null)
       {
         //Handle down and up of other mouse buttons
-        List<MouseButton> pressedButtons = OkuDrivers.Input.Mouse.GetPressedButtons();
+        List<MouseButton> pressedButtons = OkuManagers.Input.Mouse.GetPressedButtons();
         foreach (MouseButton btn in pressedButtons)
           _hotWidget.MouseDown(btn);
 
-        List<MouseButton> raisedButtons = OkuDrivers.Input.Mouse.GetRaisedButtons();
+        List<MouseButton> raisedButtons = OkuManagers.Input.Mouse.GetRaisedButtons();
         foreach (MouseButton btn in raisedButtons)
           _hotWidget.MouseUp(btn);
 
         Widget lastActive = _activeWidget;
         //Check for active widget
-        if (OkuDrivers.Input.Mouse.ButtonPressed(MouseButton.Left))
+        if (OkuManagers.Input.Mouse.ButtonPressed(MouseButton.Left))
         {
           if (_activeWidget == null)
           {
@@ -216,7 +216,7 @@ namespace OkuEngine
         }
 
         //Check for focused widget
-        if (OkuDrivers.Input.Mouse.ButtonRaised(MouseButton.Left))
+        if (OkuManagers.Input.Mouse.ButtonRaised(MouseButton.Left))
         {
           if (lastActive != null && lastActive == newHot)
           {
@@ -239,9 +239,9 @@ namespace OkuEngine
         }
 
         //Forward mouse wheel scrolling
-        if (OkuDrivers.Input.Mouse.WheelSpinned)
+        if (OkuManagers.Input.Mouse.WheelSpinned)
         {
-          newHot.MouseWheel(OkuDrivers.Input.Mouse.WheelDelta);
+          newHot.MouseWheel(OkuManagers.Input.Mouse.WheelDelta);
         }
       }
 
@@ -250,17 +250,17 @@ namespace OkuEngine
       //Forward keyboard events to focused widget
       if (_focusedWidget != null)
       {
-        List<Keys> pressedKeys = OkuDrivers.Input.Keyboard.GetPressedButtons();
+        List<Keys> pressedKeys = OkuManagers.Input.Keyboard.GetPressedButtons();
         foreach (Keys key in pressedKeys)
           _focusedWidget.KeyDown(key);
 
-        List<Keys> raisedKeys = OkuDrivers.Input.Keyboard.GetRaisedButtons();
+        List<Keys> raisedKeys = OkuManagers.Input.Keyboard.GetRaisedButtons();
         foreach (Keys key in raisedKeys)
           _focusedWidget.KeyUp(key);
       }
 
       //Deactivate active widget if mouse button is raised
-      if (_activeWidget != null && OkuDrivers.Input.Mouse.ButtonRaised(MouseButton.Left))
+      if (_activeWidget != null && OkuManagers.Input.Mouse.ButtonRaised(MouseButton.Left))
       {
         _activeWidget.Deactivate();
         _activeWidget = null;
@@ -290,19 +290,19 @@ namespace OkuEngine
     /// </summary>
     public void Render()
     {
-      OkuDrivers.Renderer.BeginScreenSpace();
+      OkuManagers.Renderer.BeginScreenSpace();
       foreach (Widget widget in _widgets)
       {
         if (widget.Visible)
         {
           _canvas.Area = widget.Area;
-          OkuDrivers.Renderer.SetScissorRectangle((int)widget.Area.Min.X, (int)widget.Area.Min.Y, (int)widget.Area.Width, (int)widget.Area.Height);
+          OkuManagers.Renderer.SetScissorRectangle((int)widget.Area.Min.X, (int)widget.Area.Min.Y, (int)widget.Area.Width, (int)widget.Area.Height);
           widget.Render(_canvas);
         }
       }
 
-      OkuDrivers.Renderer.ClearScissorRectangle();
-      OkuDrivers.Renderer.EndScreenSpace();
+      OkuManagers.Renderer.ClearScissorRectangle();
+      OkuManagers.Renderer.EndScreenSpace();
     }
 
   }

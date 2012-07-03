@@ -12,13 +12,13 @@ namespace OkuTest
     private ButtonWidget _button = null;
     private ProgressBarWidget _progress = null;
 
-    public override void Setup(ref RendererParams renderParams)
+    /*public void Setup(ref RendererParams renderParams)
     {
       renderParams.ClearColor = new Color(51, 51, 51);
       renderParams.Fullscreen = false;
       renderParams.Width = 1024;
       renderParams.Height = 768;
-    }
+    }*/
 
     public override void Initialize()
     {
@@ -67,7 +67,7 @@ namespace OkuTest
 
       if (_button.Clicked)
       {
-        OkuDrivers.Renderer.ViewPort.Scale *= -1;
+        OkuManagers.Renderer.ViewPort.Scale *= -1;
       }
 
       String hotText = _gui.HotWidget != null ? _gui.HotWidget.ID.ToString() : "None";
@@ -76,10 +76,10 @@ namespace OkuTest
 
       //OkuDrivers.Renderer.Display.Text = "H: " + hotText + "; A: " + activeText + "; F: " + focusedText;
 
-      if (OkuDrivers.Input.Keyboard.KeyPressed(Keys.Add))
+      if (OkuManagers.Input.Keyboard.KeyPressed(Keys.Add))
         _progress.Position = Math.Min(_progress.Position + 5, _progress.Max);
 
-      if (OkuDrivers.Input.Keyboard.KeyPressed(Keys.Subtract))
+      if (OkuManagers.Input.Keyboard.KeyPressed(Keys.Subtract))
         _progress.Position = Math.Max(_progress.Position - 5, _progress.Min);
     }
 

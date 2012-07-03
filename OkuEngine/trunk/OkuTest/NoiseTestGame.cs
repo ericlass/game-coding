@@ -54,7 +54,7 @@ namespace OkuTest
           i++;
         }
 
-        OkuDrivers.Renderer.Display.Text = "Min: " + min + "; Max: " + max;
+        OkuManagers.Renderer.Display.Text = "Min: " + min + "; Max: " + max;
       }
 
       image.UnlockBits(data);
@@ -72,22 +72,22 @@ namespace OkuTest
       float zoomFactor = 1.2f;
       bool zoomed = false;
 
-      if (OkuDrivers.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.Add))
+      if (OkuManagers.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.Add))
       {
         _zoom *= zoomFactor;
         zoomed = true;
       }
-      if (OkuDrivers.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.Subtract))
+      if (OkuManagers.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.Subtract))
       {
         _zoom /= zoomFactor;
         zoomed = true;
       }
-      if (OkuDrivers.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.Divide))
+      if (OkuManagers.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.Divide))
       {
         _octaves -= 1;
         zoomed = true;
       }
-      if (OkuDrivers.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.Multiply))
+      if (OkuManagers.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.Multiply))
       {
         _octaves += 1;
         zoomed = true;
@@ -99,8 +99,8 @@ namespace OkuTest
 
     public override void Render(int pass)
     {
-      OkuDrivers.Renderer.DrawImage(_content, Vector.Zero);
-      OkuDrivers.Renderer.DrawPoint(Vector.Zero, 3, OkuEngine.Color.Red);
+      OkuManagers.Renderer.DrawImage(_content, Vector.Zero);
+      OkuManagers.Renderer.DrawPoint(Vector.Zero, 3, OkuEngine.Color.Red);
     }
 
   }

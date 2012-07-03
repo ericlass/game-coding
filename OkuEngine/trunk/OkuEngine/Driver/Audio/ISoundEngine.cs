@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Xml;
 using System.IO;
 
-namespace OkuEngine
+namespace OkuEngine.Driver.Audio
 {
   /// <summary>
   /// Specifies all necessary methods to play sounds.
@@ -19,7 +17,7 @@ namespace OkuEngine
     /// <summary>
     /// Initializes the sound engine.
     /// </summary>
-    void Initialize();
+    bool Initialize(XmlNode soundNode);
     /// <summary>
     /// Updates the sounds that are currently played.
     /// </summary>

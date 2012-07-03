@@ -8,13 +8,13 @@ namespace OkuTest
 {
   public class SpatialHashGame : OkuGame
   {
-    public override void Setup(ref RendererParams renderParams)
+    /*public void Setup(ref RendererParams renderParams)
     {
       renderParams.ClearColor = Color.Black;
       renderParams.Fullscreen = false;
       renderParams.Width = 1024;
       renderParams.Height = 768;
-    }
+    }*/
 
     public override void Initialize()
     {

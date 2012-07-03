@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using OkuEngine;
+using OkuEngine.Driver.Renderer;
 
 namespace OkuTest
 {
@@ -21,14 +22,14 @@ namespace OkuTest
     private MeshInstance _guiText = null;
     private PixelShaderContent _shader = null;
 
-    public override void Setup(ref RendererParams renderParams)
+    /*public void Setup(ref RendererParams renderParams)
     {
       renderParams.ClearColor = Color.White;
       renderParams.Fullscreen = false;
       renderParams.Width = 1024;
       renderParams.Height = 768;
       renderParams.Passes = 2;
-    }
+    }*/
 
     public override void Initialize()
     {
@@ -37,8 +38,8 @@ namespace OkuTest
       Vector[] verts = new Vector[50];
       Color[] colors = new Color[verts.Length];
       Random rand = new Random();
-      int width = (int)OkuDrivers.Renderer.ViewPort.Width;
-      int height = (int)OkuDrivers.Renderer.ViewPort.Height;
+      int width = (int)OkuManagers.Renderer.ViewPort.Width;
+      int height = (int)OkuManagers.Renderer.ViewPort.Height;
       for (int i = 0; i < verts.Length; i++)
       {
         verts[i] = new Vector((float)(rand.NextDouble() - 0.5) * width, (float)(rand.NextDouble() - 0.5) * height);
@@ -101,38 +102,38 @@ namespace OkuTest
     {
       _rotation += dt * 90;
 
-      if (OkuDrivers.Input.Mouse.ButtonPressed(MouseButton.Left))
+      if (OkuManagers.Input.Mouse.ButtonPressed(MouseButton.Left))
         _sound.Play();
 
       float speed = 200 * dt;
-      Vector center = OkuDrivers.Renderer.ViewPort.Center;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Left))
+      Vector center = OkuManagers.Renderer.ViewPort.Center;
+      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Left))
         center.X -= speed;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Right))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Right))
         center.X += speed;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Up))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Up))
         center.Y -= speed;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Down))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Down))
         center.Y += speed;      
 
       speed = dt;
-      Vector scale = OkuDrivers.Renderer.ViewPort.Scale;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Add))
+      Vector scale = OkuManagers.Renderer.ViewPort.Scale;
+      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Add))
       {
         scale.X += speed;
         scale.Y += speed;
       }
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Subtract))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Subtract))
       {
         scale.X -= speed;
         scale.Y -= speed;
       }
 
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.NumPad0))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.NumPad0))
         scale = Vector.One;
       
-      OkuDrivers.Renderer.ViewPort.Center = center;
-      OkuDrivers.Renderer.ViewPort.Scale = scale;
+      OkuManagers.Renderer.ViewPort.Center = center;
+      OkuManagers.Renderer.ViewPort.Scale = scale;
     }
 
     public override void Render(int pass)
@@ -142,23 +143,23 @@ namespace OkuTest
         case 0:
           _poly.Draw();
 
-          OkuDrivers.Renderer.DrawPoints(_poly.Content.Positions, _poly.Content.Colors, _poly.Content.Positions.Length, 10);
+          OkuManagers.Renderer.DrawPoints(_poly.Content.Positions, _poly.Content.Colors, _poly.Content.Positions.Length, 10);
 
-          OkuDrivers.Renderer.DrawImage(_smiley, _pos1);
+          OkuManagers.Renderer.DrawImage(_smiley, _pos1);
           _mesh.Draw();
 
           _text.Draw();
 
           Vector[] transformed = new Vector[_guiText.Vertices.Positions.Length];
-          OkuDrivers.Renderer.ViewPort.ScreenSpaceMatrix.Transform(_guiText.Vertices.Positions, transformed);
-          OkuDrivers.Renderer.DrawMesh(transformed, _guiText.Vertices.TexCoords, _guiText.Vertices.Colors, _guiText.Vertices.Positions.Length, _guiText.Mode, _guiText.Texture);
+          OkuManagers.Renderer.ViewPort.ScreenSpaceMatrix.Transform(_guiText.Vertices.Positions, transformed);
+          OkuManagers.Renderer.DrawMesh(transformed, _guiText.Vertices.TexCoords, _guiText.Vertices.Colors, _guiText.Vertices.Positions.Length, _guiText.Mode, _guiText.Texture);
           break;
 
         case 1:
           //OkuDrivers.Renderer.UseShader(_shader);
-          ImageContent passResult = OkuDrivers.Renderer.GetPassResult(pass - 1, 0);
+          ImageContent passResult = OkuManagers.Renderer.GetPassResult(pass - 1, 0);
           //OkuDrivers.Renderer.SetShaderTexture(_shader, "texture", passResult);
-          OkuDrivers.Renderer.DrawScreenAlignedQuad(passResult);
+          OkuManagers.Renderer.DrawScreenAlignedQuad(passResult);
           //OkuDrivers.Renderer.UseShader(null);
           //_smiley.Draw(_pos1, _rotation);
           break;

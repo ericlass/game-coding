@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Xml;
 using System.IO;
 using Tao.OpenAl;
 
-namespace OkuEngine
+namespace OkuEngine.Driver.Audio
 {
   /// <summary>
   /// Implements a sound engine using OpenAL.
   /// </summary>
   public class OpenALSoundEngine : ISoundEngine
   {
+    public const string EngineName = "openal";
+
     private IntPtr _device;
     private IntPtr _context;
     private Dictionary<int, int> _buffers = new Dictionary<int, int>(); //Maps content ids to open al buffer ids
@@ -25,8 +26,23 @@ namespace OkuEngine
       set { _volume = value; }
     }
 
-    public void Initialize()
+    public bool Initialize(XmlNode soundNode)
     {
+      XmlNode child = soundNode.FirstChild;
+      while (child != null)
+      {
+        switch (child.Name)
+        {
+          case "volume":
+            _volume = Converter.StrToFloat(child.FirstChild.Value);
+            break;
+
+          default:
+            break;
+        }
+        child = child.NextSibling;
+      }
+
       //Open OpenAL device and create context
       _device = Alc.alcOpenDevice(null);
       _context = Alc.alcCreateContext(_device, IntPtr.Zero);
@@ -37,7 +53,9 @@ namespace OkuEngine
       Al.alListener3f(Al.AL_POSITION, 0, 0, 0);
       float[] vec = new float[] { 0, 0, -1, 0, 1, 0 };
       Al.alListenerfv(Al.AL_ORIENTATION, vec);
-      Al.alListenerf(Al.AL_GAIN, 1.0f);
+      Al.alListenerf(Al.AL_GAIN, _volume);
+
+      return true;
     }
 
     public void Update(float dt)

@@ -160,15 +160,17 @@ namespace OkuEngine
     /// The string is expected to be in the format
     /// "R,G,B,A" like it is produced by ToString.
     /// </summary>
-    /// <param name="str"></param>
-    /// <param name="color"></param>
-    /// <returns></returns>
-    public static bool TryParse(string str, ref Color color)
+    /// <param name="str">The string representation of the color.</param>
+    /// <param name="color">The parsed color is returend here if the method returns true.</param>
+    /// <returns>True if the given string could be parsed to a color, else false.</returns>
+    public static bool TryParse(string str, out Color color)
     {
+      color = Black;
+
       if (str != null)
       {
         string[] parts = str.Split(',');
-        if (parts.Length == 4)
+        if (parts.Length == 3 || parts.Length == 4)
         {
           byte value = 0;
           if (byte.TryParse(parts[0].Trim(), out value))
@@ -186,10 +188,13 @@ namespace OkuEngine
           else
             return false;
 
-          if (byte.TryParse(parts[3].Trim(), out value))
-            color.A = value;
-          else
-            return false;
+          if (parts.Length == 4)
+          {
+            if (byte.TryParse(parts[3].Trim(), out value))
+              color.A = value;
+            else
+              return false;
+          }
 
           return true;
         }

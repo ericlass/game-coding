@@ -5,16 +5,19 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
+using System.Xml;
 using Tao.OpenGl;
 using Tao.Platform.Windows;
 
-namespace OkuEngine
+namespace OkuEngine.Driver.Renderer
 {
   /// <summary>
   /// Implements an Oku renderer using OpenGL hardware acceleration.
   /// </summary>
   public class OpenGLRenderer : IRenderer
   {
+    public const string RendererName = "opengl";
+
     private bool _fullscreen = false;
     private Color _clearColor = Color.Black;
     private ViewPort _viewPort = null;
@@ -213,57 +216,82 @@ namespace OkuEngine
     /// <summary>
     /// Initializes the renderer. This includes creating the form and intitializing OpenGL.
     /// </summary>
-    public void Initialize(RendererParams parameters)
+    public void Initialize(XmlNode node)
     {
+      //TODO: Check for compatible node
+
+      //Load config from XML
+      XmlNode child = node.FirstChild;
+      while (child != null)
+      {
+        switch (child.Name)
+        {
+          case "fullscreen":
+            _fullscreen = Converter.StrToBool(child.FirstChild.Value, false);
+            break;
+
+          case "width":
+            _screenWidth = int.Parse(child.FirstChild.Value);
+            break;
+
+          case "height":
+            _screenHeight = int.Parse(child.FirstChild.Value);
+            break;
+
+          case "clearcolor":
+            Color col;
+            if (Color.TryParse(child.FirstChild.Value, out col))
+              _clearColor = col;
+            break;
+
+          case "passes":
+            List<int> passTargets = new List<int>();
+            XmlNode passNode = child.FirstChild;
+            while (passNode != null)
+            {
+              if (passNode.Name == "pass")
+              {
+                _renderPasses++;
+                passTargets.Add(passNode.Attributes.GetInt("targets", 1));
+              }
+              passNode = passNode.NextSibling;
+            }
+            _passTargets = passTargets.ToArray();
+            break;
+
+          default:
+            break;
+        }
+
+        child = child.NextSibling;
+      }
+
       //Process parameters
-      _fullscreen = parameters.Fullscreen;
-
-      _screenWidth = parameters.Width;
-      _screenHeight = parameters.Height;
-
-      _renderPasses = parameters.Passes;
-      _passTargets = new int[_renderPasses];
       int maxTargets = 0;
       for (int i = 0; i < _renderPasses; i++)
       {
-        int targets = 1;
-        
-        //Check that targets are given at all and that a number is given for the current pass
-        if (parameters.PassTargets != null && i < parameters.PassTargets.Length)
-          targets = parameters.PassTargets[i];
-
-        _passTargets[i] = targets;
-        maxTargets = Math.Max(maxTargets, targets);
+        maxTargets = Math.Max(maxTargets, _passTargets[i]);
       }
       _colorBuffers = new int[_renderPasses, maxTargets];
 
-      _clearColor = parameters.ClearColor;
-
       //Create view port
-      _viewPort = new ViewPort(parameters.Width, parameters.Height);
+      _viewPort = new ViewPort(_screenWidth, _screenHeight);
       _viewPort.Change += new ViewPortChangeEventHandler(_viewPort_Change);
 
-      //Create and setup form if no display handle was given
-      if (parameters.Display == null)
-      {
-        Form form = new Form();
-        form.ClientSize = new System.Drawing.Size(_screenWidth, _screenHeight);
-        form.FormBorderStyle = FormBorderStyle.FixedSingle;        
+      //Create and setup form
+      Form form = new Form();
+      form.ClientSize = new System.Drawing.Size(_screenWidth, _screenHeight);
+      form.FormBorderStyle = FormBorderStyle.FixedSingle;        
 
-        if (_fullscreen)
-        {
-          form.FormBorderStyle = FormBorderStyle.None;
-          form.WindowState = FormWindowState.Maximized;
-          form.TopMost = true;
-        }
-
-        form.Show();
-        _display = form;
-      }
-      else
+      if (_fullscreen)
       {
-        _display = parameters.Display;
+        form.FormBorderStyle = FormBorderStyle.None;
+        form.WindowState = FormWindowState.Maximized;
+        form.TopMost = true;
       }
+
+      form.Show();
+      _display = form;
 
       _display.Resize += new EventHandler(_form_Resize);
       _handle = _display.Handle;

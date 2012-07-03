@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.IO;
+using System.Xml;
+using System.Xml.Schema;
+using OkuEngine.Driver.Audio;
+using OkuEngine.GCC.Resources;
+using OkuEngine.Driver.Renderer;
 
 namespace OkuEngine
 {
@@ -37,11 +37,11 @@ namespace OkuEngine
       Kernel32.QueryPerformanceCounter(out tick2);
 
       User32.NativeMessage msg = new User32.NativeMessage();
-      HandleRef hRef = new HandleRef(OkuDrivers.Renderer.Display, OkuDrivers.Renderer.Display.Handle);
+      HandleRef hRef = new HandleRef(OkuManagers.Renderer.Display, OkuManagers.Renderer.Display.Handle);
 
       while (true)
       {
-        if (!OkuDrivers.Renderer.Display.Created)
+        if (!OkuManagers.Renderer.Display.Created)
           break;
 
         if (User32.PeekMessage(out msg, hRef, 0, 0, 1))
@@ -80,49 +80,27 @@ namespace OkuEngine
         }
       }
 
-      OkuDrivers.Renderer.Finish();
-      OkuDrivers.SoundEngine.Finish();
+      OkuManagers.Renderer.Finish();
+      OkuManagers.SoundEngine.Finish();
     }
 
     /// <summary>
-    /// Initializes the configuration with their default values.
+    /// Used to setup parameters for the resource cache.
     /// </summary>
-    private void InitDefaultConfig()
+    /// <param name="resourceParams">The parameters of the resource cache.</param>
+    protected virtual void SetupResourceCache(ref ResourceCacheParams resourceParams)
     {
-      OkuData.Globals.Set<int>(OkuConstants.VarScreenWidth, 1024);
-      OkuData.Globals.Set<int>(OkuConstants.VarScreenHeight, 768);
-      OkuData.Globals.Set<bool>(OkuConstants.VarFullscreen, false);
+      resourceParams.ResourceFile = new FileSystemResourceFile();
+      resourceParams.SizeInMb = 256;
     }
 
     /// <summary>
-    /// Loads the config file into the global variable cache.
+    /// Gets the name of the config file that is used to initializes the engine.
     /// </summary>
-    private void LoadConfigFile()
+    /// <returns>The name of the config file. Can include path.</returns>
+    protected virtual string GetConfigFileName()
     {
-      if (File.Exists(OkuConstants.ConfigFilename))
-      {
-        ConfigFile config = new ConfigFile();
-        config.LoadFile(OkuConstants.ConfigFilename);
-        if (config.Contains(OkuConstants.VarScreenWidth))
-          OkuData.Globals.Set<int>(OkuConstants.VarScreenWidth, config.GetInt(OkuConstants.VarScreenWidth));
-        if (config.Contains(OkuConstants.VarScreenHeight))
-          OkuData.Globals.Set<int>(OkuConstants.VarScreenHeight, config.GetInt(OkuConstants.VarScreenHeight));
-        if (config.Contains(OkuConstants.VarScreenWidth))
-          OkuData.Globals.Set<bool>(OkuConstants.VarFullscreen, config.GetBool(OkuConstants.VarFullscreen));
-      }
-    }
-
-    /// <summary>
-    /// Used to setup parameters for the whole engine.
-    /// </summary>
-    /// <param name="renderParams">The parameter for the renderer.</param>
-    public virtual void Setup(ref RendererParams renderParams)
-    {
-      renderParams.ClearColor = Color.Black;
-      renderParams.Fullscreen = OkuData.Globals.Get<bool>(OkuConstants.VarFullscreen);
-      renderParams.Width = OkuData.Globals.Get<int>(OkuConstants.VarScreenWidth);
-      renderParams.Height = OkuData.Globals.Get<int>(OkuConstants.VarScreenHeight);
-      renderParams.Display = null;
+      return "okuconfig.xml";
     }
 
     /// <summary>
@@ -130,20 +108,54 @@ namespace OkuEngine
     /// </summary>
     public void DoInitialize()
     {
-      InitDefaultConfig();
-      LoadConfigFile();
+      ResourceCacheParams resParams = new ResourceCacheParams();
+      SetupResourceCache(ref resParams);
 
-      RendererParams renderParams = new RendererParams();
-      renderParams.Display = null;
-      Setup(ref renderParams);
-      
-      OkuDrivers.Renderer = new OpenGLRenderer();
-      OkuDrivers.Renderer.Initialize(renderParams);
+      ResourceCache resCache = new ResourceCache(resParams);
+      OkuManagers.ResourceCache = resCache;
+      if (resCache.Initialize())
+      {
+        ResourceHandle configHandle = resCache.GetHandle(new Resource(GetConfigFileName()));
+        if (configHandle != null)
+        {
+          //TODO: include xml validation
+          XmlDocument config = new XmlDocument();
+          config.Load(configHandle.Buffer);
 
-      OkuDrivers.SoundEngine = new OpenALSoundEngine();
-      OkuDrivers.SoundEngine.Initialize();
+          XmlNode configNode = config.DocumentElement;
+          XmlNode managerNode = configNode.FirstChild;
+          while (managerNode != null)
+          {
+            switch (managerNode.Name)
+            {
+              case "renderer":                
+                RendererFactory factory = new RendererFactory();
+                IRenderer renderer = factory.CreateRenderer(managerNode);
+                if (renderer != null)
+                  OkuManagers.Renderer = renderer;
+                else
+                  throw new OkuException("Could not create renderer \"" + managerNode.ToString() + "\"!");
+                break;
 
-      Initialize();
+              case "sound":
+                SoundEngineFactory soundFactory = new SoundEngineFactory();
+                ISoundEngine sound = soundFactory.CreateSoundEngine(managerNode);
+                if (sound != null)
+                  OkuManagers.SoundEngine = sound;
+                else
+                  throw new OkuException("Could not create sound engine \"" + managerNode.ToString() + "\"!");
+                break;
+
+              default:
+                break;
+            }
+
+            managerNode = managerNode.NextSibling;
+          }
+
+          Initialize();
+        }
+      }
     }
 
     /// <summary>
@@ -162,9 +174,9 @@ namespace OkuEngine
     public void DoUpdate(float dt)
     {
       OkuData.Globals.Set<float>("oku.timedelta", dt);
-      OkuDrivers.SoundEngine.Update(dt);
-      OkuDrivers.Input.Update();
-      OkuDrivers.Input.Mouse.WheelDelta = _mouseDelta / 120.0f;
+      OkuManagers.SoundEngine.Update(dt);
+      OkuManagers.Input.Update();
+      OkuManagers.Input.Mouse.WheelDelta = _mouseDelta / 120.0f;
       _mouseDelta = 0;
 
       Update(dt);
@@ -184,20 +196,20 @@ namespace OkuEngine
     /// </summary>
     public void DoRender()
     {
-      if (OkuDrivers.Renderer.RenderPasses > 0)
+      if (OkuManagers.Renderer.RenderPasses > 0)
       {
-        for (int i = 0; i < OkuDrivers.Renderer.RenderPasses; i++)
+        for (int i = 0; i < OkuManagers.Renderer.RenderPasses; i++)
         {
-          OkuDrivers.Renderer.Begin(i);
+          OkuManagers.Renderer.Begin(i);
           Render(i);
-          OkuDrivers.Renderer.End(i);
+          OkuManagers.Renderer.End(i);
         }
       }
       else
       {
-        OkuDrivers.Renderer.Begin(0);
+        OkuManagers.Renderer.Begin(0);
         Render(0);
-        OkuDrivers.Renderer.End(0);
+        OkuManagers.Renderer.End(0);
       }
     }
 

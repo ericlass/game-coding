@@ -64,7 +64,7 @@ namespace OkuEngine
     {
       get
       {
-        Vector mouse = OkuDrivers.Renderer.ScreenToDisplay(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
+        Vector mouse = OkuManagers.Renderer.ScreenToDisplay(OkuManagers.Input.Mouse.X, OkuManagers.Input.Mouse.Y);
         return PointToClient(mouse);
       }
     }

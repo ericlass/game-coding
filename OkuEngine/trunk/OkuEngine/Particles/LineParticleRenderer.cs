@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OkuEngine.Driver.Renderer;
 
 namespace OkuEngine
 {
@@ -30,7 +31,7 @@ namespace OkuEngine
         }
       }
 
-      OkuDrivers.Renderer.DrawLines(_vertices.InternalArray, _colors.InternalArray, index, 1, VertexInterpretation.LineSegments);
+      OkuManagers.Renderer.DrawLines(_vertices.InternalArray, _colors.InternalArray, index, 1, VertexInterpretation.LineSegments);
 
 
       /*List<Vector> points = new List<Vector>();

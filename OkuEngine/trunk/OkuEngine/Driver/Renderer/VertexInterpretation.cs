@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OkuEngine
+namespace OkuEngine.Driver.Renderer
 {
   public enum VertexInterpretation {
     Polygon,

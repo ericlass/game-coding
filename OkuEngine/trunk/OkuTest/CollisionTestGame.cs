@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using OkuEngine;
+using OkuEngine.Driver.Renderer;
 
 namespace OkuTest
 {
@@ -43,11 +44,11 @@ namespace OkuTest
 
     public override void Initialize()
     {
-      OkuDrivers.Renderer.ClearColor = OkuEngine.Color.White;
+      OkuManagers.Renderer.ClearColor = OkuEngine.Color.White;
 
       SpriteFont font = new SpriteFont("Calibri", 12, FontStyle.Regular, false);
-      _strIntersect = font.GetStringMesh("Intersection", OkuDrivers.Renderer.ViewPort.Left + 5, OkuDrivers.Renderer.ViewPort.Top - 5, OkuEngine.Color.Red);
-      _strNoIntersect = font.GetStringMesh("No Intersection", OkuDrivers.Renderer.ViewPort.Left + 5, OkuDrivers.Renderer.ViewPort.Top - 5, OkuEngine.Color.Black);
+      _strIntersect = font.GetStringMesh("Intersection", OkuManagers.Renderer.ViewPort.Left + 5, OkuManagers.Renderer.ViewPort.Top - 5, OkuEngine.Color.Red);
+      _strNoIntersect = font.GetStringMesh("No Intersection", OkuManagers.Renderer.ViewPort.Left + 5, OkuManagers.Renderer.ViewPort.Top - 5, OkuEngine.Color.Black);
 
       _transform1.Translation = new Vector(-100, 0);
       _transform2.Translation = new Vector(200, 00);
@@ -68,20 +69,20 @@ namespace OkuTest
 
       float dx = 0;
       float dy = 0;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Left))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Left))
         dx -= step;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Right))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Right))
         dx += step;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Up))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Up))
         dy += step;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Down))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Down))
         dy -= step;
 
       float rotation = 0;
       step = rotSpeed * dt;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.NumPad4))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.NumPad4))
         rotation -= step;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.NumPad6))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.NumPad6))
         rotation += step;
 
       _transform2.Rotation += rotation;
@@ -105,8 +106,8 @@ namespace OkuTest
 
     public override void Render(int pass)
     {
-      OkuDrivers.Renderer.DrawLines(_transformed1, OkuEngine.Color.Red, _transformed1.Length, 1, VertexInterpretation.PolygonClosed);
-      OkuDrivers.Renderer.DrawLines(_transformed2, OkuEngine.Color.Blue, _transformed2.Length, 1, VertexInterpretation.PolygonClosed);
+      OkuManagers.Renderer.DrawLines(_transformed1, OkuEngine.Color.Red, _transformed1.Length, 1, VertexInterpretation.PolygonClosed);
+      OkuManagers.Renderer.DrawLines(_transformed2, OkuEngine.Color.Blue, _transformed2.Length, 1, VertexInterpretation.PolygonClosed);
 
       float x = 500;
       float y = 500;
@@ -115,14 +116,14 @@ namespace OkuTest
       for (int i = 0; i < _projections.Count; i++)
       {
         Ranges rang = _projections[i];
-        OkuDrivers.Renderer.DrawLine(new Vector(x + rang.Min1, y + (diff * i)), new Vector(x + rang.Max1, y + (diff * i)), 2, OkuEngine.Color.Red);
-        OkuDrivers.Renderer.DrawLine(new Vector(x + rang.Min2, y + 4 + (diff * i)), new Vector(x + rang.Max2, y + 4 + (diff * i)), 2, OkuEngine.Color.Blue);
+        OkuManagers.Renderer.DrawLine(new Vector(x + rang.Min1, y + (diff * i)), new Vector(x + rang.Max1, y + (diff * i)), 2, OkuEngine.Color.Red);
+        OkuManagers.Renderer.DrawLine(new Vector(x + rang.Min2, y + 4 + (diff * i)), new Vector(x + rang.Max2, y + 4 + (diff * i)), 2, OkuEngine.Color.Blue);
       }
 
       if (_intersect)
       {
         _strIntersect.Draw();
-        OkuDrivers.Renderer.DrawLine(_pos, _pos + _mtd, 1, OkuEngine.Color.Green);
+        OkuManagers.Renderer.DrawLine(_pos, _pos + _mtd, 1, OkuEngine.Color.Green);
       }
       else
         _strNoIntersect.Draw();

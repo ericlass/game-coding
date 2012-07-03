@@ -35,27 +35,27 @@ namespace OkuTest
         _map[x, y] = new Tile(tileType, tiles[tileType]);
       }
 
-      OkuDrivers.Renderer.ClearColor = Color.White;
+      OkuManagers.Renderer.ClearColor = Color.White;
     }
 
     public override void Update(float dt)
     {
-      if (OkuDrivers.Input.Mouse.ButtonIsDown(MouseButton.Left))
+      if (OkuManagers.Input.Mouse.ButtonIsDown(MouseButton.Left))
       {
-        _line[0] = OkuDrivers.Renderer.ScreenToWorld(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
+        _line[0] = OkuManagers.Renderer.ScreenToWorld(OkuManagers.Input.Mouse.X, OkuManagers.Input.Mouse.Y);
         //_line[0] = OkuDrivers.Renderer.ViewPort.ScreenSpaceMatrix.Transform(_line[0]);
       }
-      if (OkuDrivers.Input.Mouse.ButtonIsDown(MouseButton.Right))
+      if (OkuManagers.Input.Mouse.ButtonIsDown(MouseButton.Right))
       {
-        _line[1] = OkuDrivers.Renderer.ScreenToWorld(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
+        _line[1] = OkuManagers.Renderer.ScreenToWorld(OkuManagers.Input.Mouse.X, OkuManagers.Input.Mouse.Y);
         //_line[1] = OkuDrivers.Renderer.ViewPort.ScreenSpaceMatrix.Transform(_line[1]);
       }
-      if (OkuDrivers.Input.Keyboard.KeyPressed(Keys.Space))
+      if (OkuManagers.Input.Keyboard.KeyPressed(Keys.Space))
       {
         Random rand = new Random(System.Environment.TickCount);
-        OkuDrivers.Renderer.ViewPort.Left -= rand.RandomFloat() * 50.0f;
-        OkuDrivers.Renderer.ViewPort.Top -= rand.RandomFloat() * 50.0f;
-        OkuDrivers.Renderer.ViewPort.Scale = new Vector(rand.RandomFloat(), rand.RandomFloat());
+        OkuManagers.Renderer.ViewPort.Left -= rand.RandomFloat() * 50.0f;
+        OkuManagers.Renderer.ViewPort.Top -= rand.RandomFloat() * 50.0f;
+        OkuManagers.Renderer.ViewPort.Scale = new Vector(rand.RandomFloat(), rand.RandomFloat());
       }
       
       //_intersect = _map.GetIntersection(new LineSegment( _line[0], _line[1]), out _colPoint);
@@ -64,28 +64,28 @@ namespace OkuTest
       float speed = 300 * dt;
       float dx = 0;
       float dy = 0;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Left))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Left))
         dx += speed;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Right))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Right))
         dx -= speed;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Up))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Up))
         dy += speed;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(Keys.Down))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Down))
         dy -= speed;
 
-      OkuDrivers.Renderer.ViewPort.Left += dx;
-      OkuDrivers.Renderer.ViewPort.Top += dy;
+      OkuManagers.Renderer.ViewPort.Left += dx;
+      OkuManagers.Renderer.ViewPort.Top += dy;
     }
 
     public override void Render(int pass)
     {
       _map.Draw();
-      OkuDrivers.Renderer.DrawLine(_line[0], _line[1], 2, Color.Red);
-      OkuDrivers.Renderer.DrawPoint(_line[0], 4, Color.Blue);
-      OkuDrivers.Renderer.DrawPoint(_line[1], 4, Color.Blue);
+      OkuManagers.Renderer.DrawLine(_line[0], _line[1], 2, Color.Red);
+      OkuManagers.Renderer.DrawPoint(_line[0], 4, Color.Blue);
+      OkuManagers.Renderer.DrawPoint(_line[1], 4, Color.Blue);
 
       if (_intersect)
-        OkuDrivers.Renderer.DrawPoint(_colPoint, 4, Color.Green);
+        OkuManagers.Renderer.DrawPoint(_colPoint, 4, Color.Green);
     }
 
   }

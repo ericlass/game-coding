@@ -20,6 +20,12 @@ namespace OkuEngine.GCC.Resources
     private long _maxSize = 0;
     private long _currentSize = 0;
 
+    public ResourceCache(ResourceCacheParams resourceParams)
+    {
+      _maxSize = resourceParams.SizeInMb * 1024 * 1024;
+      _resourceFile = resourceParams.ResourceFile;
+    }
+
     public ResourceCache(long sizeInMb, IResourceFile resourceFile)
     {
       _maxSize = sizeInMb * 1024 * 1024;
@@ -67,6 +73,9 @@ namespace OkuEngine.GCC.Resources
       }
 
       long rawSize = _resourceFile.GetRawResourceSize(resource);
+      if (rawSize <= 0)
+        return null;
+
       Stream rawBuffer = loader.UseRawFile ? Allocate(rawSize) : new MemoryStream((int)rawSize);
 
       if (rawBuffer == null)
@@ -96,6 +105,9 @@ namespace OkuEngine.GCC.Resources
           return null;
         }
       }
+
+      if (buffer != null)
+        buffer.Position = 0;
 
       if (handle != null)
       {
@@ -161,7 +173,7 @@ namespace OkuEngine.GCC.Resources
       _currentSize -= size;
     }
 
-    public bool Init()
+    public bool Initialize()
     {
       bool result = false;
       if (_resourceFile.Open())

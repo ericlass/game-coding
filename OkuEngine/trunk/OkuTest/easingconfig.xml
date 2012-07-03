@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<okuconfig>
+  <renderer type="opengl">
+    <fullscreen>no</fullscreen>
+    <width>1024</width>
+    <height>768</height>
+    <clearcolor>255,255,255</clearcolor>
+  </renderer>
+  <sound type="openal">
+    <volume>1.0</volume>
+  </sound>
+</okuconfig>

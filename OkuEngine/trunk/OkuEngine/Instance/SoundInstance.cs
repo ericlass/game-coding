@@ -20,17 +20,17 @@ namespace OkuEngine
 
     public void Play()
     {
-      OkuDrivers.SoundEngine.Play(this);
+      OkuManagers.SoundEngine.Play(this);
     }
 
     public void Pause()
     {
-      OkuDrivers.SoundEngine.Pause(this);
+      OkuManagers.SoundEngine.Pause(this);
     }
 
     public void Stop()
     {
-      OkuDrivers.SoundEngine.Stop(this);
+      OkuManagers.SoundEngine.Stop(this);
     }
 
     public SoundContent Content

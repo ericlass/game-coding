@@ -13,14 +13,14 @@ namespace OkuTest
     private OkuEngine.Color _lightColor = new OkuEngine.Color(247, 235, 202);
     private PixelShaderContent _rayShader = null;
 
-    public override void Setup(ref RendererParams renderParams)
+    /*public void Setup(ref RendererParams renderParams)
     {
       renderParams.ClearColor = OkuEngine.Color.Black;
       renderParams.Fullscreen = false;
       renderParams.Height = 768;
       renderParams.Width = 1024;
       renderParams.Passes = 2;
-    }
+    }*/
 
     public override void Initialize()
     {
@@ -55,19 +55,19 @@ namespace OkuTest
     public override void Update(float dt)
     {
       //Get mouse position in window client coordinates
-      Point m = OkuDrivers.Renderer.Display.PointToClient(new Point(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y));
+      Point m = OkuManagers.Renderer.Display.PointToClient(new Point(OkuManagers.Input.Mouse.X, OkuManagers.Input.Mouse.Y));
 
       //Calculate mouse coordinates in world space
-      _mousePos.X = OkuDrivers.Renderer.ViewPort.Left + m.X;
-      _mousePos.Y = OkuDrivers.Renderer.ViewPort.Top - m.Y;
+      _mousePos.X = OkuManagers.Renderer.ViewPort.Left + m.X;
+      _mousePos.Y = OkuManagers.Renderer.ViewPort.Top - m.Y;
 
       //Get width and height of view
-      float viewWidth = OkuDrivers.Renderer.ViewPort.Width;
-      float viewHeight = OkuDrivers.Renderer.ViewPort.Height;
+      float viewWidth = OkuManagers.Renderer.ViewPort.Width;
+      float viewHeight = OkuManagers.Renderer.ViewPort.Height;
 
       //Get mouse (light) position in view space
-      float lightX = _mousePos.X - OkuDrivers.Renderer.ViewPort.Left;
-      float lightY = _mousePos.Y - OkuDrivers.Renderer.ViewPort.Bottom;
+      float lightX = _mousePos.X - OkuManagers.Renderer.ViewPort.Left;
+      float lightY = _mousePos.Y - OkuManagers.Renderer.ViewPort.Bottom;
 
       //Convert view space light coordinates to texture space
       _lightPos.X = lightX / viewWidth;
@@ -79,18 +79,18 @@ namespace OkuTest
       switch (pass)
       {
         case 0:
-          OkuDrivers.Renderer.DrawPoint(_mousePos, 50, _lightColor);
-          OkuDrivers.Renderer.DrawScreenAlignedQuad(_mask);
+          OkuManagers.Renderer.DrawPoint(_mousePos, 50, _lightColor);
+          OkuManagers.Renderer.DrawScreenAlignedQuad(_mask);
           break;
 
         case 1:
-          OkuDrivers.Renderer.UseShader(_rayShader);
-          OkuDrivers.Renderer.SetShaderFloat(_rayShader, "lightPos", new float[] { _lightPos.X, _lightPos.Y });
-          OkuDrivers.Renderer.SetShaderTexture(_rayShader, "tex", OkuDrivers.Renderer.GetPassResult(0, 0));
+          OkuManagers.Renderer.UseShader(_rayShader);
+          OkuManagers.Renderer.SetShaderFloat(_rayShader, "lightPos", new float[] { _lightPos.X, _lightPos.Y });
+          OkuManagers.Renderer.SetShaderTexture(_rayShader, "tex", OkuManagers.Renderer.GetPassResult(0, 0));
 
-          OkuDrivers.Renderer.DrawScreenAlignedQuad(OkuDrivers.Renderer.GetPassResult(0, 0));
+          OkuManagers.Renderer.DrawScreenAlignedQuad(OkuManagers.Renderer.GetPassResult(0, 0));
 
-          OkuDrivers.Renderer.UseShader(null);
+          OkuManagers.Renderer.UseShader(null);
           break;
 
         default:

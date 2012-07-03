@@ -1,4 +1,5 @@
 ﻿using System;
+using OkuEngine.Driver.Renderer;
 
 namespace OkuEngine
 {
@@ -94,7 +95,7 @@ namespace OkuEngine
     /// </summary>
     public void Draw()
     {
-      OkuDrivers.Renderer.DrawMesh(_vertices.Positions, _vertices.TexCoords, _vertices.Colors, _vertices.Positions.Length, _mode, _texture);
+      OkuManagers.Renderer.DrawMesh(_vertices.Positions, _vertices.TexCoords, _vertices.Colors, _vertices.Positions.Length, _mode, _texture);
     }
     
   }

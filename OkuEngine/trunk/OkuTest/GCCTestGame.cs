@@ -13,11 +13,6 @@ namespace OkuTest
     //private Actor _actor = null;
     //private ProcessManager _manager = null;
 
-    public override void Setup(ref RendererParams renderParams)
-    {
-      base.Setup(ref renderParams);
-    }
-
     public override void Initialize()
     {
       //Actor loading test
@@ -40,7 +35,7 @@ namespace OkuTest
       //ResourceCache test
       FileSystemResourceFile file = new FileSystemResourceFile("D:\\temp");
       ResourceCache cache = new ResourceCache(2, file);
-      if (cache.Init())
+      if (cache.Initialize())
       {
         Resource res = new Resource("AnjaFolie01.psd");
         ResourceHandle handle = cache.GetHandle(res);

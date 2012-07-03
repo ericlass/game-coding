@@ -2,12 +2,18 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Windows.Forms;
 
 namespace OkuEngine.GCC.Resources
 {
   public class FileSystemResourceFile : IResourceFile
   {
     private string _basePath = null;
+
+    public FileSystemResourceFile()
+    {
+      _basePath = Path.GetDirectoryName(Application.ExecutablePath);
+    }
 
     public FileSystemResourceFile(string basePath)
     {

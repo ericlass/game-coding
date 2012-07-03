@@ -20,7 +20,7 @@ namespace OkuEngine
       Bitmap bm = new Bitmap(filename);
       _width = bm.Width;
       _height = bm.Height;
-      OkuDrivers.Renderer.InitImageContent(this, bm);
+      OkuManagers.Renderer.InitImageContent(this, bm);
     }
 
     public ImageContent(Stream fileStream)
@@ -28,7 +28,7 @@ namespace OkuEngine
       Bitmap bm = new Bitmap(fileStream);
       _width = bm.Width;
       _height = bm.Height;
-      OkuDrivers.Renderer.InitImageContent(this, bm);
+      OkuManagers.Renderer.InitImageContent(this, bm);
     }
 
     public ImageContent(byte[] rawData, int width, int height)
@@ -42,12 +42,12 @@ namespace OkuEngine
       Marshal.Copy(rawData, 0, data.Scan0, rawData.Length);
       bm.UnlockBits(data);
 
-      OkuDrivers.Renderer.InitImageContent(this, bm);
+      OkuManagers.Renderer.InitImageContent(this, bm);
     }
 
     public ImageContent(Bitmap image)
     {
-      OkuDrivers.Renderer.InitImageContent(this, image);
+      OkuManagers.Renderer.InitImageContent(this, image);
     }
 
     public int Width
@@ -64,7 +64,7 @@ namespace OkuEngine
 
     public void Update(int x, int y, int width, int height, Bitmap image)
     {
-      OkuDrivers.Renderer.UpdateContent(this, x, y, width, height, image);
+      OkuManagers.Renderer.UpdateContent(this, x, y, width, height, image);
     }
 
     public static List<ImageContent> LoadSheet(string filename, int tileSize)

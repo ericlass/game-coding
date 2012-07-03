@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using OkuEngine.Driver.Renderer;
 
 namespace OkuEngine
 {
@@ -44,9 +43,9 @@ namespace OkuEngine
     public void Draw()
     {
       if (_content.Colors != null)
-        OkuDrivers.Renderer.DrawLines(_content.Positions, _content.Colors, _content.Positions.Length, _lineWidth, _interpretation);
+        OkuManagers.Renderer.DrawLines(_content.Positions, _content.Colors, _content.Positions.Length, _lineWidth, _interpretation);
       else
-        OkuDrivers.Renderer.DrawLines(_content.Positions, _lineColor, _content.Positions.Length, _lineWidth, _interpretation);
+        OkuManagers.Renderer.DrawLines(_content.Positions, _lineColor, _content.Positions.Length, _lineWidth, _interpretation);
     }
 
   }

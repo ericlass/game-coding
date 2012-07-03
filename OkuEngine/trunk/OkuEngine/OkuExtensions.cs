@@ -79,6 +79,29 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Gets the value of the attribute with the given name.
+    /// If there is no attribute with the given name, the given default is returned.
+    /// </summary>
+    /// <param name="attributes">The attributes to search in.</param>
+    /// <param name="name">The name of the attribute.</param>
+    /// <param name="defaultIfNull">The default value.</param>
+    /// <returns>The value of the attribute, or the given default value if there is 
+    /// no attribute with the given name.</returns>
+    public static string GetAttributeValue(this XmlAttributeCollection attributes, string name, string defaultIfNull)
+    {
+      string result = defaultIfNull;
+      foreach (XmlAttribute attrib in attributes)
+      {
+        if (attrib.Name == name)
+        {
+          result = attrib.Value;
+          break;
+        }
+      }
+      return result;
+    }
+
+    /// <summary>
     /// Gets the attribute with the given name in float format.
     /// If there is no attribute with the given name or its value cannot be
     /// converted to a float, the given default is returned.
@@ -90,16 +113,34 @@ namespace OkuEngine
     /// no attribute with the given name or its value cannot be converted to a float.</returns>
     public static float GetFloat(this XmlAttributeCollection attributes, string name, float defaultIfNull)
     {
-      float result = defaultIfNull;
-      foreach (XmlAttribute attrib in attributes)
+      string value = attributes.GetAttributeValue(name, null);
+      if (value != null)
       {
-        if (attrib.Name == name)
-        {
-          result = Converter.StrToFloat(attrib.Value);
-          break;
-        }
+        return Converter.StrToFloat(value);
       }
-      return result;
+      return defaultIfNull;
+    }
+
+    /// <summary>
+    /// Gets the attribute with the given name in int format.
+    /// If there is no attribute with the given name or its value cannot be
+    /// converted to a int, the given default is returned.
+    /// </summary>
+    /// <param name="attributes">The attributes to search in.</param>
+    /// <param name="name">The name of the attribute.</param>
+    /// <param name="defaultIfNull">The default value.</param>
+    /// <returns>The int value of the attribute, or the given default value if there is 
+    /// no attribute with the given name or its value cannot be converted to a int.</returns>
+    public static int GetInt(this XmlAttributeCollection attributes, string name, int defaultIfNull)
+    {
+      string value = attributes.GetAttributeValue(name, null);
+      if (value != null)
+      {
+        int result = 0;
+        if (int.TryParse(value, out result))
+          return result;
+      }
+      return defaultIfNull;
     }
 
     public static T PopFirst<T>(this List<T> list)

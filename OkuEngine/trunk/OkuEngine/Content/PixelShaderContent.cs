@@ -12,7 +12,7 @@ namespace OkuEngine
     public PixelShaderContent(String source)
     {
       _source = source;
-      OkuDrivers.Renderer.InitShaderContent(this);
+      OkuManagers.Renderer.InitShaderContent(this);
     }
 
     public string Source

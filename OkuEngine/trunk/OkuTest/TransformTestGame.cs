@@ -12,13 +12,13 @@ namespace OkuTest
     private float _outerAngle = 0.0f;
     private Vector _offset = new Vector(100, 0);
 
-    public override void Setup(ref RendererParams renderParams)
+    /*public void Setup(ref RendererParams renderParams)
     {
       renderParams.ClearColor = Color.White;
       renderParams.Fullscreen = false;
       renderParams.Width = 1024;
       renderParams.Height = 768;
-    }
+    }*/
 
     public override void Initialize()
     {
@@ -34,14 +34,14 @@ namespace OkuTest
 
     public override void Render(int pass)
     {
-      OkuDrivers.Renderer.PushTransform();
-      OkuDrivers.Renderer.ApplyTransform(Vector.Zero, Vector.One, _innerAngle);
-      OkuDrivers.Renderer.DrawImage(_yinyang, Vector.Zero);
-      OkuDrivers.Renderer.ApplyTransform(_offset, new Vector(0.8f, 0.8f), _outerAngle);
-      OkuDrivers.Renderer.DrawImage(_yinyang, Vector.Zero);
-      OkuDrivers.Renderer.ApplyTransform(_offset / 2, new Vector(0.5f, 0.5f), _outerAngle);
-      OkuDrivers.Renderer.DrawImage(_yinyang, Vector.Zero);
-      OkuDrivers.Renderer.PopTransform();
+      OkuManagers.Renderer.PushTransform();
+      OkuManagers.Renderer.ApplyTransform(Vector.Zero, Vector.One, _innerAngle);
+      OkuManagers.Renderer.DrawImage(_yinyang, Vector.Zero);
+      OkuManagers.Renderer.ApplyTransform(_offset, new Vector(0.8f, 0.8f), _outerAngle);
+      OkuManagers.Renderer.DrawImage(_yinyang, Vector.Zero);
+      OkuManagers.Renderer.ApplyTransform(_offset / 2, new Vector(0.5f, 0.5f), _outerAngle);
+      OkuManagers.Renderer.DrawImage(_yinyang, Vector.Zero);
+      OkuManagers.Renderer.PopTransform();
     }
 
   }

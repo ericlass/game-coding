@@ -1,8 +1,9 @@
 ﻿using System.Windows.Forms;
 using System.IO;
+using System.Xml;
 using System.Drawing;
 
-namespace OkuEngine
+namespace OkuEngine.Driver.Renderer
 {
   /// <summary>
   /// Interface with methods for rendering the game. A rendering driver has to implement all methods according to the specifications.
@@ -59,7 +60,7 @@ namespace OkuEngine
     /// Is called once at the start of the application. It should do all necessary initialization
     /// that is needed by the renderer. It has to create the form that is used to display the game.
     /// </summary>
-    void Initialize(RendererParams parameters);
+    void Initialize(XmlNode node);
 
     /// <summary>
     /// Is called each frame during the update process. This must not do any rendering. It should

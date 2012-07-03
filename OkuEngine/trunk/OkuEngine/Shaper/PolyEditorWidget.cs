@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OkuEngine.Driver.Renderer;
 
 namespace OkuEngine.Shaper
 {
@@ -247,7 +248,7 @@ namespace OkuEngine.Shaper
       }
       else if (button == MouseButton.Right)
       {
-        bool ctrl = OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.ControlKey);
+        bool ctrl = OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.ControlKey);
         if (!ctrl)
           _selectedPoints.Clear();
 
@@ -302,7 +303,7 @@ namespace OkuEngine.Shaper
 
     public override void KeyDown(System.Windows.Forms.Keys key)
     {
-      bool ctrl = OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.ControlKey);
+      bool ctrl = OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.ControlKey);
 
       if (key == System.Windows.Forms.Keys.Delete)
       {

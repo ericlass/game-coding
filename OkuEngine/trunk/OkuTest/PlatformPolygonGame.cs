@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OkuEngine;
+using OkuEngine.Driver.Renderer;
 
 namespace OkuTest
 {
@@ -26,7 +27,7 @@ namespace OkuTest
       CollisionWorld world = new CollisionWorld();
       world.GetLinesOnLine(new Vector(50, 50), new Vector(150, 150));
 
-      OkuDrivers.Renderer.ClearColor = Color.White;
+      OkuManagers.Renderer.ClearColor = Color.White;
 
       _floor = new Vector[wallPoints];
       _ceiling = new Vector[_floor.Length];
@@ -56,19 +57,19 @@ namespace OkuTest
     public override void Update(float dt)
     {
       float speed = 200 * dt;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.NumPad6))
-        OkuDrivers.Renderer.ViewPort.Left += speed;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.NumPad4))
-        OkuDrivers.Renderer.ViewPort.Left -= speed;
+      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.NumPad6))
+        OkuManagers.Renderer.ViewPort.Left += speed;
+      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.NumPad4))
+        OkuManagers.Renderer.ViewPort.Left -= speed;
 
       speed = 200 * dt;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Left))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Left))
         _playerPos.X -= speed;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Right))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Right))
         _playerPos.X += speed;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Up))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Up))
         _playerPos.Y += speed;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Down))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Down))
         _playerPos.Y -= speed;
 
       _transform.LoadIdentity();
@@ -94,15 +95,15 @@ namespace OkuTest
 
     public override void Render(int pass)
     {
-      OkuDrivers.Renderer.DrawLines(_floor, Color.Blue, _floor.Length, 1.0f, VertexInterpretation.Polygon);
-      OkuDrivers.Renderer.DrawLines(_ceiling, Color.Red, _ceiling.Length, 1.0f, VertexInterpretation.Polygon);
+      OkuManagers.Renderer.DrawLines(_floor, Color.Blue, _floor.Length, 1.0f, VertexInterpretation.Polygon);
+      OkuManagers.Renderer.DrawLines(_ceiling, Color.Red, _ceiling.Length, 1.0f, VertexInterpretation.Polygon);
 
-      OkuDrivers.Renderer.DrawLines(_transformedPlayer, Color.Black, _transformedPlayer.Length, 1.0f, VertexInterpretation.PolygonClosed);
+      OkuManagers.Renderer.DrawLines(_transformedPlayer, Color.Black, _transformedPlayer.Length, 1.0f, VertexInterpretation.PolygonClosed);
 
       if (_collision)
-        OkuDrivers.Renderer.DrawLines(_collidedPlayer, Color.Silver, _collidedPlayer.Length, 1.0f, VertexInterpretation.PolygonClosed);
+        OkuManagers.Renderer.DrawLines(_collidedPlayer, Color.Silver, _collidedPlayer.Length, 1.0f, VertexInterpretation.PolygonClosed);
 
-      OkuDrivers.Renderer.DrawLine(_playerPos, _playerPos + _trans, 1.0f, Color.Magenta);
+      OkuManagers.Renderer.DrawLine(_playerPos, _playerPos + _trans, 1.0f, Color.Magenta);
 
       /*foreach (Vector vec in _transformedPlayer)
       {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OkuEngine;
+using OkuEngine.Driver.Renderer;
 
 namespace OkuTest
 {
@@ -54,23 +55,23 @@ namespace OkuTest
     {
       float speed = 1000 * dt;
       float dx = 0;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.NumPad6))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.NumPad6))
         dx += speed;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.NumPad4))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.NumPad4))
         dx -= speed;
 
-      OkuDrivers.Renderer.ViewPort.Left += dx;
+      OkuManagers.Renderer.ViewPort.Left += dx;
 
       speed = 200 * dt;
       _playerVelocity.X = 0;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Right))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Right))
         _playerVelocity.X = speed;
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Left))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Left))
         _playerVelocity.X = -speed;
 
       _playerVelocity.Y -= 5 * dt;
 
-      if (!_jumping && OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Up))
+      if (!_jumping && OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Up))
       {
         _jumping = true;
         _playerVelocity.Y = 500 * dt;
@@ -99,17 +100,17 @@ namespace OkuTest
 
       _mtd = mtd;
 
-      Vector center = OkuDrivers.Renderer.ViewPort.Center;
+      Vector center = OkuManagers.Renderer.ViewPort.Center;
       center.X = _transformedPlayer[0].X;
-      OkuDrivers.Renderer.ViewPort.Center = center;
+      OkuManagers.Renderer.ViewPort.Center = center;
     }
 
     public override void Render(int pass)
     {
       _tileMap.Draw();
-      OkuDrivers.Renderer.DrawLines(_transformedPlayer, Color.Blue, _transformedPlayer.Length, 2, VertexInterpretation.PolygonClosed);
-      OkuDrivers.Renderer.DrawLine(_playerPos, _playerPos + (_playerVelocity * 20), 2, Color.Green);
-      OkuDrivers.Renderer.DrawLine(_playerPos, _playerPos + (_mtd * 20), 2, Color.Red);
+      OkuManagers.Renderer.DrawLines(_transformedPlayer, Color.Blue, _transformedPlayer.Length, 2, VertexInterpretation.PolygonClosed);
+      OkuManagers.Renderer.DrawLine(_playerPos, _playerPos + (_playerVelocity * 20), 2, Color.Green);
+      OkuManagers.Renderer.DrawLine(_playerPos, _playerPos + (_mtd * 20), 2, Color.Red);
     }
 
   }

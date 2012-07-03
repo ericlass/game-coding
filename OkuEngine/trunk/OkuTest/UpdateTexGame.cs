@@ -17,7 +17,7 @@ namespace OkuTest
 
     public override void Initialize()
     {
-      OkuDrivers.Renderer.ClearColor = OkuEngine.Color.White;
+      OkuManagers.Renderer.ClearColor = OkuEngine.Color.White;
 
       _leds = new Bitmap[4];
       _leds[0] = new Bitmap(".\\content\\led_red.png");
@@ -43,7 +43,7 @@ namespace OkuTest
 
     public override void Render(int pass)
     {
-      OkuDrivers.Renderer.DrawImage(_content, new Vector(0, 0));
+      OkuManagers.Renderer.DrawImage(_content, new Vector(0, 0));
     }
 
   }

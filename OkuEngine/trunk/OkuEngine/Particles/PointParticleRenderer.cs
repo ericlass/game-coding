@@ -26,7 +26,7 @@ namespace OkuEngine
         }
       }
 
-      OkuDrivers.Renderer.DrawPoints(_vertices.InternalArray, _colors.InternalArray, index, _pointSize);
+      OkuManagers.Renderer.DrawPoints(_vertices.InternalArray, _colors.InternalArray, index, _pointSize);
     }
 
     public float PointSize 

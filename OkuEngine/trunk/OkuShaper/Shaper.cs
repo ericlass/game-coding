@@ -27,18 +27,18 @@ namespace OkuShaper
     private const string ImageFileFilter = "All Images|*.png;*.bmp;*.jpg;*.jpeg;*.gif;*.tiff;*.tif|PNG (*.png)|*.png|Bitmap (*.bmp)|*.bmp|JPEG (*.jpg, *.jpeg)|*.jpg;*.jpeg|GIF (*.gif)|*.gif|TIFF (*.tif, *.tiff)|*.tif;*.tiff|All Files (*.*)|*.*";
     private const string ShapeFileFilter = "Oku Shapes (*.oks)|*.oks|All Files (*.*)|*.*";
 
-    public override void Setup(ref RendererParams renderParams)
+    /*public void Setup(ref RendererParams renderParams)
     {
       renderParams.ClearColor = ColorMap.Flash.BackGround;
       renderParams.Width = 1280;
       renderParams.Height = 800;
-    }
+    }*/
 
     public override void Initialize()
     {
       _gui = new WidgetContainer(new SpriteFont("Calibri", 10.0f, System.Drawing.FontStyle.Bold, true));
 
-      Form form = (Form)OkuDrivers.Renderer.Display;
+      Form form = (Form)OkuManagers.Renderer.Display;
       form.FormClosing += new FormClosingEventHandler(form_FormClosing);
 
       _newButton = new ButtonWidget();
@@ -106,10 +106,10 @@ namespace OkuShaper
     {
       _gui.Update(dt);
 
-      if (OkuDrivers.Renderer.Display.Focused)
+      if (OkuManagers.Renderer.Display.Focused)
       {
-        Vector mouseScreen = OkuDrivers.Renderer.ScreenToDisplay(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
-        Vector mouseWorld = OkuDrivers.Renderer.ScreenToWorld(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
+        Vector mouseScreen = OkuManagers.Renderer.ScreenToDisplay(OkuManagers.Input.Mouse.X, OkuManagers.Input.Mouse.Y);
+        Vector mouseWorld = OkuManagers.Renderer.ScreenToWorld(OkuManagers.Input.Mouse.X, OkuManagers.Input.Mouse.Y);
 
         //Load background image
         if (_imageButton.Clicked)
@@ -138,7 +138,7 @@ namespace OkuShaper
           _imageStream = null;
 
           if (_image != null)
-            OkuDrivers.Renderer.ReleaseContent(_image);
+            OkuManagers.Renderer.ReleaseContent(_image);
 
           _image = null;
 
@@ -201,7 +201,7 @@ namespace OkuShaper
         }
 
         if (_image != null)
-          OkuDrivers.Renderer.ReleaseContent(_image);
+          OkuManagers.Renderer.ReleaseContent(_image);
 
         _image = new ImageContent(_imageStream);
         _editor.BackgroundImage = _image;
@@ -245,7 +245,7 @@ namespace OkuShaper
       Shape.Load(filename, out points, out _imageStream);
 
       if (_image != null)
-        OkuDrivers.Renderer.ReleaseContent(_image);
+        OkuManagers.Renderer.ReleaseContent(_image);
 
       if (_imageStream != null)
         _image = new ImageContent(_imageStream);
@@ -276,7 +276,7 @@ namespace OkuShaper
       if (_modified)
         title += "*";
 
-      OkuDrivers.Renderer.Display.Text = title;
+      OkuManagers.Renderer.Display.Text = title;
     }
 
     public override void Render(int pass)

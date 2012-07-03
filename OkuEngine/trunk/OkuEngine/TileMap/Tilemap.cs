@@ -317,8 +317,8 @@ namespace OkuEngine
     public void Draw()
     {
       int left, right, top, bottom;
-      WorldToTile(OkuDrivers.Renderer.ViewPort.Left, OkuDrivers.Renderer.ViewPort.Top, out left, out top);
-      WorldToTile(OkuDrivers.Renderer.ViewPort.Right, OkuDrivers.Renderer.ViewPort.Bottom, out right, out bottom);
+      WorldToTile(OkuManagers.Renderer.ViewPort.Left, OkuManagers.Renderer.ViewPort.Top, out left, out top);
+      WorldToTile(OkuManagers.Renderer.ViewPort.Right, OkuManagers.Renderer.ViewPort.Bottom, out right, out bottom);
 
       for (int y = bottom; y <= top; y++)
       {
@@ -330,7 +330,7 @@ namespace OkuEngine
           {
             position.X = (x * _tileSize) + _origin.X + (_tileSize / 2.0f);
             position.Y = (y * _tileSize) + _origin.Y + (_tileSize / 2.0f);
-            OkuDrivers.Renderer.DrawImage(_tileImages[tile.Image], position);
+            OkuManagers.Renderer.DrawImage(_tileImages[tile.Image], position);
           }
         }
       }

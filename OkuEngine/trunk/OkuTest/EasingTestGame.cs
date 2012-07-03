@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OkuEngine;
+using OkuEngine.Driver.Renderer;
 
 namespace OkuTest
 {
@@ -19,12 +20,9 @@ namespace OkuTest
     private float _angle = 0.0f;
     private float _control = 0.0f;
 
-    public override void Setup(ref RendererParams renderParams)
+    protected override string GetConfigFileName()
     {
-      renderParams.ClearColor = Color.White;
-      renderParams.Fullscreen = false;
-      renderParams.Width = 1024;
-      renderParams.Height = 768;
+      return "easingconfig.xml";
     }
 
     public override void Initialize()
@@ -46,9 +44,9 @@ namespace OkuTest
 
     public override void Update(float dt)
     {
-      if (OkuDrivers.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.Add))
+      if (OkuManagers.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.Add))
         _ease.Strength += 1;
-      if (OkuDrivers.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.Subtract))
+      if (OkuManagers.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.Subtract))
         _ease.Strength -= 1;
 
       long tick1, tick2, freq;
@@ -72,12 +70,12 @@ namespace OkuTest
       }
 
       float time = passed / (float)freq;
-      OkuDrivers.Renderer.Display.Text = time.ToString();
+      OkuManagers.Renderer.Display.Text = time.ToString();
 
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Right))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Right))
         _control = Math.Min(1.0f, _control + dt);
 
-      if (OkuDrivers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Left))
+      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Left))
         _control = Math.Max(-1.0f, _control - dt);
 
       _angle = 135.0f * _imageEase.GetValueAt(_control);
@@ -85,10 +83,10 @@ namespace OkuTest
 
     public override void Render(int pass)
     {
-      OkuDrivers.Renderer.DrawLines(_points, Color.Blue, _points.Length, 1.0f, VertexInterpretation.Polygon);
-      OkuDrivers.Renderer.DrawPoints(_points, Color.Red, _points.Length, 2.0f);
+      OkuManagers.Renderer.DrawLines(_points, Color.Blue, _points.Length, 1.0f, VertexInterpretation.Polygon);
+      OkuManagers.Renderer.DrawPoints(_points, Color.Red, _points.Length, 2.0f);
 
-      OkuDrivers.Renderer.DrawImage(_image, Vector.Zero, _angle);
+      OkuManagers.Renderer.DrawImage(_image, Vector.Zero, _angle);
     }
 
   }

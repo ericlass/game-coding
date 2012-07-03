@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OkuEngine
+namespace OkuEngine.Driver.Renderer
 {
   /// <summary>
   /// Defines methods for texture filtering.
