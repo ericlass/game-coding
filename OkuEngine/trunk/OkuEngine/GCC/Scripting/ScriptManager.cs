@@ -6,7 +6,7 @@ using Microsoft.CSharp;
 
 namespace OkuEngine.GCC.Scripting
 {
-  class ScriptManager
+  public class ScriptManager
   {
     private CSharpCodeProvider _provider = new CSharpCodeProvider();
 

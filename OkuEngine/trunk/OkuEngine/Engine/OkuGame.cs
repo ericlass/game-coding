@@ -5,6 +5,9 @@ using System.Xml;
 using System.Xml.Schema;
 using OkuEngine.Driver.Audio;
 using OkuEngine.GCC.Resources;
+using OkuEngine.GCC.Processes;
+using OkuEngine.GCC.Events;
+using OkuEngine.GCC.Scripting;
 using OkuEngine.Driver.Renderer;
 
 namespace OkuEngine
@@ -108,6 +111,10 @@ namespace OkuEngine
     /// </summary>
     public void DoInitialize()
     {
+      OkuManagers.ProcessManager = new ProcessManager();
+      OkuManagers.ScriptManager = new ScriptManager();
+      OkuManagers.EventManager = new EventManager("OkuMainEventManager");
+
       ResourceCacheParams resParams = new ResourceCacheParams();
       SetupResourceCache(ref resParams);
 

@@ -1,6 +1,9 @@
 ﻿using System;
 using OkuEngine.Driver.Audio;
 using OkuEngine.GCC.Resources;
+using OkuEngine.GCC.Processes;
+using OkuEngine.GCC.Events;
+using OkuEngine.GCC.Scripting;
 using OkuEngine.Driver.Renderer;
 
 namespace OkuEngine
@@ -11,6 +14,9 @@ namespace OkuEngine
     private static ISoundEngine _sound = null;
     private static IRenderer _renderer = null;
     private static ResourceCache _resourceCache = null;
+    private static ProcessManager _processManager = null;
+    private static IEventManager _eventManager = null;
+    private static ScriptManager _scriptManager = null;
 
     public static Input Input
     {
@@ -39,6 +45,24 @@ namespace OkuEngine
     {
       get { return _resourceCache; }
       set { _resourceCache = value; }
+    }
+
+    public static ProcessManager ProcessManager
+    {
+      get { return _processManager; }
+      set { _processManager = value; }
+    }
+
+    public static IEventManager EventManager
+    {
+      get { return _eventManager; }
+      set { _eventManager = value; }
+    }
+
+    public static ScriptManager ScriptManager
+    {
+      get { return _scriptManager; }
+      set { _scriptManager = value; }
     }
 
   }
