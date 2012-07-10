@@ -104,6 +104,12 @@ namespace OkuEngine.GCC.Resources
         {
           return null;
         }
+
+        if (loader.DiscardRawBufferAfterLoad)
+        {
+          rawBuffer.Close();
+          rawBuffer.Dispose();
+        }
       }
 
       if (buffer != null)
@@ -178,7 +184,9 @@ namespace OkuEngine.GCC.Resources
       bool result = false;
       if (_resourceFile.Open())
       {
-        RegisterLoader(new DefaultResourceLoader());
+        RegisterLoader(new DefaultResourceLoader()); //<-- ALWAYS register this one as FIRST loader!!
+        //RegisterLoader(new TextureResourceLoader());
+        
         result = true;
       }
       return result;

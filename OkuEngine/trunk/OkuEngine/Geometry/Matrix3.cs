@@ -17,6 +17,9 @@ namespace OkuEngine
     public float V10; //Shear Y
     public float V11; //Scale Y
     public float V12; //Translate Y
+    public float V20; //Nothing special
+    public float V21; //Nothing special
+    public float V22; //Nothing special
 
     private static Matrix3 _identity = GetIndentity();
     
@@ -50,6 +53,9 @@ namespace OkuEngine
       V10 = 0;
       V11 = 1;
       V12 = 0;
+      V20 = 0;
+      V21 = 0;
+      V22 = 1;
     }
 
     /// <summary>
@@ -107,6 +113,7 @@ namespace OkuEngine
     {
       float res00 = V00 * vec.X + V01 * vec.Y + V02;
       float res10 = V10 * vec.X + V11 * vec.Y + V12;
+
       vec.X = res00;
       vec.Y = res10;
     }
@@ -163,19 +170,27 @@ namespace OkuEngine
     /// <param name="other">The matrix to multiply by.</param>
     public void Multiply(Matrix3 other)
     {
-      float res00 = V00 * other.V00 + V01 * other.V10;
-      float res10 = V10 * other.V00 + V11 * other.V10;
-      float res01 = V00 * other.V01 + V01 * other.V11;
-      float res11 = V10 * other.V01 + V11 * other.V11;
-      float res02 = V00 * other.V02 + V01 * other.V12 + V02;
-      float res12 = V10 * other.V02 + V11 * other.V12 + V12;
+      float res00 = V00 * other.V00 + V01 * other.V10 + V02 * other.V20;
+      float res01 = V00 * other.V01 + V01 * other.V11 + V02 * other.V21;
+      float res02 = V00 * other.V02 + V01 * other.V12 + V02 * other.V22;
+
+      float res10 = V10 * other.V00 + V11 * other.V10 + V12 * other.V20;
+      float res11 = V10 * other.V01 + V11 * other.V11 + V12 * other.V21;
+      float res12 = V10 * other.V02 + V11 * other.V12 + V12 * other.V22;
+
+      float res20 = V20 * other.V00 + V21 * other.V10 + V22 * other.V20;
+      float res21 = V20 * other.V01 + V21 * other.V11 + V22 * other.V21;
+      float res22 = V20 * other.V02 + V21 * other.V12 + V22 * other.V22;
 
       V00 = res00;
-      V10 = res10;
       V01 = res01;
-      V11 = res11;
       V02 = res02;
+      V10 = res10;
+      V11 = res11;
       V12 = res12;
+      V20 = res20;
+      V21 = res21;
+      V22 = res22;
     }
 
     /// <summary>
@@ -253,12 +268,15 @@ namespace OkuEngine
     {
       Matrix3 result = new Matrix3();
 
-      result.V00 = m1.V00 * m2.V00 + m1.V01 * m2.V10;
-      result.V10 = m1.V10 * m2.V00 + m1.V11 * m2.V10;
-      result.V01 = m1.V00 * m2.V01 + m1.V01 * m2.V11;
-      result.V11 = m1.V10 * m2.V01 + m1.V11 * m2.V11;
-      result.V02 = m1.V00 * m2.V02 + m1.V01 * m2.V12 + m1.V02;
-      result.V12 = m1.V10 * m2.V02 + m1.V11 * m2.V12 + m1.V12;
+      result.V00 = m1.V00 * m2.V00 + m1.V01 * m2.V10 + m1.V02 * m2.V20;
+      result.V01 = m1.V00 * m2.V01 + m1.V01 * m2.V11 + m1.V02 * m2.V21;
+      result.V02 = m1.V00 * m2.V02 + m1.V01 * m2.V12 + m1.V02 * m2.V22;
+      result.V10 = m1.V10 * m2.V00 + m1.V11 * m2.V10 + m1.V12 * m2.V20;
+      result.V11 = m1.V10 * m2.V01 + m1.V11 * m2.V11 + m1.V12 * m2.V21;
+      result.V12 = m1.V10 * m2.V02 + m1.V11 * m2.V12 + m1.V12 * m2.V22;
+      result.V20 = m1.V20 * m2.V00 + m1.V21 * m2.V10 + m1.V22 * m2.V20;
+      result.V21 = m1.V20 * m2.V01 + m1.V21 * m2.V11 + m1.V22 * m2.V21;
+      result.V22 = m1.V20 * m2.V02 + m1.V21 * m2.V12 + m1.V22 * m2.V22;
 
       return result;
     }
@@ -275,7 +293,44 @@ namespace OkuEngine
              V02 == other.V02 &&
              V10 == other.V10 &&
              V11 == other.V11 &&
-             V12 == other.V12;
+             V12 == other.V12 &&
+             V20 == other.V20 &&
+             V21 == other.V21 &&
+             V22 == other.V22;
+    }
+
+    /// <summary>
+    /// Calculates the inversion of the Matrix.
+    /// This is a matrix that does the exact opposite transform
+    /// of this Matrix. Please note that the numerical stability
+    /// of this algorithm is horrible.
+    /// </summary>
+    /// <returns>The inverted Matrix.</returns>
+    public Matrix3 GetInverse()
+    {
+      float det = 
+        V00 * V11 * V22 +
+        V01 * V12 * V20 +
+        V02 * V10 * V21 -
+        V02 * V11 * V20 -
+        V01 * V10 * V22 -
+        V00 * V12 * V21;
+
+      det = 1.0f / det;
+
+      Matrix3 result = Matrix3.Indentity;
+
+      result.V00 = (V11 * V22 - V12 * V21) * det;
+      result.V01 = (V02 * V21 - V01 * V22) * det;
+      result.V02 = (V01 * V12 - V02 * V11) * det;
+      result.V10 = (V12 * V20 - V10 * V22) * det;
+      result.V11 = (V00 * V22 - V02 * V20) * det;
+      result.V12 = (V02 * V10 - V00 * V12) * det;
+      result.V20 = (V10 * V21 - V11 * V20) * det;
+      result.V21 = (V01 * V20 - V00 * V21) * det;
+      result.V22 = (V00 * V11 - V01 * V10) * det;
+
+      return result;
     }
 
   }

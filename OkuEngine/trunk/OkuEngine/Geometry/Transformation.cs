@@ -11,16 +11,19 @@ namespace OkuEngine
   public class Transformation
   {
     private Vector _translation = Vector.Zero;
-    private Vector _scale = Vector.Zero;
+    private Vector _scale = Vector.One;
     private float _rotation = 0.0f;
+
+    private bool _fromValid = false;
+    private bool _toValid = false;
+    private Matrix3 _from = Matrix3.Indentity;
+    private Matrix3 _to = Matrix3.Indentity;
 
     /// <summary>
     /// Creates a new transformation with translation (0,0), scale (1,1) and rotation (0).
     /// </summary>
     public Transformation()
     {
-      _translation = new Vector();
-      _scale = new Vector(1, 1);
     }
 
     /// <summary>
@@ -42,7 +45,15 @@ namespace OkuEngine
     public Vector Translation 
     {
       get { return _translation; }
-      set { _translation = value; }
+      set 
+      {
+        if (!_translation.Equals(value))
+        {
+          _translation = value;
+          _fromValid = false;
+          _toValid = false;
+        }
+      }
     }
 
     /// <summary>
@@ -51,16 +62,66 @@ namespace OkuEngine
     public float Rotation 
     {
       get { return _rotation; }
-      set { _rotation = value; }
+      set
+      {
+        if (_rotation != value)
+        {
+          _rotation = value;
+          _fromValid = false;
+          _toValid = false;
+        }
+      }
     }
 
     /// <summary>
     /// Gets or sets the scale factor.
     /// </summary>
-    public Vector Scale 
+    public Vector Scale
     {
       get { return _scale; }
-      set { _scale = value; }
+      set
+      {
+        if (!_scale.Equals(value))
+        {
+          _scale = value;
+          _fromValid = false;
+          _toValid = false;
+        }
+      }
+    }
+
+    /// <summary>
+    /// Gets the matrix that applies the inverse of the transform.
+    /// </summary>
+    public Matrix3 FromMatrix
+    {
+      get
+      {
+        if (!_fromValid)
+        {
+          _from.LoadIdentity();
+          _from.ApplyTransform(this);
+          _fromValid = true;
+        }
+        return _from;
+      }
+    }
+
+    /// <summary>
+    /// Gets the matrix that applies the transform.
+    /// </summary>
+    public Matrix3 ToMatrix
+    {
+      get
+      {
+        if (!_toValid)
+        {
+          _to.LoadIdentity();
+          _to.ApplyTransform(this);
+          _toValid = true;
+        }
+        return _to;
+      }
     }
 
     /// <summary>

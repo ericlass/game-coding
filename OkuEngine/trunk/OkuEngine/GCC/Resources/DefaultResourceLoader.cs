@@ -27,5 +27,10 @@ namespace OkuEngine.GCC.Resources
       return true;
     }
 
+    public bool DiscardRawBufferAfterLoad
+    {
+      get { return false; }
+    }
+
   }
 }

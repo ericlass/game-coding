@@ -11,5 +11,6 @@ namespace OkuEngine.GCC.Resources
     bool UseRawFile { get; }
     long GetLoadedResourceSize(Stream rawBuffer);
     bool LoadResource(Stream rawBuffer, ResourceHandle handle);
+    bool DiscardRawBufferAfterLoad { get; }
   }
 }
