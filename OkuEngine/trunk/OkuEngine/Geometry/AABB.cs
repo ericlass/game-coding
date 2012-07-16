@@ -78,6 +78,32 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Checks if the given point is inside of the AABB.
+    /// </summary>
+    /// <param name="point">The point to check.</param>
+    /// <returns>True if the point is inside the AABB, else false.</returns>
+    public bool IsInside(Vector point)
+    {
+      return Intersections.PointInAABB(point, Min, Max);
+    }
+
+    /// <summary>
+    /// Calculates a bounding box that contains
+    /// both this and the given AABB.
+    /// </summary>
+    /// <param name="other">The bounding box to add.</param>
+    /// <returns>A new AABB that contains this and the given AABB.</returns>
+    public AABB Add(AABB other)
+    {
+      float minX = Math.Min(Min.X, other.Min.X);
+      float minY = Math.Min(Min.Y, other.Min.Y);
+      float maxX = Math.Max(Max.X, other.Max.X);
+      float maxY = Math.Max(Max.Y, other.Max.Y);
+
+      return new AABB(new Vector(minX, minY), new Vector(maxX, maxY));
+    }
+
+    /// <summary>
     /// Gets the four corner points of the AABB as a vector array.
     /// </summary>
     /// <param name="min">The minimum vector of the AABB.</param>

@@ -34,14 +34,14 @@ namespace OkuTest
 
     public override void Render(int pass)
     {
-      OkuManagers.Renderer.PushTransform();
+      /*OkuManagers.Renderer.PushTransform();
       OkuManagers.Renderer.ApplyTransform(Vector.Zero, Vector.One, _innerAngle);
       OkuManagers.Renderer.DrawImage(_yinyang, Vector.Zero);
       OkuManagers.Renderer.ApplyTransform(_offset, new Vector(0.8f, 0.8f), _outerAngle);
       OkuManagers.Renderer.DrawImage(_yinyang, Vector.Zero);
       OkuManagers.Renderer.ApplyTransform(_offset / 2, new Vector(0.5f, 0.5f), _outerAngle);
       OkuManagers.Renderer.DrawImage(_yinyang, Vector.Zero);
-      OkuManagers.Renderer.PopTransform();
+      OkuManagers.Renderer.PopTransform();*/
     }
 
   }

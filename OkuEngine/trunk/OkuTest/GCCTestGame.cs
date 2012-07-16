@@ -32,16 +32,6 @@ namespace OkuTest
       _manager.AttachProcess(p);
       */
 
-      Matrix3 test = Matrix3.Indentity;
-      test.Rotate(45);
-      test.Scale(2.0f, 3.0f);
-      test.Translate(7, 13);
-      Matrix3 invert = test.GetInverse();
-
-      Vector pos = new Vector(4.2f, 6.33f);
-      Vector result = test.Transform(pos);
-      result = invert.Transform(result);
-
       //ResourceCache test
       FileSystemResourceFile file = new FileSystemResourceFile("D:\\temp");
       ResourceCache cache = new ResourceCache(2, file);

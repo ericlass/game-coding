@@ -14,11 +14,6 @@ namespace OkuEngine
     private Vector _scale = Vector.One;
     private float _rotation = 0.0f;
 
-    private bool _fromValid = false;
-    private bool _toValid = false;
-    private Matrix3 _from = Matrix3.Indentity;
-    private Matrix3 _to = Matrix3.Indentity;
-
     /// <summary>
     /// Creates a new transformation with translation (0,0), scale (1,1) and rotation (0).
     /// </summary>
@@ -45,15 +40,7 @@ namespace OkuEngine
     public Vector Translation 
     {
       get { return _translation; }
-      set 
-      {
-        if (!_translation.Equals(value))
-        {
-          _translation = value;
-          _fromValid = false;
-          _toValid = false;
-        }
-      }
+      set { _translation = value; }
     }
 
     /// <summary>
@@ -62,15 +49,7 @@ namespace OkuEngine
     public float Rotation 
     {
       get { return _rotation; }
-      set
-      {
-        if (_rotation != value)
-        {
-          _rotation = value;
-          _fromValid = false;
-          _toValid = false;
-        }
-      }
+      set { _rotation = value; }
     }
 
     /// <summary>
@@ -79,49 +58,7 @@ namespace OkuEngine
     public Vector Scale
     {
       get { return _scale; }
-      set
-      {
-        if (!_scale.Equals(value))
-        {
-          _scale = value;
-          _fromValid = false;
-          _toValid = false;
-        }
-      }
-    }
-
-    /// <summary>
-    /// Gets the matrix that applies the inverse of the transform.
-    /// </summary>
-    public Matrix3 FromMatrix
-    {
-      get
-      {
-        if (!_fromValid)
-        {
-          _from.LoadIdentity();
-          _from.ApplyTransform(this);
-          _fromValid = true;
-        }
-        return _from;
-      }
-    }
-
-    /// <summary>
-    /// Gets the matrix that applies the transform.
-    /// </summary>
-    public Matrix3 ToMatrix
-    {
-      get
-      {
-        if (!_toValid)
-        {
-          _to.LoadIdentity();
-          _to.ApplyTransform(this);
-          _toValid = true;
-        }
-        return _to;
-      }
+      set { _scale = value; }
     }
 
     /// <summary>

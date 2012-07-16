@@ -23,6 +23,8 @@ namespace OkuEngine.Driver.Renderer
     private ViewPort _viewPort = null;
     private int _screenWidth = 1024;
     private int _screenHeight = 768;
+    private Matrix3 _transform = Matrix3.Indentity;
+    private Matrix3 _viewTransform = Matrix3.Indentity;
 
     private Control _display = null;
     private IntPtr _handle = IntPtr.Zero;
@@ -1128,25 +1130,14 @@ namespace OkuEngine.Driver.Renderer
       Gl.glDisable(Gl.GL_SCISSOR_TEST);
     }
 
-    public void ApplyTransform(Vector translate, Vector scale, float rotate)
+    public void SetTransform(Matrix3 transform)
     {
-      Gl.glMatrixMode(Gl.GL_MODELVIEW);
-
-      Gl.glTranslatef(translate.X, translate.Y, 0.0f);
-      Gl.glScalef(scale.X, scale.Y, 1.0f);
-      Gl.glRotatef(rotate, 0.0f, 0.0f, 1.0f);
+      _transform = transform;
     }
 
-    public void PushTransform()
+    public void SetViewTransform(Matrix3 transform)
     {
-      Gl.glMatrixMode(Gl.GL_MODELVIEW);
-      Gl.glPushMatrix();
-    }
-
-    public void PopTransform()
-    {
-      Gl.glMatrixMode(Gl.GL_MODELVIEW);
-      Gl.glPopMatrix();
+      _viewTransform = transform;
     }
 
   }

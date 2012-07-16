@@ -194,15 +194,11 @@ namespace OkuEngine.Driver.Renderer
     {
     }
 
-    public void ApplyTransform(Vector translate, Vector scale, float rotate)
+    public void SetTransform(Matrix3 transform)
     {
     }
 
-    public void PushTransform()
-    {
-    }
-
-    public void PopTransform()
+    public void SetViewTransform(Matrix3 transform)
     {
     }
 
