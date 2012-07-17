@@ -32,6 +32,21 @@ namespace OkuTest
       _manager.AttachProcess(p);
       */
 
+      Matrix3 test = Matrix3.Indentity;
+      Matrix3 r = Matrix3.CreateRotation(10);
+      Matrix3 s = Matrix3.CreateScale(0.9f, 1.1f);
+      Matrix3 t = Matrix3.CreateTranslation(5, 5);
+
+      test = s * r * t;
+
+      Matrix3 invert = test.Invert();
+
+      Matrix3 resu = Matrix3.Multiply(test, invert);
+
+      Vector dings = new Vector(2, 3);
+      test.Transform(ref dings);
+      invert.Transform(ref dings);
+
       //ResourceCache test
       FileSystemResourceFile file = new FileSystemResourceFile("D:\\temp");
       ResourceCache cache = new ResourceCache(2, file);

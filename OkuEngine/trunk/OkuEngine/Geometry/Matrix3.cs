@@ -117,12 +117,13 @@ namespace OkuEngine
     /// </summary>
     /// <param name="x">The x component to transform.</param>
     /// <param name="y">The y component to transform.</param>
-    public void Transform(ref double x, ref double y)
+    public void Transform(ref float x, ref float y)
     {
       double res00 = V00 * x + V01 * y + V02;
       double res10 = V10 * x + V11 * y + V12;
-      x = res00;
-      y = res10;
+
+      x = (float)res00;
+      y = (float)res10;
     }
 
     /// <summary>
@@ -214,12 +215,11 @@ namespace OkuEngine
     /// <returns>A matrix that rotates by the given angle.</returns>
     public static Matrix3 CreateRotation(double angle)
     {
-      double rad = (angle / 180.0f) * (double)Math.PI;
-      double sin = (double)Math.Sin(rad);
-      double cos = (double)Math.Cos(rad);
+      double rad = (angle / 180.0) * Math.PI;
+      double sin = Math.Sin(rad);
+      double cos = Math.Cos(rad);
 
       Matrix3 result = _identity;
-      result.LoadIdentity();
       result.V00 = cos;
       result.V01 = sin;
       result.V10 = -sin;
@@ -237,7 +237,6 @@ namespace OkuEngine
     public static Matrix3 CreateScale(double x, double y)
     {
       Matrix3 result = _identity;
-      result.LoadIdentity();
       result.V00 = x;
       result.V11 = y;
       return result;
@@ -264,6 +263,51 @@ namespace OkuEngine
       result.V12 = m1.V10 * m2.V02 + m1.V11 * m2.V12 + m1.V12;
 
       return result;
+    }
+
+    public Matrix3 Invert()
+    {
+      double det = 1.0 / (V00 * (V11) - V01 * (V10));
+
+      Matrix3 result = Matrix3.Indentity;
+
+      result.V00 = (V11) * det;
+      result.V01 = -(V01) * det;
+      result.V02 = (V01 * V12 - V11 * V02) * det;
+
+      result.V10 = -(V10) * det;
+      result.V11 = (V00) * det;
+      result.V12 = -(V00 * V12 - V10 * V02) * det;
+
+      return result;
+
+      //Full invers, just for reference
+      /*double det = V00 * (V11 * V22 - V12 * V21) -
+            V01 * (V10 * V22 - V12 * V20) +
+            V02 * (V10 * V21 - V20 * V11);
+
+      double invDet = 1.0 / det;
+
+      Matrix3 result = Matrix3.Indentity;
+
+      result.V00 = (V11 * V22 - V21 * V12) * invDet;
+      result.V01 = -(V01 * V22 - V21 * V02) * invDet;
+      result.V02 = (V01 * V12 - V11 * V02) * invDet;
+
+      result.V10 = -(V10 * V22 - V20 * V12) * invDet;
+      result.V11 = (V00 * V22 - V20 * V02) * invDet;
+      result.V12 = -(V00 * V12 - V10 * V02) * invDet;
+
+      result.V20 = (V10 * V21 - V20 * V11) * invDet;
+      result.V21 = -(V00 * V21 - V20 * V01) * invDet;
+      result.V22 = (V00 * V11 - V10 * V01) * invDet;
+
+      return result;*/
+    }
+
+    public static Matrix3 operator *(Matrix3 m1, Matrix3 m2)
+    {
+      return Multiply(m1, m2);
     }
 
     /// <summary>
