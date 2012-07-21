@@ -22,7 +22,7 @@ namespace OkuEngine.Driver.Renderer
     private float _halfHeight = 0;
 
     private bool _matrixEffective = false;
-    private Matrix3 _screenToWorld = Matrix3.Indentity;
+    private Matrix3 _screenToWorld = Matrix3.Identity;
 
     /// <summary>
     /// Create a new viewport centered at the world space coordinate (0,0)

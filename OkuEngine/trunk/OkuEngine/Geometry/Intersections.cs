@@ -290,6 +290,17 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Checks if the givne bounding boxes overlap.
+    /// </summary>
+    /// <param name="box1">The first box.</param>
+    /// <param name="box2">The second box.</param>
+    /// <returns>True if the boxes intersect, else false.</returns>
+    public static bool AABBs(AABB box1, AABB box2)
+    {
+      return AABBs(box1.Min, box1.Max, box2.Min, box2.Max);
+    }
+
+    /// <summary>
     /// Calculates the closest intersection of the ray defined by start and end with the given 
     /// polygon.
     /// </summary>

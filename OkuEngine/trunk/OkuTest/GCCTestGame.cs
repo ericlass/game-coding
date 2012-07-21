@@ -32,7 +32,7 @@ namespace OkuTest
       _manager.AttachProcess(p);
       */
 
-      Matrix3 test = Matrix3.Indentity;
+      Matrix3 test = Matrix3.Identity;
       Matrix3 r = Matrix3.CreateRotation(10);
       Matrix3 s = Matrix3.CreateScale(0.9f, 1.1f);
       Matrix3 t = Matrix3.CreateTranslation(5, 5);

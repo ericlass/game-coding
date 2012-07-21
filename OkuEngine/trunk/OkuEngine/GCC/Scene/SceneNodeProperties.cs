@@ -5,22 +5,113 @@ using System.Text;
 
 namespace OkuEngine.GCC.Scene
 {
+  /// <summary>
+  /// Stores properties of a scene node.
+  /// </summary>
   public class SceneNodeProperties
   {
-    public int ActorId { get; set; }
-    public string Name { get; set; }
-    public Matrix3 Matrix { get; set; }
-    public AABB Area { get; set; }
-    public RenderPass RenderPass { get; set; }
-    public Material Material { get; set; }
-    public bool HasAlpha { get; set; }
+    private int _actorId = 0;
+    private string _name = null;
+    private Matrix3 _toParent = Matrix3.Identity;
+    private bool _fromParentValid = false;
+    private Matrix3 _fromParent = Matrix3.Identity;
+    private AABB _area = new AABB();
+    private Color _tint = Color.White;
 
+    /// <summary>
+    /// Creates new properties with default values.
+    /// </summary>
     public SceneNodeProperties()
     {
-      Matrix = Matrix3.Indentity;
-      RenderPass = RenderPass.None;
-      HasAlpha = false;
-      Material = new Material();
+    }
+
+    /// <summary>
+    /// Creates properties with the given actor id an name.
+    /// </summary>
+    /// <param name="actorId">The actor id.</param>
+    /// <param name="name">The name.</param>
+    public SceneNodeProperties(int actorId, string name)
+    {
+      _actorId = actorId;
+      _name = name;
+    }
+
+    /// <summary>
+    /// Creates properties with the given actor id an name.
+    /// </summary>
+    /// <param name="actorId">The actor id.</param>
+    /// <param name="name">The name.</param>
+    /// <param name="toParent">The matrix that transforms the node to parent space.</param>
+    public SceneNodeProperties(int actorId, string name, Matrix3 toParent)
+    {
+      _actorId = actorId;
+      _name = name;
+      _toParent = toParent;
+    }
+
+    /// <summary>
+    /// Gets or sets the actor id associated with the scene node.
+    /// </summary>
+    public int ActorId
+    {
+      get { return _actorId; }
+      set { _actorId = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the name of the scene node.
+    /// </summary>
+    public string Name
+    {
+      get { return _name; }
+      set { _name = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the matrix that transforms the scene node from object space to parent space.
+    /// </summary>
+    public Matrix3 ToParent
+    {
+      get { return _toParent; }
+      set 
+      { 
+        _toParent = value;
+        _fromParentValid = false;
+      }
+    }
+
+    /// <summary>
+    /// Gets the matrix that transforms the scene node from parent space to object space.
+    /// </summary>
+    public Matrix3 FromParent
+    {
+      get 
+      {
+        if (!_fromParentValid)
+        {
+          _fromParent = _toParent.Invert();
+          _fromParentValid = true;
+        }
+        return _fromParent; 
+      }
+    }
+
+    /// <summary>
+    /// Gets or sets the bouding box of the scene node.
+    /// </summary>
+    public AABB Area
+    {
+      get { return _area; }
+      set { _area = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the tint color of the scene node.
+    /// </summary>
+    public Color Tint
+    {
+      get { return _tint; }
+      set { _tint = value; }
     }
 
   }

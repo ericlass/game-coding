@@ -23,8 +23,8 @@ namespace OkuEngine.Driver.Renderer
     private ViewPort _viewPort = null;
     private int _screenWidth = 1024;
     private int _screenHeight = 768;
-    private Matrix3 _transform = Matrix3.Indentity;
-    private Matrix3 _viewTransform = Matrix3.Indentity;
+    private Matrix3 _transform = Matrix3.Identity;
+    private Matrix3 _viewTransform = Matrix3.Identity;
 
     private Control _display = null;
     private IntPtr _handle = IntPtr.Zero;

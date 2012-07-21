@@ -17,7 +17,7 @@ namespace OkuEngine
     private Transformation _transform = new Transformation();
     private ActionHandler _actionHandler = new ActionHandler();
     private Content _content = null;
-    private Matrix3 _worldMatrix = Matrix3.Indentity;
+    private Matrix3 _worldMatrix = Matrix3.Identity;
 
     /// <summary>
     /// Creates a new empty scene node.

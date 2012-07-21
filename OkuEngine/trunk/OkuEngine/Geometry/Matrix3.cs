@@ -18,13 +18,13 @@ namespace OkuEngine
     public double V11; //Scale Y
     public double V12; //Translate Y
 
-    private static Matrix3 _identity = GetIndentity();
+    private static Matrix3 _identity = GetIdentity();
     
     /// <summary>
     /// Helper method to get an identity matrix.
     /// </summary>
     /// <returns>An identity matrix.</returns>
-    private static Matrix3 GetIndentity()
+    private static Matrix3 GetIdentity()
     {
       Matrix3 mat = new Matrix3();
       mat.LoadIdentity();
@@ -34,7 +34,7 @@ namespace OkuEngine
     /// <summary>
     /// Gets an identity matrix.
     /// </summary>
-    public static Matrix3 Indentity
+    public static Matrix3 Identity
     {
       get { return _identity; }
     }
@@ -269,7 +269,7 @@ namespace OkuEngine
     {
       double det = 1.0 / (V00 * (V11) - V01 * (V10));
 
-      Matrix3 result = Matrix3.Indentity;
+      Matrix3 result = Matrix3.Identity;
 
       result.V00 = (V11) * det;
       result.V01 = -(V01) * det;
@@ -305,9 +305,39 @@ namespace OkuEngine
       return result;*/
     }
 
+    /// <summary>
+    /// Multiplies the two matrices.
+    /// </summary>
+    /// <param name="m1">The first matrix.</param>
+    /// <param name="m2">The second matrix.</param>
+    /// <returns>The result of the multiplication.</returns>
     public static Matrix3 operator *(Matrix3 m1, Matrix3 m2)
     {
       return Multiply(m1, m2);
+    }
+
+    /// <summary>
+    /// Checks if the given matrices are equal.
+    /// Matrices are equal if all of their components are equal.
+    /// </summary>
+    /// <param name="m1">The first matrix.</param>
+    /// <param name="m2">The second matrix.</param>
+    /// <returns>True if the matrices are equal, else false.</returns>
+    public static bool operator ==(Matrix3 m1, Matrix3 m2)
+    {
+      return m1.Equals(m2);
+    }
+
+    /// <summary>
+    /// Checks if the two matrices are not equal.
+    /// Matrices are not equal if at least one component is different.
+    /// </summary>
+    /// <param name="m1">The first matrix.</param>
+    /// <param name="m2">The secnond matrix.</param>
+    /// <returns>True if the matrices are not equal, else false.</returns>
+    public static bool operator !=(Matrix3 m1, Matrix3 m2)
+    {
+      return !m1.Equals(m2);
     }
 
     /// <summary>
@@ -323,6 +353,20 @@ namespace OkuEngine
              V10 == other.V10 &&
              V11 == other.V11 &&
              V12 == other.V12;
+    }
+
+    public override bool Equals(object obj)
+    {
+      if (obj is Matrix3)
+      {
+        return Equals((Matrix3)obj);
+      }
+      return base.Equals(obj);
+    }
+
+    public override int GetHashCode()
+    {
+      return base.GetHashCode();
     }
 
   }

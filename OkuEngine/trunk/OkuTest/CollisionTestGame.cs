@@ -56,7 +56,7 @@ namespace OkuTest
       _transformed1 = new Vector[_box1.Length];
       _transformed2 = new Vector[_box2.Length];
 
-      Matrix3 transform = Matrix3.Indentity;
+      Matrix3 transform = Matrix3.Identity;
       transform.ApplyTransform(_transform1);
       transform.Transform(_box1, _transformed1);
     }
@@ -88,7 +88,7 @@ namespace OkuTest
       _transform2.Rotation += rotation;
       _transform2.Translation += new Vector(dx, dy);
 
-      Matrix3 transform = Matrix3.Indentity;
+      Matrix3 transform = Matrix3.Identity;
       transform.ApplyTransform(_transform2);
       transform.Transform(_box2, _transformed2);
 
@@ -96,7 +96,7 @@ namespace OkuTest
       if (_intersect)
       {
         _transform2.Translation += _mtd;
-        transform = Matrix3.Indentity;
+        transform = Matrix3.Identity;
         transform.ApplyTransform(_transform2);
         transform.Transform(_box2, _transformed2);
       }

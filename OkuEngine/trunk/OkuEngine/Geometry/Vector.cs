@@ -400,5 +400,19 @@ namespace OkuEngine
       return false;
     }
 
+    public override bool Equals(object obj)
+    {
+      if (obj is Vector)
+      {
+        return Equals((Vector)obj);
+      }
+      return base.Equals(obj);
+    }
+
+    public override int GetHashCode()
+    {
+      return base.GetHashCode();
+    }
+
   }
 }

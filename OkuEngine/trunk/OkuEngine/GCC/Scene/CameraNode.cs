@@ -7,18 +7,20 @@ namespace OkuEngine.GCC.Scene
 {
   public class CameraNode : SceneNode
   {
+    private bool _enabled = true;
     private bool _debugCamera = false;
-    private ISceneNode _target = null;
+    private SceneNode _target = null;
 
-    protected Matrix3 _projection = Matrix3.Indentity;
-    protected Matrix3 _view = Matrix3.Indentity;
-    protected Vector _offset = Vector.Zero;
-
-    public AABB Area { get; set; }
-
-    public CameraNode(Matrix3 transform, AABB area) : base(-1, "Camera", RenderPass.None, Color.Red, transform)
+    public CameraNode(Matrix3 transform, AABB area) : base(-1, "Camera", transform)
     {
-      Area = area;
+      _props.Tint = Color.Yellow;
+      _props.Area = area;
+    }
+
+    public bool Enabled
+    {
+      get { return _enabled; }
+      set { _enabled = value; }
     }
 
     public override bool Render(Scene scene)
@@ -45,45 +47,38 @@ namespace OkuEngine.GCC.Scene
     {
       if (_target != null)
       {
-        //TODO: Make camera stick to target
+        //TODO: Center camrea to target. It might be anywhere in the scene hierarchy.
       }
-
-      //_TODO: view = _props.Matrix.Inverse;
-
-      OkuManagers.Renderer.SetViewTransform(_props.Matrix);
+      OkuManagers.Renderer.SetViewTransform(_props.ToParent);
 
       return true;
     }
 
-    public ISceneNode Target
+    /// <summary>
+    /// Gets or sets the 
+    /// </summary>
+    public SceneNode Target
     {
       get { return _target; }
       set { _target = value; }
     }
 
-    Matrix3 GetWorldViewProjection(Scene scene)
+    /// <summary>
+    /// Calculates the matrix that transforms from world space into view space.
+    /// </summary>
+    /// <param name="scene">The scene to use.</param>
+    /// <returns>The matrix that transforms from world space into view space.</returns>
+    public Matrix3 GetWorldViewMatrix(Scene scene)
     {
-      Matrix3 world = scene.GetTopMatrix();
-      Matrix3 view = _props.Matrix;
-      Matrix3 worldView = Matrix3.Multiply(world, view);
-      //TODO: multiply worldview with projection and return
-      return worldView;
+      return GetFromWorld();
     }
 
-    public Matrix3 Projection
-    {
-      get { return _projection; }
-    }
-
+    /// <summary>
+    /// Gets the view matrix that transforms stuff from camera parent space to view space.
+    /// </summary>
     public Matrix3 View
     {
-      get { return View; }
-    }
-
-    public Vector Offset
-    {
-      get { return _offset; }
-      set { _offset = value; }
+      get { return _props.FromParent; }
     }
 
   }

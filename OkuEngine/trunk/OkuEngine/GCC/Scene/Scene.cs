@@ -7,29 +7,39 @@ namespace OkuEngine.GCC.Scene
 {
   public class Scene
   {
-    protected ISceneNode Root { get; set; }
-    protected CameraNode Camera { get; set; }
-    protected Dictionary<int, ISceneNode> _actorMap = new Dictionary<int, ISceneNode>();
-
+    private Dictionary<int, SceneNode> _actorMap = new Dictionary<int, SceneNode>();
     private Stack<Matrix3> _matrixStack = new Stack<Matrix3>();
-    private Matrix3 _current = Matrix3.Indentity;
+    private Matrix3 _current = Matrix3.Identity;
+
+    private RootNode _root = new RootNode();
+    private CameraNode _camera = new CameraNode(Matrix3.Identity, new AABB());
 
     public Scene()
     {
-      Root = new RootNode();
-      Camera = new CameraNode(Matrix3.Indentity, new AABB());
+    }
+
+    public RootNode Root
+    {
+      get { return _root; }
+      set { _root = value; }
+    }
+
+    public CameraNode Camera
+    {
+      get { return _camera; }
+      set { _camera = value; }
     }
 
     public bool Render()
     {
-      if (Root != null && Camera != null)
+      if (_root != null && _camera != null)
       {
         //Update camera?
-        if (Root.PreRender(this))
+        if (_root.PreRender(this))
         {
-          Root.Render(this);
-          Root.RenderChildren(this);
-          Root.PostRender(this);
+          _root.Render(this);
+          _root.RenderChildren(this);
+          _root.PostRender(this);
           return true;
         }
       }
@@ -38,22 +48,22 @@ namespace OkuEngine.GCC.Scene
 
     public bool Restore()
     {
-      return Root.Restore(this);
+      return _root.Restore(this);
     }
 
     public Boolean Update(float dt)
     {
-      return Root.Update(this, dt);
+      return _root.Update(this, dt);
     }
 
-    public ISceneNode FindActor(int actorId)
+    public SceneNode FindActor(int actorId)
     {
-      ISceneNode result = null;
+      SceneNode result = null;
       _actorMap.TryGetValue(actorId, out result);
       return result;
     }
 
-    public bool AddChild(int actorId, ISceneNode node)
+    public bool AddChild(int actorId, SceneNode node)
     {
       if (!_actorMap.ContainsKey(actorId))
       {

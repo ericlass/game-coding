@@ -17,7 +17,7 @@ namespace OkuTest
     private Vector[] _transformedPlayer = null;
     private Vector[] _collidedPlayer = null;
     private Vector _playerPos = new Vector(193, -123);
-    private Matrix3 _transform = Matrix3.Indentity;
+    private Matrix3 _transform = Matrix3.Identity;
     private Vector _trans = new Vector(40, -80);
     private bool _collision = false;
     private Vector _collisionDistance = Vector.Zero;
