@@ -98,7 +98,6 @@
     <Compile Include="GCC\Resources\TextureExtraData.cs" />
     <Compile Include="GCC\Resources\TextureResourceLoader.cs" />
     <Compile Include="GCC\Scene\CameraNode.cs" />
-    <Compile Include="GCC\Scene\Material.cs" />
     <Compile Include="GCC\Scene\RootNode.cs" />
     <Compile Include="GCC\Scene\Scene.cs" />
     <Compile Include="GCC\Scene\SceneNode.cs" />

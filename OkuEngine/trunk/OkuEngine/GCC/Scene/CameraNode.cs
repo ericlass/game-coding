@@ -33,11 +33,6 @@ namespace OkuEngine.GCC.Scene
       return true;
     }
 
-    public override bool Restore(Scene scene)
-    {
-      return true;
-    }
-
     public override bool IsVisible(Scene scene)
     {
       return _enabled;

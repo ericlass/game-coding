@@ -37,13 +37,13 @@ namespace OkuTest
       Matrix3 s = Matrix3.CreateScale(0.9f, 1.1f);
       Matrix3 t = Matrix3.CreateTranslation(5, 5);
 
-      test = s * r * t;
+      test = r * t * r;
 
       Matrix3 invert = test.Invert();
 
       Matrix3 resu = Matrix3.Multiply(test, invert);
 
-      Vector dings = new Vector(2, 3);
+      Vector dings = new Vector(1, 1);
       test.Transform(ref dings);
       invert.Transform(ref dings);
 

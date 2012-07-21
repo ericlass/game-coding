@@ -34,7 +34,7 @@ namespace OkuEngine.GCC.Scene
     {
       if (_root != null && _camera != null)
       {
-        //Update camera?
+        _camera.SetViewTransform(this);
         if (_root.PreRender(this))
         {
           _root.Render(this);
