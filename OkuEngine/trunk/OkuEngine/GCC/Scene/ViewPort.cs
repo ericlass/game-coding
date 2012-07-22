@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OkuEngine.Driver.Renderer
+namespace OkuEngine.GCC.Scene
 {
   /// <summary>
   /// Specified the delegate for a viewport change event handler. Should only be implemented by the Renderer.
@@ -204,6 +204,15 @@ namespace OkuEngine.Driver.Renderer
         return false;
 
       return true;
+    }
+
+    /// <summary>
+    /// Gets the area the viewport shows.
+    /// </summary>
+    /// <returns>The area the viewport shows.</returns>
+    public AABB GetArea()
+    {
+      return new AABB(Left, Bottom, Width, Height);
     }
 
   }

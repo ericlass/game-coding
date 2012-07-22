@@ -26,11 +26,6 @@ namespace OkuEngine.Driver.Renderer
     Control Display { get; }
 
     /// <summary>
-    /// Gets or sets the current viewport that is rendered to the screen.
-    /// </summary>
-    ViewPort ViewPort { get; set; }
-
-    /// <summary>
     /// Gets or sets the texture filter used for interpolating textures when they
     /// are minimized or maximized.
     /// </summary>

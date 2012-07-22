@@ -53,9 +53,9 @@ namespace OkuTest
       if (OkuManagers.Input.Keyboard.KeyPressed(Keys.Space))
       {
         Random rand = new Random(System.Environment.TickCount);
-        OkuManagers.Renderer.ViewPort.Left -= rand.RandomFloat() * 50.0f;
-        OkuManagers.Renderer.ViewPort.Top -= rand.RandomFloat() * 50.0f;
-        OkuManagers.Renderer.ViewPort.Scale = new Vector(rand.RandomFloat(), rand.RandomFloat());
+        OkuData.Scene.Viewport.Left -= rand.RandomFloat() * 50.0f;
+        OkuData.Scene.Viewport.Top -= rand.RandomFloat() * 50.0f;
+        OkuData.Scene.Viewport.Scale = new Vector(rand.RandomFloat(), rand.RandomFloat());
       }
       
       //_intersect = _map.GetIntersection(new LineSegment( _line[0], _line[1]), out _colPoint);
@@ -73,8 +73,8 @@ namespace OkuTest
       if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Down))
         dy -= speed;
 
-      OkuManagers.Renderer.ViewPort.Left += dx;
-      OkuManagers.Renderer.ViewPort.Top += dy;
+      OkuData.Scene.Viewport.Left += dx;
+      OkuData.Scene.Viewport.Top += dy;
     }
 
     public override void Render(int pass)

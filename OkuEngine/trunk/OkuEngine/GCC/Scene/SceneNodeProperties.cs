@@ -12,9 +12,7 @@ namespace OkuEngine.GCC.Scene
   {
     private int _actorId = 0;
     private string _name = null;
-    private Matrix3 _toParent = Matrix3.Identity;
-    private bool _fromParentValid = false;
-    private Matrix3 _fromParent = Matrix3.Identity;
+    private Transformation _transform = new Transformation();
     private AABB _area = new AABB();
     private Color _tint = Color.White;
 
@@ -37,19 +35,6 @@ namespace OkuEngine.GCC.Scene
     }
 
     /// <summary>
-    /// Creates properties with the given actor id an name.
-    /// </summary>
-    /// <param name="actorId">The actor id.</param>
-    /// <param name="name">The name.</param>
-    /// <param name="toParent">The matrix that transforms the node to parent space.</param>
-    public SceneNodeProperties(int actorId, string name, Matrix3 toParent)
-    {
-      _actorId = actorId;
-      _name = name;
-      _toParent = toParent;
-    }
-
-    /// <summary>
     /// Gets or sets the actor id associated with the scene node.
     /// </summary>
     public int ActorId
@@ -68,35 +53,6 @@ namespace OkuEngine.GCC.Scene
     }
 
     /// <summary>
-    /// Gets or sets the matrix that transforms the scene node from object space to parent space.
-    /// </summary>
-    public Matrix3 ToParent
-    {
-      get { return _toParent; }
-      set 
-      { 
-        _toParent = value;
-        _fromParentValid = false;
-      }
-    }
-
-    /// <summary>
-    /// Gets the matrix that transforms the scene node from parent space to object space.
-    /// </summary>
-    public Matrix3 FromParent
-    {
-      get 
-      {
-        if (!_fromParentValid)
-        {
-          _fromParent = _toParent.Invert();
-          _fromParentValid = true;
-        }
-        return _fromParent; 
-      }
-    }
-
-    /// <summary>
     /// Gets or sets the bouding box of the scene node.
     /// </summary>
     public AABB Area
@@ -112,6 +68,15 @@ namespace OkuEngine.GCC.Scene
     {
       get { return _tint; }
       set { _tint = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the transformation of the scene node.
+    /// </summary>
+    public Transformation Transform
+    {
+      get { return _transform; }
+      set { _transform = value; }
     }
 
   }

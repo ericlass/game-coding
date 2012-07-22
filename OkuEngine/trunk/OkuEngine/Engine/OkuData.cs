@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OkuEngine.GCC.Scene;
+using OkuEngine.GCC.Resources;
 
 namespace OkuEngine
 {
@@ -12,7 +14,8 @@ namespace OkuEngine
   {
     private static VariableList _globals = null;
     private static VariableList _locals = null;
-    private static SceneGraph _scene = new SceneGraph();
+    private static ResourceCache _resources = null;
+    private static Scene _scene = new Scene();
 
     /// <summary>
     /// Gets the global variable list.
@@ -44,9 +47,18 @@ namespace OkuEngine
     /// <summary>
     /// Gets the scene graph.
     /// </summary>
-    public static SceneGraph Scene
+    public static Scene Scene
     {
       get { return _scene; }
+    }
+
+    /// <summary>
+    /// Gets or sets the resource cache.
+    /// </summary>
+    public static ResourceCache ResourceCache
+    {
+      get { return _resources; }
+      set { _resources = value; }
     }
 
   }

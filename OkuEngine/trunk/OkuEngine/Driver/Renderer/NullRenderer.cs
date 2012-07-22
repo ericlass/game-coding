@@ -25,12 +25,6 @@ namespace OkuEngine.Driver.Renderer
       get { return null; }
     }
 
-    public ViewPort ViewPort
-    {
-      get { return null; }
-      set { }
-    }
-
     public TextureFilter TextureFilter
     {
       get { return TextureFilter.Linear; }

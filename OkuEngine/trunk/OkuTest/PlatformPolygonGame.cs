@@ -58,9 +58,9 @@ namespace OkuTest
     {
       float speed = 200 * dt;
       if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.NumPad6))
-        OkuManagers.Renderer.ViewPort.Left += speed;
+        OkuData.Scene.Viewport.Left += speed;
       if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.NumPad4))
-        OkuManagers.Renderer.ViewPort.Left -= speed;
+        OkuData.Scene.Viewport.Left -= speed;
 
       speed = 200 * dt;
       if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Left))

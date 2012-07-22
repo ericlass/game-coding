@@ -97,8 +97,6 @@
     <Compile Include="GCC\Resources\ResourceHandle.cs" />
     <Compile Include="GCC\Resources\TextureExtraData.cs" />
     <Compile Include="GCC\Resources\TextureResourceLoader.cs" />
-    <Compile Include="GCC\Scene\CameraNode.cs" />
-    <Compile Include="GCC\Scene\RootNode.cs" />
     <Compile Include="GCC\Scene\Scene.cs" />
     <Compile Include="GCC\Scene\SceneNode.cs" />
     <Compile Include="GCC\Scene\SceneNodeProperties.cs" />
@@ -129,7 +127,7 @@
     <Compile Include="Driver\Renderer\MeshMode.cs" />
     <Compile Include="Driver\Renderer\TextureFilter.cs" />
     <Compile Include="Driver\Renderer\VertexInterpretation.cs" />
-    <Compile Include="Driver\Renderer\ViewPort.cs" />
+    <Compile Include="GCC\Scene\ViewPort.cs" />
     <Compile Include="Geometry\CollisionWorld.cs" />
     <Compile Include="Geometry\ContinuousCollision.cs" />
     <Compile Include="Geometry\OkuMath.cs" />

@@ -119,7 +119,7 @@ namespace OkuEngine
       SetupResourceCache(ref resParams);
 
       ResourceCache resCache = new ResourceCache(resParams);
-      OkuManagers.ResourceCache = resCache;
+      OkuData.ResourceCache = resCache;
       if (resCache.Initialize())
       {
         ResourceHandle configHandle = resCache.GetHandle(new Resource(GetConfigFileName()));
