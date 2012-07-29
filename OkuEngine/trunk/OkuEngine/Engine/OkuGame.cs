@@ -111,13 +111,12 @@ namespace OkuEngine
     /// </summary>
     public void DoInitialize()
     {
-      OkuManagers.ProcessManager = new ProcessManager();
-      OkuManagers.ScriptManager = new ScriptManager();
       OkuManagers.EventManager = new EventManager("OkuMainEventManager");
+      OkuManagers.ScriptManager = new ScriptManager();
+      OkuManagers.ProcessManager = new ProcessManager();
 
       ResourceCacheParams resParams = new ResourceCacheParams();
       SetupResourceCache(ref resParams);
-
       ResourceCache resCache = new ResourceCache(resParams);
       OkuData.ResourceCache = resCache;
       if (resCache.Initialize())

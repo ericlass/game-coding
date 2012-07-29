@@ -12,7 +12,9 @@ namespace OkuEngine.GCC.Scene
   {
     private int _actorId = 0;
     private string _name = null;
+    private int _renderPass = 0;
     private Transformation _transform = new Transformation();
+    private int _zIndex = 0;
     private AABB _area = new AABB();
     private Color _tint = Color.White;
 
@@ -35,12 +37,24 @@ namespace OkuEngine.GCC.Scene
     }
 
     /// <summary>
+    /// Creates properties with the given actor id an name.
+    /// </summary>
+    /// <param name="actorId">The actor id.</param>
+    /// <param name="name">The name.</param>
+    /// <param name="renderPass">The render pass this scene node belongs to.</param>
+    public SceneNodeProperties(int actorId, string name, int renderPass)
+    {
+      _actorId = actorId;
+      _name = name;
+      _renderPass = renderPass;
+    }
+
+    /// <summary>
     /// Gets or sets the actor id associated with the scene node.
     /// </summary>
     public int ActorId
     {
       get { return _actorId; }
-      set { _actorId = value; }
     }
 
     /// <summary>
@@ -77,6 +91,24 @@ namespace OkuEngine.GCC.Scene
     {
       get { return _transform; }
       set { _transform = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the z index of the scene node.
+    /// </summary>
+    public int ZIndex
+    {
+      get { return _zIndex; }
+      set { _zIndex = value; } //TODO: Maybe queue event to notify others to resort lists?
+    }
+
+    /// <summary>
+    /// Gets the number of the render pass this scene node belongs to.
+    /// </summary>
+    public int RenderPass
+    {
+      get { return _renderPass; }
+      set { _renderPass = value; }
     }
 
   }

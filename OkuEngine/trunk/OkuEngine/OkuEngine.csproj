@@ -63,6 +63,8 @@
     <Compile Include="Animation\InertialMovement.cs" />
     <Compile Include="Driver\Audio\NullSoundEngine.cs" />
     <Compile Include="Driver\Audio\SoundEngineFactory.cs" />
+    <Compile Include="Driver\Renderer\IRenderer2.cs" />
+    <Compile Include="Driver\Renderer\DrawMode.cs" />
     <Compile Include="Driver\Renderer\NullRenderer.cs" />
     <Compile Include="Driver\Renderer\RendererFactory.cs" />
     <Compile Include="DynamicArray.cs" />

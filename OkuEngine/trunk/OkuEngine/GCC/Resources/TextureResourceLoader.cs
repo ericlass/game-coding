@@ -28,7 +28,7 @@ namespace OkuEngine.GCC.Resources
       try
       {
         Bitmap image = new Bitmap(rawBuffer);
-        TextureExtraData extra = new TextureExtraData(image);
+        handle.Extras = new TextureExtraData(image);
       }
       catch (Exception)
       {

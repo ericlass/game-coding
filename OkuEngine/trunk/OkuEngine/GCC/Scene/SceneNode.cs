@@ -13,7 +13,7 @@ namespace OkuEngine.GCC.Scene
   /// </summary>
   public class SceneNode
   {
-    protected SceneNodeProperties _props = new SceneNodeProperties();
+    protected SceneNodeProperties _props = null;
 
     /// <summary>
     /// Creates a new scene node with the given paramters.
@@ -23,8 +23,7 @@ namespace OkuEngine.GCC.Scene
     /// <param name="transform">The transformation matrix for the scene node.</param>
     public SceneNode(int actorId, string name)
     {
-      _props.ActorId = actorId;
-      _props.Name = name;
+      _props = new SceneNodeProperties(actorId, name);
     }
 
     /// <summary>
@@ -34,7 +33,6 @@ namespace OkuEngine.GCC.Scene
     {
       get { return _props; }
     }
-
 
     /// <summary>
     /// Updates the scene node and all child nodes recursively.
