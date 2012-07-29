@@ -12,6 +12,7 @@
     <xs:complexType>
       <xs:all>
         <xs:element ref="fullscreen"/>
+        <xs:element ref="depth"/>
         <xs:element ref="width"/>
         <xs:element ref="height"/>
         <xs:element ref="clearcolor"/>
@@ -21,6 +22,7 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="fullscreen" type="xs:string"/>
+  <xs:element name="depth" type="xs:string"/>
   <xs:element name="width" type="xs:integer"/>
   <xs:element name="height" type="xs:integer"/>
   <xs:element name="clearcolor" type="xs:string"/>

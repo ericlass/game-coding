@@ -14,6 +14,9 @@ namespace OkuEngine
     private Vector _scale = Vector.One;
     private float _rotation = 0.0f;
 
+    private bool _matrixValid = false;
+    private Matrix3 _matrix = Matrix3.Identity;
+
     /// <summary>
     /// Creates a new transformation with translation (0,0), scale (1,1) and rotation (0).
     /// </summary>
@@ -40,7 +43,11 @@ namespace OkuEngine
     public Vector Translation 
     {
       get { return _translation; }
-      set { _translation = value; }
+      set
+      {
+        _translation = value;
+        _matrixValid = false;
+      }
     }
 
     /// <summary>
@@ -49,7 +56,11 @@ namespace OkuEngine
     public float Rotation 
     {
       get { return _rotation; }
-      set { _rotation = value; }
+      set 
+      {
+        _rotation = value;
+        _matrixValid = false;
+      }
     }
 
     /// <summary>
@@ -58,7 +69,25 @@ namespace OkuEngine
     public Vector Scale
     {
       get { return _scale; }
-      set { _scale = value; }
+      set
+      {
+        _scale = value;
+        _matrixValid = false;
+      }
+    }
+
+    /// <summary>
+    /// Gets the transformation as a matrix that can be used to combine transformations.
+    /// </summary>
+    /// <returns>The current transformation as a transformation matrix.</returns>
+    public Matrix3 AsMatrix()
+    {
+      if (!_matrixValid)
+      {
+        _matrix = Matrix3.Identity;
+        _matrix.ApplyTransform(this);
+      }
+      return _matrix;
     }
 
     /// <summary>

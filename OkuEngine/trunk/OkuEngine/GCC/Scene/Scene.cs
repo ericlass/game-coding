@@ -8,31 +8,11 @@ namespace OkuEngine.GCC.Scene
 {
   public class Scene
   {
-    private class SceneNodeZIndexSorter : IComparer<SceneNode>
-    {
-      public int Compare(SceneNode x, SceneNode y)
-      {
-        if (x == null)
-        {
-          if (y == null)
-            return 0;
-          else
-            return -1;
-        }
-        else
-        {
-          if (y == null)
-            return 1;
-          else
-            return x.Properties.ZIndex - y.Properties.ZIndex;
-        }        
-      }
-    }
+    private Stack<Matrix3> _matrixStack = new Stack<Matrix3>();
+    private Matrix3 _current = Matrix3.Identity;
 
-    private Dictionary<int, SceneNode> _actorMap = new Dictionary<int, SceneNode>();
-    private SortedDictionary<int, List<SceneNode>> _renderPasses = new SortedDictionary<int, List<SceneNode>>();
     private ViewPort _viewport = new ViewPort(1024, 768);
-    private SceneNodeZIndexSorter _sorter = new SceneNodeZIndexSorter();
+    private RootNode _root = new RootNode();
 
     public Scene()
     {
@@ -40,76 +20,44 @@ namespace OkuEngine.GCC.Scene
 
     public bool Render()
     {
-      foreach (KeyValuePair<int, List<SceneNode>> pass in _renderPasses)
-      {
-        pass.Value.Sort(_sorter);
-        foreach (SceneNode node in pass.Value)
-        {
-          node.PreRender(this);
-          node.Render(this);
-          node.PostRender(this);
-        }
-      }
-
+      _root.PreRender(this);
+      _root.Render(this);
+      _root.RenderChildren(this);
+      _root.PostRender(this);
       return true;
     }
 
     public bool Restore()
     {
-      foreach (SceneNode node in _actorMap.Values)
-      {
-        node.Restore(this);
-      }
-      return true;
+      return _root.Restore(this);
     }
 
     public Boolean Update(float dt)
     {
-      foreach (SceneNode node in _actorMap.Values)
-      {
-        node.Update(this, dt);
-      }
-      return true;
+      return _root.Update(this, dt);
     }
 
     public SceneNode FindActor(int actorId)
     {
-      SceneNode result = null;
-      _actorMap.TryGetValue(actorId, out result);
-      return result;
+      throw new NotImplementedException();
     }
 
-    public void AddChild(SceneNode node)
+    public void ApplyAndPushTransform(Transformation transform)
     {
-      if (!_actorMap.ContainsKey(node.Properties.ActorId))
-      {
-        _actorMap.Add(node.Properties.ActorId, node);
-      }
-
-      if (!_renderPasses.ContainsKey(node.Properties.RenderPass))
-      {
-        _renderPasses.Add(node.Properties.RenderPass, new List<SceneNode>());
-      }
-      _renderPasses[node.Properties.RenderPass].Add(node);
+      _matrixStack.Push(_current);
+      _current = transform.AsMatrix() * _current;
+      OkuManagers.Renderer.ApplyAndPushTransform(transform);
     }
 
-    public void RemoveChild(SceneNode node)
+    public void PopTransform()
     {
-      _actorMap.Remove(node.Properties.ActorId);
-      _renderPasses[node.Properties.RenderPass].Remove(node);
+      _current = _matrixStack.Pop();
+      OkuManagers.Renderer.PopTransform();
     }
 
-    public void RemoveChild(int actorId)
+    public Matrix3 CurrentTransform
     {
-      SceneNode node = null;
-      if (_actorMap.ContainsKey(actorId))
-      {
-        node = _actorMap[actorId];
-      }
-      if (node != null)
-      {
-        _renderPasses[node.Properties.RenderPass].Remove(node);
-      }
+      get { return _current; }
     }
 
     public ViewPort Viewport

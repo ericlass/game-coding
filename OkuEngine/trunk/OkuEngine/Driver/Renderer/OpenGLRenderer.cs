@@ -18,11 +18,12 @@ namespace OkuEngine.Driver.Renderer
   public class OpenGLRenderer : IRenderer
   {
     public const string RendererName = "opengl";
-
+    
     private bool _fullscreen = false;
     private Color _clearColor = Color.Black;
     private int _screenWidth = 1024;
     private int _screenHeight = 768;
+    private bool _useDepthBuffer = false;
     private Matrix3 _transform = Matrix3.Identity;
     private Matrix3 _viewTransform = Matrix3.Identity;
 
@@ -94,6 +95,9 @@ namespace OkuEngine.Driver.Renderer
       set { _texFilter = value; }
     }
 
+    /// <summary>
+    /// Gets the number of render passes.
+    /// </summary>
     public int RenderPasses
     {
       get { return _renderPasses; }
@@ -135,6 +139,15 @@ namespace OkuEngine.Driver.Renderer
         }
       }
       return result;
+    }
+
+    /// <summary>
+    /// Gets or sets if a depth buffer should be used.
+    /// </summary>
+    public bool UseDepthBuffer
+    {
+      get { return _useDepthBuffer; }
+      set { _useDepthBuffer = value; }
     }
 
     /// <summary>
@@ -188,6 +201,16 @@ namespace OkuEngine.Driver.Renderer
       for (int i = 0; i < _passTargets[0]; i++)
       {
         Gl.glFramebufferTexture2DEXT(Gl.GL_FRAMEBUFFER_EXT, Gl.GL_COLOR_ATTACHMENT0_EXT + i, Gl.GL_TEXTURE_2D, _colorBuffers[0, i], 0);
+
+        if (UseDepthBuffer)
+        {
+          // Create depth buffers
+          int depthBuffer = 0;
+          Gl.glGenRenderbuffersEXT(1, out depthBuffer);
+          Gl.glBindRenderbufferEXT(Gl.GL_RENDERBUFFER_EXT, depthBuffer);
+          Gl.glRenderbufferStorageEXT(Gl.GL_RENDERBUFFER_EXT, Gl.GL_DEPTH_COMPONENT, width, height);
+          Gl.glFramebufferRenderbufferEXT(Gl.GL_FRAMEBUFFER_EXT, Gl.GL_DEPTH_ATTACHMENT_EXT, Gl.GL_RENDERBUFFER_EXT, depthBuffer);
+        }
       }      
 
       //Bind color buffer to fbo
@@ -231,6 +254,10 @@ namespace OkuEngine.Driver.Renderer
             Color col;
             if (Color.TryParse(child.FirstChild.Value, out col))
               _clearColor = col;
+            break;
+
+          case "depth":
+            _useDepthBuffer = Converter.StrToBool(child.FirstChild.Value, false);
             break;
 
           case "passes":
@@ -319,6 +346,11 @@ namespace OkuEngine.Driver.Renderer
 
       Gl.glEnable(Gl.GL_BLEND);
       Gl.glBlendFunc(Gl.GL_SRC_ALPHA, Gl.GL_ONE_MINUS_SRC_ALPHA);
+
+      if (UseDepthBuffer)
+      {
+        Gl.glEnable(Gl.GL_DEPTH_TEST);
+      }
 
       Gl.glClearColor(_clearColor.R / 255.0f, _clearColor.G / 255.0f, _clearColor.B / 255.0f, _clearColor.A / 255.0f);
 
@@ -1117,14 +1149,20 @@ namespace OkuEngine.Driver.Renderer
       Gl.glDisable(Gl.GL_SCISSOR_TEST);
     }
 
-    public void SetTransform(Matrix3 transform)
+    public void ApplyAndPushTransform(Transformation transform)
     {
-      _transform = transform;
+      Gl.glMatrixMode(Gl.GL_MODELVIEW);
+      Gl.glPushMatrix();
+
+      Gl.glTranslatef(transform.Translation.X, transform.Translation.Y, 0.0f);
+      Gl.glScalef(transform.Scale.X, transform.Scale.Y, 1.0f);
+      Gl.glRotatef(transform.Rotation, 0.0f, 0.0f, 1.0f);
     }
 
-    public void SetViewTransform(Matrix3 transform)
+    public void PopTransform()
     {
-      _viewTransform = transform;
+      Gl.glMatrixMode(Gl.GL_MODELVIEW);
+      Gl.glPopMatrix();
     }
 
   }

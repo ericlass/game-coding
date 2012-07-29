@@ -4,12 +4,7 @@
     <fullscreen>no</fullscreen>
     <width>1024</width>
     <height>768</height>
-    <depth>no</depth>
-    <clearcolor>0,0,0</clearcolor>
-    <passes>
-      <pass targets="1" />
-      <pass targets="1" />
-    </passes>
+    <clearcolor>51, 51, 51</clearcolor>
   </renderer>
   <sound type="openal">
     <volume>1.0</volume>

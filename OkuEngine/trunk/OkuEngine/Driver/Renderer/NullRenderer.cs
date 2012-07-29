@@ -196,5 +196,14 @@ namespace OkuEngine.Driver.Renderer
     {
     }
 
+
+    public void ApplyAndPushTransform(Transformation transform)
+    {
+    }
+
+    public void PopTransform()
+    {
+    }
+
   }
 }

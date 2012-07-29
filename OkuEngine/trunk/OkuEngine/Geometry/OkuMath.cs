@@ -141,6 +141,7 @@ namespace OkuEngine
     {
       min.X = float.MaxValue;
       min.Y = float.MaxValue;
+
       max.X = float.MinValue;
       max.Y = float.MinValue;
 

@@ -343,16 +343,15 @@ namespace OkuEngine.Driver.Renderer
     void ClearScissorRectangle();
 
     /// <summary>
-    /// Sets the current transform matrix.
+    /// Pushes the current transformation onto the stack and applies the given transformation.
     /// </summary>
-    /// <param name="transform">The transform matrix to use.</param>
-    void SetTransform(Matrix3 transform);
+    /// <param name="transform">The transformation to apply.</param>
+    void ApplyAndPushTransform(Transformation transform);
 
     /// <summary>
-    /// Sets the current view transformation.
+    /// Pops the current transformation from the stack.
     /// </summary>
-    /// <param name="transform">The new view transformation.</param>
-    void SetViewTransform(Matrix3 transform);
+    void PopTransform();
 
   }
 }

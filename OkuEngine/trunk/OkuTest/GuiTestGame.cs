@@ -20,6 +20,11 @@ namespace OkuTest
       renderParams.Height = 768;
     }*/
 
+    protected override string GetConfigFileName()
+    {
+      return "guitestconfig.xml";
+    }
+
     public override void Initialize()
     {
       _gui = new WidgetContainer( new SpriteFont("Arial", 10, System.Drawing.FontStyle.Regular, true));
@@ -85,7 +90,14 @@ namespace OkuTest
 
     public override void Render(int pass)
     {
-      _gui.Render();
+      if (pass == 0)
+      {
+        _gui.Render();
+      }
+      else
+      {
+        OkuManagers.Renderer.DrawScreenAlignedQuad(OkuManagers.Renderer.GetPassResult(pass - 1, 0));
+      }
       //Vector mousePos = OkuDrivers.Renderer.ScreenToWorld(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
       //OkuDrivers.Renderer.DrawPoint(mousePos, 4.0f, Color.Red);
     }
