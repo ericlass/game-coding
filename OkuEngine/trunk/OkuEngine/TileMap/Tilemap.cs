@@ -317,8 +317,8 @@ namespace OkuEngine
     public void Draw()
     {
       int left, right, top, bottom;
-      WorldToTile(OkuData.Scene.Viewport.Left, OkuData.Scene.Viewport.Top, out left, out top);
-      WorldToTile(OkuData.Scene.Viewport.Right, OkuData.Scene.Viewport.Bottom, out right, out bottom);
+      WorldToTile(OkuData.ActiveScene.Viewport.Left, OkuData.ActiveScene.Viewport.Top, out left, out top);
+      WorldToTile(OkuData.ActiveScene.Viewport.Right, OkuData.ActiveScene.Viewport.Bottom, out right, out bottom);
 
       for (int y = bottom; y <= top; y++)
       {

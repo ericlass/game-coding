@@ -5,11 +5,10 @@ using System.Text;
 
 namespace OkuEngine.GCC.Scene
 {
-  public class RootNode : SceneNode
+  internal class LayerNode : SceneNode
   {
-    public RootNode() : base(-1, "ROOT")
-    {      
+    public LayerNode(string name) : base(-2, name)
+    {
     }
-
   }
 }

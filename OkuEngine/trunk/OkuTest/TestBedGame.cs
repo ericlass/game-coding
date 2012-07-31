@@ -38,8 +38,8 @@ namespace OkuTest
       Vector[] verts = new Vector[50];
       Color[] colors = new Color[verts.Length];
       Random rand = new Random();
-      int width = (int)OkuData.Scene.Viewport.Width;
-      int height = (int)OkuData.Scene.Viewport.Height;
+      int width = (int)OkuData.ActiveScene.Viewport.Width;
+      int height = (int)OkuData.ActiveScene.Viewport.Height;
       for (int i = 0; i < verts.Length; i++)
       {
         verts[i] = new Vector((float)(rand.NextDouble() - 0.5) * width, (float)(rand.NextDouble() - 0.5) * height);
@@ -106,7 +106,7 @@ namespace OkuTest
         _sound.Play();
 
       float speed = 200 * dt;
-      Vector center = OkuData.Scene.Viewport.Center;
+      Vector center = OkuData.ActiveScene.Viewport.Center;
       if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Left))
         center.X -= speed;
       if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Right))
@@ -117,7 +117,7 @@ namespace OkuTest
         center.Y += speed;      
 
       speed = dt;
-      Vector scale = OkuData.Scene.Viewport.Scale;
+      Vector scale = OkuData.ActiveScene.Viewport.Scale;
       if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Add))
       {
         scale.X += speed;
@@ -132,8 +132,8 @@ namespace OkuTest
       if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.NumPad0))
         scale = Vector.One;
       
-      OkuData.Scene.Viewport.Center = center;
-      OkuData.Scene.Viewport.Scale = scale;
+      OkuData.ActiveScene.Viewport.Center = center;
+      OkuData.ActiveScene.Viewport.Scale = scale;
     }
 
     public override void Render(int pass)
@@ -151,7 +151,7 @@ namespace OkuTest
           _text.Draw();
 
           Vector[] transformed = new Vector[_guiText.Vertices.Positions.Length];
-          OkuData.Scene.Viewport.ScreenSpaceMatrix.Transform(_guiText.Vertices.Positions, transformed);
+          OkuData.ActiveScene.Viewport.ScreenSpaceMatrix.Transform(_guiText.Vertices.Positions, transformed);
           OkuManagers.Renderer.DrawMesh(transformed, _guiText.Vertices.TexCoords, _guiText.Vertices.Colors, _guiText.Vertices.Positions.Length, _guiText.Mode, _guiText.Texture);
           break;
 

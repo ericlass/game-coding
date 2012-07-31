@@ -72,7 +72,7 @@ namespace OkuTest
 
       if (_button.Clicked)
       {
-        OkuData.Scene.Viewport.Scale *= -1;
+        OkuData.ActiveScene.Viewport.Scale *= -1;
       }
 
       String hotText = _gui.HotWidget != null ? _gui.HotWidget.ID.ToString() : "None";

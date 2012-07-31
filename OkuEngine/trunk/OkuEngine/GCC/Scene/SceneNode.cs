@@ -15,17 +15,15 @@ namespace OkuEngine.GCC.Scene
   {
     protected SceneNodeProperties _props = null;
     protected SceneNode _parent = null;
-    protected HashSet<SceneNode> _children = null;
+    protected List<SceneNode> _children = null;
 
     /// <summary>
     /// Creates a new scene node with the given paramters.
     /// </summary>
     /// <param name="actorId">The id of the actor that is connected to the scene node.</param>
     /// <param name="name">The name of the scene node.</param>
-    /// <param name="transform">The transformation matrix for the scene node.</param>
     public SceneNode(int actorId, string name)
-    {
-      _props = new SceneNodeProperties(actorId, name);
+    {      
     }
 
     /// <summary>
@@ -37,11 +35,10 @@ namespace OkuEngine.GCC.Scene
     }
 
     /// <summary>
-    /// Gets or set the parent node of the node.
-    /// Setting the parent automatically adds the 
-    /// node to the child list of the new parent.
-    /// If the node already had a parent, it is automatically
-    /// removed from its child list.
+    /// Gets or sets the parent node of the node.
+    /// Setting automatically removes the node
+    /// from the previous parents child nodes
+    /// and adds it to the new parents child nodes.
     /// </summary>
     public SceneNode Parent
     {
@@ -60,6 +57,11 @@ namespace OkuEngine.GCC.Scene
       }
     }
 
+    public List<SceneNode> Children
+    {
+      get { return _children; }
+    }
+
     /// <summary>
     /// Adds the given node as a child node of this node.
     /// </summary>
@@ -69,10 +71,11 @@ namespace OkuEngine.GCC.Scene
     {
       if (_children == null)
       {
-        _children = new HashSet<SceneNode>();
+        _children = new List<SceneNode>();
       }
 
-      return _children.Add(node);
+      _children.Add(node);
+      return true;
     }
 
     /// <summary>

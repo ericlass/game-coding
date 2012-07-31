@@ -58,16 +58,16 @@ namespace OkuTest
       Point m = OkuManagers.Renderer.Display.PointToClient(new Point(OkuManagers.Input.Mouse.X, OkuManagers.Input.Mouse.Y));
 
       //Calculate mouse coordinates in world space
-      _mousePos.X = OkuData.Scene.Viewport.Left + m.X;
-      _mousePos.Y = OkuData.Scene.Viewport.Top - m.Y;
+      _mousePos.X = OkuData.ActiveScene.Viewport.Left + m.X;
+      _mousePos.Y = OkuData.ActiveScene.Viewport.Top - m.Y;
 
       //Get width and height of view
-      float viewWidth = OkuData.Scene.Viewport.Width;
-      float viewHeight = OkuData.Scene.Viewport.Height;
+      float viewWidth = OkuData.ActiveScene.Viewport.Width;
+      float viewHeight = OkuData.ActiveScene.Viewport.Height;
 
       //Get mouse (light) position in view space
-      float lightX = _mousePos.X - OkuData.Scene.Viewport.Left;
-      float lightY = _mousePos.Y - OkuData.Scene.Viewport.Bottom;
+      float lightX = _mousePos.X - OkuData.ActiveScene.Viewport.Left;
+      float lightY = _mousePos.Y - OkuData.ActiveScene.Viewport.Bottom;
 
       //Convert view space light coordinates to texture space
       _lightPos.X = lightX / viewWidth;

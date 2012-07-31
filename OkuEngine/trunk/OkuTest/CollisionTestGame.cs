@@ -47,8 +47,8 @@ namespace OkuTest
       OkuManagers.Renderer.ClearColor = OkuEngine.Color.White;
 
       SpriteFont font = new SpriteFont("Calibri", 12, FontStyle.Regular, false);
-      _strIntersect = font.GetStringMesh("Intersection", OkuData.Scene.Viewport.Left + 5, OkuData.Scene.Viewport.Top - 5, OkuEngine.Color.Red);
-      _strNoIntersect = font.GetStringMesh("No Intersection", OkuData.Scene.Viewport.Left + 5, OkuData.Scene.Viewport.Top - 5, OkuEngine.Color.Black);
+      _strIntersect = font.GetStringMesh("Intersection", OkuData.ActiveScene.Viewport.Left + 5, OkuData.ActiveScene.Viewport.Top - 5, OkuEngine.Color.Red);
+      _strNoIntersect = font.GetStringMesh("No Intersection", OkuData.ActiveScene.Viewport.Left + 5, OkuData.ActiveScene.Viewport.Top - 5, OkuEngine.Color.Black);
 
       _transform1.Translation = new Vector(-100, 0);
       _transform2.Translation = new Vector(200, 00);

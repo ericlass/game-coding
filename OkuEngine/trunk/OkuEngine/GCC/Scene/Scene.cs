@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Drawing;
 
@@ -16,6 +15,11 @@ namespace OkuEngine.GCC.Scene
 
     public Scene()
     {
+    }
+
+    public RootNode Root
+    {
+      get { return _root; }
     }
 
     public bool Render()

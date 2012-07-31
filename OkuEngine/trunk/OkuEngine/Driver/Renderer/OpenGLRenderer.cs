@@ -291,8 +291,8 @@ namespace OkuEngine.Driver.Renderer
       _colorBuffers = new int[_renderPasses, maxTargets];
 
       //Create view port
-      OkuData.Scene.Viewport = new ViewPort(_screenWidth, _screenHeight);
-      OkuData.Scene.Viewport.Change += new ViewPortChangeEventHandler(_viewPort_Change);
+      OkuData.ActiveScene.Viewport = new ViewPort(_screenWidth, _screenHeight);
+      OkuData.ActiveScene.Viewport.Change += new ViewPortChangeEventHandler(_viewPort_Change);
 
       //Create and setup form
       Form form = new Form();
@@ -426,7 +426,7 @@ namespace OkuEngine.Driver.Renderer
     {
       Gl.glMatrixMode(Gl.GL_PROJECTION);
       Gl.glLoadIdentity();
-      Gl.glOrtho(OkuData.Scene.Viewport.Left, OkuData.Scene.Viewport.Right, OkuData.Scene.Viewport.Bottom, OkuData.Scene.Viewport.Top, -1, 1);
+      Gl.glOrtho(OkuData.ActiveScene.Viewport.Left, OkuData.ActiveScene.Viewport.Right, OkuData.ActiveScene.Viewport.Bottom, OkuData.ActiveScene.Viewport.Top, -1, 1);
     }
 
     public void InitImageContent(ImageContent content, Bitmap image)
@@ -884,16 +884,16 @@ namespace OkuEngine.Driver.Renderer
       Gl.glColor4ub(tint.R, tint.G, tint.B, tint.A);
 
       Gl.glTexCoord2f(0, 1);
-      Gl.glVertex2f(OkuData.Scene.Viewport.Left, OkuData.Scene.Viewport.Top);
+      Gl.glVertex2f(OkuData.ActiveScene.Viewport.Left, OkuData.ActiveScene.Viewport.Top);
 
       Gl.glTexCoord2f(1, 1);
-      Gl.glVertex2f(OkuData.Scene.Viewport.Right, OkuData.Scene.Viewport.Top);
+      Gl.glVertex2f(OkuData.ActiveScene.Viewport.Right, OkuData.ActiveScene.Viewport.Top);
 
       Gl.glTexCoord2f(1, 0);
-      Gl.glVertex2f(OkuData.Scene.Viewport.Right, OkuData.Scene.Viewport.Bottom);
+      Gl.glVertex2f(OkuData.ActiveScene.Viewport.Right, OkuData.ActiveScene.Viewport.Bottom);
 
       Gl.glTexCoord2f(0, 0);
-      Gl.glVertex2f(OkuData.Scene.Viewport.Left, OkuData.Scene.Viewport.Bottom);
+      Gl.glVertex2f(OkuData.ActiveScene.Viewport.Left, OkuData.ActiveScene.Viewport.Bottom);
 
       Gl.glEnd();
 
@@ -1123,7 +1123,7 @@ namespace OkuEngine.Driver.Renderer
 
     public Vector ScreenToWorld(int x, int y)
     {
-      return OkuData.Scene.Viewport.ScreenSpaceMatrix.Transform(ScreenToDisplay(x, y));
+      return OkuData.ActiveScene.Viewport.ScreenSpaceMatrix.Transform(ScreenToDisplay(x, y));
     }
 
     public void BeginScreenSpace()

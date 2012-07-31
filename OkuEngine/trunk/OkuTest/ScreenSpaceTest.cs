@@ -27,13 +27,13 @@ namespace OkuTest
     public override void Update(float dt)
     {
       if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Left))
-        OkuData.Scene.Viewport.Left += 100 * dt;
+        OkuData.ActiveScene.Viewport.Left += 100 * dt;
       if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Right))
-        OkuData.Scene.Viewport.Left -= 100 * dt;
+        OkuData.ActiveScene.Viewport.Left -= 100 * dt;
       if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Up))
-        OkuData.Scene.Viewport.Top -= 100 * dt;
+        OkuData.ActiveScene.Viewport.Top -= 100 * dt;
       if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Down))
-        OkuData.Scene.Viewport.Top += 100;
+        OkuData.ActiveScene.Viewport.Top += 100;
     }
 
     public override void Render(int pass)

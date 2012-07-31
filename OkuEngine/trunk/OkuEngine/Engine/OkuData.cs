@@ -15,7 +15,7 @@ namespace OkuEngine
     private static VariableList _globals = null;
     private static VariableList _locals = null;
     private static ResourceCache _resources = null;
-    private static Scene _scene = new Scene();
+    private static Scene _activeScene = null;
 
     /// <summary>
     /// Gets the global variable list.
@@ -45,11 +45,11 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Gets the scene graph.
+    /// Gets the current active scene.
     /// </summary>
-    public static Scene Scene
+    public static Scene ActiveScene
     {
-      get { return _scene; }
+      get { return _activeScene; }
     }
 
     /// <summary>
