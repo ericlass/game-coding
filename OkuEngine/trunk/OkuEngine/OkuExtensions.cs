@@ -143,11 +143,21 @@ namespace OkuEngine
       return defaultIfNull;
     }
 
+    /// <summary>
+    /// Removes the items at index 0, removes it and returns it.
+    /// </summary>
+    /// <typeparam name="T">The type if the list.</typeparam>
+    /// <param name="list">The list to change.</param>
+    /// <returns>The item and index 0.</returns>
     public static T PopFirst<T>(this List<T> list)
     {
-      T result = list[0];
-      list.RemoveAt(0);
-      return result;
+      if (list.Count > 0)
+      {
+        T result = list[0];
+        list.RemoveAt(0);
+        return result;
+      }
+      return default(T);
     }
 
   }

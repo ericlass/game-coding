@@ -7,7 +7,10 @@ namespace OkuEngine.GCC.Actor
 {
   public class Actor
   {
+    public const int InvalidId = -1;
+
     private int _actorId = 0; //Actor id 0 is invalid
+    private string _name = null;
     private ActorComponentMap _components = null; //Is created lazylly in the getter. Some actors might not need it.
 
     public Actor(int actorId)
@@ -18,6 +21,12 @@ namespace OkuEngine.GCC.Actor
     public int ActorId
     {
       get { return _actorId; }
+    }
+
+    public string Name
+    {
+      get { return _name; }
+      set { _name = value; }
     }
 
     public bool Init(XmlNode node)

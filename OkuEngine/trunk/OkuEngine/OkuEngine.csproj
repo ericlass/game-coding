@@ -99,9 +99,8 @@
     <Compile Include="GCC\Resources\ResourceHandle.cs" />
     <Compile Include="GCC\Resources\TextureExtraData.cs" />
     <Compile Include="GCC\Resources\TextureResourceLoader.cs" />
-    <Compile Include="GCC\Scene\LayerNode.cs" />
-    <Compile Include="GCC\Scene\RootNode.cs" />
     <Compile Include="GCC\Scene\Scene.cs" />
+    <Compile Include="GCC\Scene\SceneLayer.cs" />
     <Compile Include="GCC\Scene\SceneNode.cs" />
     <Compile Include="GCC\Scene\SceneNodeProperties.cs" />
     <Compile Include="GCC\Scripting\ScriptInstance.cs" />

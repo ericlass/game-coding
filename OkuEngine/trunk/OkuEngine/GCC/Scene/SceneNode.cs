@@ -22,8 +22,9 @@ namespace OkuEngine.GCC.Scene
     /// </summary>
     /// <param name="actorId">The id of the actor that is connected to the scene node.</param>
     /// <param name="name">The name of the scene node.</param>
-    public SceneNode(int actorId, string name)
-    {      
+    internal SceneNode(int actorId)
+    {
+      _props.ActorId = actorId;
     }
 
     /// <summary>
@@ -43,17 +44,25 @@ namespace OkuEngine.GCC.Scene
     public SceneNode Parent
     {
       get { return _parent; }
-      set
+    }
+
+    /// <summary>
+    /// Sets the parent of the node.
+    /// Automatically removes the node
+    /// from the previous parents child nodes
+    /// and adds it to the new parents child nodes.
+    /// </summary>
+    /// <param name="parent">The new parent of the node.</param>
+    internal void SetParent(SceneNode parent)
+    {
+      if (_parent != null)
       {
-        if (_parent != null)
-        {
-          _parent.RemoveChild(this);
-        }
-        _parent = value;
-        if (_parent != null)
-        {
-          _parent.AddChild(this);
-        }
+        _parent.RemoveChild(this);
+      }
+      _parent = parent;
+      if (_parent != null)
+      {
+        _parent.AddChild(this);
       }
     }
 

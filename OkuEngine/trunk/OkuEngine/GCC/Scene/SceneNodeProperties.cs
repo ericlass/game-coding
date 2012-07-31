@@ -11,7 +11,6 @@ namespace OkuEngine.GCC.Scene
   public class SceneNodeProperties
   {
     private int _actorId = 0;
-    private string _name = null;
     private int _layer = 0;
     private Transformation _transform = new Transformation();
     private AABB _area = new AABB();
@@ -22,10 +21,9 @@ namespace OkuEngine.GCC.Scene
     /// </summary>
     /// <param name="actorId">The actor id.</param>
     /// <param name="name">The name.</param>
-    public SceneNodeProperties(int actorId, string name)
+    public SceneNodeProperties(int actorId)
     {
       _actorId = actorId;
-      _name = name;
     }
 
     /// <summary>
@@ -35,15 +33,6 @@ namespace OkuEngine.GCC.Scene
     {
       get { return _actorId; }
       set { _actorId = value; }
-    }
-
-    /// <summary>
-    /// Gets or sets the name of the scene node.
-    /// </summary>
-    public string Name
-    {
-      get { return _name; }
-      set { _name = value; }
     }
 
     /// <summary>
