@@ -12,6 +12,7 @@ namespace OkuEngine.GCC.Scene
 
     private ViewPort _viewport = new ViewPort(1024, 768);
     private RootNode _root = new RootNode();
+    private int test = 0;
 
     public Scene()
     {
