@@ -2,5 +2,5 @@
 
 namespace OkuEngine.GCC.Events
 {
-  public delegate void EventListenerDelegate(BaseEvent eventData);
+  public delegate void EventListenerDelegate(int eventType, object eventData);
 }

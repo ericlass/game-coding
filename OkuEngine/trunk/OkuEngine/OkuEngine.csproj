@@ -80,6 +80,7 @@
     <Compile Include="GCC\Actor\TransformComponent.cs" />
     <Compile Include="GCC\Events\ActorDestroyEvent.cs" />
     <Compile Include="GCC\Events\BaseEvent.cs" />
+    <Compile Include="GCC\Events\Event.cs" />
     <Compile Include="GCC\Events\EventListenerDelegate.cs" />
     <Compile Include="GCC\Events\EventManager.cs" />
     <Compile Include="GCC\Events\EventTypes.cs" />

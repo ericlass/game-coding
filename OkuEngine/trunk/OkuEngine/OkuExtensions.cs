@@ -144,17 +144,35 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Removes the items at index 0, removes it and returns it.
+    /// Removes the item at index 0 and returns it.
     /// </summary>
     /// <typeparam name="T">The type if the list.</typeparam>
     /// <param name="list">The list to change.</param>
-    /// <returns>The item and index 0.</returns>
+    /// <returns>The item at index 0.</returns>
     public static T PopFirst<T>(this List<T> list)
     {
       if (list.Count > 0)
       {
         T result = list[0];
         list.RemoveAt(0);
+        return result;
+      }
+      return default(T);
+    }
+
+    /// <summary>
+    /// Removes the item at the end of the list and returns it.
+    /// </summary>
+    /// <typeparam name="T">The type if the list.</typeparam>
+    /// <param name="list">The list to change.</param>
+    /// <returns>The item at the end of the list.</returns>
+    public static T PopLast<T>(this List<T> list)
+    {
+      if (list.Count > 0)
+      {
+        int index = list.Count - 1;
+        T result = list[index];
+        list.RemoveAt(index);
         return result;
       }
       return default(T);
