@@ -1,0 +1,77 @@
+<okugame>
+  <settings>
+    <renderer>
+    </renderer>
+    <sound>
+    </sound>
+  </settings>
+ 
+  <game>
+    <behaviors>
+      <behavior>
+        <id></id>
+        <name></name>
+        ...
+      </behavior>
+    </behaviors>
+    
+    <actortypes>
+      <actortype>
+        <id></id>
+        <name></name>
+        <components>
+          <renderable>
+            <points></points> <!-- A list of vectors for vertex positions -->
+            <texcoords></texcoords> <!-- A list of vectors for vertex texture coordinates -->
+            <colors></colors> <!-- A list of colors for vertex colors -->
+            <mode></mode> <!-- The mesh mode (Triangles, Quads, Line...) -->
+            <image></image> <!-- The texture to use -->
+          </renderable>
+          <healthpickup>
+            <health>100</health>
+          </healthpickup>
+        </components>
+      </actortype>
+    </actortypes>
+    
+    <scenes>
+      <scene>
+        <id></id>
+        <name></name>
+        <layers>
+          <layer>
+            <id></id>
+            <name></name>
+          </layer>
+        </layers>
+      </scene>
+    </scenes>
+
+    <actors>
+      <actor>
+        <id></id>
+        <name></name>
+        <type></type> <!-- References the actor type by its id -->
+        <scene></scene> <!-- References the scene by its id -->
+        <layer></layer> <!-- References the layer by its id -->
+        <parent></parent> <!-- References parent actor by actor id -->
+      </actor>
+    </actors>
+
+    <!-- WIP! -->
+    <actions>
+      <action>
+        <event>
+          <attributes>            
+          </attributes>
+        </event>
+        <process>
+          <classname></classname>
+          <attributes>
+          </attributes>
+        </process>
+      </action>
+    </actions>
+   
+  </game>
+</okugame>

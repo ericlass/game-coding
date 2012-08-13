@@ -193,6 +193,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Engine\okuconfig.xml" />
+    <Content Include="okugame.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\okuconfig.xsd" />
