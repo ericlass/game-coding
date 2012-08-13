@@ -1,23 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml;
 using System.Text;
 using System.Drawing;
+using OkuEngine.GCC.Events;
 
 namespace OkuEngine.GCC.Scene
 {
   /// <summary>
   /// Mananges a single scene with layers.
   /// </summary>
-  public class Scene
+  public class Scene : StoreableEntity
   {
     private Stack<Matrix3> _matrixStack = new Stack<Matrix3>();
     private Matrix3 _current = Matrix3.Identity;
 
     private ViewPort _viewport = new ViewPort(1024, 768);
-    private int _id = 0;
-    private string _name = null;
+    private bool _active = false;
 
     private SortedDictionary<int, SceneLayer> _layerMap = new SortedDictionary<int, SceneLayer>();
+
+    public Scene()
+    {
+    }
 
     /// <summary>
     /// Create a new scene with the given id and name.
@@ -28,23 +33,19 @@ namespace OkuEngine.GCC.Scene
     {
       _id = id;
       _name = name;
+
+      _viewport.Change += new ViewPortChangeEventHandler(_viewport_Change);
     }
 
     /// <summary>
-    /// Gets the id of the scene.
+    /// If the viewport is changed and the scene is active, the viewport change
+    /// event is triggered.
     /// </summary>
-    public int Id
+    /// <param name="sender">The viewport that was changed</param>
+    private void _viewport_Change(ViewPort sender)
     {
-      get { return _id; }
-    }
-
-    /// <summary>
-    /// Gets or sets the name of the scene.
-    /// </summary>
-    public string Name
-    {
-      get { return _name; }
-      set { _name = value; }
+      if (_active)
+        OkuManagers.EventManager.TriggerEvent(EventTypes.ViewPortChanged, sender);
     }
 
     /// <summary>
@@ -211,7 +212,7 @@ namespace OkuEngine.GCC.Scene
     }
 
     /// <summary>
-    /// Converts the given screen space coordinates to displayer space.
+    /// Converts the given screen space coordinates to display space.
     /// </summary>
     /// <param name="x">The x component of the position.</param>
     /// <param name="y">The y component of the position.</param>
@@ -219,6 +220,87 @@ namespace OkuEngine.GCC.Scene
     public Vector ScreenToDisplay(int x, int y)
     {
       return Viewport.ScreenSpaceMatrix.Transform(ScreenToDisplay(x, y));
+    }
+
+    /// <summary>
+    /// Is called when the scene is made the active scene.
+    /// </summary>
+    public void Activate()
+    {
+      OkuManagers.EventManager.TriggerEvent(EventTypes.ViewPortChanged, _viewport);
+      _active = true;
+    }
+
+    /// <summary>
+    /// Is called when another scene is activated and the scene is deactivated.
+    /// </summary>
+    public void Deactivate()
+    {
+      _active = false;
+    }
+
+    /// <summary>
+    /// Checks if one of the layers of the scene contains the actor with the given id.
+    /// </summary>
+    /// <param name="actorId">The id of the actor to find.</param>
+    /// <param name="layerIndex">If the actor is found, the id of the layer is returned here.</param>
+    /// <returns>True if the ator was found, else false.</returns>
+    public bool FindActor(int actorId, out int layerIndex)
+    {
+      layerIndex = 0;
+      foreach (SceneLayer layer in _layerMap.Values)
+      {
+        if (layer.ContainsActor(actorId))
+        {
+          layerIndex = layer.Id;
+          return true;
+        }
+      }
+      return false;
+    }
+
+    public override void Load(XmlNode node)
+    {
+      base.Load(node);
+
+      XmlNode child = node.FirstChild;
+      while (child != null)
+      {
+        switch (child.Name.ToLower())
+        {
+          case "layers":
+            XmlNode layerNode = child.FirstChild;
+            while (layerNode != null)
+            {
+              SceneLayer layer = new SceneLayer();
+              layer.Load(layerNode);
+              _layerMap.Add(layer.Id, layer);
+
+              layerNode = layerNode.NextSibling;
+            }
+            break;
+
+          default:
+            break;
+        }
+        child = child.NextSibling;
+      }
+    }
+
+    public override void Save(XmlWriter writer)
+    {
+      writer.WriteStartElement("scene");
+
+      base.Save(writer);
+
+      writer.WriteStartElement("layers");
+      foreach (KeyValuePair<int, SceneLayer> item in _layerMap)
+      {
+        item.Value.Save(writer);
+      }
+      writer.WriteEndElement();
+
+      writer.WriteEndElement();
     }
 
   }

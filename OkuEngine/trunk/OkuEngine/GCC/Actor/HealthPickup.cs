@@ -10,24 +10,34 @@ namespace OkuEngine.GCC.Actor
     //These two static members cannot be enforced, but should be in all components to be consistent.
     public const int ComponentId = 1;
     public const string ComponentName = "healthpickup";
+
+    private int _health = 0;
     
     public override int GetComponentId()
     {
       return ComponentId;
     }
 
-    public override bool Init(XmlNode node)
+    public void Apply(Actor actor)
     {
-      if (node.Name != ComponentName)
-        return false;
+      throw new NotImplementedException();
+    }
 
+    public int Health
+    {
+      get { return _health; }
+      set { _health = value; }
+    }
+
+    public override void Load(XmlNode node)
+    {
       XmlNode child = node.FirstChild;
       while (child != null)
       {
-        switch (child.Name)
+        switch (child.Name.ToLower())
         {
           case "health":
-            Health = child.Attributes.GetFloat("value", 0.0f);
+            _health = int.Parse(child.FirstChild.Value);
             break;
 
           default:
@@ -36,16 +46,18 @@ namespace OkuEngine.GCC.Actor
 
         child = child.NextSibling;
       }
-
-      return true;
     }
 
-    public void Apply(Actor actor)
+    public override void Save(XmlWriter writer)
     {
-      throw new NotImplementedException();
-    }
+      writer.WriteStartElement(ComponentName);
 
-    public float Health { get; set; }
+      writer.WriteStartElement("health");
+      writer.WriteValue(_health);
+      writer.WriteEndElement();
+
+      writer.WriteEndElement();
+    }
 
   }
 }

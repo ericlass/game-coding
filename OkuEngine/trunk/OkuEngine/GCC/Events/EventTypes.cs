@@ -9,6 +9,11 @@ namespace OkuEngine.GCC.Events
   {
     public const int Invalid = 0;
 
-    public const int ActorDestroyed = 1;
+    /// <summary>
+    /// The viewport of the currently active scene has changed. Event data is the viewport object itself.
+    /// </summary>
+    public const int ViewPortChanged = 100;
+
+    public const int ActorDestroyed = 10000;
   }
 }

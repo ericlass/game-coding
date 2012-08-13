@@ -31,7 +31,7 @@ namespace OkuEngine.Driver.Audio
       XmlNode child = soundNode.FirstChild;
       while (child != null)
       {
-        switch (child.Name)
+        switch (child.Name.ToLower())
         {
           case "volume":
             _volume = Converter.StrToFloat(child.FirstChild.Value);

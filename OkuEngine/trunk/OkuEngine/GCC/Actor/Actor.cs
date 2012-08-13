@@ -2,73 +2,120 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using OkuEngine.GCC.Scene;
 
 namespace OkuEngine.GCC.Actor
 {
-  public class Actor
+  /// <summary>
+  /// Defines a single actor in the game. Not to be confused with an ActorType.
+  /// </summary>
+  public class Actor : StoreableEntity
   {
-    public const int InvalidId = -1;
+    public ActorType _type = null;
 
-    private int _actorId = 0; //Actor id 0 is invalid
-    private string _name = null;
-    private ActorComponentMap _components = null; //Is created lazylly in the getter. Some actors might not need it.
-
-    public Actor(int actorId)
+    /// <summary>
+    /// Creates a new actor.
+    /// </summary>
+    public Actor()
     {
-      _actorId = actorId;
     }
 
-    public int ActorId
+    /// <summary>
+    /// Loads an actor includiong its components from the given xml node.
+    /// This also adds the actor to the corresponding scene and layer.
+    /// </summary>
+    /// <param name="node">The node to start loading from.</param>
+    public override void Load(XmlNode node)
     {
-      get { return _actorId; }
-    }
+      base.Load(node);
 
-    public string Name
-    {
-      get { return _name; }
-      set { _name = value; }
-    }
+      int actorType = 0;
+      int sceneId = 0;
+      int layerId = 0;
+      int parentId = 0;
 
-    public bool Init(XmlNode node)
-    {
-      return true;
-    }
-
-    public void PostInit()
-    {
-      foreach (ActorComponent comp in Components.Values)
+      XmlNode child = node.FirstChild;
+      while (child != null)
       {
-        comp.PostInit();
-      }
-    }
-
-    public ActorComponent GetComponent(int componentId)
-    {
-      if (Components.ContainsKey(componentId))
-      {
-        return Components[componentId];
-      }
-      return null;
-    }
-
-    public void AddComponent(ActorComponent component)
-    {
-      if (component != null)
-      {
-        Components.Add(component.GetComponentId(), component);
-      }
-    }
-
-    private ActorComponentMap Components
-    {
-      get
-      {
-        if (_components == null)
+        switch (child.Name.ToLower())
         {
-          _components = new ActorComponentMap();
+          case "type":
+            actorType = int.Parse(child.FirstChild.Value);
+            break;
+
+          case "scene":
+            sceneId = int.Parse(child.FirstChild.Value);
+            break;
+
+          case "layer":
+            layerId = int.Parse(child.FirstChild.Value);
+            break;
+
+          case "parent":
+            parentId = int.Parse(child.FirstChild.Value);
+            break;
+
+          default:
+            break;
         }
-        return _components;
+
+        child = child.NextSibling;
       }
+
+      if (actorType != 0 && sceneId != 0 && layerId != 0)
+      {
+        _type = OkuData.ActorTypes[actorType];
+        //TODO: Check that scene and layer with given ids exist
+        SceneNode parent = null;
+        if (parentId != 0)
+        {
+          parent = OkuData.SceneManager[sceneId].GetLayer(layerId).GetNode(parentId);
+
+        }
+
+        OkuData.SceneManager[sceneId].GetLayer(layerId).Add(Id, null);
+      }
+      else
+      {
+        //TODO: Log error
+      }
+    }
+
+    /// <summary>
+    /// Saves the data of this actor to the given XML writer.
+    /// </summary>
+    /// <param name="writer">The xml writer to write to.</param>
+    public override void Save(XmlWriter writer)
+    {
+      writer.WriteStartElement("actor");
+
+      base.Save(writer);
+
+      writer.WriteStartElement("type");
+      writer.WriteValue(_type.Id);
+      writer.WriteEndElement();
+
+      int scene, layer;
+      if (OkuData.SceneManager.FindActor(Id, out scene, out layer))
+      {
+        writer.WriteStartElement("scene");
+        writer.WriteValue(scene);
+        writer.WriteEndElement();
+
+        writer.WriteStartElement("layer");
+        writer.WriteValue(layer);
+        writer.WriteEndElement();
+
+        SceneNode node = OkuData.SceneManager[scene].GetLayer(layer).GetNode(Id);
+        if (node != null && node.Parent != null && node.Parent.Properties.ActorId > 0)
+        {
+          writer.WriteStartElement("parent");
+          writer.WriteValue(node.Parent.Properties.ActorId);
+          writer.WriteEndElement();
+        }
+      }
+
+      writer.WriteEndElement();
     }
 
   }

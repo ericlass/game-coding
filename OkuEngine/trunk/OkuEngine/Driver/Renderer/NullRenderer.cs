@@ -205,5 +205,9 @@ namespace OkuEngine.Driver.Renderer
     {
     }
 
+    public void OnViewportEvent(int eventType, object eventData)
+    {
+    }
+
   }
 }

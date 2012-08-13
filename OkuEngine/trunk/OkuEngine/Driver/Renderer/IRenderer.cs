@@ -353,5 +353,13 @@ namespace OkuEngine.Driver.Renderer
     /// </summary>
     void PopTransform();
 
+    /// <summary>
+    /// Is automatically registered with the event manager for the viewport change event.
+    /// Has to update the viewport according to the viewport given in eventData.
+    /// </summary>
+    /// <param name="eventType">The type of event. Always ViewPortChanged.</param>
+    /// <param name="eventData">The event data. Always the viewport object that was changed.</param>
+    void OnViewportEvent(int eventType, object eventData);
+
   }
 }

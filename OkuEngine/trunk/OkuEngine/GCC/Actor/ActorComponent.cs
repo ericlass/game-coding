@@ -8,26 +8,17 @@ namespace OkuEngine.GCC.Actor
   /// <summary>
   /// Base class for all actor components
   /// </summary>
-  public abstract class ActorComponent
+  public abstract class ActorComponent : IStoreable
   {
-    protected Actor _owner = null;
+    protected ActorType _owner = null;
 
     /// <summary>
     /// Gets or sets the actor this component belongs to.
     /// </summary>
-    internal Actor Owner
+    internal ActorType Owner
     {
       get { return _owner; }
       set { _owner = value; }
-    }
-
-    public virtual bool Init(XmlNode node)
-    {
-      return false;
-    }
-
-    public virtual void PostInit()
-    {
     }
 
     public virtual void Update(float dt)
@@ -35,5 +26,8 @@ namespace OkuEngine.GCC.Actor
     }
 
     public abstract int GetComponentId();
+    public abstract void Load(XmlNode node);
+    public abstract void Save(XmlWriter writer);
+
   }
 }

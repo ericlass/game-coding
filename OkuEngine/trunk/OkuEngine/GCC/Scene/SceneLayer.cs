@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Xml;
 using System.Text;
 
 namespace OkuEngine.GCC.Scene
@@ -8,12 +8,14 @@ namespace OkuEngine.GCC.Scene
   /// <summary>
   /// Represents one layer in a scene.
   /// </summary>
-  public class SceneLayer
+  public class SceneLayer : StoreableEntity
   {
-    private int _id = 0;
-    private string _name = null;    
-    private SceneNode _root = null;
+    private SceneNode _root = new SceneNode(-1);
     private Dictionary<int, SceneNode> _actorMap = new Dictionary<int, SceneNode>();
+
+    internal SceneLayer()
+    {
+    }
 
     /// <summary>
     /// Create a new layer with the given id and name.
@@ -24,24 +26,6 @@ namespace OkuEngine.GCC.Scene
     {
       _id = id;
       _name = name;
-      _root = new SceneNode(-1);
-    }
-
-    /// <summary>
-    /// Gets the unique id of the layer.
-    /// </summary>
-    public int Id
-    {
-      get { return _id; }
-    }
-
-    /// <summary>
-    /// Gets or sets the name of the layer.
-    /// </summary>
-    public string Name
-    {
-      get { return _name; }
-      set { _name = value; }
     }
 
     /// <summary>
@@ -96,6 +80,16 @@ namespace OkuEngine.GCC.Scene
         return _actorMap[actorId];
 
       return null;
+    }
+
+    /// <summary>
+    /// Checks if the layer contains the actor with the given id.
+    /// </summary>
+    /// <param name="actorId">The actor id to find.</param>
+    /// <returns>True if the actor with the given id is part of this layer, else false.</returns>
+    public bool ContainsActor(int actorId)
+    {
+      return _actorMap.ContainsKey(actorId);
     }
 
     /// <summary>
@@ -209,6 +203,18 @@ namespace OkuEngine.GCC.Scene
         return true;
       }
       return false;
+    }
+
+    public override void Load(XmlNode node)
+    {
+      base.Load(node);
+    }
+
+    public override void Save(XmlWriter writer)
+    {
+      writer.WriteStartElement("layer");
+      base.Save(writer);
+      writer.WriteEndElement();
     }
 
   }

@@ -60,7 +60,7 @@ namespace OkuTest
       if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.NumPad4))
         dx -= speed;
 
-      OkuData.ActiveScene.Viewport.Left += dx;
+      OkuData.SceneManager.ActiveScene.Viewport.Left += dx;
 
       speed = 200 * dt;
       _playerVelocity.X = 0;
@@ -100,9 +100,9 @@ namespace OkuTest
 
       _mtd = mtd;
 
-      Vector center = OkuData.ActiveScene.Viewport.Center;
+      Vector center = OkuData.SceneManager.ActiveScene.Viewport.Center;
       center.X = _transformedPlayer[0].X;
-      OkuData.ActiveScene.Viewport.Center = center;
+      OkuData.SceneManager.ActiveScene.Viewport.Center = center;
     }
 
     public override void Render(int pass)

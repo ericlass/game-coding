@@ -3,7 +3,7 @@
 namespace OkuEngine.Driver.Renderer
 {
   public enum DrawMode {
-    Image,
+    None,
     Points,
     Lines,
     Polygon,
@@ -12,8 +12,7 @@ namespace OkuEngine.Driver.Renderer
     TriangleStrip,
     TriangleFan,
     Quads,
-    QuadStrip,
-    ScreenAlignedQuad
+    QuadStrip
   }
 
 }

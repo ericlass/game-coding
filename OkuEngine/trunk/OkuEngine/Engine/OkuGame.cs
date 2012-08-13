@@ -159,6 +159,11 @@ namespace OkuEngine
             managerNode = managerNode.NextSibling;
           }
 
+          if (OkuManagers.Renderer != null)
+          {
+            OkuManagers.EventManager.AddListener(EventTypes.ViewPortChanged, new EventListenerDelegate(OkuManagers.Renderer.OnViewportEvent));
+          }
+
           Initialize();
         }
       }

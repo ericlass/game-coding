@@ -98,6 +98,21 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Parses the given string to a draw mode. The string has to be the name of the corresponding enum member.
+    /// </summary>
+    /// <param name="str">The string to be parsed.</param>
+    /// <returns>The parsed draw mode. DrawMode.None if the string could not be parsed.</returns>
+    public static DrawMode ParseDrawMode(string str)
+    {
+      foreach (DrawMode mode in Enum.GetValues(typeof(DrawMode)))
+      {
+        if (mode.ToString().Equals(str, StringComparison.OrdinalIgnoreCase))
+          return mode;
+      }
+      return DrawMode.None;
+    }
+
+    /// <summary>
     /// Converts the given string to a boolean value.
     /// "yes" is converted to true and "no" is converted to false.
     /// If the string is neither "yes" nor "no", defaultIfNull is returned.

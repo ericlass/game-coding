@@ -151,15 +151,6 @@ namespace OkuEngine.Driver.Renderer
     }
 
     /// <summary>
-    /// Method for handling changes on the viewport.
-    /// </summary>
-    /// <param name="sender"></param>
-    private void _viewPort_Change(ViewPort sender)
-    {
-      UpdateGLViewPort();
-    }
-
-    /// <summary>
     /// Create an fbo with a corresponding color render buffer.
     /// </summary>
     /// <param name="width">The width of the render buffer.</param>
@@ -236,7 +227,7 @@ namespace OkuEngine.Driver.Renderer
       XmlNode child = node.FirstChild;
       while (child != null)
       {
-        switch (child.Name)
+        switch (child.Name.ToLower())
         {
           case "fullscreen":
             _fullscreen = Converter.StrToBool(child.FirstChild.Value, false);
@@ -290,10 +281,6 @@ namespace OkuEngine.Driver.Renderer
       }
       _colorBuffers = new int[_renderPasses, maxTargets];
 
-      //Create view port
-      OkuData.ActiveScene.Viewport = new ViewPort(_screenWidth, _screenHeight);
-      OkuData.ActiveScene.Viewport.Change += new ViewPortChangeEventHandler(_viewPort_Change);
-
       //Create and setup form
       Form form = new Form();
       form.ClientSize = new System.Drawing.Size(_screenWidth, _screenHeight);
@@ -338,8 +325,6 @@ namespace OkuEngine.Driver.Renderer
       Gl.glEnable(Gl.GL_TEXTURE_2D);
 
       Gl.glHint(Gl.GL_PERSPECTIVE_CORRECTION_HINT, Gl.GL_NICEST);
-
-      UpdateGLViewPort();
 
       Gl.glEnable(Gl.GL_ALPHA_TEST);
       Gl.glAlphaFunc(Gl.GL_GREATER, 0.05f);
@@ -415,18 +400,17 @@ namespace OkuEngine.Driver.Renderer
     private void _form_Resize(object sender, EventArgs e)
     {
       Gl.glViewport(0, 0, _display.ClientSize.Width, _display.ClientSize.Height);
-
-      UpdateGLViewPort();
-
-      Gl.glMatrixMode(Gl.GL_MODELVIEW);
-      Gl.glLoadIdentity();
+      
+      //TODO: Check what this does and if it is needed!
+      //Gl.glMatrixMode(Gl.GL_MODELVIEW);
+      //Gl.glLoadIdentity();
     }
 
-    private void UpdateGLViewPort()
+    private void UpdateGLViewPort(ViewPort viewPort)
     {
       Gl.glMatrixMode(Gl.GL_PROJECTION);
       Gl.glLoadIdentity();
-      Gl.glOrtho(OkuData.ActiveScene.Viewport.Left, OkuData.ActiveScene.Viewport.Right, OkuData.ActiveScene.Viewport.Bottom, OkuData.ActiveScene.Viewport.Top, -1, 1);
+      Gl.glOrtho(viewPort.Left, viewPort.Right, viewPort.Bottom, viewPort.Top, -1, 1);
     }
 
     public void InitImageContent(ImageContent content, Bitmap image)
@@ -875,6 +859,12 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="tint">The color tint the image with.</param>
     public void DrawScreenAlignedQuad(ImageContent content, Color tint)
     {
+      Gl.glMatrixMode(Gl.GL_PROJECTION);
+      Gl.glPushMatrix();
+
+      Gl.glLoadIdentity();
+      Gl.glOrtho(0, 1, 0, 1, -1, 1);
+
       int textureId = _textures[content.ContentId];
 
       Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
@@ -884,20 +874,23 @@ namespace OkuEngine.Driver.Renderer
       Gl.glColor4ub(tint.R, tint.G, tint.B, tint.A);
 
       Gl.glTexCoord2f(0, 1);
-      Gl.glVertex2f(OkuData.ActiveScene.Viewport.Left, OkuData.ActiveScene.Viewport.Top);
+      Gl.glVertex2f(0, 1);
 
       Gl.glTexCoord2f(1, 1);
-      Gl.glVertex2f(OkuData.ActiveScene.Viewport.Right, OkuData.ActiveScene.Viewport.Top);
+      Gl.glVertex2f(1, 1);
 
       Gl.glTexCoord2f(1, 0);
-      Gl.glVertex2f(OkuData.ActiveScene.Viewport.Right, OkuData.ActiveScene.Viewport.Bottom);
+      Gl.glVertex2f(1, 0);
 
       Gl.glTexCoord2f(0, 0);
-      Gl.glVertex2f(OkuData.ActiveScene.Viewport.Left, OkuData.ActiveScene.Viewport.Bottom);
+      Gl.glVertex2f(0, 0);
 
       Gl.glEnd();
 
       Gl.glBindTexture(Gl.GL_TEXTURE_2D, 0);
+
+      Gl.glMatrixMode(Gl.GL_PROJECTION);
+      Gl.glPopMatrix();
     }
 
     /// <summary>
@@ -1123,19 +1116,22 @@ namespace OkuEngine.Driver.Renderer
 
     public Vector ScreenToWorld(int x, int y)
     {
-      return OkuData.ActiveScene.Viewport.ScreenSpaceMatrix.Transform(ScreenToDisplay(x, y));
+      return OkuData.SceneManager.ActiveScene.Viewport.ScreenSpaceMatrix.Transform(ScreenToDisplay(x, y));
     }
 
     public void BeginScreenSpace()
     {
       Gl.glMatrixMode(Gl.GL_PROJECTION);
+      Gl.glPushMatrix();
+
       Gl.glLoadIdentity();
       Gl.glOrtho(0, _screenWidth, 0, _screenHeight, -1, 1);
     }
 
     public void EndScreenSpace()
     {
-      UpdateGLViewPort();
+      Gl.glMatrixMode(Gl.GL_PROJECTION);
+      Gl.glPopMatrix();
     }
 
     public void SetScissorRectangle(int left, int right, int width, int height)
@@ -1163,6 +1159,11 @@ namespace OkuEngine.Driver.Renderer
     {
       Gl.glMatrixMode(Gl.GL_MODELVIEW);
       Gl.glPopMatrix();
+    }
+
+    public void OnViewportEvent(int eventType, object eventData)
+    {
+      UpdateGLViewPort(eventData as ViewPort);
     }
 
   }

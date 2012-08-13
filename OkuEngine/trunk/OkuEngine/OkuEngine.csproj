@@ -55,7 +55,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionHandler.cs" />
     <Compile Include="Animation\Animation.cs" />
     <Compile Include="Animation\AnimationFrame.cs" />
     <Compile Include="Animation\Easing.cs" />
@@ -74,12 +73,11 @@
     <Compile Include="Converter.cs" />
     <Compile Include="GCC\Actor\Actor.cs" />
     <Compile Include="GCC\Actor\ActorComponent.cs" />
-    <Compile Include="GCC\Actor\ActorComponentMap.cs" />
-    <Compile Include="GCC\Actor\ActorFactory.cs" />
+    <Compile Include="GCC\Actor\ActorComponentFactory.cs" />
+    <Compile Include="GCC\Actor\ActorType.cs" />
+    <Compile Include="GCC\Actor\ActorTypeManager.cs" />
     <Compile Include="GCC\Actor\HealthPickup.cs" />
-    <Compile Include="GCC\Actor\TransformComponent.cs" />
-    <Compile Include="GCC\Events\ActorDestroyEvent.cs" />
-    <Compile Include="GCC\Events\BaseEvent.cs" />
+    <Compile Include="GCC\Actor\RenderComponent.cs" />
     <Compile Include="GCC\Events\Event.cs" />
     <Compile Include="GCC\Events\EventListenerDelegate.cs" />
     <Compile Include="GCC\Events\EventManager.cs" />
@@ -102,6 +100,7 @@
     <Compile Include="GCC\Resources\TextureResourceLoader.cs" />
     <Compile Include="GCC\Scene\Scene.cs" />
     <Compile Include="GCC\Scene\SceneLayer.cs" />
+    <Compile Include="GCC\Scene\SceneManager.cs" />
     <Compile Include="GCC\Scene\SceneNode.cs" />
     <Compile Include="GCC\Scene\SceneNodeProperties.cs" />
     <Compile Include="GCC\Scripting\ScriptInstance.cs" />
@@ -117,11 +116,13 @@
     <Compile Include="GUI\TextProcessor.cs" />
     <Compile Include="GUI\WidgetContainer.cs" />
     <Compile Include="GUI\Widget.cs" />
+    <Compile Include="IStoreable.cs" />
     <Compile Include="OkuException.cs" />
     <Compile Include="PropertyMap.cs" />
     <Compile Include="PropertyEntry.cs" />
     <Compile Include="Shaper\PolyEditorWidget.cs" />
     <Compile Include="Shaper\Shape.cs" />
+    <Compile Include="StoreableEntity.cs" />
     <Compile Include="VirtualFileSystem\VirtualFile.cs" />
     <Compile Include="VirtualFileSystem\VirtualFileSystem.cs" />
     <Compile Include="VirtualFileSystem\VirtualFileType.cs" />
@@ -170,9 +171,6 @@
     <Compile Include="Particles\PointEmitter.cs" />
     <Compile Include="Particles\PointParticleRenderer.cs" />
     <Compile Include="PerlinNoise.cs" />
-    <Compile Include="Scene\SceneGraph.cs" />
-    <Compile Include="Scene\SceneNode.cs" />
-    <Compile Include="Scene\SceneNodeList.cs" />
     <Compile Include="Content\SoundContent.cs" />
     <Compile Include="Instance\SoundInstance.cs" />
     <Compile Include="Geometry\Spline.cs" />
