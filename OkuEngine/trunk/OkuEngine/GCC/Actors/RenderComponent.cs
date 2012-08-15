@@ -5,7 +5,7 @@ using System.Text;
 using OkuEngine.Driver.Renderer;
 using OkuEngine.GCC.Resources;
 
-namespace OkuEngine.GCC.Actor
+namespace OkuEngine.GCC.Actors
 {
   public class RenderComponent : ActorComponent
   {

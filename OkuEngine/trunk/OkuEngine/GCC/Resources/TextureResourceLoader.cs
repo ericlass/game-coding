@@ -41,7 +41,7 @@ namespace OkuEngine.GCC.Resources
 
     public bool DiscardRawBufferAfterLoad
     {
-      get { throw new NotImplementedException(); }
+      get { return true; }
     }
 
   }

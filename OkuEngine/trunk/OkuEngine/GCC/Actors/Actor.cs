@@ -4,20 +4,29 @@ using System.Xml;
 using System.Text;
 using OkuEngine.GCC.Scene;
 
-namespace OkuEngine.GCC.Actor
+namespace OkuEngine.GCC.Actors
 {
   /// <summary>
   /// Defines a single actor in the game. Not to be confused with an ActorType.
   /// </summary>
   public class Actor : StoreableEntity
   {
-    public ActorType _type = null;
+    private ActorType _type = null;
 
     /// <summary>
     /// Creates a new actor.
     /// </summary>
     public Actor()
     {
+    }
+
+    /// <summary>
+    /// Gets or sets the type of the actor.
+    /// </summary>
+    public ActorType Type
+    {
+      get { return _type; }
+      set { _type = value; }
     }
 
     /// <summary>
@@ -33,6 +42,7 @@ namespace OkuEngine.GCC.Actor
       int sceneId = 0;
       int layerId = 0;
       int parentId = 0;
+      XmlNode transformNode = null;
 
       XmlNode child = node.FirstChild;
       while (child != null)
@@ -55,6 +65,10 @@ namespace OkuEngine.GCC.Actor
             parentId = int.Parse(child.FirstChild.Value);
             break;
 
+          case "transform":
+            transformNode = child;
+            break;
+
           default:
             break;
         }
@@ -70,10 +84,13 @@ namespace OkuEngine.GCC.Actor
         if (parentId != 0)
         {
           parent = OkuData.SceneManager[sceneId].GetLayer(layerId).GetNode(parentId);
-
         }
 
-        OkuData.SceneManager[sceneId].GetLayer(layerId).Add(Id, null);
+        SceneNode actorNode = OkuData.SceneManager[sceneId].GetLayer(layerId).Add(Id, null);
+        if (transformNode != null)
+        {
+          actorNode.Properties.Transform.Load(transformNode);
+        }
       }
       else
       {
@@ -107,11 +124,16 @@ namespace OkuEngine.GCC.Actor
         writer.WriteEndElement();
 
         SceneNode node = OkuData.SceneManager[scene].GetLayer(layer).GetNode(Id);
-        if (node != null && node.Parent != null && node.Parent.Properties.ActorId > 0)
+        if (node != null)
         {
-          writer.WriteStartElement("parent");
-          writer.WriteValue(node.Parent.Properties.ActorId);
-          writer.WriteEndElement();
+          if (node.Parent != null && node.Parent.Properties.ActorId > 0)
+          {
+            writer.WriteStartElement("parent");
+            writer.WriteValue(node.Parent.Properties.ActorId);
+            writer.WriteEndElement();
+          }
+
+          node.Properties.Transform.Save(writer);
         }
       }
 

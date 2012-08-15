@@ -18,8 +18,8 @@
  
   <game>
     <attributes>
-      <name></name>
-      <startscene></startscene> <!-- References scene by id -->
+      <name>GCC Test</name>
+      <startscene>1</startscene> <!-- References scene by id -->
     </attributes>
     
     <behaviors>
@@ -32,31 +32,28 @@
     
     <actortypes>
       <actortype>
-        <id></id>
-        <name></name>
+        <id>1</id>
+        <name>Yin-Yang</name>
         <components>
           <renderable>
-            <points></points> <!-- A list of vectors for vertex positions -->
-            <texcoords></texcoords> <!-- A list of vectors for vertex texture coordinates -->
-            <colors></colors> <!-- A list of colors for vertex colors -->
-            <mode></mode> <!-- The mesh mode (Triangles, Quads, Line...) -->
-            <image></image> <!-- The texture to use -->
+            <points>-24,24;24,24;24,-24;-24,-24</points> <!-- A list of vectors for vertex positions -->
+            <texcoords>0,1;1,1;1,0;0,0</texcoords> <!-- A list of vectors for vertex texture coordinates -->
+            <colors>255,255,255,255;255,255,255,255;255,255,255,255;255,255,255,255;</colors> <!-- A list of colors for vertex colors -->
+            <mode>Quads</mode> <!-- The mesh mode (Triangles, Quads, Line...) -->
+            <image>yinyang.png</image> <!-- The texture to use (Resource name) -->
           </renderable>
-          <healthpickup> <!-- Example from book -->
-            <health>100</health>
-          </healthpickup>
         </components>
       </actortype>
     </actortypes>
     
     <scenes>
       <scene>
-        <id></id>
-        <name></name>
+        <id>1</id>
+        <name>Main Scene</name>
         <layers>
           <layer>
-            <id></id>
-            <name></name>
+            <id>1</id>
+            <name>Layer 01</name>
           </layer>
         </layers>
       </scene>
@@ -64,16 +61,16 @@
 
     <actors>
       <actor>
-        <id></id>
-        <name></name>
-        <type></type> <!-- References the actor type by its id -->
-        <scene></scene> <!-- References the scene by its id -->
-        <layer></layer> <!-- References the layer by its id -->
-        <parent></parent> <!-- References parent actor by actor id -->
+        <id>1</id>
+        <name>YY01</name>
+        <type>1</type> <!-- References the actor type by its id -->
+        <scene>1</scene> <!-- References the scene by its id -->
+        <layer>1</layer> <!-- References the layer by its id -->
+        <parent>0</parent> <!-- References parent actor by actor id -->
         <transform>
-          <position></position>
-          <rotation></rotation>
-          <scale></scale>
+          <position>0,0</position>
+          <rotation>0</rotation>
+          <scale>1,1</scale>
         </transform>
       </actor>
     </actors>

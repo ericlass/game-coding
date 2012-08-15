@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 
-namespace OkuEngine.GCC.Actor
+namespace OkuEngine.GCC.Actors
 {
   /// <summary>
   /// Base class for all actor components

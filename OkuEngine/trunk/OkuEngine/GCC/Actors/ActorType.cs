@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 
-namespace OkuEngine.GCC.Actor
+namespace OkuEngine.GCC.Actors
 {
   /// <summary>
   /// Defines the type of an actor.
@@ -74,7 +74,7 @@ namespace OkuEngine.GCC.Actor
               ActorComponent component = factory.CreateComponent(componentNode);
               if (component != null)
               {
-                _components.Add(component.GetComponentId(), component);
+                Components.Add(component.GetComponentId(), component);
               }
               componentNode = componentNode.NextSibling;
             }

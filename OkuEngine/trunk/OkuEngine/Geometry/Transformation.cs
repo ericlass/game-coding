@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Xml;
 using System.Text;
 
 namespace OkuEngine
@@ -8,7 +8,7 @@ namespace OkuEngine
   /// <summary>
   /// Determines a full transformation with translation, rotation and scale.
   /// </summary>
-  public class Transformation
+  public class Transformation : IStoreable
   {
     private Vector _translation = Vector.Zero;
     private Vector _scale = Vector.One;
@@ -100,6 +100,67 @@ namespace OkuEngine
       return _translation.Equals(other._translation) &&
         _rotation == other._rotation &&
         _scale.Equals(other._scale);
+    }
+
+    /// <summary>
+    /// Loads the transformation from the given xml node.
+    /// Before the data is loaded, all transformations are reset.
+    /// </summary>
+    /// <param name="node">The xml node to read from.</param>
+    public void Load(XmlNode node)
+    {
+      _translation = Vector.Zero;
+      _rotation = 0;
+      _scale = Vector.One;
+
+      XmlNode child = node.FirstChild;
+      while (child != null)
+      {
+        switch (child.Name.ToLower())
+        {
+          case "position":
+            Vector pos = Vector.Zero;
+            if (Vector.TryParse(child.FirstChild.Value, ref pos))
+              _translation = pos;
+            break;
+
+          case "rotation":
+            float angle = 0;
+            if (float.TryParse(child.FirstChild.Value, out angle))
+              _rotation = angle;
+            break;
+
+          case "scale":
+            Vector scale = Vector.Zero;
+            if (Vector.TryParse(child.FirstChild.Value, ref scale))
+              _scale = scale;
+            break;
+
+          default:
+            break;
+        }
+
+        child = child.NextSibling;
+      }
+    }
+
+    public void Save(XmlWriter writer)
+    {
+      writer.WriteStartElement("transform");
+
+      writer.WriteStartElement("position");
+      writer.WriteValue(_translation.ToString());
+      writer.WriteEndElement();
+
+      writer.WriteStartElement("rotation");
+      writer.WriteValue(Converter.FloatToString(_rotation));
+      writer.WriteEndElement();
+
+      writer.WriteStartElement("scale");
+      writer.WriteValue(_scale.ToString());
+      writer.WriteEndElement();
+
+      writer.WriteEndElement();
     }
 
   }

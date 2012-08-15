@@ -209,5 +209,9 @@ namespace OkuEngine.Driver.Renderer
     {
     }
 
+    public void DrawMesh(Vector[] points, Vector[] texCoords, Color[] colors, int count, DrawMode mode, ImageContent texture)
+    {
+    }
+
   }
 }

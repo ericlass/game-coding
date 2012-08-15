@@ -17,7 +17,7 @@ namespace OkuTest
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
 
-      OkuGame game = new GuiTestGame();
+      OkuGame game = new GCCTestGame();
       game.Run();
     }
 

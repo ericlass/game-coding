@@ -239,6 +239,17 @@ namespace OkuEngine.Driver.Renderer
     void DrawMesh(Vector[] points, Vector[] texCoords, Color[] colors, int count, MeshMode mode, ImageContent texture);
 
     /// <summary>
+    /// Draws a generic mesh using the given parameters.
+    /// </summary>
+    /// <param name="points">The coordinates of the vertices of the mesh in world space. Must not be null.</param>
+    /// <param name="texCoords">The normalized texture coordinates of the vertices. Must be same length as points. If null, no texture is applied.</param>
+    /// <param name="colors">The colors of the vertices. Must be same length as points. If null, white is used as default color.</param>
+    /// <param name="count">The number of points to draw from the given array.</param>
+    /// <param name="mode">The mode used to draw the given vertices.</param>
+    /// <param name="texture">The texture to be applied. If not null, texCoords must also be given.</param>
+    void DrawMesh(Vector[] points, Vector[] texCoords, Color[] colors, int count, DrawMode mode, ImageContent texture);
+
+    /// <summary>
     /// Initializes image content which means that textures are created for them.
     /// This method also sets the Width and Height properties of the content.
     /// If the given content has already been initialized, the current texture

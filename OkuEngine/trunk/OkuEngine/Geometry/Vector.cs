@@ -257,7 +257,7 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Creates a string representation of the vector in the format "[X,Y]".
+    /// Creates a string representation of the vector in the format "X,Y".
     /// </summary>
     /// <returns>A string representation of the vector.</returns>
     public override string ToString()

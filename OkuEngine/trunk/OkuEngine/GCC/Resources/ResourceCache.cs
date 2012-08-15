@@ -47,7 +47,7 @@ namespace OkuEngine.GCC.Resources
 
     private bool WildcardMatch(string pattern, string str)
     {
-      string regex = "^" + Regex.Escape(str).Replace("\\*", ".*").Replace("\\?", ".") + "$";
+      string regex = "^" + Regex.Escape(pattern).Replace("\\*", ".*").Replace("\\?", ".") + "$";
       return Regex.IsMatch(str, regex);
     }
 
@@ -185,7 +185,7 @@ namespace OkuEngine.GCC.Resources
       if (_resourceFile.Open())
       {
         RegisterLoader(new DefaultResourceLoader()); //<-- ALWAYS register this one as FIRST loader!!
-        //RegisterLoader(new TextureResourceLoader());
+        RegisterLoader(new TextureResourceLoader());
         
         result = true;
       }

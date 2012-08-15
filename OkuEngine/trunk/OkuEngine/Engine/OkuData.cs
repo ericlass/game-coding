@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using OkuEngine.GCC.Scene;
 using OkuEngine.GCC.Resources;
-using OkuEngine.GCC.Actor;
+using OkuEngine.GCC.Actors;
 
 namespace OkuEngine
 {
@@ -18,6 +18,7 @@ namespace OkuEngine
     private static ResourceCache _resources = null;
     private static SceneManager _sceneManager = null;
     private static ActorTypeManager _actorTypes = null;
+    private static ActorManager _actors = null;
 
     /// <summary>
     /// Gets the global variable list.
@@ -71,7 +72,7 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Gets a map of actor types.
+    /// Gets the actor type manager that contains all actor types.
     /// </summary>
     public static ActorTypeManager ActorTypes
     {
@@ -81,6 +82,20 @@ namespace OkuEngine
           _actorTypes = new ActorTypeManager();
 
         return _actorTypes;
+      }
+    }
+
+    /// <summary>
+    /// Gets the actor manager that contains all actors.
+    /// </summary>
+    public static ActorManager Actors
+    {
+      get
+      {
+        if (_actors == null)
+          _actors = new ActorManager();
+
+        return _actors;
       }
     }
 

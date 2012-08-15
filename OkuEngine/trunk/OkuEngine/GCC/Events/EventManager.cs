@@ -43,7 +43,7 @@ namespace OkuEngine.GCC.Events
         _listeners.Add(eventType, new HashSet<EventListenerDelegate>());
       }
 
-      if (!_listeners[eventType].Contains(eventDelegate))
+      if (_listeners[eventType].Contains(eventDelegate))
       {
         //TODO: Log warning that listener is registered twice
         return false;

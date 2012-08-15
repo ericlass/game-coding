@@ -4,6 +4,8 @@ using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 using OkuEngine.Driver.Audio;
+using OkuEngine.GCC.Actors;
+using OkuEngine.GCC.Scene;
 using OkuEngine.GCC.Resources;
 using OkuEngine.GCC.Processes;
 using OkuEngine.GCC.Events;
@@ -18,12 +20,23 @@ namespace OkuEngine
   public class OkuGame
   {
     private int _mouseDelta = 0;
+    private string _name = "OkuGame";
+    private int _startScene = 0;
 
     /// <summary>
     /// Creates a new game.
     /// </summary>
     public OkuGame()
     {
+    }
+
+    /// <summary>
+    /// Gets or sets the name of the game.
+    /// </summary>
+    public string Name
+    {
+      get { return _name; }
+      set { _name = value; }
     }
 
     /// <summary>
@@ -103,7 +116,7 @@ namespace OkuEngine
     /// <returns>The name of the config file. Can include path.</returns>
     protected virtual string GetConfigFileName()
     {
-      return "okuconfig.xml";
+      return "okugame.xml";
     }
 
     /// <summary>
@@ -128,45 +141,182 @@ namespace OkuEngine
           XmlDocument config = new XmlDocument();
           config.Load(configHandle.Buffer);
 
-          XmlNode configNode = config.DocumentElement;
-          XmlNode managerNode = configNode.FirstChild;
-          while (managerNode != null)
+          XmlNode engineNode = null;
+          XmlNode attribsNode = null;
+          XmlNode actorTypesNode = null;
+          XmlNode scenesNode = null;
+          XmlNode actorsNode = null;
+          
+          XmlNode rootNode = config.DocumentElement;
+          XmlNode topNode = rootNode.FirstChild;
+
+          while (topNode != null)
           {
-            switch (managerNode.Name)
+            switch (topNode.Name.ToLower())
             {
-              case "renderer":                
-                RendererFactory factory = new RendererFactory();
-                IRenderer renderer = factory.CreateRenderer(managerNode);
-                if (renderer != null)
-                  OkuManagers.Renderer = renderer;
-                else
-                  throw new OkuException("Could not create renderer \"" + managerNode.ToString() + "\"!");
+              case "engine":
+                engineNode = topNode;
                 break;
 
-              case "sound":
-                SoundEngineFactory soundFactory = new SoundEngineFactory();
-                ISoundEngine sound = soundFactory.CreateSoundEngine(managerNode);
-                if (sound != null)
-                  OkuManagers.SoundEngine = sound;
-                else
-                  throw new OkuException("Could not create sound engine \"" + managerNode.ToString() + "\"!");
+              case "game":
+                XmlNode gameNode = topNode.FirstChild;
+                while (gameNode != null)
+                {
+                  switch (gameNode.Name.ToLower())
+                  {
+                    case "attributes":
+                      attribsNode = gameNode;
+                      break;
+
+                    case "actortypes":
+                      actorTypesNode = gameNode;
+                      break;
+
+                    case "scenes":
+                      scenesNode = gameNode;
+                      break;
+
+                    case "actors":
+                      actorsNode = gameNode;
+                      break;
+
+                    default:
+                      break;
+                  }
+
+                  gameNode = gameNode.NextSibling;
+                }
                 break;
 
               default:
                 break;
             }
 
-            managerNode = managerNode.NextSibling;
+            topNode = topNode.NextSibling;
           }
 
-          if (OkuManagers.Renderer != null)
+          if (engineNode != null)
+            LoadSettings(engineNode);
+
+          if (actorTypesNode != null)
+            LoadActorTypes(actorTypesNode);
+
+          if (scenesNode != null)
+            LoadScenes(scenesNode);
+
+          if (actorsNode != null)
+            LoadActors(actorsNode);
+
+          if (attribsNode != null)
           {
-            OkuManagers.EventManager.AddListener(EventTypes.ViewPortChanged, new EventListenerDelegate(OkuManagers.Renderer.OnViewportEvent));
+            LoadGameAttribs(attribsNode);
+            if (_startScene > 0)
+              OkuData.SceneManager.SetActiveScene(_startScene);
           }
 
           Initialize();
         }
       }
+      else
+      {
+        //TODO: Log error and quit game
+      }
+    }
+
+    /// <summary>
+    /// Loads engine settings from the engine tag in the config XML.
+    /// </summary>
+    /// <param name="node">The "engine" node of the config XML.</param>
+    private void LoadSettings(XmlNode node)
+    {
+      XmlNode child = node.FirstChild;
+      while (child != null)
+      {
+        switch (child.Name.ToLower())
+        {
+          case "renderer":
+            RendererFactory factory = new RendererFactory();
+            IRenderer renderer = factory.CreateRenderer(child);
+            if (renderer != null)
+              OkuManagers.Renderer = renderer;
+            else
+              throw new OkuException("Could not create renderer \"" + child.ToString() + "\"!");
+            break;
+
+          case "sound":
+            SoundEngineFactory soundFactory = new SoundEngineFactory();
+            ISoundEngine sound = soundFactory.CreateSoundEngine(child);
+            if (sound != null)
+              OkuManagers.SoundEngine = sound;
+            else
+              throw new OkuException("Could not create sound engine \"" + child.ToString() + "\"!");
+            break;
+
+          default:
+            break;
+        }
+
+        child = child.NextSibling;
+      }
+
+      if (OkuManagers.Renderer != null)
+      {
+        OkuManagers.EventManager.AddListener(EventTypes.ViewPortChanged, new EventListenerDelegate(OkuManagers.Renderer.OnViewportEvent));
+      }
+    }
+
+    /// <summary>
+    /// Loads game attributes from the given xml node.
+    /// </summary>
+    /// <param name="node">The xml node to read from.</param>
+    private void LoadGameAttribs(XmlNode node)
+    {
+      XmlNode child = node.FirstChild;
+      while (child != null)
+      {
+        switch (child.Name.ToLower())
+        {
+          case "name":
+            _name = child.FirstChild.Value;
+            break;
+
+          case "startscene":
+            _startScene = int.Parse(child.FirstChild.Value);
+            break;
+
+          default:
+            break;
+        }
+
+        child = child.NextSibling;
+      }
+    }
+
+    /// <summary>
+    /// Loads the actor type from the given xml node.
+    /// </summary>
+    /// <param name="node">The xml node to read from.</param>
+    private void LoadActorTypes(XmlNode node)
+    {
+      OkuData.ActorTypes.Load(node);
+    }
+
+    /// <summary>
+    /// Loads the scenes from the given xml node.
+    /// </summary>
+    /// <param name="node">The xml node to read from.</param>
+    private void LoadScenes(XmlNode node)
+    {
+      OkuData.SceneManager.Load(node);
+    }
+
+    /// <summary>
+    /// Loads the actors from the given xml node.
+    /// </summary>
+    /// <param name="node">The xml node to read from.</param>
+    private void LoadActors(XmlNode node)
+    {
+      OkuData.Actors.Load(node);
     }
 
     /// <summary>
@@ -184,11 +334,14 @@ namespace OkuEngine
     /// <param name="dt"></param>
     public void DoUpdate(float dt)
     {
-      OkuData.Globals.Set<float>("oku.timedelta", dt);
       OkuManagers.SoundEngine.Update(dt);
       OkuManagers.Input.Update();
       OkuManagers.Input.Mouse.WheelDelta = _mouseDelta / 120.0f;
       _mouseDelta = 0;
+
+      OkuManagers.EventManager.Update(float.MaxValue);
+      OkuManagers.ProcessManager.UpdateProcesses(dt);
+      OkuData.SceneManager.ActiveScene.Update(dt);
 
       Update(dt);
     }
@@ -212,6 +365,7 @@ namespace OkuEngine
         for (int i = 0; i < OkuManagers.Renderer.RenderPasses; i++)
         {
           OkuManagers.Renderer.Begin(i);
+          OkuData.SceneManager.ActiveScene.Render();
           Render(i);
           OkuManagers.Renderer.End(i);
         }
@@ -219,6 +373,7 @@ namespace OkuEngine
       else
       {
         OkuManagers.Renderer.Begin(0);
+        OkuData.SceneManager.ActiveScene.Render();
         Render(0);
         OkuManagers.Renderer.End(0);
       }

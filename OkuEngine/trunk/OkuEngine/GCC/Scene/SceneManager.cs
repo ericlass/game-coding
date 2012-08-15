@@ -96,6 +96,20 @@ namespace OkuEngine.GCC.Scene
       _activeScene.Activate();
     }
 
+    /// <summary>
+    /// Sets the current active scene. This automatically activates the
+    /// new active scene and deactivates the previous active scene.
+    /// </summary>
+    /// <param name="scene">The id of the scene to set active.</param>
+    internal void SetActiveScene(int sceneId)
+    {
+      if (_scenes.ContainsKey(sceneId))
+      {
+        Scene scene = _scenes[sceneId];
+        SetActiveScene(scene);
+      }
+    }
+
     public void Load(XmlNode node)
     {
       XmlNode child = node.FirstChild;

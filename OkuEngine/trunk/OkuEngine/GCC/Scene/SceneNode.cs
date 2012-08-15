@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Xml;
 using System.Text;
+using OkuEngine.GCC.Actors;
 
 namespace OkuEngine.GCC.Scene
 {
@@ -15,7 +16,7 @@ namespace OkuEngine.GCC.Scene
   {
     protected SceneNodeProperties _props = null;
     protected SceneNode _parent = null;
-    protected List<SceneNode> _children = null;
+    protected List<SceneNode> _children = new List<SceneNode>();
 
     /// <summary>
     /// Creates a new scene node with the given paramters.
@@ -24,7 +25,7 @@ namespace OkuEngine.GCC.Scene
     /// <param name="name">The name of the scene node.</param>
     internal SceneNode(int actorId)
     {
-      _props.ActorId = actorId;
+      _props = new SceneNodeProperties(actorId);
     }
 
     /// <summary>
@@ -78,11 +79,6 @@ namespace OkuEngine.GCC.Scene
     /// <returns>True if the node was added as a child, false if it already is a child of the node.</returns>
     public virtual bool AddChild(SceneNode node)
     {
-      if (_children == null)
-      {
-        _children = new List<SceneNode>();
-      }
-
       _children.Add(node);
       return true;
     }
@@ -94,11 +90,7 @@ namespace OkuEngine.GCC.Scene
     /// <returns>True if the child node was removed, false if it was not a child of the node.</returns>
     public virtual bool RemoveChild(SceneNode node)
     {
-      if (_children != null)
-      {
-        return _children.Remove(node);
-      }
-      return false;
+      return _children.Remove(node);
     }
 
     /// <summary>
@@ -163,6 +155,17 @@ namespace OkuEngine.GCC.Scene
     /// <returns>True if the node was rendered successfully, else false.</returns>
     public virtual bool Render(Scene scene)
     {
+      Actor actor = OkuData.Actors[_props.ActorId];
+      if (actor != null)
+      {
+        ActorComponent comp = actor.Type.GetComponent(RenderComponent.ComponentId);
+        if (comp != null && comp is RenderComponent)
+        {
+          RenderComponent renderComp = comp as RenderComponent;
+          OkuManagers.Renderer.DrawMesh(renderComp.Points, renderComp.TexCoords, renderComp.Colors, renderComp.Points.Length, renderComp.Mode, renderComp.Texture);
+        }
+      }
+
       return true;
     }
 

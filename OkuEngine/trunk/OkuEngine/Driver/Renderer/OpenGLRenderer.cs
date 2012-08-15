@@ -691,6 +691,38 @@ namespace OkuEngine.Driver.Renderer
     }
 
     /// <summary>
+    /// Converts the given draw mode to an OpenGL primitive.
+    /// </summary>
+    /// <param name="mode">The draw mode to convert.</param>
+    /// <returns>The primitive for the given draw mode or 0 for None or unknown draw mode.</returns>
+    private int DrawModeToGLPrimitive(DrawMode mode)
+    {
+      switch (mode)
+      {
+        case DrawMode.Points:
+          return Gl.GL_POINTS;
+        case DrawMode.Lines:
+          return Gl.GL_LINES;
+        case DrawMode.Polygon:
+          return Gl.GL_LINE_STRIP;
+        case DrawMode.ClosedPolygon:
+          return Gl.GL_LINE_LOOP;
+        case DrawMode.Triangles:
+          return Gl.GL_TRIANGLES;
+        case DrawMode.TriangleStrip:
+          return Gl.GL_TRIANGLE_STRIP;
+        case DrawMode.TriangleFan:
+          return Gl.GL_TRIANGLE_FAN;
+        case DrawMode.Quads:
+          return Gl.GL_QUADS;
+        case DrawMode.QuadStrip:
+          return Gl.GL_QUAD_STRIP;
+        default:
+          return 0;
+      }
+    }
+
+    /// <summary>
     /// Starts the rendering process. Clears the screen with the setup clear color.
     /// </summary>
     public void Begin(int pass)
@@ -1042,6 +1074,25 @@ namespace OkuEngine.Driver.Renderer
       Gl.glDrawArrays(primitive, 0, count);
     }
 
+    public void DrawMesh(Vector[] points, Vector[] texCoords, Color[] colors, int count, DrawMode mode, ImageContent texture)
+    {
+      if (texture != null)
+      {
+        if (!_textures.ContainsKey(texture.ContentId))
+          return;
+
+        int textureId = _textures[texture.ContentId];
+        Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
+      }
+      else
+        Gl.glBindTexture(Gl.GL_TEXTURE_2D, 0);
+
+      int primitive = DrawModeToGLPrimitive(mode);
+
+      SetPointers(points, texCoords, colors);
+      Gl.glDrawArrays(primitive, 0, count);
+    }
+
     /// <summary>
     /// Set array pointers for vertices, texture coordinates and vertex colors.
     /// If a non-null value is given for an array, the corresponding client state
@@ -1165,6 +1216,8 @@ namespace OkuEngine.Driver.Renderer
     {
       UpdateGLViewPort(eventData as ViewPort);
     }
+
+    
 
   }
 }
