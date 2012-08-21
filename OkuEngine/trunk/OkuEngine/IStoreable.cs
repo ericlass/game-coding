@@ -7,7 +7,7 @@ namespace OkuEngine
 {
   public interface IStoreable
   {
-    void Load(XmlNode node);
+    bool Load(XmlNode node);
     void Save(XmlWriter writer);
   }
 }

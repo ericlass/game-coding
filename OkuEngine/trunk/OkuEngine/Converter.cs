@@ -83,33 +83,28 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Parses the given string to a mesh mode. The string has to be the name of the corresponding enum member.
+    /// Parses the given string into a value of the generic
+    /// type which must be an enum. Unfiortunatelly, this cannot
+    /// be forced through generic contraints.
     /// </summary>
+    /// <typeparam name="T">The enum type to parse to.</typeparam>
     /// <param name="str">The string to parse.</param>
-    /// <returns>The parsed meshmode. MeshMode.None if the string could not be parsed.</returns>
-    public static MeshMode ParseMeshMode(string str)
+    /// <returns>The parsed enum value or default(T) if no member was found.</returns>
+    public static T ParseEnum<T>(string str)
     {
-      foreach (MeshMode mode in Enum.GetValues(typeof(MeshMode)))
+      if (typeof(T).IsEnum)
       {
-        if (mode.ToString().Equals(str, StringComparison.OrdinalIgnoreCase))
-          return mode;
+        foreach (T value in Enum.GetValues(typeof(T)))
+        {
+          if (value.ToString().Equals(str, StringComparison.OrdinalIgnoreCase))
+            return value;
+        }
       }
-      return MeshMode.None;
-    }
-
-    /// <summary>
-    /// Parses the given string to a draw mode. The string has to be the name of the corresponding enum member.
-    /// </summary>
-    /// <param name="str">The string to be parsed.</param>
-    /// <returns>The parsed draw mode. DrawMode.None if the string could not be parsed.</returns>
-    public static DrawMode ParseDrawMode(string str)
-    {
-      foreach (DrawMode mode in Enum.GetValues(typeof(DrawMode)))
+      else
       {
-        if (mode.ToString().Equals(str, StringComparison.OrdinalIgnoreCase))
-          return mode;
+        throw new ArgumentException("Generic parameter type must be an enum!");
       }
-      return DrawMode.None;
+      return default(T);
     }
 
     /// <summary>
@@ -130,6 +125,17 @@ namespace OkuEngine
           return false;
       }
       return defaultIfNull;
+    }
+
+    /// <summary>
+    /// Convert the given boolean value to a string.
+    /// True is converted "yes" and false is converted to "no".
+    /// </summary>
+    /// <param name="value">The boolean value.</param>
+    /// <returns>"yes" if true is given, else "no".</returns>
+    public static string BoolToStr(bool value)
+    {
+      return value ? "yes" : "no";
     }
 
   }

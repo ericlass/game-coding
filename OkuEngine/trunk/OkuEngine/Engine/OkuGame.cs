@@ -11,6 +11,7 @@ using OkuEngine.GCC.Processes;
 using OkuEngine.GCC.Events;
 using OkuEngine.GCC.Scripting;
 using OkuEngine.Driver.Renderer;
+using OkuEngine.Logging;
 
 namespace OkuEngine
 {
@@ -124,6 +125,9 @@ namespace OkuEngine
     /// </summary>
     public void DoInitialize()
     {
+      OkuManagers.Logger = new Logger();
+      OkuManagers.Logger.AddWriter(new DebugConsoleLogWriter());
+
       OkuManagers.EventManager = new EventManager("OkuMainEventManager");
       OkuManagers.ScriptManager = new ScriptManager();
       OkuManagers.ProcessManager = new ProcessManager();
@@ -219,7 +223,8 @@ namespace OkuEngine
       }
       else
       {
-        //TODO: Log error and quit game
+        OkuManagers.Logger.LogError("Could not initialize resource cache!");
+        System.Windows.Forms.Application.Exit();
       }
     }
 

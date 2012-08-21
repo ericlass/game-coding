@@ -30,19 +30,16 @@ namespace OkuEngine.GCC.Actors
     }
 
     /// <summary>
-    /// Loads an actor includiong its components from the given xml node.
+    /// Loads an actor including its components from the given xml node.
     /// This also adds the actor to the corresponding scene and layer.
     /// </summary>
     /// <param name="node">The node to start loading from.</param>
-    public override void Load(XmlNode node)
+    public override bool Load(XmlNode node)
     {
-      base.Load(node);
+      if (!base.Load(node))
+        return false;
 
       int actorType = 0;
-      int sceneId = 0;
-      int layerId = 0;
-      int parentId = 0;
-      XmlNode transformNode = null;
 
       XmlNode child = node.FirstChild;
       while (child != null)
@@ -53,22 +50,6 @@ namespace OkuEngine.GCC.Actors
             actorType = int.Parse(child.FirstChild.Value);
             break;
 
-          case "scene":
-            sceneId = int.Parse(child.FirstChild.Value);
-            break;
-
-          case "layer":
-            layerId = int.Parse(child.FirstChild.Value);
-            break;
-
-          case "parent":
-            parentId = int.Parse(child.FirstChild.Value);
-            break;
-
-          case "transform":
-            transformNode = child;
-            break;
-
           default:
             break;
         }
@@ -76,26 +57,14 @@ namespace OkuEngine.GCC.Actors
         child = child.NextSibling;
       }
 
-      if (actorType != 0 && sceneId != 0 && layerId != 0)
+      _type = OkuData.ActorTypes[actorType];
+      if (_type == null)
       {
-        _type = OkuData.ActorTypes[actorType];
-        //TODO: Check that scene and layer with given ids exist
-        SceneNode parent = null;
-        if (parentId != 0)
-        {
-          parent = OkuData.SceneManager[sceneId].GetLayer(layerId).GetNode(parentId);
-        }
+        OkuManagers.Logger.LogError("There is no actor type with the id '" + actorType + "'!");
+        return false;
+      }
 
-        SceneNode actorNode = OkuData.SceneManager[sceneId].GetLayer(layerId).Add(Id, null);
-        if (transformNode != null)
-        {
-          actorNode.Properties.Transform.Load(transformNode);
-        }
-      }
-      else
-      {
-        //TODO: Log error
-      }
+      return true;
     }
 
     /// <summary>

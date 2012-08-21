@@ -34,7 +34,7 @@ namespace OkuEngine.GCC.Actors
       return _typeMap.Remove(actorTypeId);
     }
 
-    public void Load(XmlNode node)
+    public bool Load(XmlNode node)
     {
       XmlNode child = node.FirstChild;
       while (child != null)
@@ -46,7 +46,7 @@ namespace OkuEngine.GCC.Actors
             type.Load(child);
             if (!Add(type))
             {
-              //TODO: Log error
+              OkuManagers.Logger.LogError("The actor type id '" + type.Id + "' is specified twice in the configuration file!");
             }
             break;
 
@@ -55,6 +55,8 @@ namespace OkuEngine.GCC.Actors
         }
         child = child.NextSibling;
       }
+
+      return true;
     }
 
     public void Save(XmlWriter writer)

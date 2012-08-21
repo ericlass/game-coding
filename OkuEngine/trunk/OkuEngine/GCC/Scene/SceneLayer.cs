@@ -205,9 +205,48 @@ namespace OkuEngine.GCC.Scene
       return false;
     }
 
-    public override void Load(XmlNode node)
+    public override bool Load(XmlNode node)
     {
       base.Load(node);
+
+      XmlNode child = node.FirstChild;
+      while (child != null)
+      {
+        switch (child.Name.ToLower())
+        {
+          case "nodes":
+            XmlNode nodeNode = child.FirstChild;
+            while (nodeNode != null)
+            {
+              SceneNode sceneNode = new SceneNode();
+              if (sceneNode.Load(nodeNode))
+              {
+                sceneNode.SetParent(_root);
+
+                List<SceneNode> allNodes = new List<SceneNode>();
+                allNodes.Add(sceneNode);
+                sceneNode.GetAllChildren(allNodes);
+                foreach (SceneNode iNode in allNodes)
+                {
+                  sceneNode.Properties.Layer = Id;
+                  _actorMap.Add(iNode.Properties.ActorId, iNode);
+                }
+              }
+              else
+              {
+                OkuManagers.Logger.LogError("Could not load scene node: " + nodeNode.OuterXml);
+              }
+            }
+            break;
+
+          default:
+            break;
+        }
+
+        child = child.NextSibling;
+      }
+
+      return true;
     }
 
     public override void Save(XmlWriter writer)

@@ -32,7 +32,7 @@ namespace OkuEngine
       if (wave != null)
         OkuManagers.SoundEngine.InitContent(this, wave);
       else
-        ; //TODO: Log error
+        OkuManagers.Logger.LogInfo("Trying to init a null waveform!");
     }
 
   }

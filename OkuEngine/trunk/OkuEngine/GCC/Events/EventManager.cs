@@ -45,7 +45,7 @@ namespace OkuEngine.GCC.Events
 
       if (_listeners[eventType].Contains(eventDelegate))
       {
-        //TODO: Log warning that listener is registered twice
+        OkuManagers.Logger.LogError("Trying to register '" + eventDelegate.ToString() + "' twice for event '" + eventType + "'!");
         return false;
       }
 

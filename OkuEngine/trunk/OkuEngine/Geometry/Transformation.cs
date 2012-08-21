@@ -107,7 +107,7 @@ namespace OkuEngine
     /// Before the data is loaded, all transformations are reset.
     /// </summary>
     /// <param name="node">The xml node to read from.</param>
-    public void Load(XmlNode node)
+    public bool Load(XmlNode node)
     {
       _translation = Vector.Zero;
       _rotation = 0;
@@ -142,6 +142,8 @@ namespace OkuEngine
 
         child = child.NextSibling;
       }
+
+      return true;
     }
 
     public void Save(XmlWriter writer)

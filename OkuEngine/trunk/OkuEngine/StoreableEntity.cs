@@ -45,7 +45,7 @@ namespace OkuEngine
     /// Loads id and name from the given xml node.
     /// </summary>
     /// <param name="node">The node to load from.</param>
-    public virtual void Load(XmlNode node)
+    public virtual bool Load(XmlNode node)
     {
       XmlNode child = node.FirstChild;
       while (child != null)
@@ -65,6 +65,8 @@ namespace OkuEngine
         }
         child = child.NextSibling;
       }
+
+      return _id != InvalidId;
     }
 
     /// <summary>

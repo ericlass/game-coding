@@ -530,7 +530,7 @@ namespace OkuEngine.Driver.Renderer
         }
         else
         {
-          //TODO: throw exception
+          OkuManagers.Logger.LogError("Trying to initialize a pixel shader without source!");
         }
       }
     }
@@ -550,7 +550,7 @@ namespace OkuEngine.Driver.Renderer
         }
         else
         {
-          //TODO: throw exception
+          OkuManagers.Logger.LogError("Pixel shader with content id '" + content.ContentId + "' was not initialized yet!");
         }
       }
       else
@@ -603,7 +603,7 @@ namespace OkuEngine.Driver.Renderer
       }
       else
       {
-        //TODO: throw exception
+        OkuManagers.Logger.LogError("Trying to set texture on uninitialized pixel shader content with id '" + shader.ContentId + "'!");
       }
     }
 
@@ -640,7 +640,7 @@ namespace OkuEngine.Driver.Renderer
       }
       else
       {
-        //TODO: throw exception
+        OkuManagers.Logger.LogError("Trying to set float on uninitialized pixel shader content with id '" + shader.ContentId + "'!");
       }
     }
 

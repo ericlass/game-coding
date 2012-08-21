@@ -72,13 +72,17 @@
     <Compile Include="Content\PixelShaderContent.cs" />
     <Compile Include="Converter.cs" />
     <Compile Include="GCC\Actors\Actor.cs" />
-    <Compile Include="GCC\Actors\ActorComponent.cs" />
-    <Compile Include="GCC\Actors\ActorComponentFactory.cs" />
+    <Compile Include="GCC\Actors\Components\ActorComponent.cs" />
+    <Compile Include="GCC\Actors\Components\ActorComponentFactory.cs" />
     <Compile Include="GCC\Actors\ActorManager.cs" />
     <Compile Include="GCC\Actors\ActorType.cs" />
     <Compile Include="GCC\Actors\ActorTypeManager.cs" />
-    <Compile Include="GCC\Actors\HealthPickup.cs" />
-    <Compile Include="GCC\Actors\RenderComponent.cs" />
+    <Compile Include="GCC\Actors\Components\HealthPickup.cs" />
+    <Compile Include="GCC\Actors\Components\ImageRenderComponent.cs" />
+    <Compile Include="GCC\Actors\Components\LineRenderComponent.cs" />
+    <Compile Include="GCC\Actors\Components\MeshRenderComponent.cs" />
+    <Compile Include="GCC\Actors\Components\PointRenderComponent.cs" />
+    <Compile Include="GCC\Actors\Components\RenderComponent.cs" />
     <Compile Include="GCC\Events\Event.cs" />
     <Compile Include="GCC\Events\EventListenerDelegate.cs" />
     <Compile Include="GCC\Events\EventManager.cs" />
@@ -118,6 +122,11 @@
     <Compile Include="GUI\WidgetContainer.cs" />
     <Compile Include="GUI\Widget.cs" />
     <Compile Include="IStoreable.cs" />
+    <Compile Include="Logging\DebugConsoleLogWriter.cs" />
+    <Compile Include="Logging\ILogWriter.cs" />
+    <Compile Include="Logging\LogEntry.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\LogLevel.cs" />
     <Compile Include="OkuException.cs" />
     <Compile Include="PropertyMap.cs" />
     <Compile Include="PropertyEntry.cs" />
@@ -193,11 +202,9 @@
     <Compile Include="Platform\Winmm.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Engine\okuconfig.xml" />
-    <Content Include="okugame.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Engine\okuconfig.xsd" />
+    <None Include="okugame.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

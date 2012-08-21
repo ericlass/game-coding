@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 
-namespace OkuEngine.GCC.Actors
+namespace OkuEngine.GCC.Actors.Components
 {
   public class HealthPickup : ActorComponent
   {
@@ -29,7 +29,7 @@ namespace OkuEngine.GCC.Actors
       set { _health = value; }
     }
 
-    public override void Load(XmlNode node)
+    public override bool Load(XmlNode node)
     {
       XmlNode child = node.FirstChild;
       while (child != null)
@@ -46,6 +46,8 @@ namespace OkuEngine.GCC.Actors
 
         child = child.NextSibling;
       }
+
+      return true;
     }
 
     public override void Save(XmlWriter writer)

@@ -56,8 +56,7 @@ namespace OkuEngine.GCC.Processes
       if (_state == ProcessState.Running)
         _state = ProcessState.Paused;
       else
-        //TODO: Log warning
-        ;
+        OkuManagers.Logger.LogInfo("Trying to pause a running process!");
     }
 
     public void UnPause()
@@ -65,8 +64,7 @@ namespace OkuEngine.GCC.Processes
       if (_state == ProcessState.Paused)
         _state = ProcessState.Running;
       else
-        //TODO: Log warning
-        ;
+        OkuManagers.Logger.LogInfo("Trying to resume an unpaused process!");
     }
 
     public ProcessState State

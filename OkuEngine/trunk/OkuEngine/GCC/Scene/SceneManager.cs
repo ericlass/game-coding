@@ -110,7 +110,7 @@ namespace OkuEngine.GCC.Scene
       }
     }
 
-    public void Load(XmlNode node)
+    public bool Load(XmlNode node)
     {
       XmlNode child = node.FirstChild;
       while (child != null)
@@ -119,11 +119,17 @@ namespace OkuEngine.GCC.Scene
         {
           case "scene":
             Scene scene = new Scene();
-            scene.Load(child);
+            if (!scene.Load(child))
+            {
+              OkuManagers.Logger.LogError("Could not load scene '" + scene.Id + "'!");
+              return false;
+            }
             if (!AddScene(scene))
             {
-              //TODO: Log error
+              OkuManagers.Logger.LogError("The scene id '" + scene.Id + "' is used twice!");
+              return false;
             }
+            //TODO: Update sequence with scene id
             break;
 
           default:
@@ -131,6 +137,8 @@ namespace OkuEngine.GCC.Scene
         }
         child = child.NextSibling;
       }
+
+      return true;
     }
 
     public void Save(XmlWriter writer)

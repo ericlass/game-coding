@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 using OkuEngine.GCC.Actors;
+using OkuEngine.GCC.Actors.Components;
 
 namespace OkuEngine.GCC.Scene
 {
@@ -12,11 +13,19 @@ namespace OkuEngine.GCC.Scene
   /// by special scene node. If you override one of these methods
   /// make sure to call the base method.
   /// </summary>
-  public class SceneNode
+  public class SceneNode : IStoreable
   {
     protected SceneNodeProperties _props = null;
     protected SceneNode _parent = null;
     protected List<SceneNode> _children = new List<SceneNode>();
+
+    /// <summary>
+    /// Creates a new scene node.
+    /// </summary>
+    internal SceneNode()
+    {
+      _props = new SceneNodeProperties();
+    }
 
     /// <summary>
     /// Creates a new scene node with the given paramters.
@@ -155,6 +164,7 @@ namespace OkuEngine.GCC.Scene
     /// <returns>True if the node was rendered successfully, else false.</returns>
     public virtual bool Render(Scene scene)
     {
+      //TODO: Add visibility check
       Actor actor = OkuData.Actors[_props.ActorId];
       if (actor != null)
       {
@@ -162,7 +172,7 @@ namespace OkuEngine.GCC.Scene
         if (comp != null && comp is RenderComponent)
         {
           RenderComponent renderComp = comp as RenderComponent;
-          OkuManagers.Renderer.DrawMesh(renderComp.Points, renderComp.TexCoords, renderComp.Colors, renderComp.Points.Length, renderComp.Mode, renderComp.Texture);
+          OkuManagers.Renderer.DrawMesh(renderComp.Points, renderComp.TexCoords, renderComp.Colors, renderComp.Points.Length, renderComp.Mode, renderComp.Image);
         }
       }
 
@@ -197,6 +207,94 @@ namespace OkuEngine.GCC.Scene
         child.PostRender(scene);
       }
       return true;
+    }
+
+    /// <summary>
+    /// Adds all children of this scene node recursively to the given list.
+    /// This does not include the scene node itself.
+    /// </summary>
+    /// <param name="allChildren">Will contain all child nodes of this node.</param>
+    public void GetAllChildren(List<SceneNode> allChildren)
+    {
+      foreach (SceneNode child in _children)
+      {
+        allChildren.Add(child);
+        child.GetAllChildren(allChildren);
+      }
+    }
+
+    public bool Load(XmlNode node)
+    {
+      XmlNode child = node.FirstChild;
+      while (child != null)
+      {
+        switch (child.Name.ToLower())
+        {
+          case "actor":
+            _props.ActorId = int.Parse(child.FirstChild.Value);
+            break;
+
+          case "tint":
+            Color tint = Color.Black;
+            if (Color.TryParse(child.FirstChild.Value, out tint))
+              _props.Tint = tint;
+            break;
+
+          case "aabb":
+            Vector[] minMax = Converter.ParseVectors(child.FirstChild.Value);
+            if (minMax.Length == 2)
+              _props.Area = new AABB(minMax[0], minMax[1]);
+            else
+            {
+              OkuManagers.Logger.LogError("AABB '" + child.FirstChild.Value + "' has wrong format!");
+            }
+            break;
+
+          case "transform":
+            _props.Transform.Load(child);
+            break;
+
+          case "node":
+            SceneNode kid = new SceneNode();
+            kid.Load(child);
+            kid.SetParent(this);
+            break;
+
+          default:
+            break;
+        }
+
+        child = child.NextSibling;
+      }
+
+      if (_props.ActorId == Actor.InvalidId)
+      {
+        OkuManagers.Logger.LogError("No actor specified for scene node!");
+        return false;
+      }
+
+      return true;
+    }
+
+    public void Save(XmlWriter writer)
+    {
+      writer.WriteStartElement("node");
+
+      writer.WriteStartElement("actor");
+      writer.WriteValue(_props.ActorId);
+      writer.WriteEndElement();
+
+      writer.WriteStartElement("tint");
+      writer.WriteValue(_props.Tint.ToString());
+      writer.WriteEndElement();
+
+      writer.WriteStartElement("aabb");
+      writer.WriteValue(_props.Area.ToString());
+      writer.WriteEndElement();
+
+      _props.Transform.Save(writer);
+
+      writer.WriteEndElement();
     }
 
   }

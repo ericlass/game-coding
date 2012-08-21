@@ -5,59 +5,16 @@ using System.Text;
 using OkuEngine.Driver.Renderer;
 using OkuEngine.GCC.Resources;
 
-namespace OkuEngine.GCC.Actors
+namespace OkuEngine.GCC.Actors.Components
 {
-  public class RenderComponent : ActorComponent
+  public class MeshRenderComponent : RenderComponent
   {
-    public const int ComponentId = 2;
-    public const string ComponentName = "renderable";
+    public const string RenderType = "mesh";
 
-    private Vector[] _points = null;
-    private Vector[] _texCoords = null;
-    private Color[] _colors = null;
-    private DrawMode _mode = DrawMode.None;
-    private ImageContent _texture = null;
-    private string _textureName = null;
-
-    public Vector[] Points
-    {
-      get { return _points; }
-      set { _points = value; }
-    }
-
-    public Vector[] TexCoords
-    {
-      get { return _texCoords; }
-      set { _texCoords = value; }
-    }
-
-    public Color[] Colors
-    {
-      get { return _colors; }
-      set { _colors = value; }
-    }
-
-    public DrawMode Mode
-    {
-      get { return _mode; }
-      set { _mode = value; }
-    }
-
-    public ImageContent Texture
-    {
-      get { return _texture; }
-      set { _texture = value; }
-    }
-
-    public override int GetComponentId()
-    {
-      return ComponentId;
-    }
-
-    public override void Load(XmlNode node)
+    public override bool Load(XmlNode node)
     {
       XmlNode child = node.FirstChild;
-      while (child != null)
+      while (node != null)
       {
         switch (child.Name.ToLower())
         {
@@ -74,15 +31,19 @@ namespace OkuEngine.GCC.Actors
             break;
 
           case "mode":
-            _mode = Converter.ParseDrawMode(child.FirstChild.Value);
+            _mode = Converter.ParseEnum<DrawMode>(child.FirstChild.Value);
             break;
 
           case "image":
-            _textureName = child.FirstChild.Value;
-            ResourceHandle handle = OkuData.ResourceCache.GetHandle(new Resource(_textureName));
+            _imageName = child.FirstChild.Value;
+            ResourceHandle handle = OkuData.ResourceCache.GetHandle(new Resource(_imageName));
             if (handle != null)
             {
-              _texture = new ImageContent((handle.Extras as TextureExtraData).Image);
+              _image = new ImageContent((handle.Extras as TextureExtraData).Image);
+            }
+            else
+            {
+              OkuManagers.Logger.LogError("Image resource '" + _imageName + "' was not found!");
             }
             break;
 
@@ -92,11 +53,43 @@ namespace OkuEngine.GCC.Actors
 
         child = child.NextSibling;
       }
+
+      if (_points == null)
+      {
+        OkuManagers.Logger.LogError("Mesh render component is missing points!");
+        return false;
+      }
+
+      if ((_texCoords != null && _image == null) || (_texCoords == null && _image != null))
+      {
+        OkuManagers.Logger.LogError("texcoords and image should be both set or both missing in a mesh render component!");
+      }
+
+      if (_mode == DrawMode.None)
+      {
+        OkuManagers.Logger.LogError("Mesh render component is missing mode!");
+        return false;
+      }
+
+      if (_colors == null)
+      {
+        _colors = new Color[_points.Length];
+        for (int i = 0; i < _colors.Length; i++)
+        {
+          _colors[i] = Color.Black;
+        }
+      }
+
+      return true;
     }
 
     public override void Save(XmlWriter writer)
     {
       writer.WriteStartElement(ComponentName);
+
+      writer.WriteStartAttribute("type");
+      writer.WriteValue(RenderType);
+      writer.WriteEndAttribute();
 
       if (_points != null)
       {
@@ -123,15 +116,14 @@ namespace OkuEngine.GCC.Actors
       writer.WriteValue(_mode.ToString());
       writer.WriteEndElement();
 
-      if (_textureName != null)
+      if (_imageName != null)
       {
         writer.WriteStartElement("image");
-        writer.WriteValue(_textureName);
+        writer.WriteValue(_imageName);
         writer.WriteEndElement();
       }
 
       writer.WriteEndElement();
     }
-
   }
 }

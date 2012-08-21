@@ -40,7 +40,7 @@ namespace OkuEngine.GCC.Actors
       }
     }
 
-    public void Load(XmlNode node)
+    public bool Load(XmlNode node)
     {
       XmlNode child = node.FirstChild;
       while (child != null)
@@ -49,8 +49,14 @@ namespace OkuEngine.GCC.Actors
         {
           case "actor":
             Actor actor = new Actor();
-            actor.Load(child);
-            _actorMap.Add(actor.Id, actor);
+            if (!actor.Load(child))
+            {
+              OkuManagers.Logger.LogError("Could not load actor with id '" + actor.Id + "'!");
+            }
+            if (!Add(actor))
+            {
+              OkuManagers.Logger.LogError("The actor id '" + actor.Id + "' was used twice!");
+            }
             //TODO: Update sequence according to actor id
             break;
 
@@ -60,6 +66,8 @@ namespace OkuEngine.GCC.Actors
 
         child = child.NextSibling;
       }
+
+      return true;
     }
 
     public void Save(XmlWriter writer)

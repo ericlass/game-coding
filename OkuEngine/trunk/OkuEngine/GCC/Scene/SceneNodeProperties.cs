@@ -17,11 +17,18 @@ namespace OkuEngine.GCC.Scene
     private Color _tint = Color.White;
 
     /// <summary>
+    /// Creates new scene node properties.
+    /// </summary>
+    internal SceneNodeProperties()
+    {
+    }
+
+    /// <summary>
     /// Creates properties with the given actor id and name.
     /// </summary>
     /// <param name="actorId">The actor id.</param>
     /// <param name="name">The name.</param>
-    public SceneNodeProperties(int actorId)
+    internal SceneNodeProperties(int actorId)
     {
       _actorId = actorId;
     }

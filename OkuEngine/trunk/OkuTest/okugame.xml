@@ -35,7 +35,7 @@
         <id>1</id>
         <name>Yin-Yang</name>
         <components>
-          <renderable>
+          <renderable type="mesh">
             <points>-24,24;24,24;24,-24;-24,-24</points> <!-- A list of vectors for vertex positions -->
             <texcoords>0,1;1,1;1,0;0,0</texcoords> <!-- A list of vectors for vertex texture coordinates -->
             <colors>255,255,255,255;255,255,255,255;255,255,255,255;255,255,255,255;</colors> <!-- A list of colors for vertex colors -->
@@ -44,7 +44,48 @@
           </renderable>
         </components>
       </actortype>
+      
+      <actortype>
+        <id>2</id>
+        <name>Car</name>
+        <components>
+          <renderable type="image">
+            <image>car.png</image> <!-- The texture to use (Resource name) -->
+          </renderable>
+        </components>
+      </actortype>
+
+      <actortype>
+        <id>3</id>
+        <name>Colored Lines</name>
+        <components>
+          <renderable type="line">
+            <points>-24,24;24,24;24,-24;-24,-24</points> <!-- A list of vectors for vertex positions -->
+            <colors>255,255,255,255;255,255,255,255;255,255,255,255;255,255,255,255;</colors> <!-- A list of colors for vertex colors -->
+            <closed>yes</closed> <!-- Determines if the last point is connected to the first point -->
+          </renderable>
+        </components>
+      </actortype>
+
+      <actortype>
+        <id>4</id>
+        <name>Colored Lines</name>
+        <components>
+          <renderable type="points">
+            <points>-24,24;24,24;24,-24;-24,-24</points> <!-- A list of vectors for vertex positions -->
+            <colors>255,255,255,255;255,255,255,255;255,255,255,255;255,255,255,255;</colors> <!-- A list of colors for vertex colors -->
+          </renderable>
+        </components>
+      </actortype>
     </actortypes>
+
+    <actors>
+      <actor>
+        <id>1</id>
+        <name>YY01</name>
+        <type>1</type> <!-- References the actor type by its id -->
+      </actor>
+    </actors>
     
     <scenes>
       <scene>
@@ -54,26 +95,22 @@
           <layer>
             <id>1</id>
             <name>Layer 01</name>
+            <nodes>
+              <node>
+                <actor>1</actor> <!-- References actor by id -->
+                <tint>255,255,255,255</tint> <!-- Tint color -->
+                <aabb>-24,-24;24,24</aabb> <!-- Min and Max values of the bounding box -->
+                <transform>
+                  <position>0,0</position>
+                  <rotation>0</rotation>
+                  <scale>1,1</scale>
+                </transform>
+              </node>
+            </nodes>
           </layer>
         </layers>
       </scene>
     </scenes>
-
-    <actors>
-      <actor>
-        <id>1</id>
-        <name>YY01</name>
-        <type>1</type> <!-- References the actor type by its id -->
-        <scene>1</scene> <!-- References the scene by its id -->
-        <layer>1</layer> <!-- References the layer by its id -->
-        <parent>0</parent> <!-- References parent actor by actor id -->
-        <transform>
-          <position>0,0</position>
-          <rotation>0</rotation>
-          <scale>1,1</scale>
-        </transform>
-      </actor>
-    </actors>
 
     <!-- WIP! -->
     <actions>

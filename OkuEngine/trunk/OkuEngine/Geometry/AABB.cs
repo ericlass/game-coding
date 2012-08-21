@@ -114,5 +114,14 @@ namespace OkuEngine
       return new Vector[] { min, new Vector(min.X, max.Y), max, new Vector(max.X, min.Y) };
     }
 
+    /// <summary>
+    /// Converts the AABB to string in the format "minX,minY;maxX,maxY".
+    /// </summary>
+    /// <returns>The AABB as a string in the format "minX,minY;maxX,maxY".</returns>
+    public override string ToString()
+    {
+      return Min.ToString() + ";" + Max.ToString();
+    }
+
   }
 }

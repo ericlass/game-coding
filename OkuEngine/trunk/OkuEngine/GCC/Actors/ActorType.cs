@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using OkuEngine.GCC.Actors.Components;
 
 namespace OkuEngine.GCC.Actors
 {
@@ -57,7 +58,7 @@ namespace OkuEngine.GCC.Actors
     /// Loads the actor type from the given xml node.
     /// </summary>
     /// <param name="node">The xml node to read from.</param>
-    public override void Load(XmlNode node)
+    public override bool Load(XmlNode node)
     {
       base.Load(node);
 
@@ -76,6 +77,10 @@ namespace OkuEngine.GCC.Actors
               {
                 Components.Add(component.GetComponentId(), component);
               }
+              else
+              {
+                OkuManagers.Logger.LogError("Could not load actor component: " + componentNode.OuterXml);
+              }
               componentNode = componentNode.NextSibling;
             }
             break;
@@ -86,6 +91,8 @@ namespace OkuEngine.GCC.Actors
 
         child = child.NextSibling;
       }
+
+      return false;
     }
 
     /// <summary>

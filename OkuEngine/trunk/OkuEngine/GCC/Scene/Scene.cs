@@ -259,9 +259,10 @@ namespace OkuEngine.GCC.Scene
       return false;
     }
 
-    public override void Load(XmlNode node)
+    public override bool Load(XmlNode node)
     {
-      base.Load(node);
+      if (!base.Load(node))
+        return false;
 
       XmlNode child = node.FirstChild;
       while (child != null)
@@ -273,8 +274,15 @@ namespace OkuEngine.GCC.Scene
             while (layerNode != null)
             {
               SceneLayer layer = new SceneLayer();
-              layer.Load(layerNode);
-              _layerMap.Add(layer.Id, layer);
+              if (layer.Load(layerNode))
+              {
+                _layerMap.Add(layer.Id, layer);
+              }
+              else
+              {
+                OkuManagers.Logger.LogError("Could not load layer with id '" + layer.Id + "'!");
+                return false;
+              }
 
               layerNode = layerNode.NextSibling;
             }
@@ -285,6 +293,8 @@ namespace OkuEngine.GCC.Scene
         }
         child = child.NextSibling;
       }
+
+      return true;
     }
 
     public override void Save(XmlWriter writer)

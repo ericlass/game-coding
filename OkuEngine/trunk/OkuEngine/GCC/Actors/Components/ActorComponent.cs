@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 
-namespace OkuEngine.GCC.Actors
+namespace OkuEngine.GCC.Actors.Components
 {
   /// <summary>
   /// Base class for all actor components
@@ -26,7 +26,7 @@ namespace OkuEngine.GCC.Actors
     }
 
     public abstract int GetComponentId();
-    public abstract void Load(XmlNode node);
+    public abstract bool Load(XmlNode node);
     public abstract void Save(XmlWriter writer);
 
   }

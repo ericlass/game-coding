@@ -30,9 +30,9 @@ namespace OkuEngine.GCC.Resources
         Bitmap image = new Bitmap(rawBuffer);
         handle.Extras = new TextureExtraData(image);
       }
-      catch (Exception)
+      catch (Exception e)
       {
-        //TODO: Log exception message
+        OkuManagers.Logger.LogError(e.Message);
         return false;
       }
       
