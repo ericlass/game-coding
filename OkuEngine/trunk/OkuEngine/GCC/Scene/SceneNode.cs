@@ -18,6 +18,7 @@ namespace OkuEngine.GCC.Scene
     protected SceneNodeProperties _props = null;
     protected SceneNode _parent = null;
     protected List<SceneNode> _children = new List<SceneNode>();
+    private RenderComponent _renderComp = null;
 
     /// <summary>
     /// Creates a new scene node.
@@ -131,6 +132,23 @@ namespace OkuEngine.GCC.Scene
       return true;
     }
 
+    private RenderComponent GetRenderComponent()
+    {
+      if (_renderComp == null)
+      {
+        Actor actor = OkuData.Actors[_props.ActorId];
+        if (actor != null)
+        {
+          ActorComponent comp = actor.Type.GetComponent(RenderComponent.ComponentId);
+          if (comp != null && comp is RenderComponent)
+          {
+            _renderComp = comp as RenderComponent;
+          }
+        }
+      }
+      return _renderComp;
+    }
+
     /// <summary>
     /// Is called just before th node is rendered so it can set up
     /// rendering parameters.
@@ -164,16 +182,21 @@ namespace OkuEngine.GCC.Scene
     /// <returns>True if the node was rendered successfully, else false.</returns>
     public virtual bool Render(Scene scene)
     {
-      //TODO: Add visibility check
-      Actor actor = OkuData.Actors[_props.ActorId];
-      if (actor != null)
+      scene.ApplyAndPushTransform(_props.Transform);
+      try
       {
-        ActorComponent comp = actor.Type.GetComponent(RenderComponent.ComponentId);
-        if (comp != null && comp is RenderComponent)
+        //TODO: Add visibility check
+        RenderComponent renderComp = GetRenderComponent();
+        if (renderComp != null)
         {
-          RenderComponent renderComp = comp as RenderComponent;
+          renderComp.PreRender();
           OkuManagers.Renderer.DrawMesh(renderComp.Points, renderComp.TexCoords, renderComp.Colors, renderComp.Points.Length, renderComp.Mode, renderComp.Image);
+          renderComp.PostRender();
         }
+      }
+      finally
+      {
+        scene.PopTransform();
       }
 
       return true;
@@ -187,11 +210,17 @@ namespace OkuEngine.GCC.Scene
     public virtual bool RenderChildren(Scene scene)
     {
       scene.ApplyAndPushTransform(_props.Transform);
-      foreach (SceneNode child in _children)
+      try
       {
-        child.Render(scene);
+        foreach (SceneNode child in _children)
+        {
+          child.Render(scene);
+        }
       }
-      scene.PopTransform();
+      finally
+      {
+        scene.PopTransform();
+      }
       return true;
     }
 

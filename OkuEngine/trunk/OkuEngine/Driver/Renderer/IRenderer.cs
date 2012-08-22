@@ -372,5 +372,8 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="eventData">The event data. Always the viewport object that was changed.</param>
     void OnViewportEvent(int eventType, object eventData);
 
+    void SetLineWidth(float width);
+    void SetPointSize(float size);
+
   }
 }

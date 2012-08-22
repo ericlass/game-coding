@@ -1217,7 +1217,15 @@ namespace OkuEngine.Driver.Renderer
       UpdateGLViewPort(eventData as ViewPort);
     }
 
-    
+    public void SetLineWidth(float width)
+    {
+      Gl.glLineWidth(width);
+    }
+
+    public void SetPointSize(float size)
+    {
+      Gl.glPointSize(size);
+    }
 
   }
 }

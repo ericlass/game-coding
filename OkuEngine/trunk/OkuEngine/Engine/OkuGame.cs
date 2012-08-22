@@ -205,11 +205,11 @@ namespace OkuEngine
           if (actorTypesNode != null)
             LoadActorTypes(actorTypesNode);
 
-          if (scenesNode != null)
-            LoadScenes(scenesNode);
-
           if (actorsNode != null)
             LoadActors(actorsNode);
+          
+          if (scenesNode != null)
+            LoadScenes(scenesNode);          
 
           if (attribsNode != null)
           {

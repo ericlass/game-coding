@@ -13,7 +13,7 @@ namespace OkuEngine.GCC.Actors.Components
     protected ActorType _owner = null;
 
     /// <summary>
-    /// Gets or sets the actor this component belongs to.
+    /// Gets or sets the actor type this component belongs to.
     /// </summary>
     internal ActorType Owner
     {

@@ -59,6 +59,9 @@ namespace OkuEngine.GCC.Actors.Components
       return ComponentId;
     }
 
+    public abstract bool PreRender();
+    public abstract bool PostRender();
+
     public abstract override bool Load(XmlNode node);
     public abstract override void Save(XmlWriter writer);
 

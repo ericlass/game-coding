@@ -213,5 +213,13 @@ namespace OkuEngine.Driver.Renderer
     {
     }
 
+    public void SetLineWidth(float width)
+    {
+    }
+
+    public void SetPointSize(float size)
+    {
+    }
+
   }
 }

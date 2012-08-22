@@ -48,6 +48,9 @@ namespace OkuEngine
     public ImageContent(Bitmap image)
     {
       OkuManagers.Renderer.InitImageContent(this, image);
+
+      _width = image.Width;
+      _height = image.Height;
     }
 
     public int Width

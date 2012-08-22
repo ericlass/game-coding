@@ -76,10 +76,12 @@ namespace OkuEngine.GCC.Actors
               if (component != null)
               {
                 Components.Add(component.GetComponentId(), component);
+                component.Owner = this;
               }
               else
               {
                 OkuManagers.Logger.LogError("Could not load actor component: " + componentNode.OuterXml);
+                return false;
               }
               componentNode = componentNode.NextSibling;
             }
@@ -92,7 +94,7 @@ namespace OkuEngine.GCC.Actors
         child = child.NextSibling;
       }
 
-      return false;
+      return true;
     }
 
     /// <summary>

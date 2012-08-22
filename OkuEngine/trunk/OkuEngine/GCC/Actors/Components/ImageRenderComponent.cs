@@ -108,5 +108,15 @@ namespace OkuEngine.GCC.Actors.Components
       writer.WriteEndElement();
     }
 
+    public override bool PreRender()
+    {
+      return true;
+    }
+
+    public override bool PostRender()
+    {
+      return true;
+    }
+
   }
 }

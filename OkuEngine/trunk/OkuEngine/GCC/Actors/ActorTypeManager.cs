@@ -43,10 +43,12 @@ namespace OkuEngine.GCC.Actors
         {
           case "actortype":
             ActorType type = new ActorType();
-            type.Load(child);
-            if (!Add(type))
+            if (type.Load(child))
             {
-              OkuManagers.Logger.LogError("The actor type id '" + type.Id + "' is specified twice in the configuration file!");
+              if (!Add(type))
+              {
+                OkuManagers.Logger.LogError("The actor type id '" + type.Id + "' is specified twice in the configuration file!");
+              }
             }
             break;
 

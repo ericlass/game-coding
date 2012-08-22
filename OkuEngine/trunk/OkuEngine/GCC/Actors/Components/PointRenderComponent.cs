@@ -10,10 +10,12 @@ namespace OkuEngine.GCC.Actors.Components
   {
     public const string RenderType = "point";
 
+    private float _pointSize = 1.0f;
+
     public override bool Load(XmlNode node)
     {
       XmlNode child = node.FirstChild;
-      while (node != null)
+      while (child != null)
       {
         switch (child.Name.ToLower())
         {
@@ -23,6 +25,10 @@ namespace OkuEngine.GCC.Actors.Components
 
           case "colors":
             _colors = Converter.ParseColors(child.FirstChild.Value);
+            break;
+
+          case "size":
+            _pointSize = Converter.StrToFloat(child.FirstChild.Value);
             break;
 
           default:
@@ -74,7 +80,25 @@ namespace OkuEngine.GCC.Actors.Components
         writer.WriteEndElement();
       }
 
+      if (_pointSize != 1.0f)
+      {
+        writer.WriteStartElement("size");
+        writer.WriteValue(Converter.FloatToString(_pointSize));
+        writer.WriteEndElement();
+      }
+
       writer.WriteEndElement();
+    }
+
+    public override bool PreRender()
+    {
+      OkuManagers.Renderer.SetPointSize(_pointSize);
+      return true;
+    }
+
+    public override bool PostRender()
+    {
+      return true;
     }
 
   }

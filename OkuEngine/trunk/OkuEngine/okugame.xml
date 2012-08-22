@@ -11,7 +11,7 @@
         <pass targets="1" />
       </passes>
     </renderer>
-    <sound type="openal">
+    <sound type="null">
       <volume>1.0</volume>
     </sound>
   </engine>
@@ -62,8 +62,9 @@
         <components>
           <renderable type="line">
             <points>-24,24;24,24;24,-24;-24,-24</points> <!-- A list of vectors for vertex positions -->
-            <colors>255,255,255,255;255,255,255,255;255,255,255,255;255,255,255,255</colors> <!-- A list of colors for vertex colors -->
+            <colors>0,255,255,255;255,0,255,255;255,255,0,255;255,255,255,255</colors> <!-- A list of colors for vertex colors -->
             <closed>yes</closed> <!-- Determines if the last point is connected to the first point -->
+            <width>2</width>
           </renderable>
         </components>
       </actortype>
@@ -74,7 +75,8 @@
         <components>
           <renderable type="point">
             <points>-24,24;24,24;24,-24;-24,-24</points> <!-- A list of vectors for vertex positions -->
-            <colors>255,255,255,255;255,255,255,255;255,255,255,255;255,255,255,255;</colors> <!-- A list of colors for vertex colors -->
+            <colors>0,255,255,255;255,0,255,255;255,255,0,255;255,255,255,255;</colors> <!-- A list of colors for vertex colors -->
+            <size>4</size>
           </renderable>
         </components>
       </actortype>
@@ -84,7 +86,7 @@
       <actor>
         <id>1</id>
         <name>YY01</name>
-        <type>1</type> <!-- References the actor type by its id -->
+        <type>3</type> <!-- References the actor type by its id -->
       </actor>
     </actors>
     
@@ -103,7 +105,7 @@
                 <aabb>-24,-24;24,24</aabb> <!-- Min and Max values of the bounding box -->
                 <transform>
                   <position>0,0</position>
-                  <rotation>0</rotation>
+                  <rotation>-10</rotation>
                   <scale>1,1</scale>
                 </transform>
               </node>

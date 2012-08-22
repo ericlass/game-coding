@@ -10,12 +10,14 @@ namespace OkuEngine.GCC.Actors.Components
   {
     public const string RenderType = "line";
 
+    private float _lineWidth = 1.0f;
+
     public override bool Load(XmlNode node)
     {
       bool closed = false;
 
       XmlNode child = node.FirstChild;
-      while (node != null)
+      while (child != null)
       {
         switch (child.Name.ToLower())
         {
@@ -29,6 +31,10 @@ namespace OkuEngine.GCC.Actors.Components
 
           case "closed":
             closed = Converter.StrToBool(child.FirstChild.Value, false);
+            break;
+
+          case "width":
+            _lineWidth = Converter.StrToFloat(child.FirstChild.Value);
             break;
 
           default:
@@ -90,7 +96,25 @@ namespace OkuEngine.GCC.Actors.Components
         writer.WriteEndElement();
       }
 
+      if (_lineWidth != 1.0f)
+      {
+        writer.WriteStartElement("width");
+        writer.WriteValue(Converter.FloatToString(_lineWidth));
+        writer.WriteEndElement();
+      }
+
       writer.WriteEndElement();
+    }
+
+    public override bool PreRender()
+    {
+      OkuManagers.Renderer.SetLineWidth(_lineWidth);
+      return true;
+    }
+
+    public override bool PostRender()
+    {
+      return true;
     }
 
   }

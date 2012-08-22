@@ -14,7 +14,7 @@ namespace OkuEngine.GCC.Actors.Components
     public override bool Load(XmlNode node)
     {
       XmlNode child = node.FirstChild;
-      while (node != null)
+      while (child != null)
       {
         switch (child.Name.ToLower())
         {
@@ -125,5 +125,16 @@ namespace OkuEngine.GCC.Actors.Components
 
       writer.WriteEndElement();
     }
+
+    public override bool PreRender()
+    {
+      return true;
+    }
+
+    public override bool PostRender()
+    {
+      return true;
+    }
+
   }
 }

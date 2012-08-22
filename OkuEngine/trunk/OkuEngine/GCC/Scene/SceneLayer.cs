@@ -207,7 +207,8 @@ namespace OkuEngine.GCC.Scene
 
     public override bool Load(XmlNode node)
     {
-      base.Load(node);
+      if (!base.Load(node))
+        return false;
 
       XmlNode child = node.FirstChild;
       while (child != null)
@@ -236,6 +237,8 @@ namespace OkuEngine.GCC.Scene
               {
                 OkuManagers.Logger.LogError("Could not load scene node: " + nodeNode.OuterXml);
               }
+
+              nodeNode = nodeNode.NextSibling;
             }
             break;
 
