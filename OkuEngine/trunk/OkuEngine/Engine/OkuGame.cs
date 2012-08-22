@@ -125,6 +125,8 @@ namespace OkuEngine
     /// </summary>
     public void DoInitialize()
     {
+      KeySequence.Initialize();
+
       OkuManagers.Logger = new Logger();
       OkuManagers.Logger.AddWriter(new DebugConsoleLogWriter());
 

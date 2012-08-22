@@ -22,7 +22,7 @@ namespace OkuEngine.GCC.Scripting
         "\n" +
         "namespace OkuScripts\n" +
         "{\n" +
-        "  public class Script" + KeySequence.NextValue + "\n" + //Append sequence number to script class name
+        "  public class Script" + KeySequence.NextValue(KeySequence.ScriptSequence) +"\n" + //Append sequence number to script class name
         "  {\n" +
         code + "\n" +
         "  }\n" +

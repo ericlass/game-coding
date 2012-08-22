@@ -277,6 +277,7 @@ namespace OkuEngine.GCC.Scene
               if (layer.Load(layerNode))
               {
                 _layerMap.Add(layer.Id, layer);
+                KeySequence.SetCurrentValue(KeySequence.LayerSequence, layer.Id);
               }
               else
               {

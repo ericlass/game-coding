@@ -163,7 +163,7 @@ namespace OkuEngine
 
     public int AddStatic(Vector[] polygon)
     {
-      int result = KeySequence.NextValue;
+      int result = KeySequence.NextValue(KeySequence.EntitySequence);
       _statics.Add(result, polygon);
       return result;
     }
@@ -175,7 +175,7 @@ namespace OkuEngine
 
     public int AddDynamic(Vector[] polygon)
     {
-      int result = KeySequence.NextValue;
+      int result = KeySequence.NextValue(KeySequence.EntitySequence);
       _dynamics.Add(result, polygon);
       return result;
     }

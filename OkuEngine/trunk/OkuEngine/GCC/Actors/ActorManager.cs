@@ -53,11 +53,11 @@ namespace OkuEngine.GCC.Actors
             {
               OkuManagers.Logger.LogError("Could not load actor with id '" + actor.Id + "'!");
             }
+            KeySequence.SetCurrentValue(KeySequence.ActorSequence, actor.Id);
             if (!Add(actor))
             {
               OkuManagers.Logger.LogError("The actor id '" + actor.Id + "' was used twice!");
-            }
-            //TODO: Update sequence according to actor id
+            }            
             break;
 
           default:

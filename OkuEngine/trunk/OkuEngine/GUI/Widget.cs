@@ -9,7 +9,7 @@ namespace OkuEngine
   /// </summary>
   public class Widget
   {
-    private int _id = KeySequence.NextValue;
+    private int _id = KeySequence.NextValue(KeySequence.WidgetSequence);
     private AABB _area = new AABB();
     private string _hintText = null;
     private bool _visible = true;

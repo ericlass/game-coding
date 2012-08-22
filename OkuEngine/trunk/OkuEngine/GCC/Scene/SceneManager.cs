@@ -124,12 +124,12 @@ namespace OkuEngine.GCC.Scene
               OkuManagers.Logger.LogError("Could not load scene '" + scene.Id + "'!");
               return false;
             }
+            KeySequence.SetCurrentValue(KeySequence.SceneSequence, scene.Id);
             if (!AddScene(scene))
             {
               OkuManagers.Logger.LogError("The scene id '" + scene.Id + "' is used twice!");
               return false;
-            }
-            //TODO: Update sequence with scene id
+            }            
             break;
 
           default:

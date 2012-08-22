@@ -16,7 +16,7 @@ namespace OkuEngine
     private float _lifeTime = 10; // original lifetime in seconds
     private float _lifeRatio = -1.0f;
 
-    private int _id = KeySequence.NextValue; // artificial key of particle
+    private int _id = KeySequence.NextValue(KeySequence.ParticleSequence); // artificial key of particle
 
     public void Update(float dt)
     {

@@ -7,7 +7,7 @@ namespace OkuEngine
 {
   public class ContentInstance
   {
-    private int _instanceId = KeySequence.NextValue;
+    private int _instanceId = KeySequence.NextValue(KeySequence.ContentInstanceSequence);
 
     /// <summary>
     /// Creates a new instance.

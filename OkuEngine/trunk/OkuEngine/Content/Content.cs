@@ -10,7 +10,7 @@ namespace OkuEngine
   /// </summary>
   public abstract class Content
   {
-    private int _contentId = KeySequence.NextValue;
+    private int _contentId = KeySequence.NextValue(KeySequence.ContentSequence);
 
     /// <summary>
     /// Creates a new content.

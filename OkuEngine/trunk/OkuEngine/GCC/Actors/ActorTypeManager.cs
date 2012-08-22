@@ -45,6 +45,7 @@ namespace OkuEngine.GCC.Actors
             ActorType type = new ActorType();
             if (type.Load(child))
             {
+              KeySequence.SetCurrentValue(KeySequence.ActorTypeSequence, type.Id);
               if (!Add(type))
               {
                 OkuManagers.Logger.LogError("The actor type id '" + type.Id + "' is specified twice in the configuration file!");
