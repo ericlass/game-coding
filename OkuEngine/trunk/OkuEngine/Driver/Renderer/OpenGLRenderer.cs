@@ -8,7 +8,7 @@ using System.Text;
 using System.Xml;
 using Tao.OpenGl;
 using Tao.Platform.Windows;
-using OkuEngine.GCC.Scene;
+using OkuEngine.Scene;
 
 namespace OkuEngine.Driver.Renderer
 {

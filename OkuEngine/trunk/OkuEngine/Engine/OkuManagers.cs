@@ -1,8 +1,8 @@
 ﻿using System;
 using OkuEngine.Driver.Audio;
-using OkuEngine.GCC.Processes;
-using OkuEngine.GCC.Events;
-using OkuEngine.GCC.Scripting;
+using OkuEngine.Processes;
+using OkuEngine.Events;
+using OkuEngine.Scripting;
 using OkuEngine.Driver.Renderer;
 using OkuEngine.Logging;
 

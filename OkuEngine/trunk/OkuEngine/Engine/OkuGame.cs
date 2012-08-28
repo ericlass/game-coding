@@ -4,12 +4,12 @@ using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 using OkuEngine.Driver.Audio;
-using OkuEngine.GCC.Actors;
-using OkuEngine.GCC.Scene;
-using OkuEngine.GCC.Resources;
-using OkuEngine.GCC.Processes;
-using OkuEngine.GCC.Events;
-using OkuEngine.GCC.Scripting;
+using OkuEngine.Actors;
+using OkuEngine.Scene;
+using OkuEngine.Resources;
+using OkuEngine.Processes;
+using OkuEngine.Events;
+using OkuEngine.Scripting;
 using OkuEngine.Driver.Renderer;
 using OkuEngine.Logging;
 

@@ -4,9 +4,9 @@ using System.Xml;
 using System.IO;
 using System.Windows.Forms;
 using OkuEngine;
-using OkuEngine.GCC.Actors;
-using OkuEngine.GCC.Processes;
-using OkuEngine.GCC.Resources;
+using OkuEngine.Actors;
+using OkuEngine.Processes;
+using OkuEngine.Resources;
 
 namespace OkuTest
 {

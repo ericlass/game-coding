@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using OkuEngine.GCC.Scene;
-using OkuEngine.GCC.Resources;
-using OkuEngine.GCC.Actors;
+using OkuEngine.Scene;
+using OkuEngine.Resources;
+using OkuEngine.Actors;
 
 namespace OkuEngine
 {
