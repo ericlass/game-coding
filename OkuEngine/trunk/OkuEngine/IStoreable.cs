@@ -8,6 +8,6 @@ namespace OkuEngine
   public interface IStoreable
   {
     bool Load(XmlNode node);
-    void Save(XmlWriter writer);
+    bool Save(XmlWriter writer);
   }
 }

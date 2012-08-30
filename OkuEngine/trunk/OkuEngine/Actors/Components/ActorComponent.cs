@@ -27,7 +27,7 @@ namespace OkuEngine.Actors.Components
 
     public abstract int GetComponentId();
     public abstract bool Load(XmlNode node);
-    public abstract void Save(XmlWriter writer);
+    public abstract bool Save(XmlWriter writer);
 
   }
 }

@@ -31,34 +31,26 @@ namespace OkuEngine.Actors.Components
 
     public override bool Load(XmlNode node)
     {
-      XmlNode child = node.FirstChild;
-      while (child != null)
+      string value = node.GetTagValue("health");
+      if (value != null)
       {
-        switch (child.Name.ToLower())
-        {
-          case "health":
-            _health = int.Parse(child.FirstChild.Value);
-            break;
-
-          default:
-            break;
-        }
-
-        child = child.NextSibling;
+        int test = 0;
+        if (int.TryParse(value, out test))
+          _health = test;
+        else
+          return false;
       }
 
       return true;
     }
 
-    public override void Save(XmlWriter writer)
+    public override bool Save(XmlWriter writer)
     {
       writer.WriteStartElement(ComponentName);
-
-      writer.WriteStartElement("health");
-      writer.WriteValue(_health);
+      writer.WriteValueTag("health", _health.ToString());
       writer.WriteEndElement();
 
-      writer.WriteEndElement();
+      return true;
     }
 
   }

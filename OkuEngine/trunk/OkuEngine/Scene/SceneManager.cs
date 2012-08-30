@@ -141,7 +141,7 @@ namespace OkuEngine.Scene
       return true;
     }
 
-    public void Save(XmlWriter writer)
+    public bool Save(XmlWriter writer)
     {
       writer.WriteStartElement("scenes");
 
@@ -151,6 +151,8 @@ namespace OkuEngine.Scene
       }
 
       writer.WriteEndElement();
+
+      return true;
     }
 
   }

@@ -62,36 +62,26 @@ namespace OkuEngine.Actors
     {
       base.Load(node);
 
-      XmlNode child = node.FirstChild;
-      while (child != null)
+      XmlNode child = node["components"];
+      if (child != null)
       {
-        switch (child.Name.ToLower())
+        ActorComponentFactory factory = new ActorComponentFactory();
+        XmlNode componentNode = child.FirstChild;
+        while (componentNode != null)
         {
-          case "components":
-            ActorComponentFactory factory = new ActorComponentFactory();
-            XmlNode componentNode = child.FirstChild;
-            while (componentNode != null)
-            {
-              ActorComponent component = factory.CreateComponent(componentNode);
-              if (component != null)
-              {
-                Components.Add(component.GetComponentId(), component);
-                component.Owner = this;
-              }
-              else
-              {
-                OkuManagers.Logger.LogError("Could not load actor component: " + componentNode.OuterXml);
-                return false;
-              }
-              componentNode = componentNode.NextSibling;
-            }
-            break;
-
-          default:
-            break;
+          ActorComponent component = factory.CreateComponent(componentNode);
+          if (component != null)
+          {
+            Components.Add(component.GetComponentId(), component);
+            component.Owner = this;
+          }
+          else
+          {
+            OkuManagers.Logger.LogError("Could not load actor component: " + componentNode.OuterXml);
+            return false;
+          }
+          componentNode = componentNode.NextSibling;
         }
-
-        child = child.NextSibling;
       }
 
       return true;
@@ -101,11 +91,12 @@ namespace OkuEngine.Actors
     /// Saves the actor type to the given xml writer.
     /// </summary>
     /// <param name="writer">The xml writer to write to.</param>
-    public override void Save(XmlWriter writer)
+    public override bool Save(XmlWriter writer)
     {
       writer.WriteStartElement("actortype");
 
-      base.Save(writer);
+      if (!base.Save(writer))
+        return false;
 
       writer.WriteStartElement("components");
       foreach (ActorComponent comp in _components.Values)
@@ -115,6 +106,8 @@ namespace OkuEngine.Actors
       writer.WriteEndElement();
 
       writer.WriteEndElement();
+
+      return true;
     }
 
   }

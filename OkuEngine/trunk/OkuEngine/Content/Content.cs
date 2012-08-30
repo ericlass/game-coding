@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Xml;
 using System.Text;
 
 namespace OkuEngine
@@ -8,7 +8,7 @@ namespace OkuEngine
   /// <summary>
   /// Basic game content like sounds and images. User type content can also be created.
   /// </summary>
-  public abstract class Content
+  public abstract class Content : StoreableEntity
   {
     private int _contentId = KeySequence.NextValue(KeySequence.ContentSequence);
 

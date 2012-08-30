@@ -264,45 +264,39 @@ namespace OkuEngine.Scene
       if (!base.Load(node))
         return false;
 
-      XmlNode child = node.FirstChild;
-      while (child != null)
+      XmlNode child = node["layers"];
+      if (child != null)
       {
-        switch (child.Name.ToLower())
+        XmlNode layerNode = child.FirstChild;
+        while (layerNode != null)
         {
-          case "layers":
-            XmlNode layerNode = child.FirstChild;
-            while (layerNode != null)
-            {
-              SceneLayer layer = new SceneLayer();
-              if (layer.Load(layerNode))
-              {
-                _layerMap.Add(layer.Id, layer);
-                KeySequence.SetCurrentValue(KeySequence.LayerSequence, layer.Id);
-              }
-              else
-              {
-                OkuManagers.Logger.LogError("Could not load layer with id '" + layer.Id + "'!");
-                return false;
-              }
+          SceneLayer layer = new SceneLayer();
+          if (layer.Load(layerNode))
+          {
+            _layerMap.Add(layer.Id, layer);
+            KeySequence.SetCurrentValue(KeySequence.LayerSequence, layer.Id);
+          }
+          else
+          {
+            OkuManagers.Logger.LogError("Could not load layer with id '" + layer.Id + "'!");
+            return false;
+          }
 
-              layerNode = layerNode.NextSibling;
-            }
-            break;
-
-          default:
-            break;
+          layerNode = layerNode.NextSibling;
         }
-        child = child.NextSibling;
+
+        return true;
       }
 
-      return true;
+      return false;
     }
 
-    public override void Save(XmlWriter writer)
+    public override bool Save(XmlWriter writer)
     {
       writer.WriteStartElement("scene");
 
-      base.Save(writer);
+      if (!base.Save(writer))
+        return false;
 
       writer.WriteStartElement("layers");
       foreach (KeyValuePair<int, SceneLayer> item in _layerMap)
@@ -312,6 +306,8 @@ namespace OkuEngine.Scene
       writer.WriteEndElement();
 
       writer.WriteEndElement();
+
+      return true;
     }
 
   }

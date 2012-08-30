@@ -108,6 +108,9 @@
                   <rotation>-10</rotation>
                   <scale>1,1</scale>
                 </transform>
+                <nodes>
+                  ... <!-- Child nodes -->
+                </nodes>
               </node>
             </nodes>
           </layer>

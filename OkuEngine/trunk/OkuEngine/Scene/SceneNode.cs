@@ -254,46 +254,53 @@ namespace OkuEngine.Scene
 
     public bool Load(XmlNode node)
     {
-      XmlNode child = node.FirstChild;
-      while (child != null)
+      string value = node.GetTagValue("actor");
+      if (value != null)
       {
-        switch (child.Name.ToLower())
+        int test = 0;
+        if (int.TryParse(value, out test))
+          _props.ActorId = test;
+        else
+          return false;
+      }
+
+      value = node.GetTagValue("tint");
+      if (value != null)
+      {
+        Color tint = Color.Black;
+        if (Color.TryParse(value, out tint))
+          _props.Tint = tint;
+      }
+
+      value = node.GetTagValue("aabb");
+      if (value != null)
+      {
+        Vector[] minMax = Converter.ParseVectors(value);
+        if (minMax.Length == 2)
+          _props.Area = new AABB(minMax[0], minMax[1]);
+        else
         {
-          case "actor":
-            _props.ActorId = int.Parse(child.FirstChild.Value);
-            break;
-
-          case "tint":
-            Color tint = Color.Black;
-            if (Color.TryParse(child.FirstChild.Value, out tint))
-              _props.Tint = tint;
-            break;
-
-          case "aabb":
-            Vector[] minMax = Converter.ParseVectors(child.FirstChild.Value);
-            if (minMax.Length == 2)
-              _props.Area = new AABB(minMax[0], minMax[1]);
-            else
-            {
-              OkuManagers.Logger.LogError("AABB '" + child.FirstChild.Value + "' has wrong format!");
-            }
-            break;
-
-          case "transform":
-            _props.Transform.Load(child);
-            break;
-
-          case "node":
-            SceneNode kid = new SceneNode();
-            kid.Load(child);
-            kid.SetParent(this);
-            break;
-
-          default:
-            break;
+          OkuManagers.Logger.LogError("AABB '" + value + "' has wrong format!");
         }
+      }
 
-        child = child.NextSibling;
+      XmlNode transNode = node["transform"];
+      if (transNode != null)
+        _props.Transform.Load(transNode);
+
+      XmlNode nodesNode = node["nodes"];
+      if (nodesNode != null)
+      {
+        XmlNode child = nodesNode.FirstChild;
+        while (child != null)
+        {
+          SceneNode kid = new SceneNode();
+          if (kid.Load(child))
+            kid.SetParent(this);
+          else
+            return false;
+          child = child.NextSibling;
+        }
       }
 
       if (_props.ActorId == Actor.InvalidId)
@@ -305,25 +312,19 @@ namespace OkuEngine.Scene
       return true;
     }
 
-    public void Save(XmlWriter writer)
+    public bool Save(XmlWriter writer)
     {
       writer.WriteStartElement("node");
 
-      writer.WriteStartElement("actor");
-      writer.WriteValue(_props.ActorId);
-      writer.WriteEndElement();
-
-      writer.WriteStartElement("tint");
-      writer.WriteValue(_props.Tint.ToString());
-      writer.WriteEndElement();
-
-      writer.WriteStartElement("aabb");
-      writer.WriteValue(_props.Area.ToString());
-      writer.WriteEndElement();
+      writer.WriteValueTag("actor", _props.ActorId.ToString());
+      writer.WriteValueTag("tint", _props.Tint.ToString());
+      writer.WriteValueTag("aabb", _props.Area.ToString());
 
       _props.Transform.Save(writer);
 
       writer.WriteEndElement();
+
+      return true;
     }
 
   }

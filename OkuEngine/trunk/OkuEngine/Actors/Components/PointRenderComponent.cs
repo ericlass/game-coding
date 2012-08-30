@@ -14,29 +14,17 @@ namespace OkuEngine.Actors.Components
 
     public override bool Load(XmlNode node)
     {
-      XmlNode child = node.FirstChild;
-      while (child != null)
-      {
-        switch (child.Name.ToLower())
-        {
-          case "points":
-            _points = Converter.ParseVectors(child.FirstChild.Value);
-            break;
+      string value = node.GetTagValue("points");
+      if (value != null)
+        _points = Converter.ParseVectors(value);
 
-          case "colors":
-            _colors = Converter.ParseColors(child.FirstChild.Value);
-            break;
+      value = node.GetTagValue("colors");
+      if (value != null)
+        _colors = Converter.ParseColors(value);
 
-          case "size":
-            _pointSize = Converter.StrToFloat(child.FirstChild.Value);
-            break;
-
-          default:
-            break;
-        }
-
-        child = child.NextSibling;
-      }
+      value = node.GetTagValue("size");
+      if (value != null)
+        _pointSize = Converter.StrToFloat(value);
 
       if (_points == null)
       {
@@ -58,36 +46,24 @@ namespace OkuEngine.Actors.Components
       return true;
     }
 
-    public override void Save(XmlWriter writer)
+    public override bool Save(XmlWriter writer)
     {
       writer.WriteStartElement(ComponentName);
 
-      writer.WriteStartAttribute("type");
-      writer.WriteValue(RenderType);
-      writer.WriteEndAttribute();
+      writer.WriteValueTag("type", RenderType);
 
       if (_points != null)
-      {
-        writer.WriteStartElement("points");
-        writer.WriteValue(_points.ToOkuString());
-        writer.WriteEndElement();
-      }
+        writer.WriteValueTag("points", _points.ToOkuString());
 
       if (_colors != null)
-      {
-        writer.WriteStartElement("colors");
-        writer.WriteValue(_colors.ToOkuString());
-        writer.WriteEndElement();
-      }
+        writer.WriteValueTag("colors", _colors.ToOkuString());
 
       if (_pointSize != 1.0f)
-      {
-        writer.WriteStartElement("size");
-        writer.WriteValue(Converter.FloatToString(_pointSize));
-        writer.WriteEndElement();
-      }
+        writer.WriteValueTag("size", Converter.FloatToString(_pointSize));
 
       writer.WriteEndElement();
+
+      return true;
     }
 
     public override bool PreRender()

@@ -15,42 +15,34 @@ namespace OkuEngine.Actors.Components
     {
       Color color = Color.White;
 
-      XmlNode child = node.FirstChild;
-      while (child != null)
+      _imageName = node.GetTagValue("image");
+      if (_imageName != null)
       {
-        switch (child.Name.ToLower())
+        ResourceHandle handle = OkuData.ResourceCache.GetHandle(new Resource(_imageName));
+        if (handle != null)
         {
-          case "image":
-            _imageName = child.FirstChild.Value;
-            ResourceHandle handle = OkuData.ResourceCache.GetHandle(new Resource(_imageName));
-            if (handle != null)
-            {
-              _image = new ImageContent((handle.Extras as TextureExtraData).Image);
-            }
-            else
-            {
-              OkuManagers.Logger.LogError("Image resource '" + _imageName + "' was not found!");
-              return false;
-            }
-            break;
-
-          case "color":
-            Color col;
-            if (Color.TryParse(child.FirstChild.Value, out col))
-            {
-              color = col;
-            }
-            else
-            {
-              OkuManagers.Logger.LogError("Color '" + child.FirstChild.Value + "' could not be parsed!");
-            }
-            break;
-
-          default:
-            break;
+          _image = new ImageContent((handle.Extras as TextureExtraData).Image);
         }
+        else
+        {
+          OkuManagers.Logger.LogError("Image resource '" + _imageName + "' was not found!");
+          return false;
+        }
+      }
+      else
+      {
+        OkuManagers.Logger.LogError("No image given for image render component!");
+        return false;
+      }
 
-        child = child.NextSibling;
+      string value = node.GetTagValue("color");
+      if (value != null)
+      {
+        Color col;
+        if (Color.TryParse(value, out col))
+          color = col;
+        else
+          OkuManagers.Logger.LogError("Color '" + value + "' could not be parsed!");
       }
 
       if (_image == null)
@@ -86,26 +78,19 @@ namespace OkuEngine.Actors.Components
       return true;
     }
 
-    public override void Save(XmlWriter writer)
+    public override bool Save(XmlWriter writer)
     {
       writer.WriteStartElement(ComponentName);
 
-      writer.WriteStartAttribute("type");
-      writer.WriteValue(RenderType);
-      writer.WriteEndAttribute();
-
-      writer.WriteStartElement("image");
-      writer.WriteValue(_imageName);
-      writer.WriteEndElement();
+      writer.WriteValueTag("type", RenderType);
+      writer.WriteValueTag("image", _imageName);
 
       if (!_colors[0].Equals(Color.White))
-      {
-        writer.WriteStartElement("color");
-        writer.WriteValue(_colors[0].ToString());
-        writer.WriteEndElement();
-      }
+        writer.WriteValueTag("color", _colors[0].ToString());
 
       writer.WriteEndElement();
+
+      return true;
     }
 
     public override bool PreRender()

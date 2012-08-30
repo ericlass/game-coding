@@ -113,56 +113,44 @@ namespace OkuEngine
       _rotation = 0;
       _scale = Vector.One;
 
-      XmlNode child = node.FirstChild;
-      while (child != null)
+      string value = node.GetTagValue("position");
+      if (value != null)
       {
-        switch (child.Name.ToLower())
-        {
-          case "position":
-            Vector pos = Vector.Zero;
-            if (Vector.TryParse(child.FirstChild.Value, ref pos))
-              _translation = pos;
-            break;
+        Vector pos = Vector.Zero;
+        if (Vector.TryParse(value, ref pos))
+          _translation = pos;
+      }
 
-          case "rotation":
-            float angle = 0;
-            if (float.TryParse(child.FirstChild.Value, out angle))
-              _rotation = angle;
-            break;
+      value = node.GetTagValue("rotation");
+      if (value != null)
+      {
+        float angle = 0;
+        if (float.TryParse(value, out angle))
+          _rotation = angle;
+      }
 
-          case "scale":
-            Vector scale = Vector.Zero;
-            if (Vector.TryParse(child.FirstChild.Value, ref scale))
-              _scale = scale;
-            break;
-
-          default:
-            break;
-        }
-
-        child = child.NextSibling;
+      value = node.GetTagValue("scale");
+      if (value != null)
+      {
+        Vector scale = Vector.Zero;
+        if (Vector.TryParse(value, ref scale))
+          _scale = scale;
       }
 
       return true;
     }
 
-    public void Save(XmlWriter writer)
+    public bool Save(XmlWriter writer)
     {
       writer.WriteStartElement("transform");
 
-      writer.WriteStartElement("position");
-      writer.WriteValue(_translation.ToString());
-      writer.WriteEndElement();
-
-      writer.WriteStartElement("rotation");
-      writer.WriteValue(Converter.FloatToString(_rotation));
-      writer.WriteEndElement();
-
-      writer.WriteStartElement("scale");
-      writer.WriteValue(_scale.ToString());
-      writer.WriteEndElement();
+      writer.WriteValueTag("position", _translation.ToString());
+      writer.WriteValueTag("rotation", Converter.FloatToString(_rotation));
+      writer.WriteValueTag("scale", _scale.ToString());
 
       writer.WriteEndElement();
+
+      return true;
     }
 
   }

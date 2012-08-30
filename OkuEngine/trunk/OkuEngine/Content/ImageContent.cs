@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using System.Xml;
 
 namespace OkuEngine
 {
@@ -10,6 +11,7 @@ namespace OkuEngine
   {
     private int _width = 0;
     private int _height = 0;
+    private string _resource = null;
 
     public ImageContent()
     {
@@ -65,6 +67,12 @@ namespace OkuEngine
       set { _height = value; }
     }
 
+    public string Resource
+    {
+      get { return _resource; }
+      set { _resource = value; }
+    }
+
     public void Update(int x, int y, int width, int height, Bitmap image)
     {
       OkuManagers.Renderer.UpdateContent(this, x, y, width, height, image);
@@ -95,6 +103,30 @@ namespace OkuEngine
       sheet.Dispose();
 
       return result;
+    }
+
+    public override bool Load(XmlNode node)
+    {
+      if (!base.Load(node))
+        return false;
+
+      _resource = node.GetTagValue("resource");
+
+      return true;
+    }
+
+    public override bool Save(XmlWriter writer)
+    {
+      writer.WriteStartElement("image");
+
+      if (!base.Save(writer))
+        return false;
+
+      writer.WriteValueTag("resource", _resource);
+
+      writer.WriteEndElement();
+
+      return true;
     }
 
   }

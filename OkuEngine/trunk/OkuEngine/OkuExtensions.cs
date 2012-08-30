@@ -178,5 +178,33 @@ namespace OkuEngine
       return default(T);
     }
 
+    /// <summary>
+    /// Gets the value between the opening and the closing tag.
+    /// </summary>
+    /// <param name="node">The node to read from.</param>
+    /// <param name="name">The name of the child tag to read the value from.</param>
+    /// <returns>The value of the tag or null if there is no such tag.</returns>
+    public static string GetTagValue(this XmlNode node, string name)
+    {
+      XmlNode child = node[name];
+      if (child != null)
+        return child.FirstChild.Value;
+
+      return null;
+    }
+
+    /// <summary>
+    /// Writes and openening tag, a value and a closing tag in one step.
+    /// </summary>
+    /// <param name="writer">The writer to use.</param>
+    /// <param name="name">The of the tag to write.</param>
+    /// <param name="value">The value to write into the tag.</param>
+    public static void WriteValueTag(this XmlWriter writer, string name, string value)
+    {
+      writer.WriteStartElement(name);
+      writer.WriteValue(value);
+      writer.WriteEndElement();
+    }
+
   }
 }

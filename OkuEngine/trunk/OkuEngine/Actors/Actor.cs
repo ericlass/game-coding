@@ -41,20 +41,14 @@ namespace OkuEngine.Actors
 
       int actorType = 0;
 
-      XmlNode child = node.FirstChild;
-      while (child != null)
+      string value = node.GetTagValue("type");
+      if (value != null)
       {
-        switch (child.Name.ToLower())
-        {
-          case "type":
-            actorType = int.Parse(child.FirstChild.Value);
-            break;
-
-          default:
-            break;
-        }
-
-        child = child.NextSibling;
+        int test = 0;
+        if (int.TryParse(value, out test))
+          actorType = test;
+        else
+          return false;
       }
 
       _type = OkuData.ActorTypes[actorType];
@@ -71,35 +65,27 @@ namespace OkuEngine.Actors
     /// Saves the data of this actor to the given XML writer.
     /// </summary>
     /// <param name="writer">The xml writer to write to.</param>
-    public override void Save(XmlWriter writer)
+    public override bool Save(XmlWriter writer)
     {
       writer.WriteStartElement("actor");
 
-      base.Save(writer);
+      if (!base.Save(writer))
+        return false;
 
-      writer.WriteStartElement("type");
-      writer.WriteValue(_type.Id);
-      writer.WriteEndElement();
+      writer.WriteValueTag("type", _type.Id.ToString());
 
       int scene, layer;
       if (OkuData.SceneManager.FindActor(Id, out scene, out layer))
       {
-        writer.WriteStartElement("scene");
-        writer.WriteValue(scene);
-        writer.WriteEndElement();
-
-        writer.WriteStartElement("layer");
-        writer.WriteValue(layer);
-        writer.WriteEndElement();
+        writer.WriteValueTag("scene", scene.ToString());
+        writer.WriteValueTag("layer", layer.ToString());
 
         SceneNode node = OkuData.SceneManager[scene].GetLayer(layer).GetNode(Id);
         if (node != null)
         {
           if (node.Parent != null && node.Parent.Properties.ActorId > 0)
           {
-            writer.WriteStartElement("parent");
-            writer.WriteValue(node.Parent.Properties.ActorId);
-            writer.WriteEndElement();
+            writer.WriteValueTag("parent", node.Parent.Properties.ActorId.ToString());
           }
 
           node.Properties.Transform.Save(writer);
@@ -107,6 +93,8 @@ namespace OkuEngine.Actors
       }
 
       writer.WriteEndElement();
+
+      return true;
     }
 
   }

@@ -62,7 +62,7 @@ namespace OkuEngine.Actors
       return true;
     }
 
-    public void Save(XmlWriter writer)
+    public bool Save(XmlWriter writer)
     {
       writer.WriteStartElement("actortypes");
 
@@ -72,6 +72,8 @@ namespace OkuEngine.Actors
       }
 
       writer.WriteEndElement();
+
+      return true;
     }
 
   }

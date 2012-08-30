@@ -63,7 +63,7 @@ namespace OkuEngine.Actors.Components
     public abstract bool PostRender();
 
     public abstract override bool Load(XmlNode node);
-    public abstract override void Save(XmlWriter writer);
+    public abstract override bool Save(XmlWriter writer);
 
   }
 }

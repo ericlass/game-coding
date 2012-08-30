@@ -16,33 +16,21 @@ namespace OkuEngine.Actors.Components
     {
       bool closed = false;
 
-      XmlNode child = node.FirstChild;
-      while (child != null)
-      {
-        switch (child.Name.ToLower())
-        {
-          case "points":
-            _points = Converter.ParseVectors(child.FirstChild.Value);
-            break;
+      string value = node.GetTagValue("points");
+      if (value != null)
+        _points = Converter.ParseVectors(value);
 
-          case "colors":
-            _colors = Converter.ParseColors(child.FirstChild.Value);
-            break;
+      value = node.GetTagValue("colors");
+      if (value != null)
+        _colors = Converter.ParseColors(value);
 
-          case "closed":
-            closed = Converter.StrToBool(child.FirstChild.Value, false);
-            break;
+      value = node.GetTagValue("closed");
+      if (value != null)
+        closed = Converter.StrToBool(value, false);
 
-          case "width":
-            _lineWidth = Converter.StrToFloat(child.FirstChild.Value);
-            break;
-
-          default:
-            break;
-        }
-
-        child = child.NextSibling;
-      }
+      value = node.GetTagValue("width");
+      if (value != null)
+        _lineWidth = Converter.StrToFloat(value);
 
       if (_points == null)
       {
@@ -67,43 +55,27 @@ namespace OkuEngine.Actors.Components
       return true;
     }
 
-    public override void Save(XmlWriter writer)
+    public override bool Save(XmlWriter writer)
     {
       writer.WriteStartElement(ComponentName);
 
-      writer.WriteStartAttribute("type");
-      writer.WriteValue(RenderType);
-      writer.WriteEndAttribute();
+      writer.WriteValueTag("type", RenderType);
 
       if (_points != null)
-      {
-        writer.WriteStartElement("points");
-        writer.WriteValue(_points.ToOkuString());
-        writer.WriteEndElement();
-      }
+        writer.WriteValueTag("points", _points.ToOkuString());
 
       if (_colors != null)
-      {
-        writer.WriteStartElement("colors");
-        writer.WriteValue(_colors.ToOkuString());
-        writer.WriteEndElement();
-      }
+        writer.WriteValueTag("colors", _colors.ToOkuString());
 
       if (_mode == DrawMode.ClosedPolygon)
-      {
-        writer.WriteStartElement("closed");
-        writer.WriteValue(Converter.BoolToStr(true));
-        writer.WriteEndElement();
-      }
+        writer.WriteValueTag("closed", Converter.BoolToStr(true));
 
       if (_lineWidth != 1.0f)
-      {
-        writer.WriteStartElement("width");
-        writer.WriteValue(Converter.FloatToString(_lineWidth));
-        writer.WriteEndElement();
-      }
+        writer.WriteValueTag("width", Converter.FloatToString(_lineWidth));
 
       writer.WriteEndElement();
+
+      return true;
     }
 
     public override bool PreRender()

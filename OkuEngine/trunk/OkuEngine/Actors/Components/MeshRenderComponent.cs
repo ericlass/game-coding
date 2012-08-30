@@ -13,45 +13,31 @@ namespace OkuEngine.Actors.Components
 
     public override bool Load(XmlNode node)
     {
-      XmlNode child = node.FirstChild;
-      while (child != null)
+      string value = node.GetTagValue("points");
+      if (value != null)
+        _points = Converter.ParseVectors(value);
+
+      value = node.GetTagValue("texcoords");
+      if (value != null)
+        _texCoords = Converter.ParseVectors(value);
+
+      value = node.GetTagValue("colors");
+      if (value != null)
+        _colors = Converter.ParseColors(value);
+
+      value = node.GetTagValue("mode");
+      if (value != null)
+        _mode = Converter.ParseEnum<DrawMode>(value);
+
+      _imageName = node.GetTagValue("image");
+      if (_imageName != null)
       {
-        switch (child.Name.ToLower())
-        {
-          case "points":
-            _points = Converter.ParseVectors(child.FirstChild.Value);
-            break;
-
-          case "texcoords":
-            _texCoords = Converter.ParseVectors(child.FirstChild.Value);
-            break;
-
-          case "colors":
-            _colors = Converter.ParseColors(child.FirstChild.Value);
-            break;
-
-          case "mode":
-            _mode = Converter.ParseEnum<DrawMode>(child.FirstChild.Value);
-            break;
-
-          case "image":
-            _imageName = child.FirstChild.Value;
-            ResourceHandle handle = OkuData.ResourceCache.GetHandle(new Resource(_imageName));
-            if (handle != null)
-            {
-              _image = new ImageContent((handle.Extras as TextureExtraData).Image);
-            }
-            else
-            {
-              OkuManagers.Logger.LogError("Image resource '" + _imageName + "' was not found!");
-            }
-            break;
-
-          default:
-            break;
-        }
-
-        child = child.NextSibling;
+        _points = Converter.ParseVectors(value);
+        ResourceHandle handle = OkuData.ResourceCache.GetHandle(new Resource(_imageName));
+        if (handle != null)
+          _image = new ImageContent((handle.Extras as TextureExtraData).Image);
+        else
+          OkuManagers.Logger.LogError("Image resource '" + _imageName + "' was not found!");
       }
 
       if (_points == null)
@@ -83,47 +69,29 @@ namespace OkuEngine.Actors.Components
       return true;
     }
 
-    public override void Save(XmlWriter writer)
+    public override bool Save(XmlWriter writer)
     {
       writer.WriteStartElement(ComponentName);
 
-      writer.WriteStartAttribute("type");
-      writer.WriteValue(RenderType);
-      writer.WriteEndAttribute();
+      writer.WriteValueTag("type", RenderType);
 
       if (_points != null)
-      {
-        writer.WriteStartElement("points");
-        writer.WriteValue(_points.ToOkuString());
-        writer.WriteEndElement();
-      }
+        writer.WriteValueTag("points", _points.ToOkuString());
 
       if (_texCoords != null)
-      {
-        writer.WriteStartElement("texcoords");
-        writer.WriteValue(_texCoords.ToOkuString());
-        writer.WriteEndElement();
-      }
+        writer.WriteValueTag("texcoords", _texCoords.ToOkuString());
 
       if (_colors != null)
-      {
-        writer.WriteStartElement("colors");
-        writer.WriteValue(_colors.ToOkuString());
-        writer.WriteEndElement();
-      }
+        writer.WriteValueTag("colors", _colors.ToOkuString());
 
-      writer.WriteStartElement("mode");
-      writer.WriteValue(_mode.ToString());
-      writer.WriteEndElement();
+      writer.WriteValueTag("mode", _mode.ToString());
 
       if (_imageName != null)
-      {
-        writer.WriteStartElement("image");
-        writer.WriteValue(_imageName);
-        writer.WriteEndElement();
-      }
+        writer.WriteValueTag("image", _imageName);
 
       writer.WriteEndElement();
+
+      return true;
     }
 
     public override bool PreRender()
