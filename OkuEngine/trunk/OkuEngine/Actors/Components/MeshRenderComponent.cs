@@ -29,15 +29,12 @@ namespace OkuEngine.Actors.Components
       if (value != null)
         _mode = Converter.ParseEnum<DrawMode>(value);
 
-      _imageName = node.GetTagValue("image");
-      if (_imageName != null)
+      value = node.GetTagValue("image");
+      if (value != null)
       {
-        _points = Converter.ParseVectors(value);
-        ResourceHandle handle = OkuData.ResourceCache.GetHandle(new Resource(_imageName));
-        if (handle != null)
-          _image = new ImageContent((handle.Extras as TextureExtraData).Image);
-        else
-          OkuManagers.Logger.LogError("Image resource '" + _imageName + "' was not found!");
+        int test = 0;
+        if (int.TryParse(value, out test))
+          _image = test;
       }
 
       if (_points == null)
@@ -46,7 +43,7 @@ namespace OkuEngine.Actors.Components
         return false;
       }
 
-      if ((_texCoords != null && _image == null) || (_texCoords == null && _image != null))
+      if ((_texCoords != null && _image == KeySequence.InvalidId) || (_texCoords == null && _image != KeySequence.InvalidId))
       {
         OkuManagers.Logger.LogError("texcoords and image should be both set or both missing in a mesh render component!");
       }
@@ -86,8 +83,8 @@ namespace OkuEngine.Actors.Components
 
       writer.WriteValueTag("mode", _mode.ToString());
 
-      if (_imageName != null)
-        writer.WriteValueTag("image", _imageName);
+      if (_image != KeySequence.InvalidId)
+        writer.WriteValueTag("image", _image.ToString());
 
       writer.WriteEndElement();
 

@@ -21,6 +21,19 @@
       <name>GCC Test</name>
       <startscene>1</startscene> <!-- References scene by id -->
     </attributes>
+
+    <images>
+      <image>
+        <id>1</id>
+        <name>Yin-Yang</name>
+        <resource>yinyang.png</resource> <!-- Optional for render targets -->
+      </image>
+      <image>
+        <id>2</id>
+        <name>Car</name>
+        <resource>car.png</resource> <!-- Optional for render targets -->
+      </image>
+    </images>
     
     <behaviors>
       <behavior>
@@ -40,7 +53,7 @@
             <texcoords>0,1;1,1;1,0;0,0</texcoords> <!-- A list of vectors for vertex texture coordinates -->
             <colors>255,255,255,255;255,255,255,255;255,255,255,255;255,255,255,255</colors> <!-- A list of colors for vertex colors -->
             <mode>Quads</mode> <!-- The mesh mode (Triangles, Quads, Line...) -->
-            <image>yinyang.png</image> <!-- The texture to use (Resource name) -->
+            <image>1</image> <!-- The texture to use (image id) -->
           </renderable>
         </components>
       </actortype>
@@ -50,7 +63,7 @@
         <name>Car</name>
         <components>
           <renderable type="image">
-            <image>car.png</image> <!-- The texture to use (Resource name) -->
+            <image>2</image> <!-- The texture to use (image id) -->
             <color>255,255,255,255</color> <!-- Tint color. Can be left out for black -->
           </renderable>
         </components>

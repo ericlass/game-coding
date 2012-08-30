@@ -74,15 +74,14 @@
     <Compile Include="Actors\Actor.cs" />
     <Compile Include="Actors\Components\ActorComponent.cs" />
     <Compile Include="Actors\Components\ActorComponentFactory.cs" />
-    <Compile Include="Actors\ActorManager.cs" />
     <Compile Include="Actors\ActorType.cs" />
-    <Compile Include="Actors\ActorTypeManager.cs" />
     <Compile Include="Actors\Components\HealthPickup.cs" />
     <Compile Include="Actors\Components\ImageRenderComponent.cs" />
     <Compile Include="Actors\Components\LineRenderComponent.cs" />
     <Compile Include="Actors\Components\MeshRenderComponent.cs" />
     <Compile Include="Actors\Components\PointRenderComponent.cs" />
     <Compile Include="Actors\Components\RenderComponent.cs" />
+    <Compile Include="EntityManager.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\EventListenerDelegate.cs" />
     <Compile Include="Events\EventManager.cs" />

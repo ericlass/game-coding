@@ -1,22 +1,33 @@
-﻿using System.IO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Xml;
+using OkuEngine.Resources;
 
 namespace OkuEngine
 {
+  /// <summary>
+  /// A single loaded, renderable image.
+  /// </summary>
   public class ImageContent : Content
   {
     private int _width = 0;
     private int _height = 0;
     private string _resource = null;
 
+    /// <summary>
+    /// Creates a new image.
+    /// </summary>
     public ImageContent()
     {
     }
 
+    /// <summary>
+    /// Createa a new image and loads the image data from the given file.
+    /// </summary>
+    /// <param name="filename">The name and path of the file to load the image from.</param>
     public ImageContent(string filename)
     {
       Bitmap bm = new Bitmap(filename);
@@ -25,6 +36,10 @@ namespace OkuEngine
       OkuManagers.Renderer.InitImageContent(this, bm);
     }
 
+    /// <summary>
+    /// Createa a new image and loads the image data from the given stream.
+    /// </summary>
+    /// <param name="filename">The stream to load the image from.</param>
     public ImageContent(Stream fileStream)
     {
       Bitmap bm = new Bitmap(fileStream);
@@ -33,6 +48,12 @@ namespace OkuEngine
       OkuManagers.Renderer.InitImageContent(this, bm);
     }
 
+    /// <summary>
+    /// Creates a new image with the given raw image data.
+    /// </summary>
+    /// <param name="rawData">The raw pixel data of the image.</param>
+    /// <param name="width">The width of the image in pixels.</param>
+    /// <param name="height">The height of the image in pixels.</param>
     public ImageContent(byte[] rawData, int width, int height)
     {
       _width = width;
@@ -47,6 +68,10 @@ namespace OkuEngine
       OkuManagers.Renderer.InitImageContent(this, bm);
     }
 
+    /// <summary>
+    /// Createa a new image and loads the image data from the given bitmap.
+    /// </summary>
+    /// <param name="filename">The bitmap to load the image from.</param>
     public ImageContent(Bitmap image)
     {
       OkuManagers.Renderer.InitImageContent(this, image);
@@ -55,29 +80,89 @@ namespace OkuEngine
       _height = image.Height;
     }
 
+    /// <summary>
+    /// Gets or sets the width of the image in pixels.
+    /// </summary>
     public int Width
     {
       get { return _width; }
       set { _width = value; }
     }
 
+    /// <summary>
+    /// Gets or sets the height of the image in pixels.
+    /// </summary>
     public int Height
     {
       get { return _height; }
       set { _height = value; }
     }
 
+    /// <summary>
+    /// Gets or sets the name of the image resource the image was loaded from.
+    /// </summary>
     public string Resource
     {
       get { return _resource; }
       set { _resource = value; }
     }
 
+    /// <summary>
+    /// Updates a part of the image with the given bitmap.
+    /// </summary>
+    /// <param name="x">The left bound of the rectangle to be updated.</param>
+    /// <param name="y">The lower bound of the rectangle to be updated.</param>
+    /// <param name="width">The width of the rectangle to be updated.</param>
+    /// <param name="height">The height of the rectangle to be updated.</param>
+    /// <param name="image">The bitmap to put in the updated rectangle.</param>
     public void Update(int x, int y, int width, int height, Bitmap image)
     {
       OkuManagers.Renderer.UpdateContent(this, x, y, width, height, image);
     }
 
+    public override bool Load(XmlNode node)
+    {
+      if (!base.Load(node))
+        return false;
+
+      _resource = node.GetTagValue("resource");
+      if (_resource != null)
+      {
+        ResourceHandle handle = OkuData.ResourceCache.GetHandle(new Resource(_resource));
+        if (handle != null)
+          OkuManagers.Renderer.InitImageContent(this, (handle.Extras as TextureExtraData).Image);
+        else
+        {
+          OkuManagers.Logger.LogError("Image resource '" + _resource + "' was not found!");
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    public override bool Save(XmlWriter writer)
+    {
+      writer.WriteStartElement("image");
+
+      if (!base.Save(writer))
+        return false;
+
+      if (_resource != null)
+        writer.WriteValueTag("resource", _resource);
+
+      writer.WriteEndElement();
+
+      return true;
+    }
+
+    /// <summary>
+    /// Loads a number of images from a sprite sheet.
+    /// The sprites must have equal width and height.
+    /// </summary>
+    /// <param name="filename">The name of the file to load from.</param>
+    /// <param name="tileSize">The width and height of the sprites in pixels</param>
+    /// <returns>A list of the sprites loaded from the sheet.</returns>
     public static List<ImageContent> LoadSheet(string filename, int tileSize)
     {
       Bitmap sheet = new Bitmap(filename);
@@ -103,30 +188,6 @@ namespace OkuEngine
       sheet.Dispose();
 
       return result;
-    }
-
-    public override bool Load(XmlNode node)
-    {
-      if (!base.Load(node))
-        return false;
-
-      _resource = node.GetTagValue("resource");
-
-      return true;
-    }
-
-    public override bool Save(XmlWriter writer)
-    {
-      writer.WriteStartElement("image");
-
-      if (!base.Save(writer))
-        return false;
-
-      writer.WriteValueTag("resource", _resource);
-
-      writer.WriteEndElement();
-
-      return true;
     }
 
   }

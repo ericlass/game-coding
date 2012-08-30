@@ -15,19 +15,12 @@ namespace OkuEngine.Actors.Components
     {
       Color color = Color.White;
 
-      _imageName = node.GetTagValue("image");
-      if (_imageName != null)
+      string value = node.GetTagValue("image");
+      if (value != null)
       {
-        ResourceHandle handle = OkuData.ResourceCache.GetHandle(new Resource(_imageName));
-        if (handle != null)
-        {
-          _image = new ImageContent((handle.Extras as TextureExtraData).Image);
-        }
-        else
-        {
-          OkuManagers.Logger.LogError("Image resource '" + _imageName + "' was not found!");
-          return false;
-        }
+        int test = 0;
+        if (int.TryParse(value, out test))
+          _image = test;
       }
       else
       {
@@ -35,7 +28,7 @@ namespace OkuEngine.Actors.Components
         return false;
       }
 
-      string value = node.GetTagValue("color");
+      value = node.GetTagValue("color");
       if (value != null)
       {
         Color col;
@@ -45,14 +38,16 @@ namespace OkuEngine.Actors.Components
           OkuManagers.Logger.LogError("Color '" + value + "' could not be parsed!");
       }
 
-      if (_image == null)
+      ImageContent image = OkuData.Images[_image];
+
+      if (image == null)
       {
-        OkuManagers.Logger.LogError("Image resource '" + _imageName + "' was not found!");
+        OkuManagers.Logger.LogError("Image with id '" + _image + "' was not found!");
         return false;
       }
 
-      float halfWidth = _image.Width / 2.0f;
-      float halfHeight = _image.Height / 2.0f;
+      float halfWidth = image.Width / 2.0f;
+      float halfHeight = image.Height / 2.0f;
 
       _points = new Vector[4];
       _texCoords = new Vector[4];
@@ -83,7 +78,7 @@ namespace OkuEngine.Actors.Components
       writer.WriteStartElement(ComponentName);
 
       writer.WriteValueTag("type", RenderType);
-      writer.WriteValueTag("image", _imageName);
+      writer.WriteValueTag("image", _image.ToString());
 
       if (!_colors[0].Equals(Color.White))
         writer.WriteValueTag("color", _colors[0].ToString());

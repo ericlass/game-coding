@@ -15,14 +15,7 @@ namespace OkuEngine.Actors.Components
     protected Vector[] _texCoords = null;
     protected Color[] _colors = null;
     protected DrawMode _mode = DrawMode.None;
-    protected ImageContent _image = null;
-    protected string _imageName = null;
-
-    public string ImageName
-    {
-      get { return _imageName; }
-      set { _imageName = value; }
-    }
+    protected int _image = 0;
 
     public Vector[] Points
     {
@@ -48,7 +41,7 @@ namespace OkuEngine.Actors.Components
       set { _mode = value; }
     }
 
-    public ImageContent Image
+    public int Image
     {
       get { return _image; }
       set { _image = value; }

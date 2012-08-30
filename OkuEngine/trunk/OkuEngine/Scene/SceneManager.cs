@@ -5,49 +5,12 @@ using System.Text;
 
 namespace OkuEngine.Scene
 {
-  public class SceneManager : IStoreable
+  public class SceneManager : EntityManager<Scene>
   {
-    private Dictionary<int, Scene> _scenes = new Dictionary<int, Scene>();
     private Scene _activeScene = null;
 
-    public SceneManager()
+    public SceneManager() : base("scenes", "scene", KeySequence.SceneSequence)
     {
-    }
-
-    public bool AddScene(Scene scene)
-    {
-      if (scene != null && !_scenes.ContainsKey(scene.Id))
-      {
-        _scenes.Add(scene.Id, scene);
-        return true;
-      }
-      return false;
-    }
-
-    public bool RemoveScene(Scene scene)
-    {
-      if (scene != null && _scenes.ContainsKey(scene.Id))
-      {
-        _scenes.Remove(scene.Id);
-        return true;
-      }
-      return false;
-    }
-
-    /// <summary>
-    /// Gets the scene with the given id.
-    /// </summary>
-    /// <param name="id">The id of the scene to find.</param>
-    /// <returns>The scene with the given id or null if there is no scene with the given id.</returns>
-    public Scene this[int id]
-    {
-      get
-      {
-        if (_scenes.ContainsKey(id))
-          return _scenes[id];
-        else
-          return null;
-      }
     }
 
     /// <summary>
@@ -63,7 +26,7 @@ namespace OkuEngine.Scene
     {
       sceneId = 0;
       layerIndex = 0;
-      foreach (Scene scene in _scenes.Values)
+      foreach (Scene scene in _entities.Values)
       {
         if (scene.FindActor(actorId, out layerIndex))
         {
@@ -103,56 +66,11 @@ namespace OkuEngine.Scene
     /// <param name="scene">The id of the scene to set active.</param>
     internal void SetActiveScene(int sceneId)
     {
-      if (_scenes.ContainsKey(sceneId))
+      if (_entities.ContainsKey(sceneId))
       {
-        Scene scene = _scenes[sceneId];
+        Scene scene = _entities[sceneId];
         SetActiveScene(scene);
       }
-    }
-
-    public bool Load(XmlNode node)
-    {
-      XmlNode child = node.FirstChild;
-      while (child != null)
-      {
-        switch (child.Name.ToLower())
-        {
-          case "scene":
-            Scene scene = new Scene();
-            if (!scene.Load(child))
-            {
-              OkuManagers.Logger.LogError("Could not load scene '" + scene.Id + "'!");
-              return false;
-            }
-            KeySequence.SetCurrentValue(KeySequence.SceneSequence, scene.Id);
-            if (!AddScene(scene))
-            {
-              OkuManagers.Logger.LogError("The scene id '" + scene.Id + "' is used twice!");
-              return false;
-            }            
-            break;
-
-          default:
-            break;
-        }
-        child = child.NextSibling;
-      }
-
-      return true;
-    }
-
-    public bool Save(XmlWriter writer)
-    {
-      writer.WriteStartElement("scenes");
-
-      foreach (Scene scene in _scenes.Values)
-      {
-        scene.Save(writer);
-      }
-
-      writer.WriteEndElement();
-
-      return true;
     }
 
   }

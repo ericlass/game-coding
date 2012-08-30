@@ -190,7 +190,7 @@ namespace OkuEngine.Scene
         if (renderComp != null)
         {
           renderComp.PreRender();
-          OkuManagers.Renderer.DrawMesh(renderComp.Points, renderComp.TexCoords, renderComp.Colors, renderComp.Points.Length, renderComp.Mode, renderComp.Image);
+          OkuManagers.Renderer.DrawMesh(renderComp.Points, renderComp.TexCoords, renderComp.Colors, renderComp.Points.Length, renderComp.Mode, OkuData.Images[renderComp.Image]);
           renderComp.PostRender();
         }
       }

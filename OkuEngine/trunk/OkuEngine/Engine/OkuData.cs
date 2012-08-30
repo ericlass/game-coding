@@ -17,8 +17,9 @@ namespace OkuEngine
     private static VariableList _locals = null;
     private static ResourceCache _resources = null;
     private static SceneManager _sceneManager = null;
-    private static ActorTypeManager _actorTypes = null;
-    private static ActorManager _actors = null;
+    private static EntityManager<ActorType> _actorTypes = null;
+    private static EntityManager<Actor> _actors = null;
+    private static EntityManager<ImageContent> _images = null;
 
     /// <summary>
     /// Gets the global variable list.
@@ -74,12 +75,12 @@ namespace OkuEngine
     /// <summary>
     /// Gets the actor type manager that contains all actor types.
     /// </summary>
-    public static ActorTypeManager ActorTypes
+    public static EntityManager<ActorType> ActorTypes
     {
       get
       {
         if (_actorTypes == null)
-          _actorTypes = new ActorTypeManager();
+          _actorTypes = new EntityManager<ActorType>("actortypes", "actortype", KeySequence.ActorTypeSequence);
 
         return _actorTypes;
       }
@@ -88,14 +89,29 @@ namespace OkuEngine
     /// <summary>
     /// Gets the actor manager that contains all actors.
     /// </summary>
-    public static ActorManager Actors
+    public static EntityManager<Actor> Actors
     {
       get
       {
         if (_actors == null)
-          _actors = new ActorManager();
+          _actors = new EntityManager<Actor>("actors", "actor", KeySequence.ActorSequence);
 
         return _actors;
+      }
+    }
+
+    /// <summary>
+    /// Gets the image manager that contains all images.
+    /// </summary>
+    public static EntityManager<ImageContent> Images
+    {
+      get
+      {
+        if (_images == null)
+        {
+          _images = new EntityManager<ImageContent>("images", "image", KeySequence.ImageSequence);
+        }
+        return _images;
       }
     }
 

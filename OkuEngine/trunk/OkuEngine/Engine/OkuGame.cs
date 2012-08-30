@@ -147,71 +147,40 @@ namespace OkuEngine
           XmlDocument config = new XmlDocument();
           config.Load(configHandle.Buffer);
 
-          XmlNode engineNode = null;
+          XmlNode rootNode = config.DocumentElement;
+
+          XmlNode engineNode = rootNode["engine"];
+          XmlNode gameNode = rootNode["game"];
+
           XmlNode attribsNode = null;
+          XmlNode imagesNode = null;
           XmlNode actorTypesNode = null;
           XmlNode scenesNode = null;
           XmlNode actorsNode = null;
-          
-          XmlNode rootNode = config.DocumentElement;
-          XmlNode topNode = rootNode.FirstChild;
 
-          while (topNode != null)
+          if (gameNode != null)
           {
-            switch (topNode.Name.ToLower())
-            {
-              case "engine":
-                engineNode = topNode;
-                break;
-
-              case "game":
-                XmlNode gameNode = topNode.FirstChild;
-                while (gameNode != null)
-                {
-                  switch (gameNode.Name.ToLower())
-                  {
-                    case "attributes":
-                      attribsNode = gameNode;
-                      break;
-
-                    case "actortypes":
-                      actorTypesNode = gameNode;
-                      break;
-
-                    case "scenes":
-                      scenesNode = gameNode;
-                      break;
-
-                    case "actors":
-                      actorsNode = gameNode;
-                      break;
-
-                    default:
-                      break;
-                  }
-
-                  gameNode = gameNode.NextSibling;
-                }
-                break;
-
-              default:
-                break;
-            }
-
-            topNode = topNode.NextSibling;
+            attribsNode = rootNode["attributes"];
+            imagesNode = rootNode["images"];
+            actorTypesNode = rootNode["actortypes"];
+            scenesNode = rootNode["scenes"];
+            actorsNode = rootNode["actors"];
           }
 
           if (engineNode != null)
             LoadSettings(engineNode);
 
+          if (imagesNode != null)
+            OkuData.Images.Load(imagesNode);
+
           if (actorTypesNode != null)
-            LoadActorTypes(actorTypesNode);
+            OkuData.ActorTypes.Load(actorTypesNode);
 
           if (actorsNode != null)
-            LoadActors(actorsNode);
+            OkuData.Actors.Load(actorsNode);
           
           if (scenesNode != null)
-            LoadScenes(scenesNode);          
+            OkuData.SceneManager.Load(scenesNode);
 
           if (attribsNode != null)
           {
@@ -297,33 +266,6 @@ namespace OkuEngine
 
         child = child.NextSibling;
       }
-    }
-
-    /// <summary>
-    /// Loads the actor type from the given xml node.
-    /// </summary>
-    /// <param name="node">The xml node to read from.</param>
-    private void LoadActorTypes(XmlNode node)
-    {
-      OkuData.ActorTypes.Load(node);
-    }
-
-    /// <summary>
-    /// Loads the scenes from the given xml node.
-    /// </summary>
-    /// <param name="node">The xml node to read from.</param>
-    private void LoadScenes(XmlNode node)
-    {
-      OkuData.SceneManager.Load(node);
-    }
-
-    /// <summary>
-    /// Loads the actors from the given xml node.
-    /// </summary>
-    /// <param name="node">The xml node to read from.</param>
-    private void LoadActors(XmlNode node)
-    {
-      OkuData.Actors.Load(node);
     }
 
     /// <summary>

@@ -11,6 +11,8 @@ namespace OkuEngine
   /// </summary>
   internal static class KeySequence
   {
+    public const int InvalidId = 0;
+
     //Default system sequences
     public const string ActorSequence = "actors";
     public const string ActorTypeSequence = "actortypes";
@@ -23,6 +25,8 @@ namespace OkuEngine
     public const string WidgetSequence = "widgets";
     public const string ParticleSequence = "particles";
     public const string ScriptSequence = "scripts";
+
+    //TODO: Find a better name. Everything is an entity!
     public const string EntitySequence = "entities"; //collision world
 
     private static Dictionary<string, int> _sequences = new Dictionary<string, int>();
