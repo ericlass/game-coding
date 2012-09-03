@@ -130,7 +130,12 @@ namespace OkuEngine
       {
         ResourceHandle handle = OkuData.ResourceCache.GetHandle(new Resource(_resource));
         if (handle != null)
-          OkuManagers.Renderer.InitImageContent(this, (handle.Extras as TextureExtraData).Image);
+        {
+          Bitmap bm = (handle.Extras as TextureExtraData).Image;
+          OkuManagers.Renderer.InitImageContent(this, bm);
+          _width = bm.Width;
+          _height = bm.Height;
+        }
         else
         {
           OkuManagers.Logger.LogError("Image resource '" + _resource + "' was not found!");

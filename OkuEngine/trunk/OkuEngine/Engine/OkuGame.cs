@@ -93,7 +93,7 @@ namespace OkuEngine
           Kernel32.QueryPerformanceCounter(out perf2);
           float renderTime = (perf2 - perf1) / (float)freq;
 
-          System.Diagnostics.Debug.WriteLine("Update: " + updateTime.ToString("0.######") + " | Render: " + renderTime.ToString("0.######"));
+          //System.Diagnostics.Debug.WriteLine("Update: " + updateTime.ToString("0.######") + " | Render: " + renderTime.ToString("0.######"));
         }
       }
 
@@ -160,11 +160,11 @@ namespace OkuEngine
 
           if (gameNode != null)
           {
-            attribsNode = rootNode["attributes"];
-            imagesNode = rootNode["images"];
-            actorTypesNode = rootNode["actortypes"];
-            scenesNode = rootNode["scenes"];
-            actorsNode = rootNode["actors"];
+            attribsNode = gameNode["attributes"];
+            imagesNode = gameNode["images"];
+            actorTypesNode = gameNode["actortypes"];
+            scenesNode = gameNode["scenes"];
+            actorsNode = gameNode["actors"];
           }
 
           if (engineNode != null)
@@ -187,6 +187,8 @@ namespace OkuEngine
             LoadGameAttribs(attribsNode);
             if (_startScene > 0)
               OkuData.SceneManager.SetActiveScene(_startScene);
+            else
+              OkuData.SceneManager.SetActiveScene(new OkuEngine.Scene.Scene(-1, "Empty Scene"));
           }
 
           Initialize();

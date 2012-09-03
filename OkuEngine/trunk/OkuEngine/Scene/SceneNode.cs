@@ -294,11 +294,14 @@ namespace OkuEngine.Scene
         XmlNode child = nodesNode.FirstChild;
         while (child != null)
         {
-          SceneNode kid = new SceneNode();
-          if (kid.Load(child))
-            kid.SetParent(this);
-          else
-            return false;
+          if (child.Name.ToLower() == "node")
+          {
+            SceneNode kid = new SceneNode();
+            if (kid.Load(child))
+              kid.SetParent(this);
+            else
+              return false;
+          }
           child = child.NextSibling;
         }
       }
