@@ -139,7 +139,7 @@ namespace OkuEngine.Scene
         Actor actor = OkuData.Actors[_props.ActorId];
         if (actor != null)
         {
-          ActorComponent comp = actor.Type.GetComponent(RenderComponent.ComponentId);
+          ActorComponent comp = actor.GetComponent(RenderComponent.ComponentId);
           if (comp != null && comp is RenderComponent)
           {
             _renderComp = comp as RenderComponent;

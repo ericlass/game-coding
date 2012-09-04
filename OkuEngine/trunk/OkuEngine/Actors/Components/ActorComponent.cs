@@ -10,12 +10,12 @@ namespace OkuEngine.Actors.Components
   /// </summary>
   public abstract class ActorComponent : IStoreable
   {
-    protected ActorType _owner = null;
+    protected Actor _owner = null;
 
     /// <summary>
     /// Gets or sets the actor type this component belongs to.
     /// </summary>
-    internal ActorType Owner
+    internal Actor Owner
     {
       get { return _owner; }
       set { _owner = value; }

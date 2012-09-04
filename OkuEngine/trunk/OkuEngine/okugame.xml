@@ -15,94 +15,93 @@
       <volume>1.0</volume>
     </sound>
   </engine>
- 
+
   <game>
     <attributes>
       <name>GCC Test</name>
-      <startscene>1</startscene> <!-- References scene by id -->
+      <startscene>1</startscene>
+      <!-- References scene by id -->
     </attributes>
 
     <images>
       <image>
         <id>1</id>
         <name>Yin-Yang</name>
-        <resource>yinyang.png</resource> <!-- Optional for render targets -->
+        <resource>yinyang.png</resource>
+        <!-- Optional for render targets -->
       </image>
       <image>
         <id>2</id>
         <name>Car</name>
-        <resource>car.png</resource> <!-- Optional for render targets -->
+        <resource>car.png</resource>
+        <!-- Optional for render targets -->
       </image>
     </images>
-    
-    <behaviors>
-      <behavior>
-        <id></id>
-        <name></name>
-        ...
-      </behavior>
-    </behaviors>
-    
-    <actortypes>
-      <actortype>
-        <id>1</id>
-        <name>Yin-Yang</name>
-        <components>
-          <renderable type="mesh">
-            <points>-24,24;24,24;24,-24;-24,-24</points> <!-- A list of vectors for vertex positions -->
-            <texcoords>0,1;1,1;1,0;0,0</texcoords> <!-- A list of vectors for vertex texture coordinates -->
-            <colors>255,255,255,255;255,255,255,255;255,255,255,255;255,255,255,255</colors> <!-- A list of colors for vertex colors -->
-            <mode>Quads</mode> <!-- The mesh mode (Triangles, Quads, Line...) -->
-            <image>1</image> <!-- The texture to use (image id) -->
-          </renderable>
-        </components>
-      </actortype>
-      
-      <actortype>
-        <id>2</id>
-        <name>Car</name>
-        <components>
-          <renderable type="image">
-            <image>2</image> <!-- The texture to use (image id) -->
-            <color>255,255,255,255</color> <!-- Tint color. Can be left out for black -->
-          </renderable>
-        </components>
-      </actortype>
-
-      <actortype>
-        <id>3</id>
-        <name>Colored Lines</name>
-        <components>
-          <renderable type="line">
-            <points>-24,24;24,24;24,-24;-24,-24</points> <!-- A list of vectors for vertex positions -->
-            <colors>0,255,255,255;255,0,255,255;255,255,0,255;255,255,255,255</colors> <!-- A list of colors for vertex colors -->
-            <closed>yes</closed> <!-- Determines if the last point is connected to the first point -->
-            <width>2</width>
-          </renderable>
-        </components>
-      </actortype>
-
-      <actortype>
-        <id>4</id>
-        <name>Colored Points</name>
-        <components>
-          <renderable type="point">
-            <points>-24,24;24,24;24,-24;-24,-24</points> <!-- A list of vectors for vertex positions -->
-            <colors>0,255,255,255;255,0,255,255;255,255,0,255;255,255,255,255;</colors> <!-- A list of colors for vertex colors -->
-            <size>4</size>
-          </renderable>
-        </components>
-      </actortype>
-    </actortypes>
 
     <actors>
       <actor>
         <id>1</id>
-        <name>YY01</name>
-        <type>3</type> <!-- References the actor type by its id -->
+        <name>Car</name>
+        <components>
+          <renderable type="image">
+            <image>2</image>
+            <!-- The texture to use (image id) -->
+            <color>255,255,255,255</color>
+            <!-- Tint color. Can be left out for black -->
+          </renderable>
+        </components>
+      </actor>
+
+      <actor>
+        <id>2</id>
+        <name>Lines</name>
+        <components>
+          <renderable type="line">
+            <points>-24,24;24,24;24,-24;-24,-24</points>
+            <!-- A list of vectors for vertex positions -->
+            <colors>0,255,255,255;255,0,255,255;255,255,0,255;255,255,255,255</colors>
+            <!-- A list of colors for vertex colors -->
+            <closed>yes</closed>
+            <!-- Determines if the last point is connected to the first point -->
+            <width>2</width>
+          </renderable>
+        </components>
+      </actor>
+
+      <actor>
+        <id>3</id>
+        <name>Points</name>
+        <components>
+          <renderable type="point">
+            <points>-24,24;24,24;24,-24;-24,-24</points>
+            <!-- A list of vectors for vertex positions -->
+            <colors>0,255,255,255;255,0,255,255;255,255,0,255;255,255,255,255;</colors>
+            <!-- A list of colors for vertex colors -->
+            <size>4</size>
+          </renderable>
+        </components>
+      </actor>
+
+      <actor>
+        <id>4</id>
+        <name>Mesh</name>
+        <components>
+          <renderable type="mesh">
+            <points>-24,24;24,24;24,-24;-24,-24</points>
+            <!-- A list of vectors for vertex positions -->
+            <texcoords>0,1;1,1;1,0;0,0</texcoords>
+            <!-- A list of vectors for vertex texture coordinates -->
+            <colors>255,255,255,255;255,255,255,255;255,255,255,255;255,255,255,255</colors>
+            <!-- A list of colors for vertex colors -->
+            <mode>Quads</mode>
+            <!-- The mesh mode (Triangles, Quads, Line...) -->
+            <image>1</image>
+            <!-- The texture to use (image id) -->
+          </renderable>
+        </components>
       </actor>
     </actors>
-    
+
     <scenes>
       <scene>
         <id>1</id>
@@ -113,12 +112,15 @@
             <name>Layer 01</name>
             <nodes>
               <node>
-                <actor>1</actor> <!-- References actor by id -->
-                <tint>255,255,255,255</tint> <!-- Tint color -->
-                <aabb>-24,-24;24,24</aabb> <!-- Min and Max values of the bounding box -->
+                <actor>1</actor>
+                <!-- References actor by id -->
+                <tint>255,255,255,255</tint>
+                <!-- Tint color -->
+                <aabb>-24,-24;24,24</aabb>
+                <!-- Min and Max values of the bounding box -->
                 <transform>
                   <position>0,0</position>
-                  <rotation>-10</rotation>
+                  <rotation>-15</rotation>
                   <scale>1,1</scale>
                 </transform>
                 <nodes>
@@ -135,7 +137,7 @@
     <actions>
       <action>
         <event>
-          <attributes>            
+          <attributes>
           </attributes>
         </event>
         <process>
@@ -145,6 +147,6 @@
         </process>
       </action>
     </actions>
-   
+
   </game>
 </okugame>

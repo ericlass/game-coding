@@ -74,7 +74,6 @@
     <Compile Include="Actors\Actor.cs" />
     <Compile Include="Actors\Components\ActorComponent.cs" />
     <Compile Include="Actors\Components\ActorComponentFactory.cs" />
-    <Compile Include="Actors\ActorType.cs" />
     <Compile Include="Actors\Components\HealthPickup.cs" />
     <Compile Include="Actors\Components\ImageRenderComponent.cs" />
     <Compile Include="Actors\Components\LineRenderComponent.cs" />

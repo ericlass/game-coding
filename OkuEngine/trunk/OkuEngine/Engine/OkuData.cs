@@ -17,7 +17,6 @@ namespace OkuEngine
     private static VariableList _locals = null;
     private static ResourceCache _resources = null;
     private static SceneManager _sceneManager = null;
-    private static EntityManager<ActorType> _actorTypes = null;
     private static EntityManager<Actor> _actors = null;
     private static EntityManager<ImageContent> _images = null;
 
@@ -69,20 +68,6 @@ namespace OkuEngine
           _sceneManager = new SceneManager();
         }
         return _sceneManager;
-      }
-    }
-
-    /// <summary>
-    /// Gets the actor type manager that contains all actor types.
-    /// </summary>
-    public static EntityManager<ActorType> ActorTypes
-    {
-      get
-      {
-        if (_actorTypes == null)
-          _actorTypes = new EntityManager<ActorType>("actortypes", "actortype", KeySequence.ActorTypeSequence);
-
-        return _actorTypes;
       }
     }
 
