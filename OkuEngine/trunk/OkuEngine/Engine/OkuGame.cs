@@ -156,6 +156,7 @@ namespace OkuEngine
           XmlNode imagesNode = null;
           XmlNode scenesNode = null;
           XmlNode actorsNode = null;
+          XmlNode animationsNode = null;
 
           if (gameNode != null)
           {
@@ -163,6 +164,7 @@ namespace OkuEngine
             imagesNode = gameNode["images"];
             scenesNode = gameNode["scenes"];
             actorsNode = gameNode["actors"];
+            animationsNode = gameNode["animations"];
           }
 
           if (engineNode != null)
@@ -170,6 +172,9 @@ namespace OkuEngine
 
           if (imagesNode != null)
             OkuData.Images.Load(imagesNode);
+
+          if (animationsNode != null)
+            OkuData.Animations.Load(animationsNode);
 
           if (actorsNode != null)
             OkuData.Actors.Load(actorsNode);

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Xml;
 using System.Text;
 
 namespace OkuEngine
@@ -8,7 +8,7 @@ namespace OkuEngine
   /// <summary>
   /// Defines a frame based animation with dynamic frame times and frame rate independent perfect timing.
   /// </summary>
-  public class Animation
+  public class Animation : StoreableEntity
   {
     private List<AnimationFrame> _frames = null;
     private bool _loop = false;
@@ -108,6 +108,59 @@ namespace OkuEngine
           return _currentFrame >= _frames.Count - 1;
         return false;
       }
+    }
+
+    public override bool Load(XmlNode node)
+    {
+      if (!base.Load(node))
+        return false;
+
+      string value = node.GetTagValue("loop");
+      if (value != null)
+        _loop = Converter.StrToBool(value, _loop);
+
+      XmlNode framesNode = node["frames"];
+      if (framesNode != null)
+      {
+        XmlNode child = framesNode.FirstChild;
+        while (child != null)
+        {
+          if (child.NodeType == XmlNodeType.Element && child.Name.ToLower() == "frame")
+          {
+            AnimationFrame frame = new AnimationFrame();
+            if (!frame.Load(child))
+            {
+              return false;
+            }
+            _frames.Add(frame);
+          }
+
+          child = child.NextSibling;
+        }
+      }
+
+      return true;
+    }
+
+    public override bool Save(XmlWriter writer)
+    {
+      writer.WriteStartElement("animation");
+
+      if (!base.Save(writer))
+        return false;
+
+      writer.WriteValueTag("loop", Converter.BoolToStr(_loop));
+
+      writer.WriteStartElement("frames");
+      foreach (AnimationFrame frame in _frames)
+      {
+        frame.Save(writer);
+      }
+      writer.WriteEndElement();
+
+      writer.WriteEndElement();
+
+      return true;
     }
 
   }

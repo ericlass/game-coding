@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Xml;
 using System.Text;
 
 namespace OkuEngine
@@ -8,7 +8,7 @@ namespace OkuEngine
   /// <summary>
   /// Defines one image of an animation with it's image and duration.
   /// </summary>
-  public class AnimationFrame
+  public class AnimationFrame : IStoreable
   {
     private ImageContent _image = null;
     private float _duration = 0.0f;
@@ -47,6 +47,54 @@ namespace OkuEngine
     {
       get { return _duration; }
       set { _duration = value; }
+    }
+
+    public bool Load(XmlNode node)
+    {
+      string value = node.GetTagValue("image");
+      if (value != null)
+      {
+        int imageId = 0;
+        if (int.TryParse(value, out imageId))
+        {
+          _image = OkuData.Images[imageId];
+        }
+      }
+
+      if (_image == null)
+      {
+        OkuManagers.Logger.LogError("Could not find image for animation frame!" + node.OuterXml);
+        return false;
+      }
+
+      value = node.GetTagValue("duration");
+      if (value != null)
+      {
+        int dur = 0;
+        if (int.TryParse(value, out dur))
+          _duration = dur;
+      }
+
+      if (_duration == 0.0f)
+      {
+        OkuManagers.Logger.LogError("No duration specified for animation frame!" + node.OuterXml);
+        return false;
+      }
+
+      return true;
+    }
+
+    public bool Save(XmlWriter writer)
+    {
+      writer.WriteStartElement("frame");
+
+      writer.WriteValueTag("image", _image.Id.ToString());
+      int dur = (int)_duration;
+      writer.WriteValueTag("duration", dur.ToString());
+
+      writer.WriteEndElement();
+
+      return true;
     }
 
   }

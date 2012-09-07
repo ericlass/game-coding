@@ -19,6 +19,7 @@ namespace OkuEngine
     private static SceneManager _sceneManager = null;
     private static EntityManager<Actor> _actors = null;
     private static EntityManager<ImageContent> _images = null;
+    private static EntityManager<Animation> _animations = null;
 
     /// <summary>
     /// Gets the global variable list.
@@ -97,6 +98,21 @@ namespace OkuEngine
           _images = new EntityManager<ImageContent>("images", "image", KeySequence.ImageSequence);
         }
         return _images;
+      }
+    }
+
+    /// <summary>
+    /// Gets the animation manager that contains all animations.
+    /// </summary>
+    public static EntityManager<Animation> Animations
+    {
+      get
+      {
+        if (_animations == null)
+        {
+          _animations = new EntityManager<Animation>("animations", "animation", KeySequence.AnimationSequence);
+        }
+        return _animations;
       }
     }
 

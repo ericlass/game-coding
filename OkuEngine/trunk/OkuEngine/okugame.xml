@@ -19,24 +19,42 @@
   <game>
     <attributes>
       <name>GCC Test</name>
-      <startscene>1</startscene>
       <!-- References scene by id -->
+      <startscene>1</startscene> 
     </attributes>
 
     <images>
       <image>
         <id>1</id>
         <name>Yin-Yang</name>
-        <resource>yinyang.png</resource>
         <!-- Optional for render targets -->
+        <resource>yinyang.png</resource> 
       </image>
       <image>
         <id>2</id>
         <name>Car</name>
-        <resource>car.png</resource>
         <!-- Optional for render targets -->
+        <resource>car.png</resource> 
       </image>
     </images>
+
+    <animations>
+      <animation>
+        <id>1</id>
+        <name>Switching</name>
+        <loop>yes</loop>
+        <frames>
+          <frame>
+            <image>1</image>
+            <duration>50</duration>
+          </frame>
+          <frame>
+            <image>2</image>
+            <duration>50</duration>
+          </frame>
+        </frames>
+      </animation>
+    </animations>
 
     <actors>
       <actor>
@@ -44,10 +62,10 @@
         <name>Car</name>
         <components>
           <renderable type="image">
-            <image>2</image>
             <!-- The texture to use (image id) -->
-            <color>255,255,255,255</color>
+            <image>2</image>
             <!-- Tint color. Can be left out for black -->
+            <color>255,255,255,255</color>            
           </renderable>
         </components>
       </actor>
@@ -57,12 +75,12 @@
         <name>Lines</name>
         <components>
           <renderable type="line">
-            <points>-24,24;24,24;24,-24;-24,-24</points>
             <!-- A list of vectors for vertex positions -->
-            <colors>0,255,255,255;255,0,255,255;255,255,0,255;255,255,255,255</colors>
+            <points>-24,24;24,24;24,-24;-24,-24</points>
             <!-- A list of colors for vertex colors -->
-            <closed>yes</closed>
+            <colors>0,255,255,255;255,0,255,255;255,255,0,255;255,255,255,255</colors>
             <!-- Determines if the last point is connected to the first point -->
+            <closed>yes</closed>            
             <width>2</width>
           </renderable>
         </components>
@@ -73,10 +91,10 @@
         <name>Points</name>
         <components>
           <renderable type="point">
-            <points>-24,24;24,24;24,-24;-24,-24</points>
             <!-- A list of vectors for vertex positions -->
-            <colors>0,255,255,255;255,0,255,255;255,255,0,255;255,255,255,255;</colors>
+            <points>-24,24;24,24;24,-24;-24,-24</points>
             <!-- A list of colors for vertex colors -->
+            <colors>0,255,255,255;255,0,255,255;255,255,0,255;255,255,255,255;</colors>
             <size>4</size>
           </renderable>
         </components>
@@ -87,16 +105,16 @@
         <name>Mesh</name>
         <components>
           <renderable type="mesh">
-            <points>-24,24;24,24;24,-24;-24,-24</points>
             <!-- A list of vectors for vertex positions -->
-            <texcoords>0,1;1,1;1,0;0,0</texcoords>
+            <points>-24,24;24,24;24,-24;-24,-24</points>
             <!-- A list of vectors for vertex texture coordinates -->
-            <colors>255,255,255,255;255,255,255,255;255,255,255,255;255,255,255,255</colors>
+            <texcoords>0,1;1,1;1,0;0,0</texcoords>
             <!-- A list of colors for vertex colors -->
-            <mode>Quads</mode>
+            <colors>255,255,255,255;255,255,255,255;255,255,255,255;255,255,255,255</colors>
             <!-- The mesh mode (Triangles, Quads, Line...) -->
-            <image>1</image>
+            <mode>Quads</mode>
             <!-- The texture to use (image id) -->
+            <image>1</image>
           </renderable>
         </components>
       </actor>
@@ -112,19 +130,19 @@
             <name>Layer 01</name>
             <nodes>
               <node>
-                <actor>1</actor>
                 <!-- References actor by id -->
-                <tint>255,255,255,255</tint>
+                <actor>1</actor>
                 <!-- Tint color -->
-                <aabb>-24,-24;24,24</aabb>
+                <tint>255,255,255,255</tint>
                 <!-- Min and Max values of the bounding box -->
+                <aabb>-24,-24;24,24</aabb>
                 <transform>
                   <position>0,0</position>
                   <rotation>-15</rotation>
                   <scale>1,1</scale>
                 </transform>
                 <nodes>
-                  ... <!-- Child nodes -->
+                  <!-- Child nodes -->
                 </nodes>
               </node>
             </nodes>
