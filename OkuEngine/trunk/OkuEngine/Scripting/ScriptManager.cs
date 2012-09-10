@@ -1,61 +1,87 @@
 ﻿using System;
-using System.CodeDom;
-using System.CodeDom.Compiler;
-using System.Reflection;
-using Microsoft.CSharp;
+using Jurassic;
+using Jurassic.Library;
 
 namespace OkuEngine.Scripting
 {
+  /// <summary>
+  /// Handles compiling and error checking of scripts.
+  /// </summary>
   public class ScriptManager
   {
-    private CSharpCodeProvider _provider = new CSharpCodeProvider();
+    private const string ScriptFunctionName = "okuscriptfunc";
+    private const string ScriptCheckFunctionName = "okucompileckeckfunc";
 
+    private ScriptEngine _engine = null;
+
+    /// <summary>
+    /// Creates a new script manager.
+    /// </summary>
     public ScriptManager()
     {
+      _engine = new ScriptEngine();
+      _engine.ForceStrictMode = true; //Strict mode must be used to force local variables
     }
 
+    private string GetNextFunctionName()
+    {
+      return ScriptFunctionName + KeySequence.NextValue(KeySequence.ScriptSequence);
+    }
+
+    private string GetFinalScript(string scriptCode, string functionName)
+    {
+      //Create script function around code
+      string finalCode =
+        "function " + functionName + "()" +
+        Environment.NewLine + "{" + Environment.NewLine + scriptCode + Environment.NewLine + "}";
+
+      return finalCode;
+    }
+
+    /// <summary>
+    /// Compiles the given script and returns the result of the compilation
+    /// that can be used to run the script.
+    /// </summary>
+    /// <param name="code">The code of the script.</param>
+    /// <returns>The compiled script or null if an error occured.</returns>
     public ScriptInstance CompileScript(string code)
     {
-      string source =
-        "using System;\n" +
-        "using OkuEngine;\n" +
-        "\n" +
-        "namespace OkuScripts\n" +
-        "{\n" +
-        "  public class Script" + KeySequence.NextValue(KeySequence.ScriptSequence) +"\n" + //Append sequence number to script class name
-        "  {\n" +
-        code + "\n" +
-        "  }\n" +
-        "}\n";
+      string functionName = GetNextFunctionName();
 
-      CompilerParameters param = new CompilerParameters();
-      param.GenerateExecutable = false;
-      param.GenerateInMemory = true;
-      param.ReferencedAssemblies.Add(Assembly.GetExecutingAssembly().Location);
-      param.ReferencedAssemblies.Add(Assembly.GetAssembly(typeof(ScriptManager)).Location);
-
-      //JUST FOR TESTING!!!
-      //param.ReferencedAssemblies.Add("C:\\Windows\\Microsoft.NET\\Framework\\v2.0.50727\\System.Windows.Forms.dll");
-
-      CompilerResults result = _provider.CompileAssemblyFromSource(param, source);
-
-      if (result.Errors.HasErrors)
+      //Compile script
+      try
       {
-        //throw script compile exception
+        _engine.Execute(GetFinalScript(code, functionName));
       }
-
-      if (result.Errors.HasWarnings)
+      catch (Exception ex)
       {
-        //log warnings
-      }
-
-      ScriptInstance instance = new ScriptInstance(result.CompiledAssembly);
-      if (!instance.Init())
-      {
-        //LOG: the error
+        OkuManagers.Logger.LogError("Script could not be compiled! Cause: " + ex.Message + Environment.NewLine + code);
         return null;
       }
-      return instance;
+
+      //Get handle to compiled function
+      FunctionInstance funcInst = _engine.GetGlobalValue<FunctionInstance>(functionName);
+
+      return new ScriptInstance(funcInst);
     }
+
+    /// <summary>
+    /// Checks if the given script code is compilable.
+    /// </summary>
+    /// <param name="code">The code to be checked.</param>
+    /// <returns>Null if the script is compiler clean, else the compiler error message.</returns>
+    public string CheckScript(string code)
+    {
+      try
+      {
+        _engine.Execute(GetFinalScript(code, ScriptCheckFunctionName));
+      }
+      catch (Exception ex)
+      {
+        return ex.Message;
+      }
+      return null;
+    }
+
   }
 }
