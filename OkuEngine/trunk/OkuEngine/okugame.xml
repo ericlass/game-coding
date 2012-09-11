@@ -22,7 +22,7 @@
       <!-- References scene by id -->
       <startscene>1</startscene> 
     </attributes>
-
+    
     <images>
       <image>
         <id>1</id>
@@ -55,6 +55,29 @@
         </frames>
       </animation>
     </animations>
+
+    <behaviors>
+      <behavior>
+        <id>1</id>
+        <name>Test Behavior</name>
+        <parameters>
+          <parameter>
+            <name>In01</name>
+            <type>Integer</type>
+            <input>yes</input>
+            <value>5</value>
+          </parameter>
+          <parameter>
+            <name>Out01</name>
+            <type>Integer</type>
+            <input>no</input>
+          </parameter>
+        </parameters>
+        <script>
+          <![CDATA[Out01 = In01 * 2;]]>
+        </script>
+      </behavior>
+    </behaviors>
 
     <actors>
       <actor>
@@ -150,21 +173,6 @@
         </layers>
       </scene>
     </scenes>
-
-    <!-- WIP! -->
-    <actions>
-      <action>
-        <event>
-          <attributes>
-          </attributes>
-        </event>
-        <process>
-          <classname></classname>
-          <attributes>
-          </attributes>
-        </process>
-      </action>
-    </actions>
 
   </game>
 </okugame>

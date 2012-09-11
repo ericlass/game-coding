@@ -110,6 +110,9 @@
     <Compile Include="Scene\SceneManager.cs" />
     <Compile Include="Scene\SceneNode.cs" />
     <Compile Include="Scene\SceneNodeProperties.cs" />
+    <Compile Include="Scripting\Behavior.cs" />
+    <Compile Include="Scripting\Parameter.cs" />
+    <Compile Include="Scripting\ParameterType.cs" />
     <Compile Include="Scripting\ScriptInstance.cs" />
     <Compile Include="Scripting\ScriptManager.cs" />
     <Compile Include="Geometry\EarClipper.cs" />
