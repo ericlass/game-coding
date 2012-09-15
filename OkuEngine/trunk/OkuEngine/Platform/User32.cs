@@ -34,6 +34,8 @@ namespace OkuEngine
     public const uint WM_QUIT = 0x0012;
     public const uint WM_PAINT = 0x000F;
     public const uint WM_MOUSEWHEEL = 0x020A;
+    public const uint WM_KEYDOWN = 0x0100;
+    public const uint WM_KEYUP = 0x0101;
 
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]

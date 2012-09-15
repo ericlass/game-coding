@@ -90,6 +90,9 @@
     <Compile Include="Events\EventManager.cs" />
     <Compile Include="Events\EventTypes.cs" />
     <Compile Include="Events\IEventManager.cs" />
+    <Compile Include="Events\UserEvent.cs" />
+    <Compile Include="Input\InputManager.cs" />
+    <Compile Include="Input\KeyAction.cs" />
     <Compile Include="Processes\DelayProcess.cs" />
     <Compile Include="Processes\Process.cs" />
     <Compile Include="Processes\ProcessManager.cs" />
@@ -111,6 +114,7 @@
     <Compile Include="Scene\SceneNode.cs" />
     <Compile Include="Scene\SceneNodeProperties.cs" />
     <Compile Include="Scripting\Behavior.cs" />
+    <Compile Include="Scripting\OkuScriptManager.cs" />
     <Compile Include="Scripting\Parameter.cs" />
     <Compile Include="Scripting\ParameterType.cs" />
     <Compile Include="Scripting\ScriptInstance.cs" />
@@ -196,7 +200,7 @@
     <Compile Include="Platform\User32.cs" />
     <Compile Include="VariableList.cs" />
     <Compile Include="Geometry\Vector.cs" />
-    <Compile Include="Input\Input.cs" />
+    <Compile Include="Input\InputBase.cs" />
     <Compile Include="Input\JoystickInfo.cs" />
     <Compile Include="Input\JoystickInput.cs" />
     <Compile Include="Platform\Kernel32.cs" />

@@ -259,7 +259,21 @@ namespace OkuEngine.Scene
       {
         int test = 0;
         if (int.TryParse(value, out test))
+        {
           _props.ActorId = test;
+          Actor actor = OkuData.Actors[test];
+          if (actor != null)
+          {
+            if (actor.SceneNode != null)
+              OkuManagers.Logger.LogError("Trying to set the scene node of an actor (" + test + ") that already has a scene node!");
+            else
+              actor.SceneNode = this;
+          }
+          else
+          {
+            OkuManagers.Logger.LogError("No actor found with the id " + test + " while loading scene node! Is the initialization order correct?");
+          }
+        }
         else
           return false;
       }

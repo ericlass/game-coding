@@ -115,4 +115,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "D:\C#-Projekte\OkuEngine\OkuEngine\okugame.xml" $(TargetDir)content /D /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>

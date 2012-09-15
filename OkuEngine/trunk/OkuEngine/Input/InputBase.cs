@@ -5,13 +5,13 @@ namespace OkuEngine
   /// <summary>
   /// Handles all input of keyboard, mouse and joysticks.
   /// </summary>
-  public class Input
+  public class InputBase
   {
     private JoystickInput _joysticks = null;
     private KeyboardInput _keyboard = null;
     private MouseInput _mouse = null;
 
-    public Input()
+    public InputBase()
     {
     }
 

@@ -50,6 +50,16 @@ namespace OkuEngine
       }
     }
 
+    internal void SetX(float x)
+    {
+      _translation.X = x;
+    }
+
+    internal void SetY(float y)
+    {
+      _translation.Y = y;
+    }
+
     /// <summary>
     /// Gets or sets the rotation angle in degrees.
     /// </summary>

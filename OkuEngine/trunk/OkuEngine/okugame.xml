@@ -22,6 +22,21 @@
       <!-- References scene by id -->
       <startscene>1</startscene> 
     </attributes>
+
+    <userevents>
+      <event>
+        <id>100001</id>
+        <name>Steer Left</name>
+      </event>
+    </userevents>
+
+    <keybindings>
+      <binding>
+        <key>A</key>
+        <action>Down</action>
+        <event>100001</event>
+      </binding>
+    </keybindings>
     
     <images>
       <image>

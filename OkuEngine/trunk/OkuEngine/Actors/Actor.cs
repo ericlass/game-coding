@@ -13,6 +13,7 @@ namespace OkuEngine.Actors
   public class Actor : StoreableEntity
   {
     private Dictionary<int, ActorComponent> _components = null; //Is created lazylly in the getter. Some actors might not need it.
+    private SceneNode _sceneNode = null;
 
     /// <summary>
     /// Creates a new actor.
@@ -60,6 +61,15 @@ namespace OkuEngine.Actors
         }
         return _components;
       }
+    }
+
+    /// <summary>
+    /// Gets or sets the scene node that is associated with this actor.
+    /// </summary>
+    public SceneNode SceneNode
+    {
+      get { return _sceneNode; }
+      set { _sceneNode = value; }
     }
 
     /// <summary>

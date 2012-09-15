@@ -27,6 +27,7 @@ namespace OkuEngine
     /// </summary>
     public KeyboardInput()
     {
+
     }
 
     /// <summary>

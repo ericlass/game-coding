@@ -5,6 +5,8 @@ using System.Text;
 using OkuEngine.Scene;
 using OkuEngine.Resources;
 using OkuEngine.Actors;
+using OkuEngine.Input;
+using OkuEngine.Events;
 
 namespace OkuEngine
 {
@@ -20,6 +22,7 @@ namespace OkuEngine
     private static EntityManager<Actor> _actors = null;
     private static EntityManager<ImageContent> _images = null;
     private static EntityManager<Animation> _animations = null;
+    private static EntityManager<UserEvent> _userEvents = null;
 
     /// <summary>
     /// Gets the global variable list.
@@ -113,6 +116,21 @@ namespace OkuEngine
           _animations = new EntityManager<Animation>("animations", "animation", KeySequence.AnimationSequence);
         }
         return _animations;
+      }
+    }
+
+    /// <summary>
+    /// Gets the manager that stores all user defined events.
+    /// </summary>
+    public static EntityManager<UserEvent> UserEvents
+    {
+      get
+      {
+        if (_userEvents == null)
+        {
+          _userEvents = new EntityManager<UserEvent>("userevents", "event", KeySequence.UserEventSequence);
+        }
+        return _userEvents;
       }
     }
 

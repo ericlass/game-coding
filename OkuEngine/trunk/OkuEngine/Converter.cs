@@ -108,6 +108,34 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Tries to parse the given string into a member of the given enum type.
+    /// </summary>
+    /// <typeparam name="T">The type of the enum.</typeparam>
+    /// <param name="str">The string to be parsed.</param>
+    /// <param name="result">If true is returned, the parsed enum member is returned here.</param>
+    /// <returns>True if the string was parsed successful, else false.</returns>
+    public static bool TryParseEnum<T>(string str, out T result)
+    {
+      result = default(T);
+      if (typeof(T).IsEnum)
+      {
+        foreach (T value in Enum.GetValues(typeof(T)))
+        {
+          if (value.ToString().Equals(str, StringComparison.OrdinalIgnoreCase))
+          {
+            result = value;
+            return true;
+          }
+        }
+      }
+      else
+      {
+        throw new ArgumentException("Generic parameter type must be an enum!");
+      }
+      return false;
+    }
+
+    /// <summary>
     /// Converts the given string to a boolean value.
     /// "yes" is converted to true and "no" is converted to false.
     /// If the string is neither "yes" nor "no", defaultIfNull is returned.

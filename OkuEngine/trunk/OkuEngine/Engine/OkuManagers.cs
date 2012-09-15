@@ -5,6 +5,7 @@ using OkuEngine.Events;
 using OkuEngine.Scripting;
 using OkuEngine.Driver.Renderer;
 using OkuEngine.Logging;
+using OkuEngine.Input;
 
 namespace OkuEngine
 {
@@ -13,23 +14,24 @@ namespace OkuEngine
   /// </summary>
   public static class OkuManagers
   {
-    private static Input _input = null;
+    private static InputBase _input = null;
     private static ISoundEngine _sound = null;
     private static IRenderer _renderer = null;
     private static ProcessManager _processManager = null;
     private static IEventManager _eventManager = null;
     private static ScriptManager _scriptManager = null;
     private static Logger _logger = null;
+    private static InputManager _inputManager = null;
 
     /// <summary>
     /// Gets or sets the input handler.
     /// </summary>
-    public static Input Input
+    public static InputBase Input
     {
       get 
       {
         if (_input == null)
-          _input = new Input();
+          _input = new InputBase();
         return _input;
       }
       set { _input = value; }
@@ -87,6 +89,15 @@ namespace OkuEngine
     {
       get { return _logger; }
       set { _logger = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the input manager that is used.
+    /// </summary>
+    public static InputManager InputManager
+    {
+      get { return _inputManager; }
+      set { _inputManager = value; }
     }
 
   }

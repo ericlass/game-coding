@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
+using System.Windows.Forms;
 using OkuEngine.Driver.Audio;
 using OkuEngine.Actors;
 using OkuEngine.Scene;
@@ -12,6 +13,7 @@ using OkuEngine.Events;
 using OkuEngine.Scripting;
 using OkuEngine.Driver.Renderer;
 using OkuEngine.Logging;
+using OkuEngine.Input;
 
 namespace OkuEngine
 {
@@ -70,6 +72,20 @@ namespace OkuEngine
           else if (msg.msg == User32.WM_MOUSEWHEEL)
           {
             _mouseDelta = (int)(msg.wParam) >> 16;
+          }
+          else if (msg.msg == User32.WM_KEYDOWN)
+          {
+            if (OkuManagers.InputManager != null)
+            {
+              OkuManagers.InputManager.FireKeyAction((Keys)msg.wParam, KeyAction.Down);
+            }
+          }
+          else if (msg.msg == User32.WM_KEYUP)
+          {
+            if (OkuManagers.InputManager != null)
+            {
+              OkuManagers.InputManager.FireKeyAction((Keys)msg.wParam, KeyAction.Up);
+            }
           }
           else
           {
@@ -131,7 +147,13 @@ namespace OkuEngine
       OkuManagers.Logger.AddWriter(new DebugConsoleLogWriter());
 
       OkuManagers.EventManager = new EventManager("OkuMainEventManager");
-      OkuManagers.ScriptManager = new ScriptManager();
+
+      OkuManagers.InputManager = new InputManager();
+
+      OkuScriptManager scriptManager = new OkuScriptManager();
+      scriptManager.Initialize();
+      OkuManagers.ScriptManager = scriptManager;
+
       OkuManagers.ProcessManager = new ProcessManager();
 
       ResourceCacheParams resParams = new ResourceCacheParams();
@@ -157,6 +179,8 @@ namespace OkuEngine
           XmlNode scenesNode = null;
           XmlNode actorsNode = null;
           XmlNode animationsNode = null;
+          XmlNode inputBindingsNode = null;
+          XmlNode userEventsNode = null;
 
           if (gameNode != null)
           {
@@ -165,10 +189,18 @@ namespace OkuEngine
             scenesNode = gameNode["scenes"];
             actorsNode = gameNode["actors"];
             animationsNode = gameNode["animations"];
+            inputBindingsNode = gameNode["keybindings"];
+            userEventsNode = gameNode["userevents"];
           }
 
           if (engineNode != null)
             LoadSettings(engineNode);
+
+          if (userEventsNode != null)
+            OkuData.UserEvents.Load(userEventsNode);
+
+          if (inputBindingsNode != null)
+            OkuManagers.InputManager.Load(inputBindingsNode);
 
           if (imagesNode != null)
             OkuData.Images.Load(imagesNode);

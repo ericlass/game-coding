@@ -13,7 +13,7 @@ namespace OkuEngine.Scripting
     private const string ScriptFunctionName = "okuscriptfunc";
     private const string ScriptCheckFunctionName = "okucompileckeckfunc";
 
-    private ScriptEngine _engine = null;
+    protected ScriptEngine _engine = null;
 
     /// <summary>
     /// Creates a new script manager.
