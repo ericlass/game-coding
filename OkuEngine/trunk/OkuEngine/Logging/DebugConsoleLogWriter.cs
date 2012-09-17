@@ -8,7 +8,7 @@ namespace OkuEngine.Logging
   {
     public void WriteLine(LogEntry entry)
     {
-      System.Diagnostics.Debug.Write(entry.Message);
+      System.Diagnostics.Debug.WriteLine(entry.Message);
     }
   }
 }

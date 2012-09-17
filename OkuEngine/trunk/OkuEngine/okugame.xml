@@ -34,6 +34,9 @@
       <binding>
         <key>A</key>
         <action>Down</action>
+        <!-- If "yes", event is triggered every frame while the button is hold down.
+             If "no, event is only triggered once when the button is pressed down."-->
+        <state>yes</state>
         <event>100001</event>
       </binding>
     </keybindings>
@@ -75,22 +78,17 @@
       <behavior>
         <id>1</id>
         <name>Test Behavior</name>
-        <parameters>
-          <parameter>
-            <name>In01</name>
-            <type>Integer</type>
-            <input>yes</input>
-            <value>5</value>
-          </parameter>
-          <parameter>
-            <name>Out01</name>
-            <type>Integer</type>
-            <input>no</input>
-          </parameter>
-        </parameters>
-        <script>
-          <![CDATA[Out01 = In01 * 2;]]>
-        </script>
+        <handlers>
+          <handler>
+            <event>100001</event>
+            <script>
+              <![CDATA[
+              var actor = new Actor(1);
+              actor.setAngle(actor.getAngle() + (90 * timeDelta));
+              ]]>
+            </script>
+          </handler>
+        </handlers>        
       </behavior>
     </behaviors>
 

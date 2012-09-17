@@ -7,6 +7,7 @@ using OkuEngine.Resources;
 using OkuEngine.Actors;
 using OkuEngine.Input;
 using OkuEngine.Events;
+using OkuEngine.Scripting;
 
 namespace OkuEngine
 {
@@ -23,6 +24,7 @@ namespace OkuEngine
     private static EntityManager<ImageContent> _images = null;
     private static EntityManager<Animation> _animations = null;
     private static EntityManager<UserEvent> _userEvents = null;
+    private static EntityManager<Behavior> _behaviors = null;
 
     /// <summary>
     /// Gets the global variable list.
@@ -68,9 +70,8 @@ namespace OkuEngine
       get
       {
         if (_sceneManager == null)
-        {
           _sceneManager = new SceneManager();
-        }
+
         return _sceneManager;
       }
     }
@@ -97,9 +98,8 @@ namespace OkuEngine
       get
       {
         if (_images == null)
-        {
           _images = new EntityManager<ImageContent>("images", "image", KeySequence.ImageSequence);
-        }
+
         return _images;
       }
     }
@@ -112,9 +112,8 @@ namespace OkuEngine
       get
       {
         if (_animations == null)
-        {
           _animations = new EntityManager<Animation>("animations", "animation", KeySequence.AnimationSequence);
-        }
+
         return _animations;
       }
     }
@@ -127,10 +126,23 @@ namespace OkuEngine
       get
       {
         if (_userEvents == null)
-        {
           _userEvents = new EntityManager<UserEvent>("userevents", "event", KeySequence.UserEventSequence);
-        }
+
         return _userEvents;
+      }
+    }
+
+    /// <summary>
+    /// Gets the manager that contains all behaviors.
+    /// </summary>
+    public static EntityManager<Behavior> Behaviors
+    {
+      get
+      {
+        if (_behaviors == null)
+          _behaviors = new EntityManager<Behavior>("behaviors", "behavior", KeySequence.BehaviorSequence);
+
+        return _behaviors;
       }
     }
 

@@ -2,50 +2,76 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using OkuEngine.Events;
 
 namespace OkuEngine.Scripting
 {
   public class Behavior : StoreableEntity
   {
-    private ScriptInstance _script = null;
-    private Parameter[] _parameters = null;
+    private Dictionary<int, List<ScriptInstance>> _handlers = new Dictionary<int, List<ScriptInstance>>();
 
     public Behavior()
     {
     }
 
-    public void Execute()
+    public void EventReceived(int eventId, object data)
     {
-      _script.Run();
+      if (_handlers.ContainsKey(eventId))
+      {
+        foreach (ScriptInstance script in _handlers[eventId])
+        {
+          script.Run();
+        }
+      }
     }
 
-    public ScriptInstance Script
+    private void AddHandler(int eventId, ScriptInstance script)
     {
-      get { return _script; }
-      set { _script = value; }
+      if (!_handlers.ContainsKey(eventId))
+        _handlers.Add(eventId, new List<ScriptInstance>());
+
+      _handlers[eventId].Add(script);
+      OkuManagers.EventManager.AddListener(eventId, new EventListenerDelegate(EventReceived));
     }
 
-    private Parameter[] LoadParameters(XmlNode node)
+    public bool LoadHandlers(XmlNode node)
     {
-      List<Parameter> inputs = new List<Parameter>();
-
       XmlNode child = node.FirstChild;
       while (child != null)
       {
-        if (child.NodeType == XmlNodeType.Element && child.Name.ToLower() == "parameter")
+        if (child.NodeType == XmlNodeType.Element && child.Name.ToLower() == "handler")
         {
-          Parameter param = new Parameter();
-          if (param.Load(child))
-            inputs.Add(param);
+          int eventId = 0;
+          ScriptInstance script = null;
+
+          string value = child.GetTagValue("event");
+          if (value != null)
+          {
+            if (int.TryParse(value, out eventId))
+            {
+              value = child.GetTagValue("script");
+              if (value != null)
+              {
+                script = OkuManagers.ScriptManager.CompileScript(value, null);
+                if (script != null)
+                {
+                  AddHandler(eventId, script);                
+                }
+              }
+            }
+          }
+
+          if (eventId == 0 || script == null)
+          {
+            OkuManagers.Logger.LogError("Behavior " + Name + " has an invalid handler!");
+            return false;
+          }
         }
 
         child = child.NextSibling;
       }
 
-      if (inputs.Count > 0)
-        return inputs.ToArray();
-      else
-        return null;
+      return true;
     }
 
     public override bool Load(XmlNode node)
@@ -53,35 +79,18 @@ namespace OkuEngine.Scripting
       if (!base.Load(node))
         return false;
 
-      XmlNode paramsNode = node["parameters"];
-      if (paramsNode != null)
-        _parameters = LoadParameters(paramsNode);
-
-      string script = node.GetTagValue("script");
-      if (script != null)
+      XmlNode handlers = node["handlers"];
+      if (handlers != null)
       {
-        ScriptInstance scriptInst = OkuManagers.ScriptManager.CompileScript(script, _parameters);
-        if (scriptInst != null)
-          _script = scriptInst;
-        else
+        if (!LoadHandlers(handlers))
           return false;
       }
       else
       {
-        OkuManagers.Logger.LogError("No script defined for behavior " + _name + "!");
+        OkuManagers.Logger.LogError("No handlers defined for behavior " + _name + "!");
         return false;
       }
 
-      return true;
-    }
-
-    private bool SaveParameters(XmlWriter writer, Parameter[] parameters)
-    {
-      foreach (Parameter param in parameters)
-      {
-        if (!param.Save(writer))
-          return false;
-      }
       return true;
     }
 
@@ -92,15 +101,22 @@ namespace OkuEngine.Scripting
       if (!base.Save(writer))
         return false;
 
-      if (_parameters != null && _parameters.Length > 0)
+      writer.WriteStartElement("handlers");
+      foreach (KeyValuePair<int, List<ScriptInstance>> handler in _handlers)
       {
-        writer.WriteStartElement("parameters");
-        SaveParameters(writer, _parameters);
-        writer.WriteEndElement();
-      }
+        foreach (ScriptInstance script in handler.Value)
+        {
+          writer.WriteStartElement("handler");
+          
+          writer.WriteValueTag("event", handler.Key.ToString());
 
-      writer.WriteStartElement("script");
-      writer.WriteCData(_script.Source);
+          writer.WriteStartElement("script");
+          writer.WriteCData(script.Source);
+          writer.WriteEndElement();
+
+          writer.WriteEndElement();
+        }        
+      }
       writer.WriteEndElement();
 
       writer.WriteEndElement();

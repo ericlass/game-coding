@@ -103,5 +103,9 @@ namespace OkuEngine.Scripting
       return null;
     }
 
+    public virtual void Update(float dt)
+    {
+    }
+
   }
 }

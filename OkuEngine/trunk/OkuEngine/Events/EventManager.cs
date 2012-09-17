@@ -85,7 +85,7 @@ namespace OkuEngine.Events
 
     public bool QueueEvent(int eventType, object eventData)
     {
-      if (eventData != null && _listeners.ContainsKey(eventType))
+      if (_listeners.ContainsKey(eventType))
       {
         Event ev;
 

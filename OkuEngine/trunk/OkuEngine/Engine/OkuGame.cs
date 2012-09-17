@@ -77,14 +77,14 @@ namespace OkuEngine
           {
             if (OkuManagers.InputManager != null)
             {
-              OkuManagers.InputManager.FireKeyAction((Keys)msg.wParam, KeyAction.Down);
+              OkuManagers.InputManager.OnKeyAction((Keys)msg.wParam, KeyAction.Down);
             }
           }
           else if (msg.msg == User32.WM_KEYUP)
           {
             if (OkuManagers.InputManager != null)
             {
-              OkuManagers.InputManager.FireKeyAction((Keys)msg.wParam, KeyAction.Up);
+              OkuManagers.InputManager.OnKeyAction((Keys)msg.wParam, KeyAction.Up);
             }
           }
           else
@@ -181,6 +181,7 @@ namespace OkuEngine
           XmlNode animationsNode = null;
           XmlNode inputBindingsNode = null;
           XmlNode userEventsNode = null;
+          XmlNode behaviorsNode = null;
 
           if (gameNode != null)
           {
@@ -191,6 +192,7 @@ namespace OkuEngine
             animationsNode = gameNode["animations"];
             inputBindingsNode = gameNode["keybindings"];
             userEventsNode = gameNode["userevents"];
+            behaviorsNode = gameNode["behaviors"];
           }
 
           if (engineNode != null)
@@ -201,6 +203,9 @@ namespace OkuEngine
 
           if (inputBindingsNode != null)
             OkuManagers.InputManager.Load(inputBindingsNode);
+
+          if (behaviorsNode != null)
+            OkuData.Behaviors.Load(behaviorsNode);
 
           if (imagesNode != null)
             OkuData.Images.Load(imagesNode);
@@ -317,8 +322,11 @@ namespace OkuEngine
     /// <param name="dt"></param>
     public void DoUpdate(float dt)
     {
+      OkuManagers.ScriptManager.Update(dt);
+
       OkuManagers.SoundEngine.Update(dt);
       OkuManagers.Input.Update();
+      OkuManagers.InputManager.Update();
       OkuManagers.Input.Mouse.WheelDelta = _mouseDelta / 120.0f;
       _mouseDelta = 0;
 

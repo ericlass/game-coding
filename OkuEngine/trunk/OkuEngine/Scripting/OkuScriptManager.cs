@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
+using System.IO;
 
 namespace OkuEngine.Scripting
 {
@@ -10,33 +12,6 @@ namespace OkuEngine.Scripting
   /// </summary>
   public class OkuScriptManager : ScriptManager
   {
-    private const string ActorClass =
-      "// Actor class\n" +
-      "function Actor(actorId)\n" +
-      "{\n" +
-      "  this.actorId = actorId;\n" +
-      "  \n" +
-      "  this.getX = function()\n" +
-      "  {\n" +
-      "    return oku_getActorX(this.actorId);\n" +
-      "  }\n" +
-      "\n" +
-      "  this.getY = function()\n" +
-      "  {\n" +
-      "    return oku_getActorY(this.actorId);\n" +
-      "  }\n" +
-      "\n" +
-      "  this.setX = function()\n" +
-      "  {\n" +
-      "    return oku_setActorX(this.actorId);\n" +
-      "  }\n" +
-      "\n" +
-      "  this.setY = function()\n" +
-      "  {\n" +
-      "    return oku_setActorY(this.actorId);\n" +
-      "  }  \n" +
-      "}";
-
     /// <summary>
     /// Initializes the basic runtime environment for the scripts.
     /// Sets up classes and functions to be used by scripts.
@@ -49,7 +24,27 @@ namespace OkuEngine.Scripting
       _engine.SetGlobalFunction("oku_setActorX", new Action<int, double>((actorId, value) => OkuData.Actors[actorId].SceneNode.Properties.Transform.SetX((float)value)));
       _engine.SetGlobalFunction("oku_setActorY", new Action<int, double>((actorId, value) => OkuData.Actors[actorId].SceneNode.Properties.Transform.SetY((float)value)));
 
-      _engine.Execute(ActorClass);
+      _engine.SetGlobalFunction("oku_getActorAngle", new Func<int, double>((actorId) => OkuData.Actors[actorId].SceneNode.Properties.Transform.Rotation));
+      _engine.SetGlobalFunction("oku_setActorAngle", new Action<int, double>((actorId, value) => OkuData.Actors[actorId].SceneNode.Properties.Transform.Rotation = (float)value));
+
+      _engine.SetGlobalFunction("logMessage", new Action<string>((message) => OkuManagers.Logger.LogInfo(message)));
+
+      StreamReader reader = new StreamReader(Assembly.GetAssembly(typeof(OkuScriptManager)).GetManifestResourceStream("OkuEngine.OkuRuntime.js"));
+      string code = null;
+      try
+      {
+        code = reader.ReadToEnd();
+      }
+      finally
+      {
+        reader.Close();
+      }
+      _engine.Execute(code);
+    }
+
+    public override void Update(float dt)
+    {
+      _engine.SetGlobalValue("timeDelta", (double)dt);
     }
 
   }

@@ -8,29 +8,55 @@ namespace OkuEngine.Input
 {
   public class InputManager : IStoreable
   {
-    private Dictionary<KeyAction, Dictionary<Keys, int>> _keyBindings = new Dictionary<KeyAction, Dictionary<Keys, int>>();
+    private Dictionary<KeyAction, Dictionary<Keys, int>> _stateBindings = new Dictionary<KeyAction, Dictionary<Keys, int>>();
+    private Dictionary<KeyAction, Dictionary<Keys, int>> _stateChangeBindings = new Dictionary<KeyAction, Dictionary<Keys, int>>();
+    private Dictionary<Keys, KeyAction> _keyStates = new Dictionary<Keys, KeyAction>();
+    private Dictionary<Keys, int> _stateEvents = new Dictionary<Keys, int>();
 
     public InputManager()
     {
-      _keyBindings.Add(KeyAction.Down, new Dictionary<Keys, int>());
-      _keyBindings.Add(KeyAction.Up, new Dictionary<Keys, int>());
+      _stateChangeBindings.Add(KeyAction.Down, new Dictionary<Keys, int>());
+      _stateChangeBindings.Add(KeyAction.Up, new Dictionary<Keys, int>());
+
+      _stateBindings.Add(KeyAction.Down, new Dictionary<Keys, int>());
+      _stateBindings.Add(KeyAction.Up, new Dictionary<Keys, int>());
     }
 
-    public bool FireKeyAction(Keys key, KeyAction action)
+    public bool OnKeyAction(Keys key, KeyAction action)
     {
-      if (_keyBindings[action].ContainsKey(key))
+      bool handled = false;
+
+      if (!_keyStates.ContainsKey(key) || _keyStates[key] != action)
       {
-        OkuManagers.EventManager.QueueEvent(_keyBindings[action][key], null); //TODO: Maybe pass modifier keys as parameter?
-        return true;
-      }
-      return false;
+        if (_stateChangeBindings[action].ContainsKey(key))
+        {
+          OkuManagers.EventManager.QueueEvent(_stateChangeBindings[action][key], null); //TODO: Maybe pass modifier keys as parameter?
+          handled = true;
+        }
+
+        _stateEvents.Remove(key);
+
+        if (_stateBindings[action].ContainsKey(key))
+        {
+          _stateEvents.Add(key, _stateBindings[action][key]);
+        }
+
+        if (!_keyStates.ContainsKey(key))
+          _keyStates.Add(key, action);
+        else
+          _keyStates[key] = action;
+      }      
+
+      return handled;
     }
 
-    public bool AddBinding(Keys key, KeyAction action, int eventId)
+    public bool AddBinding(Keys key, KeyAction action, int eventId, bool state)
     {
-      if (!_keyBindings[action].ContainsKey(key))
+      Dictionary<KeyAction, Dictionary<Keys, int>> bindings = state ? _stateBindings : _stateChangeBindings;
+
+      if (!bindings[action].ContainsKey(key))
       {
-        _keyBindings[action].Add(key, eventId);
+        bindings[action].Add(key, eventId);
         return true;
       }
       return false;
@@ -38,14 +64,15 @@ namespace OkuEngine.Input
 
     public bool RemoveBinding(Keys key, KeyAction action)
     {
-      return _keyBindings[action].Remove(key);
+      return _stateChangeBindings[action].Remove(key);
     }
 
-    private bool LoadBinding(XmlNode node, out Keys key, out KeyAction action, out int eventId)
+    private bool LoadBinding(XmlNode node, out Keys key, out KeyAction action, out int eventId, out bool state)
     {
       key = default(Keys);
       action = default(KeyAction);
       eventId = 0;
+      state = false;
 
       string value = node.GetTagValue("key");
       if (value != null)
@@ -71,7 +98,21 @@ namespace OkuEngine.Input
           return false;
       }
 
+      value = node.GetTagValue("state");
+      if (value != null)
+      {
+        state = Converter.StrToBool(value, false);
+      }
+
       return true;
+    }
+
+    public void Update()
+    {
+      foreach (int eventId in _stateEvents.Values)
+      {
+        OkuManagers.EventManager.QueueEvent(eventId, null);
+      }
     }
 
     public bool Load(XmlNode node)
@@ -84,10 +125,11 @@ namespace OkuEngine.Input
           Keys key;
           KeyAction action;
           int eventId = 0;
+          bool state = false;
 
-          if (LoadBinding(child, out key, out action, out eventId))
+          if (LoadBinding(child, out key, out action, out eventId, out state))
           {
-            if (!AddBinding(key, action, eventId))
+            if (!AddBinding(key, action, eventId, state))
               OkuManagers.Logger.LogError("Trying to bind key " + key.ToString() + " twice!");
           }
         }
@@ -101,7 +143,7 @@ namespace OkuEngine.Input
     public bool Save(XmlWriter writer)
     {
       writer.WriteStartElement("keybindings");
-      foreach (KeyValuePair<KeyAction, Dictionary<Keys, int>> action in _keyBindings)
+      foreach (KeyValuePair<KeyAction, Dictionary<Keys, int>> action in _stateChangeBindings)
       {
         foreach (KeyValuePair<Keys, int> binding in action.Value)
         {
