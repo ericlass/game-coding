@@ -8,7 +8,7 @@ namespace OkuEngine.Actors.Components
 {
   public abstract class RenderComponent : ActorComponent
   {
-    public const int ComponentId = 2;
+    public const int ComponentId = ActorComponentIds.RenderId;
     public const string ComponentName = "renderable";
 
     protected Vector[] _points = null;
@@ -57,6 +57,24 @@ namespace OkuEngine.Actors.Components
 
     public abstract override bool Load(XmlNode node);
     public abstract override bool Save(XmlWriter writer);
+
+    internal void ApplyTo(RenderComponent component)
+    {
+      Vector[] points = new Vector[_points.Length];
+      Array.Copy(_points, points, points.Length);
+      component._points = points;
+
+      points = new Vector[_texCoords.Length];
+      Array.Copy(_texCoords, points, points.Length);
+      component._texCoords = points;
+
+      Color[] colors = new Color[_colors.Length];
+      Array.Copy(_colors, colors, colors.Length);
+      component._colors = _colors;
+
+      component._mode = _mode;
+      component._image = _image;
+    }
 
   }
 }

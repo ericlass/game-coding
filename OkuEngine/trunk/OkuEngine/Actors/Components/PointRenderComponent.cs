@@ -77,5 +77,13 @@ namespace OkuEngine.Actors.Components
       return true;
     }
 
+    public override ActorComponent Copy()
+    {
+      PointRenderComponent result = new PointRenderComponent();
+      this.ApplyTo(result);
+      result._pointSize = _pointSize;
+      return result;
+    }
+
   }
 }

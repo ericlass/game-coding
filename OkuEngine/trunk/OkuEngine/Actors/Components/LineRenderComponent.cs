@@ -89,5 +89,13 @@ namespace OkuEngine.Actors.Components
       return true;
     }
 
+    public override ActorComponent Copy()
+    {
+      LineRenderComponent result = new LineRenderComponent();
+      this.ApplyTo(result);
+      result._lineWidth = _lineWidth;
+      return result;
+    }
+
   }
 }

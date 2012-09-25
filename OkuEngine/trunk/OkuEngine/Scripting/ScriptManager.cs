@@ -29,29 +29,11 @@ namespace OkuEngine.Scripting
       return ScriptFunctionName + KeySequence.NextValue(KeySequence.ScriptSequence);
     }
 
-    private string GetFinalScript(string scriptCode, string functionName, Parameter[] parameters)
+    private string GetFinalScript(string scriptCode, string functionName)
     {
-      StringBuilder parameterList = new StringBuilder();
-      if (parameters != null && parameters.Length > 0)
-      {
-        bool first = true;
-        foreach (Parameter param in parameters)
-        {
-          if (param.IsInput)
-          {
-            if (!first)
-              parameterList.Append(", ");
-            else
-              first = false;
-
-            parameterList.Append(param.Name);
-          }
-        }
-      }
-
       //Create script function around code
       string finalCode =
-        "function " + functionName + "(" + parameterList.ToString() + ")" +
+        "function " + functionName + "()" +
         Environment.NewLine + "{" + Environment.NewLine + scriptCode + Environment.NewLine + "}";
 
       return finalCode;
@@ -63,14 +45,14 @@ namespace OkuEngine.Scripting
     /// </summary>
     /// <param name="code">The code of the script.</param>
     /// <returns>The compiled script or null if an error occured.</returns>
-    public ScriptInstance CompileScript(string code, Parameter[] parameters)
+    public ScriptInstance CompileScript(string code)
     {
       string functionName = GetNextFunctionName();
 
       //Compile script
       try
       {
-        _engine.Execute(GetFinalScript(code, functionName, parameters));
+        _engine.Execute(GetFinalScript(code, functionName));
       }
       catch (Exception ex)
       {
@@ -81,20 +63,19 @@ namespace OkuEngine.Scripting
       //Get handle to compiled function
       FunctionInstance funcInst = (FunctionInstance)_engine.GetGlobalValue(functionName);
 
-      return new ScriptInstance(funcInst, code, _engine, parameters);
+      return new ScriptInstance(funcInst, code, _engine);
     }
 
     /// <summary>
     /// Checks if the given script code is compilable.
     /// </summary>
     /// <param name="code">The code to be checked.</param>
-    /// <param name="parameters">The parameters of the function.</param>
     /// <returns>Null if the script is compiler clean, else the compiler error message.</returns>
-    public string CheckScript(string code, Parameter[] parameters)
+    public string CheckScript(string code)
     {
       try
       {
-        _engine.Execute(GetFinalScript(code, ScriptCheckFunctionName, parameters));
+        _engine.Execute(GetFinalScript(code, ScriptCheckFunctionName));
       }
       catch (Exception ex)
       {

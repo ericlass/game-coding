@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace OkuEngine.Scripting
+namespace OkuEngine.Attributes
 {
-  public enum ParameterType
+  public enum AttributeType
   {
     Boolean,
     Integer,

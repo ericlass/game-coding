@@ -12,8 +12,9 @@ namespace OkuEngine.Actors
   /// </summary>
   public class Actor : StoreableEntity
   {
-    private Dictionary<int, ActorComponent> _components = null; //Is created lazylly in the getter. Some actors might not need it.
+    private Dictionary<int, ActorComponent> _components = null;
     private SceneNode _sceneNode = null;
+    private ActorType _type = null;
 
     /// <summary>
     /// Creates a new actor.
@@ -29,37 +30,30 @@ namespace OkuEngine.Actors
     /// <returns>The component with the given id or null if the actor has no component with this id.</returns>
     public ActorComponent GetComponent(int componentId)
     {
-      if (Components.ContainsKey(componentId))
+      if (_components != null && _components.ContainsKey(componentId))
       {
-        return Components[componentId];
+        return _components[componentId];
       }
       return null;
+    }
+
+    /// <summary>
+    /// Gets the actor type of this actor.
+    /// </summary>
+    public ActorType Type
+    {
+      get { return _type; }
     }
 
     /// <summary>
     /// Adds the given component to the actor type.
     /// </summary>
     /// <param name="component">The component to add.</param>
-    public void AddComponent(ActorComponent component)
+    internal void AddComponent(ActorComponent component)
     {
-      if (component != null)
+      if (_components != null && component != null)
       {
-        Components.Add(component.GetComponentId(), component);
-      }
-    }
-
-    /// <summary>
-    /// Gets the map of components.
-    /// </summary>
-    private Dictionary<int, ActorComponent> Components
-    {
-      get
-      {
-        if (_components == null)
-        {
-          _components = new Dictionary<int, ActorComponent>();
-        }
-        return _components;
+        _components.Add(component.GetComponentId(), component);
       }
     }
 
@@ -94,26 +88,11 @@ namespace OkuEngine.Actors
           return false;
       }
 
-      XmlNode child = node["components"];
-      if (child != null)
+      _type = OkuData.ActorTypes[actorType];
+      if (_type == null)
       {
-        ActorComponentFactory factory = new ActorComponentFactory();
-        XmlNode componentNode = child.FirstChild;
-        while (componentNode != null)
-        {
-          ActorComponent component = factory.CreateComponent(componentNode);
-          if (component != null)
-          {
-            Components.Add(component.GetComponentId(), component);
-            component.Owner = this;
-          }
-          else
-          {
-            OkuManagers.Logger.LogError("Could not load actor component: " + componentNode.OuterXml);
-            return false;
-          }
-          componentNode = componentNode.NextSibling;
-        }
+        OkuManagers.Logger.LogError("Could not find actor type with id " + actorType + " for actor " + _name + "!");
+        return false;
       }
 
       return true;
@@ -130,12 +109,7 @@ namespace OkuEngine.Actors
       if (!base.Save(writer))
         return false;
 
-      writer.WriteStartElement("components");
-      foreach (ActorComponent comp in _components.Values)
-      {
-        comp.Save(writer);
-      }
-      writer.WriteEndElement();
+      writer.WriteValueTag("type", _type.Id.ToString());
 
       writer.WriteEndElement();
 

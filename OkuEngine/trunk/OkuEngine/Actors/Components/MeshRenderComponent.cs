@@ -101,5 +101,12 @@ namespace OkuEngine.Actors.Components
       return true;
     }
 
+    public override ActorComponent Copy()
+    {
+      MeshRenderComponent result = new MeshRenderComponent();
+      this.ApplyTo(result);
+      return result;
+    }
+
   }
 }

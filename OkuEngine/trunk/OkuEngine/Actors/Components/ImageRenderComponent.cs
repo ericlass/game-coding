@@ -98,5 +98,12 @@ namespace OkuEngine.Actors.Components
       return true;
     }
 
+    public override ActorComponent Copy()
+    {
+      ImageRenderComponent result = new ImageRenderComponent();
+      this.ApplyTo(result);
+      return result;
+    }
+
   }
 }

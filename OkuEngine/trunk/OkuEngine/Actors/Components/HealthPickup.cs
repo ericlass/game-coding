@@ -8,7 +8,7 @@ namespace OkuEngine.Actors.Components
   public class HealthPickup : ActorComponent
   {
     //These two static members cannot be enforced, but should be in all components to be consistent.
-    public const int ComponentId = 1;
+    public const int ComponentId = ActorComponentIds.HealthPickupId;
     public const string ComponentName = "healthpickup";
 
     private int _health = 0;
@@ -16,11 +16,6 @@ namespace OkuEngine.Actors.Components
     public override int GetComponentId()
     {
       return ComponentId;
-    }
-
-    public void Apply(Actor actor)
-    {
-      throw new NotImplementedException();
     }
 
     public int Health
@@ -51,6 +46,13 @@ namespace OkuEngine.Actors.Components
       writer.WriteEndElement();
 
       return true;
+    }
+
+    public override ActorComponent Copy()
+    {
+      HealthPickup result = new HealthPickup();
+      result.Health = _health;
+      return result;
     }
 
   }

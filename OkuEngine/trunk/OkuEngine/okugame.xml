@@ -28,6 +28,10 @@
         <id>100001</id>
         <name>Steer Left</name>
       </event>
+      <event>
+        <id>100002</id>
+        <name>Steer Right</name>
+      </event>
     </userevents>
 
     <keybindings>
@@ -38,6 +42,12 @@
              If "no, event is only triggered once when the button is pressed down."-->
         <state>yes</state>
         <event>100001</event>
+      </binding>
+      <binding>
+        <key>D</key>
+        <action>Down</action>
+        <state>yes</state>
+        <event>100002</event>
       </binding>
     </keybindings>
     
@@ -77,7 +87,7 @@
     <behaviors>
       <behavior>
         <id>1</id>
-        <name>Test Behavior</name>
+        <name>Turn CCW</name>
         <handlers>
           <handler>
             <event>100001</event>
@@ -90,23 +100,43 @@
           </handler>
         </handlers>        
       </behavior>
+      <behavior>
+        <id>2</id>
+        <name>Turn CW</name>
+        <handlers>
+          <handler>
+            <event>100002</event>
+            <script>
+              <![CDATA[
+              var actor = new Actor(1);
+              actor.setAngle(actor.getAngle() - (90 * timeDelta));
+              ]]>
+            </script>
+          </handler>
+        </handlers>
+      </behavior>
     </behaviors>
 
-    <actors>
-      <actor>
+    <actortypes>
+      <actortype>
         <id>1</id>
-        <name>Car</name>
+        <name>Car Image</name>
         <components>
           <renderable type="image">
-            <!-- The texture to use (image id) -->
             <image>2</image>
-            <!-- Tint color. Can be left out for black -->
-            <color>255,255,255,255</color>            
           </renderable>
+          <parameters>
+            <parameter>
+              <name>Speed</name>
+              <type>Number</type>
+              <!-- Optional -->
+              <default>0</default>
+            </parameter>
+          </parameters>
         </components>
-      </actor>
+      </actortype>
 
-      <actor>
+      <actortype>
         <id>2</id>
         <name>Lines</name>
         <components>
@@ -116,13 +146,13 @@
             <!-- A list of colors for vertex colors -->
             <colors>0,255,255,255;255,0,255,255;255,255,0,255;255,255,255,255</colors>
             <!-- Determines if the last point is connected to the first point -->
-            <closed>yes</closed>            
+            <closed>yes</closed>
             <width>2</width>
           </renderable>
         </components>
-      </actor>
+      </actortype>
 
-      <actor>
+      <actortype>
         <id>3</id>
         <name>Points</name>
         <components>
@@ -134,9 +164,9 @@
             <size>4</size>
           </renderable>
         </components>
-      </actor>
+      </actortype>
 
-      <actor>
+      <actortype>
         <id>4</id>
         <name>Mesh</name>
         <components>
@@ -153,6 +183,32 @@
             <image>1</image>
           </renderable>
         </components>
+      </actortype>
+    </actortypes>
+
+    <actors>
+      <actor>
+        <id>1</id>
+        <name>Car</name>
+        <type>1</type>
+      </actor>
+
+      <actor>
+        <id>2</id>
+        <name>Lines</name>
+        <type>2</type>
+      </actor>
+
+      <actor>
+        <id>3</id>
+        <name>Points</name>
+        <type>3</type>
+      </actor>
+
+      <actor>
+        <id>4</id>
+        <name>Mesh</name>
+        <type>4</type>
       </actor>
     </actors>
 

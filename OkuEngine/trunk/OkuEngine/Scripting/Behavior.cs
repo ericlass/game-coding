@@ -52,7 +52,7 @@ namespace OkuEngine.Scripting
               value = child.GetTagValue("script");
               if (value != null)
               {
-                script = OkuManagers.ScriptManager.CompileScript(value, null);
+                script = OkuManagers.ScriptManager.CompileScript(value);
                 if (script != null)
                 {
                   AddHandler(eventId, script);                
