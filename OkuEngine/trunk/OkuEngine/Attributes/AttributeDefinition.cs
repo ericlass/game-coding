@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Xml;
 using System.Text;
 
 namespace OkuEngine.Attributes
@@ -29,7 +29,7 @@ namespace OkuEngine.Attributes
       set { _defaultValue = value; }
     }
 
-    public bool Load(System.Xml.XmlNode node)
+    public bool Load(XmlNode node)
     {
       _name = node.GetTagValue("name");
 
@@ -50,12 +50,12 @@ namespace OkuEngine.Attributes
         return false;
       }
 
-      _defaultValue = ValueFromString(node.GetTagValue("value"));
+      _defaultValue = Converter.AttributeValueFromString(node.GetTagValue("value"), _type);
 
       return true;
     }
 
-    public bool Save(System.Xml.XmlWriter writer)
+    public bool Save(XmlWriter writer)
     {
       writer.WriteStartElement("parameter");
 
@@ -88,38 +88,6 @@ namespace OkuEngine.Attributes
 
         default:
           throw new NotImplementedException("Cannot copy value of type " + _type.ToString() + "!");
-      }
-    }
-
-    private object ValueFromString(string value)
-    {
-      if (value == null)
-        return null;
-
-      switch (_type)
-      {
-        case AttributeType.Boolean:
-          return Converter.StrToBool(value, false);
-
-        case AttributeType.Integer:
-          int test = 0;
-          if (int.TryParse(value, out test))
-            return test;
-          else
-            return 0;
-
-        case AttributeType.Number:
-          double testd = 0;
-          if (double.TryParse(value, out testd))
-            return testd;
-          else
-            return 0.0;
-
-        case AttributeType.String:
-          return value;
-
-        default:
-          throw new NotImplementedException("Don't know how to parse parameter type " + _type.ToString() + "!");
       }
     }
 

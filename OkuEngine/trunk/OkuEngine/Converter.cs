@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using OkuEngine.Driver.Renderer;
+using OkuEngine.Attributes;
 
 namespace OkuEngine
 {
@@ -164,6 +165,74 @@ namespace OkuEngine
     public static string BoolToStr(bool value)
     {
       return value ? "yes" : "no";
+    }
+
+    /// <summary>
+    /// Converts the given string to an attribute value of the given type.
+    /// </summary>
+    /// <param name="value">The value to be converted.</param>
+    /// <param name="type">The target type.</param>
+    /// <returns>The converted attribute value. Null if the given value is null.</returns>
+    public static object AttributeValueFromString(string value, AttributeType type)
+    {
+      if (value == null)
+        return null;
+
+      switch (type)
+      {
+        case AttributeType.Boolean:
+          return Converter.StrToBool(value, false);
+
+        case AttributeType.Integer:
+          int test = 0;
+          if (int.TryParse(value, out test))
+            return test;
+          else
+            return 0;
+
+        case AttributeType.Number:
+          double testd = 0;
+          if (double.TryParse(value, out testd))
+            return testd;
+          else
+            return 0.0;
+
+        case AttributeType.String:
+          return value;
+
+        default:
+          throw new NotImplementedException("Don't know how to parse parameter type " + type.ToString() + "!");
+      }
+    }
+
+    public static string ValueToString(AttributeValue value)
+    {
+      if (value == null || value.RawValue == null)
+        return null;
+
+      AttributeDefinition attrDef = value.GetDefinition();
+      if (attrDef != null)
+      {
+        switch (attrDef.Type)
+        {
+          case AttributeType.Boolean:
+            return BoolToStr((bool)value.RawValue);
+
+          case AttributeType.Integer:
+            return value.RawValue.ToString();
+
+          case AttributeType.Number:
+            return FloatToString((float)value.RawValue);
+
+          case AttributeType.String:
+            return value.RawValue as string;
+
+          default:
+            throw new NotImplementedException("Don't know how to convert parameter type " + attrDef.Type + "!");
+        }
+      }
+
+      return null;
     }
 
   }

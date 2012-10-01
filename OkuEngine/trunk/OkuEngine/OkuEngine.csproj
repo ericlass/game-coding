@@ -61,12 +61,13 @@
   <ItemGroup>
     <Compile Include="Actors\ActorType.cs" />
     <Compile Include="Actors\Components\ActorComponentIds.cs" />
-    <Compile Include="Actors\Components\ParameterComponent.cs" />
+    <Compile Include="Actors\Components\AttributeComponent.cs" />
     <Compile Include="Animation\Animation.cs" />
     <Compile Include="Animation\AnimationFrame.cs" />
     <Compile Include="Animation\Easing.cs" />
     <Compile Include="Animation\EasingController.cs" />
     <Compile Include="Animation\InertialMovement.cs" />
+    <Compile Include="Attributes\IAttributeContainer.cs" />
     <Compile Include="Driver\Audio\NullSoundEngine.cs" />
     <Compile Include="Driver\Audio\SoundEngineFactory.cs" />
     <Compile Include="Driver\Renderer\IRenderer2.cs" />
@@ -120,7 +121,6 @@
     <Compile Include="Scripting\OkuScriptManager.cs" />
     <Compile Include="Attributes\AttributeValue.cs" />
     <Compile Include="Attributes\AttributeDefinition.cs" />
-    <Compile Include="Attributes\AttributeMap.cs" />
     <Compile Include="Attributes\AttributeType.cs" />
     <Compile Include="Scripting\ScriptInstance.cs" />
     <Compile Include="Scripting\ScriptManager.cs" />
@@ -216,9 +216,6 @@
     <Compile Include="Platform\Winmm.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
-    <None Include="ClassDiagram3.cd" />
     <None Include="okugame.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -15,7 +15,7 @@ namespace OkuEngine.Actors.Components
     {
       _actorComponentCreators.Add(HealthPickup.ComponentName, new ActorComponentCreatorDelegate(CreateHealthPickup));
       _actorComponentCreators.Add(RenderComponent.ComponentName, new ActorComponentCreatorDelegate(CreateRenderComponent));
-      _actorComponentCreators.Add(ParameterComponent.ComponentName, new ActorComponentCreatorDelegate(CreateParameterComponent));
+      _actorComponentCreators.Add(AttributeComponent.ComponentName, new ActorComponentCreatorDelegate(CreateParameterComponent));
     }
 
     protected ActorComponent CreateHealthPickup(XmlNode node)
@@ -50,7 +50,7 @@ namespace OkuEngine.Actors.Components
 
     protected ActorComponent CreateParameterComponent(XmlNode node)
     {
-      return new ParameterComponent();
+      return new AttributeComponent();
     }
 
     public ActorComponent CreateComponent(XmlNode node)
