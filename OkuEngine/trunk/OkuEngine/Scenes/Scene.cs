@@ -5,7 +5,7 @@ using System.Text;
 using System.Drawing;
 using OkuEngine.Events;
 
-namespace OkuEngine.Scene
+namespace OkuEngine.Scenes
 {
   /// <summary>
   /// Mananges a single scene with layers.
@@ -153,7 +153,6 @@ namespace OkuEngine.Scene
           item.Value.Remove(actorId);
           SceneNode newNode = _layerMap[newLayerId].Add(actorId, newParent);
           newNode.Properties.Area = node.Properties.Area;
-          newNode.Properties.Tint = node.Properties.Tint;
           newNode.Properties.Transform = node.Properties.Transform;
           //TODO: What about the children of the node?
           return true;

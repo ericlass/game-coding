@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OkuEngine.Scene
+namespace OkuEngine.Scenes
 {
   /// <summary>
   /// Stores properties of a scene node.
@@ -14,7 +14,6 @@ namespace OkuEngine.Scene
     private int _layer = 0;
     private Transformation _transform = new Transformation();
     private AABB _area = new AABB();
-    private Color _tint = Color.White;
 
     /// <summary>
     /// Creates new scene node properties.
@@ -49,15 +48,6 @@ namespace OkuEngine.Scene
     {
       get { return _area; }
       set { _area = value; }
-    }
-
-    /// <summary>
-    /// Gets or sets the tint color of the scene node.
-    /// </summary>
-    public Color Tint
-    {
-      get { return _tint; }
-      set { _tint = value; }
     }
 
     /// <summary>

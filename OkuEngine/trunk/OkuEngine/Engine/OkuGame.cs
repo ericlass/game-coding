@@ -6,7 +6,7 @@ using System.Xml.Schema;
 using System.Windows.Forms;
 using OkuEngine.Driver.Audio;
 using OkuEngine.Actors;
-using OkuEngine.Scene;
+using OkuEngine.Scenes;
 using OkuEngine.Resources;
 using OkuEngine.Processes;
 using OkuEngine.Events;
@@ -225,7 +225,7 @@ namespace OkuEngine
             if (_startScene > 0)
               OkuData.SceneManager.SetActiveScene(_startScene);
             else
-              OkuData.SceneManager.SetActiveScene(new OkuEngine.Scene.Scene(-1, "Empty Scene"));
+              OkuData.SceneManager.SetActiveScene(new OkuEngine.Scenes.Scene(-1, "Empty Scene"));
           }
 
           Initialize();

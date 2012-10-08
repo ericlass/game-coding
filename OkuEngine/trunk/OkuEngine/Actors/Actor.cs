@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
-using OkuEngine.Scene;
-using OkuEngine.Components;
+using OkuEngine.Scenes;
+using OkuEngine.Attributes;
 
 namespace OkuEngine.Actors
 {
@@ -12,8 +12,6 @@ namespace OkuEngine.Actors
   /// </summary>
   public class Actor : StoreableEntity
   {
-    private Dictionary<int, EntityComponent> _components = null;
-    private Dictionary<int, XmlNode> _componentOverrides = new Dictionary<int, XmlNode>();
     private SceneNode _sceneNode = null;
     private ActorType _type = null;
 
@@ -25,37 +23,11 @@ namespace OkuEngine.Actors
     }
 
     /// <summary>
-    /// Gets the component with the given id.
-    /// </summary>
-    /// <param name="componentId">The id of the component.</param>
-    /// <returns>The component with the given id or null if the actor has no component with this id.</returns>
-    public EntityComponent GetComponent(int componentId)
-    {
-      if (_components != null && _components.ContainsKey(componentId))
-      {
-        return _components[componentId];
-      }
-      return null;
-    }
-
-    /// <summary>
     /// Gets the actor type of this actor.
     /// </summary>
     public ActorType Type
     {
       get { return _type; }
-    }
-
-    /// <summary>
-    /// Adds the given component to the actor type.
-    /// </summary>
-    /// <param name="component">The component to add.</param>
-    internal void AddComponent(EntityComponent component)
-    {
-      if (_components != null && component != null)
-      {
-        _components.Add(component.GetComponentId(), component);
-      }
     }
 
     /// <summary>
@@ -94,37 +66,6 @@ namespace OkuEngine.Actors
       {
         OkuManagers.Logger.LogError("Could not find actor type with id " + actorType + " for actor " + _name + "!");
         return false;
-      }
-
-      //First, load components from actor type
-      foreach (XmlNode compNode in _type.ComponentNodes)
-      {
-        EntityComponent component = OkuManagers.ComponentFactory.CreateComponent(compNode);
-        if (component != null)
-        {
-          AddComponent(component);
-        }
-      }
-
-      //Second, load the component value overrides
-      _componentOverrides.Clear();
-      XmlNode componentsNode = node["components"];
-      if (componentsNode != null)
-      {
-        XmlNode child = componentsNode.FirstChild;
-        while (child != null)
-        {
-          int compId = OkuManagers.ComponentFactory.GetComponentId(child);
-          if (compId > 0)
-          {
-            if (_components.ContainsKey(compId))
-            {
-              _componentOverrides.Add(compId, child); //Remember override for saving
-            }
-          }
-
-          child = child.NextSibling;
-        }
       }
 
       return true;

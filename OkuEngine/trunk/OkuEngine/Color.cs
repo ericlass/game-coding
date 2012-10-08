@@ -119,7 +119,7 @@ namespace OkuEngine
     /// <returns>The color as a string.</returns>
     public override string ToString()
     {
-      return R + "," + G + "," + B + "," + A;
+      return "#" + R.ToString("X2") + G.ToString("X2") + B.ToString("X2") + A.ToString("X2");
     }
 
     /// <summary>
@@ -157,8 +157,8 @@ namespace OkuEngine
 
     /// <summary>
     /// Tries to parse the given string into a color.
-    /// The string is expected to be in the format
-    /// "R,G,B,A" like it is produced by ToString.
+    /// The string is expected to be in the typical
+    /// hexadecimal HTML color format (#RGB, #RGBA, #RRGGBB or #RRGGBBAA).
     /// </summary>
     /// <param name="str">The string representation of the color.</param>
     /// <param name="color">The parsed color is returend here if the method returns true.</param>
@@ -169,34 +169,26 @@ namespace OkuEngine
 
       if (str != null)
       {
-        string[] parts = str.Split(',');
-        if (parts.Length == 3 || parts.Length == 4)
+        str = str.Substring(1); //Cut off hash
+        if (str.Length == 3 || str.Length == 4)
         {
-          byte value = 0;
-          if (byte.TryParse(parts[0].Trim(), out value))
-            color.R = value;
-          else
-            return false;
-
-          if (byte.TryParse(parts[1].Trim(), out value))
-            color.G = value;
-          else
-            return false;
-
-          if (byte.TryParse(parts[2].Trim(), out value))
-            color.B = value;
-          else
-            return false;
-
-          if (parts.Length == 4)
+          //Expand shortcut format (i.e. #ABCD -> #AABBCCDD)
+          string expanded = "";
+          foreach (char c in str)
           {
-            if (byte.TryParse(parts[3].Trim(), out value))
-              color.A = value;
-            else
-              return false;
+            expanded += c;
+            expanded += c;
           }
-
-          return true;
+          str = expanded;
+        }
+        
+        if (str.Length == 6 || str.Length == 8)
+        {
+          color.R = Convert.ToByte(str.Substring(0, 2), 16);
+          color.G = Convert.ToByte(str.Substring(2, 2), 16);
+          color.B = Convert.ToByte(str.Substring(4, 2), 16);
+          if (str.Length == 8)
+            color.A = Convert.ToByte(str.Substring(6, 2), 16);
         }
       }
       return false;

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using OkuEngine.Driver.Renderer;
+using OkuEngine.Rendering;
 
 namespace OkuEngine
 {
@@ -190,7 +191,7 @@ namespace OkuEngine
         }
       }
 
-      VertexContent content = new VertexContent(positions.ToArray(), texCoords.ToArray(), colors.ToArray());
+      Vertices content = new Vertices(positions.ToArray(), texCoords.ToArray(), colors.ToArray());
       return new MeshInstance(content, _fontSheetContent, MeshMode.Quads);
     }
 

@@ -59,6 +59,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actors\ActorState.cs" />
     <Compile Include="Actors\ActorType.cs" />
     <Compile Include="Components\EntityComponentIds.cs" />
     <Compile Include="Components\AttributeComponent.cs" />
@@ -94,12 +95,21 @@
     <Compile Include="Events\EventTypes.cs" />
     <Compile Include="Events\IEventManager.cs" />
     <Compile Include="Events\UserEvent.cs" />
+    <Compile Include="InheritingDictionary.cs" />
+    <Compile Include="Instance\ContentInstance.cs" />
+    <Compile Include="Instance\MeshInstance.cs" />
+    <Compile Include="Instance\SoundInstance.cs" />
+    <Compile Include="Rendering\InheritingRenderable.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\KeyAction.cs" />
+    <Compile Include="Rendering\IRenderable.cs" />
     <Compile Include="Processes\DelayProcess.cs" />
     <Compile Include="Processes\Process.cs" />
     <Compile Include="Processes\ProcessManager.cs" />
     <Compile Include="Processes\ProcessState.cs" />
+    <Compile Include="Rendering\RenderableFactory.cs" />
+    <Compile Include="Rendering\RenderableImage.cs" />
+    <Compile Include="Rendering\RenderableLines.cs" />
     <Compile Include="Resources\DefaultResourceLoader.cs" />
     <Compile Include="Resources\FileSystemResourceFile.cs" />
     <Compile Include="Resources\IResourceExtraData.cs" />
@@ -111,11 +121,11 @@
     <Compile Include="Resources\ResourceHandle.cs" />
     <Compile Include="Resources\TextureExtraData.cs" />
     <Compile Include="Resources\TextureResourceLoader.cs" />
-    <Compile Include="Scene\Scene.cs" />
-    <Compile Include="Scene\SceneLayer.cs" />
-    <Compile Include="Scene\SceneManager.cs" />
-    <Compile Include="Scene\SceneNode.cs" />
-    <Compile Include="Scene\SceneNodeProperties.cs" />
+    <Compile Include="Scenes\Scene.cs" />
+    <Compile Include="Scenes\SceneLayer.cs" />
+    <Compile Include="Scenes\SceneManager.cs" />
+    <Compile Include="Scenes\SceneNode.cs" />
+    <Compile Include="Scenes\SceneNodeProperties.cs" />
     <Compile Include="Scripting\Behavior.cs" />
     <Compile Include="Scripting\OkuScriptManager.cs" />
     <Compile Include="Attributes\AttributeValue.cs" />
@@ -154,7 +164,7 @@
     <Compile Include="Driver\Renderer\MeshMode.cs" />
     <Compile Include="Driver\Renderer\TextureFilter.cs" />
     <Compile Include="Driver\Renderer\VertexInterpretation.cs" />
-    <Compile Include="Scene\ViewPort.cs" />
+    <Compile Include="Scenes\ViewPort.cs" />
     <Compile Include="Geometry\CollisionWorld.cs" />
     <Compile Include="Geometry\ContinuousCollision.cs" />
     <Compile Include="Geometry\OkuMath.cs" />
@@ -162,12 +172,8 @@
     <Compile Include="OkuExtensions.cs" />
     <Compile Include="Geometry\Intersections.cs" />
     <Compile Include="Geometry\PolygonFactory.cs" />
-    <Compile Include="Instance\MeshInstance.cs" />
-    <Compile Include="Instance\ImageInstance.cs" />
-    <Compile Include="Instance\ContentInstance.cs" />
     <Compile Include="Driver\Renderer\IRenderer.cs" />
     <Compile Include="Driver\Audio\ISoundEngine.cs" />
-    <Compile Include="Instance\VisualInstance.cs" />
     <Compile Include="KeySequence.cs" />
     <Compile Include="Geometry\LineSegment.cs" />
     <Compile Include="Geometry\Matrix3.cs" />
@@ -177,8 +183,7 @@
     <Compile Include="Engine\OkuGame.cs" />
     <Compile Include="Driver\Audio\OpenALSoundEngine.cs" />
     <Compile Include="Driver\Renderer\OpenGLRenderer.cs" />
-    <Compile Include="Content\VertexContent.cs" />
-    <Compile Include="Instance\PolygonInstance.cs" />
+    <Compile Include="Rendering\Vertices.cs" />
     <Compile Include="Geometry\AABB.cs" />
     <Compile Include="Particles\DefaultParticleController.cs" />
     <Compile Include="Particles\ForceEffector.cs" />
@@ -194,7 +199,6 @@
     <Compile Include="Particles\PointParticleRenderer.cs" />
     <Compile Include="PerlinNoise.cs" />
     <Compile Include="Content\SoundContent.cs" />
-    <Compile Include="Instance\SoundInstance.cs" />
     <Compile Include="Geometry\Spline.cs" />
     <Compile Include="SpriteFont.cs" />
     <Compile Include="TileMap\Tile.cs" />

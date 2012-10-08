@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 
-namespace OkuEngine.Scene
+namespace OkuEngine.Scenes
 {
   /// <summary>
   /// Represents one layer in a scene.

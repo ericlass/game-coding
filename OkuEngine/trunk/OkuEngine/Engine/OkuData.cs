@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using OkuEngine.Scene;
+using OkuEngine.Scenes;
 using OkuEngine.Resources;
 using OkuEngine.Actors;
 using OkuEngine.Input;

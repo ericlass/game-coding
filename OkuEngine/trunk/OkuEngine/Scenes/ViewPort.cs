@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OkuEngine.Scene
+namespace OkuEngine.Scenes
 {
   /// <summary>
   /// Specified the delegate for a viewport change event handler. Should only be implemented by the Renderer.

@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using OkuEngine;
 using OkuEngine.Driver.Renderer;
+using OkuEngine.Rendering;
 
 namespace OkuTest
 {
@@ -14,7 +15,6 @@ namespace OkuTest
     private float _rotation = 0.0f;
     private Vector _pos1 = new Vector(0, 50);
 
-    private PolygonInstance _poly = null;
     private SoundInstance _sound = null;
     private MeshInstance _mesh = null;
     private SpriteFont _font = null;
@@ -45,11 +45,7 @@ namespace OkuTest
         verts[i] = new Vector((float)(rand.NextDouble() - 0.5) * width, (float)(rand.NextDouble() - 0.5) * height);
         colors[i] = Color.RandomColor(rand);
       }
-      VertexContent polyContent = new VertexContent(verts, colors);
-      _poly = new PolygonInstance(polyContent);
-      _poly.Interpretation = VertexInterpretation.PolygonClosed;
-      _poly.LineWidth = 3;
-      _poly.LineColor = Color.Blue;
+      Vertices polyContent = new Vertices(verts, colors);
 
       SoundContent sound = new SoundContent(".\\content\\laser.wav");
       //SoundContent sound = new SoundContent("D:\\Musik\\Meshuggah\\I\\Meshuggah - I.wav");
@@ -70,7 +66,7 @@ namespace OkuTest
         colors[i] = Color.RandomColor(rand);
         texCoords[i] = new Vector((float)i / numVerts, (i % 2));
       }
-      polyContent = new VertexContent(verts, texCoords, colors);
+      polyContent = new Vertices(verts, texCoords, colors);
       _mesh = new MeshInstance(polyContent);
       _mesh.Mode = MeshMode.TriangleStrip;
 
@@ -141,10 +137,6 @@ namespace OkuTest
       switch (pass)
       {
         case 0:
-          _poly.Draw();
-
-          OkuManagers.Renderer.DrawPoints(_poly.Content.Positions, _poly.Content.Colors, _poly.Content.Positions.Length, 10);
-
           OkuManagers.Renderer.DrawImage(_smiley, _pos1);
           _mesh.Draw();
 

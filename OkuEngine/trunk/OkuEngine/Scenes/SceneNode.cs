@@ -5,7 +5,7 @@ using System.Text;
 using OkuEngine.Actors;
 using OkuEngine.Components;
 
-namespace OkuEngine.Scene
+namespace OkuEngine.Scenes
 {
   /// <summary>
   /// A single scene node in the scene graph.
@@ -18,7 +18,6 @@ namespace OkuEngine.Scene
     protected SceneNodeProperties _props = null;
     protected SceneNode _parent = null;
     protected List<SceneNode> _children = new List<SceneNode>();
-    private RenderComponent _renderComp = null;
 
     /// <summary>
     /// Creates a new scene node.
@@ -132,23 +131,6 @@ namespace OkuEngine.Scene
       return true;
     }
 
-    private RenderComponent GetRenderComponent()
-    {
-      if (_renderComp == null)
-      {
-        Actor actor = OkuData.Actors[_props.ActorId];
-        if (actor != null)
-        {
-          EntityComponent comp = actor.GetComponent(RenderComponent.ComponentId);
-          if (comp != null && comp is RenderComponent)
-          {
-            _renderComp = comp as RenderComponent;
-          }
-        }
-      }
-      return _renderComp;
-    }
-
     /// <summary>
     /// Is called just before th node is rendered so it can set up
     /// rendering parameters.
@@ -186,13 +168,7 @@ namespace OkuEngine.Scene
       try
       {
         //TODO: Add visibility check
-        RenderComponent renderComp = GetRenderComponent();
-        if (renderComp != null)
-        {
-          renderComp.PreRender();
-          OkuManagers.Renderer.DrawMesh(renderComp.Points, renderComp.TexCoords, renderComp.Colors, renderComp.Points.Length, renderComp.Mode, OkuData.Images[renderComp.Image]);
-          renderComp.PostRender();
-        }
+        //TODO: Call IRenderable of actor
       }
       finally
       {
@@ -278,14 +254,6 @@ namespace OkuEngine.Scene
           return false;
       }
 
-      value = node.GetTagValue("tint");
-      if (value != null)
-      {
-        Color tint = Color.Black;
-        if (Color.TryParse(value, out tint))
-          _props.Tint = tint;
-      }
-
       value = node.GetTagValue("aabb");
       if (value != null)
       {
@@ -334,7 +302,6 @@ namespace OkuEngine.Scene
       writer.WriteStartElement("node");
 
       writer.WriteValueTag("actor", _props.ActorId.ToString());
-      writer.WriteValueTag("tint", _props.Tint.ToString());
       writer.WriteValueTag("aabb", _props.Area.ToString());
 
       _props.Transform.Save(writer);

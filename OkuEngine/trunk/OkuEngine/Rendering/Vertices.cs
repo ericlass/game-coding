@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Xml;
 
-namespace OkuEngine
+namespace OkuEngine.Rendering
 {
   /// <summary>
   /// Contains different data about a set of vertices.
@@ -11,7 +12,7 @@ namespace OkuEngine
   /// The arrays are expected, but not forced, to be the same length.
   /// Use the Valid property to check if all non-null arrays have the same length. 
   /// </summary>
-  public class VertexContent
+  public class Vertices : IStoreable
   {
     private Vector[] _positions = null;
     private Vector[] _texCoords = null;
@@ -20,7 +21,7 @@ namespace OkuEngine
     /// <summary>
     /// Creates a new vertex content with no data.
     /// </summary>
-    public VertexContent()
+    public Vertices()
     {
     }
 
@@ -28,7 +29,7 @@ namespace OkuEngine
     /// Creates a new vertex content with the given positions.
     /// </summary>
     /// <param name="positions">The vertex positions.</param>
-    public VertexContent(Vector[] positions)
+    public Vertices(Vector[] positions)
     {
       _positions = positions;
     }
@@ -38,7 +39,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="positions">The vertex positions.</param>
     /// <param name="texCoords">The vertex texture coordinates.</param>
-    public VertexContent(Vector[] positions, Vector[] texCoords)
+    public Vertices(Vector[] positions, Vector[] texCoords)
     {
       _positions = positions;
       _texCoords = texCoords;
@@ -49,7 +50,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="positions">The vertex positions.</param>
     /// <param name="colors">The vertex colors.</param>
-    public VertexContent(Vector[] positions, Color[] colors)
+    public Vertices(Vector[] positions, Color[] colors)
     {
       _positions = positions;
       _colors = colors;
@@ -61,7 +62,7 @@ namespace OkuEngine
     /// <param name="positions">The vertex positions.</param>
     /// <param name="texCoords">The vertex texture coordinates.</param>
     /// <param name="colors">The vertex colors.</param>
-    public VertexContent(Vector[] positions, Vector[] texCoords, Color[] colors)
+    public Vertices(Vector[] positions, Vector[] texCoords, Color[] colors)
     {
       _positions = positions;
       _texCoords = texCoords;
@@ -98,6 +99,14 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Gets the number of vertices.
+    /// </summary>
+    public int Count
+    {
+      get { return _positions.Length; }
+    }
+
+    /// <summary>
     /// Gets if the vertex content is valid.
     /// It is valid if the Positions array is not null and
     /// all non-null arrays have the same length.
@@ -111,6 +120,42 @@ namespace OkuEngine
         int colLength = _colors == null ? 0 : _colors.Length;
         return (_positions != null) && (posLength == texLength) && (texLength == colLength);
       }
+    }
+
+    public bool Load(XmlNode node)
+    {
+      string value = node.GetTagValue("points");
+      if (value != null)
+      {
+        _positions = Converter.ParseVectors(value);
+      }
+
+      value = node.GetTagValue("color");
+      if (value != null)
+      {
+        _colors = Converter.ParseColors(value);
+      }
+
+      value = node.GetTagValue("texcoords");
+      if (value != null)
+      {
+        _texCoords = Converter.ParseVectors(value);
+      }
+
+      return Valid;
+    }
+
+    public bool Save(XmlWriter writer)
+    {
+      writer.WriteStartElement("vertices");
+
+      writer.WriteValueTag("points", _positions.ToOkuString());
+      writer.WriteValueTag("colors", _colors.ToOkuString());
+      writer.WriteValueTag("texcoords", _texCoords.ToOkuString());
+
+      writer.WriteEndElement();
+
+      return true;
     }
 
   }

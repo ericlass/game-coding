@@ -121,68 +121,26 @@
       <actortype>
         <id>1</id>
         <name>Car Image</name>
-        <components>
-          <renderable type="image">
-            <image>2</image>
-          </renderable>
-          <attributes>
-            <attribute>
-              <name>Speed</name>
-              <type>Number</type>
-              <!-- Optional, default value here -->
-              <value>0.0</value>
-            </attribute>
-          </attributes>
-        </components>
-      </actortype>
-
-      <actortype>
-        <id>2</id>
-        <name>Lines</name>
-        <components>
-          <renderable type="line">
-            <!-- A list of vectors for vertex positions -->
-            <points>-24,24;24,24;24,-24;-24,-24</points>
-            <!-- A list of colors for vertex colors -->
-            <colors>0,255,255,255;255,0,255,255;255,255,0,255;255,255,255,255</colors>
-            <!-- Determines if the last point is connected to the first point -->
-            <closed>yes</closed>
-            <width>2</width>
-          </renderable>
-        </components>
-      </actortype>
-
-      <actortype>
-        <id>3</id>
-        <name>Points</name>
-        <components>
-          <renderable type="point">
-            <!-- A list of vectors for vertex positions -->
-            <points>-24,24;24,24;24,-24;-24,-24</points>
-            <!-- A list of colors for vertex colors -->
-            <colors>0,255,255,255;255,0,255,255;255,255,0,255;255,255,255,255;</colors>
-            <size>4</size>
-          </renderable>
-        </components>
-      </actortype>
-
-      <actortype>
-        <id>4</id>
-        <name>Mesh</name>
-        <components>
-          <renderable type="mesh">
-            <!-- A list of vectors for vertex positions -->
-            <points>-24,24;24,24;24,-24;-24,-24</points>
-            <!-- A list of vectors for vertex texture coordinates -->
-            <texcoords>0,1;1,1;1,0;0,0</texcoords>
-            <!-- A list of colors for vertex colors -->
-            <colors>255,255,255,255;255,255,255,255;255,255,255,255;255,255,255,255</colors>
-            <!-- The mesh mode (Triangles, Quads, Line...) -->
-            <mode>Quads</mode>
-            <!-- The texture to use (image id) -->
-            <image>1</image>
-          </renderable>
-        </components>
+        <attributes>
+          <attribute>
+            <name>Speed</name>
+            <type>Number</type>
+            <!-- Optional, default value here -->
+            <value>0.0</value>
+          </attribute>
+        </attributes>
+        <renderable type="image">
+          <image>2</image>
+        </renderable>
+        <renderable type="line">
+          <width></width>
+          <closed></closed>
+          <vertices>
+            <points></points>
+            <colors></colors>
+            <texcoords></texcoords>
+          </vertices>
+        </renderable>
       </actortype>
     </actortypes>
 
@@ -191,32 +149,12 @@
         <id>1</id>
         <name>Car</name>
         <type>1</type>
-        <components>
-          <attributes>
-            <attribute>
-              <name>Speed</name>
-              <value>10.0</value>
-            </attribute>
-          </attributes>
-        </components>
-      </actor>
-
-      <actor>
-        <id>2</id>
-        <name>Lines</name>
-        <type>2</type>
-      </actor>
-
-      <actor>
-        <id>3</id>
-        <name>Points</name>
-        <type>3</type>
-      </actor>
-
-      <actor>
-        <id>4</id>
-        <name>Mesh</name>
-        <type>4</type>
+        <attributes>
+          <attribute>
+            <name>Speed</name>
+            <value>10.0</value>
+          </attribute>
+        </attributes>
       </actor>
     </actors>
 
@@ -232,8 +170,6 @@
               <node>
                 <!-- References actor by id -->
                 <actor>1</actor>
-                <!-- Tint color -->
-                <tint>255,255,255,255</tint>
                 <!-- Min and Max values of the bounding box -->
                 <aabb>-24,-24;24,24</aabb>
                 <transform>

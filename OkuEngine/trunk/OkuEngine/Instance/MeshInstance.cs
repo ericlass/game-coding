@@ -1,14 +1,15 @@
 ﻿using System;
 using OkuEngine.Driver.Renderer;
+using OkuEngine.Rendering;
 
 namespace OkuEngine
 {
   /// <summary>
   /// One instance of a 2D mesh.
   /// </summary>
-  public class MeshInstance : VisualInstance
+  public class MeshInstance : ContentInstance
   {
-    private VertexContent _vertices = null;
+    private Vertices _vertices = null;
     private MeshMode _mode = MeshMode.Quads;
     private ImageContent _texture = null;
 
@@ -17,14 +18,14 @@ namespace OkuEngine
     /// </summary>
     public MeshInstance()
     {
-      _vertices = new VertexContent();
+      _vertices = new Vertices();
     }
 
     /// <summary>
     /// Creates a new mesh with the given vertex data.
     /// </summary>
     /// <param name="vertices">The vertices.</param>
-    public MeshInstance(VertexContent vertices)
+    public MeshInstance(Vertices vertices)
     {
       _vertices = vertices;
     }
@@ -35,7 +36,7 @@ namespace OkuEngine
     /// <param name="texture">The texture.</param>
     public MeshInstance(ImageContent texture)
     {
-      _vertices = new VertexContent();
+      _vertices = new Vertices();
       _texture = texture;
     }
 
@@ -44,7 +45,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="vertices">The vertices.</param>
     /// <param name="texture">The texture.</param>
-    public MeshInstance(VertexContent vertices, ImageContent texture)
+    public MeshInstance(Vertices vertices, ImageContent texture)
     {
       _vertices = vertices;
       _texture = texture;
@@ -56,7 +57,7 @@ namespace OkuEngine
     /// <param name="vertices">The vertices.</param>
     /// <param name="texture">The texture.</param>
     /// <param name="mode">The mesh mode.</param>
-    public MeshInstance(VertexContent vertices, ImageContent texture, MeshMode mode)
+    public MeshInstance(Vertices vertices, ImageContent texture, MeshMode mode)
     {
       _vertices = vertices;
       _texture = texture;
@@ -66,7 +67,7 @@ namespace OkuEngine
     /// <summary>
     /// Gets the vertices of the mesh.
     /// </summary>
-    public VertexContent Vertices
+    public Vertices Vertices
     {
       get { return _vertices; }
       set { _vertices = value; }
