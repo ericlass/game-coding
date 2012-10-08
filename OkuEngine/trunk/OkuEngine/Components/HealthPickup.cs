@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 
-namespace OkuEngine.Actors.Components
+namespace OkuEngine.Components
 {
-  public class HealthPickup : ActorComponent
+  public class HealthPickup : EntityComponent
   {
     //These two static members cannot be enforced, but should be in all components to be consistent.
-    public const int ComponentId = ActorComponentIds.HealthPickupId;
+    public const int ComponentId = EntityComponentIds.HealthPickupId;
     public const string ComponentName = "healthpickup";
 
     private int _health = 0;
@@ -46,13 +46,6 @@ namespace OkuEngine.Actors.Components
       writer.WriteEndElement();
 
       return true;
-    }
-
-    public override ActorComponent Copy()
-    {
-      HealthPickup result = new HealthPickup();
-      result.Health = _health;
-      return result;
     }
 
   }

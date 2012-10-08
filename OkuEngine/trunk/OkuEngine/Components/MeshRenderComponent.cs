@@ -5,7 +5,7 @@ using System.Text;
 using OkuEngine.Driver.Renderer;
 using OkuEngine.Resources;
 
-namespace OkuEngine.Actors.Components
+namespace OkuEngine.Components
 {
   public class MeshRenderComponent : RenderComponent
   {
@@ -99,13 +99,6 @@ namespace OkuEngine.Actors.Components
     public override bool PostRender()
     {
       return true;
-    }
-
-    public override ActorComponent Copy()
-    {
-      MeshRenderComponent result = new MeshRenderComponent();
-      this.ApplyTo(result);
-      return result;
     }
 
   }

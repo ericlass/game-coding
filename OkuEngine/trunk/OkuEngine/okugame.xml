@@ -127,11 +127,10 @@
           </renderable>
           <attributes>
             <attribute>
-              <id>1</id>
               <name>Speed</name>
               <type>Number</type>
-              <!-- Optional -->
-              <default>0</default>
+              <!-- Optional, default value here -->
+              <value>0.0</value>
             </attribute>
           </attributes>
         </components>
@@ -192,13 +191,14 @@
         <id>1</id>
         <name>Car</name>
         <type>1</type>
-        <attributes>
-          <attribute>
-            <!-- References the attribute id in the actor type -->
-            <id>1</id>
-            <value>10.0</value>
-          </attribute>
-        </attributes>
+        <components>
+          <attributes>
+            <attribute>
+              <name>Speed</name>
+              <value>10.0</value>
+            </attribute>
+          </attributes>
+        </components>
       </actor>
 
       <actor>

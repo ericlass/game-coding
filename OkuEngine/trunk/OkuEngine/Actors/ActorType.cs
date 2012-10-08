@@ -2,60 +2,18 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
-using OkuEngine.Actors.Components;
+using OkuEngine.Components;
 
 namespace OkuEngine.Actors
 {
   public class ActorType : StoreableEntity
   {
-    private Dictionary<int, ActorComponent> _components = null;
+    private XmlNode _actorTypeNode = null; //XmlNode containing complete actor type config
+    private List<XmlNode> _componentNodes = null; //XmlNode for each component by component id
 
-    /// <summary>
-    /// Gets the component with the given id.
-    /// </summary>
-    /// <param name="componentId">The id of the component.</param>
-    /// <returns>The component with the given id or null if the actor has no component with this id.</returns>
-    public ActorComponent GetComponent(int componentId)
+    internal List<XmlNode> ComponentNodes
     {
-      if (_components != null && _components.ContainsKey(componentId))
-      {
-        return _components[componentId];
-      }
-      return null;
-    }
-
-    /// <summary>
-    /// Adds the given component to the actor type.
-    /// </summary>
-    /// <param name="component">The component to add.</param>
-    internal bool AddComponent(ActorComponent component)
-    {
-      if (_components != null && component != null && !_components.ContainsKey(component.GetComponentId()))
-      {
-        _components.Add(component.GetComponentId(), component);
-        return true;
-      }
-      return false;
-    }
-
-    /// <summary>
-    /// Creates a new actor of this type.
-    /// </summary>
-    /// <param name="node">The xml node to load the actor data from.</param>
-    /// <returns>The newly created actor.</returns>
-    public Actor CreateActor(XmlNode node)
-    {
-      Actor result = new Actor();
-      if (result.Load(node))
-      {
-        foreach (ActorComponent comp in _components.Values)
-        {
-          ActorComponent copyComp = comp.Copy();
-          copyComp.Owner = result;
-          result.AddComponent(comp.Copy());
-        }
-      }
-      return result;
+      get { return _componentNodes; }
     }
 
     public override bool Load(XmlNode node)
@@ -63,27 +21,31 @@ namespace OkuEngine.Actors
       if (!base.Load(node))
         return false;
 
-      XmlNode child = node["components"];
-      if (child != null)
-      {
-        ActorComponentFactory factory = new ActorComponentFactory();
-        XmlNode componentNode = child.FirstChild;
-        while (componentNode != null)
-        {
-          ActorComponent component = factory.CreateComponent(componentNode);
-          if (component != null)
-          {
-            if (_components == null)
-              _components = new Dictionary<int, ActorComponent>();
+      _actorTypeNode = node;
+      
 
-            _components.Add(component.GetComponentId(), component);
+      XmlNode componentsNode = node["components"];
+      if (componentsNode != null)
+      {
+        if (_componentNodes == null)
+          _componentNodes = new List<XmlNode>();
+        else
+          _componentNodes.Clear();
+
+        XmlNode child = componentsNode.FirstChild;
+        while (child != null)
+        {
+          int id = OkuManagers.ComponentFactory.GetComponentId(child);
+          if (id > 0)
+          {
+            _componentNodes.Add(child);
           }
           else
           {
-            OkuManagers.Logger.LogError("Could not load actor type component: " + componentNode.OuterXml);
-            return false;
+            OkuManagers.Logger.LogError("Actortype " + _name + " specifies an unknown component ! " + child.OuterXml);
           }
-          componentNode = componentNode.NextSibling;
+
+          child = child.NextSibling;
         }
       }
 
@@ -98,9 +60,9 @@ namespace OkuEngine.Actors
         return false;
 
       writer.WriteStartElement("components");
-      foreach (ActorComponent comp in _components.Values)
+      foreach (XmlNode comp in _componentNodes)
       {
-        comp.Save(writer);
+        comp.WriteTo(writer);
       }
       writer.WriteEndElement();
 

@@ -5,7 +5,7 @@ using System.Text;
 using OkuEngine.Driver.Renderer;
 using OkuEngine.Resources;
 
-namespace OkuEngine.Actors.Components
+namespace OkuEngine.Components
 {
   public class ImageRenderComponent : RenderComponent
   {
@@ -96,13 +96,6 @@ namespace OkuEngine.Actors.Components
     public override bool PostRender()
     {
       return true;
-    }
-
-    public override ActorComponent Copy()
-    {
-      ImageRenderComponent result = new ImageRenderComponent();
-      this.ApplyTo(result);
-      return result;
     }
 
   }

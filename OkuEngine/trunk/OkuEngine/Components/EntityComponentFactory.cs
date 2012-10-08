@@ -3,27 +3,27 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 
-namespace OkuEngine.Actors.Components
+namespace OkuEngine.Components
 {
-  public class ActorComponentFactory
+  public class EntityComponentFactory
   {
-    private delegate ActorComponent ActorComponentCreatorDelegate(XmlNode node);
+    private delegate EntityComponent ActorComponentCreatorDelegate(XmlNode node);
 
     private Dictionary<string, ActorComponentCreatorDelegate> _actorComponentCreators = new Dictionary<string, ActorComponentCreatorDelegate>();
 
-    public ActorComponentFactory()
+    public EntityComponentFactory()
     {
       _actorComponentCreators.Add(HealthPickup.ComponentName, new ActorComponentCreatorDelegate(CreateHealthPickup));
       _actorComponentCreators.Add(RenderComponent.ComponentName, new ActorComponentCreatorDelegate(CreateRenderComponent));
       _actorComponentCreators.Add(AttributeComponent.ComponentName, new ActorComponentCreatorDelegate(CreateParameterComponent));
     }
 
-    protected ActorComponent CreateHealthPickup(XmlNode node)
+    protected EntityComponent CreateHealthPickup(XmlNode node)
     {
       return new HealthPickup();
     }
 
-    protected ActorComponent CreateRenderComponent(XmlNode node)
+    protected EntityComponent CreateRenderComponent(XmlNode node)
     {
       string type = node.Attributes.GetAttributeValue("type", "");
       switch (type.ToLower())
@@ -48,15 +48,15 @@ namespace OkuEngine.Actors.Components
       return null;
     }
 
-    protected ActorComponent CreateParameterComponent(XmlNode node)
+    protected EntityComponent CreateParameterComponent(XmlNode node)
     {
       return new AttributeComponent();
     }
 
-    public ActorComponent CreateComponent(XmlNode node)
+    public EntityComponent CreateComponent(XmlNode node)
     {
       string name = node.Name;
-      ActorComponent result = null;
+      EntityComponent result = null;
 
       if (_actorComponentCreators.ContainsKey(name))
       {
@@ -69,6 +69,24 @@ namespace OkuEngine.Actors.Components
       }
 
       return result;
+    }
+
+    public int GetComponentId(XmlNode node)
+    {
+      switch (node.Name.ToLower())
+      {
+        case HealthPickup.ComponentName:
+          return HealthPickup.ComponentId;
+
+        case RenderComponent.ComponentName:
+          return RenderComponent.ComponentId;
+
+        case AttributeComponent.ComponentName:
+          return AttributeComponent.ComponentId;
+
+        default:
+          return 0;
+      }
     }
 
   }

@@ -4,11 +4,11 @@ using System.Xml;
 using System.Text;
 using OkuEngine.Driver.Renderer;
 
-namespace OkuEngine.Actors.Components
+namespace OkuEngine.Components
 {
-  public abstract class RenderComponent : ActorComponent
+  public abstract class RenderComponent : EntityComponent
   {
-    public const int ComponentId = ActorComponentIds.RenderId;
+    public const int ComponentId = EntityComponentIds.RenderId;
     public const string ComponentName = "renderable";
 
     protected Vector[] _points = null;

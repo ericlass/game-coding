@@ -210,29 +210,23 @@ namespace OkuEngine
       if (value == null || value.RawValue == null)
         return null;
 
-      AttributeDefinition attrDef = value.GetDefinition();
-      if (attrDef != null)
+      switch (value.Type)
       {
-        switch (attrDef.Type)
-        {
-          case AttributeType.Boolean:
-            return BoolToStr((bool)value.RawValue);
+        case AttributeType.Boolean:
+          return BoolToStr((bool)value.RawValue);
 
-          case AttributeType.Integer:
-            return value.RawValue.ToString();
+        case AttributeType.Integer:
+          return value.RawValue.ToString();
 
-          case AttributeType.Number:
-            return FloatToString((float)value.RawValue);
+        case AttributeType.Number:
+          return FloatToString((float)value.RawValue);
 
-          case AttributeType.String:
-            return value.RawValue as string;
+        case AttributeType.String:
+          return value.RawValue as string;
 
-          default:
-            throw new NotImplementedException("Don't know how to convert parameter type " + attrDef.Type + "!");
-        }
+        default:
+          throw new NotImplementedException("Don't know how to convert parameter type " + value.Type + "!");
       }
-
-      return null;
     }
 
   }

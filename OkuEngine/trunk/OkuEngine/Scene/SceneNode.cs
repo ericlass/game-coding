@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 using OkuEngine.Actors;
-using OkuEngine.Actors.Components;
+using OkuEngine.Components;
 
 namespace OkuEngine.Scene
 {
@@ -139,7 +139,7 @@ namespace OkuEngine.Scene
         Actor actor = OkuData.Actors[_props.ActorId];
         if (actor != null)
         {
-          ActorComponent comp = actor.GetComponent(RenderComponent.ComponentId);
+          EntityComponent comp = actor.GetComponent(RenderComponent.ComponentId);
           if (comp != null && comp is RenderComponent)
           {
             _renderComp = comp as RenderComponent;

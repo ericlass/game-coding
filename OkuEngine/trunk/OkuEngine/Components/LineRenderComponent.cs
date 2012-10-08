@@ -4,16 +4,18 @@ using System.Xml;
 using System.Text;
 using OkuEngine.Driver.Renderer;
 
-namespace OkuEngine.Actors.Components
+namespace OkuEngine.Components
 {
-  public class PointRenderComponent : RenderComponent
+  public class LineRenderComponent : RenderComponent
   {
-    public const string RenderType = "point";
+    public const string RenderType = "line";
 
-    private float _pointSize = 1.0f;
+    private float _lineWidth = 1.0f;
 
     public override bool Load(XmlNode node)
     {
+      bool closed = false;
+
       string value = node.GetTagValue("points");
       if (value != null)
         _points = Converter.ParseVectors(value);
@@ -22,13 +24,17 @@ namespace OkuEngine.Actors.Components
       if (value != null)
         _colors = Converter.ParseColors(value);
 
-      value = node.GetTagValue("size");
+      value = node.GetTagValue("closed");
       if (value != null)
-        _pointSize = Converter.StrToFloat(value);
+        closed = Converter.StrToBool(value, false);
+
+      value = node.GetTagValue("width");
+      if (value != null)
+        _lineWidth = Converter.StrToFloat(value);
 
       if (_points == null)
       {
-        OkuManagers.Logger.LogError("Point render component is missing points!");
+        OkuManagers.Logger.LogError("Line render component is missing points!");
         return false;
       }
 
@@ -41,7 +47,10 @@ namespace OkuEngine.Actors.Components
         }
       }
 
-      _mode = DrawMode.Points;
+      if (closed)
+        _mode = DrawMode.ClosedPolygon;
+      else
+        _mode = DrawMode.Polygon;
 
       return true;
     }
@@ -58,8 +67,11 @@ namespace OkuEngine.Actors.Components
       if (_colors != null)
         writer.WriteValueTag("colors", _colors.ToOkuString());
 
-      if (_pointSize != 1.0f)
-        writer.WriteValueTag("size", Converter.FloatToString(_pointSize));
+      if (_mode == DrawMode.ClosedPolygon)
+        writer.WriteValueTag("closed", Converter.BoolToStr(true));
+
+      if (_lineWidth != 1.0f)
+        writer.WriteValueTag("width", Converter.FloatToString(_lineWidth));
 
       writer.WriteEndElement();
 
@@ -68,21 +80,13 @@ namespace OkuEngine.Actors.Components
 
     public override bool PreRender()
     {
-      OkuManagers.Renderer.SetPointSize(_pointSize);
+      OkuManagers.Renderer.SetLineWidth(_lineWidth);
       return true;
     }
 
     public override bool PostRender()
     {
       return true;
-    }
-
-    public override ActorComponent Copy()
-    {
-      PointRenderComponent result = new PointRenderComponent();
-      this.ApplyTo(result);
-      result._pointSize = _pointSize;
-      return result;
     }
 
   }

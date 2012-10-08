@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using OkuEngine.Actors;
 
-namespace OkuEngine.Actors.Components
+namespace OkuEngine.Components
 {
   /// <summary>
   /// Base class for all actor components
   /// </summary>
-  public abstract class ActorComponent : IStoreable
+  public abstract class EntityComponent : IStoreable
   {
     protected Actor _owner = null;
 
@@ -28,7 +29,6 @@ namespace OkuEngine.Actors.Components
     public abstract int GetComponentId();
     public abstract bool Load(XmlNode node);
     public abstract bool Save(XmlWriter writer);
-    public abstract ActorComponent Copy();
 
   }
 }

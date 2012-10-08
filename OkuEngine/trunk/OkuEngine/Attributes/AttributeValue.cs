@@ -7,29 +7,27 @@ namespace OkuEngine.Attributes
 {
   public class AttributeValue : IStoreable
   {
-    private int _attrId = 0;
+    private string _name = null;
+    private AttributeType _type = AttributeType.Number;
     private object _rawValue = null;
-    private IAttributeContainer _container = null;
 
-    public AttributeValue(IAttributeContainer container)
+    public AttributeValue()
     {
-      _container = container;
     }
 
-    public int AttributeId
+    public string Name
     {
-      get { return _attrId; }
-      set { _attrId = value; }
+      get { return _name; }
+    }
+
+    public AttributeType Type
+    {
+      get { return _type; }
     }
 
     public object RawValue
     {
       get { return _rawValue; }
-    }
-
-    public AttributeDefinition GetDefinition()
-    {
-      return _container.GetAttributeDefinition(_attrId);
     }
 
     internal void SetRawValue(object rawValue)
@@ -78,30 +76,14 @@ namespace OkuEngine.Attributes
 
     public bool Load(XmlNode node)
     {
-      _attrId = 0;
-      string value = node.GetTagValue("id");
-      if (value != null)
+      _name = node.GetTagValue("name");
+      if (_name != null)
       {
-        int id = 0;
-        if (int.TryParse(value, out id))
-          _attrId = id;
+        _name = _name.Trim().ToLower();
       }
 
-      if (value == null || _attrId == 0)
-      {
-        OkuManagers.Logger.LogError("Attribute value does not specify a valid attribute id! " + node.OuterXml);
-        return false;
-      }
-
-      AttributeDefinition attrDef = _container.GetAttributeDefinition(_attrId);
-
-      if (attrDef == null)
-      {
-        OkuManagers.Logger.LogError("There is no attribute definition with the id " + _attrId + "! " + node.OuterXml);
-        return false;
-      }
-
-      _rawValue = Converter.AttributeValueFromString(node.GetTagValue("value"), attrDef.Type);
+      _type = Converter.ParseEnum<AttributeType>(node.GetTagValue("type"));
+      _rawValue = Converter.AttributeValueFromString(node.GetTagValue("value"), _type);
 
       return true;
     }
@@ -110,8 +92,9 @@ namespace OkuEngine.Attributes
     {
       writer.WriteStartElement("attribute");
 
-      writer.WriteValueTag("id", _attrId.ToString());
-      writer.WriteValueTag("id", _attrId.ToString());
+      writer.WriteValueTag("name", _name);
+      writer.WriteValueTag("type", _type.ToString());
+      writer.WriteValueTag("value", Converter.ValueToString(this));
 
       writer.WriteEndElement();
 
