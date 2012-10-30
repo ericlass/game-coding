@@ -4,6 +4,7 @@ using System.Xml;
 using System.Text;
 using OkuEngine.Scenes;
 using OkuEngine.Attributes;
+using OkuEngine.States;
 
 namespace OkuEngine.Actors
 {
@@ -14,6 +15,7 @@ namespace OkuEngine.Actors
   {
     private SceneNode _sceneNode = null;
     private ActorType _type = null;
+    private StateManager<ActorState> _states = new StateManager<ActorState>();
 
     /// <summary>
     /// Creates a new actor.
@@ -28,6 +30,11 @@ namespace OkuEngine.Actors
     public ActorType Type
     {
       get { return _type; }
+    }
+
+    public StateManager<ActorState> States
+    {
+      get { return _states; }
     }
 
     /// <summary>
@@ -68,6 +75,26 @@ namespace OkuEngine.Actors
         return false;
       }
 
+      XmlNode statesNode = node["states"];
+      if (statesNode != null)
+      {
+        if (!_states.Load(statesNode))
+          return false;
+        else
+        {
+          // Set up inherting attributes and renderables
+          foreach (ActorState state in _states.States.Values)
+          {
+            if (_type.States.States.ContainsKey(state.Name))
+            {
+              //TODO: Add missing attributes on actor itself between type and states
+              state.Attributes.Parent = _type.States.States[state.Name].Attributes;
+              state.Renderable.Parent = _type.States.States[state.Name].Renderable;
+            }
+          }
+        }
+      }
+
       return true;
     }
 
@@ -83,6 +110,10 @@ namespace OkuEngine.Actors
         return false;
 
       writer.WriteValueTag("type", _type.Id.ToString());
+
+      if (_states != null)
+        if (!_states.Save(writer))
+          return false;
 
       writer.WriteEndElement();
 

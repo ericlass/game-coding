@@ -187,10 +187,35 @@ namespace OkuEngine
     public static string GetTagValue(this XmlNode node, string name)
     {
       XmlNode child = node[name];
-      if (child != null)
+      if (child != null && child.FirstChild != null)
         return child.FirstChild.Value;
 
       return null;
+    }
+
+    /// <summary>
+    /// Gets the dotted path of the given XML node as a string.
+    /// The name of the node itself is included.
+    /// </summary>
+    /// <param name="node">The node the get the path for.</param>
+    /// <returns>The dotted path of the given node.</returns>
+    public static string GetPath(this XmlNode node)
+    {
+      XmlNode parent = node;
+      StringBuilder builder = new StringBuilder();
+      bool first = true;
+      while (parent != null && parent.NodeType != XmlNodeType.Document)
+      {
+        if (first)
+          first = false;
+        else
+          builder.Append(".");
+
+        builder.Insert(0, parent.Name.ToLower());        
+        parent = parent.ParentNode;
+      }
+
+      return builder.ToString();
     }
 
     /// <summary>

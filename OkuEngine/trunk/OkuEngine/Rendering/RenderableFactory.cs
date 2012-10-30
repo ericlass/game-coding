@@ -29,6 +29,8 @@ namespace OkuEngine.Rendering
     {
       _creators.Add("image", new RenderableCreatorDelegate(CreateRenderableImage));
       _creators.Add("line", new RenderableCreatorDelegate(CreateRenderableLines));
+      _creators.Add("point", new RenderableCreatorDelegate(CreateRenderablePoints));
+      _creators.Add("mesh", new RenderableCreatorDelegate(CreateRenderableMesh));
     }
 
     public IRenderable CreateRenderable(XmlNode node)
@@ -39,7 +41,9 @@ namespace OkuEngine.Rendering
         type = type.Trim().ToLower();
         if (_creators.ContainsKey(type))
         {
-          return _creators[type]();
+          IRenderable result = _creators[type]();
+          result.Load(node);
+          return result;
         }
       }
       return null;
@@ -53,6 +57,16 @@ namespace OkuEngine.Rendering
     private IRenderable CreateRenderableLines()
     {
       return new RenderableLines();
+    }
+
+    private IRenderable CreateRenderablePoints()
+    {
+      return new RenderablePoints();
+    }
+
+    private IRenderable CreateRenderableMesh()
+    {
+      return new RenderableMesh();
     }
 
   }

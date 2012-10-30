@@ -3,47 +3,36 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 using OkuEngine.Scenes;
-using OkuEngine.Driver.Renderer;
 
 namespace OkuEngine.Rendering
 {
-  public class RenderableLines : IRenderable
+  public class RenderablePoints : IRenderable
   {
     private Vertices _vertices = null;
-    private float _width = 1.0f;
-    private bool _closed = true;
+    private float _size = 2.0f;
 
     public void Update(float dt)
     {
-      //Nothing to for lines
+      //Nothing to do for points
     }
 
     public void Render(Scene scene)
     {
-      if (_closed)
-        OkuManagers.Renderer.DrawLines(_vertices.Positions, _vertices.Colors, _vertices.Count, _width, VertexInterpretation.PolygonClosed);
-      else
-        OkuManagers.Renderer.DrawLines(_vertices.Positions, _vertices.Colors, _vertices.Count, _width, VertexInterpretation.Polygon);
+      OkuManagers.Renderer.DrawPoints(_vertices.Positions, _vertices.Colors, _vertices.Count, _size);
     }
 
     public bool Load(XmlNode node)
     {
-      string value = node.GetTagValue("width");
+      string value = node.GetTagValue("size");
       if (value != null)
       {
-        float w = 0;
-        if (Converter.TryStrToFloat(value, out w))
-          _width = w;
+        float size = 0;
+        if (Converter.TryStrToFloat(value, out size))
+          _size = size;
         else
         {
-          OkuManagers.Logger.LogError("Invalid number given for line width! " + node.OuterXml);
+          OkuManagers.Logger.LogError("Invalid number given for point size! " + node.OuterXml);
         }
-      }
-
-      value = node.GetTagValue("closed");
-      if (value != null)
-      {
-        _closed = Converter.StrToBool(value, true);
       }
 
       XmlNode vertexNode = node["vertices"];
@@ -65,11 +54,9 @@ namespace OkuEngine.Rendering
       writer.WriteStartElement("renderable");
 
       writer.WriteStartAttribute("type");
-      writer.WriteValue("line");
+      writer.WriteValue("point");
       writer.WriteEndAttribute();
-      
-      writer.WriteValueTag("width", Converter.FloatToString(_width));
-      writer.WriteValueTag("closed", Converter.BoolToStr(_closed));
+
       if (!_vertices.Save(writer))
         return false;
 

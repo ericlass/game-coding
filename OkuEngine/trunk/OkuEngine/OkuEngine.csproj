@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="Actors\ActorState.cs" />
     <Compile Include="Actors\ActorType.cs" />
+    <Compile Include="Attributes\AttributeMap.cs" />
     <Compile Include="Components\EntityComponentIds.cs" />
     <Compile Include="Components\AttributeComponent.cs" />
     <Compile Include="Animation\Animation.cs" />
@@ -110,6 +111,8 @@
     <Compile Include="Rendering\RenderableFactory.cs" />
     <Compile Include="Rendering\RenderableImage.cs" />
     <Compile Include="Rendering\RenderableLines.cs" />
+    <Compile Include="Rendering\RenderableMesh.cs" />
+    <Compile Include="Rendering\RenderablePoints.cs" />
     <Compile Include="Resources\DefaultResourceLoader.cs" />
     <Compile Include="Resources\FileSystemResourceFile.cs" />
     <Compile Include="Resources\IResourceExtraData.cs" />
@@ -154,6 +157,8 @@
     <Compile Include="PropertyEntry.cs" />
     <Compile Include="Shaper\PolyEditorWidget.cs" />
     <Compile Include="Shaper\Shape.cs" />
+    <Compile Include="States\EntityState.cs" />
+    <Compile Include="States\StateManager.cs" />
     <Compile Include="StoreableEntity.cs" />
     <Compile Include="VirtualFileSystem\VirtualFile.cs" />
     <Compile Include="VirtualFileSystem\VirtualFileSystem.cs" />

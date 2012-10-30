@@ -5,7 +5,7 @@
       <width>1024</width>
       <height>768</height>
       <depth>no</depth>
-      <clearcolor>0,0,0</clearcolor>
+      <clearcolor>#000F</clearcolor>
       <passes>
         <pass targets="1" />
         <pass targets="1" />
@@ -121,26 +121,50 @@
       <actortype>
         <id>1</id>
         <name>Car Image</name>
-        <attributes>
-          <attribute>
-            <name>Speed</name>
-            <type>Number</type>
-            <!-- Optional, default value here -->
-            <value>0.0</value>
-          </attribute>
-        </attributes>
-        <renderable type="image">
-          <image>2</image>
-        </renderable>
-        <renderable type="line">
-          <width></width>
-          <closed></closed>
-          <vertices>
-            <points></points>
-            <colors></colors>
-            <texcoords></texcoords>
-          </vertices>
-        </renderable>
+        <states>
+          <default>normal</default>
+          <state>
+            <name>normal</name>
+            <attributes>
+              <attribute>
+                <name>Speed</name>
+                <type>Number</type>
+                <!-- Optional, default value here -->
+                <value>0.0</value>
+              </attribute>
+            </attributes>
+            <renderable type="image">
+              <image>2</image>
+            </renderable>
+            <renderable type="line">
+              <width></width>
+              <closed></closed>
+              <vertices>
+                <points></points>
+                <colors></colors>
+                <texcoords></texcoords>
+              </vertices>
+            </renderable>
+            <renderable type="point">
+              <size></size>
+              <vertices>
+                <points></points>
+                <colors></colors>
+                <texcoords></texcoords>
+              </vertices>
+            </renderable>
+            <renderable type="mesh">
+              <!-- Optional -->
+              <image></image>
+              <mode></mode>
+              <vertices>
+                <points></points>
+                <colors></colors>
+                <texcoords></texcoords>
+              </vertices>
+            </renderable>
+          </state>
+        </states>
       </actortype>
     </actortypes>
 
@@ -149,12 +173,18 @@
         <id>1</id>
         <name>Car</name>
         <type>1</type>
-        <attributes>
-          <attribute>
-            <name>Speed</name>
-            <value>10.0</value>
-          </attribute>
-        </attributes>
+        <states>
+          <default>normal</default>
+          <state>
+            <name>normal</name>
+            <attributes>
+              <attribute>
+                <name>Speed</name>
+                <value>10.0</value>
+              </attribute>
+            </attributes>
+          </state>
+        </states>
       </actor>
     </actors>
 

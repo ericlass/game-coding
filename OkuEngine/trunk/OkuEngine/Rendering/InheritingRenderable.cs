@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Xml;
 using System.Text;
 using OkuEngine.Scenes;
 
@@ -18,6 +18,12 @@ namespace OkuEngine
     public InheritingRenderable(InheritingRenderable parent)
     {
       _parent = parent;
+    }
+
+    public IRenderable Renderable
+    {
+      get { return _renderable; }
+      set { _renderable = value; }
     }
 
     public InheritingRenderable Parent

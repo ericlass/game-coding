@@ -20,7 +20,7 @@ namespace OkuEngine
       int frac = (int)Math.Abs((value - num) * 1000000000.0f);
       return num + "." + frac;
     }
-
+    
     /// <summary>
     /// Converts the given string to a float value. The decimal separator has to be a ".".
     /// </summary>
@@ -41,6 +41,36 @@ namespace OkuEngine
 
       result += fraction;
       return result;
+    }
+
+    /// <summary>
+    /// Converts the given string to a float value. The decimal separator has to be a ".".
+    /// </summary>
+    /// <param name="str">The string to be converted to a float.</param>
+    /// <returns>The converted float value.</returns>
+    public static bool TryStrToFloat(string str, out float result)
+    {
+      string[] parts = str.Split('.');
+
+      result = 0.0f;
+      float fraction = 0.0f;
+      try
+      {
+        result = float.Parse(parts[0]);
+        if (parts.Length > 1)
+          fraction = float.Parse(parts[1]);
+      }
+      catch (Exception)
+      {
+        return false;
+      }
+
+      while (fraction >= 1.0f)
+        fraction /= 10.0f;
+
+      result += fraction;
+
+      return true;
     }
 
     /// <summary>

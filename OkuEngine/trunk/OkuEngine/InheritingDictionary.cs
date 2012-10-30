@@ -42,5 +42,23 @@ namespace OkuEngine
       return default(V);
     }
 
+    /// <summary>
+    /// Checks if the doctionary has a value for the given key.
+    /// If it has a value, true is returned. If not, the parent 
+    /// dictionary is checked recursively. If no parent is defined,
+    /// this behaves like a usual dictionary.
+    /// </summary>
+    /// <param name="key">The key to check.</param>
+    /// <returns>True if there is a value for the given key, else false.</returns>
+    public bool ContainsInheritedKey(K key)
+    {
+      if (ContainsKey(key))
+        return true;
+      else if (_parent != null)
+        return _parent.ContainsInheritedKey(key);
+
+      return false;
+    }
+
   }
 }

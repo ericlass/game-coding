@@ -3,39 +3,54 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 using OkuEngine.Attributes;
+using OkuEngine.Rendering;
+using OkuEngine.States;
 
 namespace OkuEngine.Actors
 {
-  public class ActorState : IStoreable
+  public class ActorState : EntityState
   {
-    private string _name = null;
-    private InheritingDictionary<string, AttributeValue> _attributes = null;
-    private InheritingRenderable _renderable = null;
-
-    public string Name
-    {
-      get { return _name; }
-      set { _name = value; }
-    }
-
-    public InheritingDictionary<string, AttributeValue> Attributes
-    {
-      get { return _attributes; }
-    }
+    private InheritingRenderable _renderable = new InheritingRenderable();
 
     public InheritingRenderable Renderable
     {
       get { return _renderable; }
     }
 
-    public bool Load(XmlNode node)
+    public override bool Load(XmlNode node)
     {
-      throw new NotImplementedException();
+      if (!base.Load(node))
+        return false;
+
+      XmlNode renderNode = node["renderable"];
+      if (renderNode != null)
+      {
+        IRenderable renderable = RenderableFactory.Instance.CreateRenderable(renderNode);
+        if (renderable != null)
+        {
+          _renderable = new InheritingRenderable();
+          _renderable.Renderable = renderable;
+        }
+        else
+          return false;
+      }
+
+      return true;
     }
 
-    public bool Save(XmlWriter writer)
+    public override bool Save(XmlWriter writer)
     {
-      throw new NotImplementedException();
+      writer.WriteStartElement("state");
+
+      if (!base.Save(writer))
+        return false;
+
+      if (_renderable != null && _renderable.Renderable != null)
+        _renderable.Renderable.Save(writer);
+
+      writer.WriteEndElement();
+
+      return true;
     }
 
   }

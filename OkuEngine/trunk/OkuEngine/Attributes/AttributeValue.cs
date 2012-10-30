@@ -81,6 +81,11 @@ namespace OkuEngine.Attributes
       {
         _name = _name.Trim().ToLower();
       }
+      else
+      {
+        OkuManagers.Logger.LogError("No name given for attribute! " + node.OuterXml);
+        return false;
+      }
 
       _type = Converter.ParseEnum<AttributeType>(node.GetTagValue("type"));
       _rawValue = Converter.AttributeValueFromString(node.GetTagValue("value"), _type);

@@ -169,6 +169,9 @@ namespace OkuEngine.Scenes
       {
         //TODO: Add visibility check
         //TODO: Call IRenderable of actor
+        Actor actor = OkuData.Actors[_props.ActorId];
+        if (actor != null)
+          actor.States.CurrentState.Renderable.RenderInherited(scene);
       }
       finally
       {
