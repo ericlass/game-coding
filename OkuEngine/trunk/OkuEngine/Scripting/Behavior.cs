@@ -20,7 +20,13 @@ namespace OkuEngine.Scripting
       {
         foreach (ScriptInstance script in _handlers[eventId])
         {
+          long tick1, tick2, freq;
+          Kernel32.QueryPerformanceFrequency(out freq);
+          Kernel32.QueryPerformanceCounter(out tick1);
           script.Run();
+          Kernel32.QueryPerformanceCounter(out tick2);
+          float time = ((tick2 - tick1) / (float)freq) * 1000.0f;
+          OkuManagers.Logger.LogInfo("Behavior Script took " + time.ToString() + "ms");
         }
       }
     }

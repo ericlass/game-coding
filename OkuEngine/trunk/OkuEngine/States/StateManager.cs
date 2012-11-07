@@ -10,12 +10,18 @@ namespace OkuEngine.States
     private string _defaultName = null;
     private T _currentState = null;
     private InheritingDictionary<string, T> _states = new InheritingDictionary<string, T>();
+    private StateManager<T> _parent = null;
 
     public StateManager()
     {      
     }
 
-    public InheritingDictionary<string, T> States
+    public StateManager(StateManager<T> parent)
+    {
+      Parent = parent;
+    }
+
+    internal InheritingDictionary<string, T> States
     {
       get { return _states; }
     }
@@ -23,6 +29,30 @@ namespace OkuEngine.States
     public T CurrentState
     {
       get { return _currentState; }
+    }
+
+    public string CurrentName
+    {
+      get
+      {
+        if (_currentState != null)
+          return _currentState.Name;
+        else
+          return "";
+      }
+    }
+
+    public StateManager<T> Parent
+    {
+      get { return _parent; }
+      set
+      {
+        _parent = value;
+        if (_parent != null)
+          _states.Parent = _parent.States;
+        else
+          _states.Parent = null;
+      }
     }
 
     public bool Add(T state)
@@ -41,9 +71,16 @@ namespace OkuEngine.States
       if (state != null)
       {
         _currentState = state;
+        //TODO: Enqueue state change event, but how? I don't know the owner!
         return true;
       }
+
       return false;
+    }
+
+    public T GetState(string stateName)
+    {
+      return _states.GetInheritedValue(stateName);
     }
 
     public bool Load(XmlNode node)

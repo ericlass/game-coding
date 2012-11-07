@@ -16,6 +16,7 @@ namespace OkuEngine.Actors
     private SceneNode _sceneNode = null;
     private ActorType _type = null;
     private StateManager<ActorState> _states = new StateManager<ActorState>();
+    private AttributeMap _attributes = new AttributeMap();
 
     /// <summary>
     /// Creates a new actor.
@@ -32,9 +33,20 @@ namespace OkuEngine.Actors
       get { return _type; }
     }
 
+    /// <summary>
+    /// Gets the states that are associated with the actor.
+    /// </summary>
     public StateManager<ActorState> States
     {
       get { return _states; }
+    }
+
+    /// <summary>
+    /// Gets the attributes of the actor.
+    /// </summary>
+    public AttributeMap Attributes
+    {
+      get { return _attributes; }
     }
 
     /// <summary>
@@ -87,13 +99,20 @@ namespace OkuEngine.Actors
           {
             if (_type.States.States.ContainsKey(state.Name))
             {
-              //TODO: Add missing attributes on actor itself between type and states
               state.Attributes.Parent = _type.States.States[state.Name].Attributes;
               state.Renderable.Parent = _type.States.States[state.Name].Renderable;
             }
           }
         }
       }
+
+      XmlNode attrsNode = node["attributes"];
+      if (attrsNode != null)
+      {
+        if (!_attributes.Load(attrsNode))
+          return false;
+      }
+      _attributes.Parent = _type.Attributes;
 
       return true;
     }
@@ -111,6 +130,9 @@ namespace OkuEngine.Actors
 
       writer.WriteValueTag("type", _type.Id.ToString());
 
+      if (!_attributes.Save(writer))
+        return false;
+      
       if (_states != null)
         if (!_states.Save(writer))
           return false;

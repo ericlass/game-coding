@@ -25,5 +25,21 @@ function Actor(actorId) {
   this.setAngle = function(angle) {
     oku_setActorAngle(this.actorId, angle);
   }
+
+  this.getState = function() {
+    return oku_getActorState(this.actorId);
+  }
+
+  this.setState = function(state) {
+    oku_setActorState(this.actorId, state);
+  }
+
+  this.getAttribute = function(name) {
+    return oku_getActorAttribute(actorId, name);
+  }
+
+  this.setAttribute = function(name, value) {
+    oku_setActorAttribute(this.actorId, name, value);
+  }
   
 }

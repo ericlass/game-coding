@@ -27,7 +27,13 @@ namespace OkuEngine.Scripting
       _engine.SetGlobalFunction("oku_getActorAngle", new Func<int, double>((actorId) => OkuData.Actors[actorId].SceneNode.Properties.Transform.Rotation));
       _engine.SetGlobalFunction("oku_setActorAngle", new Action<int, double>((actorId, value) => OkuData.Actors[actorId].SceneNode.Properties.Transform.Rotation = (float)value));
 
-      _engine.SetGlobalFunction("logMessage", new Action<string>((message) => OkuManagers.Logger.LogInfo(message)));
+      _engine.SetGlobalFunction("print", new Action<string>((message) => OkuManagers.Logger.LogInfo(message)));
+
+      _engine.SetGlobalFunction("oku_getActorState", new Func<int, string>((actorId) => OkuData.Actors[actorId].States.CurrentName));
+      _engine.SetGlobalFunction("oku_setActorState", new Action<int, string>((actorId, state) => OkuData.Actors[actorId].States.MakeCurrent(state)));
+
+      _engine.SetGlobalFunction("oku_getActorAttribute", new Func<int, string, string>((actorId, attrName) => OkuData.Actors[actorId].Attributes.GetInheritedValue(attrName.ToLower()).ValueString));
+      _engine.SetGlobalFunction("oku_setActorAttribute", new Action<int, string, string>((actorId, attrName, value) => OkuData.Actors[actorId].Attributes.GetInheritedValue(attrName.ToLower()).ValueString = value));
 
       StreamReader reader = new StreamReader(Assembly.GetAssembly(typeof(OkuScriptManager)).GetManifestResourceStream("OkuEngine.OkuRuntime.js"));
       string code = null;

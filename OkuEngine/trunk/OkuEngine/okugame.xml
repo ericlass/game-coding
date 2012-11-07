@@ -32,6 +32,14 @@
         <id>100002</id>
         <name>Steer Right</name>
       </event>
+      <event>
+        <id>100003</id>
+        <name>Test Attributes</name>
+      </event>
+      <event>
+        <id>100004</id>
+        <name>Test States</name>
+      </event>
     </userevents>
 
     <keybindings>
@@ -48,6 +56,18 @@
         <action>Down</action>
         <state>yes</state>
         <event>100002</event>
+      </binding>
+      <binding>
+        <key>S</key>
+        <action>Down</action>
+        <state>no</state>
+        <event>100003</event>
+      </binding>
+      <binding>
+        <key>W</key>
+        <action>Down</action>
+        <state>no</state>
+        <event>100004</event>
       </binding>
     </keybindings>
     
@@ -87,7 +107,7 @@
     <behaviors>
       <behavior>
         <id>1</id>
-        <name>Turn CCW</name>
+        <name>Turn Car</name>
         <handlers>
           <handler>
             <event>100001</event>
@@ -98,12 +118,6 @@
               ]]>
             </script>
           </handler>
-        </handlers>        
-      </behavior>
-      <behavior>
-        <id>2</id>
-        <name>Turn CW</name>
-        <handlers>
           <handler>
             <event>100002</event>
             <script>
@@ -115,12 +129,45 @@
           </handler>
         </handlers>
       </behavior>
+      <behavior>
+        <id>2</id>
+        <name>Test Script</name>
+        <handlers>
+          <handler>
+            <event>100003</event>
+            <script>
+              <![CDATA[
+              var actor = new Actor(1);
+              var test = actor.getAttribute("Test");
+              test = "Saublöd!";
+              actor.setAttribute("test", test);
+              ]]>
+            </script>
+          </handler>
+          <handler>
+            <event>100004</event>
+            <script>
+              <![CDATA[
+              var actor = new Actor(1);
+              actor.getState();
+              ]]>
+            </script>
+          </handler>
+        </handlers>
+      </behavior>
     </behaviors>
 
     <actortypes>
       <actortype>
         <id>1</id>
         <name>Car Image</name>
+        <attributes>
+          <attribute>
+            <name>Test</name>
+            <type>String</type>
+            <value>Hallo!</value>
+          </attribute>
+        </attributes>
         <states>
           <default>normal</default>
           <state>
