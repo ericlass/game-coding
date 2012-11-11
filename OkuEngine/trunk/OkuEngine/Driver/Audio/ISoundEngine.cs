@@ -60,6 +60,10 @@ namespace OkuEngine.Driver.Audio
     /// <param name="numChannels">The number of channels.</param>
     void InitContentRaw(SoundContent content, byte[] data, int sampleRate, int numChannels);
 
+    /// <summary>
+    /// Release all resource for the given sound content.
+    /// </summary>
+    /// <param name="content">The sound content to release.</param>
     void ReleaseContent(SoundContent content);
   }
 }

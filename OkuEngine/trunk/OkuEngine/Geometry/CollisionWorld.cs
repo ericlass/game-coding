@@ -5,6 +5,9 @@ using System.Text;
 
 namespace OkuEngine
 {
+  /// <summary>
+  /// Defines a collision world where collisions between static and dynamic entities are calucalted.
+  /// </summary>
   public class CollisionWorld
   {
     private Dictionary<int, Vector[]> _statics = new Dictionary<int, Vector[]>();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Xml;
+using System.Reflection;
 
 namespace OkuEngine
 {
@@ -229,6 +230,68 @@ namespace OkuEngine
       writer.WriteStartElement(name);
       writer.WriteValue(value);
       writer.WriteEndElement();
+    }
+
+    /// <summary>
+    /// Gets the delegate type of the method which can be used to create a 
+    /// delegate for it at runtime.
+    /// </summary>
+    /// <param name="method">The method.</param>
+    /// <returns>The delegate type of the method, or null if it could not be found.</returns>
+    public static Type GetDelegateType(this MethodInfo method)
+    {
+      Type result = null;
+      if (method.ReturnType != typeof(void))
+      {
+        switch (method.GetParameters().Length)
+        {
+          case 0:
+            result = typeof(Func<>);
+            break;
+
+          case 1:
+            result = typeof(Func<,>);
+            break;
+
+          case 2:
+            result = typeof(Func<,,>);
+            break;
+
+          case 3:
+            result = typeof(Func<,,,>);
+            break;
+
+          case 4:
+            result = typeof(Func<,,,,>);
+            break;
+        }
+      }
+      else
+      {
+        switch (method.GetParameters().Length)
+        {
+          case 0:
+            result = typeof(Action);
+            break;
+
+          case 1:
+            result = typeof(Action<>);
+            break;
+
+          case 2:
+            result = typeof(Action<,>);
+            break;
+
+          case 3:
+            result = typeof(Action<,,>);
+            break;
+
+          case 4:
+            result = typeof(Action<,,,>);
+            break;
+        }
+      }
+      return result;
     }
 
   }

@@ -400,6 +400,11 @@ namespace OkuEngine
       return false;
     }
 
+    /// <summary>
+    /// Checks if the two vectors are equal.
+    /// </summary>
+    /// <param name="obj">The other vector.</param>
+    /// <returns>True if the vectors are equal.</returns>
     public override bool Equals(object obj)
     {
       if (obj is Vector)
@@ -407,11 +412,6 @@ namespace OkuEngine
         return Equals((Vector)obj);
       }
       return base.Equals(obj);
-    }
-
-    public override int GetHashCode()
-    {
-      return base.GetHashCode();
     }
 
   }

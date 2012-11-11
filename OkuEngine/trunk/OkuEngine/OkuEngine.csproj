@@ -61,9 +61,8 @@
   <ItemGroup>
     <Compile Include="Actors\ActorState.cs" />
     <Compile Include="Actors\ActorType.cs" />
+    <Compile Include="Api\OkuApi.cs" />
     <Compile Include="Attributes\AttributeMap.cs" />
-    <Compile Include="Components\EntityComponentIds.cs" />
-    <Compile Include="Components\AttributeComponent.cs" />
     <Compile Include="Animation\Animation.cs" />
     <Compile Include="Animation\AnimationFrame.cs" />
     <Compile Include="Animation\Easing.cs" />
@@ -81,14 +80,6 @@
     <Compile Include="Content\PixelShaderContent.cs" />
     <Compile Include="Converter.cs" />
     <Compile Include="Actors\Actor.cs" />
-    <Compile Include="Components\EntityComponent.cs" />
-    <Compile Include="Components\EntityComponentFactory.cs" />
-    <Compile Include="Components\HealthPickup.cs" />
-    <Compile Include="Components\ImageRenderComponent.cs" />
-    <Compile Include="Components\LineRenderComponent.cs" />
-    <Compile Include="Components\MeshRenderComponent.cs" />
-    <Compile Include="Components\PointRenderComponent.cs" />
-    <Compile Include="Components\RenderComponent.cs" />
     <Compile Include="EntityManager.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\EventListenerDelegate.cs" />
@@ -182,7 +173,6 @@
     <Compile Include="KeySequence.cs" />
     <Compile Include="Geometry\LineSegment.cs" />
     <Compile Include="Geometry\Matrix3.cs" />
-    <Compile Include="Engine\OkuConstants.cs" />
     <Compile Include="Engine\OkuData.cs" />
     <Compile Include="Engine\OkuManagers.cs" />
     <Compile Include="Engine\OkuGame.cs" />

@@ -43,8 +43,16 @@ namespace OkuEngine.Scripting
     {
       try
       {
+        long tick1, tick2, freq;
+        Kernel32.QueryPerformanceFrequency(out freq);
+        Kernel32.QueryPerformanceCounter(out tick1);
+
         //Call script
         _function.Call(null, null);
+
+        Kernel32.QueryPerformanceCounter(out tick2);
+        float time = (tick2 - tick1) / ((float)freq / 1000);
+        OkuManagers.Logger.LogInfo("Script execution took " + time.ToString("0.######") + "ms");
       }
       catch (Exception ex)
       {

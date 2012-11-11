@@ -5,6 +5,10 @@ using System.Text;
 
 namespace OkuEngine.States
 {
+  /// <summary>
+  /// Handles a set of entity states.
+  /// </summary>
+  /// <typeparam name="T">The type of state that should be handled.</typeparam>
   public class StateManager<T> : IStoreable where T : EntityState, new()
   {
     private string _defaultName = null;
@@ -12,25 +16,41 @@ namespace OkuEngine.States
     private InheritingDictionary<string, T> _states = new InheritingDictionary<string, T>();
     private StateManager<T> _parent = null;
 
+    /// <summary>
+    /// Creates a new state mananger.
+    /// </summary>
     public StateManager()
     {      
     }
 
+    /// <summary>
+    /// Creates a new state manager with the given parent manager.
+    /// </summary>
+    /// <param name="parent">The parent of the state manager.</param>
     public StateManager(StateManager<T> parent)
     {
       Parent = parent;
     }
 
+    /// <summary>
+    /// Gets the internal dictionary of states.
+    /// </summary>
     internal InheritingDictionary<string, T> States
     {
       get { return _states; }
     }
 
+    /// <summary>
+    /// Gets the current state.
+    /// </summary>
     public T CurrentState
     {
       get { return _currentState; }
     }
 
+    /// <summary>
+    /// Gets the name of the current state.
+    /// </summary>
     public string CurrentName
     {
       get
@@ -42,6 +62,9 @@ namespace OkuEngine.States
       }
     }
 
+    /// <summary>
+    /// Gets or sets the parent of the state manager.
+    /// </summary>
     public StateManager<T> Parent
     {
       get { return _parent; }
@@ -55,6 +78,11 @@ namespace OkuEngine.States
       }
     }
 
+    /// <summary>
+    /// Adds the given state to the state manager.
+    /// </summary>
+    /// <param name="state">The state to be added.</param>
+    /// <returns>True if the state was added, false if there already is a state with the same name.</returns>
     public bool Add(T state)
     {
       if (!_states.ContainsKey(state.Name.ToLower()))
@@ -65,6 +93,11 @@ namespace OkuEngine.States
       return false;
     }
 
+    /// <summary>
+    /// Makes the state with the given the current state.
+    /// </summary>
+    /// <param name="stateName">The name of the state.</param>
+    /// <returns>True if the state was made the current state, false if there is no state with the given name.</returns>
     public bool MakeCurrent(string stateName)
     {
       T state = _states.GetInheritedValue(stateName.ToLower());
@@ -78,6 +111,13 @@ namespace OkuEngine.States
       return false;
     }
 
+    /// <summary>
+    /// Gets the state with the given name.
+    /// If a parent manager is set, it is also queried if the manager
+    /// itself has no state with the given name.
+    /// </summary>
+    /// <param name="stateName">The name of the state.</param>
+    /// <returns>The state with the given name or null if there is no state with this name.</returns>
     public T GetState(string stateName)
     {
       return _states.GetInheritedValue(stateName);

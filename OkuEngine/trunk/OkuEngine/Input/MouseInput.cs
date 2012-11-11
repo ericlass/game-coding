@@ -6,6 +6,9 @@ using System.Windows.Forms;
 
 namespace OkuEngine
 {
+  /// <summary>
+  /// Defines a set of mouse buttons.
+  /// </summary>
   public enum MouseButton
   {
     Left = (int)Keys.LButton,

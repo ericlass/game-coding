@@ -372,7 +372,16 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="eventData">The event data. Always the viewport object that was changed.</param>
     void OnViewportEvent(int eventType, object eventData);
 
+    /// <summary>
+    /// Sets the width of lines that are drawn in pixels.
+    /// </summary>
+    /// <param name="width">The width of lines in pixels.</param>
     void SetLineWidth(float width);
+
+    /// <summary>
+    /// Sets the size of points that are drawn in pixels.
+    /// </summary>
+    /// <param name="size">The size of points in pixels.</param>
     void SetPointSize(float size);
 
   }

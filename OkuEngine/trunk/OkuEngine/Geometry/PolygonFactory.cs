@@ -5,8 +5,19 @@ using System.Text;
 
 namespace OkuEngine
 {
+  /// <summary>
+  /// Defines a set of function to create poylgons.
+  /// </summary>
   public static class PolygonFactory
   {
+    /// <summary>
+    /// Creates an axis aligned box with the given boundaries.
+    /// </summary>
+    /// <param name="left">The left boundary of the box.</param>
+    /// <param name="right">The right boundary of the box.</param>
+    /// <param name="top">The top boundary of the box.</param>
+    /// <param name="bottom">The bottom boundary of the box.</param>
+    /// <returns>The vertices for the box.</returns>
     public static Vector[] Box(float left, float right, float top, float bottom)
     {
       return new Vector[] {
@@ -17,6 +28,14 @@ namespace OkuEngine
       };
     }
 
+    /// <summary>
+    /// Creates a circle from the given parameters.
+    /// </summary>
+    /// <param name="x">The x coordinate of the center of the circle.</param>
+    /// <param name="y">The y coordinate of the center of the circle.</param>
+    /// <param name="radius">The radius of the circle.</param>
+    /// <param name="points">The number of vertices of the circle.</param>
+    /// <returns>The vertices for the circle.</returns>
     public static Vector[] Circle(float x, float y, float radius, int points)
     {
       float step = (float)((2 * Math.PI) / points);

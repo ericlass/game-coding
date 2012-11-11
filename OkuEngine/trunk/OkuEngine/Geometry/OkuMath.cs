@@ -5,6 +5,9 @@ using System.Text;
 
 namespace OkuEngine
 {
+  /// <summary>
+  /// Defines a set of math functions that are used by the engine.
+  /// </summary>
   public static class OkuMath
   {
     /// <summary>

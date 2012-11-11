@@ -5,6 +5,9 @@ using System.Text;
 
 namespace OkuEngine
 {
+  /// <summary>
+  /// Base class for content instances.
+  /// </summary>
   public class ContentInstance
   {
     private int _instanceId = KeySequence.NextValue(KeySequence.ContentInstanceSequence);

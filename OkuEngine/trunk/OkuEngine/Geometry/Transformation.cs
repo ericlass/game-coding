@@ -50,11 +50,19 @@ namespace OkuEngine
       }
     }
 
+    /// <summary>
+    /// Sets the x value of the translation.
+    /// </summary>
+    /// <param name="x">The new x value.</param>
     internal void SetX(float x)
     {
       _translation.X = x;
     }
 
+    /// <summary>
+    /// Sets the y value of the translation.
+    /// </summary>
+    /// <param name="y">The new y value.</param>
     internal void SetY(float y)
     {
       _translation.Y = y;

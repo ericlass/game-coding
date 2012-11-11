@@ -8,10 +8,16 @@ using OkuEngine.States;
 
 namespace OkuEngine.Actors
 {
+  /// <summary>
+  /// Defines a single state of an actor.
+  /// </summary>
   public class ActorState : EntityState
   {
     private InheritingRenderable _renderable = new InheritingRenderable();
 
+    /// <summary>
+    /// Gets the renderable of the state.
+    /// </summary>
     public InheritingRenderable Renderable
     {
       get { return _renderable; }

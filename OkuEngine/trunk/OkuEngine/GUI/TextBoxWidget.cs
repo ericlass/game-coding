@@ -7,6 +7,9 @@ using OkuEngine.Driver.Renderer;
 
 namespace OkuEngine
 {
+  /// <summary>
+  /// Defines a widget that is a single line text box.
+  /// </summary>
   public class TextBoxWidget : Widget
   {
     private bool _textMeshValid = false;
@@ -22,11 +25,17 @@ namespace OkuEngine
     private float _currentTime = 0.0f;
     private bool _cursorVisible = true;
 
+    /// <summary>
+    /// Creates a new text box widget.
+    /// </summary>
     public TextBoxWidget()
     {
       _processor.Multiline = true;
     }
 
+    /// <summary>
+    /// Gets or sets the text that is displayed on the button.
+    /// </summary>
     public String Text
     {
       get { return _processor.Text; }
@@ -46,6 +55,10 @@ namespace OkuEngine
       _vertices[3] = new Vector(Area.Width, 0);
     }
 
+    /// <summary>
+    /// Gets the text mesh that can be used to render the text.
+    /// </summary>
+    /// <returns>The text mesh.</returns>
     private MeshInstance GetTextMesh()
     {
       if (!_textMeshValid || _textMesh == null)

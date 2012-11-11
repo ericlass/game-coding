@@ -4,6 +4,9 @@ using System.Windows.Forms;
 
 namespace OkuEngine.Driver.Renderer
 {
+  /// <summary>
+  /// Defines a renderer that does not render anything.
+  /// </summary>
   public class NullRenderer : IRenderer
   {
     public const string RendererName = "null";

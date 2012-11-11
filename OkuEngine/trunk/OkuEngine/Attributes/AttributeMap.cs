@@ -5,8 +5,16 @@ using System.Text;
 
 namespace OkuEngine.Attributes
 {
+  /// <summary>
+  /// Defines an inheriting dictionary of attribute names to attribute values.
+  /// </summary>
   public class AttributeMap : InheritingDictionary<string, AttributeValue>, IStoreable
   {
+    /// <summary>
+    /// Adds the given attribute value to the map.
+    /// </summary>
+    /// <param name="value">The value to be added.</param>
+    /// <returns>True fi the value was added, false if there already is a value with the same name.</returns>
     public bool Add(AttributeValue value)
     {
       if (!ContainsKey(value.Name.ToLower()))

@@ -5,9 +5,19 @@ using System.Text;
 
 namespace OkuEngine
 {
+  /// <summary>
+  /// Defines a set of functions that do continuous collision detection for several shapes.
+  /// </summary>
   public static class ContinuousCollision
   {
-
+    /// <summary>
+    /// Calculates continuous collisions for two polygons.
+    /// </summary>
+    /// <param name="poly1">The first polygon.</param>
+    /// <param name="poly2">The second polygon.</param>
+    /// <param name="translation">The translation of the first polygon.</param>
+    /// <param name="mtd">The minimum translation distance to move the two polygons apart if they collide.</param>
+    /// <returns>True if the polygons collide, else false.</returns>
     public static bool PolygonPolygon(Vector[] poly1, Vector[] poly2, Vector translation, out float mtd)
     {
       mtd = float.MaxValue;
@@ -53,8 +63,6 @@ namespace OkuEngine
 
       return result;
     }
-
-    
 
   }
 }

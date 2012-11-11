@@ -5,6 +5,9 @@ using System.Text;
 
 namespace OkuEngine.Driver.Renderer
 {
+  /// <summary>
+  /// A try to streamline the rendering interface. NOT USED!
+  /// </summary>
   public interface IRenderer2
   {
     Color Background { get; set; }

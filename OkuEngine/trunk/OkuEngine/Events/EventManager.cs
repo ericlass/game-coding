@@ -5,6 +5,9 @@ using System.Text;
 
 namespace OkuEngine.Events
 {
+  /// <summary>
+  /// Defines a manager for an event queue.
+  /// </summary>
   public class EventManager : IEventManager
   {
     private const int NumQueues = 2;
@@ -16,6 +19,10 @@ namespace OkuEngine.Events
 
     private string _name = null;
 
+    /// <summary>
+    /// Creates a new event mananger with the given name.
+    /// </summary>
+    /// <param name="name"></param>
     public EventManager(string name)
     {
       _name = name;
@@ -26,16 +33,28 @@ namespace OkuEngine.Events
       }
     }
 
+    /// <summary>
+    /// Gets the name of the event manager.
+    /// </summary>
     public string Name
     {
       get { return _name; }
     }
 
+    /// <summary>
+    /// Gets the current active queue.
+    /// </summary>
     private List<Event> ActiveQueue
     {
       get { return _queues[_activeQueue]; }
     }
 
+    /// <summary>
+    /// Adds a new listener for the given event type to the event manager.
+    /// </summary>
+    /// <param name="eventType">The type of event to listen to.</param>
+    /// <param name="eventDelegate">The delegate to call if the event happens.</param>
+    /// <returns>True if the listener was added, false if the listener is already registered for the event.</returns>
     public bool AddListener(int eventType, EventListenerDelegate eventDelegate)
     {
       if (!_listeners.ContainsKey(eventType))
@@ -53,6 +72,12 @@ namespace OkuEngine.Events
       return true;
     }
 
+    /// <summary>
+    /// Removes the given listener for the given event type.
+    /// </summary>
+    /// <param name="eventType">The event type.</param>
+    /// <param name="eventDelegate">The event listener delegate.</param>
+    /// <returns>True if the listener was removed, false if the listener was not registered for the event type.</returns>
     public bool RemoveListener(int eventType, EventListenerDelegate eventDelegate)
     {
       if (eventDelegate != null && _listeners.ContainsKey(eventType) && _listeners[eventType].Contains(eventDelegate))
@@ -69,6 +94,14 @@ namespace OkuEngine.Events
       return false;
     }
 
+    /// <summary>
+    /// Triggers the given event. Triggering an event means that
+    /// the listeners are informed immediatelly, not in the next
+    /// run of event processing. Use with caution!
+    /// </summary>
+    /// <param name="eventType">The type of event to trigger.</param>
+    /// <param name="eventData">The data of the event.</param>
+    /// <returns>True if any listeners where triggered, false if there are no listeners for the event.</returns>
     public bool TriggerEvent(int eventType, object eventData)
     {
       if (_listeners.ContainsKey(eventType))
@@ -83,6 +116,14 @@ namespace OkuEngine.Events
       return false;
     }
 
+    /// <summary>
+    /// Adds the given event to the event queue.
+    /// The listeners will be informed on the next
+    /// run of event processing.
+    /// </summary>
+    /// <param name="eventType">The type of the event.</param>
+    /// <param name="eventData">The data of the event.</param>
+    /// <returns>True if the event was enqueued, false if there are no listeners for the event.</returns>
     public bool QueueEvent(int eventType, object eventData)
     {
       if (_listeners.ContainsKey(eventType))
@@ -104,6 +145,12 @@ namespace OkuEngine.Events
       return false;
     }
 
+    /// <summary>
+    /// Removes the one or all event of the given type from the queue.
+    /// </summary>
+    /// <param name="eventType">The type of event to remove.</param>
+    /// <param name="allOfType">Remove only the last event (false) or all of the given type (true).</param>
+    /// <returns>True if any events where removed, else false.</returns>
     public bool AbortEvent(int eventType, bool allOfType)
     {
       bool result = false;
@@ -125,6 +172,11 @@ namespace OkuEngine.Events
       return result;
     }
 
+    /// <summary>
+    /// Executes a single run of event processing.
+    /// </summary>
+    /// <param name="maxTime">The maximum time the event processing ios allowed to take.</param>
+    /// <returns>True if all events where processed, false if not all events could be processed in the given time.</returns>
     public bool Update(float maxTime)
     {
       long startTick, endTick, freq;

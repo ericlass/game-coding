@@ -3,6 +3,12 @@ using System.Collections.Generic;
 
 namespace OkuEngine
 {
+  /// <summary>
+  /// Defines a spatial hash map that implementes spatial hashing
+  /// in a regular grid which can be used to speed up collision
+  /// calculations.
+  /// </summary>
+  /// <typeparam name="T">The type of entity in the map.</typeparam>
   public class SpatialHashMap<T>
   {
     private int _left = 0;
@@ -15,6 +21,14 @@ namespace OkuEngine
     private List<T>[] _table = null;
     private Dictionary<T, List<int>> _objects = new Dictionary<T, List<int>>();
     
+    /// <summary>
+    /// Creates a new spatial hash map with the given parameters.
+    /// </summary>
+    /// <param name="left">The left boundary of the map.</param>
+    /// <param name="right">The right boundary of the map.</param>
+    /// <param name="top">The top boundary of the map.</param>
+    /// <param name="bottom">The bottom boundary of the map.</param>
+    /// <param name="cellSize">The size of the rectangular cells of the grid.</param>
     public SpatialHashMap(int left, int right, int top, int bottom, int cellSize)
     {
       //Calculate factor to speed up further processing
@@ -35,6 +49,12 @@ namespace OkuEngine
         _table[i] = new List<T>();
     }
     
+    /// <summary>
+    /// Gets a hash value for the given coordinates.
+    /// </summary>
+    /// <param name="x">The x coordinate.</param>
+    /// <param name="y">The y coordinate.</param>
+    /// <returns>The hash value for the coordinate.</returns>
     public int GetHash(int x, int y)
     {
       return OkuMath.Floor((x - _left) * _factor) + OkuMath.Floor((y - _bottom) * _factor) * _width;

@@ -40,6 +40,14 @@
         <id>100004</id>
         <name>Test States</name>
       </event>
+      <event>
+        <id>100005</id>
+        <name>Test Move Left</name>
+      </event>
+      <event>
+        <id>100006</id>
+        <name>Test Move Right</name>
+      </event>
     </userevents>
 
     <keybindings>
@@ -68,6 +76,18 @@
         <action>Down</action>
         <state>no</state>
         <event>100004</event>
+      </binding>
+      <binding>
+        <key>Left</key>
+        <action>Down</action>
+        <state>yes</state>
+        <event>100005</event>
+      </binding>
+      <binding>
+        <key>Right</key>
+        <action>Down</action>
+        <state>yes</state>
+        <event>100006</event>
       </binding>
     </keybindings>
     
@@ -113,8 +133,7 @@
             <event>100001</event>
             <script>
               <![CDATA[
-              var actor = new Actor(1);
-              actor.setAngle(actor.getAngle() + (90 * timeDelta));
+              okuActorSetAngle(1, okuActorGetAngle(1) + (90 * timeDelta));
               ]]>
             </script>
           </handler>
@@ -122,8 +141,7 @@
             <event>100002</event>
             <script>
               <![CDATA[
-              var actor = new Actor(1);
-              actor.setAngle(actor.getAngle() - (90 * timeDelta));
+              okuActorSetAngle(1, okuActorGetAngle(1) - (90 * timeDelta));
               ]]>
             </script>
           </handler>
@@ -137,10 +155,9 @@
             <event>100003</event>
             <script>
               <![CDATA[
-              var actor = new Actor(1);
-              var test = actor.getAttribute("Test");
-              test = "Saublöd!";
-              actor.setAttribute("test", test);
+              var test = okuActorGetAttribute(1, "Test");
+              test = "Saublöd!";              
+              okuActorSetAttribute(1, "test", test);
               ]]>
             </script>
           </handler>
@@ -148,8 +165,28 @@
             <event>100004</event>
             <script>
               <![CDATA[
-              var actor = new Actor(1);
-              actor.getState();
+              print(okuActorGetCurrentState(1));
+              okuActorSetCurrentState(1, "normal");
+              ]]>
+            </script>
+          </handler>
+          <handler>
+            <event>100005</event>
+            <script>
+              <![CDATA[
+              var x = okuActorGetX(1);
+              x = x - (100 * timeDelta);
+              okuActorSetX(1, x);
+              ]]>
+            </script>
+          </handler>
+          <handler>
+            <event>100006</event>
+            <script>
+              <![CDATA[
+              var x = okuActorGetX(1);
+              x = x + (100 * timeDelta);
+              okuActorSetX(1, x);
               ]]>
             </script>
           </handler>

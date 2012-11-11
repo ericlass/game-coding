@@ -5,42 +5,67 @@ using System.Text;
 
 namespace OkuEngine.Attributes
 {
+  /// <summary>
+  /// Defines a single attribute value of a specific type.
+  /// </summary>
   public class AttributeValue : IStoreable
   {
     private string _name = null;
     private AttributeType _type = AttributeType.Number;
     private object _rawValue = null;
 
+    /// <summary>
+    /// Creates a new attribute value with type Number.
+    /// </summary>
     public AttributeValue()
     {
     }
 
+    /// <summary>
+    /// Gets the name of the attribute.
+    /// </summary>
     public string Name
     {
       get { return _name; }
     }
 
+    /// <summary>
+    /// Gets the type of the attribute.
+    /// </summary>
     public AttributeType Type
     {
       get { return _type; }
     }
 
+    /// <summary>
+    /// Gets the raw value object.
+    /// </summary>
     public object RawValue
     {
       get { return _rawValue; }
     }
 
+    /// <summary>
+    /// Sets the raw value object.
+    /// </summary>
+    /// <param name="rawValue"></param>
     internal void SetRawValue(object rawValue)
     {
       _rawValue = rawValue;
     }
 
+    /// <summary>
+    /// Gets or sets the value as a boolean.
+    /// </summary>
     public bool ValueBoolean
     {
       get { return (bool)_rawValue; }
       set { _rawValue = value; }
     }
 
+    /// <summary>
+    /// Gets or sets the value as an integer.
+    /// </summary>
     public double ValueInteger
     {
       get
@@ -52,6 +77,9 @@ namespace OkuEngine.Attributes
       set { _rawValue = value; }
     }
 
+    /// <summary>
+    /// Gets or sets the value as a double.
+    /// </summary>
     public double ValueDouble
     {
       get 
@@ -63,6 +91,9 @@ namespace OkuEngine.Attributes
       set { _rawValue = value; }
     }
 
+    /// <summary>
+    /// Gets or sets the value as a string.
+    /// </summary>
     public string ValueString
     {
       get 

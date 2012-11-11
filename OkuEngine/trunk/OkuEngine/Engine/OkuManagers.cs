@@ -6,7 +6,6 @@ using OkuEngine.Scripting;
 using OkuEngine.Driver.Renderer;
 using OkuEngine.Logging;
 using OkuEngine.Input;
-using OkuEngine.Components;
 
 namespace OkuEngine
 {
@@ -23,7 +22,6 @@ namespace OkuEngine
     private static ScriptManager _scriptManager = null;
     private static Logger _logger = null;
     private static InputManager _inputManager = null;
-    private static EntityComponentFactory _componentFactory = new EntityComponentFactory();
 
     /// <summary>
     /// Gets or sets the input handler.
@@ -100,14 +98,6 @@ namespace OkuEngine
     {
       get { return _inputManager; }
       set { _inputManager = value; }
-    }
-
-    /// <summary>
-    /// Gets the component factory.
-    /// </summary>
-    public static EntityComponentFactory ComponentFactory
-    {
-      get { return _componentFactory; }
     }
 
   }

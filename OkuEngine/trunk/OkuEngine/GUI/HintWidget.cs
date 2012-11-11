@@ -6,11 +6,18 @@ using OkuEngine.Driver.Renderer;
 
 namespace OkuEngine
 {
+  /// <summary>
+  /// Defines a widget that shows a hint.
+  /// </summary>
   public class HintWidget : LabelWidget
   {
     private Vector[] _vertices = new Vector[4];
     private Color[] _colors = new Color[4];
 
+    /// <summary>
+    /// Gets the color of the font.
+    /// </summary>
+    /// <returns>The color of the font.</returns>
     protected override Color GetFontColor()
     {
       return Container.ColorMap.FontDark;
