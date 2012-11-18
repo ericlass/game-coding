@@ -263,6 +263,9 @@ namespace OkuEngine.Scenes
       if (!base.Load(node))
         return false;
 
+      //Update scene id sequence
+      KeySequence.SetCurrentValue(KeySequence.SceneSequence, Id);
+
       XmlNode child = node["layers"];
       if (child != null)
       {

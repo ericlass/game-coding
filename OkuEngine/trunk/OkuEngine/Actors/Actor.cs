@@ -5,6 +5,7 @@ using System.Text;
 using OkuEngine.Scenes;
 using OkuEngine.Attributes;
 using OkuEngine.States;
+using OkuEngine.Events;
 
 namespace OkuEngine.Actors
 {
@@ -23,6 +24,15 @@ namespace OkuEngine.Actors
     /// </summary>
     public Actor()
     {
+      _states.OnStateChange += new StateManager<ActorState>.StateChangedDelegate(_states_OnStateChange);
+    }
+
+    /// <summary>
+    /// Posts an event if the state of the actor was changed.
+    /// </summary>
+    private void _states_OnStateChange()
+    {
+      OkuManagers.EventManager.QueueEvent(EventTypes.ActorStateChanged + Id, Id);
     }
 
     /// <summary>

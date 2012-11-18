@@ -11,10 +11,15 @@ namespace OkuEngine.States
   /// <typeparam name="T">The type of state that should be handled.</typeparam>
   public class StateManager<T> : IStoreable where T : EntityState, new()
   {
+    public delegate void StateChangedDelegate();
+
     private string _defaultName = null;
+    private T _previousState = null;
     private T _currentState = null;
     private InheritingDictionary<string, T> _states = new InheritingDictionary<string, T>();
     private StateManager<T> _parent = null;
+
+    public event StateChangedDelegate OnStateChange;
 
     /// <summary>
     /// Creates a new state mananger.
@@ -49,6 +54,14 @@ namespace OkuEngine.States
     }
 
     /// <summary>
+    /// Gets the previous state.
+    /// </summary>
+    public T PreviousState
+    {
+      get { return _previousState; }
+    }
+
+    /// <summary>
     /// Gets the name of the current state.
     /// </summary>
     public string CurrentName
@@ -60,6 +73,14 @@ namespace OkuEngine.States
         else
           return "";
       }
+    }
+
+    /// <summary>
+    /// Gets the name of the previous state.
+    /// </summary>
+    public string PreviousName
+    {
+      get { return _previousState == null ? "" : _previousState.Name; }
     }
 
     /// <summary>
@@ -103,8 +124,11 @@ namespace OkuEngine.States
       T state = _states.GetInheritedValue(stateName.ToLower());
       if (state != null)
       {
+        _previousState = _currentState;
         _currentState = state;
-        //TODO: Enqueue state change event, but how? I don't know the owner!
+
+        OnStateChange();
+
         return true;
       }
 

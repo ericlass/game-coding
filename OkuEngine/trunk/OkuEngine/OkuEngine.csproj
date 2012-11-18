@@ -200,7 +200,6 @@
     <Compile Include="TileMap\Tilemap.cs" />
     <Compile Include="Geometry\Transformation.cs" />
     <Compile Include="Platform\User32.cs" />
-    <Compile Include="VariableList.cs" />
     <Compile Include="Geometry\Vector.cs" />
     <Compile Include="Input\InputBase.cs" />
     <Compile Include="Input\JoystickInfo.cs" />

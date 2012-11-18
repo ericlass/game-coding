@@ -164,6 +164,20 @@ namespace OkuEngine.Api
     }
 
     /// <summary>
+    /// Gets the name of the previous state of the actor with the given id.
+    /// </summary>
+    /// <param name="actorId">The id of the actor.</param>
+    /// <returns>The name of the previous state.</returns>
+    public string ActorGetPreviousState(int actorId)
+    {
+      Actor actor = GetActor(actorId);
+      if (actor != null)
+        return actor.States.PreviousName;
+      else
+        return null;
+    }
+
+    /// <summary>
     /// Sets the current state of the actor with the given id.
     /// </summary>
     /// <param name="actorId">The id of the actor.</param>

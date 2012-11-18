@@ -16,8 +16,6 @@ namespace OkuEngine
   /// </summary>
   public static class OkuData
   {
-    private static VariableList _globals = null;
-    private static VariableList _locals = null;
     private static ResourceCache _resources = null;
     private static SceneManager _sceneManager = null;
     private static EntityManager<Actor> _actors = null;
@@ -26,33 +24,6 @@ namespace OkuEngine
     private static EntityManager<Animation> _animations = null;
     private static EntityManager<UserEvent> _userEvents = null;
     private static EntityManager<Behavior> _behaviors = null;
-
-    /// <summary>
-    /// Gets the global variable list.
-    /// </summary>
-    public static VariableList Globals
-    {
-      get
-      {
-        if (_globals == null)
-          _globals = new VariableList();
-        return _globals;
-      }
-    }
-
-    /// <summary>
-    /// Gets or sets the local variable list.
-    /// </summary>
-    public static VariableList Locals
-    {
-      get
-      {
-        if (_locals == null)
-          _locals = new VariableList();
-        return _locals;
-      }
-      set { _locals = value; }
-    }
 
     /// <summary>
     /// Gets or sets the resource cache.

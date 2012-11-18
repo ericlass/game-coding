@@ -12,6 +12,7 @@ namespace OkuEngine.Events
   {
     public override bool Load(XmlNode node)
     {
+      //TODO: Check that event id is greater than EventTypes.UserEventBase
       return base.Load(node);
     }
 

@@ -25,27 +25,27 @@
 
     <userevents>
       <event>
-        <id>100001</id>
+        <id>1000001</id>
         <name>Steer Left</name>
       </event>
       <event>
-        <id>100002</id>
+        <id>1000002</id>
         <name>Steer Right</name>
       </event>
       <event>
-        <id>100003</id>
+        <id>1000003</id>
         <name>Test Attributes</name>
       </event>
       <event>
-        <id>100004</id>
+        <id>1000004</id>
         <name>Test States</name>
       </event>
       <event>
-        <id>100005</id>
+        <id>1000005</id>
         <name>Test Move Left</name>
       </event>
       <event>
-        <id>100006</id>
+        <id>1000006</id>
         <name>Test Move Right</name>
       </event>
     </userevents>
@@ -57,37 +57,37 @@
         <!-- If "yes", event is triggered every frame while the button is hold down.
              If "no, event is only triggered once when the button is pressed down."-->
         <state>yes</state>
-        <event>100001</event>
+        <event>1000001</event>
       </binding>
       <binding>
         <key>D</key>
         <action>Down</action>
         <state>yes</state>
-        <event>100002</event>
+        <event>1000002</event>
       </binding>
       <binding>
         <key>S</key>
         <action>Down</action>
         <state>no</state>
-        <event>100003</event>
+        <event>1000003</event>
       </binding>
       <binding>
         <key>W</key>
         <action>Down</action>
         <state>no</state>
-        <event>100004</event>
+        <event>1000004</event>
       </binding>
       <binding>
         <key>Left</key>
         <action>Down</action>
         <state>yes</state>
-        <event>100005</event>
+        <event>1000005</event>
       </binding>
       <binding>
         <key>Right</key>
         <action>Down</action>
         <state>yes</state>
-        <event>100006</event>
+        <event>1000006</event>
       </binding>
     </keybindings>
     
@@ -130,7 +130,7 @@
         <name>Turn Car</name>
         <handlers>
           <handler>
-            <event>100001</event>
+            <event>1000001</event>
             <script>
               <![CDATA[
               okuActorSetAngle(1, okuActorGetAngle(1) + (90 * timeDelta));
@@ -138,7 +138,7 @@
             </script>
           </handler>
           <handler>
-            <event>100002</event>
+            <event>1000002</event>
             <script>
               <![CDATA[
               okuActorSetAngle(1, okuActorGetAngle(1) - (90 * timeDelta));
@@ -152,7 +152,7 @@
         <name>Test Script</name>
         <handlers>
           <handler>
-            <event>100003</event>
+            <event>1000003</event>
             <script>
               <![CDATA[
               var test = okuActorGetAttribute(1, "Test");
@@ -162,7 +162,7 @@
             </script>
           </handler>
           <handler>
-            <event>100004</event>
+            <event>1000004</event>
             <script>
               <![CDATA[
               print(okuActorGetCurrentState(1));
@@ -171,7 +171,7 @@
             </script>
           </handler>
           <handler>
-            <event>100005</event>
+            <event>1000005</event>
             <script>
               <![CDATA[
               var x = okuActorGetX(1);
@@ -181,7 +181,7 @@
             </script>
           </handler>
           <handler>
-            <event>100006</event>
+            <event>1000006</event>
             <script>
               <![CDATA[
               var x = okuActorGetX(1);
