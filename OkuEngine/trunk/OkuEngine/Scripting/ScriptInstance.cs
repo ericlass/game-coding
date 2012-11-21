@@ -37,22 +37,30 @@ namespace OkuEngine.Scripting
     }
 
     /// <summary>
+    /// Gets the script engine that the script is running in.
+    /// </summary>
+    internal ScriptEngine Engine
+    {
+      get { return _engine; }
+    }
+
+    /// <summary>
     /// Executes this script instance.
     /// </summary>
     public bool Run()
     {
       try
       {
-        long tick1, tick2, freq;
+        /*long tick1, tick2, freq;
         Kernel32.QueryPerformanceFrequency(out freq);
-        Kernel32.QueryPerformanceCounter(out tick1);
+        Kernel32.QueryPerformanceCounter(out tick1);*/
 
         //Call script
         _function.Call(null, null);
 
-        Kernel32.QueryPerformanceCounter(out tick2);
+        /*Kernel32.QueryPerformanceCounter(out tick2);
         float time = (tick2 - tick1) / ((float)freq / 1000);
-        OkuManagers.Logger.LogInfo("Script execution took " + time.ToString("0.######") + "ms");
+        OkuManagers.Logger.LogInfo("Script execution took " + time.ToString("0.######") + "ms");*/
       }
       catch (Exception ex)
       {
@@ -60,6 +68,50 @@ namespace OkuEngine.Scripting
         return false;
       }
       return true;
+    }
+
+    /// <summary>
+    /// Executes this script instance with the given parameters.
+    /// The parameters must all be of a type that is supported
+    /// the script engine.
+    /// </summary>
+    /// <param name="parameters">The parameters to pass to the script.</param>
+    /// <returns>True if the script was executed successfully, else false.</returns>
+    public bool Run(params object[] parameters)
+    {
+      bool result = false;
+      try
+      {
+        int paramNum = 1;
+        foreach (object param in parameters)
+        {
+          if (OkuScriptManager.IsSupportedType(param.GetType()))
+          {
+            _engine.SetGlobalValue("param" + paramNum, param);
+          }
+          else
+          {
+            OkuManagers.Logger.LogError("Parameter " + paramNum + " is of a type that is not supported by the script engine! Script: " + _source);
+            return false;
+          }
+          paramNum++;
+        }
+
+        result = Run();
+
+        paramNum = 1;
+        foreach (object param in parameters)
+        {
+          _engine.SetGlobalValue("param" + paramNum, Undefined.Value);
+        }
+      }
+      catch (Exception ex)
+      {
+        OkuManagers.Logger.LogError("Error while executing script! Cause: " + ex.Message);
+        return false;
+      }
+
+      return result;
     }
 
   }

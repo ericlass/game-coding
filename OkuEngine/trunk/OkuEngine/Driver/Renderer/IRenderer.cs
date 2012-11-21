@@ -370,7 +370,7 @@ namespace OkuEngine.Driver.Renderer
     /// </summary>
     /// <param name="eventType">The type of event. Always ViewPortChanged.</param>
     /// <param name="eventData">The event data. Always the viewport object that was changed.</param>
-    void OnViewportEvent(int eventType, object eventData);
+    void OnViewportEvent(int eventType, params object[] eventData);
 
     /// <summary>
     /// Sets the width of lines that are drawn in pixels.

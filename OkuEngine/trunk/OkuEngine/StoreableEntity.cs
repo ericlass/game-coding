@@ -8,29 +8,9 @@ namespace OkuEngine
   /// <summary>
   /// Defines a base class for all entities in the engine that can be stored (load and saved).
   /// </summary>
-  public class StoreableEntity : IStoreable
+  public class StoreableEntity : Entity, IStoreable
   {
-    public const int InvalidId = 0;
-
-    protected int _id = InvalidId;
     protected string _name = null;
-
-    /// <summary>
-    /// Gets the unique artificial id.
-    /// </summary>
-    public int Id
-    {
-      get { return _id; }
-    }
-
-    /// <summary>
-    /// Sets the id of the entity.
-    /// </summary>
-    /// <param name="id">The new id of the entity.</param>
-    internal void SetId(int id)
-    {
-      _id = id;
-    }
 
     /// <summary>
     /// Gets or sets the name.

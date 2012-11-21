@@ -102,7 +102,7 @@ namespace OkuEngine.Events
     /// <param name="eventType">The type of event to trigger.</param>
     /// <param name="eventData">The data of the event.</param>
     /// <returns>True if any listeners where triggered, false if there are no listeners for the event.</returns>
-    public bool TriggerEvent(int eventType, object eventData)
+    public bool TriggerEvent(int eventType, params object[] eventData)
     {
       if (_listeners.ContainsKey(eventType))
       {
@@ -124,7 +124,7 @@ namespace OkuEngine.Events
     /// <param name="eventType">The type of the event.</param>
     /// <param name="eventData">The data of the event.</param>
     /// <returns>True if the event was enqueued, false if there are no listeners for the event.</returns>
-    public bool QueueEvent(int eventType, object eventData)
+    public bool QueueEvent(int eventType, params object[] eventData)
     {
       if (_listeners.ContainsKey(eventType))
       {

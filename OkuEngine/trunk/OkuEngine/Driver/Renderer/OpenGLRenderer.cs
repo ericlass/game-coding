@@ -1212,9 +1212,9 @@ namespace OkuEngine.Driver.Renderer
       Gl.glPopMatrix();
     }
 
-    public void OnViewportEvent(int eventType, object eventData)
+    public void OnViewportEvent(int eventType, params object[] eventData)
     {
-      UpdateGLViewPort(eventData as ViewPort);
+      UpdateGLViewPort(eventData[0] as ViewPort);
     }
 
     public void SetLineWidth(float width)

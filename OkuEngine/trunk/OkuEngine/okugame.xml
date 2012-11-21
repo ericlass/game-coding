@@ -190,6 +190,16 @@
               ]]>
             </script>
           </handler>
+          <handler>
+            <event>1000</event>
+            <script>
+              <![CDATA[
+              print(param1);
+              print(param2);
+              print(param3);
+              ]]>
+            </script>
+          </handler>
         </handlers>
       </behavior>
     </behaviors>

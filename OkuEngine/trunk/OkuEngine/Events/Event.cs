@@ -11,14 +11,14 @@ namespace OkuEngine.Events
   internal class Event
   {
     private int _eventType = 0;
-    private object _eventData = null;
+    private object[] _eventData = null;
 
     /// <summary>
     /// Creates a new event with the given typ and date.
     /// </summary>
     /// <param name="eventType">The type of event.</param>
     /// <param name="eventData">The data of the event.</param>
-    public Event(int eventType, object eventData)
+    public Event(int eventType, object[] eventData)
     {
       _eventType = eventType;
       _eventData = eventData;
@@ -29,7 +29,7 @@ namespace OkuEngine.Events
     /// </summary>
     /// <param name="eventType">The type of event.</param>
     /// <param name="eventData">The data of the event.</param>
-    internal void Set(int eventType, object eventData)
+    internal void Set(int eventType, object[] eventData)
     {
       _eventType = eventType;
       _eventData = eventData;
@@ -46,7 +46,7 @@ namespace OkuEngine.Events
     /// <summary>
     /// Gets the data of the event.
     /// </summary>
-    public object EventData
+    public object[] EventData
     {
       get { return _eventData; }
     }

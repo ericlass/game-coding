@@ -14,13 +14,13 @@ namespace OkuEngine.Scripting
     {
     }
 
-    public void EventReceived(int eventId, object data)
+    public void EventReceived(int eventId, params object[] data)
     {
       if (_handlers.ContainsKey(eventId))
       {
         foreach (ScriptInstance script in _handlers[eventId])
         {
-          script.Run();
+          script.Run(data);
         }
       }
     }

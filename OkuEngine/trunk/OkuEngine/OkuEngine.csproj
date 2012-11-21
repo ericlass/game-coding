@@ -80,6 +80,7 @@
     <Compile Include="Content\PixelShaderContent.cs" />
     <Compile Include="Converter.cs" />
     <Compile Include="Actors\Actor.cs" />
+    <Compile Include="Entity.cs" />
     <Compile Include="EntityManager.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\EventListenerDelegate.cs" />
@@ -218,6 +219,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="OkuRuntime.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Collision\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

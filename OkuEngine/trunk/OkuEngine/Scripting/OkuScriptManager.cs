@@ -39,7 +39,7 @@ namespace OkuEngine.Scripting
     /// </summary>
     /// <param name="type">The type to check.</param>
     /// <returns>True if the type is supported, else false.</returns>
-    private bool IsSupportedType(Type type)
+    public static bool IsSupportedType(Type type)
     {
       return type == typeof(int) || type == typeof(double) || type == typeof(string) || type == typeof(bool);
     }

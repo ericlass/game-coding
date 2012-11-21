@@ -30,7 +30,7 @@ namespace OkuEngine.Events
     /// <param name="eventType">The type of event.</param>
     /// <param name="eventData">The data for the given event type.</param>
     /// <returns>True if the event was triggered, false if no listener is registered for the event.</returns>
-    bool TriggerEvent(int eventType, object eventData);
+    bool TriggerEvent(int eventType, params object[] eventData);
 
     /// <summary>
     /// Adds the given event to the event queue.
@@ -38,7 +38,7 @@ namespace OkuEngine.Events
     /// <param name="eventType">The type of event.</param>
     /// <param name="eventData">The data for the event.</param>
     /// <returns>True if the event was queued, else false.</returns>
-    bool QueueEvent(int eventType, object eventData);
+    bool QueueEvent(int eventType, params object[] eventData);
 
     /// <summary>
     /// Removes an event from the queue. Depending on the value of the

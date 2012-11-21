@@ -32,7 +32,7 @@ namespace OkuEngine.Actors
     /// </summary>
     private void _states_OnStateChange()
     {
-      OkuManagers.EventManager.QueueEvent(EventTypes.ActorStateChanged + Id, Id);
+      OkuManagers.EventManager.QueueEvent(EventTypes.ActorStateChanged, Id, _states.PreviousName, _states.CurrentName);
     }
 
     /// <summary>

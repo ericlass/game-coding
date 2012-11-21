@@ -16,17 +16,10 @@ namespace OkuEngine.Events
 
     #region Actor Events
 
-    // All actor events in this class define a base. When the event happens,
-    // the id of the actor is added to this base so we get a unique event id
-    // for the every actor. The base event should be 5000 apart so there can
-    // be 5000 actors in total. This is hopefully enough.
-    // This is needed because I think that you will be more interessted in
-    // the change of one specific actor instead of all actors.
-
     /// <summary>
-    /// The state of an actor was changed. Event data is the actor id.
+    /// The state of an actor was changed. Event data is the actor id, the previous state name and the new state name.
     /// </summary>
-    public const int ActorStateChanged = 5000;
+    public const int ActorStateChanged = 1000;
 
     #endregion
 

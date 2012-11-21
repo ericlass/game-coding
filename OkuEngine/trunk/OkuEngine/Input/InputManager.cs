@@ -42,7 +42,7 @@ namespace OkuEngine.Input
       {
         if (_stateChangeBindings[action].ContainsKey(key))
         {
-          OkuManagers.EventManager.QueueEvent(_stateChangeBindings[action][key], null); //TODO: Maybe pass modifier keys as parameter?
+          OkuManagers.EventManager.QueueEvent(_stateChangeBindings[action][key]); //TODO: Maybe pass modifier keys as parameter?
           handled = true;
         }
 
@@ -100,7 +100,7 @@ namespace OkuEngine.Input
     {
       foreach (int eventId in _stateEvents.Values)
       {
-        OkuManagers.EventManager.QueueEvent(eventId, null);
+        OkuManagers.EventManager.QueueEvent(eventId);
       }
     }
 
