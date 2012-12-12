@@ -227,7 +227,7 @@ namespace OkuEngine.Scenes
             foreach (SceneNode iNode in allNodes)
             {
               sceneNode.Properties.Layer = Id;
-              //TODO: Adapt to new actor/brush concept
+              // TODO: Adapt to new actor/brush concept
               _actorMap.Add(iNode.Properties.ObjectId, iNode);
             }
           }
