@@ -224,10 +224,10 @@
     <EmbeddedResource Include="OkuRuntime.js" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Jurassic.dll" />
-    <None Include="Tao.OpenAl.dll" />
-    <None Include="Tao.OpenGl.dll" />
-    <None Include="Tao.Platform.Windows.dll" />
+    <None Include="lib\Jurassic.dll" />
+    <None Include="lib\Tao.OpenAl.dll" />
+    <None Include="lib\Tao.OpenGl.dll" />
+    <None Include="lib\Tao.Platform.Windows.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
