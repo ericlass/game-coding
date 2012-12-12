@@ -21,6 +21,11 @@ namespace OkuEngine.Rendering
       OkuManagers.Renderer.DrawPoints(_vertices.Positions, _vertices.Colors, _vertices.Count, _size);
     }
 
+    public AABB GetBoundingBox()
+    {
+      return _vertices.GetAABB();
+    }
+
     public bool Load(XmlNode node)
     {
       string value = node.GetTagValue("size");

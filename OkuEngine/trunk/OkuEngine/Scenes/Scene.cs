@@ -152,7 +152,6 @@ namespace OkuEngine.Scenes
         {
           item.Value.Remove(actorId);
           SceneNode newNode = _layerMap[newLayerId].Add(actorId, newParent);
-          newNode.Properties.Area = node.Properties.Area;
           newNode.Properties.Transform = node.Properties.Transform;
           //TODO: What about the children of the node?
           return true;
@@ -241,15 +240,15 @@ namespace OkuEngine.Scenes
     /// <summary>
     /// Checks if one of the layers of the scene contains the actor with the given id.
     /// </summary>
-    /// <param name="actorId">The id of the actor to find.</param>
-    /// <param name="layerIndex">If the actor is found, the id of the layer is returned here.</param>
+    /// <param name="objectId">The id of the object to find.</param>
+    /// <param name="layerIndex">If the object is found, the id of the layer is returned here.</param>
     /// <returns>True if the ator was found, else false.</returns>
-    public bool FindActor(int actorId, out int layerIndex)
+    public bool FindActor(int objectId, out int layerIndex)
     {
       layerIndex = 0;
       foreach (SceneLayer layer in _layerMap.Values)
       {
-        if (layer.ContainsActor(actorId))
+        if (layer.ContainsActor(objectId))
         {
           layerIndex = layer.Id;
           return true;

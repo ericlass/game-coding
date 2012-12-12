@@ -17,6 +17,8 @@ namespace OkuEngine.Rendering
     private Vector[] _positions = null;
     private Vector[] _texCoords = null;
     private Color[] _colors = null;
+    private AABB _boundingBox = new AABB();
+    private bool _aabbValid = false;
 
     /// <summary>
     /// Creates a new vertex content with no data.
@@ -75,7 +77,11 @@ namespace OkuEngine.Rendering
     public Vector[] Positions
     {
       get { return _positions; }
-      set { _positions = value; }
+      set
+      {
+        _positions = value;
+        _aabbValid = false;
+      }
     }
 
     /// <summary>
@@ -122,8 +128,20 @@ namespace OkuEngine.Rendering
       }
     }
 
+    public AABB GetAABB()
+    {
+      if (!_aabbValid)
+      {
+        _boundingBox = _positions.BoundingBox();
+        _aabbValid = true;
+      }
+      return _boundingBox;
+    }
+
     public bool Load(XmlNode node)
     {
+      _aabbValid = false;
+
       string value = node.GetTagValue("points");
       if (value != null)
       {

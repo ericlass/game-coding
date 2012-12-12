@@ -12,7 +12,7 @@ namespace OkuEngine.Actors
   /// <summary>
   /// Defines a single actor in the game. Not to be confused with an ActorType.
   /// </summary>
-  public class Actor : StoreableEntity
+  public class Actor : StoreableEntity, ISceneObject
   {
     private SceneNode _sceneNode = null;
     private ActorType _type = null;
@@ -150,6 +150,39 @@ namespace OkuEngine.Actors
       writer.WriteEndElement();
 
       return true;
+    }
+
+    public void Render(Scene scene)
+    {
+      if (_states.CurrentState != null)
+        _states.CurrentState.Renderable.RenderInherited(scene);
+    }
+
+    public AABB BoundingBox
+    {
+      get
+      {
+        if (_states.CurrentState != null)
+          return _states.CurrentState.BoundingBox;
+
+        return default(AABB);
+      }
+    }
+
+    public Vector[] Shape
+    {
+      get
+      {
+        if (_states.CurrentState != null)
+          return _states.CurrentState.Shape;
+
+        return null;
+      }
+    }
+
+    public bool IsStatic
+    {
+      get { return false; }
     }
 
   }

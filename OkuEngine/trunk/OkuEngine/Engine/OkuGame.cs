@@ -183,6 +183,7 @@ namespace OkuEngine
           XmlNode inputBindingsNode = null;
           XmlNode userEventsNode = null;
           XmlNode behaviorsNode = null;
+          XmlNode brushesNode = null;
 
           if (gameNode != null)
           {
@@ -195,6 +196,7 @@ namespace OkuEngine
             inputBindingsNode = gameNode["keybindings"];
             userEventsNode = gameNode["userevents"];
             behaviorsNode = gameNode["behaviors"];
+            brushesNode = gameNode["brushes"];
           }
 
           if (engineNode != null)
@@ -220,6 +222,9 @@ namespace OkuEngine
 
           if (actorsNode != null)
             OkuData.Actors.Load(actorsNode);
+
+          if (brushesNode != null)
+            OkuData.Brushes.Load(brushesNode);
           
           if (scenesNode != null)
             OkuData.SceneManager.Load(scenesNode);

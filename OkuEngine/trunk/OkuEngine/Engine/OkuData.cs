@@ -8,6 +8,7 @@ using OkuEngine.Actors;
 using OkuEngine.Input;
 using OkuEngine.Events;
 using OkuEngine.Scripting;
+using OkuEngine.Collision;
 
 namespace OkuEngine
 {
@@ -24,6 +25,7 @@ namespace OkuEngine
     private static EntityManager<Animation> _animations = null;
     private static EntityManager<UserEvent> _userEvents = null;
     private static EntityManager<Behavior> _behaviors = null;
+    private static EntityManager<Brush> _brushes = null;
 
     /// <summary>
     /// Gets or sets the resource cache.
@@ -129,6 +131,20 @@ namespace OkuEngine
           _behaviors = new EntityManager<Behavior>("behaviors", "behavior", KeySequence.BehaviorSequence);
 
         return _behaviors;
+      }
+    }
+
+    /// <summary>
+    /// Gets the manager that contains all brushes.
+    /// </summary>
+    public static EntityManager<Brush> Brushes
+    {
+      get
+      {
+        if (_brushes == null)
+          _brushes = new EntityManager<Brush>("brushes", "brush", KeySequence.BrushSequence);
+
+        return _brushes;
       }
     }
 

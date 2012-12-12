@@ -227,6 +227,7 @@
                 <value>0.0</value>
               </attribute>
             </attributes>
+            <shape></shape>
             <renderable type="image">
               <image>2</image>
             </renderable>
@@ -282,6 +283,17 @@
       </actor>
     </actors>
 
+    <brushes>
+      <brush>
+        <id>1</id>
+        <name>TestBrush</name>
+        <renderable type="image">
+          <image>1</image>
+        </renderable>
+        <shape></shape>
+      </brush>
+    </brushes>
+
     <scenes>
       <scene>
         <id>1</id>
@@ -294,11 +306,21 @@
               <node>
                 <!-- References actor by id -->
                 <actor>1</actor>
-                <!-- Min and Max values of the bounding box -->
-                <aabb>-24,-24;24,24</aabb>
                 <transform>
                   <position>0,0</position>
                   <rotation>-15</rotation>
+                  <scale>1,1</scale>
+                </transform>
+                <nodes>
+                  <!-- Child nodes -->
+                </nodes>
+              </node>
+              <node>
+                <!-- References brush by id -->
+                <brush>1</brush>
+                <transform>
+                  <position>0,-100</position>
+                  <rotation>0</rotation>
                   <scale>1,1</scale>
                 </transform>
                 <nodes>

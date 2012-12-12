@@ -11,6 +11,9 @@ namespace OkuEngine.Rendering
     private ImageContent _image = null;
     private int _imageId = 0;
 
+    private AABB _boundingBox = new AABB();
+    private bool _aabbValid = false;
+
     public void Update(float dt)
     {
       //Nothing to do for an image
@@ -22,8 +25,20 @@ namespace OkuEngine.Rendering
         OkuManagers.Renderer.DrawImage(_image, Vector.Zero);
     }
 
+    public AABB GetBoundingBox()
+    {
+      if (!_aabbValid)
+      {
+        _boundingBox = new AABB(_image.Width * -0.5f, _image.Height  * -0.5f, _image.Width, _image.Height);
+        _aabbValid = true;
+      }
+      return _boundingBox;
+    }
+
     public bool Load(XmlNode node)
     {
+      _aabbValid = false;
+
       string value = node.GetTagValue("image");
       if (value != null)
       {

@@ -68,6 +68,8 @@
     <Compile Include="Animation\Easing.cs" />
     <Compile Include="Animation\EasingController.cs" />
     <Compile Include="Animation\InertialMovement.cs" />
+    <Compile Include="Collision\Brush.cs" />
+    <Compile Include="Collision\ICollidable.cs" />
     <Compile Include="Driver\Audio\NullSoundEngine.cs" />
     <Compile Include="Driver\Audio\SoundEngineFactory.cs" />
     <Compile Include="Driver\Renderer\IRenderer2.cs" />
@@ -116,6 +118,7 @@
     <Compile Include="Resources\ResourceHandle.cs" />
     <Compile Include="Resources\TextureExtraData.cs" />
     <Compile Include="Resources\TextureResourceLoader.cs" />
+    <Compile Include="Scenes\ISceneObject.cs" />
     <Compile Include="Scenes\Scene.cs" />
     <Compile Include="Scenes\SceneLayer.cs" />
     <Compile Include="Scenes\SceneManager.cs" />
@@ -219,9 +222,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="OkuRuntime.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Collision\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

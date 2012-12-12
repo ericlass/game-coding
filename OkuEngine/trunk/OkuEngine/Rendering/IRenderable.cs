@@ -10,5 +10,6 @@ namespace OkuEngine
   {
     void Update(float dt);
     void Render(Scene scene);
+    AABB GetBoundingBox();
   }
 }

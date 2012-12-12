@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
-using OkuEngine.Actors;
 
 namespace OkuEngine.Scenes
 {
@@ -29,11 +28,11 @@ namespace OkuEngine.Scenes
     /// <summary>
     /// Creates a new scene node with the given paramters.
     /// </summary>
-    /// <param name="actorId">The id of the actor that is connected to the scene node.</param>
+    /// <param name="objectId">The id of the object that is connected to the scene node.</param>
     /// <param name="name">The name of the scene node.</param>
-    internal SceneNode(int actorId)
+    internal SceneNode(int objectId)
     {
-      _props = new SceneNodeProperties(actorId);
+      _props = new SceneNodeProperties(objectId);
     }
 
     /// <summary>
@@ -153,7 +152,8 @@ namespace OkuEngine.Scenes
     /// <returns>True if the node is visible, else false.</returns>
     public virtual bool IsVisible(Scene scene)
     {
-      return Intersections.AABBs(_props.Area, scene.Viewport.GetArea());
+      //TODO: Check if visible by looking at AABB
+      return false;
     }
 
     /// <summary>
@@ -167,10 +167,7 @@ namespace OkuEngine.Scenes
       try
       {
         //TODO: Add visibility check
-        //TODO: Call IRenderable of actor
-        Actor actor = OkuData.Actors[_props.ActorId];
-        if (actor != null)
-          actor.States.CurrentState.Renderable.RenderInherited(scene);
+        _props.SceneObject.Render(scene);
       }
       finally
       {
@@ -232,81 +229,44 @@ namespace OkuEngine.Scenes
 
     public bool Load(XmlNode node)
     {
-      string value = node.GetTagValue("actor");
-      if (value != null)
+      bool result = _props.Load(node);
+
+      if (result)
       {
-        int test = 0;
-        if (int.TryParse(value, out test))
-        {
-          _props.ActorId = test;
-          Actor actor = OkuData.Actors[test];
-          if (actor != null)
-          {
-            if (actor.SceneNode != null)
-              OkuManagers.Logger.LogError("Trying to set the scene node of an actor (" + test + ") that already has a scene node!");
-            else
-              actor.SceneNode = this;
-          }
-          else
-          {
-            OkuManagers.Logger.LogError("No actor found with the id " + test + " while loading scene node! Is the initialization order correct?");
-          }
-        }
+        if (_props.SceneObject.SceneNode != null)
+          OkuManagers.Logger.LogError("Trying to set the scene node of a scene object (" + _props.SceneObject.Id + ") that already has a scene node!");
         else
-          return false;
-      }
+          _props.SceneObject.SceneNode = this;
 
-      value = node.GetTagValue("aabb");
-      if (value != null)
-      {
-        Vector[] minMax = Converter.ParseVectors(value);
-        if (minMax.Length == 2)
-          _props.Area = new AABB(minMax[0], minMax[1]);
-        else
+        //Load child nodes
+        XmlNode nodesNode = node["nodes"];
+        if (nodesNode != null)
         {
-          OkuManagers.Logger.LogError("AABB '" + value + "' has wrong format!");
-        }
-      }
-
-      XmlNode transNode = node["transform"];
-      if (transNode != null)
-        _props.Transform.Load(transNode);
-
-      XmlNode nodesNode = node["nodes"];
-      if (nodesNode != null)
-      {
-        XmlNode child = nodesNode.FirstChild;
-        while (child != null)
-        {
-          if (child.Name.ToLower() == "node")
+          XmlNode child = nodesNode.FirstChild;
+          while (child != null)
           {
-            SceneNode kid = new SceneNode();
-            if (kid.Load(child))
-              kid.SetParent(this);
-            else
-              return false;
+            if (child.NodeType == XmlNodeType.Element && child.Name.ToLower() == "node")
+            {
+              SceneNode kidNode = new SceneNode();
+              if (kidNode.Load(child))
+                kidNode.SetParent(this);
+              else
+                return false;
+            }
+            child = child.NextSibling;
           }
-          child = child.NextSibling;
         }
       }
 
-      if (_props.ActorId == Actor.InvalidId)
-      {
-        OkuManagers.Logger.LogError("No actor specified for scene node!");
-        return false;
-      }
-
-      return true;
+      return result;
     }
 
     public bool Save(XmlWriter writer)
     {
       writer.WriteStartElement("node");
 
-      writer.WriteValueTag("actor", _props.ActorId.ToString());
-      writer.WriteValueTag("aabb", _props.Area.ToString());
-
-      _props.Transform.Save(writer);
+      if (!_props.Save(writer))
+        return false;
 
       writer.WriteEndElement();
 

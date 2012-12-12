@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Xml;
 using System.Text;
+using OkuEngine.Actors;
+using OkuEngine.Collision;
 
 namespace OkuEngine.Scenes
 {
   /// <summary>
   /// Stores properties of a scene node.
   /// </summary>
-  public class SceneNodeProperties
+  public class SceneNodeProperties : IStoreable
   {
-    private int _actorId = 0;
+    private int _objectId = 0;
+    private ISceneObject _object = null;
+    private string _objectType = null;
+
     private int _layer = 0;
     private Transformation _transform = new Transformation();
-    private AABB _area = new AABB();
 
     /// <summary>
     /// Creates new scene node properties.
@@ -23,31 +27,30 @@ namespace OkuEngine.Scenes
     }
 
     /// <summary>
-    /// Creates properties with the given actor id and name.
+    /// Creates properties with the given object id and name.
     /// </summary>
-    /// <param name="actorId">The actor id.</param>
+    /// <param name="objectId">The object id.</param>
     /// <param name="name">The name.</param>
-    internal SceneNodeProperties(int actorId)
+    internal SceneNodeProperties(int objectId)
     {
-      _actorId = actorId;
+      _objectId = objectId;
     }
 
     /// <summary>
-    /// Gets or sets the actor id associated with the scene node.
+    /// Gets the scene object for the scene node.
     /// </summary>
-    public int ActorId
+    public ISceneObject SceneObject
     {
-      get { return _actorId; }
-      set { _actorId = value; }
+      get { return _object; }
     }
 
     /// <summary>
-    /// Gets or sets the bouding box of the scene node.
+    /// Gets or sets the object id associated with the scene node.
     /// </summary>
-    public AABB Area
+    public int ObjectId
     {
-      get { return _area; }
-      set { _area = value; }
+      get { return _objectId; }
+      set { _objectId = value; }
     }
 
     /// <summary>
@@ -66,6 +69,87 @@ namespace OkuEngine.Scenes
     {
       get { return _layer; }
       set { _layer = value; }
+    }
+
+    public bool Load(XmlNode node)
+    {
+      string actorValue = node.GetTagValue("actor");
+      string brushValue = node.GetTagValue("brush");
+
+      //Check that actor or brush is given
+      if (actorValue == null && brushValue == null)
+      {
+        OkuManagers.Logger.LogError("Neither actor nor brush given for scene node! " + node.OuterXml);
+        return false;
+      }
+
+      //Check that not actor AND brush are given
+      if (actorValue != null && brushValue != null)
+      {
+        OkuManagers.Logger.LogError("Both actor and brush given for scene node! This is not allowed. " + node.OuterXml);
+        return false;
+      }
+
+      //Load actor
+      if (actorValue != null)
+      {
+        _objectType = "actor";
+        int test = 0;
+        if (int.TryParse(actorValue, out test))
+        {
+          _objectId = test;
+          Actor actor = OkuData.Actors[test];
+          if (actor == null)
+          {
+            OkuManagers.Logger.LogError("No actor found with the id " + test + " while loading scene node! Is the initialization order correct?");
+            return false;
+          }
+          _object = actor;
+        }
+        else
+          return false;
+      }
+
+      //Load brush
+      if (brushValue != null)
+      {
+        _objectType = "brush";
+        int test = 0;
+        if (int.TryParse(brushValue, out test))
+        {
+          _objectId = test;
+          Brush brush = OkuData.Brushes[test];
+          if (brush == null)
+          {
+            OkuManagers.Logger.LogError("No brush found with the id " + test + " while loading scene node! Is the initialization order correct?");
+            return false;
+          }
+          _object = brush;
+        }
+        else
+          return false;
+      }
+
+      //Load transform
+      XmlNode transNode = node["transform"];
+      if (transNode != null)
+        _transform.Load(transNode);
+
+      if (_objectId < 0)
+      {
+        OkuManagers.Logger.LogError("No object specified for scene node!");
+        return false;
+      }
+
+      return true;
+    }
+
+    public bool Save(XmlWriter writer)
+    {
+      writer.WriteValueTag(_objectType, _objectId.ToString());
+      _transform.Save(writer);
+
+      return true;
     }
 
   }

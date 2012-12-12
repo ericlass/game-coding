@@ -80,6 +80,37 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Calculates the axis aligned bounding box of the vector array.
+    /// </summary>
+    /// <param name="vectors">The vectors to calculate the AABB for.</param>
+    /// <returns>The AABB of the vectors.</returns>
+    public static AABB BoundingBox(this Vector[] vectors)
+    {
+      if (vectors.Length > 0)
+      {
+        float minX = float.MaxValue;
+        float minY = float.MaxValue;
+        float maxX = float.MinValue;
+        float maxY = float.MinValue;
+
+        foreach (Vector vec in vectors)
+        {
+          if (vec.X < minX)
+            minX = vec.X;
+          if (vec.X > maxX)
+            maxX = vec.X;
+          if (vec.Y < minY)
+            minY = vec.Y;
+          if (vec.Y > maxY)
+            maxY = vec.Y;
+        }
+
+        return new AABB(new Vector(minX, minY), new Vector(maxX, maxY));
+      }
+      return new AABB();
+    }
+
+    /// <summary>
     /// Gets the value of the attribute with the given name.
     /// If there is no attribute with the given name, the given default is returned.
     /// </summary>

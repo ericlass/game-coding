@@ -259,5 +259,25 @@ namespace OkuEngine
       }
     }
 
+    public static bool TryParseAABB(string str, out AABB result)
+    {
+      result = new AABB();
+      if (str != null)
+      {
+        Vector[] minMax = Converter.ParseVectors(str);
+        if (minMax.Length == 2)
+        {
+          result.Min = minMax[0];
+          result.Max = minMax[1];
+          return true;
+        }
+        else
+        {
+          OkuManagers.Logger.LogError("AABB '" + str + "' has wrong format!");
+        }
+      }
+      return false;
+    }
+
   }
 }

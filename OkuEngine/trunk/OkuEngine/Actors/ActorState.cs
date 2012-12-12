@@ -14,6 +14,8 @@ namespace OkuEngine.Actors
   public class ActorState : EntityState
   {
     private InheritingRenderable _renderable = new InheritingRenderable();
+    private Vector[] _shape = null;
+    private AABB _boundingBox = new AABB();
 
     /// <summary>
     /// Gets the renderable of the state.
@@ -21,6 +23,22 @@ namespace OkuEngine.Actors
     public InheritingRenderable Renderable
     {
       get { return _renderable; }
+    }
+
+    /// <summary>
+    /// Gets the shape associated with the actor state.
+    /// </summary>
+    public Vector[] Shape
+    {
+      get { return _shape; }
+    }
+
+    /// <summary>
+    /// Gets the bounding box of the actor state.
+    /// </summary>
+    public AABB BoundingBox
+    {
+      get { return _boundingBox; }
     }
 
     public override bool Load(XmlNode node)
@@ -41,6 +59,22 @@ namespace OkuEngine.Actors
           return false;
       }
 
+      string shape = node.GetTagValue("shape");
+      if (shape != null)
+      {
+        _shape = Converter.ParseVectors(shape);
+      }
+
+      if (_shape != null)
+        _boundingBox = _shape.BoundingBox();
+      else
+      {
+        if (_renderable != null)
+        {
+          _boundingBox = _renderable.InheritedAABB();
+        }
+      }          
+
       return true;
     }
 
@@ -53,6 +87,9 @@ namespace OkuEngine.Actors
 
       if (_renderable != null && _renderable.Renderable != null)
         _renderable.Renderable.Save(writer);
+
+      if (_shape != null)
+        writer.WriteValueTag("shape", _shape.ToOkuString());
 
       writer.WriteEndElement();
 

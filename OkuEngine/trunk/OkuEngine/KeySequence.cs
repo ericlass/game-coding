@@ -27,6 +27,7 @@ namespace OkuEngine
     public const string ScriptSequence = "scripts";
     public const string UserEventSequence = "userevents";
     public const string BehaviorSequence = "behaviors";
+    public const string BrushSequence = "brushes";
 
     //TODO: Find a better name. Everything is an entity!
     public const string EntitySequence = "entities"; //collision world
@@ -50,6 +51,7 @@ namespace OkuEngine
       AddSequence(EntitySequence);
       AddSequence(UserEventSequence);
       AddSequence(BehaviorSequence);
+      AddSequence(BrushSequence);
     }
 
     public static bool ResetSequence(string name)

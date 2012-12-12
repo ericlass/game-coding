@@ -24,6 +24,11 @@ namespace OkuEngine.Rendering
       OkuManagers.Renderer.DrawMesh(_vertices.Positions, _vertices.TexCoords, _vertices.Colors, _vertices.Count, _mode, _image);
     }
 
+    public AABB GetBoundingBox()
+    {
+      return _vertices.GetAABB();
+    }
+
     public bool Load(XmlNode node)
     {
       string value = node.GetTagValue("image");
