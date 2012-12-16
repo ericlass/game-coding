@@ -42,8 +42,10 @@ namespace OkuEngine.Rendering
         if (_creators.ContainsKey(type))
         {
           IRenderable result = _creators[type]();
-          result.Load(node);
-          return result;
+          if (!result.Load(node))
+            return null;
+          else
+            return result;
         }
       }
       return null;

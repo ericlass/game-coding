@@ -11,12 +11,11 @@ namespace OkuEngine.Collision
   /// Defines a static piece of level geometry with collision information
   /// and an optional renderable.
   /// </summary>
-  public class Brush : StoreableEntity, ISceneObject
+  public class Brush : SceneObject
   {
     private IRenderable _renderable = null;
     private AABB _boundingBox = new AABB();
     private Vector[] _shape = null;
-    private SceneNode _sceneNode = null;
 
     /// <summary>
     /// Create a new brush.
@@ -28,7 +27,7 @@ namespace OkuEngine.Collision
     /// <summary>
     /// Gets the bounding box of the brush.
     /// </summary>
-    public AABB BoundingBox
+    public override AABB BoundingBox
     {
       get { return _boundingBox; }
     }
@@ -36,7 +35,7 @@ namespace OkuEngine.Collision
     /// <summary>
     /// Gets the shape of the brush. Can be null if only AABB is specified.
     /// </summary>
-    public Vector[] Shape
+    public override Vector[] Shape
     {
       get { return _shape; }
     }
@@ -44,25 +43,16 @@ namespace OkuEngine.Collision
     /// <summary>
     /// Gets if the brush is static or not, so it always returns true.
     /// </summary>
-    public bool IsStatic
+    public override bool IsStatic
     {
       get { return true; }
     }
 
     /// <summary>
-    /// Gets or set the scene node the brush belongs to.
+    /// Renders the brushes renderable if there is any using the given scene.
     /// </summary>
-    public SceneNode SceneNode
-    {
-      get { return _sceneNode; }
-      set { _sceneNode = value; }
-    }
-
-    /// <summary>
-    /// Renders the brushes renderable if there is any.
-    /// </summary>
-    /// <param name="scene"></param>
-    public void Render(Scene scene)
+    /// <param name="scene">The scene to be used.</param>
+    public override void Render(Scene scene)
     {
       if (_renderable != null)
         _renderable.Render(scene);

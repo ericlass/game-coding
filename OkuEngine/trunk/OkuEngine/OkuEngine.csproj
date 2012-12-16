@@ -69,7 +69,6 @@
     <Compile Include="Animation\EasingController.cs" />
     <Compile Include="Animation\InertialMovement.cs" />
     <Compile Include="Collision\Brush.cs" />
-    <Compile Include="Collision\ICollidable.cs" />
     <Compile Include="Driver\Audio\NullSoundEngine.cs" />
     <Compile Include="Driver\Audio\SoundEngineFactory.cs" />
     <Compile Include="Driver\Renderer\IRenderer2.cs" />
@@ -118,12 +117,14 @@
     <Compile Include="Resources\ResourceHandle.cs" />
     <Compile Include="Resources\TextureExtraData.cs" />
     <Compile Include="Resources\TextureResourceLoader.cs" />
-    <Compile Include="Scenes\ISceneObject.cs" />
     <Compile Include="Scenes\Scene.cs" />
     <Compile Include="Scenes\SceneLayer.cs" />
     <Compile Include="Scenes\SceneManager.cs" />
     <Compile Include="Scenes\SceneNode.cs" />
     <Compile Include="Scenes\SceneNodeProperties.cs" />
+    <Compile Include="Scenes\SceneObject.cs" />
+    <Compile Include="Scenes\SceneObjectFactory.cs" />
+    <Compile Include="Scenes\SceneObjectManager.cs" />
     <Compile Include="Scripting\Behavior.cs" />
     <Compile Include="Scripting\OkuScriptManager.cs" />
     <Compile Include="Attributes\AttributeValue.cs" />

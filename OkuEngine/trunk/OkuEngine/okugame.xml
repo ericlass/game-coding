@@ -263,7 +263,7 @@
       </actortype>
     </actortypes>
 
-    <actors>
+    <sceneobjects>
       <actor>
         <id>1</id>
         <name>Car</name>
@@ -281,9 +281,6 @@
           </state>
         </states>
       </actor>
-    </actors>
-
-    <brushes>
       <brush>
         <id>1</id>
         <name>TestBrush</name>
@@ -292,7 +289,7 @@
         </renderable>
         <shape></shape>
       </brush>
-    </brushes>
+    </sceneobjects>
 
     <scenes>
       <scene>

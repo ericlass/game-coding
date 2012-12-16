@@ -13,7 +13,7 @@ namespace OkuEngine.Scenes
   public class SceneNodeProperties : IStoreable
   {
     private int _objectId = 0;
-    private ISceneObject _object = null;
+    private SceneObject _object = null;
     private string _objectType = null;
 
     private int _layer = 0;
@@ -39,7 +39,7 @@ namespace OkuEngine.Scenes
     /// <summary>
     /// Gets the scene object for the scene node.
     /// </summary>
-    public ISceneObject SceneObject
+    public SceneObject SceneObject
     {
       get { return _object; }
     }
@@ -90,6 +90,7 @@ namespace OkuEngine.Scenes
         return false;
       }
 
+      //TODO: Load scene objects generically
       //Load actor
       if (actorValue != null)
       {
@@ -98,7 +99,7 @@ namespace OkuEngine.Scenes
         if (int.TryParse(actorValue, out test))
         {
           _objectId = test;
-          Actor actor = OkuData.Actors[test];
+          Actor actor = OkuData.SceneObjects.Get<Actor>(test);
           if (actor == null)
           {
             OkuManagers.Logger.LogError("No actor found with the id " + test + " while loading scene node! Is the initialization order correct?");
@@ -118,7 +119,7 @@ namespace OkuEngine.Scenes
         if (int.TryParse(brushValue, out test))
         {
           _objectId = test;
-          Brush brush = OkuData.Brushes[test];
+          Brush brush = OkuData.SceneObjects.Get<Brush>(test);
           if (brush == null)
           {
             OkuManagers.Logger.LogError("No brush found with the id " + test + " while loading scene node! Is the initialization order correct?");

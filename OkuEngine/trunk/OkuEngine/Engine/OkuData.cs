@@ -19,13 +19,12 @@ namespace OkuEngine
   {
     private static ResourceCache _resources = null;
     private static SceneManager _sceneManager = null;
-    private static EntityManager<Actor> _actors = null;
     private static EntityManager<ActorType> _actorTypes = null;
     private static EntityManager<ImageContent> _images = null;
     private static EntityManager<Animation> _animations = null;
     private static EntityManager<UserEvent> _userEvents = null;
     private static EntityManager<Behavior> _behaviors = null;
-    private static EntityManager<Brush> _brushes = null;
+    private static SceneObjectManager _sceneObjects = null;
 
     /// <summary>
     /// Gets or sets the resource cache.
@@ -47,20 +46,6 @@ namespace OkuEngine
           _sceneManager = new SceneManager();
 
         return _sceneManager;
-      }
-    }
-
-    /// <summary>
-    /// Gets the actor manager that contains all actors.
-    /// </summary>
-    public static EntityManager<Actor> Actors
-    {
-      get
-      {
-        if (_actors == null)
-          _actors = new EntityManager<Actor>("actors", "actor", KeySequence.ActorSequence);
-
-        return _actors;
       }
     }
 
@@ -135,16 +120,16 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Gets the manager that contains all brushes.
+    /// Gets the manager that contains all scene objects.
     /// </summary>
-    public static EntityManager<Brush> Brushes
+    public static SceneObjectManager SceneObjects
     {
       get
       {
-        if (_brushes == null)
-          _brushes = new EntityManager<Brush>("brushes", "brush", KeySequence.BrushSequence);
+        if (_sceneObjects == null)
+          _sceneObjects = new SceneObjectManager();
 
-        return _brushes;
+        return _sceneObjects;
       }
     }
 

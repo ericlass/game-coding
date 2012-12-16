@@ -43,7 +43,7 @@ namespace OkuEngine.Api
     /// <returns>The actor with the given id or null is there is no actor with this id.</returns>
     private Actor GetActor(int actorId)
     {
-      Actor actor = OkuData.Actors[actorId];
+      Actor actor = OkuData.SceneObjects.Get<Actor>(actorId);
       if (actor == null)
         OkuManagers.Logger.LogError("No actor with the id " + actorId + " exists!");
 

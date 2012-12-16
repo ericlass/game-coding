@@ -178,12 +178,11 @@ namespace OkuEngine
           XmlNode imagesNode = null;
           XmlNode scenesNode = null;
           XmlNode actorTypesNode = null;
-          XmlNode actorsNode = null;
           XmlNode animationsNode = null;
           XmlNode inputBindingsNode = null;
           XmlNode userEventsNode = null;
           XmlNode behaviorsNode = null;
-          XmlNode brushesNode = null;
+          XmlNode sceneObjectNode = null;
 
           if (gameNode != null)
           {
@@ -191,12 +190,11 @@ namespace OkuEngine
             imagesNode = gameNode["images"];
             scenesNode = gameNode["scenes"];
             actorTypesNode = gameNode["actortypes"];
-            actorsNode = gameNode["actors"];
             animationsNode = gameNode["animations"];
             inputBindingsNode = gameNode["keybindings"];
             userEventsNode = gameNode["userevents"];
             behaviorsNode = gameNode["behaviors"];
-            brushesNode = gameNode["brushes"];
+            sceneObjectNode = gameNode["sceneobjects"];
           }
 
           if (engineNode != null)
@@ -220,12 +218,9 @@ namespace OkuEngine
           if (actorTypesNode != null)
             OkuData.ActorTypes.Load(actorTypesNode);
 
-          if (actorsNode != null)
-            OkuData.Actors.Load(actorsNode);
-
-          if (brushesNode != null)
-            OkuData.Brushes.Load(brushesNode);
-          
+          if (sceneObjectNode != null)
+            OkuData.SceneObjects.Load(sceneObjectNode);
+      
           if (scenesNode != null)
             OkuData.SceneManager.Load(scenesNode);
 

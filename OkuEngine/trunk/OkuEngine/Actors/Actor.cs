@@ -12,9 +12,8 @@ namespace OkuEngine.Actors
   /// <summary>
   /// Defines a single actor in the game. Not to be confused with an ActorType.
   /// </summary>
-  public class Actor : StoreableEntity, ISceneObject
+  public class Actor : SceneObject
   {
-    private SceneNode _sceneNode = null;
     private ActorType _type = null;
     private StateManager<ActorState> _states = new StateManager<ActorState>();
     private AttributeMap _attributes = new AttributeMap();
@@ -60,12 +59,50 @@ namespace OkuEngine.Actors
     }
 
     /// <summary>
-    /// Gets or sets the scene node that is associated with this actor.
+    /// Renders the actor with its current state using the given scene.
     /// </summary>
-    public SceneNode SceneNode
+    /// <param name="scene">The scene to use.</param>
+    public override void Render(Scene scene)
     {
-      get { return _sceneNode; }
-      set { _sceneNode = value; }
+      if (_states.CurrentState != null)
+        _states.CurrentState.Renderable.RenderInherited(scene);
+    }
+
+    /// <summary>
+    /// Gets the bounding box of the current state of the actor.
+    /// </summary>
+    public override AABB BoundingBox
+    {
+      get
+      {
+        if (_states.CurrentState != null)
+          return _states.CurrentState.BoundingBox;
+
+        return default(AABB);
+      }
+    }
+
+    /// <summary>
+    /// Gets the shape of the current state of the actor.
+    /// Can be null if only bounding box is used.
+    /// </summary>
+    public override Vector[] Shape
+    {
+      get
+      {
+        if (_states.CurrentState != null)
+          return _states.CurrentState.Shape;
+
+        return null;
+      }
+    }
+
+    /// <summary>
+    /// Gets if the actor is static. An actor is assumed to be never static (false).
+    /// </summary>
+    public override bool IsStatic
+    {
+      get { return false; }
     }
 
     /// <summary>
@@ -97,6 +134,7 @@ namespace OkuEngine.Actors
         return false;
       }
 
+      //Load actor states
       XmlNode statesNode = node["states"];
       if (statesNode != null)
       {
@@ -116,6 +154,7 @@ namespace OkuEngine.Actors
         }
       }
 
+      //Load global actor attributes
       XmlNode attrsNode = node["attributes"];
       if (attrsNode != null)
       {
@@ -150,39 +189,6 @@ namespace OkuEngine.Actors
       writer.WriteEndElement();
 
       return true;
-    }
-
-    public void Render(Scene scene)
-    {
-      if (_states.CurrentState != null)
-        _states.CurrentState.Renderable.RenderInherited(scene);
-    }
-
-    public AABB BoundingBox
-    {
-      get
-      {
-        if (_states.CurrentState != null)
-          return _states.CurrentState.BoundingBox;
-
-        return default(AABB);
-      }
-    }
-
-    public Vector[] Shape
-    {
-      get
-      {
-        if (_states.CurrentState != null)
-          return _states.CurrentState.Shape;
-
-        return null;
-      }
-    }
-
-    public bool IsStatic
-    {
-      get { return false; }
     }
 
   }
