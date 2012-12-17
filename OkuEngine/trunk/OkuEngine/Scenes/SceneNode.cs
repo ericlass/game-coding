@@ -166,8 +166,8 @@ namespace OkuEngine.Scenes
       scene.ApplyAndPushTransform(_props.Transform);
       try
       {
-        //TODO: Add visibility check
-        _props.SceneObject.Render(scene);
+        if (_props.SceneObject != null)
+          _props.SceneObject.Render(scene);
       }
       finally
       {
@@ -233,10 +233,13 @@ namespace OkuEngine.Scenes
 
       if (result)
       {
-        if (_props.SceneObject.SceneNode != null)
-          OkuManagers.Logger.LogError("Trying to set the scene node of a scene object (" + _props.SceneObject.Id + ") that already has a scene node!");
-        else
-          _props.SceneObject.SceneNode = this;
+        if (_props.SceneObject != null)
+        {
+          if (_props.SceneObject.SceneNode != null)
+            OkuManagers.Logger.LogError("Trying to set the scene node of a scene object (" + _props.SceneObject.Id + ") that already has a scene node!");
+          else
+            _props.SceneObject.SceneNode = this;
+        }
 
         //Load child nodes
         XmlNode nodesNode = node["nodes"];

@@ -14,7 +14,6 @@ namespace OkuEngine.Scenes
   {
     private int _objectId = 0;
     private SceneObject _object = null;
-    private string _objectType = null;
 
     private int _layer = 0;
     private Transformation _transform = new Transformation();
@@ -38,6 +37,7 @@ namespace OkuEngine.Scenes
 
     /// <summary>
     /// Gets the scene object for the scene node.
+    /// This can be null if the scene node is only used for transformation.
     /// </summary>
     public SceneObject SceneObject
     {
@@ -73,59 +73,21 @@ namespace OkuEngine.Scenes
 
     public bool Load(XmlNode node)
     {
-      string actorValue = node.GetTagValue("actor");
-      string brushValue = node.GetTagValue("brush");
+      string objectValue = node.GetTagValue("object");
 
-      //Check that actor or brush is given
-      if (actorValue == null && brushValue == null)
+      // Load scene object, is allowed to be null!
+      if (objectValue != null)
       {
-        OkuManagers.Logger.LogError("Neither actor nor brush given for scene node! " + node.OuterXml);
-        return false;
-      }
-
-      //Check that not actor AND brush are given
-      if (actorValue != null && brushValue != null)
-      {
-        OkuManagers.Logger.LogError("Both actor and brush given for scene node! This is not allowed. " + node.OuterXml);
-        return false;
-      }
-
-      //TODO: Load scene objects generically
-      //Load actor
-      if (actorValue != null)
-      {
-        _objectType = "actor";
         int test = 0;
-        if (int.TryParse(actorValue, out test))
+        if (int.TryParse(objectValue, out test))
         {
           _objectId = test;
-          Actor actor = OkuData.SceneObjects.Get<Actor>(test);
-          if (actor == null)
+          _object = OkuData.SceneObjects[_objectId];
+          if (_object == null)
           {
-            OkuManagers.Logger.LogError("No actor found with the id " + test + " while loading scene node! Is the initialization order correct?");
+            OkuManagers.Logger.LogError("No scene object found with the id " + test + " while loading scene node! Is the initialization order correct?");
             return false;
           }
-          _object = actor;
-        }
-        else
-          return false;
-      }
-
-      //Load brush
-      if (brushValue != null)
-      {
-        _objectType = "brush";
-        int test = 0;
-        if (int.TryParse(brushValue, out test))
-        {
-          _objectId = test;
-          Brush brush = OkuData.SceneObjects.Get<Brush>(test);
-          if (brush == null)
-          {
-            OkuManagers.Logger.LogError("No brush found with the id " + test + " while loading scene node! Is the initialization order correct?");
-            return false;
-          }
-          _object = brush;
         }
         else
           return false;
@@ -136,18 +98,12 @@ namespace OkuEngine.Scenes
       if (transNode != null)
         _transform.Load(transNode);
 
-      if (_objectId < 0)
-      {
-        OkuManagers.Logger.LogError("No object specified for scene node!");
-        return false;
-      }
-
       return true;
     }
 
     public bool Save(XmlWriter writer)
     {
-      writer.WriteValueTag(_objectType, _objectId.ToString());
+      writer.WriteValueTag("object", _objectId.ToString());
       _transform.Save(writer);
 
       return true;

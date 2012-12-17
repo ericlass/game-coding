@@ -1,4 +1,4 @@
-<okugame>
+﻿<okugame>
   <engine>
     <renderer type="opengl">
       <fullscreen>no</fullscreen>
@@ -282,7 +282,7 @@
         </states>
       </actor>
       <brush>
-        <id>1</id>
+        <id>2</id>
         <name>TestBrush</name>
         <renderable type="image">
           <image>1</image>
@@ -301,8 +301,8 @@
             <name>Layer 01</name>
             <nodes>
               <node>
-                <!-- References actor by id -->
-                <actor>1</actor>
+                <!-- References scene object by id -->
+                <object>1</object>
                 <transform>
                   <position>0,0</position>
                   <rotation>-15</rotation>
@@ -313,8 +313,8 @@
                 </nodes>
               </node>
               <node>
-                <!-- References brush by id -->
-                <brush>1</brush>
+                <!-- References scene object by id -->
+                <object>2</object>
                 <transform>
                   <position>0,-100</position>
                   <rotation>0</rotation>
