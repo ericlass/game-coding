@@ -52,20 +52,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnimationTestGame.cs" />
-    <Compile Include="CollisionTestGame.cs" />
-    <Compile Include="EasingTestGame.cs" />
-    <Compile Include="GCCTestGame.cs" />
-    <Compile Include="GodrayGame.cs" />
-    <Compile Include="GuiTestGame.cs" />
-    <Compile Include="InertiaTestGame.cs" />
-    <Compile Include="NoiseTestGame.cs" />
-    <Compile Include="ParticleTestGame.cs" />
-    <Compile Include="PlatformPolygonGame.cs" />
-    <Compile Include="PlatformTileGame.cs" />
-    <Compile Include="ScreenSpaceTest.cs" />
-    <Compile Include="SpatialHashGame.cs" />
-    <Compile Include="TestBedGame.cs" />
+    <Compile Include="OldTest\AnimationTestGame.cs" />
+    <Compile Include="OldTest\CollisionTestGame.cs" />
+    <Compile Include="OldTest\EasingTestGame.cs" />
+    <Compile Include="TestGame.cs" />
+    <Compile Include="OldTest\GodrayGame.cs" />
+    <Compile Include="OldTest\GuiTestGame.cs" />
+    <Compile Include="OldTest\InertiaTestGame.cs" />
+    <Compile Include="OldTest\NoiseTestGame.cs" />
+    <Compile Include="OldTest\ParticleTestGame.cs" />
+    <Compile Include="OldTest\PlatformPolygonGame.cs" />
+    <Compile Include="OldTest\PlatformTileGame.cs" />
+    <Compile Include="OldTest\ScreenSpaceTest.cs" />
+    <Compile Include="OldTest\SpatialHashGame.cs" />
+    <Compile Include="OldTest\TestBedGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -87,9 +87,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="TileTestGame.cs" />
-    <Compile Include="TransformTestGame.cs" />
-    <Compile Include="UpdateTexGame.cs" />
+    <Compile Include="OldTest\TileTestGame.cs" />
+    <Compile Include="OldTest\TransformTestGame.cs" />
+    <Compile Include="OldTest\UpdateTexGame.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OkuEngine\OkuEngine.csproj">
@@ -98,13 +98,94 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="easingconfig.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Include="OldTest\easingconfig.xml">
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="guitestconfig.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Include="OldTest\guitestconfig.xml">
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="content\actor.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\car.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\coin_animation.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\earth.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\Impact0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\Impact1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\Impact2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\laser.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\led_blue.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\led_green.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\led_red.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\led_yellow.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\light.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\mask.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\okugame.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\orange_tile.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\realtiles.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\sinus.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\smiley.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\smw_title.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\smw_title_mask.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\tiles.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\tilesheet.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\tilesheet2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\tilesheet3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\tilesheet4.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="content\yinyang.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

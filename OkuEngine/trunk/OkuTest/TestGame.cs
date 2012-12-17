@@ -11,7 +11,7 @@ using OkuEngine.Scripting;
 
 namespace OkuTest
 {
-  public class GCCTestGame : OkuGame
+  public class TestGame : OkuGame
   {
     protected override string GetConfigFileName()
     {
@@ -24,17 +24,10 @@ namespace OkuTest
       resourceParams.SizeInMb = 64;
     }
 
-    public override void Initialize()
-    {
-    }
-
-    public override void Update(float dt)
-    {
-    }
-
-    public override void Render(int pass)
-    {
-    }
+    //Old, unused override methods. Will be removed!
+    public override void Initialize() { }
+    public override void Update(float dt) { }
+    public override void Render(int pass) { }
 
   }
 }
