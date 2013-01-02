@@ -299,6 +299,17 @@
           <layer>
             <id>1</id>
             <name>Layer 01</name>
+            <!-- Optional Backdrop -->
+            <backdrop type="image">
+              <!-- References image by id -->
+              <image></image>
+              <!-- One or more shapes -->
+              <shapes>
+                <polygon></polygon>
+                <polygon></polygon>
+                <polygon></polygon>
+              </shapes>
+            </backdrop>
             <nodes>
               <node>
                 <!-- References scene object by id -->

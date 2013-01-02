@@ -89,6 +89,7 @@
     <Compile Include="Events\EventTypes.cs" />
     <Compile Include="Events\IEventManager.cs" />
     <Compile Include="Events\UserEvent.cs" />
+    <Compile Include="Geometry\Polygon.cs" />
     <Compile Include="InheritingDictionary.cs" />
     <Compile Include="Instance\ContentInstance.cs" />
     <Compile Include="Instance\MeshInstance.cs" />
@@ -117,6 +118,9 @@
     <Compile Include="Resources\ResourceHandle.cs" />
     <Compile Include="Resources\TextureExtraData.cs" />
     <Compile Include="Resources\TextureResourceLoader.cs" />
+    <Compile Include="Scenes\Backdrops\Backdrop.cs" />
+    <Compile Include="Scenes\Backdrops\BackdropFactory.cs" />
+    <Compile Include="Scenes\Backdrops\ImageBackdrop.cs" />
     <Compile Include="Scenes\Scene.cs" />
     <Compile Include="Scenes\SceneLayer.cs" />
     <Compile Include="Scenes\SceneManager.cs" />
