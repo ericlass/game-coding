@@ -102,6 +102,7 @@
     <Compile Include="Processes\Process.cs" />
     <Compile Include="Processes\ProcessManager.cs" />
     <Compile Include="Processes\ProcessState.cs" />
+    <Compile Include="Rendering\RenderableBigImage.cs" />
     <Compile Include="Rendering\RenderableFactory.cs" />
     <Compile Include="Rendering\RenderableImage.cs" />
     <Compile Include="Rendering\RenderableLines.cs" />
