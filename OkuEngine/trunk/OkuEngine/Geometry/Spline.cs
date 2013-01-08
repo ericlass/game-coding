@@ -15,6 +15,7 @@ namespace OkuEngine
     private double _tension = 0;
     private double _bias = 0;
     private double _continuity = 0;
+    private double[] _arcLengthMap = null;
 
     /// <summary>
     /// Creates a new spline with the given points.
@@ -127,7 +128,7 @@ namespace OkuEngine
 
       return true;
     }
-
+    
     /// <summary>
     /// Calculates the arc length of the complete spline. Note that this is only an aproximation and not the 100% correct length.
     /// But it should be enough for most purposes especialy games.
@@ -176,10 +177,86 @@ namespace OkuEngine
 
       return result;
     }
-
-    public Vector[] TesselateParameterized()
+    
+    /// <summary>
+    /// Gets a map that translates from linear length to arc length.
+    /// </summary>
+    private double[] ArcLengthMap
     {
-      throw new NotImplementedException("TesselateParameterized");
+      get
+      {
+        if (_arcLengthMap == null)
+        {
+          _arcLengthMap = new double[100];
+          _arcLengthMap[0] = 0.0;
+          
+          Vector previous = _points[0];
+          Vector current = Vector.Zero;
+          
+          double arcLength = 0.0;
+          for (int i = 1; i < _arcLengthMap.Length; i++)
+          {
+            double t = i / (double)_arcLengthMap.Length;
+            if (GetInterpolatedPoint(t, ref current))
+            {
+              arcLength += Vector.Distance(previous, current);
+              _arcLengthMap[i] = arcLength;
+              previous = current;
+            }
+          }
+        }
+        return _arcLengthMap;
+      }
+    }
+    
+    /// <summary>
+    /// Interpolates a point on the spline at the given control value t.
+    /// The spline is parameterized  to linear length so a control value of 0.5
+    /// is garantueed to return a point that half way down the spline.
+    /// </summary>
+    /// <param name="t">The linear control value. Must be in range 0.0 - 1.0.</param>
+    /// <param name="result">The interpolated point is returned here.</param>
+    /// <returns>True if the point was interpolated, false if the control parameter t was out of range 0.0 - 1.0.</returns>
+    public bool GetParameterizedInterpolatedPoint(double t, ref Vector result)
+    {
+      if (t < 0 || t > 1)
+        return false;
+     
+      double totalLength = ArcLengthMap[ArcLengthMap.Length - 1];
+      
+      int min = (int)(t * ArcLengthMap.Length) - 1;
+      if (min >= ArcLengthMap.Length - 1)
+        return _points[_points.Length - 1];      
+      
+      int max = min + 1;
+      
+      //TODO: Make this work correctly
+      double tarc = OkuMath.InterpolateLinear(ArcLengthMap[min], ArcLengthMap[max], t - (Math.Floor(t)));
+      
+      return true;
+    }
+
+    /// <summary>
+    /// Tesselates the spline to a polygon. The points are evenly spread on the spline
+    /// at even distances-
+    /// </summary>
+    /// <param name="points">The number of points the tesselated spline should have.</param>
+    /// <returns>The points of the tesselated polygon.</returns>
+    public Vector[] TesselateParameterized(int points)
+    {
+      Vector[] result = new Vector[points];
+
+      double step = 1.0 / (points - 1);
+      Vector vec = Vector.Zero;
+
+      for (int i = 0; i < points; i++)
+      {
+        double t = i * step;
+        GetParameterizedInterpolatedPoint(t, ref vec);
+        result[i] = vec;
+      }
+
+      return result;
     }
 
   }

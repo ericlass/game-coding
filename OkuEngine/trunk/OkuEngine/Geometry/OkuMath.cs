@@ -77,6 +77,18 @@ namespace OkuEngine
     {
       return start + (end - start) * t;
     }
+    
+    /// <summary>
+    /// Interpolates linearly between the two given values.
+    /// </summary>
+    /// <param name="start">The start value.</param>
+    /// <param name="end">The end value.</param>
+    /// <param name="t">A value in the range 0.0 - 1.0 where 0.0 means start and 1.0 means end.</param>
+    /// <returns>The interpolated value.</returns>
+    public static double InterpolateLinear(double start, double end, double t)
+    {
+      return start + (end - start) * t;
+    }
 
     /// <summary>
     /// Interpolates between a and b using cosine interpolation. m controls the amount of interpolation.
