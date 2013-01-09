@@ -90,6 +90,7 @@
     <Compile Include="Events\IEventManager.cs" />
     <Compile Include="Events\UserEvent.cs" />
     <Compile Include="Geometry\Polygon.cs" />
+    <Compile Include="Geometry\QuadTreeCell.cs" />
     <Compile Include="InheritingDictionary.cs" />
     <Compile Include="Instance\ContentInstance.cs" />
     <Compile Include="Instance\MeshInstance.cs" />

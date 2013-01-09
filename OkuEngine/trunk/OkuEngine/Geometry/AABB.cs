@@ -102,6 +102,27 @@ namespace OkuEngine
 
       return new AABB(new Vector(minX, minY), new Vector(maxX, maxY));
     }
+    
+    /// <summary>
+    /// Checks if the given AABB is completly inside the AABB.
+    /// Also returns true if the AABBs are equal.
+    /// </summary>
+    /// <param name="other">The AABB to check.</param>
+    /// <returns>True f the given AABB is completly inside of the AABB, else false.</returns>
+    public bool Contains(AABB other)
+    {
+      return Min.X <= other.Min.X && Min.Y <= other.Min.Y && Max.X >= other.Max.X && Max.Y >= other.Max.Y;
+    }
+    
+    /// <summary>
+    /// Check if the AABB intersects with the given AABB.
+    /// </summary>
+    /// <param name="other">The AABB to check intersection with.</param>
+    /// <returns>True if the AABBs intersect, else false.</returns>
+    public bool Intersects(AABB other)
+    {
+      return Intersections.AABBs(this, other);
+    }
 
     /// <summary>
     /// Gets the four corner points of the AABB as a vector array.
