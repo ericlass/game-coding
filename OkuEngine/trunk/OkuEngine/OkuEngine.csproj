@@ -92,6 +92,7 @@
     <Compile Include="Geometry\Polygon.cs" />
     <Compile Include="Geometry\RegularGrid.cs" />
     <Compile Include="Geometry\QuadTreeCell.cs" />
+    <Compile Include="Geometry\Vector2i.cs" />
     <Compile Include="InheritingDictionary.cs" />
     <Compile Include="Instance\ContentInstance.cs" />
     <Compile Include="Instance\MeshInstance.cs" />

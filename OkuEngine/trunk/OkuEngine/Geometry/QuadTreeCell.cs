@@ -28,6 +28,12 @@ namespace OkuEngine.Geometry
     {
       _level = level;
     }
+
+    public QuadTreeCell Parent
+    {
+      get { return _parent; }
+      set { _parent = value; }
+    }
     
     public QuadTreeCell Add(SceneObject so)
     {
@@ -46,6 +52,7 @@ namespace OkuEngine.Geometry
           for (int i = 0; i < _children.Length; i++)
           {
             _children[i] = new QuadTreeCell(_level + 1);
+            _children[i].Parent = this;
             foreach (SceneObject currentObject in _objects.Values)
             {
               if (_children[i].Area.Contains(currentObject.BoundingBox))

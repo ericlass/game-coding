@@ -145,6 +145,17 @@ namespace OkuEngine.Geometry
     }
 
     /// <summary>
+    /// Checks if the given point is inside of the grid.
+    /// </summary>
+    /// <param name="x">The x coordinate of the point.</param>
+    /// <param name="y">The y coordinate of the point.</param>
+    /// <returns>True if the point is inside, else false.</returns>
+    public bool IsInside(float x, float y)
+    {
+      return Intersections.PointInAABB(x, y, Left, Bottom, Right, Top);
+    }
+
+    /// <summary>
     /// Gets the bounds of the cell with the given coordinates.
     /// </summary>
     /// <param name="x">The x index of the cell.</param>
@@ -189,6 +200,104 @@ namespace OkuEngine.Geometry
       y = (int)((point.Y - _offset.Y) / _cellSize);
 
       return IsInside(point);
+    }
+
+    /// <summary>
+    /// Gets the cell of the given point.
+    /// </summary>
+    /// <param name="px">The x coordinate of the point.</param>
+    /// <param name="py">The y coordinate of the point.</param>
+    /// <param name="x">The x index of the cell is returned here.</param>
+    /// <param name="y">The y index of the cell is returned here.</param>
+    /// <returns>True if the point is within the grid, else false.</returns>
+    public bool GetCellOf(float px, float py, out int x, out int y)
+    {
+      x = (int)((px - _offset.X) / _cellSize);
+      y = (int)((py - _offset.Y) / _cellSize);
+
+      return IsInside(x, y);
+    }
+
+    /// <summary>
+    /// Calucates the boundary cells the given aabb intersects.
+    /// </summary>
+    /// <param name="box">The aabb to check.</param>
+    /// <param name="min">The minimum cell indices (left, bottom) are returned here.</param>
+    /// <param name="max">The maximum cell indices (right, top) are returned here.</param>
+    public void GetCellsIntersecting(AABB box, ref Vector2i min, ref Vector2i max)
+    {
+      int x, y;
+
+      GetCellOf(box.Min, out x, out y);
+      min.X = x;
+      min.Y = y;
+
+      GetCellOf(box.Max, out x, out y);
+      max.X = x;
+      max.Y = y;
+    }
+
+    /// <summary>
+    /// Traverses the line given by start and end through the grid.
+    /// </summary>
+    /// <param name="start">The start of the line.</param>
+    /// <param name="end">The end of the line.</param>
+    /// <returns>A list of indices of all cell the line crosses.</returns>
+    public List<Vector2i> GetCellsOnLine(Vector2f start, Vector2f end)
+    {
+      return GetCellsOnLine(start.X, start.Y, end.X, end.Y);
+    }
+
+    /// <summary>
+    /// Traverses the line given by start and end through the grid.
+    /// </summary>
+    /// <param name="x1">The x coordinate of the start point of the line.</param>
+    /// <param name="y1">The y coordinate of the start point of the line.</param>
+    /// <param name="x2">The x coordinate of the end point of the line.</param>
+    /// <param name="y2">The y coordinate of the end point of the line.</param>
+    /// <returns>A list of indices of all cell the line crosses.</returns>
+    public List<Vector2i> GetCellsOnLine(float x1, float y1, float x2, float y2)
+    {
+      int cx, cy;
+      GetCellOf(x1, y1, out cx, out cy);
+
+      AABB cellBounds;
+      GetCellBounds(cx, cy, false, out cellBounds);
+
+      float dirX = x2 - x1;
+      float dirY = y2 - y1;
+
+      int stepX = Math.Sign(dirX);
+      int stepY = Math.Sign(dirY);
+
+      float tMaxX = dirX == 0.0f ? float.PositiveInfinity : Math.Abs((stepX < 0 ? cellBounds.Min.X : cellBounds.Max.X) - x1) / dirX;
+      float tMaxY = dirY == 0.0f ? float.PositiveInfinity : Math.Abs((stepY < 0 ? cellBounds.Min.Y : cellBounds.Max.Y) - y1) / dirY;
+
+      float tDeltaX = dirX == 0.0 ? 0.0f : Math.Abs(_cellSize / dirX);
+      float tDeltaY = dirY == 0.0 ? 0.0f : Math.Abs(_cellSize / dirY);
+
+      List<Vector2i> result = new List<Vector2i>();
+      while (true)
+      {
+        result.Add(new Vector2i(cx, cy));
+
+        if (tMaxX < tMaxY)
+        {
+          tMaxX = tMaxX + tDeltaX;
+          if (tMaxX > 1.0f) //Exit when end of line has been reached.
+            break;
+          cx = cx + stepX;
+        }
+        else
+        {
+          tMaxY = tMaxY + tDeltaY;
+          if (tMaxY > 1.0f) //Exit when end of line has been reached.
+            break;
+          cy = cy + stepY;
+        }
+      }
+
+      return result;
     }
 
   }

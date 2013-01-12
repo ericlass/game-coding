@@ -45,6 +45,16 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Creates a new vector from the given integer vector.
+    /// </summary>
+    /// <param name="ivec">The integer vector to copy.</param>
+    public Vector2f(Vector2i ivec)
+    {
+      X = ivec.X;
+      Y = ivec.Y;
+    }
+
+    /// <summary>
     /// Gets the magnitude (length) of the vector by using the pythogarean theorem.
     /// </summary>
     public float Magnitude
@@ -412,6 +422,11 @@ namespace OkuEngine
         return Equals((Vector2f)obj);
       }
       return base.Equals(obj);
+    }
+
+    public override int GetHashCode()
+    {
+      return base.GetHashCode();
     }
 
   }
