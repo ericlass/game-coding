@@ -99,8 +99,8 @@ namespace OkuTest
 
     public override void Render(int pass)
     {
-      OkuManagers.Renderer.DrawImage(_content, Vector.Zero);
-      OkuManagers.Renderer.DrawPoint(Vector.Zero, 3, OkuEngine.Color.Red);
+      OkuManagers.Renderer.DrawImage(_content, Vector2f.Zero);
+      OkuManagers.Renderer.DrawPoint(Vector2f.Zero, 3, OkuEngine.Color.Red);
     }
 
   }

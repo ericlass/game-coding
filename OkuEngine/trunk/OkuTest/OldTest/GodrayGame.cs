@@ -8,8 +8,8 @@ namespace OkuTest
   public class GodrayGame : OkuGame
   {
     private ImageContent _mask = null;
-    private Vector _mousePos = Vector.Zero;
-    private Vector _lightPos = Vector.Zero;
+    private Vector2f _mousePos = Vector2f.Zero;
+    private Vector2f _lightPos = Vector2f.Zero;
     private OkuEngine.Color _lightColor = new OkuEngine.Color(247, 235, 202);
     private PixelShaderContent _rayShader = null;
 

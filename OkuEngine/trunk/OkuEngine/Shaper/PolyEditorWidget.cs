@@ -10,38 +10,38 @@ namespace OkuEngine.Shaper
 
   public class PolyEditorWidget : Widget
   {
-    private DynamicArray<Vector> _points = new DynamicArray<Vector>();
-    private DynamicArray<Vector> _pointsForDrawing = new DynamicArray<Vector>();
+    private DynamicArray<Vector2f> _points = new DynamicArray<Vector2f>();
+    private DynamicArray<Vector2f> _pointsForDrawing = new DynamicArray<Vector2f>();
     private bool _showPoints = true;
     private Color _pointColor = Color.Red;
     private Color _lineColor = Color.Blue;
     private int _hotPoint = -1;
 
-    private Vector _cutPoint = Vector.Zero;
-    private Vector _cutNormal = Vector.Zero;
+    private Vector2f _cutPoint = Vector2f.Zero;
+    private Vector2f _cutNormal = Vector2f.Zero;
     private int _cutIndex = -1;
 
     private ImageContent _backgroundImage = null;
 
     private bool _offsetUserChanges = false;
-    private Vector _viewOffset = Vector.Zero;
+    private Vector2f _viewOffset = Vector2f.Zero;
     private float _viewScale = 1.0f;
 
-    private Vector _mousePos = Vector.Zero;
+    private Vector2f _mousePos = Vector2f.Zero;
 
     private bool _dragging = false;
     private bool _panning = false;
-    private Vector _dragStart = Vector.Zero;
-    private Vector _dragOrigin = Vector.Zero;
+    private Vector2f _dragStart = Vector2f.Zero;
+    private Vector2f _dragOrigin = Vector2f.Zero;
 
     private bool _selecting = false;
-    private Vector _selectionStart = Vector.Zero;
-    private Vector _selectionEnd = Vector.Zero;
+    private Vector2f _selectionStart = Vector2f.Zero;
+    private Vector2f _selectionEnd = Vector2f.Zero;
     private List<int> _selectedPoints = new List<int>();
 
     private bool _hot = false;    
 
-    private Vector[] _vertices = new Vector[4];
+    private Vector2f[] _vertices = new Vector2f[4];
 
     public event EditorChangeDelegate Change;
 
@@ -51,7 +51,7 @@ namespace OkuEngine.Shaper
         Change();
     }
 
-    public DynamicArray<Vector> Points
+    public DynamicArray<Vector2f> Points
     {
       get { return _points; }
       set { _points = value; }
@@ -83,10 +83,10 @@ namespace OkuEngine.Shaper
 
     protected override void AreaChange()
     {
-      _vertices[0] = Vector.Zero;
-      _vertices[1] = new Vector(0, Area.Height);
-      _vertices[2] = new Vector(Area.Width, Area.Height);
-      _vertices[3] = new Vector(Area.Width, 0);
+      _vertices[0] = Vector2f.Zero;
+      _vertices[1] = new Vector2f(0, Area.Height);
+      _vertices[2] = new Vector2f(Area.Width, Area.Height);
+      _vertices[3] = new Vector2f(Area.Width, 0);
 
       if (!_offsetUserChanges)
       {
@@ -95,12 +95,12 @@ namespace OkuEngine.Shaper
       }
     }
 
-    private Vector ClientToPoly(Vector point)
+    private Vector2f ClientToPoly(Vector2f point)
     {
       return (point - _viewOffset) / _viewScale;
     }
 
-    private Vector PolyToClient(Vector point)
+    private Vector2f PolyToClient(Vector2f point)
     {
       return (point * _viewScale) + _viewOffset;
     }
@@ -108,7 +108,7 @@ namespace OkuEngine.Shaper
     public override void Update(float dt)
     {
       _mousePos = MousePosition;
-      Vector mousePoly = ClientToPoly(_mousePos);
+      Vector2f mousePoly = ClientToPoly(_mousePos);
 
       if (_panning)
       {
@@ -131,7 +131,7 @@ namespace OkuEngine.Shaper
           _hotPoint = -1;
       }
 
-      _cutPoint = Vector.Zero;
+      _cutPoint = Vector2f.Zero;
       _cutIndex = -1;
       if (_hotPoint < 0)
       {
@@ -139,12 +139,12 @@ namespace OkuEngine.Shaper
         for (int i = 0; i < _points.Count; i++)
         {
           int j = (i + 1) % _points.Count;
-          Vector line = _points[j] - _points[i];
-          Vector mp = mousePoly - _points[i];
+          Vector2f line = _points[j] - _points[i];
+          Vector2f mp = mousePoly - _points[i];
           float projection = line.ProjectScalar(mp);
           if (projection >= 0.0f && projection <= 1.0f)
           {
-            Vector projected = line * projection;
+            Vector2f projected = line * projection;
             float d = (mp - projected).Magnitude;
             if (d < 4.0f && d < dist)
             {
@@ -169,14 +169,14 @@ namespace OkuEngine.Shaper
 
       if (_backgroundImage != null)
       {
-        canvas.DrawImage(_backgroundImage, PolyToClient(Vector.Zero), new Vector(_viewScale, _viewScale));
+        canvas.DrawImage(_backgroundImage, PolyToClient(Vector2f.Zero), new Vector2f(_viewScale, _viewScale));
       }
 
       if (_hot)
         canvas.DrawPoint(_mousePos, 4.0f, Color.Red);
 
-      canvas.DrawLine(PolyToClient(Vector.Zero), PolyToClient(new Vector(25, 0)), 1.0f, Color.Red);
-      canvas.DrawLine(PolyToClient(Vector.Zero), PolyToClient(new Vector(0, 25)), 1.0f, Color.Green);
+      canvas.DrawLine(PolyToClient(Vector2f.Zero), PolyToClient(new Vector2f(25, 0)), 1.0f, Color.Red);
+      canvas.DrawLine(PolyToClient(Vector2f.Zero), PolyToClient(new Vector2f(0, 25)), 1.0f, Color.Green);
 
       //Translate points to client space
       _pointsForDrawing.Clear();
@@ -191,7 +191,7 @@ namespace OkuEngine.Shaper
 
       if (_cutIndex >= 0)
       {
-        Vector cutP = PolyToClient(_cutPoint);
+        Vector2f cutP = PolyToClient(_cutPoint);
         canvas.DrawPoint(cutP, 3.0f, Color.Yellow);
         canvas.DrawLine(cutP + (_cutNormal * 5), cutP - (_cutNormal * 5), 1.0f, Color.Yellow);
       }
@@ -280,8 +280,8 @@ namespace OkuEngine.Shaper
       else if (_selecting && button == MouseButton.Right)
       {
         _selecting = false;
-        Vector minPoly = new Vector(Math.Min(_selectionStart.X, _selectionEnd.X), Math.Min(_selectionStart.Y, _selectionEnd.Y));
-        Vector maxPoly = new Vector(Math.Max(_selectionStart.X, _selectionEnd.X), Math.Max(_selectionStart.Y, _selectionEnd.Y));
+        Vector2f minPoly = new Vector2f(Math.Min(_selectionStart.X, _selectionEnd.X), Math.Min(_selectionStart.Y, _selectionEnd.Y));
+        Vector2f maxPoly = new Vector2f(Math.Max(_selectionStart.X, _selectionEnd.X), Math.Max(_selectionStart.Y, _selectionEnd.Y));
         minPoly = ClientToPoly(minPoly);
         maxPoly = ClientToPoly(maxPoly);
         for (int i = 0; i < _points.Count; i++)
@@ -295,9 +295,9 @@ namespace OkuEngine.Shaper
     public override void MouseWheel(float delta)
     {
       //Zoom in/out to the point where the mouse is
-      Vector posBefore = ClientToPoly(MousePosition);
+      Vector2f posBefore = ClientToPoly(MousePosition);
       _viewScale *= 1.0f + (delta / 10.0f);
-      Vector posAfter = ClientToPoly(MousePosition);
+      Vector2f posAfter = ClientToPoly(MousePosition);
       _viewOffset += (posAfter - posBefore) * _viewScale;
     }
 

@@ -9,34 +9,34 @@ namespace OkuTest
 {
   public class PlatformPolygonGame : OkuGame
   {
-    private Vector[] _floor = null;
-    private Vector[] _ceiling = null;
+    private Vector2f[] _floor = null;
+    private Vector2f[] _ceiling = null;
     private int wallPoints = 200;
 
-    private Vector[] _player = null;
-    private Vector[] _transformedPlayer = null;
-    private Vector[] _collidedPlayer = null;
-    private Vector _playerPos = new Vector(193, -123);
+    private Vector2f[] _player = null;
+    private Vector2f[] _transformedPlayer = null;
+    private Vector2f[] _collidedPlayer = null;
+    private Vector2f _playerPos = new Vector2f(193, -123);
     private Matrix3 _transform = Matrix3.Identity;
-    private Vector _trans = new Vector(40, -80);
+    private Vector2f _trans = new Vector2f(40, -80);
     private bool _collision = false;
-    private Vector _collisionDistance = Vector.Zero;
+    private Vector2f _collisionDistance = Vector2f.Zero;
 
     public override void Initialize()
     {
       CollisionWorld world = new CollisionWorld();
-      world.GetLinesOnLine(new Vector(50, 50), new Vector(150, 150));
+      world.GetLinesOnLine(new Vector2f(50, 50), new Vector2f(150, 150));
 
       OkuManagers.Renderer.ClearColor = Color.White;
 
-      _floor = new Vector[wallPoints];
-      _ceiling = new Vector[_floor.Length];
+      _floor = new Vector2f[wallPoints];
+      _ceiling = new Vector2f[_floor.Length];
       PerlinNoise noise = new PerlinNoise();
       for (int i = 0; i < _floor.Length; i++)
       {
         float x = i * (5000.0f / wallPoints);
         float y = -200.0f + noise.Noise(x, 0, 2, 100) * 50.0f;
-        Vector value = _floor[i];
+        Vector2f value = _floor[i];
         value.X = x;
         value.Y = y;
         _floor[i] = value;
@@ -50,8 +50,8 @@ namespace OkuTest
 
       //_player = PolygonFactory.Box(-25, 25, -50, 50);
       _player = PolygonFactory.Circle(0, 0, 25, 12);
-      _transformedPlayer = new Vector[_player.Length];
-      _collidedPlayer = new Vector[_player.Length];
+      _transformedPlayer = new Vector2f[_player.Length];
+      _collidedPlayer = new Vector2f[_player.Length];
     }
 
     public override void Update(float dt)

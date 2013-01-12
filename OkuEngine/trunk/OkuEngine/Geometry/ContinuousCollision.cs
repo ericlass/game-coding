@@ -18,19 +18,19 @@ namespace OkuEngine
     /// <param name="translation">The translation of the first polygon.</param>
     /// <param name="mtd">The minimum translation distance to move the two polygons apart if they collide.</param>
     /// <returns>True if the polygons collide, else false.</returns>
-    public static bool PolygonPolygon(Vector[] poly1, Vector[] poly2, Vector translation, out float mtd)
+    public static bool PolygonPolygon(Vector2f[] poly1, Vector2f[] poly2, Vector2f translation, out float mtd)
     {
       mtd = float.MaxValue;
 
       //Calculate swept bounding box of poly1
-      Vector min1 = new Vector();
-      Vector max1 = new Vector();
+      Vector2f min1 = new Vector2f();
+      Vector2f max1 = new Vector2f();
       OkuMath.BoundingBox(poly1, out min1, out max1);
       OkuMath.GetSweptAABB(ref min1, ref max1, translation);
 
       //Calculate swept bounding box of poly2
-      Vector min2 = new Vector();
-      Vector max2 = new Vector();
+      Vector2f min2 = new Vector2f();
+      Vector2f max2 = new Vector2f();
       OkuMath.BoundingBox(poly1, out min2, out max2);
       OkuMath.GetSweptAABB(ref min2, ref max2, translation);
 

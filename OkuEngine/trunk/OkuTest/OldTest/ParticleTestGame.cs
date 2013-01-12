@@ -17,8 +17,8 @@ namespace OkuTest
 
       _system = new ParticleSystem<LineEmitter, DefaultParticleController, PointParticleRenderer>(new LineEmitter(), new DefaultParticleController(), new PointParticleRenderer());
       //_system.Emitter.Center = new Vector(0, 0);
-      _system.Emitter.Start = new Vector(-100, 0);
-      _system.Emitter.End = new Vector(100, 0);
+      _system.Emitter.Start = new Vector2f(-100, 0);
+      _system.Emitter.End = new Vector2f(100, 0);
       _system.Emitter.NormalDirection = false;
       _system.Emitter.BirthRate = 200.0f;
       _system.Emitter.Angle = 90;
@@ -30,7 +30,7 @@ namespace OkuTest
       _system.Renderer.PointSize = 3;
 
       _eff = new ForceEffector(new AABB(-300, -300, 600, 600));
-      _eff.Force = new Vector(0, -200);
+      _eff.Force = new Vector2f(0, -200);
       _system.Effectors.Add(_eff);
     }
 

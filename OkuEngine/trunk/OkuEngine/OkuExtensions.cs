@@ -24,7 +24,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="vectors">The vector array to be converted.</param>
     /// <returns>The string representation of the vector array.</returns>
-    public static string ToOkuString(this Vector[] vectors)
+    public static string ToOkuString(this Vector2f[] vectors)
     {
       StringBuilder builder = new StringBuilder();
       for (int i = 0; i < vectors.Length; i++)
@@ -60,7 +60,7 @@ namespace OkuEngine
     /// <param name="point">The point to find the closest point for.</param>
     /// <param name="distance">The distance is of the closest point is returned here.</param>
     /// <returns>The index of the closest point. -1 if vectors does not contain any points.</returns>
-    public static int ClosestPoint(this Vector[] vectors, Vector point, out float distance)
+    public static int ClosestPoint(this Vector2f[] vectors, Vector2f point, out float distance)
     {
       distance = 0.0f;
 
@@ -84,7 +84,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="vectors">The vectors to calculate the AABB for.</param>
     /// <returns>The AABB of the vectors.</returns>
-    public static AABB BoundingBox(this Vector[] vectors)
+    public static AABB BoundingBox(this Vector2f[] vectors)
     {
       if (vectors.Length > 0)
       {
@@ -93,7 +93,7 @@ namespace OkuEngine
         float maxX = float.MinValue;
         float maxY = float.MinValue;
 
-        foreach (Vector vec in vectors)
+        foreach (Vector2f vec in vectors)
         {
           if (vec.X < minX)
             minX = vec.X;
@@ -105,7 +105,7 @@ namespace OkuEngine
             maxY = vec.Y;
         }
 
-        return new AABB(new Vector(minX, minY), new Vector(maxX, maxY));
+        return new AABB(new Vector2f(minX, minY), new Vector2f(maxX, maxY));
       }
       return new AABB();
     }

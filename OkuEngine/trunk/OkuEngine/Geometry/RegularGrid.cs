@@ -10,7 +10,7 @@ namespace OkuEngine.Geometry
   /// </summary>
   public class RegularGrid
   {
-    private Vector _offset = Vector.Zero;
+    private Vector2f _offset = Vector2f.Zero;
     private float _width = 0.0f;
     private float _height = 0.0f;
     private float _cellSize = 0.0f;
@@ -32,7 +32,7 @@ namespace OkuEngine.Geometry
     /// <summary>
     /// Gets or sets the offest of the origin of the grid.
     /// </summary>
-    public Vector Offset
+    public Vector2f Offset
     {
       get { return _offset; }
       set { _offset = value; }
@@ -139,7 +139,7 @@ namespace OkuEngine.Geometry
     /// </summary>
     /// <param name="point">The point to be checked.</param>
     /// <returns>True if the point is inside, else false.</returns>
-    public bool IsInside(Vector point)
+    public bool IsInside(Vector2f point)
     {
       return Intersections.PointInAABB(point, Left, Bottom, Right, Top);
     }
@@ -183,7 +183,7 @@ namespace OkuEngine.Geometry
     /// <param name="x">The x index of the cell is returned here.</param>
     /// <param name="y">The y index of the cell is returned here.</param>
     /// <returns>True if the point is within the grid, else false.</returns>
-    public bool GetCellOf(Vector point, out int x, out int y)
+    public bool GetCellOf(Vector2f point, out int x, out int y)
     {
       x = (int)((point.X - _offset.X) / _cellSize);
       y = (int)((point.Y - _offset.Y) / _cellSize);

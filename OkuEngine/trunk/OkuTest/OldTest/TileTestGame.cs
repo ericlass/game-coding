@@ -10,8 +10,8 @@ namespace OkuTest
   public class TileTestGame : OkuGame
   {
     private Tilemap _map = null;
-    private Vector[] _line = new Vector[2] { new Vector(80, 80), new Vector(180, 180) };
-    private Vector _colPoint = Vector.Zero;
+    private Vector2f[] _line = new Vector2f[2] { new Vector2f(80, 80), new Vector2f(180, 180) };
+    private Vector2f _colPoint = Vector2f.Zero;
     private bool _intersect = false;
 
     public override void Initialize()
@@ -20,7 +20,7 @@ namespace OkuTest
       int mapHeight = 16;
 
       _map = new Tilemap(mapWidth, mapHeight, 32);
-      _map.Origin = new Vector(mapWidth * -16, mapHeight * -16); //OkuDrivers.Renderer.ViewPort.ScreenSpaceMatrix.Transform(new Vector(5, 5));
+      _map.Origin = new Vector2f(mapWidth * -16, mapHeight * -16); //OkuDrivers.Renderer.ViewPort.ScreenSpaceMatrix.Transform(new Vector(5, 5));
       _map.TileImages = ImageContent.LoadSheet(".\\content\\realtiles.bmp", 32);
 
       Random rand = new Random();
@@ -55,7 +55,7 @@ namespace OkuTest
         Random rand = new Random(System.Environment.TickCount);
         OkuData.SceneManager.ActiveScene.Viewport.Left -= rand.RandomFloat() * 50.0f;
         OkuData.SceneManager.ActiveScene.Viewport.Top -= rand.RandomFloat() * 50.0f;
-        OkuData.SceneManager.ActiveScene.Viewport.Scale = new Vector(rand.RandomFloat(), rand.RandomFloat());
+        OkuData.SceneManager.ActiveScene.Viewport.Scale = new Vector2f(rand.RandomFloat(), rand.RandomFloat());
       }
       
       //_intersect = _map.GetIntersection(new LineSegment( _line[0], _line[1]), out _colPoint);

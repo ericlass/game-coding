@@ -16,9 +16,9 @@ namespace OkuEngine
     /// <param name="start">The start position.</param>
     /// <param name="end">The end position.</param>
     /// <returns>The normalized left hand normal.</returns>
-    public static Vector GetNormal(Vector start, Vector end)
+    public static Vector2f GetNormal(Vector2f start, Vector2f end)
     {
-      Vector result = new Vector(end.Y - start.Y, -(end.X - start.X));
+      Vector2f result = new Vector2f(end.Y - start.Y, -(end.X - start.X));
       result.Normalize();
       return result;
     }
@@ -31,9 +31,9 @@ namespace OkuEngine
     /// <param name="x2">The x coordinate of the end point.</param>
     /// <param name="y2">The y coordinate of the end point.</param>
     /// <returns>The normalized left hand normal.</returns>
-    public static Vector GetNormal(float x1, float y1, float x2, float y2)
+    public static Vector2f GetNormal(float x1, float y1, float x2, float y2)
     {
-      Vector result = new Vector(y2 - y1, -(x2 - x1));
+      Vector2f result = new Vector2f(y2 - y1, -(x2 - x1));
       result.Normalize();
       return result;
     }
@@ -45,7 +45,7 @@ namespace OkuEngine
     /// <param name="polygon">The points of the polygon.</param>
     /// <param name="normals">The normals array the results are written to.</param>
     /// <param name="start">The start index in the normals array where the normals are written to.</param>
-    public static void GetNormals(Vector[] polygon, Vector[] normals, int start)
+    public static void GetNormals(Vector2f[] polygon, Vector2f[] normals, int start)
     {
       for (int i = 0; i < polygon.Length; i++)
       {
@@ -61,9 +61,9 @@ namespace OkuEngine
     /// <param name="end">The end point.</param>
     /// <param name="t">A value in the range 0.0 - 1.0 where 0.0 means start and 1.0 means end.</param>
     /// <returns>The interpolated vector.</returns>
-    public static Vector InterpolateLinear(Vector start, Vector end, float t)
+    public static Vector2f InterpolateLinear(Vector2f start, Vector2f end, float t)
     {
-      return new Vector(start.X + ((end.X - start.X) * t), start.Y + ((end.Y - start.Y) * t));
+      return new Vector2f(start.X + ((end.X - start.X) * t), start.Y + ((end.Y - start.Y) * t));
     }
 
     /// <summary>
@@ -152,7 +152,7 @@ namespace OkuEngine
     /// <param name="polygon">The polygon to get the bounding box for.</param>
     /// <param name="min">Returns the minimum vector of the bounding box.</param>
     /// <param name="max">Returns the maximum vector of the bounding box.</param>
-    public static void BoundingBox(Vector[] polygon, out Vector min, out Vector max)
+    public static void BoundingBox(Vector2f[] polygon, out Vector2f min, out Vector2f max)
     {
       min.X = float.MaxValue;
       min.Y = float.MaxValue;
@@ -162,7 +162,7 @@ namespace OkuEngine
 
       for (int i = 0; i < polygon.Length; i++)
       {
-        Vector vert = polygon[i];
+        Vector2f vert = polygon[i];
         min.X = Math.Min(min.X, vert.X);
         min.Y = Math.Min(min.Y, vert.Y);
         max.X = Math.Max(max.X, vert.X);
@@ -177,10 +177,10 @@ namespace OkuEngine
     /// <param name="min">The minimum vector of the AABB. The result is also returned here.</param>
     /// <param name="max">The maximum vector of the AABB. The result is also returned here.</param>
     /// <param name="translation">The translation of the AABB.</param>
-    public static void GetSweptAABB(ref Vector min, ref Vector max, Vector translation)
+    public static void GetSweptAABB(ref Vector2f min, ref Vector2f max, Vector2f translation)
     {
-      Vector minT = min + translation;
-      Vector maxT = max + translation;
+      Vector2f minT = min + translation;
+      Vector2f maxT = max + translation;
 
       min.X = Math.Min(min.X, minT.X);
       min.Y = Math.Min(min.Y, minT.Y);
@@ -209,10 +209,10 @@ namespace OkuEngine
     /// </summary>
     /// <param name="polygon"></param>
     /// <returns></returns>
-    public static Vector GetCenter(Vector[] polygon)
+    public static Vector2f GetCenter(Vector2f[] polygon)
     {
-      Vector min;
-      Vector max;
+      Vector2f min;
+      Vector2f max;
       BoundingBox(polygon, out min, out max);
       return (min + max) * 0.5f;
     }
@@ -222,9 +222,9 @@ namespace OkuEngine
     /// vertices positions are realtive to the center of the polygon.
     /// </summary>
     /// <param name="polygon">The polygon to center.</param>
-    public static void CenterOrigin(Vector[] polygon)
+    public static void CenterOrigin(Vector2f[] polygon)
     {
-      CenterAt(polygon, Vector.Zero);
+      CenterAt(polygon, Vector2f.Zero);
     }
 
     /// <summary>
@@ -234,10 +234,10 @@ namespace OkuEngine
     /// </summary>
     /// <param name="polygon">The polygon to be centered.</param>
     /// <param name="center">The new center of the polygon.</param>
-    public static void CenterAt(Vector[] polygon, Vector center)
+    public static void CenterAt(Vector2f[] polygon, Vector2f center)
     {
-      Vector currentCenter = GetCenter(polygon);
-      Vector offset = center - currentCenter;
+      Vector2f currentCenter = GetCenter(polygon);
+      Vector2f offset = center - currentCenter;
       for (int i = 0; i < polygon.Length; i++)
         polygon[i] += offset;
     }

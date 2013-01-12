@@ -6,7 +6,7 @@ namespace OkuEngine
   public class PointParticleRenderer : IParticleRenderer
   {
     private float _pointSize = 2.0f;
-    private DynamicArray<Vector> _vertices = new DynamicArray<Vector>();
+    private DynamicArray<Vector2f> _vertices = new DynamicArray<Vector2f>();
     private DynamicArray<Color> _colors = new DynamicArray<Color>();
     
     public void Render(List<Particle> particles)

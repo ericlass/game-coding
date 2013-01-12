@@ -18,7 +18,7 @@ namespace OkuEngine
     /// <param name="u">The first barycentric value is returned here.</param>
     /// <param name="v">The second barycentric value is returned here.</param>
     /// <param name="w">The third barycentric value is returned here.</param>
-    private static void Barycentric(Vector v1, Vector v2, Vector v3, Vector p, ref float u, ref float v, ref float w)
+    private static void Barycentric(Vector2f v1, Vector2f v2, Vector2f v3, Vector2f p, ref float u, ref float v, ref float w)
     {
       float det = ((v2.Y - v3.Y) * (v1.X - v3.X) + (v3.X - v2.X) * (v1.Y - v3.Y));
       u = ((v2.Y - v3.Y) * (p.X - v3.X) + (v3.X - v2.X) * (p.Y - v3.Y)) / det;
@@ -35,7 +35,7 @@ namespace OkuEngine
     /// <param name="v3">The third point of the triangle.</param>
     /// <param name="p">The point to check.</param>
     /// <returns>True if the point is inside of the triangle, else false.</returns>
-    private static bool PointInTriangle(Vector v1, Vector v2, Vector v3, Vector p) 
+    private static bool PointInTriangle(Vector2f v1, Vector2f v2, Vector2f v3, Vector2f p) 
     {
       float u = 0;
       float v = 0;
@@ -51,7 +51,7 @@ namespace OkuEngine
     /// <param name="v2">The second point.</param>
     /// <param name="v3">The third point.</param>
     /// <returns></returns>
-    private static bool IsReflex(Vector v1, Vector v2, Vector v3)
+    private static bool IsReflex(Vector2f v1, Vector2f v2, Vector2f v3)
     {
       float pos = Math.Sign((v3.X - v1.X) * (v2.Y - v1.Y) - (v3.Y - v1.Y) * (v2.X - v1.X));
       return pos >= 0;
@@ -63,10 +63,10 @@ namespace OkuEngine
     /// <param name="poly">The polygon to convert.</param>
     /// <returns>The triangles in an array where every group of 
     /// three vectors form a triangle.</returns>
-    public static Vector[] Triangulate(Vector[] poly)
+    public static Vector2f[] Triangulate(Vector2f[] poly)
     {
-      List<Vector> points = new List<Vector>(poly);
-      List<Vector> tris = new List<Vector>();
+      List<Vector2f> points = new List<Vector2f>(poly);
+      List<Vector2f> tris = new List<Vector2f>();
       
       bool earFound = true;
       while (points.Count > 2 && earFound)
@@ -80,9 +80,9 @@ namespace OkuEngine
           
           int next = (i + 1) % points.Count;
           
-          Vector v1 = points[prev];
-          Vector v2 = points[i];
-          Vector v3 = points[next];
+          Vector2f v1 = points[prev];
+          Vector2f v2 = points[i];
+          Vector2f v3 = points[next];
           
           if (!IsReflex(v1, v2, v3))
           {

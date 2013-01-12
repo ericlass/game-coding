@@ -60,11 +60,11 @@ namespace OkuEngine
     /// <summary>
     /// Gets the current mouse position in client space.
     /// </summary>
-    public Vector MousePosition
+    public Vector2f MousePosition
     {
       get
       {
-        Vector mouse = OkuManagers.Renderer.ScreenToDisplay(OkuManagers.Input.Mouse.X, OkuManagers.Input.Mouse.Y);
+        Vector2f mouse = OkuManagers.Renderer.ScreenToDisplay(OkuManagers.Input.Mouse.X, OkuManagers.Input.Mouse.Y);
         return PointToClient(mouse);
       }
     }
@@ -89,7 +89,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="point">The display space point to convert.</param>
     /// <returns>The location of the given display space point in client space.</returns>
-    public Vector PointToClient(Vector point)
+    public Vector2f PointToClient(Vector2f point)
     {
       return point - _area.Min;
     }
@@ -99,7 +99,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="point">The client space point to convert.</param>
     /// <returns>The location of the given client space point in display space.</returns>
-    public Vector PointToDisplay(Vector point)
+    public Vector2f PointToDisplay(Vector2f point)
     {
       return _area.Min + point;
     }

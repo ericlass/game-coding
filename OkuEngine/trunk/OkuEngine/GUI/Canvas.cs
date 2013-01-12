@@ -12,7 +12,7 @@ namespace OkuEngine
   public class Canvas
   {
     private AABB _area;
-    private DynamicArray<Vector> _vertices = new DynamicArray<Vector>();
+    private DynamicArray<Vector2f> _vertices = new DynamicArray<Vector2f>();
     private DynamicArray<Color> _colors = new DynamicArray<Color>();
 
     /// <summary>
@@ -39,7 +39,7 @@ namespace OkuEngine
     /// <param name="min">The minimum vector.</param>
     /// <param name="max">The maximum vector.</param>
     /// <param name="color">The color of the rectangle.</param>
-    public void FillRect(Vector min, Vector max, Color color)
+    public void FillRect(Vector2f min, Vector2f max, Color color)
     {
       //Convert to display space
       min += _area.Min;
@@ -49,9 +49,9 @@ namespace OkuEngine
 
       _vertices.Clear();
       _vertices.Add(min);
-      _vertices.Add(new Vector(min.X, max.Y));
+      _vertices.Add(new Vector2f(min.X, max.Y));
       _vertices.Add(max);
-      _vertices.Add(new Vector(max.X, min.Y));
+      _vertices.Add(new Vector2f(max.X, min.Y));
 
       _colors.Clear();
       for (int i = 0; i < 4; i++)
@@ -69,7 +69,7 @@ namespace OkuEngine
     /// <param name="count">The number of points to draw from the given array.</param>
     /// <param name="mode">The mode used to create polygons from the given vertices.</param>
     /// <param name="texture">The texture to be applied. If not null, texCoords must also be given.</param>
-    public void DrawMesh(Vector[] points, Vector[] texCoords, Color[] colors, int count, MeshMode mode, ImageContent texture)
+    public void DrawMesh(Vector2f[] points, Vector2f[] texCoords, Color[] colors, int count, MeshMode mode, ImageContent texture)
     {
       _vertices.Clear();
       int min = Math.Min(points.Length, count);
@@ -93,13 +93,13 @@ namespace OkuEngine
     /// </summary>
     /// <param name="content">The content to be drawn.</param>
     /// <param name="position">The position to draw the image to in screen space pixels.</param>
-    public void DrawImage(ImageContent image, Vector position)
+    public void DrawImage(ImageContent image, Vector2f position)
     {
       position += _area.Min;
       OkuManagers.Renderer.DrawImage(image, position);
     }
 
-    public void DrawImage(ImageContent image, Vector position, Vector scale)
+    public void DrawImage(ImageContent image, Vector2f position, Vector2f scale)
     {
       position += _area.Min;
       OkuManagers.Renderer.DrawImage(image, position, scale);
@@ -112,7 +112,7 @@ namespace OkuEngine
     /// <param name="end">The end of the line.</param>
     /// <param name="width">The width of the line in pixels.</param>
     /// <param name="color">The color of the line.</param>
-    public void DrawLine(Vector start, Vector end, float width, Color color)
+    public void DrawLine(Vector2f start, Vector2f end, float width, Color color)
     {
       start += _area.Min;
       end += _area.Min;
@@ -128,7 +128,7 @@ namespace OkuEngine
     /// <param name="count">The number of lines to draw from the given array.</param>
     /// <param name="width">The width of the lines in pixel.</param>
     /// <param name="interpretation">Specifies how to interpret the vertices.</param>
-    public void DrawLines(Vector[] vertices, Color color, int count, float width, VertexInterpretation interpretation)
+    public void DrawLines(Vector2f[] vertices, Color color, int count, float width, VertexInterpretation interpretation)
     {
       _vertices.Clear();
       int min = Math.Min(vertices.Length, count);
@@ -144,7 +144,7 @@ namespace OkuEngine
     /// <param name="p">The center of the point in world space pixels.</param>
     /// <param name="size">The size of the point in pixels.</param>
     /// <param name="color">The color of the point.</param>
-    public void DrawPoint(Vector p, float size, Color color)
+    public void DrawPoint(Vector2f p, float size, Color color)
     {
       p += _area.Min;
       OkuManagers.Renderer.DrawPoint(p, size, color);
@@ -157,7 +157,7 @@ namespace OkuEngine
     /// <param name="color">The color of the points.</param>
     /// <param name="count">The number of points to draw.</param>
     /// <param name="size">The size in pixels of the points.</param>
-    public void DrawPoints(Vector[] points, Color color, int count, float size)
+    public void DrawPoints(Vector2f[] points, Color color, int count, float size)
     {
       _vertices.Clear();
       int min = Math.Min(points.Length, count);

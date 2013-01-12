@@ -24,7 +24,7 @@ namespace OkuEngine.Rendering
     private int _imageId = 0;
     private ImageContent _image = null;
     private int _tileSize = 512;
-    private Vector _offset = Vector.Zero;
+    private Vector2f _offset = Vector2f.Zero;
 
     private ImageTile[,] _tiles = null;
     private AABB _boudingBox = new AABB();
@@ -83,12 +83,12 @@ namespace OkuEngine.Rendering
           float vertTop = top - halfHeight;
 
           Vertices verts = new Vertices();
-          verts.Positions = new Vector[] 
+          verts.Positions = new Vector2f[] 
           {
-            new Vector(vertLeft, vertBottom),
-            new Vector(vertLeft, vertTop),
-            new Vector(vertRight, vertTop),
-            new Vector(vertRight, vertBottom)
+            new Vector2f(vertLeft, vertBottom),
+            new Vector2f(vertLeft, vertTop),
+            new Vector2f(vertRight, vertTop),
+            new Vector2f(vertRight, vertBottom)
           };
 
           //Tile texture coordinates
@@ -97,12 +97,12 @@ namespace OkuEngine.Rendering
           float texBottom = _image.Height / (float)bottom;
           float texTop = _image.Height / (float)top;
 
-          verts.TexCoords = new Vector[]
+          verts.TexCoords = new Vector2f[]
           {
-            new Vector(texLeft, texBottom),
-            new Vector(texLeft, texTop),
-            new Vector(texRight, texTop),
-            new Vector(texRight, texBottom)
+            new Vector2f(texLeft, texBottom),
+            new Vector2f(texLeft, texTop),
+            new Vector2f(texRight, texTop),
+            new Vector2f(texRight, texBottom)
           };
 
           //Tile bounding box in object space

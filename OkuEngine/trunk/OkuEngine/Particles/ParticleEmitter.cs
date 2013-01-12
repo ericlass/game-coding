@@ -61,11 +61,11 @@ namespace OkuEngine
     /// configured angle and speed and the corresponding variations.
     /// </summary>
     /// <returns>The direction vector scaled by the speed.</returns>
-    protected virtual Vector GetRandomVelocity()
+    protected virtual Vector2f GetRandomVelocity()
     {
       float angle = GetRandomAngle();
       float speed = GetRandomSpeed();
-      return new Vector((float)Math.Cos(angle) * speed, (float)Math.Sin(angle) * speed);
+      return new Vector2f((float)Math.Cos(angle) * speed, (float)Math.Sin(angle) * speed);
     }
 
     /// <summary>

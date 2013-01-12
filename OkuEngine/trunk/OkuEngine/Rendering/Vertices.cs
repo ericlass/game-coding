@@ -14,8 +14,8 @@ namespace OkuEngine.Rendering
   /// </summary>
   public class Vertices : IStoreable
   {
-    private Vector[] _positions = null;
-    private Vector[] _texCoords = null;
+    private Vector2f[] _positions = null;
+    private Vector2f[] _texCoords = null;
     private Color[] _colors = null;
     private AABB _boundingBox = new AABB();
     private bool _aabbValid = false;
@@ -31,7 +31,7 @@ namespace OkuEngine.Rendering
     /// Creates a new vertex content with the given positions.
     /// </summary>
     /// <param name="positions">The vertex positions.</param>
-    public Vertices(Vector[] positions)
+    public Vertices(Vector2f[] positions)
     {
       _positions = positions;
     }
@@ -41,7 +41,7 @@ namespace OkuEngine.Rendering
     /// </summary>
     /// <param name="positions">The vertex positions.</param>
     /// <param name="texCoords">The vertex texture coordinates.</param>
-    public Vertices(Vector[] positions, Vector[] texCoords)
+    public Vertices(Vector2f[] positions, Vector2f[] texCoords)
     {
       _positions = positions;
       _texCoords = texCoords;
@@ -52,7 +52,7 @@ namespace OkuEngine.Rendering
     /// </summary>
     /// <param name="positions">The vertex positions.</param>
     /// <param name="colors">The vertex colors.</param>
-    public Vertices(Vector[] positions, Color[] colors)
+    public Vertices(Vector2f[] positions, Color[] colors)
     {
       _positions = positions;
       _colors = colors;
@@ -64,7 +64,7 @@ namespace OkuEngine.Rendering
     /// <param name="positions">The vertex positions.</param>
     /// <param name="texCoords">The vertex texture coordinates.</param>
     /// <param name="colors">The vertex colors.</param>
-    public Vertices(Vector[] positions, Vector[] texCoords, Color[] colors)
+    public Vertices(Vector2f[] positions, Vector2f[] texCoords, Color[] colors)
     {
       _positions = positions;
       _texCoords = texCoords;
@@ -74,7 +74,7 @@ namespace OkuEngine.Rendering
     /// <summary>
     /// Gets or set the array of positions of the vertices.
     /// </summary>
-    public Vector[] Positions
+    public Vector2f[] Positions
     {
       get { return _positions; }
       set
@@ -88,7 +88,7 @@ namespace OkuEngine.Rendering
     /// Gets or set the array of texture coordinates of the vertices.
     /// Can be set to null if not needed.
     /// </summary>
-    public Vector[] TexCoords
+    public Vector2f[] TexCoords
     {
       get { return _texCoords; }
       set { _texCoords = value; }

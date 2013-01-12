@@ -10,8 +10,8 @@ namespace OkuEngine
   /// </summary>
   public class Transformation : IStoreable
   {
-    private Vector _translation = Vector.Zero;
-    private Vector _scale = Vector.One;
+    private Vector2f _translation = Vector2f.Zero;
+    private Vector2f _scale = Vector2f.One;
     private float _rotation = 0.0f;
 
     private bool _matrixValid = false;
@@ -30,7 +30,7 @@ namespace OkuEngine
     /// <param name="translation">The translation vector.</param>
     /// <param name="scale">The scale vector.</param>
     /// <param name="rotation">The rotation angle in degrees.</param>
-    public Transformation(Vector translation, Vector scale, float rotation)
+    public Transformation(Vector2f translation, Vector2f scale, float rotation)
     {
       _translation = translation;
       _scale = scale;
@@ -40,7 +40,7 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets the translation vector.
     /// </summary>
-    public Vector Translation 
+    public Vector2f Translation 
     {
       get { return _translation; }
       set
@@ -84,7 +84,7 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets the scale factor.
     /// </summary>
-    public Vector Scale
+    public Vector2f Scale
     {
       get { return _scale; }
       set
@@ -127,15 +127,15 @@ namespace OkuEngine
     /// <param name="node">The xml node to read from.</param>
     public bool Load(XmlNode node)
     {
-      _translation = Vector.Zero;
+      _translation = Vector2f.Zero;
       _rotation = 0;
-      _scale = Vector.One;
+      _scale = Vector2f.One;
 
       string value = node.GetTagValue("position");
       if (value != null)
       {
-        Vector pos = Vector.Zero;
-        if (Vector.TryParse(value, ref pos))
+        Vector2f pos = Vector2f.Zero;
+        if (Vector2f.TryParse(value, ref pos))
           _translation = pos;
       }
 
@@ -150,8 +150,8 @@ namespace OkuEngine
       value = node.GetTagValue("scale");
       if (value != null)
       {
-        Vector scale = Vector.Zero;
-        if (Vector.TryParse(value, ref scale))
+        Vector2f scale = Vector2f.Zero;
+        if (Vector2f.TryParse(value, ref scale))
           _scale = scale;
       }
 

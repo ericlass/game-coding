@@ -10,10 +10,10 @@ namespace OkuEngine
   /// </summary>
   public class CollisionWorld
   {
-    private Dictionary<int, Vector[]> _statics = new Dictionary<int, Vector[]>();
-    private Dictionary<int, Vector[]> _dynamics = new Dictionary<int, Vector[]>();
+    private Dictionary<int, Vector2f[]> _statics = new Dictionary<int, Vector2f[]>();
+    private Dictionary<int, Vector2f[]> _dynamics = new Dictionary<int, Vector2f[]>();
 
-    private Dictionary<int, Vector> _translations = new Dictionary<int,Vector>();
+    private Dictionary<int, Vector2f> _translations = new Dictionary<int,Vector2f>();
 
     private const int _virtualWidth = 1000000;
     private int _cellWidth = 100;
@@ -47,12 +47,12 @@ namespace OkuEngine
       }
     }
 
-    public Dictionary<int, HashSet<int>> GetLinesOnLine(Vector start, Vector end)
+    public Dictionary<int, HashSet<int>> GetLinesOnLine(Vector2f start, Vector2f end)
     {
       int vx = (int)(start.X / _cellWidth);
       int vy = (int)(start.Y / _cellWidth);
 
-      Vector lineDir = end - start;
+      Vector2f lineDir = end - start;
 
       int stepX = Math.Sign(lineDir.X);
       int stepY = Math.Sign(lineDir.Y);
@@ -113,12 +113,12 @@ namespace OkuEngine
       return result;
     }
 
-    public void AddLineToGrid(int poly, int lineIndex, Vector start, Vector end)
+    public void AddLineToGrid(int poly, int lineIndex, Vector2f start, Vector2f end)
     {
       int vx = (int)(start.X / _cellWidth);
       int vy = (int)(start.Y / _cellWidth);
 
-      Vector lineDir = end - start;
+      Vector2f lineDir = end - start;
 
       int stepX = Math.Sign(lineDir.X);
       int stepY = Math.Sign(lineDir.Y);
@@ -164,7 +164,7 @@ namespace OkuEngine
       }
     }
 
-    public int AddStatic(Vector[] polygon)
+    public int AddStatic(Vector2f[] polygon)
     {
       int result = KeySequence.NextValue(KeySequence.EntitySequence);
       _statics.Add(result, polygon);
@@ -176,7 +176,7 @@ namespace OkuEngine
       return _statics.Remove(id);
     }
 
-    public int AddDynamic(Vector[] polygon)
+    public int AddDynamic(Vector2f[] polygon)
     {
       int result = KeySequence.NextValue(KeySequence.EntitySequence);
       _dynamics.Add(result, polygon);
@@ -188,7 +188,7 @@ namespace OkuEngine
       return _dynamics.Remove(id);
     }
 
-    public void SetTranslation(int id, Vector translation)
+    public void SetTranslation(int id, Vector2f translation)
     {
       if (_dynamics.ContainsKey(id))
         _translations.Add(id, translation);

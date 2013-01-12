@@ -11,7 +11,7 @@ namespace OkuEngine
   /// * operator is overloaded to scale a vector by a float value.
   /// </summary>
   [StructLayout(LayoutKind.Sequential)]
-  public struct Vector
+  public struct Vector2f
   {
     /// <summary>
     /// The X component of the vector.
@@ -26,19 +26,19 @@ namespace OkuEngine
     /// <summary>
     /// A vector with X and Y set to 0.
     /// </summary>
-    public static Vector Zero = new Vector(0, 0);
+    public static Vector2f Zero = new Vector2f(0, 0);
 
     /// <summary>
     /// A vector with X and Y set to 1.
     /// </summary>
-    public static Vector One = new Vector(1, 1);
+    public static Vector2f One = new Vector2f(1, 1);
 
     /// <summary>
     /// Creates a new Vector and initializes X and Y with the given values.
     /// </summary>
     /// <param name="x">The x component.</param>
     /// <param name="y">The y component.</param>
-    public Vector(float x, float y)
+    public Vector2f(float x, float y)
     {
       X = x;
       Y = y;
@@ -65,7 +65,7 @@ namespace OkuEngine
     /// Adds the values of the given vector to this vector.
     /// </summary>
     /// <param name="other">The vector to be added.</param>
-    public void Add(Vector other)
+    public void Add(Vector2f other)
     {
       X += other.X;
       Y += other.Y;
@@ -75,7 +75,7 @@ namespace OkuEngine
     /// Subtracts the values of the given vector from this vector.
     /// </summary>
     /// <param name="other">The vector to be subtracted.</param>
-    public void Subtract(Vector other)
+    public void Subtract(Vector2f other)
     {
       X -= other.X;
       Y -= other.X;
@@ -107,7 +107,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="other">The other vector.</param>
     /// <returns>The dot/scalar product of the two vectors.</returns>
-    public float DotProduct(Vector other)
+    public float DotProduct(Vector2f other)
     {
       return X * other.X + Y * other.Y;
     }
@@ -118,9 +118,9 @@ namespace OkuEngine
     /// <param name="vec1">The first vector.</param>
     /// <param name="vec2">The second vector.</param>
     /// <returns>A new vector with the result of the addition.</returns>
-    public static Vector operator +(Vector vec1, Vector vec2)
+    public static Vector2f operator +(Vector2f vec1, Vector2f vec2)
     {
-      return new Vector(vec1.X + vec2.X, vec1.Y + vec2.Y);
+      return new Vector2f(vec1.X + vec2.X, vec1.Y + vec2.Y);
     }
 
     /// <summary>
@@ -129,9 +129,9 @@ namespace OkuEngine
     /// <param name="vec1">The first vector.</param>
     /// <param name="vec2">The second vector.</param>
     /// <returns>A new vector with the result of the subtraction.</returns>
-    public static Vector operator -(Vector vec1, Vector vec2)
+    public static Vector2f operator -(Vector2f vec1, Vector2f vec2)
     {
-      return new Vector(vec1.X - vec2.X, vec1.Y - vec2.Y);
+      return new Vector2f(vec1.X - vec2.X, vec1.Y - vec2.Y);
     }
 
     /// <summary>
@@ -139,9 +139,9 @@ namespace OkuEngine
     /// </summary>
     /// <param name="vec">The vector to be inverted.</param>
     /// <returns>The inverted vector.</returns>
-    public static Vector operator -(Vector vec)
+    public static Vector2f operator -(Vector2f vec)
     {
-      return new Vector(-vec.X, -vec.Y);
+      return new Vector2f(-vec.X, -vec.Y);
     }
 
     /// <summary>
@@ -150,9 +150,9 @@ namespace OkuEngine
     /// <param name="vec">The vector to be multiplied.</param>
     /// <param name="mul">The multiplier.</param>
     /// <returns>The scaled vector.</returns>
-    public static Vector operator *(Vector vec, float mul)
+    public static Vector2f operator *(Vector2f vec, float mul)
     {
-      return new Vector(vec.X * mul, vec.Y * mul);
+      return new Vector2f(vec.X * mul, vec.Y * mul);
     }
 
     /// <summary>
@@ -161,9 +161,9 @@ namespace OkuEngine
     /// <param name="vec1">The first vector.</param>
     /// <param name="vec2">The second vector.</param>
     /// <returns>The result of the multiplication as a new vector.</returns>
-    public static Vector operator *(Vector vec1, Vector vec2)
+    public static Vector2f operator *(Vector2f vec1, Vector2f vec2)
     {
-      return new Vector(vec1.X * vec2.X, vec1.Y * vec2.Y);
+      return new Vector2f(vec1.X * vec2.X, vec1.Y * vec2.Y);
     }
 
     /// <summary>
@@ -172,9 +172,9 @@ namespace OkuEngine
     /// <param name="vec1">The first vector.</param>
     /// <param name="vec2">The second vector.</param>
     /// <returns>The result of the division as a new vector.</returns>
-    public static Vector operator /(Vector vec1, Vector vec2)
+    public static Vector2f operator /(Vector2f vec1, Vector2f vec2)
     {
-      return new Vector(vec1.X / vec2.X, vec1.Y / vec2.Y);
+      return new Vector2f(vec1.X / vec2.X, vec1.Y / vec2.Y);
     }
 
     /// <summary>
@@ -183,9 +183,9 @@ namespace OkuEngine
     /// <param name="vec">The vector.</param>
     /// <param name="value">The dividend.</param>
     /// <returns>The result of the division as a new vector.</returns>
-    public static Vector operator /(Vector vec, float value)
+    public static Vector2f operator /(Vector2f vec, float value)
     {
-      return new Vector(vec.X / value, vec.Y / value);
+      return new Vector2f(vec.X / value, vec.Y / value);
     }
 
     /// <summary>
@@ -194,7 +194,7 @@ namespace OkuEngine
     /// <param name="vec1">The first vector.</param>
     /// <param name="vec2">The second vector.</param>
     /// <returns>True if the vectors are equal, else false.</returns>
-    public static bool operator ==(Vector vec1, Vector vec2)
+    public static bool operator ==(Vector2f vec1, Vector2f vec2)
     {
       return (vec1.X == vec2.X) && (vec1.Y == vec2.Y);
     }
@@ -205,7 +205,7 @@ namespace OkuEngine
     /// <param name="vec1">The first vector.</param>
     /// <param name="vec2">The second vector.</param>
     /// <returns>True if the vectors are not equal, else false.</returns>
-    public static bool operator !=(Vector vec1, Vector vec2)
+    public static bool operator !=(Vector2f vec1, Vector2f vec2)
     {
       return (vec1.X != vec2.X) || (vec1.Y != vec2.Y);
     }
@@ -215,10 +215,10 @@ namespace OkuEngine
     /// </summary>
     /// <param name="vec">The vector to be normalized.</param>
     /// <returns>The normalized vector.</returns>
-    public static Vector Normalize(Vector vec)
+    public static Vector2f Normalize(Vector2f vec)
     {
       float magnitude = vec.Magnitude;
-      return new Vector(vec.X / magnitude, vec.Y / magnitude);
+      return new Vector2f(vec.X / magnitude, vec.Y / magnitude);
     }
 
     /// <summary>
@@ -228,7 +228,7 @@ namespace OkuEngine
     /// <param name="vec1">The first vector.</param>
     /// <param name="vec2">The second vector.</param>
     /// <returns>The dot/scalar product of the two given vectors.</returns>
-    public static float DotProduct(Vector vec1, Vector vec2)
+    public static float DotProduct(Vector2f vec1, Vector2f vec2)
     {
       return vec1.X * vec2.X + vec1.Y * vec2.Y;
     }
@@ -239,7 +239,7 @@ namespace OkuEngine
     /// <param name="vec1">The first point.</param>
     /// <param name="vec2">The second point.</param>
     /// <returns>The distance between the two points.</returns>
-    public static float Distance(Vector vec1, Vector vec2)
+    public static float Distance(Vector2f vec1, Vector2f vec2)
     {
       float a = vec1.X - vec2.X;
       float b = vec1.Y - vec2.Y;
@@ -250,7 +250,7 @@ namespace OkuEngine
     /// Assigns the X and Y values of the given vector to this vector.
     /// </summary>
     /// <param name="vec">The vector to assign to this vector.</param>
-    public void Assign(Vector vec)
+    public void Assign(Vector2f vec)
     {
       X = vec.X;
       Y = vec.Y;
@@ -270,7 +270,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="other">The vector to compare to.</param>
     /// <returns>True if the vectors are equal, else False.</returns>
-    public bool Equals(Vector other)
+    public bool Equals(Vector2f other)
     {
       return X == other.X && Y == other.Y;
     }
@@ -303,9 +303,9 @@ namespace OkuEngine
     /// <param name="vec">The vector to be rotated.</param>
     /// <param name="angle">The angle to rotate in degrees.</param>
     /// <returns>The result of the rotation in a new vector.</returns>
-    public static Vector Rotate(Vector vec, float angle)
+    public static Vector2f Rotate(Vector2f vec, float angle)
     {
-      Vector result = Vector.Zero;
+      Vector2f result = Vector2f.Zero;
       result.Assign(vec);
       result.Rotate(angle);
       return result;
@@ -316,10 +316,10 @@ namespace OkuEngine
     /// </summary>
     /// <param name="other">The vector to be projected.</param>
     /// <returns>The projected vector.</returns>
-    public Vector Project(Vector other)
+    public Vector2f Project(Vector2f other)
     {
       float dp = DotProduct(other) / (X * X + Y * Y);
-      return new Vector(dp * X, dp * Y);
+      return new Vector2f(dp * X, dp * Y);
     }
 
     /// <summary>
@@ -327,7 +327,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="other">The vector to be projected.</param>
     /// <returns>The 1d scalar projecetd value.</returns>
-    public float ProjectScalar(Vector other)
+    public float ProjectScalar(Vector2f other)
     {
       return DotProduct(other) / (X * X + Y * Y);
     }
@@ -338,7 +338,7 @@ namespace OkuEngine
     /// <param name="p1">The first point.</param>
     /// <param name="p2">The second point.</param>
     /// <returns>The new, unnormalized vector.</returns>
-    public static Vector FromPoints(Vector p1, Vector p2)
+    public static Vector2f FromPoints(Vector2f p1, Vector2f p2)
     {
       return p2 - p1;
     }
@@ -351,18 +351,18 @@ namespace OkuEngine
     /// <param name="x2">The x component of the second point.</param>
     /// <param name="y2">The y component of the second point.</param>
     /// <returns>The new, unnormalized vector.</returns>
-    public static Vector FromPoints(float x1, float y1, float x2, float y2)
+    public static Vector2f FromPoints(float x1, float y1, float x2, float y2)
     {
-      return new Vector(x2 - x1, y2 - y1);
+      return new Vector2f(x2 - x1, y2 - y1);
     }
 
     /// <summary>
     /// Calculates the left hand normal of the vector.
     /// </summary>
     /// <returns>The normalized left hand vector of the vector.</returns>
-    public Vector GetNormal()
+    public Vector2f GetNormal()
     {
-      Vector normal = new Vector(Y, -X);
+      Vector2f normal = new Vector2f(Y, -X);
       normal.Normalize();
       return normal;
     }
@@ -385,7 +385,7 @@ namespace OkuEngine
     /// <param name="vec">The aprsed vector is returned here.</param>
     /// <returns>True if the str was parsed successfully, False if the 
     /// given string is null or has a wrong format.</returns>
-    public static bool TryParse(string str, ref Vector vec)
+    public static bool TryParse(string str, ref Vector2f vec)
     {
       if (str != null)
       {
@@ -407,9 +407,9 @@ namespace OkuEngine
     /// <returns>True if the vectors are equal.</returns>
     public override bool Equals(object obj)
     {
-      if (obj is Vector)
+      if (obj is Vector2f)
       {
-        return Equals((Vector)obj);
+        return Equals((Vector2f)obj);
       }
       return base.Equals(obj);
     }

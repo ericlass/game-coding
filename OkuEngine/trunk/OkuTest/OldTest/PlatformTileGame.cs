@@ -9,23 +9,23 @@ namespace OkuTest
   {
     private ImageContent _tile = null;
     private Tilemap _tileMap = null;
-    private Vector[] _playerBB = null;
-    private Vector[] _transformedPlayer = null;
-    private Vector _playerPos = new Vector(16, 0);
-    private Vector _playerVelocity = new Vector(0, 0);
+    private Vector2f[] _playerBB = null;
+    private Vector2f[] _transformedPlayer = null;
+    private Vector2f _playerPos = new Vector2f(16, 0);
+    private Vector2f _playerVelocity = new Vector2f(0, 0);
     private Matrix3 _tranform = new Matrix3();
     private bool _jumping = false;
-    private Vector _mtd = Vector.Zero;
+    private Vector2f _mtd = Vector2f.Zero;
 
     public override void Initialize()
     {
-      _playerBB = new Vector[] { new Vector(-8, 16), new Vector(8, 16), new Vector(8, -16), new Vector(-8, -16) };
-      _transformedPlayer = new Vector[_playerBB.Length];
+      _playerBB = new Vector2f[] { new Vector2f(-8, 16), new Vector2f(8, 16), new Vector2f(8, -16), new Vector2f(-8, -16) };
+      _transformedPlayer = new Vector2f[_playerBB.Length];
       _tranform.LoadIdentity();
 
       _tile = new ImageContent(".\\content\\orange_tile.png");
       _tileMap = new Tilemap(640, 48, 16);
-      _tileMap.Origin = new Vector(-512, -384);
+      _tileMap.Origin = new Vector2f(-512, -384);
       _tileMap.TileImages = new List<ImageContent>() { _tile };
 
       PerlinNoise noise = new PerlinNoise(6);
@@ -83,7 +83,7 @@ namespace OkuTest
       _tranform.Translate(_playerPos);
       _tranform.Transform(_playerBB, _transformedPlayer);
 
-      Vector mtd = Vector.Zero;
+      Vector2f mtd = Vector2f.Zero;
       if (_tileMap.IntersectAABB(_transformedPlayer[0], _transformedPlayer[2], out mtd))
       {
         _playerPos += mtd;
@@ -100,7 +100,7 @@ namespace OkuTest
 
       _mtd = mtd;
 
-      Vector center = OkuData.SceneManager.ActiveScene.Viewport.Center;
+      Vector2f center = OkuData.SceneManager.ActiveScene.Viewport.Center;
       center.X = _transformedPlayer[0].X;
       OkuData.SceneManager.ActiveScene.Viewport.Center = center;
     }

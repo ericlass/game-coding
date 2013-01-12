@@ -6,7 +6,7 @@ namespace OkuEngine.Shaper
 {
   public static class Shape
   {
-    public static void Save(string filename, Vector[] points, MemoryStream image)
+    public static void Save(string filename, Vector2f[] points, MemoryStream image)
     {
       PropertyMap props = new PropertyMap();
 
@@ -21,7 +21,7 @@ namespace OkuEngine.Shaper
       props.Save(filename);
     }
 
-    public static void Load(string filename, out Vector[] points, out MemoryStream image)
+    public static void Load(string filename, out Vector2f[] points, out MemoryStream image)
     {
       PropertyMap props = new PropertyMap();
       props.Load(filename);

@@ -7,7 +7,7 @@ namespace OkuEngine
 {
   public class PointEmitter : ParticleEmitter
   {
-    private Vector _center = Vector.Zero;
+    private Vector2f _center = Vector2f.Zero;
 
     public override void Emit(List<Particle> particles, float dt)
     {
@@ -20,7 +20,7 @@ namespace OkuEngine
       }
     }
 
-    public Vector Center
+    public Vector2f Center
     {
       get { return _center; }
       set { _center = value; }

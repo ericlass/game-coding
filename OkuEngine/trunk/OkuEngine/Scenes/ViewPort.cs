@@ -16,8 +16,8 @@ namespace OkuEngine.Scenes
   /// </summary>
   public class ViewPort
   {
-    private Vector _center = Vector.Zero;
-    private Vector _scale = Vector.One;
+    private Vector2f _center = Vector2f.Zero;
+    private Vector2f _scale = Vector2f.One;
     private float _halfWidth = 0;
     private float _halfHeight = 0;
 
@@ -49,7 +49,7 @@ namespace OkuEngine.Scenes
     {
       _halfWidth = (right - left) / 2.0f;
       _halfHeight = (top - bottom) / 2.0f;
-      _center = new Vector(left + _halfWidth, bottom + _halfHeight);
+      _center = new Vector2f(left + _halfWidth, bottom + _halfHeight);
     }
 
     /// <summary>
@@ -73,7 +73,7 @@ namespace OkuEngine.Scenes
     /// <summary>
     /// Gets or sets the center of the viewport.
     /// </summary>
-    public Vector Center
+    public Vector2f Center
     {
       get { return _center; }
       set 
@@ -86,7 +86,7 @@ namespace OkuEngine.Scenes
     /// <summary>
     /// Gets or sets the scale of the viewport.
     /// </summary>
-    public Vector Scale
+    public Vector2f Scale
     {
       get { return _scale; }
       set
@@ -193,7 +193,7 @@ namespace OkuEngine.Scenes
     /// </summary>
     /// <param name="p">The point to check.</param>
     /// <returns>True if the point is inside the viewport, else False.</returns>
-    public bool Contains(Vector p)
+    public bool Contains(Vector2f p)
     {
       if (p.X > Right)
         return false;

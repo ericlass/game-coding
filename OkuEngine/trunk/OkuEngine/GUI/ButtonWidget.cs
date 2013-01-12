@@ -18,13 +18,13 @@ namespace OkuEngine
     private bool _clicked = false;
 
     private ImageContent _glyph = null;
-    private Vector _glyphPos = Vector.Zero;
+    private Vector2f _glyphPos = Vector2f.Zero;
 
     private String _text = null;
     private bool _refreshNeeded = true;
     private MeshInstance _textMesh = null;
-    private Vector[] _vertices = new Vector[4];
-    private Vector[] _focusRect = new Vector[4];
+    private Vector2f[] _vertices = new Vector2f[4];
+    private Vector2f[] _focusRect = new Vector2f[4];
     private Color[] _colors = new Color[4];
 
     /// <summary>
@@ -56,16 +56,16 @@ namespace OkuEngine
     protected override void AreaChange()
     {
       //If area is changed, recalculate vertices
-      _vertices[0] = Vector.Zero;
-      _vertices[1] = new Vector(0, Area.Height);
-      _vertices[2] = new Vector(Area.Width, Area.Height);
-      _vertices[3] = new Vector(Area.Width, 0);
+      _vertices[0] = Vector2f.Zero;
+      _vertices[1] = new Vector2f(0, Area.Height);
+      _vertices[2] = new Vector2f(Area.Width, Area.Height);
+      _vertices[3] = new Vector2f(Area.Width, 0);
 
       float inset = 3;
-      _focusRect[0] = new Vector(_vertices[0].X + inset, _vertices[0].Y + inset);
-      _focusRect[1] = new Vector(_vertices[1].X + inset, _vertices[1].Y - inset);
-      _focusRect[2] = new Vector(_vertices[2].X - inset, _vertices[2].Y - inset);
-      _focusRect[3] = new Vector(_vertices[3].X - inset, _vertices[3].Y + inset);
+      _focusRect[0] = new Vector2f(_vertices[0].X + inset, _vertices[0].Y + inset);
+      _focusRect[1] = new Vector2f(_vertices[1].X + inset, _vertices[1].Y - inset);
+      _focusRect[2] = new Vector2f(_vertices[2].X - inset, _vertices[2].Y - inset);
+      _focusRect[3] = new Vector2f(_vertices[3].X - inset, _vertices[3].Y + inset);
 
       _refreshNeeded = true;
     }
@@ -127,10 +127,10 @@ namespace OkuEngine
         if (hasText && hasGlyph)
           totalWidth += 5;
 
-        Vector center = new Vector((Area.Width / 2.0f) - 1.0f, Area.Height / 2.0f);
+        Vector2f center = new Vector2f((Area.Width / 2.0f) - 1.0f, Area.Height / 2.0f);
 
         if (hasText)
-          OkuMath.CenterAt(_textMesh.Vertices.Positions, new Vector(center.X + (totalWidth / 2.0f) - (textWidth / 2.0f), center.Y));
+          OkuMath.CenterAt(_textMesh.Vertices.Positions, new Vector2f(center.X + (totalWidth / 2.0f) - (textWidth / 2.0f), center.Y));
 
         if (hasGlyph)
         {

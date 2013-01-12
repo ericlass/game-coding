@@ -18,14 +18,14 @@ namespace OkuEngine
     public const byte TILE_COLLISION_LEFT_BOTTOM = 5;
 
     //List that contains a list of line segments for each collision shape that can be used to find the collision point of a line segment with a tile.
-    private List<Vector[]> _bounds = new List<Vector[]>()
+    private List<Vector2f[]> _bounds = new List<Vector2f[]>()
     {
-      new Vector[] { },
-      new Vector[] { new Vector(0, 1), new Vector(1, 1), new Vector(1, 0), new Vector(0, 0) },
-      new Vector[] { new Vector(0, 1), new Vector(1, 1), new Vector(0, 0) },
-      new Vector[] { new Vector(0, 1), new Vector(1, 1), new Vector(1, 0) },
-      new Vector[] { new Vector(0, 0), new Vector(1, 1), new Vector(1, 0) },
-      new Vector[] { new Vector(0, 1), new Vector(1, 0), new Vector(0, 0) }
+      new Vector2f[] { },
+      new Vector2f[] { new Vector2f(0, 1), new Vector2f(1, 1), new Vector2f(1, 0), new Vector2f(0, 0) },
+      new Vector2f[] { new Vector2f(0, 1), new Vector2f(1, 1), new Vector2f(0, 0) },
+      new Vector2f[] { new Vector2f(0, 1), new Vector2f(1, 1), new Vector2f(1, 0) },
+      new Vector2f[] { new Vector2f(0, 0), new Vector2f(1, 1), new Vector2f(1, 0) },
+      new Vector2f[] { new Vector2f(0, 1), new Vector2f(1, 0), new Vector2f(0, 0) }
     };
 
     //The main tiles
@@ -37,7 +37,7 @@ namespace OkuEngine
     private int _tileSize = 32;
     private int _mapWidth = 0;
     private int _mapHeight = 0;
-    private Vector _origin = new Vector();
+    private Vector2f _origin = new Vector2f();
 
     /// <summary>
     /// Create new tile map with the given parameters.
@@ -56,7 +56,7 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets the origin of the tile map. This is the top left corner of the tile at (0,0).
     /// </summary>
-    public Vector Origin
+    public Vector2f Origin
     {
       get { return _origin; }
       set { _origin = value; }
@@ -119,9 +119,9 @@ namespace OkuEngine
     /// <param name="max">The maximum vector of the AABB.</param>
     /// <param name="mtd">The minimum translation distance to move the tiles and the AABB apart is returned here.</param>
     /// <returns>True if the AABB intersects with the tiles, else false.</returns>
-    public bool IntersectAABB(Vector min, Vector max, out Vector mtd)
+    public bool IntersectAABB(Vector2f min, Vector2f max, out Vector2f mtd)
     {
-      mtd = Vector.Zero;
+      mtd = Vector2f.Zero;
 
       if (max.X < _origin.X || max.Y < _origin.Y || min.X > (_origin.X + _mapWidth) || min.Y > (_origin.Y + _mapHeight))
         return false;
@@ -130,15 +130,15 @@ namespace OkuEngine
       WorldToTile(min.X, min.Y, out left, out top);
       WorldToTile(max.X, max.Y, out right, out bottom);
 
-      Vector minTileSpace = new Vector((min.X - _origin.X) / _tileSize, (min.Y - _origin.Y) / _tileSize);
-      Vector maxTileSpace = new Vector((max.X - _origin.X) / _tileSize, (max.Y - _origin.Y) / _tileSize);
+      Vector2f minTileSpace = new Vector2f((min.X - _origin.X) / _tileSize, (min.Y - _origin.Y) / _tileSize);
+      Vector2f maxTileSpace = new Vector2f((max.X - _origin.X) / _tileSize, (max.Y - _origin.Y) / _tileSize);
 
-      Vector minTileTileSpace = new Vector();
-      Vector maxTileTileSpace = new Vector();
+      Vector2f minTileTileSpace = new Vector2f();
+      Vector2f maxTileTileSpace = new Vector2f();
 
-      Vector[] aabbVertices = new Vector[4];
+      Vector2f[] aabbVertices = new Vector2f[4];
 
-      Vector td = new Vector(float.MaxValue, float.MaxValue);
+      Vector2f td = new Vector2f(float.MaxValue, float.MaxValue);
 
       bool result = false;
 
@@ -151,7 +151,7 @@ namespace OkuEngine
           minTileTileSpace.X = minTileSpace.X - x;
           maxTileTileSpace.X = maxTileSpace.X - x;
 
-          Vector p = aabbVertices[0];
+          Vector2f p = aabbVertices[0];
           p.X = minTileTileSpace.X;
           p.Y = minTileTileSpace.Y;
           aabbVertices[0] = p;
@@ -191,15 +191,15 @@ namespace OkuEngine
     /// <param name="p2">The end point of the line segment.</param>
     /// <param name="ip">The point of intersection is returned in this parameter.</param>
     /// <returns>If there is an intersection, true is returned. Otherwise false.</returns>
-    public bool IntersectLineSegment(Vector p1, Vector p2, out Vector ip)
+    public bool IntersectLineSegment(Vector2f p1, Vector2f p2, out Vector2f ip)
     {
-      ip = Vector.Zero;
+      ip = Vector2f.Zero;
 
       int vx = 0;
       int vy = 0;
 
       //line origin in tile map pixel space
-      Vector lineOrgMapPixelSpace = new Vector();
+      Vector2f lineOrgMapPixelSpace = new Vector2f();
 
       //Tile map pixel boundaries
       float mapLeft = _origin.X;
@@ -220,7 +220,7 @@ namespace OkuEngine
         float t = 0;
         if (Intersections.LineSegmentAABB(p1.X, p1.Y, p2.X, p2.Y, mapLeft, mapRight, mapTop, mapBottom, out t, float.MaxValue))
         {
-          Vector p = OkuMath.InterpolateLinear(p1, p2, t);
+          Vector2f p = OkuMath.InterpolateLinear(p1, p2, t);
           lineOrgMapPixelSpace.X = p.X - mapLeft;
           lineOrgMapPixelSpace.Y = p.Y - mapTop;
         }
@@ -229,7 +229,7 @@ namespace OkuEngine
       }
 
       //Calculate line direction
-      Vector lineDir = p2 - p1;
+      Vector2f lineDir = p2 - p1;
       lineDir.Normalize();
 
       //Calculate tile coordinates of line origin
@@ -251,13 +251,13 @@ namespace OkuEngine
       float tDeltaY = lineDir.Y != 0.0f ? Math.Abs(_tileSize / lineDir.Y) : 0.0f;
 
       //Precalculate line position in tile map tile space
-      Vector lineMapTileSpaceStart = new Vector((p1.X - mapLeft) / _tileSize, (p1.Y - mapTop) / _tileSize);
-      Vector lineMapTileSpaceEnd = new Vector((p2.X - mapLeft) / _tileSize, (p2.Y - mapTop) / _tileSize);
+      Vector2f lineMapTileSpaceStart = new Vector2f((p1.X - mapLeft) / _tileSize, (p1.Y - mapTop) / _tileSize);
+      Vector2f lineMapTileSpaceEnd = new Vector2f((p2.X - mapLeft) / _tileSize, (p2.Y - mapTop) / _tileSize);
 
-      Vector lineTileTileSpaceStart = new Vector();
-      Vector lineTileTileSpaceEnd = new Vector();
+      Vector2f lineTileTileSpaceStart = new Vector2f();
+      Vector2f lineTileTileSpaceEnd = new Vector2f();
 
-      Vector[] shape = null;
+      Vector2f[] shape = null;
       while (true)
       {
         shape = _bounds[_tiles[vx, vy].Collision];
@@ -325,7 +325,7 @@ namespace OkuEngine
         for (int x = left; x <= right; x++)
         {
           Tile tile = _tiles[x, y];
-          Vector position = Vector.Zero;
+          Vector2f position = Vector2f.Zero;
           if (tile.Collision > TILE_COLLISION_NONE && (tile.Image >= 0 && tile.Image < _tileImages.Count))
           {
             position.X = (x * _tileSize) + _origin.X + (_tileSize / 2.0f);

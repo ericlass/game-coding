@@ -88,7 +88,7 @@ namespace OkuEngine.Driver.Renderer
     /// </summary>
     /// <param name="content">The content to be drawn.</param>
     /// <param name="position">The position to draw the image to in screen space pixels.</param>
-    void DrawImage(ImageContent content, Vector position);
+    void DrawImage(ImageContent content, Vector2f position);
 
     /// <summary>
     /// Draws the given image content at the given position, rotating it by the given angle.
@@ -97,7 +97,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="content">The content to be drawn.</param>
     /// <param name="position">The position to draw the image to.</param>
     /// <param name="rotation">The rotation angle in degrees.</param>
-    void DrawImage(ImageContent content, Vector position, float rotation);
+    void DrawImage(ImageContent content, Vector2f position, float rotation);
 
     /// <summary>
     /// Draws the given image content at the given position, scaling it by the given factors.
@@ -105,7 +105,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="content">The content to be drawn.</param>
     /// <param name="position">The position to draw the image to in screen space pixels.</param>
     /// <param name="scale">The scale factors.</param>
-    void DrawImage(ImageContent content, Vector position, Vector scale);
+    void DrawImage(ImageContent content, Vector2f position, Vector2f scale);
 
     /// <summary>
     /// Draws the given image content at the given position, rotating and scaling it 
@@ -115,7 +115,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="position">The position to draw the image to in screen space pixels.</param>
     /// <param name="rotation">The rotation angle in degrees.</param>
     /// <param name="scale">The scale factors.</param>
-    void DrawImage(ImageContent content, Vector position, float rotation, Vector scale);
+    void DrawImage(ImageContent content, Vector2f position, float rotation, Vector2f scale);
 
     /// <summary>
     /// Draws the given image content at the given position. The image is tinted with given tint color.
@@ -123,7 +123,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="content">The content to be drawn.</param>
     /// <param name="position">The position to draw the image to in screen space pixels.</param>
     /// <param name="tint">A color that is used to tint the image with.</param>
-    void DrawImage(ImageContent content, Vector position, Color tint);
+    void DrawImage(ImageContent content, Vector2f position, Color tint);
 
     /// <summary>
     /// Draws the given image content at the given position, rotating it by the given 
@@ -133,7 +133,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="position">The position to draw the image to in screen space pixels.</param>
     /// <param name="rotation">The rotation angle in degrees.</param>
     /// <param name="tint">A color that is used to tint the image with.</param>
-    void DrawImage(ImageContent content, Vector position, float rotation, Color tint);
+    void DrawImage(ImageContent content, Vector2f position, float rotation, Color tint);
 
     /// <summary>
     /// Draws the given image content at the given position, scaling it by the given 
@@ -143,7 +143,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="position">The position to draw the image to in screen space pixels.</param>
     /// <param name="scale">The scale factors.</param>
     /// <param name="tint">A color that is used to tint the image with.</param>
-    void DrawImage(ImageContent content, Vector position, Vector scale, Color tint);
+    void DrawImage(ImageContent content, Vector2f position, Vector2f scale, Color tint);
 
     /// <summary>
     /// Draws the given image content at the given position, rotating and scaling it by the given 
@@ -154,7 +154,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="rotation">The rotation angle in degrees.</param>
     /// <param name="scale">The scale factors.</param>
     /// <param name="tint">A color that is used to tint the image with.</param>
-    void DrawImage(ImageContent content, Vector position, float rotation, Vector scale, Color tint);
+    void DrawImage(ImageContent content, Vector2f position, float rotation, Vector2f scale, Color tint);
 
     /// <summary>
     /// Draws the given image content on a screen aligned quad so it fills the whole screen.
@@ -177,7 +177,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="end">The end of the line.</param>
     /// <param name="width">The width of the line in pixels.</param>
     /// <param name="color">The color of the line.</param>
-    void DrawLine(Vector start, Vector end, float width, Color color);
+    void DrawLine(Vector2f start, Vector2f end, float width, Color color);
 
     /// <summary>
     /// Draws a series of lines using the given vertices with the given width and color.
@@ -188,7 +188,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="count">The number of lines to draw from the given array.</param>
     /// <param name="width">The width of the lines in pixel.</param>
     /// <param name="interpretation">Specifies how to interpret the vertices.</param>
-    void DrawLines(Vector[] vertices, Color color, int count, float width, VertexInterpretation interpretation);
+    void DrawLines(Vector2f[] vertices, Color color, int count, float width, VertexInterpretation interpretation);
 
     /// <summary>
     /// Draws a series of lines using the given vertices with the given width and colors.
@@ -199,7 +199,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="count">The number of lines to draw from the given array.</param>
     /// <param name="width">The width of the lines in pixels.</param>
     /// <param name="interpretation">Specifies how to interpret the vertices.</param>
-    void DrawLines(Vector[] vertices, Color[] colors, int count, float width, VertexInterpretation interpretation);
+    void DrawLines(Vector2f[] vertices, Color[] colors, int count, float width, VertexInterpretation interpretation);
 
     /// <summary>
     /// Draws a point at the given point p with the given size and color.
@@ -207,7 +207,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="p">The center of the point in world space pixels.</param>
     /// <param name="size">The size of the point in pixels.</param>
     /// <param name="color">The color of the point.</param>
-    void DrawPoint(Vector p, float size, Color color);
+    void DrawPoint(Vector2f p, float size, Color color);
 
     /// <summary>
     /// Draws a series of points at the given vertices with the given size and color.
@@ -216,7 +216,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="color">The color of the points.</param>
     /// <param name="count">The number of points to draw from the given array.</param>
     /// <param name="size">The size of the points in pixels.</param>
-    void DrawPoints(Vector[] points, Color color, int count, float size);
+    void DrawPoints(Vector2f[] points, Color color, int count, float size);
 
     /// <summary>
     /// Draws a series of points at the given vertices with the given size and color.
@@ -225,7 +225,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="colors">The color values belonging to the points. Must be same length as points.</param>
     /// <param name="count">The number of points to draw from the given array.</param>
     /// <param name="size">The size of the points in pixels.</param>
-    void DrawPoints(Vector[] points, Color[] colors, int count, float size);
+    void DrawPoints(Vector2f[] points, Color[] colors, int count, float size);
 
     /// <summary>
     /// Draws a generic mesh using the given parameters.
@@ -236,7 +236,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="count">The number of points to draw from the given array.</param>
     /// <param name="mode">The mode used to create polygons from the given vertices.</param>
     /// <param name="texture">The texture to be applied. If not null, texCoords must also be given.</param>
-    void DrawMesh(Vector[] points, Vector[] texCoords, Color[] colors, int count, MeshMode mode, ImageContent texture);
+    void DrawMesh(Vector2f[] points, Vector2f[] texCoords, Color[] colors, int count, MeshMode mode, ImageContent texture);
 
     /// <summary>
     /// Draws a generic mesh using the given parameters.
@@ -247,7 +247,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="count">The number of points to draw from the given array.</param>
     /// <param name="mode">The mode used to draw the given vertices.</param>
     /// <param name="texture">The texture to be applied. If not null, texCoords must also be given.</param>
-    void DrawMesh(Vector[] points, Vector[] texCoords, Color[] colors, int count, DrawMode mode, ImageContent texture);
+    void DrawMesh(Vector2f[] points, Vector2f[] texCoords, Color[] colors, int count, DrawMode mode, ImageContent texture);
 
     /// <summary>
     /// Initializes image content which means that textures are created for them.
@@ -315,7 +315,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="x">The x coordinate of the pixel.</param>
     /// <param name="y">The y coordinate of the pixel.</param>
     /// <returns>The client space coordinates of the given pixel. Note that this can be outside of the window in windowed mode.</returns>
-    Vector ScreenToDisplay(int x, int y);
+    Vector2f ScreenToDisplay(int x, int y);
 
     /// <summary>
     /// Converts the given screen pixel coordinates to world coordinates.
@@ -323,7 +323,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="x">The x coordinate of the pixel.</param>
     /// <param name="y">The y coordinate of the pixel.</param>
     /// <returns>The world space coordinates of the given pixel. Note that this can be outside of the window in windowed mode.</returns>
-    Vector ScreenToWorld(int x, int y);
+    Vector2f ScreenToWorld(int x, int y);
 
     /// <summary>
     /// Set the renderer to screen space mode. In this mode

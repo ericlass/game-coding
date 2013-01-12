@@ -10,7 +10,7 @@ namespace OkuEngine
   /// </summary>
   public static class Intersections
   {
-    private static DynamicArray<Vector> _vectorBuffer = new DynamicArray<Vector>(100);
+    private static DynamicArray<Vector2f> _vectorBuffer = new DynamicArray<Vector2f>(100);
 
     /// <summary>
     /// Checks for intersection of two line segments specified by the given
@@ -74,7 +74,7 @@ namespace OkuEngine
     /// <param name="factor">Contains the line formula control value, if there is an intersection.</param>
     /// <param name="minT">The minimum line formula control value that has to be reached.</param>
     /// <returns>True if the line segments intersect, otherwise false.</returns>
-    public static bool LineSegments(Vector p1, Vector p2, Vector p3, Vector p4, out float factor, float minT)
+    public static bool LineSegments(Vector2f p1, Vector2f p2, Vector2f p3, Vector2f p4, out float factor, float minT)
     {
       return LineSegments(p1.X, p1.Y, p2.X, p2.Y, p3.X, p3.Y, p4.X, p4.Y, out factor, minT);
     }
@@ -193,18 +193,18 @@ namespace OkuEngine
     /// <param name="poly2">The second polygon.</param>
     /// <param name="mtd">The minimum transaltion distance is returned in this parameter if true is returned.</param>
     /// <returns>If an intersection is present, true is returned. Else false.</returns>
-    public static bool Intersect(Vector[] poly1, Vector[] poly2, out Vector mtd)
+    public static bool Intersect(Vector2f[] poly1, Vector2f[] poly2, out Vector2f mtd)
     {
-      mtd = Vector.Zero;
+      mtd = Vector2f.Zero;
 
       int count = poly1.Length + poly2.Length;
       _vectorBuffer.AsureCapacity(count);
-      Vector[] normalAxes = _vectorBuffer.InternalArray;
+      Vector2f[] normalAxes = _vectorBuffer.InternalArray;
 
       OkuMath.GetNormals(poly1, normalAxes, 0);
       OkuMath.GetNormals(poly2, normalAxes, poly1.Length);
 
-      Vector separation = new Vector();
+      Vector2f separation = new Vector2f();
       float minOverlap = float.MaxValue;
 
       float min1 = float.MaxValue;
@@ -214,7 +214,7 @@ namespace OkuEngine
 
       for (int i = 0; i < count; i++)
       {
-        Vector axis = normalAxes[i];
+        Vector2f axis = normalAxes[i];
 
         GetProjectedBounds(axis, poly1, out min1, out max1);
         GetProjectedBounds(axis, poly2, out min2, out max2);
@@ -255,7 +255,7 @@ namespace OkuEngine
     /// <param name="poly">The polygon to be projected. Must have at least one point.</param>
     /// <param name="min">The minimum projection value is returned in this parameter.</param>
     /// <param name="max">The maximum projection value is returned in this parameter.</param>
-    private static void GetProjectedBounds(Vector axis, Vector[] poly, out float min, out float max)
+    private static void GetProjectedBounds(Vector2f axis, Vector2f[] poly, out float min, out float max)
     {
       min = float.MaxValue;
       max = float.MinValue;
@@ -276,7 +276,7 @@ namespace OkuEngine
     /// <param name="min2">The minimum vector of the second bounding box.</param>
     /// <param name="max2">The maximum vector of the second bounding box.</param>
     /// <returns>True if the bounding boxes intersect, else false.</returns>
-    public static bool AABBs(Vector min1, Vector max1, Vector min2, Vector max2)
+    public static bool AABBs(Vector2f min1, Vector2f max1, Vector2f min2, Vector2f max2)
     {
       if (min1.X > max2.X)
         return false;
@@ -309,7 +309,7 @@ namespace OkuEngine
     /// <param name="polygon">The polygon.</param>
     /// <param name="mtd">If an intersection is present, the ray control value of the intersection point is returned here.</param>
     /// <returns>True if the ray intersects the polygon, else false.</returns>
-    public static bool RayPolygon(Vector start, Vector end, Vector[] polygon, out float mtd)
+    public static bool RayPolygon(Vector2f start, Vector2f end, Vector2f[] polygon, out float mtd)
     {
       mtd = float.MaxValue;
       bool result = false;
@@ -333,7 +333,7 @@ namespace OkuEngine
     /// <param name="min">The min vector of the AABB.</param>
     /// <param name="max">The max vector of the AABB.</param>
     /// <returns>True if the point is inside the AABB, else false.</returns>
-    public static Boolean PointInAABB(Vector p, Vector min, Vector max)
+    public static Boolean PointInAABB(Vector2f p, Vector2f min, Vector2f max)
     {
       if (p.X < min.X)
         return false;
@@ -356,7 +356,7 @@ namespace OkuEngine
     /// <param name="maxX">The x value of the max vector.</param>
     /// <param name="maxY">The y value of the max vector.</param>
     /// <returns>True if the point is inside the AABB, else false.</returns>
-    public static Boolean PointInAABB(Vector p, float minX, float minY, float maxX, float maxY)
+    public static Boolean PointInAABB(Vector2f p, float minX, float minY, float maxX, float maxY)
     {
       if (p.X < minX)
         return false;

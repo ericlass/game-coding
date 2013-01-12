@@ -38,10 +38,10 @@ namespace OkuTest
 
     public override void Render(int pass)
     {
-      OkuManagers.Renderer.DrawImage(_yin, Vector.Zero);
+      OkuManagers.Renderer.DrawImage(_yin, Vector2f.Zero);
 
       OkuManagers.Renderer.BeginScreenSpace();
-      OkuManagers.Renderer.DrawImage(_earth, new Vector(50, 50));
+      OkuManagers.Renderer.DrawImage(_earth, new Vector2f(50, 50));
       OkuManagers.Renderer.EndScreenSpace();
     }
 

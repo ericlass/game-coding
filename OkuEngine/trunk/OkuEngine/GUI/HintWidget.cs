@@ -11,7 +11,7 @@ namespace OkuEngine
   /// </summary>
   public class HintWidget : LabelWidget
   {
-    private Vector[] _vertices = new Vector[4];
+    private Vector2f[] _vertices = new Vector2f[4];
     private Color[] _colors = new Color[4];
 
     /// <summary>
@@ -27,7 +27,7 @@ namespace OkuEngine
     {
       base.AreaChange();
 
-      Vector min, max;
+      Vector2f min, max;
       OkuMath.BoundingBox(GetTextMesh().Vertices.Positions, out min, out max);
       const float border = 4;
       min.X -= border;

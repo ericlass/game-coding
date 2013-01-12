@@ -10,7 +10,7 @@ namespace OkuEngine.Geometry
   /// </summary>
   public class Polygon : IStoreable
   {
-    private Vector[] _vertices = null;
+    private Vector2f[] _vertices = null;
     private bool _aabbValid = false;
     private AABB _aabb = new AABB();
 
@@ -26,7 +26,7 @@ namespace OkuEngine.Geometry
     /// If you change any of the vertices you must call 
     /// the Invalidate() method to make sure cached data is refreshed.
     /// </summary>
-    public Vector[] Vertices
+    public Vector2f[] Vertices
     {
       get { return _vertices; }
     }
@@ -60,7 +60,7 @@ namespace OkuEngine.Geometry
     /// <param name="point">The point to find the nearest vertex for.</param>
     /// <param name="distance">The distance to the nearest vertex is returned here.</param>
     /// <returns>The index of the nearest vertex.</returns>
-    public int GetNearestVertex(Vector point, out float distance)
+    public int GetNearestVertex(Vector2f point, out float distance)
     {
       return _vertices.ClosestPoint(point, out distance);
     }

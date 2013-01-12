@@ -10,7 +10,7 @@ namespace OkuTest
     private ImageContent _yinyang = null;
     private float _innerAngle = 0.0f;
     private float _outerAngle = 0.0f;
-    private Vector _offset = new Vector(100, 0);
+    private Vector2f _offset = new Vector2f(100, 0);
 
     /*public void Setup(ref RendererParams renderParams)
     {

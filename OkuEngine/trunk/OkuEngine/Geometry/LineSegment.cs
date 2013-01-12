@@ -7,8 +7,8 @@ namespace OkuEngine
   /// </summary>
   public class LineSegment
   {
-    private Vector _start = Vector.Zero;
-    private Vector _end = Vector.Zero;
+    private Vector2f _start = Vector2f.Zero;
+    private Vector2f _end = Vector2f.Zero;
 
     /// <summary>
     /// Creates a new line segment and initializes it's fields to the given values.
@@ -19,8 +19,8 @@ namespace OkuEngine
     /// <param name="y2">The y component of the end point.</param>
     public LineSegment(float x1, float y1, float x2, float y2)
     {
-      _start = new Vector(x1, y1);
-      _end = new Vector(x2, y2);
+      _start = new Vector2f(x1, y1);
+      _end = new Vector2f(x2, y2);
     }
 
     /// <summary>
@@ -28,7 +28,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="p1">The start point of the line segment.</param>
     /// <param name="p2">The end point of the line segment.</param>
-    public LineSegment(Vector p1, Vector p2)
+    public LineSegment(Vector2f p1, Vector2f p2)
     {
       _start = p1;
       _end = p2;
@@ -37,7 +37,7 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets the start point of the line segment.
     /// </summary>
-    public Vector Start
+    public Vector2f Start
     {
       get { return _start; }
       set { _start = value; }
@@ -46,7 +46,7 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets the end point of the line segment.
     /// </summary>
-    public Vector End
+    public Vector2f End
     {
       get { return _end; }
       set { _end = value; }
@@ -67,9 +67,9 @@ namespace OkuEngine
     /// Calculates the left hand normal of the line segment.
     /// </summary>
     /// <returns>The normalized normal of the line segment.</returns>
-    public Vector Normal()
+    public Vector2f Normal()
     {
-      Vector result = new Vector(_end.Y - _start.Y, -(_end.X - _start.X));
+      Vector2f result = new Vector2f(_end.Y - _start.Y, -(_end.X - _start.X));
       result.Normalize();
       return result;
     }
@@ -80,7 +80,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="factor">The factor between the start and the end point. 0 means the start point, 1 means the end point.</param>
     /// <returns>The interpolated point on the line segment.</returns>
-    public Vector GetPointAt(float factor)
+    public Vector2f GetPointAt(float factor)
     {
       return OkuMath.InterpolateLinear(_start, _end, factor);
     }

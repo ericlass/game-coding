@@ -13,7 +13,7 @@ namespace OkuTest
   {
     private ImageContent _smiley = null;
     private float _rotation = 0.0f;
-    private Vector _pos1 = new Vector(0, 50);
+    private Vector2f _pos1 = new Vector2f(0, 50);
 
     private SoundInstance _sound = null;
     private MeshInstance _mesh = null;
@@ -35,14 +35,14 @@ namespace OkuTest
     {
       _smiley = new ImageContent(".\\content\\smiley.png");
 
-      Vector[] verts = new Vector[50];
+      Vector2f[] verts = new Vector2f[50];
       Color[] colors = new Color[verts.Length];
       Random rand = new Random();
       int width = (int)OkuData.SceneManager.ActiveScene.Viewport.Width;
       int height = (int)OkuData.SceneManager.ActiveScene.Viewport.Height;
       for (int i = 0; i < verts.Length; i++)
       {
-        verts[i] = new Vector((float)(rand.NextDouble() - 0.5) * width, (float)(rand.NextDouble() - 0.5) * height);
+        verts[i] = new Vector2f((float)(rand.NextDouble() - 0.5) * width, (float)(rand.NextDouble() - 0.5) * height);
         colors[i] = Color.RandomColor(rand);
       }
       Vertices polyContent = new Vertices(verts, colors);
@@ -54,17 +54,17 @@ namespace OkuTest
       _sound = new SoundInstance(sound);
 
       int numVerts = 10;
-      verts = new Vector[numVerts];
+      verts = new Vector2f[numVerts];
       colors = new Color[numVerts];
-      Vector[] texCoords = new Vector[numVerts];
+      Vector2f[] texCoords = new Vector2f[numVerts];
       for (int i = 0; i < numVerts; i++)
       {
         int x = (i * 50) - 250;
         int y = ((i % 2) * 50) + 200;
 
-        verts[i] = new Vector(x, y);
+        verts[i] = new Vector2f(x, y);
         colors[i] = Color.RandomColor(rand);
-        texCoords[i] = new Vector((float)i / numVerts, (i % 2));
+        texCoords[i] = new Vector2f((float)i / numVerts, (i % 2));
       }
       polyContent = new Vertices(verts, texCoords, colors);
       _mesh = new MeshInstance(polyContent);
@@ -102,7 +102,7 @@ namespace OkuTest
         _sound.Play();
 
       float speed = 200 * dt;
-      Vector center = OkuData.SceneManager.ActiveScene.Viewport.Center;
+      Vector2f center = OkuData.SceneManager.ActiveScene.Viewport.Center;
       if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Left))
         center.X -= speed;
       if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Right))
@@ -113,7 +113,7 @@ namespace OkuTest
         center.Y += speed;      
 
       speed = dt;
-      Vector scale = OkuData.SceneManager.ActiveScene.Viewport.Scale;
+      Vector2f scale = OkuData.SceneManager.ActiveScene.Viewport.Scale;
       if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Add))
       {
         scale.X += speed;
@@ -126,7 +126,7 @@ namespace OkuTest
       }
 
       if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.NumPad0))
-        scale = Vector.One;
+        scale = Vector2f.One;
       
       OkuData.SceneManager.ActiveScene.Viewport.Center = center;
       OkuData.SceneManager.ActiveScene.Viewport.Scale = scale;
@@ -142,7 +142,7 @@ namespace OkuTest
 
           _text.Draw();
 
-          Vector[] transformed = new Vector[_guiText.Vertices.Positions.Length];
+          Vector2f[] transformed = new Vector2f[_guiText.Vertices.Positions.Length];
           OkuData.SceneManager.ActiveScene.Viewport.ScreenSpaceMatrix.Transform(_guiText.Vertices.Positions, transformed);
           OkuManagers.Renderer.DrawMesh(transformed, _guiText.Vertices.TexCoords, _guiText.Vertices.Colors, _guiText.Vertices.Positions.Length, _guiText.Mode, _guiText.Texture);
           break;

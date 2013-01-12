@@ -126,7 +126,7 @@ namespace OkuEngine.Api
       if (sceneObject != null)
       {
         Transformation trans = sceneObject.SceneNode.Properties.Transform;
-        Vector pos = trans.Translation;
+        Vector2f pos = trans.Translation;
         pos.X = (float)x;
         pos.Y = (float)y;
         trans.Translation = pos;

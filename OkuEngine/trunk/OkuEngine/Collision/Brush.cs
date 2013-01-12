@@ -15,7 +15,7 @@ namespace OkuEngine.Collision
   {
     private IRenderable _renderable = null;
     private AABB _boundingBox = new AABB();
-    private Vector[] _shape = null;
+    private Vector2f[] _shape = null;
 
     /// <summary>
     /// Create a new brush.
@@ -35,7 +35,7 @@ namespace OkuEngine.Collision
     /// <summary>
     /// Gets the shape of the brush. Can be null if only AABB is specified.
     /// </summary>
-    public override Vector[] Shape
+    public override Vector2f[] Shape
     {
       get { return _shape; }
     }

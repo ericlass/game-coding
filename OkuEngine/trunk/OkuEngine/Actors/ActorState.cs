@@ -14,7 +14,7 @@ namespace OkuEngine.Actors
   public class ActorState : EntityState
   {
     private InheritingRenderable _renderable = new InheritingRenderable();
-    private Vector[] _shape = null;
+    private Vector2f[] _shape = null;
     private AABB _boundingBox = new AABB();
 
     /// <summary>
@@ -28,7 +28,7 @@ namespace OkuEngine.Actors
     /// <summary>
     /// Gets the shape associated with the actor state.
     /// </summary>
-    public Vector[] Shape
+    public Vector2f[] Shape
     {
       get { return _shape; }
     }

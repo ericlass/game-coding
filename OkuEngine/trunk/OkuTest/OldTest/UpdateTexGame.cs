@@ -43,7 +43,7 @@ namespace OkuTest
 
     public override void Render(int pass)
     {
-      OkuManagers.Renderer.DrawImage(_content, new Vector(0, 0));
+      OkuManagers.Renderer.DrawImage(_content, new Vector2f(0, 0));
     }
 
   }

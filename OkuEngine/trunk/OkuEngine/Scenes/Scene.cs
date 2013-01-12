@@ -203,10 +203,10 @@ namespace OkuEngine.Scenes
     /// <param name="x">The x component of the position.</param>
     /// <param name="y">The y component of the position.</param>
     /// <returns>The converted world space position.</returns>
-    public Vector ScreenToWorld(int x, int y)
+    public Vector2f ScreenToWorld(int x, int y)
     {
       Point client = OkuManagers.Renderer.Display.PointToClient(new Point(x, y));
-      return new Vector(client.X, OkuManagers.Renderer.Display.ClientSize.Height - client.Y);
+      return new Vector2f(client.X, OkuManagers.Renderer.Display.ClientSize.Height - client.Y);
     }
 
     /// <summary>
@@ -215,7 +215,7 @@ namespace OkuEngine.Scenes
     /// <param name="x">The x component of the position.</param>
     /// <param name="y">The y component of the position.</param>
     /// <returns>The converted display space position.</returns>
-    public Vector ScreenToDisplay(int x, int y)
+    public Vector2f ScreenToDisplay(int x, int y)
     {
       return Viewport.ScreenSpaceMatrix.Transform(ScreenToDisplay(x, y));
     }

@@ -13,18 +13,18 @@ namespace OkuEngine
     /// <summary>
     /// The min vector.
     /// </summary>
-    public Vector Min;
+    public Vector2f Min;
     /// <summary>
     /// The max vector.
     /// </summary>
-    public Vector Max;
+    public Vector2f Max;
 
     /// <summary>
     /// Create a new quad with the given vectors.
     /// </summary>
     /// <param name="min">The min vector.</param>
     /// <param name="max">The max vector.</param>
-    public AABB(Vector min, Vector max)
+    public AABB(Vector2f min, Vector2f max)
     {
       Min = min;
       Max = max;
@@ -39,15 +39,15 @@ namespace OkuEngine
     /// <param name="bottom">The bottom border of the quad.</param>
     public AABB(float left, float bottom, float width, float height)
     {
-      Min = new Vector(left, bottom);
-      Max = new Vector(left + width, bottom + height);
+      Min = new Vector2f(left, bottom);
+      Max = new Vector2f(left + width, bottom + height);
     }
 
     /// <summary>
     /// Calculates the center of the quad.
     /// </summary>
     /// <returns>The center point of the quad.</returns>
-    public Vector GetCenter()
+    public Vector2f GetCenter()
     {
       return (Min + Max) * 0.5f;
     }
@@ -72,7 +72,7 @@ namespace OkuEngine
     /// Gets the four corner points of the AABB as a vector array.
     /// </summary>
     /// <returns>The four corner points in an array.</returns>
-    public Vector[] GetPoints()
+    public Vector2f[] GetPoints()
     {
       return GetPoints(Min, Max);
     }
@@ -82,7 +82,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="point">The point to check.</param>
     /// <returns>True if the point is inside the AABB, else false.</returns>
-    public bool IsInside(Vector point)
+    public bool IsInside(Vector2f point)
     {
       return Intersections.PointInAABB(point, Min, Max);
     }
@@ -100,7 +100,7 @@ namespace OkuEngine
       float maxX = Math.Max(Max.X, other.Max.X);
       float maxY = Math.Max(Max.Y, other.Max.Y);
 
-      return new AABB(new Vector(minX, minY), new Vector(maxX, maxY));
+      return new AABB(new Vector2f(minX, minY), new Vector2f(maxX, maxY));
     }
     
     /// <summary>
@@ -130,9 +130,9 @@ namespace OkuEngine
     /// <param name="min">The minimum vector of the AABB.</param>
     /// <param name="max">The maximum vector of the AABB.</param>
     /// <returns>The four corner points in an array.</returns>
-    public static Vector[] GetPoints(Vector min, Vector max)
+    public static Vector2f[] GetPoints(Vector2f min, Vector2f max)
     {
-      return new Vector[] { min, new Vector(min.X, max.Y), max, new Vector(max.X, min.Y) };
+      return new Vector2f[] { min, new Vector2f(min.X, max.Y), max, new Vector2f(max.X, min.Y) };
     }
 
     /// <summary>

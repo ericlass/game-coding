@@ -27,15 +27,15 @@ namespace OkuTest
       }
     }
 
-    private Vector[] _box1 = PolygonFactory.Box(-50, 50, -100, 100);
+    private Vector2f[] _box1 = PolygonFactory.Box(-50, 50, -100, 100);
     private Transformation _transform1 = new Transformation();
-    private Vector[] _transformed1 = null;
+    private Vector2f[] _transformed1 = null;
 
-    private Vector[] _box2 = PolygonFactory.Box(-25, 25, -50, 50);
+    private Vector2f[] _box2 = PolygonFactory.Box(-25, 25, -50, 50);
     private Transformation _transform2 = new Transformation();
-    private Vector[] _transformed2 = null;
+    private Vector2f[] _transformed2 = null;
 
-    private Vector _mtd = Vector.Zero;
+    private Vector2f _mtd = Vector2f.Zero;
     private bool _intersect = false;
     private MeshInstance _strIntersect = null;
     private MeshInstance _strNoIntersect = null;
@@ -50,11 +50,11 @@ namespace OkuTest
       _strIntersect = font.GetStringMesh("Intersection", OkuData.SceneManager.ActiveScene.Viewport.Left + 5, OkuData.SceneManager.ActiveScene.Viewport.Top - 5, OkuEngine.Color.Red);
       _strNoIntersect = font.GetStringMesh("No Intersection", OkuData.SceneManager.ActiveScene.Viewport.Left + 5, OkuData.SceneManager.ActiveScene.Viewport.Top - 5, OkuEngine.Color.Black);
 
-      _transform1.Translation = new Vector(-100, 0);
-      _transform2.Translation = new Vector(200, 00);
+      _transform1.Translation = new Vector2f(-100, 0);
+      _transform2.Translation = new Vector2f(200, 00);
 
-      _transformed1 = new Vector[_box1.Length];
-      _transformed2 = new Vector[_box2.Length];
+      _transformed1 = new Vector2f[_box1.Length];
+      _transformed2 = new Vector2f[_box2.Length];
 
       Matrix3 transform = Matrix3.Identity;
       transform.ApplyTransform(_transform1);
@@ -86,7 +86,7 @@ namespace OkuTest
         rotation += step;
 
       _transform2.Rotation += rotation;
-      _transform2.Translation += new Vector(dx, dy);
+      _transform2.Translation += new Vector2f(dx, dy);
 
       Matrix3 transform = Matrix3.Identity;
       transform.ApplyTransform(_transform2);
@@ -102,7 +102,7 @@ namespace OkuTest
       }
     }
 
-    private Vector _pos = new Vector(512, 384);
+    private Vector2f _pos = new Vector2f(512, 384);
 
     public override void Render(int pass)
     {
@@ -116,8 +116,8 @@ namespace OkuTest
       for (int i = 0; i < _projections.Count; i++)
       {
         Ranges rang = _projections[i];
-        OkuManagers.Renderer.DrawLine(new Vector(x + rang.Min1, y + (diff * i)), new Vector(x + rang.Max1, y + (diff * i)), 2, OkuEngine.Color.Red);
-        OkuManagers.Renderer.DrawLine(new Vector(x + rang.Min2, y + 4 + (diff * i)), new Vector(x + rang.Max2, y + 4 + (diff * i)), 2, OkuEngine.Color.Blue);
+        OkuManagers.Renderer.DrawLine(new Vector2f(x + rang.Min1, y + (diff * i)), new Vector2f(x + rang.Max1, y + (diff * i)), 2, OkuEngine.Color.Red);
+        OkuManagers.Renderer.DrawLine(new Vector2f(x + rang.Min2, y + 4 + (diff * i)), new Vector2f(x + rang.Max2, y + 4 + (diff * i)), 2, OkuEngine.Color.Blue);
       }
 
       if (_intersect)
@@ -132,8 +132,8 @@ namespace OkuTest
     public bool Intersect(LineSegment seg1, LineSegment seg2)
     {
       //Get axis
-      Vector axis1 = seg1.Normal();
-      Vector axis2 = seg2.Normal();
+      Vector2f axis1 = seg1.Normal();
+      Vector2f axis2 = seg2.Normal();
 
       //Project one vector of seg1 to axis1. seg1 only has one projection as it is perpendicular to axis1.
       float projected = axis1.ProjectScalar(seg1.Start);

@@ -4,9 +4,9 @@ namespace OkuEngine
 {
   public class Particle
   {
-    private Vector _position = Vector.Zero; //current position
-    private Vector _oldPosition = Vector.Zero; //previous position
-    private Vector _velocity = Vector.Zero; //velocitiy in world units per second
+    private Vector2f _position = Vector2f.Zero; //current position
+    private Vector2f _oldPosition = Vector2f.Zero; //previous position
+    private Vector2f _velocity = Vector2f.Zero; //velocitiy in world units per second
 
     private Color _color = Color.White; // color
 
@@ -51,19 +51,19 @@ namespace OkuEngine
       get { return _energy <= 0.0f; }
     }
 
-    public Vector Position
+    public Vector2f Position
     {
       get { return _position; }
       set { _position = value; }
     }
 
-    public Vector OldPosition
+    public Vector2f OldPosition
     {
       get { return _oldPosition; }
       set { _oldPosition = value; }
     }
 
-    public Vector Velocity
+    public Vector2f Velocity
     {
       get { return _velocity; }
       set { _velocity = value; }

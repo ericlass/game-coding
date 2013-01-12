@@ -11,7 +11,7 @@ namespace OkuEngine
   /// </summary>
   public class Spline
   {
-    private Vector[] _points = null;
+    private Vector2f[] _points = null;
     private double _tension = 0;
     private double _bias = 0;
     private double _continuity = 0;
@@ -21,7 +21,7 @@ namespace OkuEngine
     /// Creates a new spline with the given points.
     /// </summary>
     /// <param name="points">The points that will be used for interpolation.</param>
-    public Spline(Vector[] points)
+    public Spline(Vector2f[] points)
     {
       _points = points;
     }
@@ -29,7 +29,7 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets the points that are used for interpolation.
     /// </summary>
-    public Vector[] Points
+    public Vector2f[] Points
     {
       get { return _points; }
       set { _points = value; }
@@ -78,7 +78,7 @@ namespace OkuEngine
     /// <param name="bias">The bias parameter.</param>
     /// <param name="continuity">The continuity parameter.</param>
     /// <returns>The interpolated point at position t between p1 and p2.</returns>
-    private Vector InterpolateHermite(Vector p0, Vector p1, Vector p2, Vector p3, double t, double tension, double bias, double continuity)
+    private Vector2f InterpolateHermite(Vector2f p0, Vector2f p1, Vector2f p2, Vector2f p3, double t, double tension, double bias, double continuity)
     {
       double mu2 = t * t;
       double mu3 = mu2 * t;
@@ -102,7 +102,7 @@ namespace OkuEngine
 
       float resultY = (float)(a0 * p1.Y + a1 * m0 + a2 * m1 + a3 * p2.Y);
 
-      return new Vector(resultX, resultY);
+      return new Vector2f(resultX, resultY);
     }
 
     /// <summary>
@@ -112,7 +112,7 @@ namespace OkuEngine
     /// <param name="t">The position of the point to interpolate. Ranges from 0.0 to 1.0.</param>
     /// <param name="result">The interpolated point is returned in this ref parameter.</param>
     /// <returns>true if the point was interpolated correctly or false if the t parameter is out of range.</returns>
-    public bool GetInterpolatedPoint(double t, ref Vector result)
+    public bool GetInterpolatedPoint(double t, ref Vector2f result)
     {
       if ((t < 0) || (t > 1))
         return false;
@@ -140,13 +140,13 @@ namespace OkuEngine
       double step = 1.0 / steps;
 
       double result = 0;
-      Vector last = Vector.Zero;
-      Vector current = Vector.Zero;
+      Vector2f last = Vector2f.Zero;
+      Vector2f current = Vector2f.Zero;
       GetInterpolatedPoint(0, ref last);
       for (double t = step; t <= 1.0; t += step)
       {
         GetInterpolatedPoint(t, ref current);
-        result += Vector.Distance(last, current);
+        result += Vector2f.Distance(last, current);
         last = current;
       }
 
@@ -161,12 +161,12 @@ namespace OkuEngine
     /// </summary>
     /// <param name="points">Specifies how many points the resulting polygon will have.</param>
     /// <returns>The tesselated polygon.</returns>
-    public Vector[] Tesselate(int points)
+    public Vector2f[] Tesselate(int points)
     {
-      Vector[] result = new Vector[points];
+      Vector2f[] result = new Vector2f[points];
 
       double step = 1.0 / (points - 1);
-      Vector vec = Vector.Zero;
+      Vector2f vec = Vector2f.Zero;
 
       for (int i = 0; i < points; i++)
       {
@@ -190,8 +190,8 @@ namespace OkuEngine
           _arcLengthMap = new double[100];
           _arcLengthMap[0] = 0.0;
           
-          Vector previous = _points[0];
-          Vector current = Vector.Zero;
+          Vector2f previous = _points[0];
+          Vector2f current = Vector2f.Zero;
           
           double arcLength = 0.0;
           for (int i = 1; i < _arcLengthMap.Length; i++)
@@ -199,7 +199,7 @@ namespace OkuEngine
             double t = i / (double)_arcLengthMap.Length;
             if (GetInterpolatedPoint(t, ref current))
             {
-              arcLength += Vector.Distance(previous, current);
+              arcLength += Vector2f.Distance(previous, current);
               _arcLengthMap[i] = arcLength;
               previous = current;
             }
@@ -217,7 +217,7 @@ namespace OkuEngine
     /// <param name="t">The linear control value. Must be in range 0.0 - 1.0.</param>
     /// <param name="result">The interpolated point is returned here.</param>
     /// <returns>True if the point was interpolated, false if the control parameter t was out of range 0.0 - 1.0.</returns>
-    public bool GetParameterizedInterpolatedPoint(double t, ref Vector result)
+    public bool GetParameterizedInterpolatedPoint(double t, ref Vector2f result)
     {
       if (t < 0 || t > 1)
         return false;
@@ -245,12 +245,12 @@ namespace OkuEngine
     /// </summary>
     /// <param name="points">The number of points the tesselated spline should have.</param>
     /// <returns>The points of the tesselated polygon.</returns>
-    public Vector[] TesselateParameterized(int points)
+    public Vector2f[] TesselateParameterized(int points)
     {
-      Vector[] result = new Vector[points];
+      Vector2f[] result = new Vector2f[points];
 
       double step = 1.0 / (points - 1);
-      Vector vec = Vector.Zero;
+      Vector2f vec = Vector2f.Zero;
 
       for (int i = 0; i < points; i++)
       {

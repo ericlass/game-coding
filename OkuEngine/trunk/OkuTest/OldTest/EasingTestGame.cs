@@ -12,7 +12,7 @@ namespace OkuTest
     private const int _numSamples = 50;
     private const int _size = 100;
 
-    private Vector[] _points = null;
+    private Vector2f[] _points = null;
     private EasingController _ease = null;
 
     private EasingController _imageEase = null;
@@ -27,7 +27,7 @@ namespace OkuTest
 
     public override void Initialize()
     {
-      _points = new Vector[_numSamples];
+      _points = new Vector2f[_numSamples];
       _ease = new EasingController();
       _ease.Min = -1;
       _ease.Max = 1;
@@ -63,7 +63,7 @@ namespace OkuTest
         Kernel32.QueryPerformanceCounter(out tick2);
         passed += tick2 - tick1;
 
-        Vector vec = _points[i];
+        Vector2f vec = _points[i];
         vec.X = t * _size;
         vec.Y = v * _size;
         _points[i] = vec;
@@ -86,7 +86,7 @@ namespace OkuTest
       OkuManagers.Renderer.DrawLines(_points, Color.Blue, _points.Length, 1.0f, VertexInterpretation.Polygon);
       OkuManagers.Renderer.DrawPoints(_points, Color.Red, _points.Length, 2.0f);
 
-      OkuManagers.Renderer.DrawImage(_image, Vector.Zero, _angle);
+      OkuManagers.Renderer.DrawImage(_image, Vector2f.Zero, _angle);
     }
 
   }

@@ -14,9 +14,9 @@ namespace OkuEngine
   {
     private bool _textMeshValid = false;
     private MeshInstance _textMesh = null;
-    private Vector _textOffset = new Vector();
+    private Vector2f _textOffset = new Vector2f();
 
-    private Vector[] _vertices = new Vector[4];
+    private Vector2f[] _vertices = new Vector2f[4];
     private Color[] _colors = new Color[4];
 
     private bool _focused = false;
@@ -49,10 +49,10 @@ namespace OkuEngine
     protected override void AreaChange()
     {
       //If area is changed, recalculate vertices
-      _vertices[0] = Vector.Zero;
-      _vertices[1] = new Vector(0, Area.Height);
-      _vertices[2] = new Vector(Area.Width, Area.Height);
-      _vertices[3] = new Vector(Area.Width, 0);
+      _vertices[0] = Vector2f.Zero;
+      _vertices[1] = new Vector2f(0, Area.Height);
+      _vertices[2] = new Vector2f(Area.Width, Area.Height);
+      _vertices[3] = new Vector2f(Area.Width, 0);
     }
 
     /// <summary>
@@ -106,7 +106,7 @@ namespace OkuEngine
 
         cursorX += _textOffset.X;
 
-        canvas.DrawLine(new Vector(cursorX, _textOffset.Y), new Vector(cursorX, _textOffset.Y - Container.Font.Height), 1.0f, Color.Black);
+        canvas.DrawLine(new Vector2f(cursorX, _textOffset.Y), new Vector2f(cursorX, _textOffset.Y - Container.Font.Height), 1.0f, Color.Black);
       }
     }
 

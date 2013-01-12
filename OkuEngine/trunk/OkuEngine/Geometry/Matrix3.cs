@@ -66,7 +66,7 @@ namespace OkuEngine
     /// Translates the matrix by the given vector.
     /// </summary>
     /// <param name="vec">The translation vector.</param>
-    public void Translate(Vector vec)
+    public void Translate(Vector2f vec)
     {
       Multiply(CreateTranslation(vec.X, vec.Y));
     }
@@ -85,7 +85,7 @@ namespace OkuEngine
     /// Scales the matrix by the given vector.
     /// </summary>
     /// <param name="vec">The scale vector.</param>
-    public void Scale(Vector vec)
+    public void Scale(Vector2f vec)
     {
       Multiply(CreateScale(vec.X, vec.Y));
     }
@@ -103,7 +103,7 @@ namespace OkuEngine
     /// Transforms the given vector. The result is returned in the vector itself.
     /// </summary>
     /// <param name="vec">The vector to be transformed.</param>
-    public void Transform(ref Vector vec)
+    public void Transform(ref Vector2f vec)
     {
       double res00 = V00 * vec.X + V01 * vec.Y + V02;
       double res10 = V10 * vec.X + V11 * vec.Y + V12;
@@ -131,16 +131,16 @@ namespace OkuEngine
     /// </summary>
     /// <param name="vec">The vector to be transformed.</param>
     /// <returns>The transformed vector.</returns>
-    public Vector Transform(Vector vec)
+    public Vector2f Transform(Vector2f vec)
     {
-      return new Vector((float)(V00 * vec.X + V01 * vec.Y + V02), (float)(V10 * vec.X + V11 * vec.Y + V12));
+      return new Vector2f((float)(V00 * vec.X + V01 * vec.Y + V02), (float)(V10 * vec.X + V11 * vec.Y + V12));
     }
 
     /// <summary>
     /// Transforms the given polygon.
     /// </summary>
     /// <param name="poly">The polygon to be transformed.</param>
-    public void Transform(Vector[] poly)
+    public void Transform(Vector2f[] poly)
     {
       for (int i = 0; i < poly.Length; i++)
         poly[i] = Transform(poly[i]);
@@ -151,7 +151,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="poly">The polygon that is transformed.</param>
     /// <param name="target">The resulting transformed polygon.</param>    
-    public void Transform(Vector[] poly, Vector[] target)
+    public void Transform(Vector2f[] poly, Vector2f[] target)
     {
       for (int i = 0; i < poly.Length; i++)
         target[i] = Transform(poly[i]);

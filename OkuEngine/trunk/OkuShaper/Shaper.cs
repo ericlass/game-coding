@@ -108,8 +108,8 @@ namespace OkuShaper
 
       if (OkuManagers.Renderer.Display.Focused)
       {
-        Vector mouseScreen = OkuManagers.Renderer.ScreenToDisplay(OkuManagers.Input.Mouse.X, OkuManagers.Input.Mouse.Y);
-        Vector mouseWorld = OkuManagers.Renderer.ScreenToWorld(OkuManagers.Input.Mouse.X, OkuManagers.Input.Mouse.Y);
+        Vector2f mouseScreen = OkuManagers.Renderer.ScreenToDisplay(OkuManagers.Input.Mouse.X, OkuManagers.Input.Mouse.Y);
+        Vector2f mouseWorld = OkuManagers.Renderer.ScreenToWorld(OkuManagers.Input.Mouse.X, OkuManagers.Input.Mouse.Y);
 
         //Load background image
         if (_imageButton.Clicked)
@@ -237,7 +237,7 @@ namespace OkuShaper
 
     private void LoadFile(string filename)
     {
-      Vector[] points;
+      Vector2f[] points;
 
       if (_imageStream != null)
         _imageStream.Close();
@@ -256,7 +256,7 @@ namespace OkuShaper
 
       if (points != null)
       {
-        _editor.Points = new DynamicArray<Vector>(points);
+        _editor.Points = new DynamicArray<Vector2f>(points);
       }
 
       _modified = false;

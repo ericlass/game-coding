@@ -86,7 +86,7 @@ namespace OkuEngine.Actors
     /// Gets the shape of the current state of the actor.
     /// Can be null if only bounding box is used.
     /// </summary>
-    public override Vector[] Shape
+    public override Vector2f[] Shape
     {
       get
       {

@@ -15,8 +15,8 @@ namespace OkuEngine
     private float _max = 100;
     private float _position = 0;
 
-    private Vector[] _vertices = new Vector[4];
-    private Vector[] _progressRect = new Vector[4];
+    private Vector2f[] _vertices = new Vector2f[4];
+    private Vector2f[] _progressRect = new Vector2f[4];
     private Color[] _colors = new Color[4];
 
     /// <summary>
@@ -49,10 +49,10 @@ namespace OkuEngine
     protected override void AreaChange()
     {
       //If area is changed, recalculate vertices
-      _vertices[0] = Vector.Zero;
-      _vertices[1] = new Vector(0, Area.Height);
-      _vertices[2] = new Vector(Area.Width, Area.Height);
-      _vertices[3] = new Vector(Area.Width, 0);
+      _vertices[0] = Vector2f.Zero;
+      _vertices[1] = new Vector2f(0, Area.Height);
+      _vertices[2] = new Vector2f(Area.Width, Area.Height);
+      _vertices[3] = new Vector2f(Area.Width, 0);
     }
 
     /// <summary>
@@ -74,8 +74,8 @@ namespace OkuEngine
 
         _progressRect[0] = _vertices[0];
         _progressRect[1] = _vertices[1];
-        _progressRect[2] = new Vector(right, Area.Height);
-        _progressRect[3] = new Vector(right, 0);
+        _progressRect[2] = new Vector2f(right, Area.Height);
+        _progressRect[3] = new Vector2f(right, 0);
 
         _colors[0] = Container.ColorMap.ActiveDark;
         _colors[1] = Container.ColorMap.ActiveLight;

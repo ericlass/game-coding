@@ -7,16 +7,16 @@ namespace OkuEngine
 {
   public class LineEmitter : ParticleEmitter
   {
-    private Vector _start = Vector.Zero;
-    private Vector _end = Vector.Zero;
+    private Vector2f _start = Vector2f.Zero;
+    private Vector2f _end = Vector2f.Zero;
     private bool _normalDirection = true;
-    private Vector _normal = Vector.Zero;
+    private Vector2f _normal = Vector2f.Zero;
 
     public LineEmitter()
     {
     }
 
-    public LineEmitter(Vector start, Vector end)
+    public LineEmitter(Vector2f start, Vector2f end)
     {
       _start = start;
       _end = end;
@@ -25,26 +25,26 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets the start point of the emitters line.
     /// </summary>
-    public Vector Start
+    public Vector2f Start
     {
       get { return _start; }
       set 
       {
         _start = value;
-        _normal = Vector.Zero;
+        _normal = Vector2f.Zero;
       }
     }
 
     /// <summary>
     /// Gets or sets the end point of the emitters line.
     /// </summary>
-    public Vector End
+    public Vector2f End
     {
       get { return _end; }
       set 
       { 
         _end = value;
-        _normal = Vector.Zero;
+        _normal = Vector2f.Zero;
       }
     }
 
@@ -65,12 +65,12 @@ namespace OkuEngine
     /// as direction. In this case the angle variation is not supported.
     /// </summary>
     /// <returns>The direction vector scaled by the speed.</returns>
-    protected override Vector GetRandomVelocity()
+    protected override Vector2f GetRandomVelocity()
     {
-      Vector result = base.GetRandomVelocity();
+      Vector2f result = base.GetRandomVelocity();
       if (_normalDirection)
       {
-        if (_normal == Vector.Zero)
+        if (_normal == Vector2f.Zero)
           _normal = OkuMath.GetNormal(_start, _end);
         result = _normal * GetRandomSpeed();
       }
@@ -81,7 +81,7 @@ namespace OkuEngine
     /// Calculates a random position on the emitter line.
     /// </summary>
     /// <returns>A random point on the emitter line.</returns>
-    private Vector GetRandomPosition()
+    private Vector2f GetRandomPosition()
     {
       float t = (float)_rand.NextDouble();
       return OkuMath.InterpolateLinear(_start, _end, t);

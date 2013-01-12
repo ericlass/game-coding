@@ -12,7 +12,7 @@ namespace OkuTest
     private InertialMovement _xInertia = null;
     private InertialMovement _yInertia = null;
     private float _angle = 0.0f;
-    private Vector _position = Vector.Zero;
+    private Vector2f _position = Vector2f.Zero;
 
     /*public void Setup(ref RendererParams renderParams)
     {

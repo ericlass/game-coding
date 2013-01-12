@@ -18,13 +18,13 @@ namespace OkuEngine
     /// <param name="top">The top boundary of the box.</param>
     /// <param name="bottom">The bottom boundary of the box.</param>
     /// <returns>The vertices for the box.</returns>
-    public static Vector[] Box(float left, float right, float top, float bottom)
+    public static Vector2f[] Box(float left, float right, float top, float bottom)
     {
-      return new Vector[] {
-        new Vector(left, top),
-        new Vector(right, top),
-        new Vector(right, bottom),
-        new Vector(left, bottom)
+      return new Vector2f[] {
+        new Vector2f(left, top),
+        new Vector2f(right, top),
+        new Vector2f(right, bottom),
+        new Vector2f(left, bottom)
       };
     }
 
@@ -36,14 +36,14 @@ namespace OkuEngine
     /// <param name="radius">The radius of the circle.</param>
     /// <param name="points">The number of vertices of the circle.</param>
     /// <returns>The vertices for the circle.</returns>
-    public static Vector[] Circle(float x, float y, float radius, int points)
+    public static Vector2f[] Circle(float x, float y, float radius, int points)
     {
       float step = (float)((2 * Math.PI) / points);
       float angle = 0;
-      Vector[] result = new Vector[points];
+      Vector2f[] result = new Vector2f[points];
       for (int i = 0; i < points; i++)
       {
-        result[i] = new Vector((float)Math.Sin(angle) * radius + x, (float)Math.Cos(angle) * radius + y);
+        result[i] = new Vector2f((float)Math.Sin(angle) * radius + x, (float)Math.Cos(angle) * radius + y);
         angle += step;
       }
       return result;

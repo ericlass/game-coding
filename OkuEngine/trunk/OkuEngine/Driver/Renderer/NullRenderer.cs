@@ -69,35 +69,35 @@ namespace OkuEngine.Driver.Renderer
     {
     }
 
-    public void DrawImage(ImageContent content, Vector position)
+    public void DrawImage(ImageContent content, Vector2f position)
     {
     }
 
-    public void DrawImage(ImageContent content, Vector position, float rotation)
+    public void DrawImage(ImageContent content, Vector2f position, float rotation)
     {
     }
 
-    public void DrawImage(ImageContent content, Vector position, Vector scale)
+    public void DrawImage(ImageContent content, Vector2f position, Vector2f scale)
     {
     }
 
-    public void DrawImage(ImageContent content, Vector position, float rotation, Vector scale)
+    public void DrawImage(ImageContent content, Vector2f position, float rotation, Vector2f scale)
     {
     }
 
-    public void DrawImage(ImageContent content, Vector position, Color tint)
+    public void DrawImage(ImageContent content, Vector2f position, Color tint)
     {
     }
 
-    public void DrawImage(ImageContent content, Vector position, float rotation, Color tint)
+    public void DrawImage(ImageContent content, Vector2f position, float rotation, Color tint)
     {
     }
 
-    public void DrawImage(ImageContent content, Vector position, Vector scale, Color tint)
+    public void DrawImage(ImageContent content, Vector2f position, Vector2f scale, Color tint)
     {
     }
 
-    public void DrawImage(ImageContent content, Vector position, float rotation, Vector scale, Color tint)
+    public void DrawImage(ImageContent content, Vector2f position, float rotation, Vector2f scale, Color tint)
     {
     }
 
@@ -109,31 +109,31 @@ namespace OkuEngine.Driver.Renderer
     {
     }
 
-    public void DrawLine(Vector start, Vector end, float width, Color color)
+    public void DrawLine(Vector2f start, Vector2f end, float width, Color color)
     {
     }
 
-    public void DrawLines(Vector[] vertices, Color color, int count, float width, VertexInterpretation interpretation)
+    public void DrawLines(Vector2f[] vertices, Color color, int count, float width, VertexInterpretation interpretation)
     {
     }
 
-    public void DrawLines(Vector[] vertices, Color[] colors, int count, float width, VertexInterpretation interpretation)
+    public void DrawLines(Vector2f[] vertices, Color[] colors, int count, float width, VertexInterpretation interpretation)
     {
     }
 
-    public void DrawPoint(Vector p, float size, Color color)
+    public void DrawPoint(Vector2f p, float size, Color color)
     {
     }
 
-    public void DrawPoints(Vector[] points, Color color, int count, float size)
+    public void DrawPoints(Vector2f[] points, Color color, int count, float size)
     {
     }
 
-    public void DrawPoints(Vector[] points, Color[] colors, int count, float size)
+    public void DrawPoints(Vector2f[] points, Color[] colors, int count, float size)
     {
     }
 
-    public void DrawMesh(Vector[] points, Vector[] texCoords, Color[] colors, int count, MeshMode mode, ImageContent texture)
+    public void DrawMesh(Vector2f[] points, Vector2f[] texCoords, Color[] colors, int count, MeshMode mode, ImageContent texture)
     {
     }
 
@@ -165,14 +165,14 @@ namespace OkuEngine.Driver.Renderer
     {
     }
 
-    public Vector ScreenToDisplay(int x, int y)
+    public Vector2f ScreenToDisplay(int x, int y)
     {
-      return Vector.Zero;
+      return Vector2f.Zero;
     }
 
-    public Vector ScreenToWorld(int x, int y)
+    public Vector2f ScreenToWorld(int x, int y)
     {
-      return Vector.Zero;
+      return Vector2f.Zero;
     }
 
     public void BeginScreenSpace()
@@ -212,7 +212,7 @@ namespace OkuEngine.Driver.Renderer
     {
     }
 
-    public void DrawMesh(Vector[] points, Vector[] texCoords, Color[] colors, int count, DrawMode mode, ImageContent texture)
+    public void DrawMesh(Vector2f[] points, Vector2f[] texCoords, Color[] colors, int count, DrawMode mode, ImageContent texture)
     {
     }
 

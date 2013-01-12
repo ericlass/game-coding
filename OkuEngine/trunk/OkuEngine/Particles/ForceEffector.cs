@@ -8,7 +8,7 @@ namespace OkuEngine
   public class ForceEffector : IParticleEffector
   {
     private bool _enabled = true;
-    private Vector _force = Vector.Zero;
+    private Vector2f _force = Vector2f.Zero;
     private AABB _area;
 
     public ForceEffector()
@@ -27,7 +27,7 @@ namespace OkuEngine
       set { _enabled = value; }
     }
 
-    public Vector Force
+    public Vector2f Force
     {
       get { return _force; }
       set { _force = value; }

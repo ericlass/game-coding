@@ -142,8 +142,8 @@ namespace OkuEngine
     {
       PrepareChars(text);
 
-      List<Vector> positions = new List<Vector>();
-      List<Vector> texCoords = new List<Vector>();
+      List<Vector2f> positions = new List<Vector2f>();
+      List<Vector2f> texCoords = new List<Vector2f>();
       List<Color> colors = new List<Color>();
 
       float left = offsetX;
@@ -171,20 +171,20 @@ namespace OkuEngine
 
           float right = left + dims.Width;
 
-          positions.Add(new Vector(left, top));
-          texCoords.Add(new Vector(texLeft, texTop));
+          positions.Add(new Vector2f(left, top));
+          texCoords.Add(new Vector2f(texLeft, texTop));
           colors.Add(color);
 
-          positions.Add(new Vector(right, top));
-          texCoords.Add(new Vector(texRight, texTop));
+          positions.Add(new Vector2f(right, top));
+          texCoords.Add(new Vector2f(texRight, texTop));
           colors.Add(color);
 
-          positions.Add(new Vector(right, bottom));
-          texCoords.Add(new Vector(texRight, texBottom));
+          positions.Add(new Vector2f(right, bottom));
+          texCoords.Add(new Vector2f(texRight, texBottom));
           colors.Add(color);
 
-          positions.Add(new Vector(left, bottom));
-          texCoords.Add(new Vector(texLeft, texBottom));
+          positions.Add(new Vector2f(left, bottom));
+          texCoords.Add(new Vector2f(texLeft, texBottom));
           colors.Add(color);
 
           left += dims.Width;

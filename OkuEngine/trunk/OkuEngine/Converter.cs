@@ -80,14 +80,14 @@ namespace OkuEngine
     /// </summary>
     /// <param name="str">The string with the vectors.</param>
     /// <returns>A vector array with all vectors.</returns>
-    public static Vector[] ParseVectors(string str)
+    public static Vector2f[] ParseVectors(string str)
     {
-      List<Vector> result = new List<Vector>();
+      List<Vector2f> result = new List<Vector2f>();
       string[] vectors = str.Split(';');
       for (int i = 0; i < vectors.Length; i++)
       {
-        Vector vec = new Vector();
-        if (Vector.TryParse(vectors[i], ref vec))
+        Vector2f vec = new Vector2f();
+        if (Vector2f.TryParse(vectors[i], ref vec))
           result.Add(vec);
       }
       return result.ToArray();
@@ -264,7 +264,7 @@ namespace OkuEngine
       result = new AABB();
       if (str != null)
       {
-        Vector[] minMax = Converter.ParseVectors(str);
+        Vector2f[] minMax = Converter.ParseVectors(str);
         if (minMax.Length == 2)
         {
           result.Min = minMax[0];

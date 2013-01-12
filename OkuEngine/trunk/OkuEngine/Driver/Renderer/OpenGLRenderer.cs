@@ -747,9 +747,9 @@ namespace OkuEngine.Driver.Renderer
     /// </summary>
     /// <param name="content">The content to be drawn.</param>
     /// <param name="position">The position to draw the image to in screen space pixels.</param>
-    public void DrawImage(ImageContent content, Vector position)
+    public void DrawImage(ImageContent content, Vector2f position)
     {
-      DrawImage(content, position, 0.0f, Vector.One, Color.White);
+      DrawImage(content, position, 0.0f, Vector2f.One, Color.White);
     }
 
     /// <summary>
@@ -759,9 +759,9 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="content">The content to be drawn.</param>
     /// <param name="position">The position to draw the image to.</param>
     /// <param name="rotation">The rotation angle in degrees.</param>
-    public void DrawImage(ImageContent content, Vector position, float rotation)
+    public void DrawImage(ImageContent content, Vector2f position, float rotation)
     {
-      DrawImage(content, position, rotation, Vector.One, Color.White);
+      DrawImage(content, position, rotation, Vector2f.One, Color.White);
     }
 
     /// <summary>
@@ -770,7 +770,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="content">The content to be drawn.</param>
     /// <param name="position">The position to draw the image to in screen space pixels.</param>
     /// <param name="scale">The scale factors.</param>
-    public void DrawImage(ImageContent content, Vector position, Vector scale)
+    public void DrawImage(ImageContent content, Vector2f position, Vector2f scale)
     {
       DrawImage(content, position, 0.0f, scale, Color.White);
     }
@@ -783,7 +783,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="position">The position to draw the image to in screen space pixels.</param>
     /// <param name="rotation">The rotation angle in degrees.</param>
     /// <param name="scale">The scale factors.</param>
-    public void DrawImage(ImageContent content, Vector position, float rotation, Vector scale)
+    public void DrawImage(ImageContent content, Vector2f position, float rotation, Vector2f scale)
     {
       DrawImage(content, position, rotation, scale, Color.White);
     }
@@ -794,9 +794,9 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="content">The content to be drawn.</param>
     /// <param name="position">The position to draw the image to in screen space pixels.</param>
     /// <param name="tint">A color that is used to tint the image with.</param>
-    public void DrawImage(ImageContent content, Vector position, Color tint)
+    public void DrawImage(ImageContent content, Vector2f position, Color tint)
     {
-      DrawImage(content, position, 0.0f, Vector.One, tint);
+      DrawImage(content, position, 0.0f, Vector2f.One, tint);
     }
 
     /// <summary>
@@ -807,9 +807,9 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="position">The position to draw the image to in screen space pixels.</param>
     /// <param name="rotation">The rotation angle in degrees.</param>
     /// <param name="tint">A color that is used to tint the image with.</param>
-    public void DrawImage(ImageContent content, Vector position, float rotation, Color tint)
+    public void DrawImage(ImageContent content, Vector2f position, float rotation, Color tint)
     {
-      DrawImage(content, position, rotation, Vector.One, tint);
+      DrawImage(content, position, rotation, Vector2f.One, tint);
     }
 
     /// <summary>
@@ -820,7 +820,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="position">The position to draw the image to in screen space pixels.</param>
     /// <param name="scale">The scale factors.</param>
     /// <param name="tint">A color that is used to tint the image with.</param>
-    public void DrawImage(ImageContent content, Vector position, Vector scale, Color tint)
+    public void DrawImage(ImageContent content, Vector2f position, Vector2f scale, Color tint)
     {
       DrawImage(content, position, 0.0f, scale, tint);
     }
@@ -834,7 +834,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="rotation">The rotation angle in degrees.</param>
     /// <param name="scale">The scale factors.</param>
     /// <param name="tint">A color that is used to tint the image with.</param>
-    public void DrawImage(ImageContent content, Vector position, float rotation, Vector scale, Color tint)
+    public void DrawImage(ImageContent content, Vector2f position, float rotation, Vector2f scale, Color tint)
     {
       if (!_textures.ContainsKey(content.ContentId))
         return;
@@ -932,7 +932,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="end">The end of the line.</param>
     /// <param name="width">The width of the line in pixels.</param>
     /// <param name="color">The color of the line.</param>
-    public void DrawLine(Vector start, Vector end, float width, Color color)
+    public void DrawLine(Vector2f start, Vector2f end, float width, Color color)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
       try
@@ -953,7 +953,7 @@ namespace OkuEngine.Driver.Renderer
       } 
     }
 
-    public void DrawLines(Vector[] vertices, Color color, int count, float width, VertexInterpretation interpretation)
+    public void DrawLines(Vector2f[] vertices, Color color, int count, float width, VertexInterpretation interpretation)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
       try
@@ -974,7 +974,7 @@ namespace OkuEngine.Driver.Renderer
       }   
     }
 
-    public void DrawLines(Vector[] vertices, Color[] colors, int count, float width, VertexInterpretation interpretation)
+    public void DrawLines(Vector2f[] vertices, Color[] colors, int count, float width, VertexInterpretation interpretation)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
       try
@@ -999,7 +999,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="p">The center of the point in screen space pixels.</param>
     /// <param name="size">The size of the point in pixels.</param>
     /// <param name="color">The color of the point.</param>
-    public void DrawPoint(Vector p, float size, Color color)
+    public void DrawPoint(Vector2f p, float size, Color color)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
 
@@ -1020,7 +1020,7 @@ namespace OkuEngine.Driver.Renderer
       }
     }
 
-    public void DrawPoints(Vector[] points, Color color, int count, float size)
+    public void DrawPoints(Vector2f[] points, Color color, int count, float size)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
 
@@ -1038,7 +1038,7 @@ namespace OkuEngine.Driver.Renderer
       }
     }
 
-    public void DrawPoints(Vector[] points, Color[] colors, int count, float size)
+    public void DrawPoints(Vector2f[] points, Color[] colors, int count, float size)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
 
@@ -1055,7 +1055,7 @@ namespace OkuEngine.Driver.Renderer
       }
     }
 
-    public void DrawMesh(Vector[] points, Vector[] texCoords, Color[] colors, int count, MeshMode mode, ImageContent texture)
+    public void DrawMesh(Vector2f[] points, Vector2f[] texCoords, Color[] colors, int count, MeshMode mode, ImageContent texture)
     {
       if (texture != null)
       {
@@ -1074,7 +1074,7 @@ namespace OkuEngine.Driver.Renderer
       Gl.glDrawArrays(primitive, 0, count);
     }
 
-    public void DrawMesh(Vector[] points, Vector[] texCoords, Color[] colors, int count, DrawMode mode, ImageContent texture)
+    public void DrawMesh(Vector2f[] points, Vector2f[] texCoords, Color[] colors, int count, DrawMode mode, ImageContent texture)
     {
       if (texture != null)
       {
@@ -1101,9 +1101,9 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="vertices">The vertex array.</param>
     /// <param name="texCoords">The texture coordinate array.</param>
     /// <param name="colors">The vertex color array.</param>
-    private void SetPointers(Vector[] vertices, Vector[] texCoords, Color[] colors)
+    private void SetPointers(Vector2f[] vertices, Vector2f[] texCoords, Color[] colors)
     {
-      int vectorSize = System.Runtime.InteropServices.Marshal.SizeOf(Vector.Zero);
+      int vectorSize = System.Runtime.InteropServices.Marshal.SizeOf(Vector2f.Zero);
 
       if (vertices != null)
       {
@@ -1159,13 +1159,13 @@ namespace OkuEngine.Driver.Renderer
       }
     }
     
-    public Vector ScreenToDisplay(int x, int y)
+    public Vector2f ScreenToDisplay(int x, int y)
     {
       Point client = Display.PointToClient(new Point(x, y));
-      return new Vector(client.X, Display.ClientSize.Height - client.Y);
+      return new Vector2f(client.X, Display.ClientSize.Height - client.Y);
     }
 
-    public Vector ScreenToWorld(int x, int y)
+    public Vector2f ScreenToWorld(int x, int y)
     {
       return OkuData.SceneManager.ActiveScene.Viewport.ScreenSpaceMatrix.Transform(ScreenToDisplay(x, y));
     }

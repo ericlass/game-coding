@@ -13,11 +13,11 @@ namespace OkuEngine.Driver.Renderer
     Color Background { get; set; }
     Color Foreground { get; set; }
     ImageContent Texture { get; set; }
-    Vector[] Vertices { get; set; }
-    Vector[] TextureCoordinates { get; set; }
+    Vector2f[] Vertices { get; set; }
+    Vector2f[] TextureCoordinates { get; set; }
     Color[] Colors { get; set; }
     PixelShaderContent PixelShader { get; set; }
-    Vector Translation { get; set; }
+    Vector2f Translation { get; set; }
 
     bool Initialize();
     void Update(float dt);
