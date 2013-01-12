@@ -257,6 +257,16 @@ namespace OkuEngine.Scenes
       return false;
     }
 
+    /// <summary>
+    /// Check if the given AABB is in the visible part of the scene.
+    /// </summary>
+    /// <param name="boudingBox">The bounding box to be checked.</param>
+    /// <returns>True if the given AABB is visible, else false.</returns>
+    public bool IsVisible(AABB boudingBox)
+    {
+      return Intersections.AABBs(boudingBox, Viewport.GetBoundingBox());
+    }
+
     public override bool Load(XmlNode node)
     {
       if (!base.Load(node))

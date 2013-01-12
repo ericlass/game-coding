@@ -109,7 +109,8 @@ namespace OkuEngine.Scenes
     /// <param name="dt">The time passed since the last frame in secoonds.</param>
     public void Update(Scene scene, float dt)
     {
-      _backdrop.Update(dt);
+      if (_backdrop != null)
+        _backdrop.Update(dt);
       _root.Update(scene, dt);
     }
 

@@ -21,8 +21,9 @@ namespace OkuEngine.Scenes
     private float _halfWidth = 0;
     private float _halfHeight = 0;
 
-    private bool _matrixEffective = false;
+    private bool _valid = false;
     private Matrix3 _screenToWorld = Matrix3.Identity;
+    private AABB _boundingBox;
 
     /// <summary>
     /// Create a new viewport centered at the world space coordinate (0,0)
@@ -64,7 +65,7 @@ namespace OkuEngine.Scenes
     /// <param name="sender">The viewport that triggered the event.</param>
     public virtual void OnChange(ViewPort sender)
     {
-      _matrixEffective = false;
+      _valid = false;
       if (Change != null)
         Change(sender);
     }
@@ -171,7 +172,7 @@ namespace OkuEngine.Scenes
     {
       get
       {
-        if (!_matrixEffective)
+        if (!_valid)
         {
           //Matrix3 m = Matrix3.CreateScale(1.0f, -1.0f);
 
@@ -181,7 +182,7 @@ namespace OkuEngine.Scenes
 
           //_screenToWorld = Matrix3.Multiply(m, _screenToWorld);
 
-          _matrixEffective = true;
+          _valid = true;
         }
         return _screenToWorld;
       }
@@ -207,12 +208,14 @@ namespace OkuEngine.Scenes
     }
 
     /// <summary>
-    /// Gets the area the viewport shows.
+    /// Gets the bounding box of the area the viewport shows.
     /// </summary>
-    /// <returns>The area the viewport shows.</returns>
-    public AABB GetArea()
+    /// <returns>The bounding box the viewport shows.</returns>
+    public AABB GetBoundingBox()
     {
-      return new AABB(Left, Bottom, Width, Height);
+      if (!_valid)
+        _boundingBox = new AABB(Left, Bottom, Width, Height);
+      return _boundingBox;
     }
 
   }

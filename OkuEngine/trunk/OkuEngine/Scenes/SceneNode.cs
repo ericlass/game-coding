@@ -152,7 +152,9 @@ namespace OkuEngine.Scenes
     /// <returns>True if the node is visible, else false.</returns>
     public virtual bool IsVisible(Scene scene)
     {
-      //TODO: Check if visible by looking at AABB
+      if (_props.SceneObject != null)
+        return scene.IsVisible(_props.SceneObject.BoundingBox);
+
       return false;
     }
 

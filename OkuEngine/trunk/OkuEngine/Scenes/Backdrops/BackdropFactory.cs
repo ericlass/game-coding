@@ -38,7 +38,7 @@ namespace OkuEngine.Scenes.Backdrops
     /// </summary>
     private BackdropFactory()
     {
-      _creators.Add("image", new BackdropCreatorDelegate(CreateImageBackdrop));
+      _creators.Add("freeform", new BackdropCreatorDelegate(CreateImageBackdrop));
     }
 
     /// <summary>
@@ -69,7 +69,7 @@ namespace OkuEngine.Scenes.Backdrops
     /// <returns>A new image based backdrop.</returns>
     private Backdrop CreateImageBackdrop()
     {
-      return new ImageBackdrop();
+      return new FreeFormBackdrop();
     }
 
   }

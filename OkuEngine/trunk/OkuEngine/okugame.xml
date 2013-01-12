@@ -300,9 +300,10 @@
             <id>1</id>
             <name>Layer 01</name>
             <!-- Optional Backdrop -->
-            <backdrop type="image">
-              <!-- References image by id -->
-              <image></image>
+            <backdrop type="freeform">
+              <offset>0,0</offset>
+              <!-- Background image -->
+              <image>1</image>
               <!-- One or more shapes -->
               <shapes>
                 <polygon></polygon>

@@ -226,7 +226,10 @@ namespace OkuEngine
       
       int min = (int)(t * ArcLengthMap.Length) - 1;
       if (min >= ArcLengthMap.Length - 1)
-        return _points[_points.Length - 1];      
+      {
+        result = _points[_points.Length - 1];
+        return true;
+      }
       
       int max = min + 1;
       

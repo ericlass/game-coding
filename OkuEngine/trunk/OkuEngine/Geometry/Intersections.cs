@@ -346,5 +346,28 @@ namespace OkuEngine
       return true;
     }
 
+    /// <summary>
+    /// Checks if the given point is inside of the axis aligned box 
+    /// defined by the points [minX, minY] and [maxX, maxY].
+    /// </summary>
+    /// <param name="p">The point to check.</param>
+    /// <param name="minX">The x value of the min vector.</param>
+    /// <param name="minY">The y value of the min vector.</param>
+    /// <param name="maxX">The x value of the max vector.</param>
+    /// <param name="maxY">The y value of the max vector.</param>
+    /// <returns>True if the point is inside the AABB, else false.</returns>
+    public static Boolean PointInAABB(Vector p, float minX, float minY, float maxX, float maxY)
+    {
+      if (p.X < minX)
+        return false;
+      if (p.Y < minY)
+        return false;
+      if (p.X > maxX)
+        return false;
+      if (p.Y > maxY)
+        return false;
+      return true;
+    }
+
   }
 }

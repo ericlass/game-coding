@@ -8,6 +8,7 @@ using OkuEngine.Actors;
 using OkuEngine.Processes;
 using OkuEngine.Resources;
 using OkuEngine.Scripting;
+using OkuEngine.Geometry;
 
 namespace OkuTest
 {
@@ -25,7 +26,14 @@ namespace OkuTest
     }
 
     //Old, unused override methods. Will be removed!
-    public override void Initialize() { }
+    public override void Initialize()
+    {
+      RegularGrid grid = new RegularGrid(1000, 1000, 256);
+      grid.Centered = true;
+      AABB test;
+      grid.GetCellBounds(3, 3, true, out test);
+    }
+
     public override void Update(float dt) { }
     public override void Render(int pass) { }
 
