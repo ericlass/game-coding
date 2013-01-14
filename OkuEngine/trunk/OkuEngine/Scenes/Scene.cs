@@ -22,6 +22,7 @@ namespace OkuEngine.Scenes
 
     public Scene()
     {
+      _viewport.Change += new ViewPortChangeEventHandler(_viewport_Change);
     }
 
     /// <summary>

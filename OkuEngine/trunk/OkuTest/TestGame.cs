@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.IO;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using OkuEngine;
 using OkuEngine.Actors;
 using OkuEngine.Processes;
@@ -22,7 +23,7 @@ namespace OkuTest
     protected override void SetupResourceCache(ref ResourceCacheParams resourceParams)
     {
       resourceParams.ResourceFile = new FileSystemResourceFile(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "content"));
-      resourceParams.SizeInMb = 64;
+      resourceParams.SizeInMb = 1024;
     }
 
     //Old, unused override methods. Will be removed!

@@ -256,5 +256,50 @@ namespace OkuEngine.Api
 
     #endregion
 
+    #region Viewport Functions
+
+    /// <summary>
+    /// Gets the x component of the current viewport center.
+    /// </summary>
+    /// <returns>The x component of the current viewport center.</returns>
+    public double GetViewportX()
+    {
+      return OkuData.SceneManager.ActiveScene.Viewport.Center.X;
+    }
+
+    /// <summary>
+    /// Gets the y component of the current viewport center.
+    /// </summary>
+    /// <returns>The y component of the current viewport center.</returns>
+    public double GetViewportY()
+    {
+      return OkuData.SceneManager.ActiveScene.Viewport.Center.Y;
+    }
+
+    /// <summary>
+    /// Sets the current position of the viewport center.
+    /// </summary>
+    /// <param name="x">The x component.</param>
+    /// <param name="y">The y component.</param>
+    public void SetViewportPosition(double x, double y)
+    {
+      OkuData.SceneManager.ActiveScene.Viewport.Center = new Vector2f((float)x, (float)y);
+    }
+
+    /// <summary>
+    /// Moves the viewport by the given amounts along the x and y axes.
+    /// </summary>
+    /// <param name="x">The amount to move along the x axis.</param>
+    /// <param name="y">The amount to move along the y axis.</param>
+    public void MoveViewport(double x, double y)
+    {
+      Vector2f pos = OkuData.SceneManager.ActiveScene.Viewport.Center;
+      pos.X += (float)x;
+      pos.Y += (float)y;
+      OkuData.SceneManager.ActiveScene.Viewport.Center = pos;
+    }
+
+    #endregion
+
   }
 }

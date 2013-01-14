@@ -11,6 +11,16 @@ namespace OkuEngine
     public int Y;
 
     /// <summary>
+    /// A vector with X and Y set to 0.
+    /// </summary>
+    public static Vector2i Zero = new Vector2i(0, 0);
+
+    /// <summary>
+    /// A vector with X and Y set to 1.
+    /// </summary>
+    public static Vector2i One = new Vector2i(1, 1);
+
+    /// <summary>
     /// Creates a new vector with the given values.
     /// </summary>
     /// <param name="x">The x component.</param>

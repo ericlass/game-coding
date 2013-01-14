@@ -48,6 +48,22 @@
         <id>1000006</id>
         <name>Test Move Right</name>
       </event>
+      <event>
+        <id>1000007</id>
+        <name>Move Viewport Left</name>
+      </event>
+      <event>
+        <id>1000008</id>
+        <name>Move Viewport Right</name>
+      </event>
+      <event>
+        <id>1000009</id>
+        <name>Move Viewport Up</name>
+      </event>
+      <event>
+        <id>1000010</id>
+        <name>Move Viewport Down</name>
+      </event>
     </userevents>
 
     <keybindings>
@@ -89,6 +105,30 @@
         <state>yes</state>
         <event>1000006</event>
       </binding>
+      <binding>
+        <key>NumPad4</key>
+        <action>Down</action>
+        <state>yes</state>
+        <event>1000007</event>
+      </binding>
+      <binding>
+        <key>NumPad6</key>
+        <action>Down</action>
+        <state>yes</state>
+        <event>1000008</event>
+      </binding>
+      <binding>
+        <key>NumPad8</key>
+        <action>Down</action>
+        <state>yes</state>
+        <event>1000009</event>
+      </binding>
+      <binding>
+        <key>NumPad2</key>
+        <action>Down</action>
+        <state>yes</state>
+        <event>1000010</event>
+      </binding>
     </keybindings>
     
     <images>
@@ -103,6 +143,12 @@
         <name>Car</name>
         <!-- Optional for render targets -->
         <resource>car.png</resource> 
+      </image>
+      <image>
+        <id>3</id>
+        <name>Zelda Map</name>
+        <!-- Optional for render targets -->
+        <resource>zelda_map.png</resource>
       </image>
     </images>
 
@@ -197,6 +243,38 @@
               print(param1);
               print(param2);
               print(param3);
+              ]]>
+            </script>
+          </handler>
+          <handler>
+            <event>1000007</event>
+            <script>
+              <![CDATA[
+              okuMoveViewport(-500 * timeDelta, 0);
+              ]]>
+            </script>
+          </handler>
+          <handler>
+            <event>1000008</event>
+            <script>
+              <![CDATA[
+              okuMoveViewport(500 * timeDelta, 0);
+              ]]>
+            </script>
+          </handler>
+          <handler>
+            <event>1000009</event>
+            <script>
+              <![CDATA[
+              okuMoveViewport(0, 500 * timeDelta);
+              ]]>
+            </script>
+          </handler>
+          <handler>
+            <event>1000010</event>
+            <script>
+              <![CDATA[
+              okuMoveViewport(0, -500 * timeDelta);
               ]]>
             </script>
           </handler>
@@ -303,7 +381,7 @@
             <backdrop type="freeform">
               <offset>0,0</offset>
               <!-- Background image -->
-              <image>1</image>
+              <image>3</image>
               <!-- One or more shapes -->
               <shapes>
                 <polygon></polygon>

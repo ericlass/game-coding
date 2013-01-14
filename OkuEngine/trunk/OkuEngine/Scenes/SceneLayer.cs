@@ -226,7 +226,15 @@ namespace OkuEngine.Scenes
         return false;
 
       XmlNode backdropNode = node["backdrop"];
-      //TODO: Load backdrop through factory
+      if (backdropNode != null)
+      {
+        _backdrop = BackdropFactory.Instance.CreateBackdrop(backdropNode);
+        if (_backdrop == null)
+        {
+          OkuManagers.Logger.LogError("Could not load backdrop! " + node.OuterXml);
+          return false;
+        }
+      }
 
       XmlNode child = node["nodes"];
       if (child != null)

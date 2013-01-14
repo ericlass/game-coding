@@ -79,7 +79,7 @@ namespace OkuEngine.Geometry
     /// </summary>
     public int NumVerticalCells
     {
-      get { return (int)(_width / _cellSize) + 1; }
+      get { return (int)Math.Ceiling(_width / _cellSize); }
     }
 
     /// <summary>
@@ -87,7 +87,7 @@ namespace OkuEngine.Geometry
     /// </summary>
     public int NumHorizontalCells
     {
-      get { return (int)(_height / _cellSize) + 1; }
+      get { return (int)Math.Ceiling(_height / _cellSize); }
     }
 
     /// <summary>
@@ -155,6 +155,20 @@ namespace OkuEngine.Geometry
       return Intersections.PointInAABB(x, y, Left, Bottom, Right, Top);
     }
 
+    public Vector2i GetMinCell()
+    {
+      int x, y;
+      GetCellOf(Left, Bottom, out x, out y);
+      return new Vector2i(x, y);
+    }
+
+    public Vector2i GetMaxCell()
+    {
+      int x, y;
+      GetCellOf(Right, Top, out x, out y);
+      return new Vector2i(x, y);
+    }
+
     /// <summary>
     /// Gets the bounds of the cell with the given coordinates.
     /// </summary>
@@ -166,13 +180,9 @@ namespace OkuEngine.Geometry
     public bool GetCellBounds(int x, int y, bool clip, out AABB bounds)
     {
       float left = _offset.X + (x * _cellSize);
-      if (_centered)
-        left -= _width * 0.5f;
       float right = left + _cellSize;
 
       float bottom = _offset.Y + (y * _cellSize);
-      if (_centered)
-        bottom -= _width * 0.5f;
       float top = bottom + _cellSize;
 
       if (clip)

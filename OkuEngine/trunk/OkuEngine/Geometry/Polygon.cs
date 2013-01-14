@@ -84,12 +84,16 @@ namespace OkuEngine.Geometry
     {
       try
       {
-        _vertices = Converter.ParseVectors(node.FirstChild.Value);
-        _aabbValid = false;
+        if (node.FirstChild != null)
+        {
+          _vertices = Converter.ParseVectors(node.FirstChild.Value);
+          _aabbValid = false;
+        }
         return true;
       }
-      catch (Exception)
+      catch (Exception e)
       {
+        OkuManagers.Logger.LogError("Error while loading polygon! " + e.Message);
         return false;
       }
     }
