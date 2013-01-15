@@ -16,6 +16,7 @@ namespace OkuEngine
     private int _width = 0;
     private int _height = 0;
     private string _resource = null;
+    private bool _compressed = false;
 
     /// <summary>
     /// Creates a new image.
@@ -107,6 +108,16 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Gets or sets if the image should be compressed or not.
+    /// NOTE: After the image has been loaded changing this has no effect.
+    /// </summary>
+    public bool Compressed
+    {
+      get { return _compressed; }
+      set { _compressed = value; }
+    }
+
+    /// <summary>
     /// Updates a part of the image with the given bitmap.
     /// </summary>
     /// <param name="x">The left bound of the rectangle to be updated.</param>
@@ -123,6 +134,8 @@ namespace OkuEngine
     {
       if (!base.Load(node))
         return false;
+
+      _compressed = Converter.StrToBool(node.GetTagValue("compress"), false);
 
       _resource = node.GetTagValue("resource");
       if (_resource != null)

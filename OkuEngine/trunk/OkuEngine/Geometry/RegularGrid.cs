@@ -157,9 +157,7 @@ namespace OkuEngine.Geometry
 
     public Vector2i GetMinCell()
     {
-      int x, y;
-      GetCellOf(Left, Bottom, out x, out y);
-      return new Vector2i(x, y);
+      return Vector2i.Zero;
     }
 
     public Vector2i GetMaxCell()
@@ -179,16 +177,16 @@ namespace OkuEngine.Geometry
     /// <returns>True if the given cell is inside of the grid, else false.</returns>
     public bool GetCellBounds(int x, int y, bool clip, out AABB bounds)
     {
-      float left = _offset.X + (x * _cellSize);
+      float left = Left + (x * _cellSize);
       float right = left + _cellSize;
 
-      float bottom = _offset.Y + (y * _cellSize);
+      float bottom = Bottom + (y * _cellSize);
       float top = bottom + _cellSize;
 
       if (clip)
       {
-        right = Math.Min(right, Left + _width);
-        top = Math.Min(top, Bottom + _height);
+        right = Math.Min(right, Right);
+        top = Math.Min(top, Top);
       }
 
       bounds = new AABB(left, bottom, right - left, top - bottom);
@@ -206,8 +204,8 @@ namespace OkuEngine.Geometry
     /// <returns>True if the point is within the grid, else false.</returns>
     public bool GetCellOf(Vector2f point, out int x, out int y)
     {
-      x = (int)((point.X - _offset.X) / _cellSize);
-      y = (int)((point.Y - _offset.Y) / _cellSize);
+      x = (int)((point.X - Left) / _cellSize);
+      y = (int)((point.Y - Bottom) / _cellSize);
 
       return IsInside(point);
     }
@@ -222,8 +220,8 @@ namespace OkuEngine.Geometry
     /// <returns>True if the point is within the grid, else false.</returns>
     public bool GetCellOf(float px, float py, out int x, out int y)
     {
-      x = (int)((px - _offset.X) / _cellSize);
-      y = (int)((py - _offset.Y) / _cellSize);
+      x = (int)((px - Left) / _cellSize);
+      y = (int)((py - Bottom) / _cellSize);
 
       return IsInside(x, y);
     }

@@ -29,10 +29,6 @@ namespace OkuTest
     //Old, unused override methods. Will be removed!
     public override void Initialize()
     {
-      RegularGrid grid = new RegularGrid(1000, 1000, 256);
-      grid.Centered = true;
-      AABB test;
-      grid.GetCellBounds(3, 3, true, out test);
     }
 
     public override void Update(float dt) { }

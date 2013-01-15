@@ -149,6 +149,7 @@
         <name>Zelda Map</name>
         <!-- Optional for render targets -->
         <resource>zelda_map.png</resource>
+        <compress>yes</compress>
       </image>
     </images>
 

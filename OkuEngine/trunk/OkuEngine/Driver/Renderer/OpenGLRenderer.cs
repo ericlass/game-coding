@@ -416,6 +416,7 @@ namespace OkuEngine.Driver.Renderer
     public void InitImageContent(ImageContent content, Bitmap image)
     {
       int textureId = 0;
+      int textureFormat = content.Compressed ? Gl.GL_COMPRESSED_RGBA : 4;
 
       Bitmap flippedImg = new Bitmap(image);
 
@@ -424,7 +425,15 @@ namespace OkuEngine.Driver.Renderer
 
       Gl.glGenTextures(1, out textureId);
       Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
-      Gl.glTexImage2D(Gl.GL_TEXTURE_2D, 0, 4, image.Width, image.Height, 0, Gl.GL_BGRA, Gl.GL_UNSIGNED_BYTE, bmData.Scan0);
+      Gl.glTexImage2D(Gl.GL_TEXTURE_2D, 0, textureFormat, image.Width, image.Height, 0, Gl.GL_BGRA, Gl.GL_UNSIGNED_BYTE, bmData.Scan0);
+      if (content.Compressed)
+      {
+        int compSize = 0;
+        Gl.glGetTexLevelParameteriv(Gl.GL_TEXTURE_2D, 0, Gl.GL_TEXTURE_COMPRESSED_IMAGE_SIZE, out compSize);
+        int uncompSize = image.Width * image.Height * 4;
+        float ratio = (compSize / (float)uncompSize) * 100.0f;
+        OkuManagers.Logger.LogError("Image \"" + content.Name + "\" (ID " + content.Id + ") Compressed: " + compSize + "; Uncompressed: " + uncompSize + "; Ratio: " + ratio + "%");
+      }
       Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, GetGLTexFilter());
       Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, GetGLTexFilter());
 

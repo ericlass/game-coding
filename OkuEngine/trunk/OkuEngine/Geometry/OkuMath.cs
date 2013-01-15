@@ -242,5 +242,37 @@ namespace OkuEngine
         polygon[i] += offset;
     }
 
+    /// <summary>
+    /// Signed ceiling function. If the value is positive, it
+    /// acts just like the normal ceiling. If the value is negative,
+    /// the next smaller value is returned, so -1.5 returns -2 instead
+    /// of -1.
+    /// </summary>
+    /// <param name="value">The value to process.</param>
+    /// <returns>The ceiling of the given value.</returns>
+    public static int SignedCeiling(float value)
+    {
+      if (value >= 0)
+        return (int)Math.Ceiling(value);
+      else
+        return (int)Math.Floor(value);
+    }
+
+    /// <summary>
+    /// Signed floor function. If the value is positive, it
+    /// acts just like the normal floor. If the value is negative,
+    /// the next bigger value is returned, so -1.5 returns -1 instead
+    /// of -2.
+    /// </summary>
+    /// <param name="value">The value to process.</param>
+    /// <returns>The ceiling of the given value.</returns>
+    public static float SignedFloor(float value)
+    {
+      if (value >= 0)
+        return (int)Math.Floor(value);
+      else
+        return (int)Math.Ceiling(value);
+    }
+
   }
 }
