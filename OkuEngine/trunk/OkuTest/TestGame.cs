@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Xml;
 using System.IO;
 using System.Windows.Forms;
-using System.Collections.Generic;
 using OkuEngine;
 using OkuEngine.Actors;
 using OkuEngine.Processes;
