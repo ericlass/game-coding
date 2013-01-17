@@ -385,9 +385,7 @@
               <image>3</image>
               <!-- One or more shapes -->
               <shapes>
-                <polygon></polygon>
-                <polygon></polygon>
-                <polygon></polygon>
+                <polygon>-150.0,-150.0;-150.0,150.0;150.0,150.0;150.0,-150.0</polygon>
               </shapes>
             </backdrop>
             <nodes>

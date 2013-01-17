@@ -7,6 +7,11 @@ using OkuEngine.Rendering;
 
 namespace OkuEngine.Scenes.Backdrops
 {
+  /// <summary>
+  /// Defines a free form backdrop that consists of a backgound
+  /// image and freely definable shapes.
+  /// The background image is split into slices for more efficient rendering.
+  /// </summary>
   public class FreeFormBackdrop : Backdrop
   {
     private const int MaxImageDimensions = 1024;
@@ -19,15 +24,26 @@ namespace OkuEngine.Scenes.Backdrops
     private RegularGrid _grid = null;
     private Dictionary<Vector2i, Vertices> _sliceData = new Dictionary<Vector2i, Vertices>();
 
+    /// <summary>
+    /// Gets the shapes for collision detection.
+    /// </summary>
     public override Polygon[] Shapes
     {
       get { return _shapes; }
     }
 
+    /// <summary>
+    /// Update the background. In this case does nothing.
+    /// </summary>
+    /// <param name="dt">The time delta in seconds.</param>
     public override void Update(float dt)
     {      
     }
 
+    /// <summary>
+    /// Renders the free form backdrop.
+    /// </summary>
+    /// <param name="scene">The scene to be used for rendering.</param>
     public override void Render(Scene scene)
     {
       Vector2i min = Vector2i.Zero;
@@ -45,45 +61,71 @@ namespace OkuEngine.Scenes.Backdrops
           {
             Vertices verts = _sliceData[index];
             OkuManagers.Renderer.DrawMesh(verts.Positions, verts.TexCoords, verts.Colors, verts.Positions.Length, OkuEngine.Driver.Renderer.DrawMode.Quads, _image);
+            /*
             OkuManagers.Renderer.SetPointSize(2.0f);
             OkuManagers.Renderer.DrawMesh(verts.Positions, null, verts.Colors, verts.Positions.Length, OkuEngine.Driver.Renderer.DrawMode.ClosedPolygon, null);
             OkuManagers.Renderer.DrawPoint(Vector2f.Zero, 2.0f, Color.Red);
+             */
           }
         }
       }
     }
 
+    /// <summary>
+    /// Initializes the sclices of the backdrop that are later
+    /// used for efficient rendering.
+    /// </summary>
     private void InitializeSlices()
     {
       _sliceData.Clear();
-      if (_image.Width > MaxImageDimensions || _image.Height > MaxImageDimensions)
+
+      float width = 0;
+      float height = 0;
+
+      if (_image != null)
       {
-        _grid = new RegularGrid(_image.Width, _image.Height, ImageSliceSize);
-        _grid.Centered = true;
-
-        Vector2i minCell = _grid.GetMinCell();
-        Vector2i maxCell = _grid.GetMaxCell();
-
-        AABB cellBounds;
-        for (int y = minCell.Y; y <= maxCell.Y; y++)
+        width = _image.Width;
+        height = _image.Height;
+      }
+      else
+      {
+        if (_shapes != null && _shapes.Length > 0)
         {
-          for (int x = minCell.X; x <= maxCell.X; x++)
+          AABB total = new AABB();
+          foreach (Polygon poly in _shapes)
           {
-            _grid.GetCellBounds(x, y, true, out cellBounds);
-            Vector2f[] points = AABB.GetPoints(cellBounds.Min, cellBounds.Max);
-            Vector2f[] texCoords = AABB.GetPoints(cellBounds.Min, cellBounds.Max);
-            for (int i = 0; i < texCoords.Length; i++)
-            {
-              Vector2f texCoord = texCoords[i];
-              texCoord.X = (texCoord.X - _grid.Left) / _grid.Width;
-              texCoord.Y = (texCoord.Y - _grid.Bottom) / _grid.Height;
-              texCoords[i] = texCoord;
-            }
-            Color[] colors = new Color[] { Color.White, Color.White, Color.White, Color.White };
-
-            Vertices verts = new Vertices(points, texCoords, colors);
-            _sliceData.Add(new Vector2i(x, y), verts);
+            total = total.Add(poly.Vertices.BoundingBox());
           }
+          width = total.Width;
+          height = total.Height;
+        }
+      }
+
+      _grid = new RegularGrid(width, height, ImageSliceSize);
+      _grid.Centered = true;
+
+      Vector2i minCell = _grid.GetMinCell();
+      Vector2i maxCell = _grid.GetMaxCell();
+
+      AABB cellBounds;
+      for (int y = minCell.Y; y <= maxCell.Y; y++)
+      {
+        for (int x = minCell.X; x <= maxCell.X; x++)
+        {
+          _grid.GetCellBounds(x, y, true, out cellBounds);
+          Vector2f[] points = AABB.GetPoints(cellBounds.Min, cellBounds.Max);
+          Vector2f[] texCoords = AABB.GetPoints(cellBounds.Min, cellBounds.Max);
+          for (int i = 0; i < texCoords.Length; i++)
+          {
+            Vector2f texCoord = texCoords[i];
+            texCoord.X = (texCoord.X - _grid.Left) / _grid.Width;
+            texCoord.Y = (texCoord.Y - _grid.Bottom) / _grid.Height;
+            texCoords[i] = texCoord;
+          }
+          Color[] colors = new Color[] { Color.White, Color.White, Color.White, Color.White };
+
+          Vertices verts = new Vertices(points, texCoords, colors);
+          _sliceData.Add(new Vector2i(x, y), verts);
         }
       }
     }
@@ -117,11 +159,6 @@ namespace OkuEngine.Scenes.Backdrops
           return false;
         }
       }
-      else
-      {
-        OkuManagers.Logger.LogError("No image specified for backdrop! " + node.OuterXml);
-        return false;
-      }
 
       XmlNode shapesNode = node["shapes"];
       if (shapesNode != null)
@@ -143,9 +180,10 @@ namespace OkuEngine.Scenes.Backdrops
         _shapes = shapes.ToArray();
       }
 
-      if (_shapes == null || _shapes.Length == 0 || _image == null)
+      if ((_shapes == null || _shapes.Length == 0) && _image == null)
       {
         OkuManagers.Logger.LogError("FreeFormBackdrop has no shape and no image! " + node.OuterXml);
+        return false;
       }
 
       InitializeSlices();
@@ -154,7 +192,28 @@ namespace OkuEngine.Scenes.Backdrops
 
     public override bool Save(XmlWriter writer)
     {
-      throw new NotImplementedException();
+      writer.WriteStartElement("backdrop");
+      
+      writer.WriteStartAttribute("type");
+      writer.WriteValue("freeform");
+      writer.WriteEndAttribute();
+
+      if (_image != null)
+        writer.WriteValueTag("image", _image.Id.ToString());
+
+      if (_shapes != null && _shapes.Length > 0)
+      {
+        writer.WriteStartElement("shapes");
+
+        foreach (Polygon poly in _shapes)
+          poly.Save(writer);
+
+        writer.WriteEndElement();
+      }
+
+      writer.WriteEndElement();
+
+      return true;
     }
   }
 }
