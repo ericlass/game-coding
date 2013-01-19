@@ -14,8 +14,6 @@ namespace OkuEngine.Scenes
   {
     private int _objectId = 0;
     private SceneObject _object = null;
-
-    private int _layer = 0;
     private Transformation _transform = new Transformation();
 
     /// <summary>
@@ -60,15 +58,6 @@ namespace OkuEngine.Scenes
     {
       get { return _transform; }
       set { _transform = value; }
-    }
-
-    /// <summary>
-    /// Gets the number of the render pass this scene node belongs to.
-    /// </summary>
-    public int Layer
-    {
-      get { return _layer; }
-      set { _layer = value; }
     }
 
     public bool Load(XmlNode node)

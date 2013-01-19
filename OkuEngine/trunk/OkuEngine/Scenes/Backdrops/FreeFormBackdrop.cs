@@ -20,9 +20,14 @@ namespace OkuEngine.Scenes.Backdrops
     private Vector2f _offset = Vector2f.Zero;
     private ImageContent _image = null;
     private Polygon[] _shapes = null;
+    private float _width = 0.0f;
+    private float _height = 0.0f;
     
     private RegularGrid _grid = null;
     private Dictionary<Vector2i, Vertices> _sliceData = new Dictionary<Vector2i, Vertices>();
+    private DynamicArray<Vector2f> _vertPoints = new DynamicArray<Vector2f>();
+    private DynamicArray<Vector2f> _vertTexCoords = new DynamicArray<Vector2f>();
+    private DynamicArray<Color> _vertColors = new DynamicArray<Color>();
 
     /// <summary>
     /// Gets the shapes for collision detection.
@@ -30,6 +35,16 @@ namespace OkuEngine.Scenes.Backdrops
     public override Polygon[] Shapes
     {
       get { return _shapes; }
+    }
+
+    public override float Width
+    {
+      get { return _width; }
+    }
+
+    public override float Height
+    {
+      get { return _height; }
     }
 
     /// <summary>
@@ -52,6 +67,11 @@ namespace OkuEngine.Scenes.Backdrops
       AABB viewportBox = scene.Viewport.GetBoundingBox();
 
       _grid.GetCellsIntersecting(viewportBox, ref min, ref max);
+
+      //Collect vertex data in arrays for more efficient rendering
+      _vertPoints.Clear();
+      _vertTexCoords.Clear();
+      _vertColors.Clear();
       for (int y = min.Y; y <= max.Y; y++)
       {
         for (int x = min.X; x <= max.X; x++)
@@ -60,15 +80,16 @@ namespace OkuEngine.Scenes.Backdrops
           if (_sliceData.ContainsKey(index))
           {
             Vertices verts = _sliceData[index];
-            OkuManagers.Renderer.DrawMesh(verts.Positions, verts.TexCoords, verts.Colors, verts.Positions.Length, OkuEngine.Driver.Renderer.DrawMode.Quads, _image);
-            /*
-            OkuManagers.Renderer.SetPointSize(2.0f);
-            OkuManagers.Renderer.DrawMesh(verts.Positions, null, verts.Colors, verts.Positions.Length, OkuEngine.Driver.Renderer.DrawMode.ClosedPolygon, null);
-            OkuManagers.Renderer.DrawPoint(Vector2f.Zero, 2.0f, Color.Red);
-             */
+
+            _vertPoints.AddRange(verts.Positions);
+            _vertTexCoords.AddRange(verts.TexCoords);
+            _vertColors.AddRange(verts.Colors);
           }
         }
       }
+
+      //Render everything at once
+      OkuManagers.Renderer.DrawMesh(_vertPoints.InternalArray, _vertTexCoords.InternalArray, _vertColors.InternalArray, _vertPoints.Count, OkuEngine.Driver.Renderer.DrawMode.Quads, _image);
     }
 
     /// <summary>
@@ -79,13 +100,13 @@ namespace OkuEngine.Scenes.Backdrops
     {
       _sliceData.Clear();
 
-      float width = 0;
-      float height = 0;
+      _width = 0;
+      _height = 0;
 
       if (_image != null)
       {
-        width = _image.Width;
-        height = _image.Height;
+        _width = _image.Width;
+        _height = _image.Height;
       }
       else
       {
@@ -96,12 +117,12 @@ namespace OkuEngine.Scenes.Backdrops
           {
             total = total.Add(poly.Vertices.BoundingBox());
           }
-          width = total.Width;
-          height = total.Height;
+          _width = total.Width;
+          _height = total.Height;
         }
       }
 
-      _grid = new RegularGrid(width, height, ImageSliceSize);
+      _grid = new RegularGrid(_width, _height, ImageSliceSize);
       _grid.Centered = true;
 
       Vector2i minCell = _grid.GetMinCell();

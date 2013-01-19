@@ -4,6 +4,7 @@ using System.Xml;
 using System.Text;
 using OkuEngine.Scenes;
 using OkuEngine.Rendering;
+using OkuEngine.Collision;
 
 namespace OkuEngine.Collision
 {

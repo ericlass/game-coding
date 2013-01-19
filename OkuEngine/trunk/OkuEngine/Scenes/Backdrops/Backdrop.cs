@@ -15,5 +15,8 @@ namespace OkuEngine.Scenes.Backdrops
 
     public abstract bool Load(XmlNode node);
     public abstract bool Save(XmlWriter writer);
+
+    public abstract float Width { get; }
+    public abstract float Height { get; }
   }
 }

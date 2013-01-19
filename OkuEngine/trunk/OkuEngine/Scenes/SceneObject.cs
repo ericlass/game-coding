@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using OkuEngine.Collision;
 
 namespace OkuEngine.Scenes
 {
-  public abstract class SceneObject : StoreableEntity
+  public abstract class SceneObject : StoreableEntity, ICollidable
   {
     private SceneNode _sceneNode = null;
 

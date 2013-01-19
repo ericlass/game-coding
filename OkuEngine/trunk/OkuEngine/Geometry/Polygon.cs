@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using OkuEngine.Collision;
 
 namespace OkuEngine.Geometry
 {
   /// <summary>
   /// Defines a static 2D polygon as a series of vertices.
   /// </summary>
-  public class Polygon : IStoreable
+  public class Polygon : IStoreable, ICollidable
   {
     private Vector2f[] _vertices = null;
     private bool _aabbValid = false;
@@ -109,6 +110,16 @@ namespace OkuEngine.Geometry
     public override string ToString()
     {
       return _vertices == null ? "" : _vertices.ToOkuString();
+    }
+
+    public AABB BoundingBox
+    {
+      get { return GetBoundingBox(); }
+    }
+
+    public Vector2f[] Shape
+    {
+      get { return _vertices; }
     }
 
   }

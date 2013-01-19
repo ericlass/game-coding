@@ -125,6 +125,30 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Splits the AABB into the given amount of vertical and horizontal cells.
+    /// </summary>
+    /// <param name="vertical">The number of vertical cells.</param>
+    /// <param name="horizontal">The number of horizontal cells.</param>
+    /// <returns>An array containing the split AABBs in the order from left-bottom to right top.</returns>
+    public AABB[] Split(int vertical, int horizontal)
+    {
+      AABB[] result = new AABB[vertical * horizontal];
+      float xStep = Width / vertical;
+      float yStep = Height / horizontal;
+      for (int y = 0; y < horizontal - 1; y++)
+      {
+        for (int x = 0; x < vertical - 1; x++)
+        {
+          float left = Min.X + (x * xStep);
+          float bottom = Min.Y + (y * yStep);
+
+          result[(y * vertical) + x] = new AABB(new Vector2f(left, bottom), new Vector2f(left + xStep, left + yStep));
+        }
+      }
+      return result;
+    }
+
+    /// <summary>
     /// Gets the four corner points of the AABB as a vector array.
     /// </summary>
     /// <param name="min">The minimum vector of the AABB.</param>

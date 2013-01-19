@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 using OkuEngine.Scenes.Backdrops;
+using OkuEngine.Collision;
 
 namespace OkuEngine.Scenes
 {
@@ -14,6 +15,7 @@ namespace OkuEngine.Scenes
     private SceneNode _root = new SceneNode(-1);
     private Dictionary<int, SceneNode> _objectMap = new Dictionary<int, SceneNode>();
     private Backdrop _backdrop = null;
+    private QuadTree _quadTree = null;
 
     internal SceneLayer()
     {
@@ -49,7 +51,6 @@ namespace OkuEngine.Scenes
       if (!_objectMap.ContainsKey(objectId))
       {
         SceneNode node = new SceneNode(objectId);
-        node.Properties.Layer = _id;
 
         if (parent == null)
           node.SetParent(_root);
@@ -240,30 +241,35 @@ namespace OkuEngine.Scenes
       if (child != null)
       {
         XmlNode nodeNode = child.FirstChild;
+        List<SceneNode> allNodes = new List<SceneNode>();
         while (nodeNode != null)
         {
-          SceneNode sceneNode = new SceneNode();
-          if (sceneNode.Load(nodeNode))
+          if (nodeNode.NodeType == XmlNodeType.Element && nodeNode.Name.Trim().ToLower() == "node")
           {
-            sceneNode.SetParent(_root);
-
-            List<SceneNode> allNodes = new List<SceneNode>();
-            allNodes.Add(sceneNode);
-            sceneNode.GetAllChildren(allNodes);
-            foreach (SceneNode iNode in allNodes)
+            SceneNode sceneNode = new SceneNode();
+            if (sceneNode.Load(nodeNode))
             {
-              sceneNode.Properties.Layer = Id;
-              _objectMap.Add(iNode.Properties.ObjectId, iNode);
+              sceneNode.SetParent(_root);
+              
+              allNodes.Add(sceneNode);
+              sceneNode.GetAllChildren(allNodes);
             }
-          }
-          else
-          {
-            OkuManagers.Logger.LogError("Could not load scene node: " + nodeNode.OuterXml);
+            else
+            {
+              OkuManagers.Logger.LogError("Could not load scene node: " + nodeNode.OuterXml);
+            }
           }
 
           nodeNode = nodeNode.NextSibling;
         }
+
+        foreach (SceneNode childNode in allNodes)
+        {
+          _objectMap.Add(childNode.Properties.ObjectId, childNode);
+        }
       }
+
+      //_quadTree = new QuadTree();
 
       return true;
     }

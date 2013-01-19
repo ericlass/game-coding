@@ -130,6 +130,20 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Adds the given array of items to the end of the list.
+    /// </summary>
+    /// <param name="items">The items to be added.</param>
+    public void AddRange(T[] items)
+    {
+      AsureCapacity(_count + items.Length);
+      for (int i = 0; i < items.Length; i++)
+      {
+        _internalArray[_count] = items[i];
+        _count++;
+      }
+    }
+
+    /// <summary>
     /// Deletes the item at the given index from the list.
     /// </summary>
     /// <param name="index">The index of the item to delete.</param>
