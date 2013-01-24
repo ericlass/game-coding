@@ -15,7 +15,6 @@ namespace OkuEngine.Scenes
     private SceneNode _root = new SceneNode(-1);
     private Dictionary<int, SceneNode> _objectMap = new Dictionary<int, SceneNode>();
     private Backdrop _backdrop = null;
-    private QuadTree _quadTree = null;
 
     internal SceneLayer()
     {

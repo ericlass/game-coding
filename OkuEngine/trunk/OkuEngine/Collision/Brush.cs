@@ -83,7 +83,7 @@ namespace OkuEngine.Collision
 
       if (_shape != null)
       {
-        _boundingBox = _shape.BoundingBox();
+        _boundingBox = _shape.GetBoundingBox();
       }
       else
       {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OkuEngine.Driver.Renderer;
+using OkuEngine.Collections;
 
 namespace OkuEngine.Shaper
 {

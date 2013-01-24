@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using OkuEngine.Collections;
 
 namespace OkuEngine.States
 {

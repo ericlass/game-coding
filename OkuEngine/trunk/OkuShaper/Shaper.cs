@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.IO;
 using OkuEngine;
 using OkuEngine.Shaper;
+using OkuEngine.Collections;
 
 namespace OkuShaper
 {

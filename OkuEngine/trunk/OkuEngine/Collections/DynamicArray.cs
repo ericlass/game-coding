@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OkuEngine
+namespace OkuEngine.Collections
 {
   /// <summary>
   /// Provides a virtual dynamic array. The internal array is resized intelligently.

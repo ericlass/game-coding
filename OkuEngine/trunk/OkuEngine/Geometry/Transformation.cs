@@ -10,6 +10,11 @@ namespace OkuEngine
   /// </summary>
   public class Transformation : IStoreable
   {
+    public static Transformation Identity
+    {
+      get { return new Transformation(); }
+    }
+
     private Vector2f _translation = Vector2f.Zero;
     private Vector2f _scale = Vector2f.One;
     private float _rotation = 0.0f;
@@ -118,6 +123,16 @@ namespace OkuEngine
       return _translation.Equals(other._translation) &&
         _rotation == other._rotation &&
         _scale.Equals(other._scale);
+    }
+
+    /// <summary>
+    /// Check if the transformation is an identity transform which means
+    /// that it does not do any transformation at all.
+    /// </summary>
+    /// <returns>True if the transformation is and identity, else false.</returns>
+    public bool IsIdentity()
+    {
+      return (_translation == Vector2f.Zero) && (_scale == Vector2f.One) && _rotation == 0.0f;
     }
 
     /// <summary>

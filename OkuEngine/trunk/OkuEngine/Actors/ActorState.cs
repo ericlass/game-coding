@@ -66,7 +66,7 @@ namespace OkuEngine.Actors
       }
 
       if (_shape != null)
-        _boundingBox = _shape.BoundingBox();
+        _boundingBox = _shape.GetBoundingBox();
       else
       {
         if (_renderable != null)

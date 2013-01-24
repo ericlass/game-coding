@@ -132,7 +132,7 @@ namespace OkuEngine.Rendering
     {
       if (!_aabbValid)
       {
-        _boundingBox = _positions.BoundingBox();
+        _boundingBox = _positions.GetBoundingBox();
         _aabbValid = true;
       }
       return _boundingBox;

@@ -192,6 +192,7 @@ namespace OkuEngine.Scenes
         foreach (SceneNode child in _children)
         {
           child.Render(scene);
+          child.RenderChildren(scene);
         }
       }
       finally

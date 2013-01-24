@@ -4,6 +4,7 @@ using System.Xml;
 using System.Text;
 using OkuEngine.Geometry;
 using OkuEngine.Rendering;
+using OkuEngine.Collections;
 
 namespace OkuEngine.Scenes.Backdrops
 {
@@ -115,7 +116,7 @@ namespace OkuEngine.Scenes.Backdrops
           AABB total = new AABB();
           foreach (Polygon poly in _shapes)
           {
-            total = total.Add(poly.Vertices.BoundingBox());
+            total = total.Add(poly.Vertices.GetBoundingBox());
           }
           _width = total.Width;
           _height = total.Height;

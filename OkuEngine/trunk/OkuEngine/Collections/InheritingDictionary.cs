@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OkuEngine
+namespace OkuEngine.Collections
 {
   /// <summary>
   /// The InheritingDictionary can have a parent dictionary.

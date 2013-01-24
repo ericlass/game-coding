@@ -84,7 +84,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="vectors">The vectors to calculate the AABB for.</param>
     /// <returns>The AABB of the vectors.</returns>
-    public static AABB BoundingBox(this Vector2f[] vectors)
+    public static AABB GetBoundingBox(this Vector2f[] vectors)
     {
       if (vectors.Length > 0)
       {
@@ -323,6 +323,12 @@ namespace OkuEngine
         }
       }
       return result;
+    }
+
+    public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> values)
+    {
+      foreach (T item in values)
+        collection.Add(item);
     }
 
   }

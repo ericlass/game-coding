@@ -78,6 +78,19 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Returns the corner points of the bounding box in the given array
+    /// which must have a length >= 4. Only the first four entries (0-3) are filled.
+    /// </summary>
+    /// <param name="points">The array to put in the points.</param>
+    public void GetPoints(Vector2f[] points)
+    {
+      points[0] = Min;
+      points[1] = new Vector2f(Min.X, Max.Y);
+      points[2] = Max;
+      points[3] = new Vector2f(Max.X, Min.Y);
+    }
+
+    /// <summary>
     /// Checks if the given point is inside of the AABB.
     /// </summary>
     /// <param name="point">The point to check.</param>

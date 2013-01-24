@@ -49,7 +49,7 @@ namespace OkuEngine.Geometry
     {
       if (!_aabbValid)
       {
-        _aabb = _vertices.BoundingBox();
+        _aabb = _vertices.GetBoundingBox();
         _aabbValid = true;
       }
       return _aabb;
