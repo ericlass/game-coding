@@ -83,5 +83,14 @@ namespace OkuEngine.Rendering
       return true;
     }
 
+    public IRenderable Copy()
+    {
+      RenderableLines result = new RenderableLines();
+      result._closed = _closed;
+      result._vertices = _vertices.Copy();
+      result._width = _width;
+      return result;
+    }
+
   }
 }

@@ -14,8 +14,13 @@ namespace OkuEngine.Actors
   /// </summary>
   public class Actor : SceneObject
   {
+    public const string ActorStateRenderableComponentName = "renderable";
+    public const string ActorStateShapeComponentName = "shape";
+    public const string ActorStateAttributeComponentName = "attributes";
+    public const string ActorStateAABBComponentName = "boundingbox";
+
     private ActorType _type = null;
-    private StateManager<ActorState> _states = new StateManager<ActorState>();
+    private StateManager<StateInstance> _states = new StateManager<StateInstance>(true);
     private AttributeMap _attributes = new AttributeMap();
 
     /// <summary>
@@ -23,7 +28,7 @@ namespace OkuEngine.Actors
     /// </summary>
     public Actor()
     {
-      _states.OnStateChange += new StateManager<ActorState>.StateChangedDelegate(_states_OnStateChange);
+      _states.OnStateChange += new StateManager<StateInstance>.StateChangedDelegate(_states_OnStateChange);
     }
 
     /// <summary>
@@ -31,7 +36,7 @@ namespace OkuEngine.Actors
     /// </summary>
     private void _states_OnStateChange()
     {
-      OkuManagers.EventManager.QueueEvent(EventTypes.ActorStateChanged, Id, _states.PreviousName, _states.CurrentName);
+      OkuManagers.EventManager.QueueEvent(EventTypes.ActorStateChanged, Id, _states.PreviousStateName, _states.CurrentStateName);
     }
 
     /// <summary>
@@ -45,7 +50,7 @@ namespace OkuEngine.Actors
     /// <summary>
     /// Gets the states that are associated with the actor.
     /// </summary>
-    public StateManager<ActorState> States
+    public StateManager<StateInstance> States
     {
       get { return _states; }
     }
@@ -64,8 +69,12 @@ namespace OkuEngine.Actors
     /// <param name="scene">The scene to use.</param>
     public override void Render(Scene scene)
     {
-      if (_states.CurrentState != null)
-        _states.CurrentState.Renderable.RenderInherited(scene);
+      if (_states.GetCurrentState() != null)
+      {
+        RenderableStateComponent renderable = _states.GetCurrentState().GetComponent<RenderableStateComponent>(ActorStateRenderableComponentName);
+        if (renderable != null && renderable.Renderable != null)
+          renderable.Renderable.Render(scene);
+      }
     }
 
     /// <summary>
@@ -75,8 +84,12 @@ namespace OkuEngine.Actors
     {
       get
       {
-        if (_states.CurrentState != null)
-          return _states.CurrentState.BoundingBox;
+        if (_states.GetCurrentState() != null)
+        {
+          AABBStateComponent component = _states.GetCurrentState().GetComponent<AABBStateComponent>(ActorStateAABBComponentName);
+          if (component != null)
+            return component.GetBoundingBox();
+        }
 
         return default(AABB);
       }
@@ -90,8 +103,12 @@ namespace OkuEngine.Actors
     {
       get
       {
-        if (_states.CurrentState != null)
-          return _states.CurrentState.Shape;
+        if (_states.GetCurrentState() != null)
+        {
+          ShapeStateComponent shape = _states.GetCurrentState().GetComponent<ShapeStateComponent>(ActorStateShapeComponentName);
+          if (shape != null && shape.Shape != null)
+            return shape.Shape.Vertices;
+        }
 
         return null;
       }
@@ -134,24 +151,18 @@ namespace OkuEngine.Actors
         return false;
       }
 
+      _states.Clear();
+      foreach (StateDefinition def in _type.States.Values)
+      {
+        _states.Add(def.CreateInstance());
+      }
+
       //Load actor states
       XmlNode statesNode = node["states"];
       if (statesNode != null)
       {
         if (!_states.Load(statesNode))
           return false;
-        else
-        {
-          // Set up inherting attributes and renderables
-          foreach (ActorState state in _states.States.Values)
-          {
-            if (_type.States.States.ContainsKey(state.Name))
-            {
-              state.Attributes.Parent = _type.States.States[state.Name].Attributes;
-              state.Renderable.Parent = _type.States.States[state.Name].Renderable;
-            }
-          }
-        }
       }
 
       //Load global actor attributes

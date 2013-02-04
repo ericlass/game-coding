@@ -66,5 +66,15 @@ namespace OkuEngine.Attributes
       return true;
     }
 
+    public AttributeMap Copy()
+    {
+      AttributeMap result = new AttributeMap();
+      foreach (KeyValuePair<string, AttributeValue> attribute in this)
+      {
+        result.Add(attribute.Value.Copy());
+      }
+      return result;
+    }
+
   }
 }

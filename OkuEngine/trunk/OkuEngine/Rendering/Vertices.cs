@@ -128,6 +128,25 @@ namespace OkuEngine.Rendering
       }
     }
 
+    public Vertices Copy()
+    {
+      Vertices result = new Vertices();
+
+      Vector2f[] tc = new Vector2f[_texCoords.Length];
+      Array.Copy(_texCoords, tc, tc.Length);
+      result.TexCoords = tc;
+
+      tc = new Vector2f[_positions.Length];
+      Array.Copy(_positions, tc, tc.Length);
+      result.Positions = tc;
+
+      Color[] cols = new Color[_colors.Length];
+      Array.Copy(_colors, cols, cols.Length);
+      result.Colors = cols;
+
+      return result;
+    }
+
     public AABB GetAABB()
     {
       if (!_aabbValid)

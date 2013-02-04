@@ -92,5 +92,15 @@ namespace OkuEngine.Rendering
       return true;
     }
 
+    public IRenderable Copy()
+    {
+      RenderableMesh result = new RenderableMesh();
+      result._image = _image;
+      result._imageId = _imageId;
+      result._mode = _mode;
+      result._vertices = _vertices.Copy();
+      return result;
+    }
+
   }
 }

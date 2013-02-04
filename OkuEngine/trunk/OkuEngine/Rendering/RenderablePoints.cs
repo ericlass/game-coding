@@ -70,5 +70,14 @@ namespace OkuEngine.Rendering
       return true;
     }
 
+
+    public IRenderable Copy()
+    {
+      RenderablePoints result = new RenderablePoints();
+      result._vertices = _vertices.Copy();
+      result._size = _size;
+      return result;
+    }
+
   }
 }

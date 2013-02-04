@@ -105,6 +105,15 @@ namespace OkuEngine.Attributes
       set { _rawValue = value; }
     }
 
+    public AttributeValue Copy()
+    {
+      AttributeValue result = new AttributeValue();
+      result._name = _name;
+      result._rawValue = _rawValue;
+      result._type = _type;
+      return result;
+    }
+
     public bool Load(XmlNode node)
     {
       _name = node.GetTagValue("name");

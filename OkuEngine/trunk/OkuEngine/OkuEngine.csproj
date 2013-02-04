@@ -59,8 +59,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actors\AABBStateComponent.cs" />
     <Compile Include="Actors\ActorState.cs" />
     <Compile Include="Actors\ActorType.cs" />
+    <Compile Include="Actors\AttributeStateComponent.cs" />
+    <Compile Include="Actors\RenderableStateComponent.cs" />
+    <Compile Include="Actors\ShapeStateComponent.cs" />
     <Compile Include="Api\OkuApi.cs" />
     <Compile Include="Attributes\AttributeMap.cs" />
     <Compile Include="Animation\Animation.cs" />
@@ -90,7 +94,6 @@
     <Compile Include="Content\PixelShaderContent.cs" />
     <Compile Include="Converter.cs" />
     <Compile Include="Actors\Actor.cs" />
-    <Compile Include="Entity.cs" />
     <Compile Include="EntityManager.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\EventListenerDelegate.cs" />
@@ -171,6 +174,11 @@
     <Compile Include="Shaper\PolyEditorWidget.cs" />
     <Compile Include="Shaper\Shape.cs" />
     <Compile Include="States\EntityState.cs" />
+    <Compile Include="States\IStateComponent .cs" />
+    <Compile Include="States\StateBase.cs" />
+    <Compile Include="States\StateComponentFactory.cs" />
+    <Compile Include="States\StateDefinition.cs" />
+    <Compile Include="States\StateInstance.cs" />
     <Compile Include="States\StateManager.cs" />
     <Compile Include="StoreableEntity.cs" />
     <Compile Include="VirtualFileSystem\VirtualFile.cs" />

@@ -12,13 +12,13 @@ namespace OkuEngine.Actors
   /// </summary>
   public class ActorType : StoreableEntity
   {
-    private StateManager<ActorState> _states = new StateManager<ActorState>();
+    private StateManager<StateDefinition> _states = new StateManager<StateDefinition>();
     private AttributeMap _attributes = new AttributeMap();
 
     /// <summary>
     /// Gets the state of the actor type.
     /// </summary>
-    public StateManager<ActorState> States
+    public StateManager<StateDefinition> States
     {
       get { return _states; }
     }

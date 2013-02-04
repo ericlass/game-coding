@@ -27,7 +27,7 @@ namespace OkuEngine.Rendering
     private Vector2f _offset = Vector2f.Zero;
 
     private ImageTile[,] _tiles = null;
-    private AABB _boudingBox = new AABB();
+    private AABB _boundingBox = new AABB();
 
     public RenderableBigImage()
     {
@@ -50,7 +50,7 @@ namespace OkuEngine.Rendering
       
     public AABB GetBoundingBox()
     {
-      return _boudingBox;
+      return _boundingBox;
     }
 
     private void Init()
@@ -63,7 +63,7 @@ namespace OkuEngine.Rendering
 
       float halfWidth = _image.Width * 0.5f;
       float halfHeight = _image.Height * 0.5f;
-      _boudingBox = new AABB(-halfWidth, -halfHeight, _image.Width, _image.Height);
+      _boundingBox = new AABB(-halfWidth, -halfHeight, _image.Width, _image.Height);
 
       _tiles = new ImageTile[vparts, hparts];
       for (int y = 0; y < hparts; y++)
@@ -149,6 +149,17 @@ namespace OkuEngine.Rendering
       writer.WriteValueTag("image", _imageId.ToString());
       return true;
     }
-  
+
+    public IRenderable Copy()
+    {
+      RenderableBigImage result = new RenderableBigImage();
+      result._image = _image;
+      result._imageId = _imageId;
+      result._offset = _offset;
+      result._tileSize = _tileSize;
+      result.Init();
+      return result;
+    }
+
   }
 }

@@ -172,7 +172,7 @@ namespace OkuEngine.Api
     {
       Actor actor = GetActor(actorId);
       if (actor != null)
-        return actor.States.CurrentName;
+        return actor.States.CurrentStateName;
       else
         return null;
     }
@@ -186,7 +186,7 @@ namespace OkuEngine.Api
     {
       Actor actor = GetActor(actorId);
       if (actor != null)
-        return actor.States.PreviousName;
+        return actor.States.PreviousStateName;
       else
         return null;
     }
@@ -202,7 +202,7 @@ namespace OkuEngine.Api
       Actor actor = GetActor(actorId);
       if (actor != null)
       {
-        if (actor.States.MakeCurrent(state))
+        if (actor.States.SetCurrentState(state))
         {
           return true;
         }

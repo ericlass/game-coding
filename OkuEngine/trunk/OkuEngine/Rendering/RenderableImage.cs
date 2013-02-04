@@ -83,5 +83,13 @@ namespace OkuEngine.Rendering
       return true;
     }
 
+    public IRenderable Copy()
+    {
+      RenderableImage result = new RenderableImage();
+      result._image = _image;
+      result._imageId = _imageId;
+      return result;
+    }
+
   }
 }

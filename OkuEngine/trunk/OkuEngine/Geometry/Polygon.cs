@@ -122,5 +122,16 @@ namespace OkuEngine.Geometry
       get { return _vertices; }
     }
 
+    public Polygon Copy()
+    {
+      Polygon result = new Polygon();
+
+      Vector2f[] verts = new Vector2f[_vertices.Length];
+      Array.Copy(_vertices, verts, verts.Length);
+      result._vertices = verts;
+
+      return result;
+    }
+
   }
 }
