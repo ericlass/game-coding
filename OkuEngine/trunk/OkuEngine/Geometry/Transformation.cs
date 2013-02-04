@@ -126,6 +126,18 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Applies the transformation data of the given transformation to the transformation.
+    /// </summary>
+    /// <param name="transform">The transform to be applied.</param>
+    public void Apply(Transformation transform)
+    {
+      _translation = transform.Translation;
+      _scale = transform.Scale;
+      _rotation = transform.Rotation;
+      _matrixValid = false;
+    }
+
+    /// <summary>
     /// Check if the transformation is an identity transform which means
     /// that it does not do any transformation at all.
     /// </summary>

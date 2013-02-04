@@ -243,6 +243,55 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Creates a new matrix that translates and scales according to the given values.
+    /// </summary>
+    /// <param name="tx">The translation on the x axis.</param>
+    /// <param name="ty">The translation on the y axis.</param>
+    /// <param name="sx">The scale on the x axis.</param>
+    /// <param name="sy">The scale on the y axis.</param>
+    /// <returns>A new matrix that transforms according to the parameters.</returns>
+    public static Matrix3 CreateTranslateScale(double tx, double ty, double sx, double sy)
+    {
+      Matrix3 result = _identity;
+      result.Translate(tx, ty);
+      
+      return result;
+    }
+
+    /// <summary>
+    /// Creates a new matrix that translates and rotates according to the given values.
+    /// </summary>
+    /// <param name="tx">The translation on the x axis.</param>
+    /// <param name="ty">The translation on the y axis.</param>
+    /// <param name="angle">The angle to rotate in degrees.</param>
+    /// <returns>A new matrix that transforms according to the parameters.</returns>
+    public static Matrix3 CreateTranslateRotate(double tx, double ty, double angle)
+    {
+      Matrix3 result = _identity;
+      result.Translate(tx, ty);
+      result.Rotate(angle);
+      return result;
+    }
+
+    /// <summary>
+    /// Creates a new matrix that translates, scales and rotates according to the given values.
+    /// </summary>
+    /// <param name="tx">The translation on the x axis.</param>
+    /// <param name="ty">The translation on the y axis.</param>
+    /// <param name="sx">The scale on the x axis.</param>
+    /// <param name="sy">The scale on the y axis.</param>
+    /// <param name="angle">The angle to rotate in degrees.</param>
+    /// <returns>A new matrix that transforms according to the parameters.</returns>
+    public static Matrix3 CreateTranslateScaleRotate(double tx, double ty, double sx, double sy, double angle)
+    {
+      Matrix3 result = _identity;
+      result.Translate(tx, ty);
+      result.Scale(sx, sy);
+      result.Rotate(angle);
+      return result;
+    }
+
+    /// <summary>
     /// Multiplies the two given matrices. That is "m1 * m2". 
     /// Remember that matrix multiplication is not commutative, so the order
     /// of multiplication matters.

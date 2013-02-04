@@ -306,7 +306,7 @@
                 <value>0.0</value>
               </attribute>
             </attributes>
-            <shape></shape>
+            <shape>-10,-10;-10,10;10,10;10,-10</shape>
             <renderable type="image">
               <image>2</image>
             </renderable>
@@ -348,9 +348,9 @@
         <name>Car</name>
         <type>1</type>
         <states>
-          <default>normal</default>
+          <default>other</default>
           <state>
-            <name>normal</name>
+            <name>other</name>
             <attributes>
               <attribute>
                 <name>Speed</name>
