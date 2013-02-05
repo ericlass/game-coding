@@ -60,7 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actors\AABBStateComponent.cs" />
-    <Compile Include="Actors\ActorState.cs" />
     <Compile Include="Actors\ActorType.cs" />
     <Compile Include="Actors\AttributeStateComponent.cs" />
     <Compile Include="Actors\RenderableStateComponent.cs" />
@@ -173,7 +172,6 @@
     <Compile Include="PropertyEntry.cs" />
     <Compile Include="Shaper\PolyEditorWidget.cs" />
     <Compile Include="Shaper\Shape.cs" />
-    <Compile Include="States\EntityState.cs" />
     <Compile Include="States\IStateComponent .cs" />
     <Compile Include="States\StateBase.cs" />
     <Compile Include="States\StateComponentFactory.cs" />

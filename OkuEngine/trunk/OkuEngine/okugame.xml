@@ -348,13 +348,19 @@
         <name>Car</name>
         <type>1</type>
         <states>
-          <default>other</default>
+          <default>normal</default>
           <state>
-            <name>other</name>
+            <name>normal</name>
             <attributes>
               <attribute>
                 <name>Speed</name>
+                <type>Number</type>
                 <value>10.0</value>
+              </attribute>
+              <attribute>
+                <name>Color</name>
+                <type>Number</type>
+                <value>123.0</value>
               </attribute>
             </attributes>
           </state>

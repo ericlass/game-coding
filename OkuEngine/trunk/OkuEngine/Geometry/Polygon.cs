@@ -9,7 +9,7 @@ namespace OkuEngine.Geometry
   /// <summary>
   /// Defines a static 2D polygon as a series of vertices.
   /// </summary>
-  public class Polygon : IStoreable, ICollidable
+  public class Polygon : IStoreable
   {
     private Vector2f[] _vertices = null;
     private bool _aabbValid = false;
@@ -110,16 +110,6 @@ namespace OkuEngine.Geometry
     public override string ToString()
     {
       return _vertices == null ? "" : _vertices.ToOkuString();
-    }
-
-    public AABB BoundingBox
-    {
-      get { return GetBoundingBox(); }
-    }
-
-    public Vector2f[] Shape
-    {
-      get { return _vertices; }
     }
 
     public Polygon Copy()

@@ -133,6 +133,8 @@ namespace OkuEngine.Actors
         return false;
 
       int actorType = 0;
+      _attributes.Clear();
+      _states.Clear();
 
       string value = node.GetTagValue("type");
       if (value != null)
@@ -163,6 +165,12 @@ namespace OkuEngine.Actors
       {
         if (!_states.Load(statesNode))
           return false;
+
+        //Add the aabb component manually as it cannot (and shall not) be added in the XML
+        foreach (StateBase stat in _states.Values)
+          stat.Add(new AABBStateComponent());
+        
+        //TODO: Also check that all state contain all mandatory components
       }
 
       //Load global actor attributes

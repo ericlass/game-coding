@@ -65,6 +65,17 @@ namespace OkuEngine.States
       return default(T);
     }
 
+    public void Merge(StateBase state)
+    {
+      foreach (KeyValuePair<string, IStateComponent> comp in state._components)
+      {
+        if (_components.ContainsKey(comp.Key))
+          _components[comp.Key].Merge(comp.Value);
+        else
+          Add(comp.Value);
+      }
+    }
+
     public virtual bool Load(XmlNode node)
     {
       _name = node.GetTagValue("name");

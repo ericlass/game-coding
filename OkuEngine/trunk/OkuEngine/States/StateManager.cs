@@ -104,6 +104,7 @@ namespace OkuEngine.States
     public bool Load(XmlNode node)
     {
       _defaultName = node.GetTagValue("default");
+      _currentStateName = _defaultName;
 
       XmlNode child = node.FirstChild;
       while (child != null)
@@ -112,17 +113,8 @@ namespace OkuEngine.States
         {
           string name = child.GetTagValue("name");
 
-          T state = null;
-          if (_overwriteStates)
-          {
-            if (_states.ContainsKey(name))
-              state = _states[name];
-          }
-
-          if (state == null)
-            state = new T();
-
-          if (state.Load(child))
+          T state = new T();
+          if (!state.Load(child))
           {
             //TODO: Log
           }
@@ -130,7 +122,7 @@ namespace OkuEngine.States
           if (_overwriteStates)
           {
             if (_states.ContainsKey(name))
-              _states[name] = state;
+              _states[name].Merge(state);
             else
               Add(state);
           }

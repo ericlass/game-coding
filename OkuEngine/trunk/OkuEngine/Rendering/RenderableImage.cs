@@ -6,6 +6,9 @@ using OkuEngine.Scenes;
 
 namespace OkuEngine.Rendering
 {
+  /// <summary>
+  /// Defines a renderable that renders a static image.
+  /// </summary>
   public class RenderableImage : IRenderable
   {
     private ImageContent _image = null;
@@ -33,6 +36,14 @@ namespace OkuEngine.Rendering
         _aabbValid = true;
       }
       return _boundingBox;
+    }
+
+    public IRenderable Copy()
+    {
+      RenderableImage result = new RenderableImage();
+      result._image = _image;
+      result._imageId = _imageId;
+      return result;
     }
 
     public bool Load(XmlNode node)
@@ -81,14 +92,6 @@ namespace OkuEngine.Rendering
       writer.WriteEndElement();
 
       return true;
-    }
-
-    public IRenderable Copy()
-    {
-      RenderableImage result = new RenderableImage();
-      result._image = _image;
-      result._imageId = _imageId;
-      return result;
     }
 
   }

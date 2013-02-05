@@ -26,6 +26,40 @@ namespace OkuEngine.Attributes
       return false;
     }
 
+    /// <summary>
+    /// Adds all values of the given attribte map to the map.
+    /// The overwrite parameter determines if existing values are
+    /// overwritten.
+    /// </summary>
+    /// <param name="other">The map to read values from.</param>
+    /// <param name="overwrite">determines if existing values are overwritten or not.</param>
+    public void AddAll(AttributeMap other, bool overwrite)
+    {
+      if (other != this)
+      {
+        foreach (AttributeValue value in other.Values)
+        {
+          if (!Add(value) && overwrite)
+            this[value.Name.ToLower()] = value;
+        }
+      }
+    }
+
+    /// <summary>
+    /// Creates a copy of the attribute map and all
+    /// contained attributes.
+    /// </summary>
+    /// <returns>A copy of the attribute map.</returns>
+    public AttributeMap Copy()
+    {
+      AttributeMap result = new AttributeMap();
+      foreach (KeyValuePair<string, AttributeValue> attribute in this)
+      {
+        result.Add(attribute.Value.Copy());
+      }
+      return result;
+    }
+
     public bool Load(XmlNode node)
     {
       Clear();
@@ -64,16 +98,6 @@ namespace OkuEngine.Attributes
       writer.WriteEndElement();
 
       return true;
-    }
-
-    public AttributeMap Copy()
-    {
-      AttributeMap result = new AttributeMap();
-      foreach (KeyValuePair<string, AttributeValue> attribute in this)
-      {
-        result.Add(attribute.Value.Copy());
-      }
-      return result;
     }
 
   }
