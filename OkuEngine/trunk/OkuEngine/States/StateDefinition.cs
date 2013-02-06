@@ -5,10 +5,15 @@ using System.Text;
 
 namespace OkuEngine.States
 {
-  // A state definition defines the components for a state instance
-  // This is what the actor state stores now
+  /// <summary>
+  /// A state definition defines the components for a state instance.
+  /// </summary>  
   public class StateDefinition : StateBase
   {
+    /// <summary>
+    /// Creates a new instance of the state.
+    /// </summary>
+    /// <returns>A new state instance.</returns>
     public StateInstance CreateInstance()
     {
       StateInstance result = new StateInstance();
@@ -41,10 +46,8 @@ namespace OkuEngine.States
               component.Owner = this;
             }
             else
-              ;//TODO: Log
+              OkuManagers.Logger.LogError("Trying to add a " + component.ComponentTypeName + " twice! " + node.OuterXml);
           }
-          else
-            ;//TODO: Log
           
         }
         child = child.NextSibling;

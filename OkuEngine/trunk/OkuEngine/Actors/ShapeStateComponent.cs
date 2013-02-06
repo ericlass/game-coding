@@ -27,7 +27,7 @@ namespace OkuEngine.Actors
     /// <summary>
     /// Gets the name of the component.
     /// </summary>
-    public string ComponentName
+    public string ComponentTypeName
     {
       get { return Actor.ActorStateShapeComponentName; }
     }

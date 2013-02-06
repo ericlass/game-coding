@@ -189,7 +189,6 @@
     <Compile Include="Driver\Renderer\TextureFilter.cs" />
     <Compile Include="Driver\Renderer\VertexInterpretation.cs" />
     <Compile Include="Scenes\ViewPort.cs" />
-    <Compile Include="Geometry\CollisionWorld.cs" />
     <Compile Include="Geometry\ContinuousCollision.cs" />
     <Compile Include="Geometry\OkuMath.cs" />
     <Compile Include="Geometry\SpatialHashMap.cs" />

@@ -168,9 +168,12 @@ namespace OkuEngine.Actors
 
         //Add the aabb component manually as it cannot (and shall not) be added in the XML
         foreach (StateBase stat in _states.Values)
+        {
           stat.Add(new AABBStateComponent());
-        
-        //TODO: Also check that all state contain all mandatory components
+          //Also check that all states contain all mandatory components
+          if (!stat.Contains(ActorStateRenderableComponentName) && !stat.Contains(ActorStateShapeComponentName))
+            OkuManagers.Logger.LogError("Actor state " + stat.Name + " does not have a renderable or shape! At least one of them is needed! " + node.OuterXml);
+        }
       }
 
       //Load global actor attributes

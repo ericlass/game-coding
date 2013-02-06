@@ -24,9 +24,6 @@ namespace OkuTest
 
     public override void Initialize()
     {
-      CollisionWorld world = new CollisionWorld();
-      world.GetLinesOnLine(new Vector2f(50, 50), new Vector2f(150, 150));
-
       OkuManagers.Renderer.ClearColor = Color.White;
 
       _floor = new Vector2f[wallPoints];

@@ -81,6 +81,21 @@ namespace OkuEngine.Geometry
       return total >= 0.0f;
     }
 
+    /// <summary>
+    /// Creates a deep copy of the polygon.
+    /// </summary>
+    /// <returns>A copy of the Polygon.</returns>
+    public Polygon Copy()
+    {
+      Polygon result = new Polygon();
+
+      Vector2f[] verts = new Vector2f[_vertices.Length];
+      Array.Copy(_vertices, verts, verts.Length);
+      result._vertices = verts;
+
+      return result;
+    }
+
     public bool Load(XmlNode node)
     {
       try
@@ -110,17 +125,6 @@ namespace OkuEngine.Geometry
     public override string ToString()
     {
       return _vertices == null ? "" : _vertices.ToOkuString();
-    }
-
-    public Polygon Copy()
-    {
-      Polygon result = new Polygon();
-
-      Vector2f[] verts = new Vector2f[_vertices.Length];
-      Array.Copy(_vertices, verts, verts.Length);
-      result._vertices = verts;
-
-      return result;
     }
 
   }

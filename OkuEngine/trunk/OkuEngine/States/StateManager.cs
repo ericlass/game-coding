@@ -11,6 +11,9 @@ namespace OkuEngine.States
   /// </summary>
   public class StateManager<T> : IStoreable where T : StateBase, new()
   {
+    /// <summary>
+    /// Delegate for the change event.
+    /// </summary>
     public delegate void StateChangedDelegate();
 
     private Dictionary<string, T> _states = new Dictionary<string, T>();
@@ -23,11 +26,19 @@ namespace OkuEngine.States
     {
     }
 
+    /// <summary>
+    /// Creates a new state manager defining if existing
+    /// statets are overwritten while loading or not.
+    /// </summary>
+    /// <param name="overwriteStates">If true, existing states are overwritten when the Load() method is executed.</param>
     public StateManager(bool overwriteStates)
     {
       _overwriteStates = overwriteStates;
     }
 
+    /// <summary>
+    /// Event is fired when the current state is changed.
+    /// </summary>
     public event StateChangedDelegate OnStateChange;
 
     public bool OverwriteStates
@@ -35,22 +46,36 @@ namespace OkuEngine.States
       get { return _overwriteStates; }
     }
 
+    /// <summary>
+    /// Gets or sets the name of the default state.
+    /// </summary>
     public string DefaultStateName
     {
       get { return _defaultName; }
       set { _defaultName = value; }
     }
 
+    /// <summary>
+    /// Gets or sets the name of the previous state.
+    /// </summary>
     public string PreviousStateName
     {
       get { return _currentStateName; }
     }
 
+    /// <summary>
+    /// Gets or sets the name of the current state.
+    /// </summary>
     public string CurrentStateName
     {
       get { return _currentStateName; }
     }
 
+    /// <summary>
+    /// Sets the current state.
+    /// </summary>
+    /// <param name="name">The name of the new current state.</param>
+    /// <returns>True if the state was set successfully, false if there is no state with the given name.</returns>
     public bool SetCurrentState(string name)
     {
       if (_states.ContainsKey(name))
@@ -63,6 +88,10 @@ namespace OkuEngine.States
       return false;
     }
 
+    /// <summary>
+    /// Gets the current state object.
+    /// </summary>
+    /// <returns>The current state object or null if there is no current state.</returns>
     public T GetCurrentState()
     {
       if (_states.ContainsKey(_currentStateName))
@@ -71,6 +100,11 @@ namespace OkuEngine.States
         return null;
     }
 
+    /// <summary>
+    /// Adds the given state to the manager.
+    /// </summary>
+    /// <param name="state">The state to be added.</param>
+    /// <returns>True if the state was added, false if there already is a state with the same name.</returns>
     public bool Add(T state)
     {
       if (!_states.ContainsKey(state.Name))
@@ -81,21 +115,35 @@ namespace OkuEngine.States
       return false;
     }
 
+    /// <summary>
+    /// Removes the given state from manager,
+    /// </summary>
+    /// <param name="state">The state to be removed.</param>
+    /// <returns>True if the state was removed, false if the manager did not contain the state.</returns>
     public bool Remove(T state)
     {
       return _states.Remove(state.Name);
     }
 
+    /// <summary>
+    /// Clears all states from the manager.
+    /// </summary>
     public void Clear()
     {
       _states.Clear();
     }
 
+    /// <summary>
+    /// Gets the number of states the manager contains.
+    /// </summary>
     public int Count
     {
       get { return _states.Count; }
     }
 
+    /// <summary>
+    /// Gets a list of all states the manager contains.
+    /// </summary>
     public List<T> Values
     {
       get { return new List<T>(_states.Values); }
@@ -115,9 +163,7 @@ namespace OkuEngine.States
 
           T state = new T();
           if (!state.Load(child))
-          {
-            //TODO: Log
-          }
+            OkuManagers.Logger.LogError("Could not load state " + name + "! " + child.OuterXml);
 
           if (_overwriteStates)
           {
@@ -130,7 +176,7 @@ namespace OkuEngine.States
           {
             if (!Add(state))
             {
-              //TODO: Log
+              OkuManagers.Logger.LogError("State " + name + " is defined twice! " + child.OuterXml);
             }
           }
         }
@@ -143,7 +189,15 @@ namespace OkuEngine.States
 
     public bool Save(XmlWriter writer)
     {
-      throw new NotImplementedException();
+      writer.WriteStartElement("states");
+      foreach (KeyValuePair<string, T> state in _states)
+      {
+        if (!state.Value.Save(writer))
+          return false;
+      }
+      writer.WriteEndElement();
+
+      return true;
     }
 
   }

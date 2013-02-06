@@ -224,6 +224,7 @@ namespace OkuEngine.Driver.Renderer
       //TODO: Check for compatible node
 
       //Load config from XML
+      //TODO: Convert to new model
       XmlNode child = node.FirstChild;
       while (child != null)
       {

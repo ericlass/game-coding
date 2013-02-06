@@ -16,10 +16,10 @@ namespace OkuEngine.States
     StateBase Owner { get; set; }
 
     /// <summary>
-    /// Gets the name of the component. This must be a
+    /// Gets the name of the component type. This must be a
     /// unique identifier as it is used in the XML.
     /// </summary>
-    string ComponentName { get; }
+    string ComponentTypeName { get; }
 
     /// <summary>
     /// Creates a deep copy of the component.

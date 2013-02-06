@@ -5,10 +5,15 @@ using System.Text;
 
 namespace OkuEngine.States
 {
-  // The instance is created from the StateDefinition.CreateInstance() method
-  // This is what is stored in the actors
+  /// <summary>
+  /// The instance is created from the StateDefinition.CreateInstance() method.
+  /// </summary>
   public class StateInstance : StateBase
   {
+    /// <summary>
+    /// Creates a new state instance. This should not be done
+    /// directly but through the StateDefinition.CreateInstance() method.
+    /// </summary>
     public StateInstance()
     {
     }
@@ -29,15 +34,13 @@ namespace OkuEngine.States
           if (component != null)
           {
             // A state instance can override the components of a state definition
-            if (_components.ContainsKey(component.ComponentName))
-              _components[component.ComponentName] = component;
+            if (_components.ContainsKey(component.ComponentTypeName))
+              _components[component.ComponentTypeName] = component;
             else
-              _components.Add(component.ComponentName, component);
+              _components.Add(component.ComponentTypeName, component);
 
             component.Owner = this;
           }
-          else
-            ; //TODO: Log
         }
         child = child.NextSibling;
       }

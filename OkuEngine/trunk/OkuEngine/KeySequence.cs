@@ -30,9 +30,6 @@ namespace OkuEngine
     public const string BrushSequence = "brushes";
     public const string SceneObjectSequence = "sceneobjects";
 
-    //TODO: Find a better name. Everything is an entity!
-    public const string EntitySequence = "entities"; //collision world
-
     private static Dictionary<string, int> _sequences = new Dictionary<string, int>();
 
     public static void Initialize()
@@ -49,7 +46,6 @@ namespace OkuEngine
       AddSequence(WidgetSequence);
       AddSequence(ParticleSequence);
       AddSequence(ScriptSequence);
-      AddSequence(EntitySequence);
       AddSequence(UserEventSequence);
       AddSequence(BehaviorSequence);
       AddSequence(BrushSequence);

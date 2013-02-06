@@ -35,7 +35,7 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Fills thea area defined by the given vectors.
+    /// Fills the area defined by the given vectors.
     /// </summary>
     /// <param name="min">The minimum vector.</param>
     /// <param name="max">The maximum vector.</param>
