@@ -108,6 +108,8 @@ namespace OkuEngine.Scenes
     /// <returns>True if the update was successful, else false.</returns>
     public virtual bool Update(Scene scene, float dt)
     {
+      _props.PreviousTransform.Apply(_props.Transform);
+
       foreach (SceneNode child in _children)
       {
         child.Update(scene, dt);

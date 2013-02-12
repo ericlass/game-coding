@@ -14,6 +14,7 @@ namespace OkuEngine.Scenes
   {
     private int _objectId = 0;
     private SceneObject _object = null;
+    private Transformation _previousTransform = new Transformation();
     private Transformation _transform = new Transformation();
 
     /// <summary>
@@ -58,6 +59,15 @@ namespace OkuEngine.Scenes
     {
       get { return _transform; }
       set { _transform = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the previous transformation of the scene node.
+    /// </summary>
+    public Transformation PreviousTransform
+    {
+      get { return _previousTransform; }
+      set { _previousTransform = value; }
     }
 
     public bool Load(XmlNode node)

@@ -327,17 +327,27 @@ namespace OkuEngine
     /// <param name="dt"></param>
     public void DoUpdate(float dt)
     {
+      //Update scene (previous transforms...)
+      OkuData.SceneManager.ActiveScene.Update(dt);
+
+      //Update script engine (global timedelta value)
       OkuManagers.ScriptManager.Update(dt);
 
+      //Update sound engine (does nothing atm)
       OkuManagers.SoundEngine.Update(dt);
+      
+      //Update input data
       OkuManagers.Input.Update();
-      OkuManagers.InputManager.Update();
       OkuManagers.Input.Mouse.WheelDelta = _mouseDelta / 120.0f;
       _mouseDelta = 0;
 
+      // Update input manager (runs state behaviors)
+      OkuManagers.InputManager.Update();
+      
+      //Process events
       OkuManagers.EventManager.Update(float.MaxValue);
+      //Update processes (not used atm)
       OkuManagers.ProcessManager.UpdateProcesses(dt);
-      OkuData.SceneManager.ActiveScene.Update(dt);
 
       Update(dt);
     }
