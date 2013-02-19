@@ -4,6 +4,7 @@ using System.Xml;
 using System.Text;
 using System.Drawing;
 using OkuEngine.Events;
+using OkuEngine.Collision;
 
 namespace OkuEngine.Scenes
 {
@@ -18,11 +19,14 @@ namespace OkuEngine.Scenes
     private ViewPort _viewport = new ViewPort(1024, 768);
     private bool _active = false;
 
+    private CollisionWorld<SceneNode> _collisionWorld = null;
+
     private SortedDictionary<int, SceneLayer> _layerMap = new SortedDictionary<int, SceneLayer>();
 
     public Scene()
     {
       _viewport.Change += new ViewPortChangeEventHandler(_viewport_Change);
+      OkuManagers.EventManager.AddListener(EventTypes.SceneNodeMoved, new EventListenerDelegate(OnEventReceived));
     }
 
     /// <summary>
@@ -36,6 +40,21 @@ namespace OkuEngine.Scenes
       _name = name;
 
       _viewport.Change += new ViewPortChangeEventHandler(_viewport_Change);
+      OkuManagers.EventManager.AddListener(EventTypes.SceneNodeMoved, new EventListenerDelegate(OnEventReceived));
+    }
+
+    /// <summary>
+    /// Handler for events.
+    /// </summary>
+    /// <param name="eventType">The type of event received.</param>
+    /// <param name="eventData">The optional data of the event.</param>
+    private void OnEventReceived(int eventType, params object[] eventData)
+    {
+      if (eventType == EventTypes.SceneNodeMoved)
+      {
+        SceneNode node = eventData[0] as SceneNode;
+        _collisionWorld.UpdateBody(node.Properties.Body);
+      }
     }
 
     /// <summary>
@@ -134,6 +153,18 @@ namespace OkuEngine.Scenes
       {
         item.Value.Update(this, dt);
       }
+
+      List<CollisionInfo<SceneNode>> collisions = new List<CollisionInfo<SceneNode>>();
+      if (_collisionWorld.GetCollisions(collisions))
+      {
+        foreach (CollisionInfo<SceneNode> collision in collisions)
+        {
+          OkuManagers.EventManager.QueueEvent(EventTypes.CollisionOccurred, collision.BodyA.Data.Properties.ObjectId, collision.BodyB.Data.Properties.ObjectId);
+          OkuManagers.Logger.LogInfo(Environment.TickCount + " - COLLISION: " + collision.BodyA.Data.Properties.ObjectId + " <> " + collision.BodyB.Data.Properties.ObjectId);
+          //collision.BodyA.Data.Properties.Transform.Translation = collision.BodyA.Data.Properties.Transform.Translation + collision.MTD;
+        }
+      }
+
       return true;
     }
 
@@ -276,6 +307,8 @@ namespace OkuEngine.Scenes
       //Update scene id sequence
       KeySequence.SetCurrentValue(KeySequence.SceneSequence, Id);
 
+      _collisionWorld = new CollisionWorld<SceneNode>(new NoBroadPhaseDetector<SceneNode>(), new AABBPrecisePhaseDetector<SceneNode>());
+
       XmlNode child = node["layers"];
       if (child != null)
       {
@@ -287,6 +320,10 @@ namespace OkuEngine.Scenes
           {
             _layerMap.Add(layer.Id, layer);
             KeySequence.SetCurrentValue(KeySequence.LayerSequence, layer.Id);
+
+            List<SceneNode> nodes = layer.AllNodes;
+            foreach (SceneNode sceneNode in nodes)
+              _collisionWorld.AddBody(sceneNode.Properties.Body);
           }
           else
           {

@@ -10,6 +10,10 @@ namespace OkuEngine
   /// </summary>
   public class Transformation : IStoreable
   {
+    public delegate void OnChangeDelegate(Transformation transform);
+
+    public event OnChangeDelegate OnChange;
+
     public static Transformation Identity
     {
       get { return new Transformation(); }
@@ -42,6 +46,13 @@ namespace OkuEngine
       _rotation = rotation;
     }
 
+    public void DoChange()
+    {
+      _matrixValid = false;
+      if (OnChange != null)
+        OnChange(this);
+    }
+
     /// <summary>
     /// Gets or sets the translation vector.
     /// </summary>
@@ -51,7 +62,7 @@ namespace OkuEngine
       set
       {
         _translation = value;
-        _matrixValid = false;
+        DoChange();
       }
     }
 
@@ -62,6 +73,7 @@ namespace OkuEngine
     internal void SetX(float x)
     {
       _translation.X = x;
+      DoChange();
     }
 
     /// <summary>
@@ -71,6 +83,7 @@ namespace OkuEngine
     internal void SetY(float y)
     {
       _translation.Y = y;
+      DoChange();
     }
 
     /// <summary>
@@ -82,7 +95,7 @@ namespace OkuEngine
       set 
       {
         _rotation = value;
-        _matrixValid = false;
+        DoChange();
       }
     }
 
@@ -95,7 +108,7 @@ namespace OkuEngine
       set
       {
         _scale = value;
-        _matrixValid = false;
+        DoChange();
       }
     }
 
@@ -109,6 +122,7 @@ namespace OkuEngine
       {
         _matrix = Matrix3.Identity;
         _matrix.ApplyTransform(this);
+        _matrixValid = true;
       }
       return _matrix;
     }
@@ -134,7 +148,7 @@ namespace OkuEngine
       _translation = transform.Translation;
       _scale = transform.Scale;
       _rotation = transform.Rotation;
-      _matrixValid = false;
+      DoChange();
     }
 
     /// <summary>

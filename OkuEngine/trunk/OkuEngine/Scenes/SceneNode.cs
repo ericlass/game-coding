@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using OkuEngine.Events;
 
 namespace OkuEngine.Scenes
 {
@@ -23,6 +24,7 @@ namespace OkuEngine.Scenes
     internal SceneNode()
     {
       _props = new SceneNodeProperties();
+      _props.Transform.OnChange += new Transformation.OnChangeDelegate(Transform_OnChange);
     }
 
     /// <summary>
@@ -33,6 +35,12 @@ namespace OkuEngine.Scenes
     internal SceneNode(int objectId)
     {
       _props = new SceneNodeProperties(objectId);
+      _props.Transform.OnChange += new Transformation.OnChangeDelegate(Transform_OnChange);
+    }
+
+    private void Transform_OnChange(Transformation transform)
+    {
+      OkuManagers.EventManager.QueueEvent(EventTypes.SceneNodeMoved, this);
     }
 
     /// <summary>

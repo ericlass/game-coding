@@ -114,8 +114,7 @@ namespace OkuEngine.Scenes
       if (transNode != null)
         _transform.Load(transNode);
 
-      // Setup some stuff here. The rest is setup in SceneNode.Load() and SceneLayer.Load()
-      //TODO: What to do if the scene object does not want any collision?
+      // Setup some body stuff here. The rest is setup in SceneNode.Load() and SceneLayer.Load()
       _body = new Body<SceneNode>();
       _body.BoundingBox = _object.BoundingBox;
       _body.Transform = _transform;

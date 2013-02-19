@@ -23,6 +23,24 @@ namespace OkuEngine.Events
 
     #endregion
 
+    #region Scene Events
+
+    /// <summary>
+    /// Is triggered when a scene nodes transformation changes. Event data is the scene node that was moved.
+    /// </summary>
+    public const int SceneNodeMoved = 2000;
+
+    #endregion
+
+    #region Collision Events
+
+    /// <summary>
+    /// Is triggered when an object collides with another one. Event data are the ids of the scene objects that collided.
+    /// </summary>
+    public const int CollisionOccurred = 3000;
+
+    #endregion
+
     /// <summary>
     /// The beginning of user defined events. All user defined events must be greater than this.
     /// </summary>

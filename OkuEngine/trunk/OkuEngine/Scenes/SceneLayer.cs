@@ -40,6 +40,15 @@ namespace OkuEngine.Scenes
     }
 
     /// <summary>
+    /// Gets a list of all objects that are on the layer.
+    /// A new list created for every call so use with caution.
+    /// </summary>
+    public List<SceneNode> AllNodes
+    {
+      get { return new List<SceneNode>(_objectMap.Values); }
+    }
+
+    /// <summary>
     /// Adds the scene object with the given id to the layer below the given parent.
     /// </summary>
     /// <param name="objectId">The id of the scene object.</param>

@@ -55,10 +55,10 @@ namespace OkuEngine.Collision
         result.BodyA = bodyA;
         result.BodyB = bodyB;
 
-        if (Math.Abs(xOverlap) > Math.Abs(yOverlap))
-          result.MTD = new Vector2f(xOverlap, 0);
+        if (Math.Abs(xOverlap) < Math.Abs(yOverlap))
+          result.MTD = new Vector2f(-xOverlap, 0);
         else
-          result.MTD = new Vector2f(0, yOverlap);
+          result.MTD = new Vector2f(0, -yOverlap);
 
         return result;
       }

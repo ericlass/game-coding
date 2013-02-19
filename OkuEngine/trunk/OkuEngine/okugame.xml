@@ -306,7 +306,7 @@
                 <value>0.0</value>
               </attribute>
             </attributes>
-            <shape>-10,-10;-10,10;10,10;10,-10</shape>
+            <!--<shape>-10,-10;-10,10;10,10;10,-10</shape>-->
             <renderable type="image">
               <image>2</image>
             </renderable>
@@ -374,6 +374,13 @@
         </renderable>
         <shape></shape>
       </brush>
+      <brush>
+        <id>3</id>
+        <name>CollisionBrush</name>
+        <renderable type="image">
+          <image>1</image>
+        </renderable>
+      </brush>
     </sceneobjects>
 
     <scenes>
@@ -414,6 +421,15 @@
                     </transform>
                   </node>
                 </nodes>
+              </node>
+              <node>
+                <!-- References scene object by id -->
+                <object>3</object>
+                <transform>
+                  <position>-100,0</position>
+                  <rotation>0</rotation>
+                  <scale>1,1</scale>
+                </transform>
               </node>
             </nodes>
           </layer>
