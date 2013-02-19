@@ -16,6 +16,7 @@ namespace OkuEngine.Scenes
     private SceneObject _object = null;
     private Transformation _previousTransform = new Transformation();
     private Transformation _transform = new Transformation();
+    private Body<SceneNode> _body = null;
 
     /// <summary>
     /// Creates new scene node properties.
@@ -58,7 +59,11 @@ namespace OkuEngine.Scenes
     public Transformation Transform
     {
       get { return _transform; }
-      set { _transform = value; }
+      set 
+      { 
+        _transform = value;
+        _body.Transform = value;
+      }
     }
 
     /// <summary>
@@ -67,7 +72,19 @@ namespace OkuEngine.Scenes
     public Transformation PreviousTransform
     {
       get { return _previousTransform; }
-      set { _previousTransform = value; }
+      set 
+      { 
+        _previousTransform = value;
+        _body.PreviousTransform = value;
+      }
+    }
+
+    /// <summary>
+    /// Gets the collision body that is assigned to the scene node.
+    /// </summary>
+    public Body<SceneNode> Body
+    {
+      get { return _body; }
     }
 
     public bool Load(XmlNode node)
@@ -96,6 +113,14 @@ namespace OkuEngine.Scenes
       XmlNode transNode = node["transform"];
       if (transNode != null)
         _transform.Load(transNode);
+
+      // Setup some stuff here. The rest is setup in SceneNode.Load() and SceneLayer.Load()
+      //TODO: What to do if the scene object does not want any collision?
+      _body = new Body<SceneNode>();
+      _body.BoundingBox = _object.BoundingBox;
+      _body.Transform = _transform;
+      _body.PreviousTransform = _previousTransform;
+      _body.Shape = _object.Shape;
 
       return true;
     }

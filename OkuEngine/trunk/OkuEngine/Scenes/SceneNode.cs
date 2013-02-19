@@ -234,39 +234,38 @@ namespace OkuEngine.Scenes
 
     public bool Load(XmlNode node)
     {
-      bool result = _props.Load(node);
+      if (!_props.Load(node))
+        return false;
 
-      if (result)
+      _props.Body.Data = this;
+      if (_props.SceneObject != null)
       {
-        if (_props.SceneObject != null)
-        {
-          if (_props.SceneObject.SceneNode != null)
-            OkuManagers.Logger.LogError("Trying to set the scene node of a scene object (" + _props.SceneObject.Id + ") that already has a scene node!");
-          else
-            _props.SceneObject.SceneNode = this;
-        }
+        if (_props.SceneObject.SceneNode != null)
+          OkuManagers.Logger.LogError("Trying to set the scene node of a scene object (" + _props.SceneObject.Id + ") that already has a scene node!");
+        else
+          _props.SceneObject.SceneNode = this;
+      }
 
-        //Load child nodes
-        XmlNode nodesNode = node["nodes"];
-        if (nodesNode != null)
+      //Load child nodes
+      XmlNode nodesNode = node["nodes"];
+      if (nodesNode != null)
+      {
+        XmlNode child = nodesNode.FirstChild;
+        while (child != null)
         {
-          XmlNode child = nodesNode.FirstChild;
-          while (child != null)
+          if (child.NodeType == XmlNodeType.Element && child.Name.ToLower() == "node")
           {
-            if (child.NodeType == XmlNodeType.Element && child.Name.ToLower() == "node")
-            {
-              SceneNode kidNode = new SceneNode();
-              if (kidNode.Load(child))
-                kidNode.SetParent(this);
-              else
-                return false;
-            }
-            child = child.NextSibling;
+            SceneNode kidNode = new SceneNode();
+            if (kidNode.Load(child))
+              kidNode.SetParent(this);
+            else
+              return false;
           }
+          child = child.NextSibling;
         }
       }
 
-      return result;
+      return true;
     }
 
     public bool Save(XmlWriter writer)

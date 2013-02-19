@@ -13,8 +13,8 @@ namespace OkuEngine.Collision
   public class Body<T>
   {
     private int _groupId = 0;
+    private Transformation _previousTransform = Transformation.Identity;
     private Transformation _transform = Transformation.Identity;
-    private Vector2f _lastMovement = Vector2f.Zero;
     private AABB _boundingBox = new AABB();
     private Vector2f[] _shape = null;
     private T _data = default(T);
@@ -43,13 +43,12 @@ namespace OkuEngine.Collision
     }
 
     /// <summary>
-    /// Gets or sets the last movement of the body.
-    /// Is used by time aware collision detectors.
+    /// Gets or sets the previous transformation of the body.
     /// </summary>
-    public Vector2f LastMovement
+    public Transformation PreviousTransform //Transforms objects space AABB and Shape to world space
     {
-      get { return _lastMovement; }
-      set { _lastMovement = value; }
+      get { return _previousTransform; }
+      set { _previousTransform = value; }
     }
 
     /// <summary>

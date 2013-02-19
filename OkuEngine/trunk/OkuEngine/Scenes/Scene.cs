@@ -13,7 +13,7 @@ namespace OkuEngine.Scenes
   public class Scene : StoreableEntity
   {
     private Stack<Matrix3> _matrixStack = new Stack<Matrix3>();
-    private Matrix3 _current = Matrix3.Identity;
+    private Matrix3 _currentTransform = Matrix3.Identity;
 
     private ViewPort _viewport = new ViewPort(1024, 768);
     private bool _active = false;
@@ -167,8 +167,8 @@ namespace OkuEngine.Scenes
     /// <param name="transform">The transform to be applied.</param>
     public void ApplyAndPushTransform(Transformation transform)
     {
-      _matrixStack.Push(_current);
-      _current = transform.AsMatrix() * _current;
+      _matrixStack.Push(_currentTransform);
+      _currentTransform = transform.AsMatrix() * _currentTransform;
       OkuManagers.Renderer.ApplyAndPushTransform(transform);
     }
 
@@ -177,7 +177,7 @@ namespace OkuEngine.Scenes
     /// </summary>
     public void PopTransform()
     {
-      _current = _matrixStack.Pop();
+      _currentTransform = _matrixStack.Pop();
       OkuManagers.Renderer.PopTransform();
     }
 
@@ -186,7 +186,7 @@ namespace OkuEngine.Scenes
     /// </summary>
     public Matrix3 CurrentTransform
     {
-      get { return _current; }
+      get { return _currentTransform; }
     }
 
     /// <summary>

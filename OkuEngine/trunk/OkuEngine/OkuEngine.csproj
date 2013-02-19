@@ -83,7 +83,6 @@
     <Compile Include="Collision\PrecisePhaseDetector.cs" />
     <Compile Include="Driver\Audio\NullSoundEngine.cs" />
     <Compile Include="Driver\Audio\SoundEngineFactory.cs" />
-    <Compile Include="Driver\Renderer\IRenderer2.cs" />
     <Compile Include="Driver\Renderer\DrawMode.cs" />
     <Compile Include="Driver\Renderer\NullRenderer.cs" />
     <Compile Include="Driver\Renderer\RendererFactory.cs" />
@@ -108,7 +107,6 @@
     <Compile Include="Instance\ContentInstance.cs" />
     <Compile Include="Instance\MeshInstance.cs" />
     <Compile Include="Instance\SoundInstance.cs" />
-    <Compile Include="Rendering\InheritingRenderable.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\KeyAction.cs" />
     <Compile Include="Rendering\IRenderable.cs" />
@@ -116,7 +114,6 @@
     <Compile Include="Processes\Process.cs" />
     <Compile Include="Processes\ProcessManager.cs" />
     <Compile Include="Processes\ProcessState.cs" />
-    <Compile Include="Rendering\RenderableBigImage.cs" />
     <Compile Include="Rendering\RenderableFactory.cs" />
     <Compile Include="Rendering\RenderableImage.cs" />
     <Compile Include="Rendering\RenderableLines.cs" />
@@ -182,8 +179,8 @@
     <Compile Include="VirtualFileSystem\VirtualFile.cs" />
     <Compile Include="VirtualFileSystem\VirtualFileSystem.cs" />
     <Compile Include="VirtualFileSystem\VirtualFileType.cs" />
-    <Compile Include="Display.cs" />
-    <Compile Include="DisplayMode.cs" />
+    <Compile Include="Rendering\Display.cs" />
+    <Compile Include="Rendering\DisplayMode.cs" />
     <Compile Include="Content\ImageContent.cs" />
     <Compile Include="Driver\Renderer\MeshMode.cs" />
     <Compile Include="Driver\Renderer\TextureFilter.cs" />

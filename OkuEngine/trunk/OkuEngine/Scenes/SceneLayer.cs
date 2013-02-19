@@ -265,10 +265,9 @@ namespace OkuEngine.Scenes
         foreach (SceneNode childNode in allNodes)
         {
           _objectMap.Add(childNode.Properties.ObjectId, childNode);
+          childNode.Properties.Body.GroupId = Id;
         }
       }
-
-      //_quadTree = new QuadTree();
 
       return true;
     }

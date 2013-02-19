@@ -4,7 +4,7 @@ using System.Xml;
 using System.Text;
 using OkuEngine.Scenes;
 
-namespace OkuEngine
+namespace OkuEngine.Rendering
 {
   public interface IRenderable : IStoreable
   {

@@ -59,7 +59,6 @@ namespace OkuEngine.Collision
             }
           }
         }
-        body.LastMovement = Vector2f.Zero;
       }
 
       //Clear updated bodies list

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OkuEngine
+namespace OkuEngine.Rendering
 {
   /// <summary>
   /// Specifies a display mode with resolution, display frequency, bits per pixel and display orientation.
