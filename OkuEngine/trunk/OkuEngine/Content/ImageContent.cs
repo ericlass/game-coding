@@ -140,7 +140,7 @@ namespace OkuEngine
       _resource = node.GetTagValue("resource");
       if (_resource != null)
       {
-        ResourceHandle handle = OkuData.ResourceCache.GetHandle(new Resource(_resource));
+        ResourceHandle handle = OkuManagers.ResourceCache.GetHandle(new Resource(_resource));
         if (handle != null)
         {
           Bitmap bm = (handle.Extras as TextureExtraData).Image;

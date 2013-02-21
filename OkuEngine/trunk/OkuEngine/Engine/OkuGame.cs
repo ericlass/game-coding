@@ -159,7 +159,7 @@ namespace OkuEngine
       ResourceCacheParams resParams = new ResourceCacheParams();
       SetupResourceCache(ref resParams);
       ResourceCache resCache = new ResourceCache(resParams);
-      OkuData.ResourceCache = resCache;
+      OkuManagers.ResourceCache = resCache;
       if (resCache.Initialize())
       {
         ResourceHandle configHandle = resCache.GetHandle(new Resource(GetConfigFileName()));
@@ -201,36 +201,36 @@ namespace OkuEngine
             LoadSettings(engineNode);
 
           if (userEventsNode != null)
-            OkuData.UserEvents.Load(userEventsNode);
+            OkuData.Instance.UserEvents.Load(userEventsNode);
 
           if (inputBindingsNode != null)
             OkuManagers.InputManager.Load(inputBindingsNode);
 
           if (behaviorsNode != null)
-            OkuData.Behaviors.Load(behaviorsNode);
+            OkuData.Instance.Behaviors.Load(behaviorsNode);
 
           if (imagesNode != null)
-            OkuData.Images.Load(imagesNode);
+            OkuData.Instance.Images.Load(imagesNode);
 
           if (animationsNode != null)
-            OkuData.Animations.Load(animationsNode);
+            OkuData.Instance.Animations.Load(animationsNode);
 
           if (actorTypesNode != null)
-            OkuData.ActorTypes.Load(actorTypesNode);
+            OkuData.Instance.ActorTypes.Load(actorTypesNode);
 
           if (sceneObjectNode != null)
-            OkuData.SceneObjects.Load(sceneObjectNode);
+            OkuData.Instance.SceneObjects.Load(sceneObjectNode);
       
           if (scenesNode != null)
-            OkuData.SceneManager.Load(scenesNode);
+            OkuData.Instance.SceneManager.Load(scenesNode);
 
           if (attribsNode != null)
           {
             LoadGameAttribs(attribsNode);
             if (_startScene > 0)
-              OkuData.SceneManager.SetActiveScene(_startScene);
+              OkuData.Instance.SceneManager.SetActiveScene(_startScene);
             else
-              OkuData.SceneManager.SetActiveScene(new OkuEngine.Scenes.Scene(-1, "Empty Scene"));
+              OkuData.Instance.SceneManager.SetActiveScene(new OkuEngine.Scenes.Scene(-1, "Empty Scene"));
           }
 
           Initialize();
@@ -328,7 +328,7 @@ namespace OkuEngine
     public void DoUpdate(float dt)
     {
       //Update scene (previous transforms...)
-      OkuData.SceneManager.ActiveScene.Update(dt);
+      OkuData.Instance.SceneManager.ActiveScene.Update(dt);
 
       //Update script engine (global timedelta value)
       OkuManagers.ScriptManager.Update(dt);
@@ -371,7 +371,7 @@ namespace OkuEngine
         for (int i = 0; i < OkuManagers.Renderer.RenderPasses; i++)
         {
           OkuManagers.Renderer.Begin(i);
-          OkuData.SceneManager.ActiveScene.Render();
+          OkuData.Instance.SceneManager.ActiveScene.Render();
           Render(i);
           OkuManagers.Renderer.End(i);
         }
@@ -379,7 +379,7 @@ namespace OkuEngine
       else
       {
         OkuManagers.Renderer.Begin(0);
-        OkuData.SceneManager.ActiveScene.Render();
+        OkuData.Instance.SceneManager.ActiveScene.Render();
         Render(0);
         OkuManagers.Renderer.End(0);
       }

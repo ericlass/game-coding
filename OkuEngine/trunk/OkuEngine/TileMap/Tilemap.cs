@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using OkuEngine.Scenes;
 
 namespace OkuEngine
 {
@@ -317,8 +318,10 @@ namespace OkuEngine
     public void Draw()
     {
       int left, right, top, bottom;
-      WorldToTile(OkuData.SceneManager.ActiveScene.Viewport.Left, OkuData.SceneManager.ActiveScene.Viewport.Top, out left, out top);
-      WorldToTile(OkuData.SceneManager.ActiveScene.Viewport.Right, OkuData.SceneManager.ActiveScene.Viewport.Bottom, out right, out bottom);
+      
+      ViewPort view = OkuData.Instance.SceneManager.ActiveScene.Viewport;
+      WorldToTile(view.Left, view.Top, out left, out top);
+      WorldToTile(view.Right, view.Bottom, out right, out bottom);
 
       for (int y = bottom; y <= top; y++)
       {

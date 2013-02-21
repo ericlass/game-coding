@@ -6,6 +6,7 @@ using OkuEngine.Scripting;
 using OkuEngine.Driver.Renderer;
 using OkuEngine.Logging;
 using OkuEngine.Input;
+using OkuEngine.Resources;
 
 namespace OkuEngine
 {
@@ -22,6 +23,7 @@ namespace OkuEngine
     private static ScriptManager _scriptManager = null;
     private static Logger _logger = null;
     private static InputManager _inputManager = null;
+    private static ResourceCache _resources = null;
 
     /// <summary>
     /// Gets or sets the input handler.
@@ -35,6 +37,15 @@ namespace OkuEngine
         return _input;
       }
       set { _input = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the resource cache.
+    /// </summary>
+    public static ResourceCache ResourceCache
+    {
+      get { return _resources; }
+      set { _resources = value; }
     }
 
     /// <summary>

@@ -44,7 +44,7 @@ namespace OkuEngine.Api
     /// <returns>The actor with the given id or null is there is no actor with this id.</returns>
     private Actor GetActor(int actorId)
     {
-      Actor actor = OkuData.SceneObjects.Get<Actor>(actorId);
+      Actor actor = OkuData.Instance.SceneObjects.Get<Actor>(actorId);
       if (actor == null)
         OkuManagers.Logger.LogError("No actor with the id " + actorId + " exists!");
 
@@ -53,7 +53,7 @@ namespace OkuEngine.Api
     
     private SceneObject GetSceneObject(int objectId)
     {
-      SceneObject so = OkuData.SceneObjects[objectId];
+      SceneObject so = OkuData.Instance.SceneObjects[objectId];
       if (so == null)
         OkuManagers.Logger.LogError("No scene object with the id " + objectId + " exists!");
       
@@ -264,7 +264,7 @@ namespace OkuEngine.Api
     /// <returns>The x component of the current viewport center.</returns>
     public double GetViewportX()
     {
-      return OkuData.SceneManager.ActiveScene.Viewport.Center.X;
+      return OkuData.Instance.SceneManager.ActiveScene.Viewport.Center.X;
     }
 
     /// <summary>
@@ -273,7 +273,7 @@ namespace OkuEngine.Api
     /// <returns>The y component of the current viewport center.</returns>
     public double GetViewportY()
     {
-      return OkuData.SceneManager.ActiveScene.Viewport.Center.Y;
+      return OkuData.Instance.SceneManager.ActiveScene.Viewport.Center.Y;
     }
 
     /// <summary>
@@ -283,7 +283,7 @@ namespace OkuEngine.Api
     /// <param name="y">The y component.</param>
     public void SetViewportPosition(double x, double y)
     {
-      OkuData.SceneManager.ActiveScene.Viewport.Center = new Vector2f((float)x, (float)y);
+      OkuData.Instance.SceneManager.ActiveScene.Viewport.Center = new Vector2f((float)x, (float)y);
     }
 
     /// <summary>
@@ -293,10 +293,10 @@ namespace OkuEngine.Api
     /// <param name="y">The amount to move along the y axis.</param>
     public void MoveViewport(double x, double y)
     {
-      Vector2f pos = OkuData.SceneManager.ActiveScene.Viewport.Center;
+      Vector2f pos = OkuData.Instance.SceneManager.ActiveScene.Viewport.Center;
       pos.X += (float)x;
       pos.Y += (float)y;
-      OkuData.SceneManager.ActiveScene.Viewport.Center = pos;
+      OkuData.Instance.SceneManager.ActiveScene.Viewport.Center = pos;
     }
 
     #endregion

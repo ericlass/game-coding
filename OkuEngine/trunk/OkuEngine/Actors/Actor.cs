@@ -146,7 +146,7 @@ namespace OkuEngine.Actors
           return false;
       }
 
-      _type = OkuData.ActorTypes[actorType];
+      _type = OkuData.Instance.ActorTypes[actorType];
       if (_type == null)
       {
         OkuManagers.Logger.LogError("Could not find actor type with id " + actorType + " for actor " + _name + "!");

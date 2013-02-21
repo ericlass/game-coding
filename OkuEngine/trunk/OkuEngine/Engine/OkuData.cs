@@ -9,128 +9,122 @@ using OkuEngine.Input;
 using OkuEngine.Events;
 using OkuEngine.Scripting;
 using OkuEngine.Collision;
+using OkuEngine.Driver.Renderer;
+using OkuEngine.Driver.Audio;
 
 namespace OkuEngine
 {
   /// <summary>
   /// Contains the data of the game.
   /// </summary>
-  public static class OkuData
+  public class OkuData
   {
-    private static ResourceCache _resources = null;
-    private static SceneManager _sceneManager = null;
-    private static EntityManager<ActorType> _actorTypes = null;
-    private static EntityManager<ImageContent> _images = null;
-    private static EntityManager<Animation> _animations = null;
-    private static EntityManager<UserEvent> _userEvents = null;
-    private static EntityManager<Behavior> _behaviors = null;
-    private static SceneObjectManager _sceneObjects = null;
+    private static OkuData _instance = null;
 
-    /// <summary>
-    /// Gets or sets the resource cache.
-    /// </summary>
-    public static ResourceCache ResourceCache
+    public static OkuData Instance
     {
-      get { return _resources; }
-      set { _resources = value; }
+      get
+      {
+        if (_instance == null)
+          _instance = new OkuData();
+        return _instance;
+      }
+    }
+
+    private OkuData()
+    {
+    }
+
+    private GameProperties _gameProperties = new GameProperties();
+    private RenderSettings _renderSettings = new RenderSettings();
+    private AudioSettings _audioSettings = new AudioSettings();
+    private SceneManager _sceneManager = new SceneManager();
+    private EntityManager<ActorType> _actorTypes = new EntityManager<ActorType>("actortypes", "actortype", KeySequence.ActorTypeSequence);
+    private EntityManager<ImageContent> _images = new EntityManager<ImageContent>("images", "image", KeySequence.ImageSequence);
+    private EntityManager<Animation> _animations = new EntityManager<Animation>("animations", "animation", KeySequence.AnimationSequence);
+    private EntityManager<UserEvent> _userEvents = new EntityManager<UserEvent>("userevents", "event", KeySequence.UserEventSequence);
+    private EntityManager<Behavior> _behaviors = new EntityManager<Behavior>("behaviors", "behavior", KeySequence.BehaviorSequence);
+    private SceneObjectManager _sceneObjects = new SceneObjectManager();
+
+    public GameProperties GameProperties
+    {
+      get { return _gameProperties; }
+      set { _gameProperties = value; }
+    }
+
+    public RenderSettings RenderSettings
+    {
+      get { return _renderSettings; }
+      set { _renderSettings = value; }
+    }
+
+    public AudioSettings AudioSettings
+    {
+      get { return _audioSettings; }
+      set { _audioSettings = value; }
     }
 
     /// <summary>
     /// Gets the scene manager.
     /// </summary>
-    public static SceneManager SceneManager
+    public SceneManager SceneManager
     {
-      get
-      {
-        if (_sceneManager == null)
-          _sceneManager = new SceneManager();
-
-        return _sceneManager;
-      }
+      get { return _sceneManager; }
+      set { _sceneManager = value; }
     }
 
     /// <summary>
     /// Gets the actor type manager that contains all actor types.
     /// </summary>
-    public static EntityManager<ActorType> ActorTypes
+    public EntityManager<ActorType> ActorTypes
     {
-      get
-      {
-        if (_actorTypes == null)
-          _actorTypes = new EntityManager<ActorType>("actortypes", "actortype", KeySequence.ActorTypeSequence);
-
-        return _actorTypes;
-      }
+      get { return _actorTypes; }
+      set { _actorTypes = value; }
     }
 
     /// <summary>
     /// Gets the image manager that contains all images.
     /// </summary>
-    public static EntityManager<ImageContent> Images
+    public EntityManager<ImageContent> Images
     {
-      get
-      {
-        if (_images == null)
-          _images = new EntityManager<ImageContent>("images", "image", KeySequence.ImageSequence);
-
-        return _images;
-      }
+      get { return _images; }
+      set { _images = value; }
     }
 
     /// <summary>
     /// Gets the animation manager that contains all animations.
     /// </summary>
-    public static EntityManager<Animation> Animations
+    public EntityManager<Animation> Animations
     {
-      get
-      {
-        if (_animations == null)
-          _animations = new EntityManager<Animation>("animations", "animation", KeySequence.AnimationSequence);
-
-        return _animations;
-      }
+      get { return _animations; }
+      set { _animations = value; }
     }
 
     /// <summary>
     /// Gets the manager that stores all user defined events.
     /// </summary>
-    public static EntityManager<UserEvent> UserEvents
+    public EntityManager<UserEvent> UserEvents
     {
-      get
-      {
-        if (_userEvents == null)
-          _userEvents = new EntityManager<UserEvent>("userevents", "event", KeySequence.UserEventSequence);
-
-        return _userEvents;
-      }
+      get { return _userEvents; }
+      set { _userEvents = value; }
     }
 
     /// <summary>
     /// Gets the manager that contains all behaviors.
     /// </summary>
-    public static EntityManager<Behavior> Behaviors
+    public EntityManager<Behavior> Behaviors
     {
-      get
-      {
-        if (_behaviors == null)
-          _behaviors = new EntityManager<Behavior>("behaviors", "behavior", KeySequence.BehaviorSequence);
-
-        return _behaviors;
-      }
+      get { return _behaviors; }
+      set { _behaviors = value; }
     }
 
     /// <summary>
     /// Gets the manager that contains all scene objects.
     /// </summary>
-    public static SceneObjectManager SceneObjects
+    public SceneObjectManager SceneObjects
     {
-      get
-      {
-        if (_sceneObjects == null)
-          _sceneObjects = new SceneObjectManager();
-
-        return _sceneObjects;
-      }
+      get { return _sceneObjects; }
+      set { _sceneObjects = value; }
     }
 
   }

@@ -57,7 +57,7 @@ namespace OkuEngine
         int imageId = 0;
         if (int.TryParse(value, out imageId))
         {
-          _image = OkuData.Images[imageId];
+          _image = OkuData.Instance.Images[imageId];
         }
       }
 

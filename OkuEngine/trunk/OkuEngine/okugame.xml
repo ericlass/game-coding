@@ -1,9 +1,10 @@
-﻿<okugame>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<okugame>
   <engine>
     <renderer type="opengl">
       <fullscreen>no</fullscreen>
-      <width>1024</width>
-      <height>768</height>
+      <width>1280</width>
+      <height>960</height>
       <depth>no</depth>
       <clearcolor>#000F</clearcolor>
       <passes>

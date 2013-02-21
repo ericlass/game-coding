@@ -174,7 +174,7 @@ namespace OkuEngine.Scenes.Backdrops
           return false;
         }
 
-        _image = OkuData.Images[imageId];
+        _image = OkuData.Instance.Images[imageId];
         if (_image == null)
         {
           OkuManagers.Logger.LogError("Could not find image with id " + imageId + "! " + node.OuterXml);

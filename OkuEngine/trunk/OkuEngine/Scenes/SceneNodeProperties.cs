@@ -98,7 +98,7 @@ namespace OkuEngine.Scenes
         if (int.TryParse(objectValue, out test))
         {
           _objectId = test;
-          _object = OkuData.SceneObjects[_objectId];
+          _object = OkuData.Instance.SceneObjects[_objectId];
           if (_object == null)
           {
             OkuManagers.Logger.LogError("No scene object found with the id " + test + " while loading scene node! Is the initialization order correct?");

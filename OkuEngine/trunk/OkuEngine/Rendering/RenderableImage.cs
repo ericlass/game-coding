@@ -57,7 +57,7 @@ namespace OkuEngine.Rendering
         if (int.TryParse(value, out imageId))
         {
           _imageId = imageId;
-          _image = OkuData.Images[_imageId];
+          _image = OkuData.Instance.Images[_imageId];
           if (_image == null)
           {
             OkuManagers.Logger.LogError("There is no image with the id " + imageId + "! " + node.OuterXml);
