@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace OkuEngine
 {
@@ -33,9 +34,20 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Gets or sets if the animation is looped.
+    /// </summary>
+    [JsonPropertyAttribute]
+    public bool Loop
+    {
+      get { return _loop; }
+      set { _loop = value; }
+    }
+
+    /// <summary>
     /// Gets or sets the frames of this animation.
     /// Setting the frames resets the animation to start from the beginning.
     /// </summary>
+    [JsonPropertyAttribute]
     public List<AnimationFrame> Frames
     {
       get { return _frames; }
@@ -45,15 +57,6 @@ namespace OkuEngine
         _currentFrame = 0;
         _timer = 0;
       }
-    }
-
-    /// <summary>
-    /// Gets or sets if the animation is looped.
-    /// </summary>
-    public bool Loop
-    {
-      get { return _loop; }
-      set { _loop = value; }
     }
 
     /// <summary>
@@ -85,7 +88,7 @@ namespace OkuEngine
     /// </summary>
     public ImageContent CurrentImage
     {
-      get { return _frames[_currentFrame].Image; }
+      get { return OkuData.Instance.Images[_frames[_currentFrame].ImageId]; }
     }
 
     /// <summary>

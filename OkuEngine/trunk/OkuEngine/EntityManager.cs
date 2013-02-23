@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace OkuEngine
 {
@@ -10,6 +11,7 @@ namespace OkuEngine
   /// management and loading and saving of entities.
   /// </summary>
   /// <typeparam name="T">The type of entities to be managed.</typeparam>
+  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class EntityManager<T> : IStoreable where T : StoreableEntity, new()
   {
     protected Dictionary<int, T> _entities = new Dictionary<int, T>();
@@ -28,6 +30,21 @@ namespace OkuEngine
       _groupName = groupName;
       _entityName = entityName;
       _sequenceName = sequenceName;
+    }
+
+    [JsonPropertyAttribute]
+    public List<T> Entities
+    {
+      get { return new List<T>(_entities.Values); }
+      set
+      {
+        _entities.Clear();
+        if (value != null)
+        {
+          foreach (T entity in value)
+            _entities.Add(entity.Id, entity);
+        }
+      }
     }
 
     /// <summary>

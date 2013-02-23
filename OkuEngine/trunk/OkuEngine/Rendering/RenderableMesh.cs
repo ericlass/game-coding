@@ -4,6 +4,7 @@ using System.Xml;
 using System.Text;
 using OkuEngine.Scenes;
 using OkuEngine.Driver.Renderer;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Rendering
 {
@@ -13,6 +14,27 @@ namespace OkuEngine.Rendering
     private int _imageId = 0;
     private ImageContent _image = null;
     private DrawMode _mode = DrawMode.ClosedPolygon;
+
+    [JsonPropertyAttribute]
+    public int ImageId
+    {
+      get { return _imageId; }
+      set { _imageId = value; }
+    }
+
+    [JsonPropertyAttribute]
+    public DrawMode Mode
+    {
+      get { return _mode; }
+      set { _mode = value; }
+    }
+
+    [JsonPropertyAttribute]
+    public Vertices Vertices
+    {
+      get { return _vertices; }
+      set { _vertices = value; }
+    }
 
     public void Update(float dt)
     {

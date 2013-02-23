@@ -4,12 +4,14 @@ using System.Xml;
 using System.Text;
 using OkuEngine.Actors;
 using OkuEngine.Collision;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Scenes
 {
   /// <summary>
   /// Stores properties of a scene node.
   /// </summary>
+  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class SceneNodeProperties : IStoreable
   {
     private int _objectId = 0;
@@ -47,6 +49,7 @@ namespace OkuEngine.Scenes
     /// <summary>
     /// Gets or sets the object id associated with the scene node.
     /// </summary>
+    [JsonPropertyAttribute]
     public int ObjectId
     {
       get { return _objectId; }
@@ -56,6 +59,7 @@ namespace OkuEngine.Scenes
     /// <summary>
     /// Gets or sets the transformation of the scene node.
     /// </summary>
+    [JsonPropertyAttribute]
     public Transformation Transform
     {
       get { return _transform; }

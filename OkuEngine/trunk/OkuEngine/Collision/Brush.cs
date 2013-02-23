@@ -5,6 +5,7 @@ using System.Text;
 using OkuEngine.Scenes;
 using OkuEngine.Rendering;
 using OkuEngine.Collision;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Collision
 {
@@ -34,11 +35,23 @@ namespace OkuEngine.Collision
     }
 
     /// <summary>
-    /// Gets the shape of the brush. Can be null if only AABB is specified.
+    /// Gets or sets the renderable of the brush.
     /// </summary>
+    [JsonPropertyAttribute]
+    public IRenderable Renderable
+    {
+      get { return _renderable; }
+      set { _renderable = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the shape of the brush. Can be null if only AABB is specified.
+    /// </summary>
+    [JsonPropertyAttribute]
     public override Vector2f[] Shape
     {
       get { return _shape; }
+      set { _shape = value; }
     }
 
     /// <summary>

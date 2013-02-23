@@ -3,8 +3,8 @@
   <engine>
     <renderer type="opengl">
       <fullscreen>no</fullscreen>
-      <width>1280</width>
-      <height>960</height>
+      <width>1024</width>
+      <height>768</height>
       <depth>no</depth>
       <clearcolor>#000F</clearcolor>
       <passes>

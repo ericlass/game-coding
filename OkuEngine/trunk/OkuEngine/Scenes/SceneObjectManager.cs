@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Scenes
 {
   /// <summary>
   /// Manages scene objects like actors and brushes.
   /// </summary>
+  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class SceneObjectManager : IStoreable
   {
-    private Dictionary<int, SceneObject> _objects = null;
+    private Dictionary<int, SceneObject> _objects = new Dictionary<int,SceneObject>();
 
     /// <summary>
     /// Create a new scene object manager.
@@ -42,6 +44,21 @@ namespace OkuEngine.Scenes
     public bool Remove(SceneObject sceneObject)
     {
       return _objects.Remove(sceneObject.Id);
+    }
+
+    /// <summary>
+    /// Gets or sets the scene objects of the manager.
+    /// </summary>
+    [JsonPropertyAttribute]
+    public List<SceneObject> Objects
+    {
+      get { return new List<SceneObject>(_objects.Values); }
+      set
+      {
+        _objects.Clear();
+        foreach (SceneObject obj in value)
+          Add(obj);
+      }
     }
 
     /// <summary>

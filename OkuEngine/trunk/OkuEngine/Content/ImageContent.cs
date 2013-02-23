@@ -5,6 +5,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Xml;
 using OkuEngine.Resources;
+using Newtonsoft.Json;
 
 namespace OkuEngine
 {
@@ -101,6 +102,7 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets the name of the image resource the image was loaded from.
     /// </summary>
+    [JsonPropertyAttribute]
     public string Resource
     {
       get { return _resource; }

@@ -233,6 +233,10 @@ namespace OkuEngine
               OkuData.Instance.SceneManager.SetActiveScene(new OkuEngine.Scenes.Scene(-1, "Empty Scene"));
           }
 
+          Newtonsoft.Json.JsonSerializerSettings settings = new Newtonsoft.Json.JsonSerializerSettings();
+          settings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
+          Clipboard.SetText(Newtonsoft.Json.JsonConvert.SerializeObject(OkuData.Instance, Newtonsoft.Json.Formatting.Indented, settings)); 
+
           Initialize();
         }
       }

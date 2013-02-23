@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Newtonsoft.Json;
 
 namespace OkuEngine
 {
   /// <summary>
   /// Stores a color value in RGBA format.
   /// </summary>
-  [StructLayout(LayoutKind.Sequential)]
+  [StructLayout(LayoutKind.Sequential), JsonObjectAttribute(MemberSerialization.OptIn)]
   public struct Color
   {
+    [JsonPropertyAttribute]
     public byte R;
+    [JsonPropertyAttribute]
     public byte G;
+    [JsonPropertyAttribute]
     public byte B;
+    [JsonPropertyAttribute]
     public byte A;
 
     public static Color White = new Color(255, 255, 255);

@@ -5,6 +5,7 @@ using System.Text;
 using System.Drawing;
 using OkuEngine.Events;
 using OkuEngine.Collision;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Scenes
 {
@@ -41,6 +42,21 @@ namespace OkuEngine.Scenes
 
       _viewport.Change += new ViewPortChangeEventHandler(_viewport_Change);
       OkuManagers.EventManager.AddListener(EventTypes.SceneNodeMoved, new EventListenerDelegate(OnEventReceived));
+    }
+
+    [JsonPropertyAttribute]
+    public List<SceneLayer> Layers
+    {
+      get { return new List<SceneLayer>(_layerMap.Values); }
+      set
+      {
+        _layerMap.Clear();
+        if (value != null)
+        {
+          foreach (SceneLayer layer in value)
+            _layerMap.Add(layer.Id, layer);
+        }
+      }
     }
 
     /// <summary>

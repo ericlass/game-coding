@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Attributes
 {
   /// <summary>
   /// Defines a single attribute value of a specific type.
   /// </summary>
+  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class AttributeValue : IStoreable
   {
     private string _name = null;
@@ -24,9 +26,11 @@ namespace OkuEngine.Attributes
     /// <summary>
     /// Gets the name of the attribute.
     /// </summary>
+    [JsonPropertyAttribute]
     public string Name
     {
       get { return _name; }
+      set { _name = value; }
     }
 
     /// <summary>
@@ -40,9 +44,11 @@ namespace OkuEngine.Attributes
     /// <summary>
     /// Gets the raw value object.
     /// </summary>
+    [JsonPropertyAttribute]
     public object RawValue
     {
       get { return _rawValue; }
+      set { _rawValue = value; }
     }
 
     /// <summary>

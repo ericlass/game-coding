@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 using OkuEngine.Events;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Scenes
 {
@@ -12,6 +13,7 @@ namespace OkuEngine.Scenes
   /// by special scene node. If you override one of these methods
   /// make sure to call the base method.
   /// </summary>
+  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class SceneNode : IStoreable
   {
     protected SceneNodeProperties _props = null;
@@ -46,6 +48,7 @@ namespace OkuEngine.Scenes
     /// <summary>
     /// Gets the properties of the scene node.
     /// </summary>
+    [JsonPropertyAttribute]
     public SceneNodeProperties Properties
     {
       get { return _props; }
@@ -60,6 +63,16 @@ namespace OkuEngine.Scenes
     public SceneNode Parent
     {
       get { return _parent; }
+    }
+
+    /// <summary>
+    /// Gets or sets the list of child nodes.
+    /// </summary>
+    [JsonPropertyAttribute]
+    public List<SceneNode> Children
+    {
+      get { return _children; }
+      set { _children = value; }
     }
 
     /// <summary>
@@ -80,11 +93,6 @@ namespace OkuEngine.Scenes
       {
         _parent.AddChild(this);
       }
-    }
-
-    public List<SceneNode> Children
-    {
-      get { return _children; }
     }
 
     /// <summary>

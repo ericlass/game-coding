@@ -4,6 +4,7 @@ using System.Xml;
 using System.Text;
 using OkuEngine.Scenes.Backdrops;
 using OkuEngine.Collision;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Scenes
 {
@@ -34,9 +35,21 @@ namespace OkuEngine.Scenes
     /// <summary>
     /// Gets the backdrop of the layer.
     /// </summary>
+    [JsonPropertyAttribute]
     public Backdrop Backdrop
     {
       get { return _backdrop; }
+      set { _backdrop = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the root node of the scene layer.
+    /// </summary>
+    [JsonPropertyAttribute]
+    public SceneNode Root
+    {
+      get { return _root; }
+      set { _root = value; }
     }
 
     /// <summary>

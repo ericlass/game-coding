@@ -2,39 +2,35 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace OkuEngine
 {
   /// <summary>
   /// Defines a base class for all entities in the engine that can be stored (load and saved).
   /// </summary>
+  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class StoreableEntity : IStoreable
   {
-    protected string _name = null;
     public const int InvalidId = 0;
 
+    protected string _name = null;
     protected int _id = InvalidId;
 
     /// <summary>
     /// Gets the unique artificial id.
     /// </summary>
+    [JsonPropertyAttribute]
     public int Id
     {
       get { return _id; }
-    }
-
-    /// <summary>
-    /// Sets the id of the entity.
-    /// </summary>
-    /// <param name="id">The new id of the entity.</param>
-    internal void SetId(int id)
-    {
-      _id = id;
+      set { _id = value; }
     }
 
     /// <summary>
     /// Gets or sets the name.
     /// </summary>
+    [JsonPropertyAttribute]
     public string Name
     {
       get { return _name; }

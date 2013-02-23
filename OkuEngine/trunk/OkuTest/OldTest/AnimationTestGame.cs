@@ -16,13 +16,13 @@ namespace OkuTest
       _anim.Loop = true;
       
       ImageContent image = new ImageContent(".\\content\\impact0.png");
-      _anim.Frames.Add(new AnimationFrame(image, 100));
+      _anim.Frames.Add(new AnimationFrame(image.Id, 100));
 
       image = new ImageContent(".\\content\\impact1.png");
-      _anim.Frames.Add(new AnimationFrame(image, 100));
+      _anim.Frames.Add(new AnimationFrame(image.Id, 100));
 
       image = new ImageContent(".\\content\\impact2.png");
-      _anim.Frames.Add(new AnimationFrame(image, 100));
+      _anim.Frames.Add(new AnimationFrame(image.Id, 100));
 
       _coin = new Animation();
       _coin.Loop = true;
@@ -30,7 +30,7 @@ namespace OkuTest
       List<ImageContent> images = ImageContent.LoadSheet(".\\content\\coin_animation.png", 64);
       for (int i = 0; i < images.Count - 1; i++)
       {
-        _coin.Frames.Add(new AnimationFrame(images[i], 50));
+        _coin.Frames.Add(new AnimationFrame(images[i].Id, 50));
       }
     }
 

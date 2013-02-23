@@ -4,6 +4,7 @@ using System.Xml;
 using System.Text;
 using OkuEngine.States;
 using OkuEngine.Geometry;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Actors
 {
@@ -35,9 +36,11 @@ namespace OkuEngine.Actors
     /// <summary>
     /// Gets the shape of this component.
     /// </summary>
+    [JsonPropertyAttribute]
     public Polygon Shape
     {
       get { return _shape; }
+      set { _shape = value; }
     }
 
     /// <summary>

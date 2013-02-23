@@ -20,7 +20,7 @@ namespace OkuEngine.Scenes
     }
 
     public abstract AABB BoundingBox { get; }
-    public abstract Vector2f[] Shape { get; }
+    public abstract Vector2f[] Shape { get; set; }
     public abstract bool IsStatic { get; }
     public abstract void Render(Scene scene);
 

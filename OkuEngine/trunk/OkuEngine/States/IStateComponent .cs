@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace OkuEngine.States
 {
   /// <summary>
   /// Defines the interface for a state component.
   /// </summary>
+  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public interface IStateComponent : IStoreable
   {
     /// <summary>

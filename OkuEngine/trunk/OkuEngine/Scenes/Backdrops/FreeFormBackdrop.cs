@@ -5,6 +5,7 @@ using System.Text;
 using OkuEngine.Geometry;
 using OkuEngine.Rendering;
 using OkuEngine.Collections;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Scenes.Backdrops
 {
@@ -19,6 +20,7 @@ namespace OkuEngine.Scenes.Backdrops
     private const int ImageSliceSize = 256;
 
     private Vector2f _offset = Vector2f.Zero;
+    private int _imageId = 0;
     private ImageContent _image = null;
     private Polygon[] _shapes = null;
     private float _width = 0.0f;
@@ -46,6 +48,20 @@ namespace OkuEngine.Scenes.Backdrops
     public override float Height
     {
       get { return _height; }
+    }
+
+    [JsonPropertyAttribute]
+    public Vector2f Offset
+    {
+      get { return _offset; }
+      set { _offset = value; }
+    }
+
+    [JsonPropertyAttribute]
+    public int ImageId
+    {
+      get { return _imageId; }
+      set { _imageId = value; }
     }
 
     /// <summary>
@@ -167,17 +183,17 @@ namespace OkuEngine.Scenes.Backdrops
       value = node.GetTagValue("image");
       if (value != null)
       {
-        int imageId = 0;
-        if (!int.TryParse(value, out imageId))
+        _imageId = 0;
+        if (!int.TryParse(value, out _imageId))
         {
           OkuManagers.Logger.LogError("Could not parse image for backdrop! " + node.OuterXml);
           return false;
         }
 
-        _image = OkuData.Instance.Images[imageId];
+        _image = OkuData.Instance.Images[_imageId];
         if (_image == null)
         {
-          OkuManagers.Logger.LogError("Could not find image with id " + imageId + "! " + node.OuterXml);
+          OkuManagers.Logger.LogError("Could not find image with id " + _imageId + "! " + node.OuterXml);
           return false;
         }
       }

@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 using OkuEngine.Geometry;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Scenes.Backdrops
 {
+  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public abstract class Backdrop : IStoreable
   {
+    [JsonPropertyAttribute]
     public abstract Polygon[] Shapes { get; }
 
     public abstract void Update(float dt);

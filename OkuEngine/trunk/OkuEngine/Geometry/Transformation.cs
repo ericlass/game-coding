@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace OkuEngine
 {
   /// <summary>
   /// Determines a full transformation with translation, rotation and scale.
   /// </summary>
+  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class Transformation : IStoreable
   {
     public delegate void OnChangeDelegate(Transformation transform);
@@ -56,7 +58,8 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets the translation vector.
     /// </summary>
-    public Vector2f Translation 
+    [JsonPropertyAttribute]
+    public Vector2f Translation
     {
       get { return _translation; }
       set
@@ -89,6 +92,7 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets the rotation angle in degrees.
     /// </summary>
+    [JsonPropertyAttribute]
     public float Rotation 
     {
       get { return _rotation; }
@@ -102,6 +106,7 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets the scale factor.
     /// </summary>
+    [JsonPropertyAttribute]
     public Vector2f Scale
     {
       get { return _scale; }

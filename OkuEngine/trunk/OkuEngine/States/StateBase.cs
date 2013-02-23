@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace OkuEngine.States
 {
@@ -9,6 +10,7 @@ namespace OkuEngine.States
   /// Defines the base for states.
   /// State definition and instance share a lot of data and this base defines them.
   /// </summary>
+  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public abstract class StateBase : IStoreable
   {
     protected string _name = null;
@@ -17,9 +19,26 @@ namespace OkuEngine.States
     /// <summary>
     /// Gets the name of the state.
     /// </summary>
+    [JsonPropertyAttribute]
     public string Name
     {
       get { return _name; }
+      set { _name = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the components of the state.
+    /// </summary>
+    [JsonPropertyAttribute]
+    public List<IStateComponent> Components
+    {
+      get { return new List<IStateComponent>(_components.Values); }
+      set
+      {
+        _components.Clear();
+        foreach (IStateComponent component in value)
+          Add(component);
+      }
     }
 
     /// <summary>

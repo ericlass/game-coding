@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace OkuEngine
 {
   /// <summary>
   /// Defines one image of an animation with it's image and duration.
   /// </summary>
+  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class AnimationFrame : IStoreable
   {
-    private ImageContent _image = null;
+    private int _imageId = 0;
     private float _duration = 0.0f;
 
     /// <summary>
@@ -23,26 +25,28 @@ namespace OkuEngine
     /// <summary>
     /// Creates a new animation frame with the given image and duration.
     /// </summary>
-    /// <param name="image">The animation image.</param>
+    /// <param name="imageId">The frames image id.</param>
     /// <param name="duration">The duration in milliseconds.</param>
-    public AnimationFrame(ImageContent image, float duration)
+    public AnimationFrame(int imageId, float duration)
     {
-      _image = image;
+      _imageId = imageId;
       _duration = duration;
     }
 
     /// <summary>
-    /// Gets or sets the image of the animation frame.
+    /// Gets or sets the id of the image of this frame.
     /// </summary>
-    public ImageContent Image
+    [JsonPropertyAttribute]
+    public int ImageId
     {
-      get { return _image; }
-      set { _image = value; }
+      get { return _imageId; }
+      set { _imageId = value; }
     }
 
     /// <summary>
     /// Gets or sets the duration this frame is displayed in milliseconds.
     /// </summary>
+    [JsonPropertyAttribute]
     public float Duration
     {
       get { return _duration; }
@@ -54,17 +58,12 @@ namespace OkuEngine
       string value = node.GetTagValue("image");
       if (value != null)
       {
-        int imageId = 0;
-        if (int.TryParse(value, out imageId))
+        _imageId = 0;
+        if (!int.TryParse(value, out _imageId))
         {
-          _image = OkuData.Instance.Images[imageId];
+          OkuManagers.Logger.LogError("Could not find image for animation frame!" + node.OuterXml);
+          return false;
         }
-      }
-
-      if (_image == null)
-      {
-        OkuManagers.Logger.LogError("Could not find image for animation frame!" + node.OuterXml);
-        return false;
       }
 
       value = node.GetTagValue("duration");
@@ -88,7 +87,7 @@ namespace OkuEngine
     {
       writer.WriteStartElement("frame");
 
-      writer.WriteValueTag("image", _image.Id.ToString());
+      writer.WriteValueTag("image", _imageId.ToString());
       int dur = (int)_duration;
       writer.WriteValueTag("duration", dur.ToString());
 

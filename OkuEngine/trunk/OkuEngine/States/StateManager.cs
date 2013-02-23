@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 using OkuEngine.Collections;
+using Newtonsoft.Json;
 
 namespace OkuEngine.States
 {
   /// <summary>
   /// Handles a set of entity states.
   /// </summary>
+  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class StateManager<T> : IStoreable where T : StateBase, new()
   {
     /// <summary>
@@ -49,10 +51,23 @@ namespace OkuEngine.States
     /// <summary>
     /// Gets or sets the name of the default state.
     /// </summary>
+    [JsonPropertyAttribute]
     public string DefaultStateName
     {
       get { return _defaultName; }
       set { _defaultName = value; }
+    }
+
+    [JsonPropertyAttribute]
+    public List<T> States
+    {
+      get { return new List<T>(_states.Values); }
+      set
+      {
+        _states.Clear();
+        foreach (T state in value)
+          Add(state);
+      }
     }
 
     /// <summary>

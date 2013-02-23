@@ -4,6 +4,7 @@ using System.Xml;
 using System.Text;
 using OkuEngine.States;
 using OkuEngine.Geometry;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Actors
 {

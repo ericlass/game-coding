@@ -248,6 +248,7 @@
     <EmbeddedResource Include="OkuRuntime.js" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="lib\Jurassic.dll" />
     <None Include="lib\Tao.OpenAl.dll" />
     <None Include="lib\Tao.OpenGl.dll" />

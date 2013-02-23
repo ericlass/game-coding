@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Xml;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Rendering
 {
@@ -12,6 +13,7 @@ namespace OkuEngine.Rendering
   /// The arrays are expected, but not forced, to be the same length.
   /// Use the Valid property to check if all non-null arrays have the same length. 
   /// </summary>
+  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class Vertices : IStoreable
   {
     private Vector2f[] _positions = null;
@@ -74,6 +76,7 @@ namespace OkuEngine.Rendering
     /// <summary>
     /// Gets or set the array of positions of the vertices.
     /// </summary>
+    [JsonPropertyAttribute]
     public Vector2f[] Positions
     {
       get { return _positions; }
@@ -88,6 +91,7 @@ namespace OkuEngine.Rendering
     /// Gets or set the array of texture coordinates of the vertices.
     /// Can be set to null if not needed.
     /// </summary>
+    [JsonPropertyAttribute]
     public Vector2f[] TexCoords
     {
       get { return _texCoords; }
@@ -98,6 +102,7 @@ namespace OkuEngine.Rendering
     /// Gets or set the array of colors of the vertices.
     /// Can be set to null if not needed.
     /// </summary>
+    [JsonPropertyAttribute]
     public Color[] Colors
     {
       get { return _colors; }

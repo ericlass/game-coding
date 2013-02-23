@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 using OkuEngine.Events;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Scripting
 {
@@ -23,6 +24,13 @@ namespace OkuEngine.Scripting
           script.Run(data);
         }
       }
+    }
+
+    [JsonPropertyAttribute]
+    public Dictionary<int, List<ScriptInstance>> Handlers
+    {
+      get { return _handlers; }
+      set { _handlers = value; }
     }
 
     private void AddHandler(int eventId, ScriptInstance script)

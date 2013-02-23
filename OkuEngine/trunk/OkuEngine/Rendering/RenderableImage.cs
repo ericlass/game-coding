@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 using OkuEngine.Scenes;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Rendering
 {
@@ -20,6 +21,16 @@ namespace OkuEngine.Rendering
     public void Update(float dt)
     {
       //Nothing to do for an image
+    }
+
+    /// <summary>
+    /// Gets or sets the id of image to be rendered.
+    /// </summary>
+    [JsonPropertyAttribute]
+    public int ImageId
+    {
+      get { return _imageId; }
+      set { _imageId = value; }
     }
 
     public void Render(Scene scene)

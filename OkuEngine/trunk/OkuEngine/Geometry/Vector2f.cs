@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
+using Newtonsoft.Json;
 
 namespace OkuEngine
 {
@@ -10,17 +11,19 @@ namespace OkuEngine
   /// The + and - operators have been overloaded to add / subtract two vectors. The
   /// * operator is overloaded to scale a vector by a float value.
   /// </summary>
-  [StructLayout(LayoutKind.Sequential)]
+  [StructLayout(LayoutKind.Sequential), JsonObjectAttribute(MemberSerialization.OptIn)]
   public struct Vector2f
   {
     /// <summary>
     /// The X component of the vector.
     /// </summary>
+    [JsonPropertyAttribute]
     public float X;
 
     /// <summary>
     /// The Y component of the vector.
     /// </summary>
+    [JsonPropertyAttribute]
     public float Y;
 
     /// <summary>

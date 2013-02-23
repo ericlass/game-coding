@@ -3,12 +3,14 @@ using System.Xml;
 using System.Collections.Generic;
 using Jurassic;
 using Jurassic.Library;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Scripting
 {
   /// <summary>
   /// Defines a single script instance that can be used to execute a compiled script over and over.
   /// </summary>
+  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class ScriptInstance
   {
     private string _source = null;
@@ -31,9 +33,11 @@ namespace OkuEngine.Scripting
     /// <summary>
     /// Gets the script source code that was used to compile.
     /// </summary>
+    [JsonPropertyAttribute]
     public string Source
     {
       get { return _source; }
+      set { _source = value; }
     }
 
     /// <summary>

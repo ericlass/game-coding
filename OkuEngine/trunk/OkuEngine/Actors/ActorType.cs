@@ -4,12 +4,14 @@ using System.Xml;
 using System.Text;
 using OkuEngine.States;
 using OkuEngine.Attributes;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Actors
 {
   /// <summary>
   /// Defines the basis of an actor.
   /// </summary>
+  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class ActorType : StoreableEntity
   {
     private StateManager<StateDefinition> _states = new StateManager<StateDefinition>();
@@ -18,6 +20,7 @@ namespace OkuEngine.Actors
     /// <summary>
     /// Gets the state of the actor type.
     /// </summary>
+    [JsonPropertyAttribute]
     public StateManager<StateDefinition> States
     {
       get { return _states; }
@@ -26,6 +29,7 @@ namespace OkuEngine.Actors
     /// <summary>
     /// Gets the attributes of the actor type.
     /// </summary>
+    [JsonPropertyAttribute]
     public AttributeMap Attributes
     {
       get { return _attributes; }

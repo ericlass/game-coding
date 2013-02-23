@@ -4,6 +4,7 @@ using System.Xml;
 using System.Text;
 using OkuEngine.States;
 using OkuEngine.Attributes;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Actors
 {
@@ -35,6 +36,7 @@ namespace OkuEngine.Actors
     /// <summary>
     /// Gets the attribute for the component.
     /// </summary>
+    [JsonPropertyAttribute]
     public AttributeMap Attributes
     {
       get { return _attributes; }

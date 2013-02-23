@@ -4,6 +4,7 @@ using System.Xml;
 using System.Text;
 using OkuEngine.States;
 using OkuEngine.Rendering;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Actors
 {
@@ -28,6 +29,7 @@ namespace OkuEngine.Actors
     /// <summary>
     /// Gets or sets the renderable of the component.
     /// </summary>
+    [JsonPropertyAttribute]
     public IRenderable Renderable
     {
       get { return _renderable; }

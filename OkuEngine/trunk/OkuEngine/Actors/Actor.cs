@@ -6,6 +6,7 @@ using OkuEngine.Scenes;
 using OkuEngine.Attributes;
 using OkuEngine.States;
 using OkuEngine.Events;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Actors
 {
@@ -19,6 +20,7 @@ namespace OkuEngine.Actors
     public const string ActorStateAttributeComponentName = "attributes";
     public const string ActorStateAABBComponentName = "boundingbox";
 
+    private int _actorTypeId = 0;
     private ActorType _type = null;
     private StateManager<StateInstance> _states = new StateManager<StateInstance>(true);
     private AttributeMap _attributes = new AttributeMap();
@@ -40,24 +42,29 @@ namespace OkuEngine.Actors
     }
 
     /// <summary>
-    /// Gets the actor type of this actor.
+    /// Gets or sets the id of the type of the actor.
     /// </summary>
-    public ActorType Type
+    [JsonPropertyAttribute]
+    public int ActorTypeId
     {
-      get { return _type; }
+      get { return _actorTypeId; }
+      set { _actorTypeId = value; }
     }
 
     /// <summary>
     /// Gets the states that are associated with the actor.
     /// </summary>
+    [JsonPropertyAttribute]
     public StateManager<StateInstance> States
     {
       get { return _states; }
+      set { _states = value; }
     }
 
     /// <summary>
     /// Gets the attributes of the actor.
     /// </summary>
+    [JsonPropertyAttribute]
     public AttributeMap Attributes
     {
       get { return _attributes; }
@@ -112,6 +119,9 @@ namespace OkuEngine.Actors
 
         return null;
       }
+      set
+      {
+      }
     }
 
     /// <summary>
@@ -132,7 +142,7 @@ namespace OkuEngine.Actors
       if (!base.Load(node))
         return false;
 
-      int actorType = 0;
+      _actorTypeId = 0;
       _attributes.Clear();
       _states.Clear();
 
@@ -141,15 +151,15 @@ namespace OkuEngine.Actors
       {
         int test = 0;
         if (int.TryParse(value, out test))
-          actorType = test;
+          _actorTypeId = test;
         else
           return false;
       }
 
-      _type = OkuData.Instance.ActorTypes[actorType];
+      _type = OkuData.Instance.ActorTypes[_actorTypeId];
       if (_type == null)
       {
-        OkuManagers.Logger.LogError("Could not find actor type with id " + actorType + " for actor " + _name + "!");
+        OkuManagers.Logger.LogError("Could not find actor type with id " + _actorTypeId + " for actor " + _name + "!");
         return false;
       }
 
