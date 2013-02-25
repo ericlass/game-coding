@@ -233,9 +233,26 @@ namespace OkuEngine
               OkuData.Instance.SceneManager.SetActiveScene(new OkuEngine.Scenes.Scene(-1, "Empty Scene"));
           }
 
-          Newtonsoft.Json.JsonSerializerSettings settings = new Newtonsoft.Json.JsonSerializerSettings();
-          settings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
-          Clipboard.SetText(Newtonsoft.Json.JsonConvert.SerializeObject(OkuData.Instance, Newtonsoft.Json.Formatting.Indented, settings)); 
+          long tick1, tick2, freq;
+          Kernel32.QueryPerformanceFrequency(out freq);
+
+          Kernel32.QueryPerformanceCounter(out tick1);
+          string json = Newtonsoft.Json.JsonConvert.SerializeObject(OkuData.Instance, Newtonsoft.Json.Formatting.Indented, OkuData.JsonSettings);
+          Kernel32.QueryPerformanceCounter(out tick2);
+
+          Clipboard.SetText(json); 
+
+          float time = (tick2 - tick1) / (float)freq;
+          OkuManagers.Logger.LogInfo("JSON serialisation took: " + time + " seconds");
+
+          Kernel32.QueryPerformanceCounter(out tick1);
+          OkuData test = Newtonsoft.Json.JsonConvert.DeserializeObject<OkuData>(json, OkuData.JsonSettings);
+          if (test.AfterLoad())
+            OkuData.Instance = test;
+          Kernel32.QueryPerformanceCounter(out tick2);
+
+          time = (tick2 - tick1) / (float)freq;
+          OkuManagers.Logger.LogInfo("JSON deserialisation took: " + time + " seconds");
 
           Initialize();
         }

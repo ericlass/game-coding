@@ -15,6 +15,7 @@ namespace OkuEngine.Collision
     public abstract void AddBody(Body<T> body); //Is called when body is added to world
     public abstract void UpdateBody(Body<T> body); //Is called when body moves somehow
     public abstract void RemoveBody(Body<T> body); //Is called wheb body is removed from world
+    public abstract void Clear();
 
     public abstract List<Body<T>> GetCollisionCandidates(Body<T> body);
   }

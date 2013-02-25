@@ -46,6 +46,13 @@ namespace OkuEngine.Scripting
     internal ScriptEngine Engine
     {
       get { return _engine; }
+      set { _engine = value; }
+    }
+
+    internal FunctionInstance Function
+    {
+      get { return _function; }
+      set { _function = value; }
     }
 
     /// <summary>

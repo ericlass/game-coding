@@ -13,13 +13,13 @@ namespace OkuEngine.Actors
   /// </summary>
   class ShapeStateComponent : IStateComponent
   {
-    private StateBase _owner = null;
+    private State _owner = null;
     private Polygon _shape = null;
 
     /// <summary>
     /// Gets or sets the owning state of the component.
     /// </summary>
-    public StateBase Owner
+    public State Owner
     {
       get { return _owner; }
       set { _owner = value; }
@@ -84,6 +84,11 @@ namespace OkuEngine.Actors
     public bool Save(XmlWriter writer)
     {
       return _shape.Save(writer);
+    }
+
+    public bool AfterLoad()
+    {
+      return _shape.AfterLoad();
     }
 
   }

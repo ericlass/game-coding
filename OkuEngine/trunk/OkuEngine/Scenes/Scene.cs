@@ -28,6 +28,7 @@ namespace OkuEngine.Scenes
     {
       _viewport.Change += new ViewPortChangeEventHandler(_viewport_Change);
       OkuManagers.EventManager.AddListener(EventTypes.SceneNodeMoved, new EventListenerDelegate(OnEventReceived));
+      _collisionWorld = new CollisionWorld<SceneNode>(new NoBroadPhaseDetector<SceneNode>(), new AABBPrecisePhaseDetector<SceneNode>());
     }
 
     /// <summary>
@@ -42,6 +43,7 @@ namespace OkuEngine.Scenes
 
       _viewport.Change += new ViewPortChangeEventHandler(_viewport_Change);
       OkuManagers.EventManager.AddListener(EventTypes.SceneNodeMoved, new EventListenerDelegate(OnEventReceived));
+      _collisionWorld = new CollisionWorld<SceneNode>(new NoBroadPhaseDetector<SceneNode>(), new AABBPrecisePhaseDetector<SceneNode>());
     }
 
     [JsonPropertyAttribute]
@@ -323,7 +325,7 @@ namespace OkuEngine.Scenes
       //Update scene id sequence
       KeySequence.SetCurrentValue(KeySequence.SceneSequence, Id);
 
-      _collisionWorld = new CollisionWorld<SceneNode>(new NoBroadPhaseDetector<SceneNode>(), new AABBPrecisePhaseDetector<SceneNode>());
+      _collisionWorld.Clear();
 
       XmlNode child = node["layers"];
       if (child != null)
@@ -372,6 +374,16 @@ namespace OkuEngine.Scenes
 
       writer.WriteEndElement();
 
+      return true;
+    }
+
+    public override bool AfterLoad()
+    {
+      foreach (SceneLayer layer in _layerMap.Values)
+      {
+        if (!layer.AfterLoad())
+          return false;
+      }
       return true;
     }
 

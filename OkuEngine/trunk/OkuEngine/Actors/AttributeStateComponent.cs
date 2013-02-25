@@ -13,13 +13,13 @@ namespace OkuEngine.Actors
   /// </summary>
   public class AttributeStateComponent : IStateComponent
   {
-    private StateBase _owner = null;
+    private State _owner = null;
     private AttributeMap _attributes = null;
 
     /// <summary>
     /// Gets or sets the owning state of the component.
     /// </summary>
-    public StateBase Owner
+    public State Owner
     {
       get { return _owner; }
       set { _owner = value; }
@@ -83,6 +83,11 @@ namespace OkuEngine.Actors
     public bool Save(XmlWriter writer)
     {
       return _attributes.Save(writer);
+    }
+
+    public bool AfterLoad()
+    {
+      return true;
     }
 
   }

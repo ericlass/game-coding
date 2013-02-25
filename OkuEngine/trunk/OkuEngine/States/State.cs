@@ -11,10 +11,12 @@ namespace OkuEngine.States
   /// State definition and instance share a lot of data and this base defines them.
   /// </summary>
   [JsonObjectAttribute(MemberSerialization.OptIn)]
-  public abstract class StateBase : IStoreable
+  public class State : IStoreable
   {
     protected string _name = null;
-    protected Dictionary<string, IStateComponent> _components = new Dictionary<string,IStateComponent>();
+    protected HashSet<IStateComponent> _components = new HashSet<IStateComponent>();
+
+    protected Dictionary<string, IStateComponent> _componentMap = new Dictionary<string,IStateComponent>();
 
     /// <summary>
     /// Gets the name of the state.
@@ -30,15 +32,10 @@ namespace OkuEngine.States
     /// Gets or sets the components of the state.
     /// </summary>
     [JsonPropertyAttribute]
-    public List<IStateComponent> Components
+    public HashSet<IStateComponent> Components
     {
-      get { return new List<IStateComponent>(_components.Values); }
-      set
-      {
-        _components.Clear();
-        foreach (IStateComponent component in value)
-          Add(component);
-      }
+      get { return _components; }
+      set { _components = value; }
     }
 
     /// <summary>
@@ -57,9 +54,10 @@ namespace OkuEngine.States
     /// <returns>True if the component was added successfully, false if the state already contains a component of the same type.</returns>
     public bool Add(IStateComponent component)
     {
-      if (!_components.ContainsKey(component.ComponentTypeName))
+      if (!_componentMap.ContainsKey(component.ComponentTypeName))
       {
-        _components.Add(component.ComponentTypeName, component);
+        _components.Add(component);
+        _componentMap.Add(component.ComponentTypeName, component);
         component.Owner = this;
         return true;
       }
@@ -74,10 +72,11 @@ namespace OkuEngine.States
     /// <returns>True if the component was removed successfully, false if the state does not contain the given component.</returns>
     public bool Remove(IStateComponent component)
     {
-      if (_components.ContainsKey(component.ComponentTypeName))
+      if (_componentMap.ContainsKey(component.ComponentTypeName))
       {
-        _components[component.ComponentTypeName].Owner = null; // Is this really needed?
-        _components.Remove(component.ComponentTypeName);
+        _components.Remove(component);
+        _componentMap[component.ComponentTypeName].Owner = null; // Is this really needed?
+        _componentMap.Remove(component.ComponentTypeName);
         return true;
       }
       return false;
@@ -90,7 +89,7 @@ namespace OkuEngine.States
     /// <returns>True if the state contains a component with the given name, else false.</returns>
     public bool Contains(string name)
     {
-      return _components.ContainsKey(name);
+      return _componentMap.ContainsKey(name);
     }
 
     /// <summary>
@@ -110,8 +109,8 @@ namespace OkuEngine.States
     {
       get
       {
-        if (_components.ContainsKey(name))
-          return _components[name];
+        if (_componentMap.ContainsKey(name))
+          return _componentMap[name];
         return null;
       }
     }
@@ -125,9 +124,19 @@ namespace OkuEngine.States
     /// <returns>The component with the given name or null if their is not component with this name.</returns>
     public T GetComponent<T>(string name) where T : IStateComponent
     {
-      if (_components.ContainsKey(name))
-        return (T)_components[name];
+      if (_componentMap.ContainsKey(name))
+        return (T)_componentMap[name];
       return default(T);
+    }
+
+    /// <summary>
+    /// Creates a deep copy of the state including all components.
+    /// </summary>
+    /// <returns>A copy of the state.</returns>
+    public State Copy()
+    {
+      string json = JsonConvert.SerializeObject(this, OkuData.JsonSettings);
+      return JsonConvert.DeserializeObject<State>(json);
     }
 
     /// <summary>
@@ -135,12 +144,12 @@ namespace OkuEngine.States
     /// Duplicate components are merged too.
     /// </summary>
     /// <param name="state">The state to merge with.</param>
-    public void Merge(StateBase state)
+    public void Merge(State state)
     {
-      foreach (KeyValuePair<string, IStateComponent> comp in state._components)
+      foreach (KeyValuePair<string, IStateComponent> comp in state._componentMap)
       {
-        if (_components.ContainsKey(comp.Key))
-          _components[comp.Key].Merge(comp.Value);
+        if (_componentMap.ContainsKey(comp.Key))
+          _componentMap[comp.Key].Merge(comp.Value);
         else
           Add(comp.Value);
       }
@@ -159,7 +168,7 @@ namespace OkuEngine.States
 
       writer.WriteValueTag("name", _name);
 
-      foreach (KeyValuePair<string, IStateComponent> component in _components)
+      foreach (KeyValuePair<string, IStateComponent> component in _componentMap)
       {
         if (!component.Value.Save(writer))
           return false;
@@ -167,6 +176,20 @@ namespace OkuEngine.States
 
       writer.WriteEndElement();
 
+      return true;
+    }
+
+
+    public bool AfterLoad()
+    {
+      _componentMap.Clear();
+      foreach (IStateComponent component in _components)
+      {
+        if (!component.AfterLoad())
+          return false;
+        component.Owner = this;
+        _componentMap.Add(component.ComponentTypeName, component);
+      }
       return true;
     }
 

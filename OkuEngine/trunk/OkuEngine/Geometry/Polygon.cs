@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 using OkuEngine.Collision;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Geometry
 {
   /// <summary>
   /// Defines a static 2D polygon as a series of vertices.
   /// </summary>
+  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class Polygon : IStoreable
   {
     private Vector2f[] _vertices = null;
@@ -27,9 +29,11 @@ namespace OkuEngine.Geometry
     /// If you change any of the vertices you must call 
     /// the Invalidate() method to make sure cached data is refreshed.
     /// </summary>
+    [JsonPropertyAttribute]
     public Vector2f[] Vertices
     {
       get { return _vertices; }
+      set { _vertices = value; }
     }
 
     /// <summary>
@@ -125,6 +129,12 @@ namespace OkuEngine.Geometry
     public override string ToString()
     {
       return _vertices == null ? "" : _vertices.ToOkuString();
+    }
+
+    public bool AfterLoad()
+    {
+      _aabbValid = false;
+      return true;
     }
 
   }

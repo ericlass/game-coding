@@ -200,5 +200,11 @@ namespace OkuEngine.Rendering
       return true;
     }
 
+    public bool AfterLoad()
+    {
+      _aabbValid = false;
+      return true;
+    }
+
   }
 }

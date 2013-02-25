@@ -9,7 +9,6 @@ namespace OkuEngine.Attributes
   /// <summary>
   /// Defines a single attribute value of a specific type.
   /// </summary>
-  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class AttributeValue : IStoreable
   {
     private string _name = null;
@@ -36,9 +35,11 @@ namespace OkuEngine.Attributes
     /// <summary>
     /// Gets the type of the attribute.
     /// </summary>
+    [JsonPropertyAttribute]
     public AttributeType Type
     {
       get { return _type; }
+      set { _type = value; }
     }
 
     /// <summary>
@@ -155,6 +156,11 @@ namespace OkuEngine.Attributes
     public override string ToString()
     {
       return _rawValue == null ? "NULL" : _rawValue.ToString();
+    }
+
+    public bool AfterLoad()
+    {
+      return true;
     }
 
   }

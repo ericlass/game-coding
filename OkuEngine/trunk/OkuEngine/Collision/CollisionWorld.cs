@@ -40,6 +40,14 @@ namespace OkuEngine.Collision
       _bodies.Remove(body);
     }
 
+    public void Clear()
+    {
+      _bodies.Clear();
+      _updatedBodies.Clear();
+      _collidedPairs.Clear();
+      _broadDetector.Clear();
+    }
+
     public bool GetCollisions(List<CollisionInfo<T>> collisions)
     {
       collisions.Clear();

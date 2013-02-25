@@ -11,14 +11,14 @@ namespace OkuEngine.Scenes
   /// <summary>
   /// Stores properties of a scene node.
   /// </summary>
-  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class SceneNodeProperties : IStoreable
   {
     private int _objectId = 0;
+    private Transformation _transform = new Transformation();
+
     private SceneObject _object = null;
     private Transformation _previousTransform = new Transformation();
-    private Transformation _transform = new Transformation();
-    private Body<SceneNode> _body = null;
+    private Body<SceneNode> _body = new Body<SceneNode>();
 
     /// <summary>
     /// Creates new scene node properties.
@@ -134,6 +134,25 @@ namespace OkuEngine.Scenes
       _transform.Save(writer);
 
       return true;
+    }
+
+    public bool AfterLoad()
+    {
+      _object = OkuData.Instance.SceneObjects[_objectId];
+      if (_object == null)
+      {
+        OkuManagers.Logger.LogError("No scene object found with the id " + _objectId + " while loading scene node! Is the initialization order correct?");
+        return false;
+      }
+
+      // Setup some body stuff here. The rest is setup in SceneNode.AfterLoad() and SceneLayer.AfterLoad()
+      _body = new Body<SceneNode>();
+      _body.BoundingBox = _object.BoundingBox;
+      _body.Transform = _transform;
+      _body.PreviousTransform = _previousTransform;
+      _body.Shape = _object.Shape;
+
+      return _transform.AfterLoad();
     }
 
   }

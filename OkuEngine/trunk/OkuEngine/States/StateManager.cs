@@ -11,15 +11,17 @@ namespace OkuEngine.States
   /// Handles a set of entity states.
   /// </summary>
   [JsonObjectAttribute(MemberSerialization.OptIn)]
-  public class StateManager<T> : IStoreable where T : StateBase, new()
+  public class StateManager<T> : IStoreable where T : State, new()
   {
     /// <summary>
     /// Delegate for the change event.
     /// </summary>
     public delegate void StateChangedDelegate();
 
-    private Dictionary<string, T> _states = new Dictionary<string, T>();
     private string _defaultName = null;
+    private HashSet<T> _states = new HashSet<T>();
+
+    private Dictionary<string, T> _stateMap = new Dictionary<string, T>();
     private string _previousStateName = null;
     private string _currentStateName = null;
     private bool _overwriteStates = false;
@@ -59,15 +61,10 @@ namespace OkuEngine.States
     }
 
     [JsonPropertyAttribute]
-    public List<T> States
+    public HashSet<T> States
     {
-      get { return new List<T>(_states.Values); }
-      set
-      {
-        _states.Clear();
-        foreach (T state in value)
-          Add(state);
-      }
+      get { return _states; }
+      set { _states = value; }
     }
 
     /// <summary>
@@ -93,7 +90,7 @@ namespace OkuEngine.States
     /// <returns>True if the state was set successfully, false if there is no state with the given name.</returns>
     public bool SetCurrentState(string name)
     {
-      if (_states.ContainsKey(name))
+      if (_stateMap.ContainsKey(name))
       {
         _previousStateName = _currentStateName;
         _currentStateName = name;
@@ -109,8 +106,8 @@ namespace OkuEngine.States
     /// <returns>The current state object or null if there is no current state.</returns>
     public T GetCurrentState()
     {
-      if (_states.ContainsKey(_currentStateName))
-        return _states[_currentStateName];
+      if (_stateMap.ContainsKey(_currentStateName))
+        return _stateMap[_currentStateName];
       else
         return null;
     }
@@ -122,9 +119,10 @@ namespace OkuEngine.States
     /// <returns>True if the state was added, false if there already is a state with the same name.</returns>
     public bool Add(T state)
     {
-      if (!_states.ContainsKey(state.Name))
+      if (!_stateMap.ContainsKey(state.Name))
       {
-        _states.Add(state.Name, state);
+        _states.Add(state);
+        _stateMap.Add(state.Name, state);
         return true;
       }
       return false;
@@ -137,7 +135,8 @@ namespace OkuEngine.States
     /// <returns>True if the state was removed, false if the manager did not contain the state.</returns>
     public bool Remove(T state)
     {
-      return _states.Remove(state.Name);
+      _states.Remove(state);
+      return _stateMap.Remove(state.Name);
     }
 
     /// <summary>
@@ -146,6 +145,7 @@ namespace OkuEngine.States
     public void Clear()
     {
       _states.Clear();
+      _stateMap.Clear();
     }
 
     /// <summary>
@@ -153,7 +153,7 @@ namespace OkuEngine.States
     /// </summary>
     public int Count
     {
-      get { return _states.Count; }
+      get { return _stateMap.Count; }
     }
 
     /// <summary>
@@ -161,7 +161,7 @@ namespace OkuEngine.States
     /// </summary>
     public List<T> Values
     {
-      get { return new List<T>(_states.Values); }
+      get { return new List<T>(_stateMap.Values); }
     }
 
     public bool Load(XmlNode node)
@@ -182,8 +182,8 @@ namespace OkuEngine.States
 
           if (_overwriteStates)
           {
-            if (_states.ContainsKey(name))
-              _states[name].Merge(state);
+            if (_stateMap.ContainsKey(name))
+              _stateMap[name].Merge(state);
             else
               Add(state);
           }
@@ -205,13 +205,25 @@ namespace OkuEngine.States
     public bool Save(XmlWriter writer)
     {
       writer.WriteStartElement("states");
-      foreach (KeyValuePair<string, T> state in _states)
+      foreach (KeyValuePair<string, T> state in _stateMap)
       {
         if (!state.Value.Save(writer))
           return false;
       }
       writer.WriteEndElement();
 
+      return true;
+    }
+
+    public bool AfterLoad()
+    {
+      _stateMap.Clear();
+      foreach (T state in _states)
+      {
+        if (!state.AfterLoad())
+          return false;
+        _stateMap.Add(state.Name, state);
+      }
       return true;
     }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Input
 {
@@ -26,6 +27,26 @@ namespace OkuEngine.Input
 
       _stateBindings.Add(KeyAction.Down, new Dictionary<Keys, int>());
       _stateBindings.Add(KeyAction.Up, new Dictionary<Keys, int>());
+    }
+
+    /// <summary>
+    /// Gets or set the key bindings that are triggered while a key is in a certain state.
+    /// </summary>
+    [JsonPropertyAttribute]
+    public Dictionary<KeyAction, Dictionary<Keys, int>> StateBindings
+    {
+      get { return _stateBindings; }
+      set { _stateBindings = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the key bindings that are triggered when a key switches to a certain state.
+    /// </summary>
+    [JsonPropertyAttribute]
+    public Dictionary<KeyAction, Dictionary<Keys, int>> StateChangeBindings
+    {
+      get { return _stateChangeBindings; }
+      set { _stateChangeBindings = value; }
     }
 
     /// <summary>
@@ -182,6 +203,17 @@ namespace OkuEngine.Input
         }
       }
       writer.WriteEndElement();
+
+      return true;
+    }
+
+    public bool AfterLoad()
+    {
+      _stateChangeBindings.Add(KeyAction.Down, new Dictionary<Keys, int>());
+      _stateChangeBindings.Add(KeyAction.Up, new Dictionary<Keys, int>());
+
+      _stateBindings.Add(KeyAction.Down, new Dictionary<Keys, int>());
+      _stateBindings.Add(KeyAction.Up, new Dictionary<Keys, int>());
 
       return true;
     }

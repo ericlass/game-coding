@@ -37,5 +37,11 @@ namespace OkuEngine.Collision
 
       return result;
     }
+
+    public override void Clear()
+    {
+      _bodies.Clear();
+    }
+
   }
 }

@@ -14,14 +14,14 @@ namespace OkuEngine.Actors
   /// </summary>
   public class AABBStateComponent : IStateComponent
   {
-    private StateBase _owner = null;
+    private State _owner = null;
     private bool _aabbValid = false;
     private AABB _aabb = new AABB();
 
     /// <summary>
     /// Gets or sets the owning state of the component.
     /// </summary>
-    public StateBase Owner
+    public State Owner
     {
       get { return _owner; }
       set { _owner = value; }
@@ -88,7 +88,13 @@ namespace OkuEngine.Actors
     public bool Save(XmlWriter writer)
     {
       return true;
-    }    
+    }
+
+    public bool AfterLoad()
+    {
+      _aabbValid = false;
+      return true;
+    }
 
   }
 }

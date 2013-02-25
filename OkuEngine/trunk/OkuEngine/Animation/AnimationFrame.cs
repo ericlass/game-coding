@@ -96,5 +96,10 @@ namespace OkuEngine
       return true;
     }
 
+    public bool AfterLoad()
+    {
+      return true;
+    }
+
   }
 }

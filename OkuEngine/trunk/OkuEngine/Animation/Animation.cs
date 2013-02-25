@@ -166,5 +166,15 @@ namespace OkuEngine
       return true;
     }
 
+    public override bool AfterLoad()
+    {
+      foreach (AnimationFrame frame in _frames)
+      {
+        if (!frame.AfterLoad())
+          return false;
+      }
+      return true;
+    }
+
   }
 }

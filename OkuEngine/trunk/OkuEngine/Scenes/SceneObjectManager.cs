@@ -9,17 +9,17 @@ namespace OkuEngine.Scenes
   /// <summary>
   /// Manages scene objects like actors and brushes.
   /// </summary>
-  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class SceneObjectManager : IStoreable
   {
-    private Dictionary<int, SceneObject> _objects = new Dictionary<int,SceneObject>();
+    private HashSet<SceneObject> _objects = new HashSet<SceneObject>();
+    private Dictionary<int, SceneObject> _objectMap = new Dictionary<int,SceneObject>();
 
     /// <summary>
     /// Create a new scene object manager.
     /// </summary>
     public SceneObjectManager()
     {
-      _objects = new Dictionary<int, SceneObject>();
+      _objectMap = new Dictionary<int, SceneObject>();
     }
 
     /// <summary>
@@ -29,10 +29,12 @@ namespace OkuEngine.Scenes
     /// <returns>True if the scene object was added, false if there already is a scene object with the same id.</returns>
     public bool Add(SceneObject sceneObject)
     {
-      if (_objects.ContainsKey(sceneObject.Id))
+      if (_objectMap.ContainsKey(sceneObject.Id))
         return false;
 
-      _objects.Add(sceneObject.Id, sceneObject);
+      _objects.Add(sceneObject);
+      _objectMap.Add(sceneObject.Id, sceneObject);
+
       return true;
     }
 
@@ -43,22 +45,18 @@ namespace OkuEngine.Scenes
     /// <returns>True if the scene object was removed, false if the manager did not contain the scene object.</returns>
     public bool Remove(SceneObject sceneObject)
     {
-      return _objects.Remove(sceneObject.Id);
+      _objects.Remove(sceneObject);
+      return _objectMap.Remove(sceneObject.Id);
     }
 
     /// <summary>
     /// Gets or sets the scene objects of the manager.
     /// </summary>
     [JsonPropertyAttribute]
-    public List<SceneObject> Objects
+    public HashSet<SceneObject> Objects
     {
-      get { return new List<SceneObject>(_objects.Values); }
-      set
-      {
-        _objects.Clear();
-        foreach (SceneObject obj in value)
-          Add(obj);
-      }
+      get { return _objects; }
+      set { _objects = value; }
     }
 
     /// <summary>
@@ -70,8 +68,8 @@ namespace OkuEngine.Scenes
     {
       get
       {
-        if (_objects.ContainsKey(id))
-          return _objects[id];
+        if (_objectMap.ContainsKey(id))
+          return _objectMap[id];
         else
           return null;
       }
@@ -87,9 +85,9 @@ namespace OkuEngine.Scenes
     /// <returns>The scene object with the given id or null if the manager does not contain a scene object with this id.</returns>
     public T Get<T>(int id) where T : SceneObject
     {
-      if (_objects.ContainsKey(id))
+      if (_objectMap.ContainsKey(id))
       {
-        SceneObject so = _objects[id];
+        SceneObject so = _objectMap[id];
         if (so is T)
           return so as T;
         else
@@ -127,13 +125,24 @@ namespace OkuEngine.Scenes
     {
       writer.WriteStartElement("sceneobjects");
 
-      foreach (SceneObject so in _objects.Values)
+      foreach (SceneObject so in _objectMap.Values)
       {
         so.Save(writer);
       }
 
       writer.WriteEndElement();
 
+      return true;
+    }
+
+    public bool AfterLoad()
+    {
+      foreach (SceneObject obj in _objects)
+      {
+        if (!obj.AfterLoad())
+          return false;
+        _objectMap.Add(obj.Id, obj);
+      }
       return true;
     }
 

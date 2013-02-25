@@ -94,5 +94,10 @@ namespace OkuEngine.Rendering
       return result;
     }
 
+    public bool AfterLoad()
+    {
+      return _vertices.AfterLoad();
+    }
+
   }
 }

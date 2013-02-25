@@ -11,17 +11,16 @@ namespace OkuEngine.Actors
   /// <summary>
   /// Defines the basis of an actor.
   /// </summary>
-  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class ActorType : StoreableEntity
   {
-    private StateManager<StateDefinition> _states = new StateManager<StateDefinition>();
+    private StateManager<State> _states = new StateManager<State>();
     private AttributeMap _attributes = new AttributeMap();
 
     /// <summary>
     /// Gets the state of the actor type.
     /// </summary>
     [JsonPropertyAttribute]
-    public StateManager<StateDefinition> States
+    public StateManager<State> States
     {
       get { return _states; }
     }
@@ -84,6 +83,11 @@ namespace OkuEngine.Actors
       writer.WriteEndElement();
 
       return true;
+    }
+
+    public override bool AfterLoad()
+    {
+      return _states.AfterLoad() && _attributes.AfterLoad();
     }
 
   }

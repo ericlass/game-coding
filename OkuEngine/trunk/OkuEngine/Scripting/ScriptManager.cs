@@ -66,6 +66,18 @@ namespace OkuEngine.Scripting
       return new ScriptInstance(funcInst, code, _engine);
     }
 
+    public bool Recompile(ScriptInstance script)
+    {
+      string source = script.Source;
+      if (source == null)
+        return false;
+
+      ScriptInstance compiled = CompileScript(source);
+      script.Engine = _engine;
+      script.Function = compiled.Function;
+      return true;
+    }
+
     /// <summary>
     /// Checks if the given script code is compilable.
     /// </summary>

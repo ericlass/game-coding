@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace OkuEngine
 {
@@ -25,9 +26,17 @@ namespace OkuEngine
     /// <summary>
     /// Gets the source of the pixel shader.
     /// </summary>
+    [JsonPropertyAttribute]
     public string Source
     {
       get { return _source; }
+      set { _source = value; }
+    }
+
+    public override bool AfterLoad()
+    {
+      OkuManagers.Renderer.InitShaderContent(this);
+      return true;
     }
 
   }

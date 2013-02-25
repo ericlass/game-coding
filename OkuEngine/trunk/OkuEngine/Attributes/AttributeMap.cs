@@ -100,5 +100,15 @@ namespace OkuEngine.Attributes
       return true;
     }
 
+    public bool AfterLoad()
+    {
+      foreach (AttributeValue value in this.Values)
+      {
+        if (!value.AfterLoad())
+          return false;
+      }
+      return true;
+    }
+
   }
 }

@@ -13,7 +13,6 @@ namespace OkuEngine.Scenes
   /// by special scene node. If you override one of these methods
   /// make sure to call the base method.
   /// </summary>
-  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class SceneNode : IStoreable
   {
     protected SceneNodeProperties _props = null;
@@ -294,6 +293,12 @@ namespace OkuEngine.Scenes
       writer.WriteEndElement();
 
       return true;
+    }
+
+    public bool AfterLoad()
+    {
+      _props.Body.Data = this;
+      return _props.AfterLoad();
     }
 
   }

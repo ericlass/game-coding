@@ -56,20 +56,19 @@ namespace OkuEngine.Rendering
       string value = node.GetTagValue("image");
       if (value != null)
       {
-        int imageId = 0;
-        if (int.TryParse(value, out imageId))
+        _imageId = 0;
+        if (int.TryParse(value, out _imageId))
         {
-          _imageId = imageId;
           _image = OkuData.Instance.Images[_imageId];
           if (_image == null)
           {
-            OkuManagers.Logger.LogError("There is no image with the id " + imageId + "! " + node.OuterXml);
+            OkuManagers.Logger.LogError("There is no image with the id " + _imageId + "! " + node.OuterXml);
             return false;
           }
         }
         else
         {
-          OkuManagers.Logger.LogError("The image id " + imageId + " is not a valid number! " + node.OuterXml);
+          OkuManagers.Logger.LogError("The image id " + _imageId + " is not a valid number! " + node.OuterXml);
           return false;
         }
       }
@@ -122,6 +121,17 @@ namespace OkuEngine.Rendering
       result._mode = _mode;
       result._vertices = _vertices.Copy();
       return result;
+    }
+
+    public bool AfterLoad()
+    {
+      _image = OkuData.Instance.Images[_imageId];
+      if (_image == null)
+      {
+        OkuManagers.Logger.LogError("There is no image with the id " + _imageId + "!");
+        return false;
+      }
+      return _vertices.AfterLoad();
     }
 
   }

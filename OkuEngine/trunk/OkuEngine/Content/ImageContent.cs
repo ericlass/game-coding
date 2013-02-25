@@ -113,6 +113,7 @@ namespace OkuEngine
     /// Gets or sets if the image should be compressed or not.
     /// NOTE: After the image has been loaded changing this has no effect.
     /// </summary>
+    [JsonPropertyAttribute]
     public bool Compressed
     {
       get { return _compressed; }
@@ -207,6 +208,28 @@ namespace OkuEngine
       sheet.Dispose();
 
       return result;
+    }
+
+    public override bool AfterLoad()
+    {
+      if (_resource == null)
+        return false;
+
+      ResourceHandle handle = OkuManagers.ResourceCache.GetHandle(new Resource(_resource));
+      if (handle != null)
+      {
+        Bitmap bm = (handle.Extras as TextureExtraData).Image;
+        OkuManagers.Renderer.InitImageContent(this, bm);
+        _width = bm.Width;
+        _height = bm.Height;
+      }
+      else
+      {
+        OkuManagers.Logger.LogError("Image resource '" + _resource + "' was not found!");
+        return false;
+      }
+
+      return true;
     }
 
   }

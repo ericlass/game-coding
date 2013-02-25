@@ -21,11 +21,11 @@ namespace OkuEngine.Scenes.Backdrops
 
     private Vector2f _offset = Vector2f.Zero;
     private int _imageId = 0;
-    private ImageContent _image = null;
     private Polygon[] _shapes = null;
     private float _width = 0.0f;
     private float _height = 0.0f;
-    
+
+    private ImageContent _image = null;
     private RegularGrid _grid = null;
     private Dictionary<Vector2i, Vertices> _sliceData = new Dictionary<Vector2i, Vertices>();
     private DynamicArray<Vector2f> _vertPoints = new DynamicArray<Vector2f>();
@@ -35,19 +35,25 @@ namespace OkuEngine.Scenes.Backdrops
     /// <summary>
     /// Gets the shapes for collision detection.
     /// </summary>
+    [JsonPropertyAttribute]
     public override Polygon[] Shapes
     {
       get { return _shapes; }
+      set { _shapes = value; }
     }
 
+    [JsonPropertyAttribute]
     public override float Width
     {
       get { return _width; }
+      set { _width = value; }
     }
 
+    [JsonPropertyAttribute]
     public override float Height
     {
       get { return _height; }
+      set { _height = value; }
     }
 
     [JsonPropertyAttribute]
@@ -250,6 +256,20 @@ namespace OkuEngine.Scenes.Backdrops
       }
 
       writer.WriteEndElement();
+
+      return true;
+    }
+
+    public override bool AfterLoad()
+    {
+      _image = OkuData.Instance.Images[_imageId];
+      if (_image == null)
+      {
+        OkuManagers.Logger.LogError("Could not find image with id " + _imageId + "!");
+        return false;
+      }
+
+      InitializeSlices();
 
       return true;
     }

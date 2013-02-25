@@ -9,8 +9,7 @@ namespace OkuEngine
   /// <summary>
   /// Defines a base class for all entities in the engine that can be stored (load and saved).
   /// </summary>
-  [JsonObjectAttribute(MemberSerialization.OptIn)]
-  public class StoreableEntity : IStoreable
+  public abstract class StoreableEntity : IStoreable
   {
     public const int InvalidId = 0;
 
@@ -36,6 +35,8 @@ namespace OkuEngine
       get { return _name; }
       set { _name = value; }
     }
+
+    public abstract bool AfterLoad();
 
     /// <summary>
     /// Loads id and name from the given xml node.

@@ -26,7 +26,7 @@ namespace OkuEngine.Scenes
     {
       sceneId = 0;
       layerIndex = 0;
-      foreach (Scene scene in _entities.Values)
+      foreach (Scene scene in _entityMap.Values)
       {
         if (scene.FindActor(actorId, out layerIndex))
         {
@@ -66,11 +66,19 @@ namespace OkuEngine.Scenes
     /// <param name="scene">The id of the scene to set active.</param>
     internal void SetActiveScene(int sceneId)
     {
-      if (_entities.ContainsKey(sceneId))
+      if (_entityMap.ContainsKey(sceneId))
       {
-        Scene scene = _entities[sceneId];
+        Scene scene = _entityMap[sceneId];
         SetActiveScene(scene);
       }
+    }
+
+    public override bool AfterLoad()
+    {
+      if (!base.AfterLoad())
+        return false;
+      _activeScene = this[OkuData.Instance.GameProperties.StartSceneId];
+      return _activeScene != null;
     }
 
   }

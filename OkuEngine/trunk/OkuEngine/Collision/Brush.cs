@@ -130,5 +130,31 @@ namespace OkuEngine.Collision
       return true;
     }
 
+    public override bool AfterLoad()
+    {
+      if (_renderable != null)
+      {
+        if (!_renderable.AfterLoad())
+          return false;
+      }
+
+      if (_shape != null)
+      {
+        _boundingBox = _shape.GetBoundingBox();
+      }
+      else
+      {
+        if (_renderable != null)
+          _boundingBox = _renderable.GetBoundingBox();
+        else
+        {
+          OkuManagers.Logger.LogError("Brush " + Id + " does not have a renderable or shape!");
+          return false;
+        }
+      }
+
+      return true;
+    }
+
   }
 }

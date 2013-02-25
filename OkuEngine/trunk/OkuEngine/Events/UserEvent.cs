@@ -21,5 +21,10 @@ namespace OkuEngine.Events
       return base.Save(writer);
     }
 
+    public override bool AfterLoad()
+    {
+      return true;
+    }
+
   }
 }

@@ -132,5 +132,19 @@ namespace OkuEngine.Scripting
       return true;
     }
 
+    public override bool AfterLoad()
+    {
+      //TODO: Bad hack that should be replaced asap
+      foreach (KeyValuePair<int, List<ScriptInstance>> handler in _handlers)
+      {
+        foreach (ScriptInstance script in handler.Value)
+        {
+          if (!OkuManagers.ScriptManager.Recompile(script))
+            return false;
+        }
+      }
+      return true;
+    }
+
   }
 }

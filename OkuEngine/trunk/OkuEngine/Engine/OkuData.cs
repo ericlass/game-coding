@@ -19,8 +19,13 @@ namespace OkuEngine
   /// Contains the data of the game.
   /// </summary>
   [JsonObjectAttribute(MemberSerialization.OptIn)]
-  public class OkuData
+  public class OkuData : IStoreable
   {
+    /// <summary>
+    /// Defines the engine wide serializer settings.
+    /// </summary>
+    public static JsonSerializerSettings JsonSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
+
     private static OkuData _instance = null;
 
     public static OkuData Instance
@@ -31,6 +36,7 @@ namespace OkuEngine
           _instance = new OkuData();
         return _instance;
       }
+      set { _instance = value; }
     }
 
     private OkuData()
@@ -47,6 +53,18 @@ namespace OkuEngine
     private EntityManager<UserEvent> _userEvents = new EntityManager<UserEvent>("userevents", "event", KeySequence.UserEventSequence);
     private EntityManager<Behavior> _behaviors = new EntityManager<Behavior>("behaviors", "behavior", KeySequence.BehaviorSequence);
     private SceneObjectManager _sceneObjects = new SceneObjectManager();
+
+    public bool AfterLoad()
+    {
+      return
+        _userEvents.AfterLoad() &&
+        _behaviors.AfterLoad() &&
+        _images.AfterLoad() &&
+        _animations.AfterLoad() &&
+        _actorTypes.AfterLoad() &&
+        _sceneObjects.AfterLoad() &&
+        _sceneManager.AfterLoad();
+    }
 
     [JsonPropertyAttribute]
     public GameProperties GameProperties
@@ -138,6 +156,18 @@ namespace OkuEngine
       get { return _sceneObjects; }
       set { _sceneObjects = value; }
     }
+
+    public bool Load(System.Xml.XmlNode node)
+    {
+      throw new NotImplementedException();
+    }
+
+    public bool Save(System.Xml.XmlWriter writer)
+    {
+      throw new NotImplementedException();
+    }
+
+    
 
   }
 }

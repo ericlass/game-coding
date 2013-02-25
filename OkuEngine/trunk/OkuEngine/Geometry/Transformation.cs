@@ -217,5 +217,11 @@ namespace OkuEngine
       return true;
     }
 
+    public bool AfterLoad()
+    {
+      _matrixValid = false;
+      return true;
+    }
+
   }
 }

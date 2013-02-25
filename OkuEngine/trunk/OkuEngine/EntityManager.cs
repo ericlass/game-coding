@@ -14,7 +14,8 @@ namespace OkuEngine
   [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class EntityManager<T> : IStoreable where T : StoreableEntity, new()
   {
-    protected Dictionary<int, T> _entities = new Dictionary<int, T>();
+    protected HashSet<T> _entities = new HashSet<T>();
+    protected Dictionary<int, T> _entityMap = new Dictionary<int, T>();
     private string _groupName = null;
     private string _entityName = null;
     private string _sequenceName = null;
@@ -33,18 +34,10 @@ namespace OkuEngine
     }
 
     [JsonPropertyAttribute]
-    public List<T> Entities
+    public HashSet<T> Entities
     {
-      get { return new List<T>(_entities.Values); }
-      set
-      {
-        _entities.Clear();
-        if (value != null)
-        {
-          foreach (T entity in value)
-            _entities.Add(entity.Id, entity);
-        }
-      }
+      get { return _entities; }
+      set { _entities = value; }
     }
 
     /// <summary>
@@ -78,9 +71,10 @@ namespace OkuEngine
     /// <returns>True if the entity was added, false if there already is an entity with the same id.</returns>
     public bool Add(T entity)
     {
-      if (!_entities.ContainsKey(entity.Id))
+      if (!_entityMap.ContainsKey(entity.Id))
       {
-        _entities.Add(entity.Id, entity);
+        _entities.Add(entity);
+        _entityMap.Add(entity.Id, entity);
         return true;
       }
       return false;
@@ -93,7 +87,7 @@ namespace OkuEngine
     /// <returns>True if the entity was removed, false if the manager did not contain the entity.</returns>
     public bool Remove(T entity)
     {
-      return _entities.Remove(entity.Id);
+      return _entityMap.Remove(entity.Id) || _entities.Remove(entity);
     }
 
     /// <summary>
@@ -105,8 +99,8 @@ namespace OkuEngine
     {
       get
       {
-        if (_entities.ContainsKey(id))
-          return _entities[id];
+        if (_entityMap.ContainsKey(id))
+          return _entityMap[id];
 
         return null;
       }
@@ -152,7 +146,7 @@ namespace OkuEngine
     {
       writer.WriteStartElement(_groupName);
 
-      foreach (KeyValuePair<int, T> entity in _entities)
+      foreach (KeyValuePair<int, T> entity in _entityMap)
       {
         if (!entity.Value.Save(writer))
         {
@@ -163,6 +157,18 @@ namespace OkuEngine
 
       writer.WriteEndElement();
 
+      return true;
+    }
+
+    public virtual bool AfterLoad()
+    {
+      _entityMap.Clear();
+      foreach (T entity in _entities)
+      {
+        if (!entity.AfterLoad())
+          return false;
+        _entityMap.Add(entity.Id, entity);
+      }
       return true;
     }
 

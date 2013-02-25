@@ -22,7 +22,7 @@ namespace OkuEngine.Actors
 
     private int _actorTypeId = 0;
     private ActorType _type = null;
-    private StateManager<StateInstance> _states = new StateManager<StateInstance>(true);
+    private StateManager<State> _states = new StateManager<State>(true);
     private AttributeMap _attributes = new AttributeMap();
 
     /// <summary>
@@ -30,7 +30,7 @@ namespace OkuEngine.Actors
     /// </summary>
     public Actor()
     {
-      _states.OnStateChange += new StateManager<StateInstance>.StateChangedDelegate(_states_OnStateChange);
+      _states.OnStateChange += new StateManager<State>.StateChangedDelegate(_states_OnStateChange);
     }
 
     /// <summary>
@@ -55,7 +55,7 @@ namespace OkuEngine.Actors
     /// Gets the states that are associated with the actor.
     /// </summary>
     [JsonPropertyAttribute]
-    public StateManager<StateInstance> States
+    public StateManager<State> States
     {
       get { return _states; }
       set { _states = value; }
@@ -164,9 +164,9 @@ namespace OkuEngine.Actors
       }
 
       _states.Clear();
-      foreach (StateDefinition def in _type.States.Values)
+      foreach (State def in _type.States.Values)
       {
-        _states.Add(def.CreateInstance());
+        _states.Add(def.Copy());
       }
 
       //Load actor states
@@ -177,7 +177,7 @@ namespace OkuEngine.Actors
           return false;
 
         //Add the aabb component manually as it cannot (and shall not) be added in the XML
-        foreach (StateBase stat in _states.Values)
+        foreach (State stat in _states.Values)
         {
           stat.Add(new AABBStateComponent());
           //Also check that all states contain all mandatory components
@@ -221,6 +221,17 @@ namespace OkuEngine.Actors
       writer.WriteEndElement();
 
       return true;
+    }
+
+    public override bool AfterLoad()
+    {
+      _type = OkuData.Instance.ActorTypes[_actorTypeId];
+      if (_type == null)
+      {
+        OkuManagers.Logger.LogError("Could not find actor type with id " + _actorTypeId + " for actor " + _name + "!");
+        return false;
+      }
+      return _states.AfterLoad();
     }
 
   }

@@ -311,5 +311,20 @@ namespace OkuEngine.Scenes
       return true;
     }
 
+    public override bool AfterLoad()
+    {
+      _objectMap.Clear();
+      List<SceneNode> allNodes = new List<SceneNode>();
+      _root.GetAllChildren(allNodes);
+      foreach (SceneNode node in allNodes)
+      {
+        if (!node.AfterLoad())
+          return false;
+        _objectMap.Add(node.Properties.ObjectId, node);
+        node.Properties.Body.GroupId = Id;
+      }
+      return true;
+    }
+
   }
 }

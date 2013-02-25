@@ -56,5 +56,9 @@ namespace OkuEngine
         OkuManagers.Logger.LogInfo("Trying to init a null waveform!");
     }
 
+    public override bool AfterLoad()
+    {
+      throw new NotImplementedException();
+    }
   }
 }
