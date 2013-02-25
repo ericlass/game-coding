@@ -91,51 +91,6 @@ namespace OkuEngine.Scenes
       get { return _body; }
     }
 
-    public bool Load(XmlNode node)
-    {
-      string objectValue = node.GetTagValue("object");
-
-      // Load scene object, is allowed to be null!
-      if (objectValue != null)
-      {
-        int test = 0;
-        if (int.TryParse(objectValue, out test))
-        {
-          _objectId = test;
-          _object = OkuData.Instance.SceneObjects[_objectId];
-          if (_object == null)
-          {
-            OkuManagers.Logger.LogError("No scene object found with the id " + test + " while loading scene node! Is the initialization order correct?");
-            return false;
-          }
-        }
-        else
-          return false;
-      }
-
-      //Load transform
-      XmlNode transNode = node["transform"];
-      if (transNode != null)
-        _transform.Load(transNode);
-
-      // Setup some body stuff here. The rest is setup in SceneNode.Load() and SceneLayer.Load()
-      _body = new Body<SceneNode>();
-      _body.BoundingBox = _object.BoundingBox;
-      _body.Transform = _transform;
-      _body.PreviousTransform = _previousTransform;
-      _body.Shape = _object.Shape;
-
-      return true;
-    }
-
-    public bool Save(XmlWriter writer)
-    {
-      writer.WriteValueTag("object", _objectId.ToString());
-      _transform.Save(writer);
-
-      return true;
-    }
-
     public bool AfterLoad()
     {
       _object = OkuData.Instance.SceneObjects[_objectId];

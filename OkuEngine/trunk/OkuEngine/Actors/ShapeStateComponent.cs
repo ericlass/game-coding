@@ -75,17 +75,6 @@ namespace OkuEngine.Actors
       return true;
     }
 
-    public bool Load(XmlNode node)
-    {
-      _shape = new Polygon();
-      return _shape.Load(node);
-    }
-
-    public bool Save(XmlWriter writer)
-    {
-      return _shape.Save(writer);
-    }
-
     public bool AfterLoad()
     {
       return _shape.AfterLoad();

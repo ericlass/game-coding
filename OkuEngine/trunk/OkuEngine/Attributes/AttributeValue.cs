@@ -120,47 +120,15 @@ namespace OkuEngine.Attributes
       result._type = _type;
       return result;
     }
-
-    public bool Load(XmlNode node)
+    
+    public bool AfterLoad()
     {
-      _name = node.GetTagValue("name");
-      if (_name != null)
-      {
-        _name = _name.Trim().ToLower();
-      }
-      else
-      {
-        OkuManagers.Logger.LogError("No name given for attribute! " + node.OuterXml);
-        return false;
-      }
-
-      _type = Converter.ParseEnum<AttributeType>(node.GetTagValue("type"));
-      _rawValue = Converter.AttributeValueFromString(node.GetTagValue("value"), _type);
-
-      return true;
-    }
-
-    public bool Save(XmlWriter writer)
-    {
-      writer.WriteStartElement("attribute");
-
-      writer.WriteValueTag("name", _name);
-      writer.WriteValueTag("type", _type.ToString());
-      writer.WriteValueTag("value", Converter.ValueToString(this));
-
-      writer.WriteEndElement();
-
       return true;
     }
 
     public override string ToString()
     {
       return _rawValue == null ? "NULL" : _rawValue.ToString();
-    }
-
-    public bool AfterLoad()
-    {
-      return true;
     }
 
   }

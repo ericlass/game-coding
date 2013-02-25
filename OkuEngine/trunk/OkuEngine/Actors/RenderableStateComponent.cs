@@ -76,17 +76,6 @@ namespace OkuEngine.Actors
       return true;
     }
 
-    public bool Load(XmlNode node)
-    {
-      _renderable = RenderableFactory.Instance.CreateRenderable(node);
-      return _renderable != null;
-    }
-
-    public bool Save(XmlWriter writer)
-    {
-      return _renderable.Save(writer);
-    }
-
     public bool AfterLoad()
     {
       return _renderable.AfterLoad();

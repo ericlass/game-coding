@@ -10,6 +10,18 @@ namespace OkuEngine.Driver.Audio
   /// </summary>
   internal class SoundEngineFactory
   {
+    private static SoundEngineFactory _instance = null;
+
+    public static SoundEngineFactory Instance
+    {
+      get
+      {
+        if (_instance == null)
+          _instance = new SoundEngineFactory();
+        return _instance;
+      }
+    }
+
     private delegate ISoundEngine CreateSoundEngineDelegate();
 
     private Dictionary<string, CreateSoundEngineDelegate> _soundCreators = new Dictionary<string, CreateSoundEngineDelegate>();
@@ -17,7 +29,7 @@ namespace OkuEngine.Driver.Audio
     /// <summary>
     /// Creates a new sound engine factory.
     /// </summary>
-    public SoundEngineFactory()
+    private SoundEngineFactory()
     {
       _soundCreators.Add(NullSoundEngine.EngineName, new CreateSoundEngineDelegate(CreateNullEngine));
       _soundCreators.Add(OpenALSoundEngine.EngineName, new CreateSoundEngineDelegate(CreateOpenAlEngine));
@@ -26,17 +38,17 @@ namespace OkuEngine.Driver.Audio
     /// <summary>
     /// Create a new sound engine using the given XML node.
     /// </summary>
-    /// <param name="engineNode">The XML node to load the sound engine from.</param>
+    /// <param name="settings">The settings for the sound engine.</param>
     /// <returns>The created sound engine or null if the sound engine could not be created.</returns>
-    public ISoundEngine CreateSoundEngine(XmlNode engineNode)
+    public ISoundEngine CreateSoundEngine(AudioSettings settings)
     {
-      string type = engineNode.Attributes.GetAttributeValue("type", OpenALSoundEngine.EngineName);
+      string type = settings.Type;
       ISoundEngine result = null;
 
       if (_soundCreators.ContainsKey(type))
       {
         result = _soundCreators[type]();
-        result.Initialize(engineNode);
+        result.Initialize(settings);
       }
 
       return result;

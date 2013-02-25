@@ -164,59 +164,11 @@ namespace OkuEngine.States
       get { return new List<T>(_stateMap.Values); }
     }
 
-    public bool Load(XmlNode node)
-    {
-      _defaultName = node.GetTagValue("default");
-      _currentStateName = _defaultName;
-
-      XmlNode child = node.FirstChild;
-      while (child != null)
-      {
-        if (child.NodeType == XmlNodeType.Element && child.Name.Trim().ToLower() == "state")
-        {
-          string name = child.GetTagValue("name");
-
-          T state = new T();
-          if (!state.Load(child))
-            OkuManagers.Logger.LogError("Could not load state " + name + "! " + child.OuterXml);
-
-          if (_overwriteStates)
-          {
-            if (_stateMap.ContainsKey(name))
-              _stateMap[name].Merge(state);
-            else
-              Add(state);
-          }
-          else
-          {
-            if (!Add(state))
-            {
-              OkuManagers.Logger.LogError("State " + name + " is defined twice! " + child.OuterXml);
-            }
-          }
-        }
-
-        child = child.NextSibling;
-      }
-
-      return true;
-    }
-
-    public bool Save(XmlWriter writer)
-    {
-      writer.WriteStartElement("states");
-      foreach (KeyValuePair<string, T> state in _stateMap)
-      {
-        if (!state.Value.Save(writer))
-          return false;
-      }
-      writer.WriteEndElement();
-
-      return true;
-    }
-
     public bool AfterLoad()
     {
+      _currentStateName = _defaultName;
+      _previousStateName = _defaultName;
+
       _stateMap.Clear();
       foreach (T state in _states)
       {

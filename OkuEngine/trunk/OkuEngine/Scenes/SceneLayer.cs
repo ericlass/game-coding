@@ -242,77 +242,11 @@ namespace OkuEngine.Scenes
       return false;
     }
 
-    public override bool Load(XmlNode node)
-    {
-      if (!base.Load(node))
-        return false;
-
-      XmlNode backdropNode = node["backdrop"];
-      if (backdropNode != null)
-      {
-        _backdrop = BackdropFactory.Instance.CreateBackdrop(backdropNode);
-        if (_backdrop == null)
-        {
-          OkuManagers.Logger.LogError("Could not load backdrop! " + node.OuterXml);
-          return false;
-        }
-      }
-
-      XmlNode child = node["nodes"];
-      if (child != null)
-      {
-        XmlNode nodeNode = child.FirstChild;
-        List<SceneNode> allNodes = new List<SceneNode>();
-        while (nodeNode != null)
-        {
-          if (nodeNode.NodeType == XmlNodeType.Element && nodeNode.Name.Trim().ToLower() == "node")
-          {
-            SceneNode sceneNode = new SceneNode();
-            if (sceneNode.Load(nodeNode))
-            {
-              sceneNode.SetParent(_root);
-              
-              allNodes.Add(sceneNode);
-              sceneNode.GetAllChildren(allNodes);
-            }
-            else
-            {
-              OkuManagers.Logger.LogError("Could not load scene node: " + nodeNode.OuterXml);
-            }
-          }
-
-          nodeNode = nodeNode.NextSibling;
-        }
-
-        foreach (SceneNode childNode in allNodes)
-        {
-          _objectMap.Add(childNode.Properties.ObjectId, childNode);
-          childNode.Properties.Body.GroupId = Id;
-        }
-      }
-
-      return true;
-    }
-
-    public override bool Save(XmlWriter writer)
-    {
-      writer.WriteStartElement("layer");
-      if (!base.Save(writer))
-      {
-        writer.WriteEndElement();
-        return false;
-      }
-
-      //TODO: Save backdrop
-      //TODO: Save child nodes
-
-      writer.WriteEndElement();
-
-      return true;
-    }
-
     public override bool AfterLoad()
     {
+      if (_backdrop != null)
+        _backdrop.AfterLoad();
+
       _objectMap.Clear();
       List<SceneNode> allNodes = new List<SceneNode>();
       _root.GetAllChildren(allNodes);

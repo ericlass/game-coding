@@ -106,60 +106,6 @@ namespace OkuEngine
       }
     }
 
-    /// <summary>
-    /// Loads a list of entities from the given XML node.
-    /// </summary>
-    /// <param name="node">The xml node to load from.</param>
-    /// <returns>True if the entities where loaded, else false.</returns>
-    public virtual bool Load(XmlNode node)
-    {
-      XmlNode child = node.FirstChild;
-      while (child != null)
-      {
-        if (child.Name.ToLower() == _entityName)
-        {
-          T entity = new T();
-          if (!entity.Load(child))
-          {
-            OkuManagers.Logger.LogError("Could not load " + _entityName + " from XML!\n" + child.OuterXml);
-          }
-          if (!Add(entity))
-          {
-            OkuManagers.Logger.LogError("The id " + entity.Id + " is used twice for " + _entityName + "!");
-          }
-          if (_sequenceName != null)
-            KeySequence.SetCurrentValue(_sequenceName, entity.Id);
-        }
-
-        child = child.NextSibling;
-      }
-
-      return true;
-    }
-
-    /// <summary>
-    /// Saves the entities in the manager to the given XML writer.
-    /// </summary>
-    /// <param name="writer">The write to save to.</param>
-    /// <returns>True if the entities where saved successfully, else false.</returns>
-    public virtual bool Save(XmlWriter writer)
-    {
-      writer.WriteStartElement(_groupName);
-
-      foreach (KeyValuePair<int, T> entity in _entityMap)
-      {
-        if (!entity.Value.Save(writer))
-        {
-          OkuManagers.Logger.LogError("Could not save " + _entityName + " with the id " + entity.Value.Id + "!");
-          return false;
-        }
-      }
-
-      writer.WriteEndElement();
-
-      return true;
-    }
-
     public virtual bool AfterLoad()
     {
       _entityMap.Clear();

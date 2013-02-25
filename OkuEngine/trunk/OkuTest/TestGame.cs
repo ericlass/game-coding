@@ -27,7 +27,7 @@ namespace OkuTest
 
     protected override string GetConfigFileName()
     {
-      return "okugame.xml";
+      return "okugame.json";
     }
 
     protected override void SetupResourceCache(ref ResourceCacheParams resourceParams)

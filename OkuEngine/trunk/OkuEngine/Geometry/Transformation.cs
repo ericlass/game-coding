@@ -166,57 +166,6 @@ namespace OkuEngine
       return (_translation == Vector2f.Zero) && (_scale == Vector2f.One) && _rotation == 0.0f;
     }
 
-    /// <summary>
-    /// Loads the transformation from the given xml node.
-    /// Before the data is loaded, all transformations are reset.
-    /// </summary>
-    /// <param name="node">The xml node to read from.</param>
-    public bool Load(XmlNode node)
-    {
-      _translation = Vector2f.Zero;
-      _rotation = 0;
-      _scale = Vector2f.One;
-
-      string value = node.GetTagValue("position");
-      if (value != null)
-      {
-        Vector2f pos = Vector2f.Zero;
-        if (Vector2f.TryParse(value, ref pos))
-          _translation = pos;
-      }
-
-      value = node.GetTagValue("rotation");
-      if (value != null)
-      {
-        float angle = 0;
-        if (float.TryParse(value, out angle))
-          _rotation = angle;
-      }
-
-      value = node.GetTagValue("scale");
-      if (value != null)
-      {
-        Vector2f scale = Vector2f.Zero;
-        if (Vector2f.TryParse(value, ref scale))
-          _scale = scale;
-      }
-
-      return true;
-    }
-
-    public bool Save(XmlWriter writer)
-    {
-      writer.WriteStartElement("transform");
-
-      writer.WriteValueTag("position", _translation.ToString());
-      writer.WriteValueTag("rotation", Converter.FloatToString(_rotation));
-      writer.WriteValueTag("scale", _scale.ToString());
-
-      writer.WriteEndElement();
-
-      return true;
-    }
-
     public bool AfterLoad()
     {
       _matrixValid = false;

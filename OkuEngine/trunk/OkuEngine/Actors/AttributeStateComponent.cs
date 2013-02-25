@@ -74,17 +74,6 @@ namespace OkuEngine.Actors
       return true;
     }
 
-    public bool Load(XmlNode node)
-    {
-      _attributes = new AttributeMap();
-      return _attributes.Load(node);
-    }
-
-    public bool Save(XmlWriter writer)
-    {
-      return _attributes.Save(writer);
-    }
-
     public bool AfterLoad()
     {
       return true;

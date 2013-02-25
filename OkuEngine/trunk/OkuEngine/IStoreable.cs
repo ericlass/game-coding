@@ -9,8 +9,6 @@ namespace OkuEngine
   [JsonObjectAttribute(MemberSerialization.OptIn)]
   public interface IStoreable
   {
-    bool Load(XmlNode node);
-    bool Save(XmlWriter writer);
     bool AfterLoad();
   }
 }

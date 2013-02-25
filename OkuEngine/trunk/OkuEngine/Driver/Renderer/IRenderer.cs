@@ -55,7 +55,8 @@ namespace OkuEngine.Driver.Renderer
     /// Is called once at the start of the application. It should do all necessary initialization
     /// that is needed by the renderer. It has to create the form that is used to display the game.
     /// </summary>
-    void Initialize(XmlNode node);
+    /// <param name="settings">The settings for rednering.</param>
+    void Initialize(RenderSettings settings);
 
     /// <summary>
     /// Is called each frame during the update process. This must not do any rendering. It should

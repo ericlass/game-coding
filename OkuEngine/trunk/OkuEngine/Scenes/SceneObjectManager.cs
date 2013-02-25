@@ -96,45 +96,6 @@ namespace OkuEngine.Scenes
       return null;
     }
 
-    public bool Load(XmlNode node)
-    {
-      if (node != null && node.NodeType == XmlNodeType.Element && node.Name == "sceneobjects")
-      {
-        XmlNode child = node.FirstChild;
-        while (child != null)
-        {
-          SceneObject so = SceneObjectFactory.Instance.CreateSceneObject(child);
-          if (so != null)
-          {
-            if (!Add(so))
-            {
-              OkuManagers.Logger.LogError("Duplicate scene object id! " + child.OuterXml);
-            }
-            KeySequence.SetCurrentValue(KeySequence.SceneObjectSequence, so.Id);
-          }
-          else
-            OkuManagers.Logger.LogError("Could not create scene object! " + child.OuterXml);
-
-          child = child.NextSibling;
-        }
-      }
-      return false;
-    }
-
-    public bool Save(XmlWriter writer)
-    {
-      writer.WriteStartElement("sceneobjects");
-
-      foreach (SceneObject so in _objectMap.Values)
-      {
-        so.Save(writer);
-      }
-
-      writer.WriteEndElement();
-
-      return true;
-    }
-
     public bool AfterLoad()
     {
       foreach (SceneObject obj in _objects)

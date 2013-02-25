@@ -49,7 +49,7 @@ namespace OkuEngine.Driver.Renderer
       return null;
     }
 
-    public void Initialize(System.Xml.XmlNode node)
+    public void Initialize(RenderSettings settings)
     {
     }
 

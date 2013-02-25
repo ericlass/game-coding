@@ -202,6 +202,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>xcopy "D:\C#-Projekte\OkuEngine\trunk\OkuEngine\okugame.xml" $(TargetDir)content\ /D /Y</PostBuildEvent>
+    <PostBuildEvent>xcopy "D:\C#-Projekte\OkuEngine\trunk\OkuEngine\okugame.xml" $(TargetDir)content\ /D /Y
+xcopy "D:\C#-Projekte\OkuEngine\trunk\OkuEngine\okugame.json" $(TargetDir)content\ /D /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>

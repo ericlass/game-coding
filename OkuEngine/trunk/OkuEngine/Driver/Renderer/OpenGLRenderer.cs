@@ -219,60 +219,14 @@ namespace OkuEngine.Driver.Renderer
     /// <summary>
     /// Initializes the renderer. This includes creating the form and intitializing OpenGL.
     /// </summary>
-    public void Initialize(XmlNode node)
+    /// <param name="settings">The redner settings.</param>
+    public void Initialize(RenderSettings settings)
     {
-      //TODO: Check for compatible node
-
-      //Load config from XML
-      //TODO: Convert to new model
-      XmlNode child = node.FirstChild;
-      while (child != null)
-      {
-        switch (child.Name.ToLower())
-        {
-          case "fullscreen":
-            _fullscreen = Converter.StrToBool(child.FirstChild.Value, false);
-            break;
-
-          case "width":
-            _screenWidth = int.Parse(child.FirstChild.Value);
-            break;
-
-          case "height":
-            _screenHeight = int.Parse(child.FirstChild.Value);
-            break;
-
-          case "clearcolor":
-            Color col;
-            if (Color.TryParse(child.FirstChild.Value, out col))
-              _clearColor = col;
-            break;
-
-          case "depth":
-            _useDepthBuffer = Converter.StrToBool(child.FirstChild.Value, false);
-            break;
-
-          case "passes":
-            List<int> passTargets = new List<int>();
-            XmlNode passNode = child.FirstChild;
-            while (passNode != null)
-            {
-              if (passNode.Name == "pass")
-              {
-                _renderPasses++;
-                passTargets.Add(passNode.Attributes.GetInt("targets", 1));
-              }
-              passNode = passNode.NextSibling;
-            }
-            _passTargets = passTargets.ToArray();
-            break;
-
-          default:
-            break;
-        }
-
-        child = child.NextSibling;
-      }
+      _fullscreen = settings.Fullscreen;
+      _screenWidth = settings.Width;
+      _screenHeight = settings.Height;
+      _clearColor = settings.ClearColor;
+      _useDepthBuffer = settings.DepthTest;
 
       //Process parameters
       int maxTargets = 0;

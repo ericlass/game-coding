@@ -14,15 +14,14 @@ namespace OkuEngine.Scenes
   /// </summary>
   public class Scene : StoreableEntity
   {
-    private Stack<Matrix3> _matrixStack = new Stack<Matrix3>();
-    private Matrix3 _currentTransform = Matrix3.Identity;
-
-    private ViewPort _viewport = new ViewPort(1024, 768);
-    private bool _active = false;
-
-    private CollisionWorld<SceneNode> _collisionWorld = null;
+    private HashSet<SceneLayer> _layers = new HashSet<SceneLayer>();
 
     private SortedDictionary<int, SceneLayer> _layerMap = new SortedDictionary<int, SceneLayer>();
+    private Stack<Matrix3> _matrixStack = new Stack<Matrix3>();
+    private Matrix3 _currentTransform = Matrix3.Identity;
+    private ViewPort _viewport = new ViewPort(1024, 768);
+    private bool _active = false;
+    private CollisionWorld<SceneNode> _collisionWorld = null;    
 
     public Scene()
     {
@@ -47,18 +46,10 @@ namespace OkuEngine.Scenes
     }
 
     [JsonPropertyAttribute]
-    public List<SceneLayer> Layers
+    public HashSet<SceneLayer> Layers
     {
-      get { return new List<SceneLayer>(_layerMap.Values); }
-      set
-      {
-        _layerMap.Clear();
-        if (value != null)
-        {
-          foreach (SceneLayer layer in value)
-            _layerMap.Add(layer.Id, layer);
-        }
-      }
+      get { return _layers; }
+      set { _layers = value; }
     }
 
     /// <summary>
@@ -317,72 +308,13 @@ namespace OkuEngine.Scenes
       return Intersections.AABBs(boudingBox, Viewport.GetBoundingBox());
     }
 
-    public override bool Load(XmlNode node)
-    {
-      if (!base.Load(node))
-        return false;
-
-      //Update scene id sequence
-      KeySequence.SetCurrentValue(KeySequence.SceneSequence, Id);
-
-      _collisionWorld.Clear();
-
-      XmlNode child = node["layers"];
-      if (child != null)
-      {
-        XmlNode layerNode = child.FirstChild;
-        while (layerNode != null)
-        {
-          SceneLayer layer = new SceneLayer();
-          if (layer.Load(layerNode))
-          {
-            _layerMap.Add(layer.Id, layer);
-            KeySequence.SetCurrentValue(KeySequence.LayerSequence, layer.Id);
-
-            List<SceneNode> nodes = layer.AllNodes;
-            foreach (SceneNode sceneNode in nodes)
-              _collisionWorld.AddBody(sceneNode.Properties.Body);
-          }
-          else
-          {
-            OkuManagers.Logger.LogError("Could not load layer with id '" + layer.Id + "'!");
-            return false;
-          }
-
-          layerNode = layerNode.NextSibling;
-        }
-
-        return true;
-      }
-
-      return false;
-    }
-
-    public override bool Save(XmlWriter writer)
-    {
-      writer.WriteStartElement("scene");
-
-      if (!base.Save(writer))
-        return false;
-
-      writer.WriteStartElement("layers");
-      foreach (KeyValuePair<int, SceneLayer> item in _layerMap)
-      {
-        item.Value.Save(writer);
-      }
-      writer.WriteEndElement();
-
-      writer.WriteEndElement();
-
-      return true;
-    }
-
     public override bool AfterLoad()
     {
-      foreach (SceneLayer layer in _layerMap.Values)
+      foreach (SceneLayer layer in _layers)
       {
         if (!layer.AfterLoad())
           return false;
+        _layerMap.Add(layer.Id, layer);
       }
       return true;
     }

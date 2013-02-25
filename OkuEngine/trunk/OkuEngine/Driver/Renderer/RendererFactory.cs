@@ -10,6 +10,18 @@ namespace OkuEngine.Driver.Renderer
   /// </summary>
   public class RendererFactory
   {
+    private static RendererFactory _instance = null;
+
+    public static RendererFactory Instance
+    {
+      get
+      {
+        if (_instance == null)
+          _instance = new RendererFactory();
+        return _instance;
+      }
+    }
+
     private delegate IRenderer CreateRendererDelegate();
 
     private Dictionary<string, CreateRendererDelegate> _rendererCreators = new Dictionary<string, CreateRendererDelegate>();
@@ -17,7 +29,7 @@ namespace OkuEngine.Driver.Renderer
     /// <summary>
     /// Create a new renderer factory.
     /// </summary>
-    public RendererFactory()
+    private RendererFactory()
     {
       _rendererCreators.Add(NullRenderer.RendererName, new CreateRendererDelegate(CreateNullRenderer));
       _rendererCreators.Add(OpenGLRenderer.RendererName, new CreateRendererDelegate(CreateOpenGlRenderer));
@@ -28,15 +40,14 @@ namespace OkuEngine.Driver.Renderer
     /// </summary>
     /// <param name="rendererNode">The node containing the renderer configuration.</param>
     /// <returns>The created renderer or null if the renderer could not be created.</returns>
-    public IRenderer CreateRenderer(XmlNode rendererNode)
+    public IRenderer CreateRenderer(RenderSettings settings)
     {
-      string type = rendererNode.Attributes.GetAttributeValue("type", OpenGLRenderer.RendererName);
       IRenderer result = null;
 
-      if (_rendererCreators.ContainsKey(type))
+      if (_rendererCreators.ContainsKey(settings.Type))
       {
-        result = _rendererCreators[type]();
-        result.Initialize(rendererNode);
+        result = _rendererCreators[settings.Type]();
+        result.Initialize(settings);
       }
 
       return result;

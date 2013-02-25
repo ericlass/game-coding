@@ -19,7 +19,7 @@ namespace OkuEngine.Driver.Audio
       set { }
     }
 
-    public bool Initialize(XmlNode soundNode)
+    public bool Initialize(AudioSettings settings)
     {
       return true;
     }

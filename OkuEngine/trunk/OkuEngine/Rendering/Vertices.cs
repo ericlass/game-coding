@@ -162,44 +162,6 @@ namespace OkuEngine.Rendering
       return _boundingBox;
     }
 
-    public bool Load(XmlNode node)
-    {
-      _aabbValid = false;
-
-      string value = node.GetTagValue("points");
-      if (value != null)
-      {
-        _positions = Converter.ParseVectors(value);
-      }
-
-      value = node.GetTagValue("color");
-      if (value != null)
-      {
-        _colors = Converter.ParseColors(value);
-      }
-
-      value = node.GetTagValue("texcoords");
-      if (value != null)
-      {
-        _texCoords = Converter.ParseVectors(value);
-      }
-
-      return Valid;
-    }
-
-    public bool Save(XmlWriter writer)
-    {
-      writer.WriteStartElement("vertices");
-
-      writer.WriteValueTag("points", _positions.ToOkuString());
-      writer.WriteValueTag("colors", _colors.ToOkuString());
-      writer.WriteValueTag("texcoords", _texCoords.ToOkuString());
-
-      writer.WriteEndElement();
-
-      return true;
-    }
-
     public bool AfterLoad()
     {
       _aabbValid = false;

@@ -26,22 +26,9 @@ namespace OkuEngine.Driver.Audio
       set { _volume = value; }
     }
 
-    public bool Initialize(XmlNode soundNode)
+    public bool Initialize(AudioSettings settings)
     {
-      XmlNode child = soundNode.FirstChild;
-      while (child != null)
-      {
-        switch (child.Name.ToLower())
-        {
-          case "volume":
-            _volume = Converter.StrToFloat(child.FirstChild.Value);
-            break;
-
-          default:
-            break;
-        }
-        child = child.NextSibling;
-      }
+      _volume = settings.Volume;
 
       //Open OpenAL device and create context
       _device = Alc.alcOpenDevice(null);

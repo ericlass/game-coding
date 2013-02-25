@@ -133,45 +133,24 @@ namespace OkuEngine
       OkuManagers.Renderer.UpdateContent(this, x, y, width, height, image);
     }
 
-    public override bool Load(XmlNode node)
+    public override bool AfterLoad()
     {
-      if (!base.Load(node))
+      if (_resource == null)
         return false;
 
-      _compressed = Converter.StrToBool(node.GetTagValue("compress"), false);
-
-      _resource = node.GetTagValue("resource");
-      if (_resource != null)
+      ResourceHandle handle = OkuManagers.ResourceCache.GetHandle(new Resource(_resource));
+      if (handle != null)
       {
-        ResourceHandle handle = OkuManagers.ResourceCache.GetHandle(new Resource(_resource));
-        if (handle != null)
-        {
-          Bitmap bm = (handle.Extras as TextureExtraData).Image;
-          OkuManagers.Renderer.InitImageContent(this, bm);
-          _width = bm.Width;
-          _height = bm.Height;
-        }
-        else
-        {
-          OkuManagers.Logger.LogError("Image resource '" + _resource + "' was not found!");
-          return false;
-        }
+        Bitmap bm = (handle.Extras as TextureExtraData).Image;
+        OkuManagers.Renderer.InitImageContent(this, bm);
+        _width = bm.Width;
+        _height = bm.Height;
       }
-
-      return true;
-    }
-
-    public override bool Save(XmlWriter writer)
-    {
-      writer.WriteStartElement("image");
-
-      if (!base.Save(writer))
+      else
+      {
+        OkuManagers.Logger.LogError("Image resource '" + _resource + "' was not found!");
         return false;
-
-      if (_resource != null)
-        writer.WriteValueTag("resource", _resource);
-
-      writer.WriteEndElement();
+      }
 
       return true;
     }
@@ -208,28 +187,6 @@ namespace OkuEngine
       sheet.Dispose();
 
       return result;
-    }
-
-    public override bool AfterLoad()
-    {
-      if (_resource == null)
-        return false;
-
-      ResourceHandle handle = OkuManagers.ResourceCache.GetHandle(new Resource(_resource));
-      if (handle != null)
-      {
-        Bitmap bm = (handle.Extras as TextureExtraData).Image;
-        OkuManagers.Renderer.InitImageContent(this, bm);
-        _width = bm.Width;
-        _height = bm.Height;
-      }
-      else
-      {
-        OkuManagers.Logger.LogError("Image resource '" + _resource + "' was not found!");
-        return false;
-      }
-
-      return true;
     }
 
   }

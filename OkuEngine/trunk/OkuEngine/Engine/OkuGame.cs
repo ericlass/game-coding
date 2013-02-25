@@ -1,12 +1,8 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.IO;
 using System.Xml;
-using System.Xml.Schema;
 using System.Windows.Forms;
 using OkuEngine.Driver.Audio;
-using OkuEngine.Actors;
-using OkuEngine.Scenes;
 using OkuEngine.Resources;
 using OkuEngine.Processes;
 using OkuEngine.Events;
@@ -165,7 +161,7 @@ namespace OkuEngine
         ResourceHandle configHandle = resCache.GetHandle(new Resource(GetConfigFileName()));
         if (configHandle != null)
         {
-          //TODO: include xml validation
+          /*
           XmlDocument config = new XmlDocument();
           config.Load(configHandle.Buffer);
 
@@ -232,10 +228,15 @@ namespace OkuEngine
             else
               OkuData.Instance.SceneManager.SetActiveScene(new OkuEngine.Scenes.Scene(-1, "Empty Scene"));
           }
+          */
+
+          StreamReader reader = new StreamReader(configHandle.Buffer);
+          string configText = reader.ReadToEnd();
 
           long tick1, tick2, freq;
           Kernel32.QueryPerformanceFrequency(out freq);
 
+          /*
           Kernel32.QueryPerformanceCounter(out tick1);
           string json = Newtonsoft.Json.JsonConvert.SerializeObject(OkuData.Instance, Newtonsoft.Json.Formatting.Indented, OkuData.JsonSettings);
           Kernel32.QueryPerformanceCounter(out tick2);
@@ -244,15 +245,17 @@ namespace OkuEngine
 
           float time = (tick2 - tick1) / (float)freq;
           OkuManagers.Logger.LogInfo("JSON serialisation took: " + time + " seconds");
+          */
 
           Kernel32.QueryPerformanceCounter(out tick1);
-          OkuData test = Newtonsoft.Json.JsonConvert.DeserializeObject<OkuData>(json, OkuData.JsonSettings);
-          if (test.AfterLoad())
-            OkuData.Instance = test;
+          OkuData.Instance = Newtonsoft.Json.JsonConvert.DeserializeObject<OkuData>(configText, OkuData.JsonSettings);
           Kernel32.QueryPerformanceCounter(out tick2);
 
-          time = (tick2 - tick1) / (float)freq;
+          float time = (tick2 - tick1) / (float)freq;
           OkuManagers.Logger.LogInfo("JSON deserialisation took: " + time + " seconds");
+
+          if (!AfterLoad())
+            return;
 
           Initialize();
         }
@@ -264,46 +267,29 @@ namespace OkuEngine
       }
     }
 
-    /// <summary>
-    /// Loads engine settings from the engine tag in the config XML.
-    /// </summary>
-    /// <param name="node">The "engine" node of the config XML.</param>
-    private void LoadSettings(XmlNode node)
+    private bool AfterLoad()
     {
-      XmlNode child = node.FirstChild;
-      while (child != null)
+      IRenderer renderer = RendererFactory.Instance.CreateRenderer(OkuData.Instance.RenderSettings);
+      if (renderer != null)
       {
-        switch (child.Name.ToLower())
-        {
-          case "renderer":
-            RendererFactory factory = new RendererFactory();
-            IRenderer renderer = factory.CreateRenderer(child);
-            if (renderer != null)
-              OkuManagers.Renderer = renderer;
-            else
-              throw new OkuException("Could not create renderer \"" + child.ToString() + "\"!");
-            break;
-
-          case "sound":
-            SoundEngineFactory soundFactory = new SoundEngineFactory();
-            ISoundEngine sound = soundFactory.CreateSoundEngine(child);
-            if (sound != null)
-              OkuManagers.SoundEngine = sound;
-            else
-              throw new OkuException("Could not create sound engine \"" + child.ToString() + "\"!");
-            break;
-
-          default:
-            break;
-        }
-
-        child = child.NextSibling;
+        OkuManagers.Renderer = renderer;
+        OkuManagers.EventManager.AddListener(EventTypes.ViewPortChanged, new EventListenerDelegate(OkuManagers.Renderer.OnViewportEvent));
       }
+      else
+        throw new OkuException("Could not create renderer!");
 
       if (OkuManagers.Renderer != null)
       {
-        OkuManagers.EventManager.AddListener(EventTypes.ViewPortChanged, new EventListenerDelegate(OkuManagers.Renderer.OnViewportEvent));
+        
       }
+
+      ISoundEngine sound = SoundEngineFactory.Instance.CreateSoundEngine(OkuData.Instance.AudioSettings);
+      if (sound != null)
+        OkuManagers.SoundEngine = sound;
+      else
+        throw new OkuException("Could not create sound engine!");
+
+      return OkuData.Instance.AfterLoad();
     }
 
     /// <summary>

@@ -155,31 +155,6 @@ namespace OkuEngine.States
       }
     }
 
-    //Is overriden by the descendants to do additional loading.
-    public virtual bool Load(XmlNode node)
-    {
-      _name = node.GetTagValue("name");
-      return _name != null;
-    }
-
-    public bool Save(XmlWriter writer)
-    {
-      writer.WriteStartElement("state");
-
-      writer.WriteValueTag("name", _name);
-
-      foreach (KeyValuePair<string, IStateComponent> component in _componentMap)
-      {
-        if (!component.Value.Save(writer))
-          return false;
-      }
-
-      writer.WriteEndElement();
-
-      return true;
-    }
-
-
     public bool AfterLoad()
     {
       _componentMap.Clear();

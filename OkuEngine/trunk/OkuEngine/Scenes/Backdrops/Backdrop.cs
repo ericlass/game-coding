@@ -16,8 +16,6 @@ namespace OkuEngine.Scenes.Backdrops
     public abstract void Update(float dt);
     public abstract void Render(Scene scene);
 
-    public abstract bool Load(XmlNode node);
-    public abstract bool Save(XmlWriter writer);
     public abstract bool AfterLoad();
 
     public abstract float Width { get; set; }

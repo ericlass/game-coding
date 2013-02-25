@@ -100,32 +100,6 @@ namespace OkuEngine.Geometry
       return result;
     }
 
-    public bool Load(XmlNode node)
-    {
-      try
-      {
-        if (node.FirstChild != null)
-        {
-          _vertices = Converter.ParseVectors(node.FirstChild.Value);
-          _aabbValid = false;
-        }
-        return true;
-      }
-      catch (Exception e)
-      {
-        OkuManagers.Logger.LogError("Error while loading polygon! " + e.Message);
-        return false;
-      }
-    }
-
-    public bool Save(XmlWriter writer)
-    {
-      if (_vertices != null)
-        writer.WriteValueTag("polygon", _vertices.ToOkuString());
-
-      return true;
-    }
-
     public override string ToString()
     {
       return _vertices == null ? "" : _vertices.ToOkuString();

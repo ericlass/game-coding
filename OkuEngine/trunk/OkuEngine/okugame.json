@@ -1,7 +1,7 @@
 ﻿{
   "GameProperties": {
     "Name": "Oku Game",
-    "StartSceneId": 0
+    "StartSceneId": 1
   },
   "RenderSettings": {
     "Type": "opengl",
@@ -17,7 +17,7 @@
     }
   },
   "AudioSettings": {
-    "Type": "openal",
+    "Type": "null",
     "Volume": 1.0
   },
   "SceneManager": {

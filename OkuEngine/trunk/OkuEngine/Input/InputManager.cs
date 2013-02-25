@@ -165,56 +165,8 @@ namespace OkuEngine.Input
       return true;
     }
 
-    public bool Load(XmlNode node)
-    {
-      XmlNode child = node.FirstChild;
-      while (child != null)
-      {
-        if (child.NodeType == XmlNodeType.Element && child.Name.ToLower() == "binding")
-        {
-          Keys key;
-          KeyAction action;
-          int eventId = 0;
-          bool state = false;
-
-          if (LoadBinding(child, out key, out action, out eventId, out state))
-          {
-            if (!AddBinding(key, action, eventId, state))
-              OkuManagers.Logger.LogError("Trying to bind key " + key.ToString() + " twice!");
-          }
-        }
-
-        child = child.NextSibling;
-      }
-
-      return true;
-    }
-
-    public bool Save(XmlWriter writer)
-    {
-      writer.WriteStartElement("keybindings");
-      foreach (KeyValuePair<KeyAction, Dictionary<Keys, int>> action in _stateChangeBindings)
-      {
-        foreach (KeyValuePair<Keys, int> binding in action.Value)
-        {
-          writer.WriteValueTag("key", binding.Key.ToString());
-          writer.WriteValueTag("action", action.Key.ToString());
-          writer.WriteValueTag("event", binding.Value.ToString());
-        }
-      }
-      writer.WriteEndElement();
-
-      return true;
-    }
-
     public bool AfterLoad()
     {
-      _stateChangeBindings.Add(KeyAction.Down, new Dictionary<Keys, int>());
-      _stateChangeBindings.Add(KeyAction.Up, new Dictionary<Keys, int>());
-
-      _stateBindings.Add(KeyAction.Down, new Dictionary<Keys, int>());
-      _stateBindings.Add(KeyAction.Up, new Dictionary<Keys, int>());
-
       return true;
     }
 

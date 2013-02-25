@@ -80,16 +80,6 @@ namespace OkuEngine.Actors
       return true;
     }
 
-    public bool Load(XmlNode node)
-    {
-      return true;
-    }
-
-    public bool Save(XmlWriter writer)
-    {
-      return true;
-    }
-
     public bool AfterLoad()
     {
       _aabbValid = false;

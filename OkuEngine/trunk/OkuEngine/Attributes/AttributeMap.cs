@@ -60,46 +60,6 @@ namespace OkuEngine.Attributes
       return result;
     }
 
-    public bool Load(XmlNode node)
-    {
-      Clear();
-      if (node.NodeType == XmlNodeType.Element && node.Name.ToLower() == "attributes")
-      {
-        XmlNode child = node.FirstChild;
-        while (child != null)
-        {
-          if (child.NodeType == XmlNodeType.Element && child.Name.ToLower() == "attribute")
-          {
-            AttributeValue value = new AttributeValue();
-            if (!value.Load(child))
-              return false;
-            if (!Add(value))
-            {
-              OkuManagers.Logger.LogError("Trying to add attribute " + value.Name + " twice! " + node.OuterXml);
-              return false;
-            }
-          }
-          child = child.NextSibling;
-        }
-      }
-      return true;
-    }
-
-    public bool Save(XmlWriter writer)
-    {
-      writer.WriteStartElement("attributes");
-
-      foreach (AttributeValue value in Values)
-      {
-        if (!value.Save(writer))
-          return false;
-      }
-
-      writer.WriteEndElement();
-
-      return true;
-    }
-
     public bool AfterLoad()
     {
       foreach (AttributeValue value in this.Values)

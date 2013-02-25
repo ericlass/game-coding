@@ -82,56 +82,6 @@ namespace OkuEngine.Scripting
       return true;
     }
 
-    public override bool Load(XmlNode node)
-    {
-      if (!base.Load(node))
-        return false;
-
-      XmlNode handlers = node["handlers"];
-      if (handlers != null)
-      {
-        if (!LoadHandlers(handlers))
-          return false;
-      }
-      else
-      {
-        OkuManagers.Logger.LogError("No handlers defined for behavior " + _name + "!");
-        return false;
-      }
-
-      return true;
-    }
-
-    public override bool Save(XmlWriter writer)
-    {
-      writer.WriteStartElement("behavior");
-
-      if (!base.Save(writer))
-        return false;
-
-      writer.WriteStartElement("handlers");
-      foreach (KeyValuePair<int, List<ScriptInstance>> handler in _handlers)
-      {
-        foreach (ScriptInstance script in handler.Value)
-        {
-          writer.WriteStartElement("handler");
-          
-          writer.WriteValueTag("event", handler.Key.ToString());
-
-          writer.WriteStartElement("script");
-          writer.WriteCData(script.Source);
-          writer.WriteEndElement();
-
-          writer.WriteEndElement();
-        }        
-      }
-      writer.WriteEndElement();
-
-      writer.WriteEndElement();
-
-      return true;
-    }
-
     public override bool AfterLoad()
     {
       //TODO: Bad hack that should be replaced asap

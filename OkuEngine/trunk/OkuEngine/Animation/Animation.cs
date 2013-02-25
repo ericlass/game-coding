@@ -113,59 +113,6 @@ namespace OkuEngine
       }
     }
 
-    public override bool Load(XmlNode node)
-    {
-      if (!base.Load(node))
-        return false;
-
-      string value = node.GetTagValue("loop");
-      if (value != null)
-        _loop = Converter.StrToBool(value, _loop);
-
-      XmlNode framesNode = node["frames"];
-      if (framesNode != null)
-      {
-        XmlNode child = framesNode.FirstChild;
-        while (child != null)
-        {
-          if (child.NodeType == XmlNodeType.Element && child.Name.ToLower() == "frame")
-          {
-            AnimationFrame frame = new AnimationFrame();
-            if (!frame.Load(child))
-            {
-              return false;
-            }
-            _frames.Add(frame);
-          }
-
-          child = child.NextSibling;
-        }
-      }
-
-      return true;
-    }
-
-    public override bool Save(XmlWriter writer)
-    {
-      writer.WriteStartElement("animation");
-
-      if (!base.Save(writer))
-        return false;
-
-      writer.WriteValueTag("loop", Converter.BoolToStr(_loop));
-
-      writer.WriteStartElement("frames");
-      foreach (AnimationFrame frame in _frames)
-      {
-        frame.Save(writer);
-      }
-      writer.WriteEndElement();
-
-      writer.WriteEndElement();
-
-      return true;
-    }
-
     public override bool AfterLoad()
     {
       foreach (AnimationFrame frame in _frames)

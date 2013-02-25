@@ -53,49 +53,6 @@ namespace OkuEngine
       set { _duration = value; }
     }
 
-    public bool Load(XmlNode node)
-    {
-      string value = node.GetTagValue("image");
-      if (value != null)
-      {
-        _imageId = 0;
-        if (!int.TryParse(value, out _imageId))
-        {
-          OkuManagers.Logger.LogError("Could not find image for animation frame!" + node.OuterXml);
-          return false;
-        }
-      }
-
-      value = node.GetTagValue("duration");
-      if (value != null)
-      {
-        int dur = 0;
-        if (int.TryParse(value, out dur))
-          _duration = dur;
-      }
-
-      if (_duration == 0.0f)
-      {
-        OkuManagers.Logger.LogError("No duration specified for animation frame!" + node.OuterXml);
-        return false;
-      }
-
-      return true;
-    }
-
-    public bool Save(XmlWriter writer)
-    {
-      writer.WriteStartElement("frame");
-
-      writer.WriteValueTag("image", _imageId.ToString());
-      int dur = (int)_duration;
-      writer.WriteValueTag("duration", dur.ToString());
-
-      writer.WriteEndElement();
-
-      return true;
-    }
-
     public bool AfterLoad()
     {
       return true;

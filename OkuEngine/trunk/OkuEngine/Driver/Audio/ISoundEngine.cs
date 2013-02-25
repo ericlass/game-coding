@@ -17,7 +17,7 @@ namespace OkuEngine.Driver.Audio
     /// <summary>
     /// Initializes the sound engine.
     /// </summary>
-    bool Initialize(XmlNode soundNode);
+    bool Initialize(AudioSettings settings);
     /// <summary>
     /// Updates the sounds that are currently played.
     /// </summary>

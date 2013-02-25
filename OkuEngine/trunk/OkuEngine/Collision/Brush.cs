@@ -72,64 +72,6 @@ namespace OkuEngine.Collision
         _renderable.Render(scene);
     }
 
-    public override bool Load(XmlNode node)
-    {
-      if (!base.Load(node))
-        return false;
-
-      XmlNode renderNode = node["renderable"];
-      if (renderNode != null)
-      {
-        _renderable = RenderableFactory.Instance.CreateRenderable(renderNode);
-        if (_renderable == null)
-        {
-          OkuManagers.Logger.LogError("Renderable for brush " + Id + " could not be loaded! " + renderNode.OuterXml);
-          return false;
-        }
-      }
-
-      string shape = node.GetTagValue("shape");
-      if (shape != null)
-      {
-        _shape = Converter.ParseVectors(shape);
-      }
-
-      if (_shape != null)
-      {
-        _boundingBox = _shape.GetBoundingBox();
-      }
-      else
-      {
-        if (_renderable != null)
-          _boundingBox = _renderable.GetBoundingBox();
-        else
-        {
-          OkuManagers.Logger.LogError("Brush " + Id + " does not have a renderable or shape! " + node.OuterXml);
-          return false;
-        }
-      }
-
-      return true;
-    }
-
-    public override bool Save(XmlWriter writer)
-    {
-      writer.WriteStartElement("brush");
-
-      if (!base.Save(writer))
-        return false;
-
-      if (_renderable != null)
-        _renderable.Save(writer);
-
-      if (_shape != null)
-        writer.WriteValueTag("shape", _shape.ToOkuString());
-
-      writer.WriteEndElement();
-
-      return true;
-    }
-
     public override bool AfterLoad()
     {
       if (_renderable != null)

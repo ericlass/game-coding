@@ -119,7 +119,6 @@
     <Compile Include="Processes\Process.cs" />
     <Compile Include="Processes\ProcessManager.cs" />
     <Compile Include="Processes\ProcessState.cs" />
-    <Compile Include="Rendering\RenderableFactory.cs" />
     <Compile Include="Rendering\RenderableImage.cs" />
     <Compile Include="Rendering\RenderableLines.cs" />
     <Compile Include="Rendering\RenderableMesh.cs" />
@@ -136,7 +135,6 @@
     <Compile Include="Resources\TextureExtraData.cs" />
     <Compile Include="Resources\TextureResourceLoader.cs" />
     <Compile Include="Scenes\Backdrops\Backdrop.cs" />
-    <Compile Include="Scenes\Backdrops\BackdropFactory.cs" />
     <Compile Include="Scenes\Backdrops\FreeFormBackdrop.cs" />
     <Compile Include="Scenes\Scene.cs" />
     <Compile Include="Scenes\SceneLayer.cs" />
@@ -144,7 +142,6 @@
     <Compile Include="Scenes\SceneNode.cs" />
     <Compile Include="Scenes\SceneNodeProperties.cs" />
     <Compile Include="Scenes\SceneObject.cs" />
-    <Compile Include="Scenes\SceneObjectFactory.cs" />
     <Compile Include="Scenes\SceneObjectManager.cs" />
     <Compile Include="Scripting\Behavior.cs" />
     <Compile Include="Scripting\OkuScriptManager.cs" />
@@ -174,7 +171,6 @@
     <Compile Include="PropertyEntry.cs" />
     <Compile Include="States\IStateComponent .cs" />
     <Compile Include="States\State.cs" />
-    <Compile Include="States\StateComponentFactory.cs" />
     <Compile Include="States\StateManager.cs" />
     <Compile Include="StoreableEntity.cs" />
     <Compile Include="VirtualFileSystem\VirtualFile.cs" />

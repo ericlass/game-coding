@@ -12,8 +12,9 @@ namespace OkuEngine.Rendering
   {
     private Vertices _vertices = null;
     private int _imageId = 0;
-    private ImageContent _image = null;
     private DrawMode _mode = DrawMode.ClosedPolygon;
+
+    private ImageContent _image = null;
 
     [JsonPropertyAttribute]
     public int ImageId
@@ -49,68 +50,6 @@ namespace OkuEngine.Rendering
     public AABB GetBoundingBox()
     {
       return _vertices.GetAABB();
-    }
-
-    public bool Load(XmlNode node)
-    {
-      string value = node.GetTagValue("image");
-      if (value != null)
-      {
-        _imageId = 0;
-        if (int.TryParse(value, out _imageId))
-        {
-          _image = OkuData.Instance.Images[_imageId];
-          if (_image == null)
-          {
-            OkuManagers.Logger.LogError("There is no image with the id " + _imageId + "! " + node.OuterXml);
-            return false;
-          }
-        }
-        else
-        {
-          OkuManagers.Logger.LogError("The image id " + _imageId + " is not a valid number! " + node.OuterXml);
-          return false;
-        }
-      }
-      else
-      {
-        OkuManagers.Logger.LogError("No image given for mesh! " + node.OuterXml);
-        return false;
-      }
-
-      XmlNode vertexNode = node["vertices"];
-      if (vertexNode != null)
-      {
-        _vertices = new Vertices();
-        if (!_vertices.Load(vertexNode))
-        {
-          OkuManagers.Logger.LogError("Vertices for mesh could not be loaded! " + node.OuterXml);
-          return false;
-        }
-      }
-
-      _mode = Converter.ParseEnum<DrawMode>(node.GetTagValue("mode"));
-
-      return true;
-    }
-
-    public bool Save(XmlWriter writer)
-    {
-      writer.WriteStartElement("renderable");
-
-      writer.WriteStartAttribute("type");
-      writer.WriteValue("mesh");
-      writer.WriteEndAttribute();
-
-      writer.WriteValueTag("image", _imageId.ToString());
-      writer.WriteValueTag("mode", _mode.ToString());
-
-      if (!_vertices.Save(writer))
-        return false;
-
-      writer.WriteEndElement();
-
-      return true;
     }
 
     public IRenderable Copy()

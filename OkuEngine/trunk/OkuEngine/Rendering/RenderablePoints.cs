@@ -41,51 +41,6 @@ namespace OkuEngine.Rendering
       return _vertices.GetAABB();
     }
 
-    public bool Load(XmlNode node)
-    {
-      string value = node.GetTagValue("size");
-      if (value != null)
-      {
-        float size = 0;
-        if (Converter.TryStrToFloat(value, out size))
-          _size = size;
-        else
-        {
-          OkuManagers.Logger.LogError("Invalid number given for point size! " + node.OuterXml);
-        }
-      }
-
-      XmlNode vertexNode = node["vertices"];
-      if (vertexNode != null)
-      {
-        _vertices = new Vertices();
-        if (!_vertices.Load(vertexNode))
-        {
-          OkuManagers.Logger.LogError("Vertices for line renderable could not be loaded! " + node.OuterXml);
-          return false;
-        }
-      }
-
-      return true;
-    }
-
-    public bool Save(XmlWriter writer)
-    {
-      writer.WriteStartElement("renderable");
-
-      writer.WriteStartAttribute("type");
-      writer.WriteValue("point");
-      writer.WriteEndAttribute();
-
-      if (!_vertices.Save(writer))
-        return false;
-
-      writer.WriteEndElement();
-
-      return true;
-    }
-
-
     public IRenderable Copy()
     {
       RenderablePoints result = new RenderablePoints();
