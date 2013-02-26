@@ -239,28 +239,12 @@ namespace OkuEngine
           long tick1, tick2, freq;
           Kernel32.QueryPerformanceFrequency(out freq);
 
-          /*
-          Kernel32.QueryPerformanceCounter(out tick1);
-          string json = Newtonsoft.Json.JsonConvert.SerializeObject(OkuData.Instance, Newtonsoft.Json.Formatting.Indented, OkuData.JsonSettings);
-          Kernel32.QueryPerformanceCounter(out tick2);
-
-          Clipboard.SetText(json); 
-
-          float time = (tick2 - tick1) / (float)freq;
-          OkuManagers.Logger.LogInfo("JSON serialisation took: " + time + " seconds");
-          */
-
-          ITraceWriter writer = new MemoryTraceWriter();
-          OkuData.JsonSettings.TraceWriter = writer;
-
           Kernel32.QueryPerformanceCounter(out tick1);
           OkuData.Instance = JsonConvert.DeserializeObject<OkuData>(configText, OkuData.JsonSettings);
           Kernel32.QueryPerformanceCounter(out tick2);
 
           float time = (tick2 - tick1) / (float)freq;
           OkuManagers.Logger.LogInfo("JSON deserialisation took: " + time + " seconds");
-
-          Clipboard.SetText(writer.ToString());
 
           if (!AfterLoad())
             return;

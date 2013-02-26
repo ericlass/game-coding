@@ -12,7 +12,7 @@ namespace OkuEngine
   /// <summary>
   /// A single loaded, renderable image.
   /// </summary>
-  public class ImageContent : Content
+  public class ImageContent : StoreableEntity
   {
     private int _width = 0;
     private int _height = 0;

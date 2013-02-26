@@ -14,11 +14,9 @@ namespace OkuEngine
     public const int InvalidId = 0;
 
     //Default system sequences
-    public const string ActorSequence = "actors";
     public const string ActorTypeSequence = "actortypes";
     public const string SceneSequence = "scenes";
     public const string LayerSequence = "layers";
-    public const string ContentSequence = "content";
     public const string ContentInstanceSequence = "contentinstances";
     public const string ImageSequence = "images";
     public const string AnimationSequence = "animations";
@@ -27,7 +25,6 @@ namespace OkuEngine
     public const string ScriptSequence = "scripts";
     public const string UserEventSequence = "userevents";
     public const string BehaviorSequence = "behaviors";
-    public const string BrushSequence = "brushes";
     public const string SceneObjectSequence = "sceneobjects";
 
     private static Dictionary<string, int> _sequences = new Dictionary<string, int>();
@@ -35,11 +32,9 @@ namespace OkuEngine
     public static void Initialize()
     {
       //Initialize default sequences
-      AddSequence(ActorSequence);
       AddSequence(ActorTypeSequence);
       AddSequence(SceneSequence);
       AddSequence(LayerSequence);
-      AddSequence(ContentSequence);
       AddSequence(ContentInstanceSequence);
       AddSequence(ImageSequence);
       AddSequence(AnimationSequence);
@@ -48,7 +43,6 @@ namespace OkuEngine
       AddSequence(ScriptSequence);
       AddSequence(UserEventSequence);
       AddSequence(BehaviorSequence);
-      AddSequence(BrushSequence);
       AddSequence(SceneObjectSequence);
     }
 

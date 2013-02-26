@@ -247,6 +247,8 @@ namespace OkuEngine.Scenes
       if (_backdrop != null)
         _backdrop.AfterLoad();
 
+      KeySequence.SetCurrentValue(KeySequence.LayerSequence, Id);
+
       _objectMap.Clear();
       List<SceneNode> allNodes = new List<SceneNode>();
       _root.GetAllChildren(allNodes);

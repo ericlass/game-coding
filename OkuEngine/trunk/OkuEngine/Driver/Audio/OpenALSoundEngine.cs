@@ -102,25 +102,25 @@ namespace OkuEngine.Driver.Audio
       Al.alGenBuffers(1, out buffer);
       Al.alBufferData(buffer, format, data, data.Length, sampleRate);
 
-      _buffers.Add(content.ContentId, buffer);
+      _buffers.Add(content.Id, buffer);
     }
 
     public void ReleaseContent(SoundContent content)
     {
-      if (_buffers.ContainsKey(content.ContentId))
+      if (_buffers.ContainsKey(content.Id))
       {
         //Release buffer
-        int buffer = _buffers[content.ContentId];
+        int buffer = _buffers[content.Id];
         Al.alDeleteBuffers(1, ref buffer);
       }
     }
 
     public void Play(SoundInstance instance)
     {
-      if (!_buffers.ContainsKey(instance.Content.ContentId))
+      if (!_buffers.ContainsKey(instance.Content.Id))
         throw new ArgumentException("The sound content does not have a corresponding buffer in the sound engine!");
 
-      int buffer = _buffers[instance.Content.ContentId];
+      int buffer = _buffers[instance.Content.Id];
 
       int source = 0;
       if (_sources.ContainsKey(instance.InstanceId))

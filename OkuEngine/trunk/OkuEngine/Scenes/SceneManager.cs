@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using OkuEngine.Events;
 
 namespace OkuEngine.Scenes
 {
@@ -57,6 +58,8 @@ namespace OkuEngine.Scenes
 
       _activeScene = scene;
       _activeScene.Activate();
+
+      OkuManagers.EventManager.TriggerEvent(EventTypes.ActiveSceneChanged, _activeScene.Id);
     }
 
     /// <summary>

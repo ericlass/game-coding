@@ -130,7 +130,7 @@ namespace OkuEngine.Driver.Renderer
           result = new ImageContent();
           result.Width = _screenWidth;
           result.Height = _screenHeight;
-          _textures.Add(result.ContentId, buffer);
+          _textures.Add(result.Id, buffer);
           _colorBufferContent.Add(buffer, result);
         }
         else
@@ -394,10 +394,10 @@ namespace OkuEngine.Driver.Renderer
 
       flippedImg.UnlockBits(bmData);
 
-      if (_textures.ContainsKey(content.ContentId))
+      if (_textures.ContainsKey(content.Id))
         ReleaseContent(content);
 
-      _textures.Add(content.ContentId, textureId);
+      _textures.Add(content.Id, textureId);
 
       flippedImg.Dispose();
     }
@@ -405,8 +405,8 @@ namespace OkuEngine.Driver.Renderer
     public void UpdateContent(ImageContent content, int x, int y, int width, int height, Bitmap image)
     {
       int textureId = 0;
-      if (_textures.ContainsKey(content.ContentId))
-        textureId = _textures[content.ContentId];
+      if (_textures.ContainsKey(content.Id))
+        textureId = _textures[content.Id];
       else
         return;
 
@@ -428,11 +428,11 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="content">The content to release.</param>
     public void ReleaseContent(ImageContent content)
     {
-      if (_textures.ContainsKey(content.ContentId))
+      if (_textures.ContainsKey(content.Id))
       {
-        int texId = _textures[content.ContentId];
+        int texId = _textures[content.Id];
         Gl.glDeleteTextures(1, ref texId);
-        _textures.Remove(content.ContentId);
+        _textures.Remove(content.Id);
       }
     }
 
@@ -473,7 +473,7 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="content">The pixel shader content to be initialized.</param>
     public void InitShaderContent(PixelShaderContent content)
     {
-      if (!_shaderPrograms.ContainsKey(content.ContentId))
+      if (!_shaderPrograms.ContainsKey(content.Id))
       {
         if (content.Source != null)
         {
@@ -490,7 +490,7 @@ namespace OkuEngine.Driver.Renderer
 
           System.Diagnostics.Debug.WriteLine(GetShaderInfoLog(program));
 
-          _shaderPrograms.Add(content.ContentId, program);
+          _shaderPrograms.Add(content.Id, program);
         }
         else
         {
@@ -507,14 +507,14 @@ namespace OkuEngine.Driver.Renderer
     {
       if (content != null)
       {
-        if (_shaderPrograms.ContainsKey(content.ContentId))
+        if (_shaderPrograms.ContainsKey(content.Id))
         {
-          int program = _shaderPrograms[content.ContentId];
+          int program = _shaderPrograms[content.Id];
           Gl.glUseProgram(program);
         }
         else
         {
-          OkuManagers.Logger.LogError("Pixel shader with content id '" + content.ContentId + "' was not initialized yet!");
+          OkuManagers.Logger.LogError("Pixel shader with content id '" + content.Id + "' was not initialized yet!");
         }
       }
       else
@@ -528,9 +528,9 @@ namespace OkuEngine.Driver.Renderer
       if (_uniformLocations == null)
         _uniformLocations = new Dictionary<KeyValuePair<int, string>, int>();
 
-      if (_shaderPrograms.ContainsKey(shader.ContentId))
+      if (_shaderPrograms.ContainsKey(shader.Id))
       {
-        int program = _shaderPrograms[shader.ContentId];
+        int program = _shaderPrograms[shader.Id];
         KeyValuePair<int, string> key = new KeyValuePair<int,string>(program, name);
         if (_uniformLocations.ContainsKey(key))
         {
@@ -554,28 +554,28 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="texture">The texture to set.</param>
     public void SetShaderTexture(PixelShaderContent shader, string name, ImageContent texture)
     {
-      if (_shaderPrograms.ContainsKey(shader.ContentId))
+      if (_shaderPrograms.ContainsKey(shader.Id))
       {
-        //int program = _shaderPrograms[shader.ContentId];
+        //int program = _shaderPrograms[shader.Id];
         //int location = Gl.glGetUniformLocation(program, name);
         int location = GetUniformLocation(shader, name);
 
         Gl.glActiveTexture(Gl.GL_TEXTURE0 + 1);
-        Gl.glBindTexture(Gl.GL_TEXTURE_2D, _textures[texture.ContentId]);
+        Gl.glBindTexture(Gl.GL_TEXTURE_2D, _textures[texture.Id]);
         Gl.glUniform1i(location, 1);
         Gl.glActiveTexture(Gl.GL_TEXTURE0);
       }
       else
       {
-        OkuManagers.Logger.LogError("Trying to set texture on uninitialized pixel shader content with id '" + shader.ContentId + "'!");
+        OkuManagers.Logger.LogError("Trying to set texture on uninitialized pixel shader content with id '" + shader.Id + "'!");
       }
     }
 
     public void SetShaderFloat(PixelShaderContent shader, string name, float[] values)
     {
-      if (_shaderPrograms.ContainsKey(shader.ContentId))
+      if (_shaderPrograms.ContainsKey(shader.Id))
       {
-        //int program = _shaderPrograms[shader.ContentId];
+        //int program = _shaderPrograms[shader.Id];
         //int location = Gl.glGetUniformLocation(program, name);
         int location = GetUniformLocation(shader, name);
 
@@ -604,7 +604,7 @@ namespace OkuEngine.Driver.Renderer
       }
       else
       {
-        OkuManagers.Logger.LogError("Trying to set float on uninitialized pixel shader content with id '" + shader.ContentId + "'!");
+        OkuManagers.Logger.LogError("Trying to set float on uninitialized pixel shader content with id '" + shader.Id + "'!");
       }
     }
 
@@ -800,10 +800,10 @@ namespace OkuEngine.Driver.Renderer
     /// <param name="tint">A color that is used to tint the image with.</param>
     public void DrawImage(ImageContent content, Vector2f position, float rotation, Vector2f scale, Color tint)
     {
-      if (!_textures.ContainsKey(content.ContentId))
+      if (!_textures.ContainsKey(content.Id))
         return;
 
-      int textureId = _textures[content.ContentId];
+      int textureId = _textures[content.Id];
       Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
 
       Gl.glPushMatrix();
@@ -861,7 +861,7 @@ namespace OkuEngine.Driver.Renderer
       Gl.glLoadIdentity();
       Gl.glOrtho(0, 1, 0, 1, -1, 1);
 
-      int textureId = _textures[content.ContentId];
+      int textureId = _textures[content.Id];
 
       Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
 
@@ -1023,10 +1023,10 @@ namespace OkuEngine.Driver.Renderer
     {
       if (texture != null)
       {
-        if (!_textures.ContainsKey(texture.ContentId))
+        if (!_textures.ContainsKey(texture.Id))
           return;
 
-        int textureId = _textures[texture.ContentId];
+        int textureId = _textures[texture.Id];
         Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
       }
       else
@@ -1042,10 +1042,10 @@ namespace OkuEngine.Driver.Renderer
     {
       if (texture != null)
       {
-        if (!_textures.ContainsKey(texture.ContentId))
+        if (!_textures.ContainsKey(texture.Id))
           return;
 
-        int textureId = _textures[texture.ContentId];
+        int textureId = _textures[texture.Id];
         Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
       }
       else

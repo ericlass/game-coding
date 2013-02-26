@@ -36,6 +36,7 @@ namespace OkuEngine.Actors
 
     public override bool AfterLoad()
     {
+      KeySequence.SetCurrentValue(KeySequence.ActorTypeSequence, Id);
       return _states.AfterLoad() && _attributes.AfterLoad();
     }
 

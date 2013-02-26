@@ -9,7 +9,7 @@ namespace OkuEngine
   /// <summary>
   /// Defines a pixel shader.
   /// </summary>
-  public class PixelShaderContent : Content
+  public class PixelShaderContent : StoreableEntity
   {
     private string _source = null;
 

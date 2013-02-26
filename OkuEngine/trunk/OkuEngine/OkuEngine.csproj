@@ -92,7 +92,6 @@
     <Compile Include="Driver\Renderer\RendererFactory.cs" />
     <Compile Include="Collections\DynamicArray.cs" />
     <Compile Include="Color.cs" />
-    <Compile Include="Content\Content.cs" />
     <Compile Include="Content\PixelShaderContent.cs" />
     <Compile Include="Converter.cs" />
     <Compile Include="Actors\Actor.cs" />

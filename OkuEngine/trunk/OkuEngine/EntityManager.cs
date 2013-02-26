@@ -109,12 +109,17 @@ namespace OkuEngine
     public virtual bool AfterLoad()
     {
       _entityMap.Clear();
+      int maxId = -1;
       foreach (T entity in _entities)
       {
         if (!entity.AfterLoad())
           return false;
         _entityMap.Add(entity.Id, entity);
+        if (entity.Id > maxId)
+          maxId = entity.Id;
       }
+      KeySequence.SetCurrentValue(_sequenceName, maxId);
+
       return true;
     }
 

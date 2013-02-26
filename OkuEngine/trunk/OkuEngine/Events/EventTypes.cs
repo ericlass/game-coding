@@ -14,6 +14,11 @@ namespace OkuEngine.Events
     /// </summary>
     public const int ViewPortChanged = 100;
 
+    /// <summary>
+    /// The active scene has changed. Event data is the id of the new active scene.
+    /// </summary>
+    public const int ActiveSceneChanged = 110;
+
     #region Actor Events
 
     /// <summary>

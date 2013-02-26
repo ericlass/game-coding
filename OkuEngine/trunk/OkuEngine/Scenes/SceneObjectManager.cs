@@ -98,12 +98,17 @@ namespace OkuEngine.Scenes
 
     public bool AfterLoad()
     {
+      int maxId = -1;
       foreach (SceneObject obj in _objects)
       {
         if (!obj.AfterLoad())
           return false;
         _objectMap.Add(obj.Id, obj);
+        if (obj.Id > maxId)
+          maxId = obj.Id;
       }
+      KeySequence.SetCurrentValue(KeySequence.SceneObjectSequence, maxId);
+
       return true;
     }
 

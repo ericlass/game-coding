@@ -9,7 +9,7 @@ namespace OkuEngine
   /// <summary>
   /// Defins a single sound.
   /// </summary>
-  public class SoundContent : Content
+  public class SoundContent : StoreableEntity
   {
     /// <summary>
     /// Create a new sound from the given file.
