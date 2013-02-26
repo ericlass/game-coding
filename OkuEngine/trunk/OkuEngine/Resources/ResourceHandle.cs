@@ -21,7 +21,7 @@ namespace OkuEngine.Resources
 
     ~ResourceHandle()
     {
-      _cache.MemoryHasBeenFreed(_buffer.Length);
+      //_cache.MemoryHasBeenFreed(_buffer.Length);
       _buffer.Close();
     }
 

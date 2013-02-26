@@ -77,7 +77,7 @@ namespace OkuEngine.Scenes
     {
       if (!base.AfterLoad())
         return false;
-      _activeScene = this[OkuData.Instance.GameProperties.StartSceneId];
+      SetActiveScene(OkuData.Instance.GameProperties.StartSceneId);
       return _activeScene != null;
     }
 

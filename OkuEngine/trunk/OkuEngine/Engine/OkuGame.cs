@@ -10,6 +10,8 @@ using OkuEngine.Scripting;
 using OkuEngine.Driver.Renderer;
 using OkuEngine.Logging;
 using OkuEngine.Input;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace OkuEngine
 {
@@ -232,6 +234,7 @@ namespace OkuEngine
 
           StreamReader reader = new StreamReader(configHandle.Buffer);
           string configText = reader.ReadToEnd();
+          reader.Close();
 
           long tick1, tick2, freq;
           Kernel32.QueryPerformanceFrequency(out freq);
@@ -247,12 +250,17 @@ namespace OkuEngine
           OkuManagers.Logger.LogInfo("JSON serialisation took: " + time + " seconds");
           */
 
+          ITraceWriter writer = new MemoryTraceWriter();
+          OkuData.JsonSettings.TraceWriter = writer;
+
           Kernel32.QueryPerformanceCounter(out tick1);
-          OkuData.Instance = Newtonsoft.Json.JsonConvert.DeserializeObject<OkuData>(configText, OkuData.JsonSettings);
+          OkuData.Instance = JsonConvert.DeserializeObject<OkuData>(configText, OkuData.JsonSettings);
           Kernel32.QueryPerformanceCounter(out tick2);
 
           float time = (tick2 - tick1) / (float)freq;
           OkuManagers.Logger.LogInfo("JSON deserialisation took: " + time + " seconds");
+
+          Clipboard.SetText(writer.ToString());
 
           if (!AfterLoad())
             return;
@@ -277,11 +285,6 @@ namespace OkuEngine
       }
       else
         throw new OkuException("Could not create renderer!");
-
-      if (OkuManagers.Renderer != null)
-      {
-        
-      }
 
       ISoundEngine sound = SoundEngineFactory.Instance.CreateSoundEngine(OkuData.Instance.AudioSettings);
       if (sound != null)
