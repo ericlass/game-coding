@@ -58,7 +58,7 @@ namespace OkuEngine
       for (int i = 0; i < 4; i++)
         _colors.Add(color);
 
-      OkuManagers.Renderer.DrawMesh(_vertices.InternalArray, null, _colors.InternalArray, 4, MeshMode.Quads, null);
+      OkuDrivers.Instance.Renderer.DrawMesh(_vertices.InternalArray, null, _colors.InternalArray, 4, MeshMode.Quads, null);
     }
 
     /// <summary>
@@ -77,7 +77,7 @@ namespace OkuEngine
       for (int i = 0; i < min; i++)
         _vertices.Add(points[i] + _area.Min);
 
-      OkuManagers.Renderer.DrawMesh(_vertices.InternalArray, texCoords, colors, count, mode, texture);
+      OkuDrivers.Instance.Renderer.DrawMesh(_vertices.InternalArray, texCoords, colors, count, mode, texture);
     }
 
     /// <summary>
@@ -97,13 +97,13 @@ namespace OkuEngine
     public void DrawImage(ImageContent image, Vector2f position)
     {
       position += _area.Min;
-      OkuManagers.Renderer.DrawImage(image, position);
+      OkuDrivers.Instance.Renderer.DrawImage(image, position);
     }
 
     public void DrawImage(ImageContent image, Vector2f position, Vector2f scale)
     {
       position += _area.Min;
-      OkuManagers.Renderer.DrawImage(image, position, scale);
+      OkuDrivers.Instance.Renderer.DrawImage(image, position, scale);
     }
 
     /// <summary>
@@ -117,7 +117,7 @@ namespace OkuEngine
     {
       start += _area.Min;
       end += _area.Min;
-      OkuManagers.Renderer.DrawLine(start, end, width, color);
+      OkuDrivers.Instance.Renderer.DrawLine(start, end, width, color);
     }
 
     /// <summary>
@@ -136,7 +136,7 @@ namespace OkuEngine
       for (int i = 0; i < min; i++)
         _vertices.Add(vertices[i] + _area.Min);
 
-      OkuManagers.Renderer.DrawLines(_vertices.InternalArray, color, count, width, interpretation);
+      OkuDrivers.Instance.Renderer.DrawLines(_vertices.InternalArray, color, count, width, interpretation);
     }
 
     /// <summary>
@@ -148,7 +148,7 @@ namespace OkuEngine
     public void DrawPoint(Vector2f p, float size, Color color)
     {
       p += _area.Min;
-      OkuManagers.Renderer.DrawPoint(p, size, color);
+      OkuDrivers.Instance.Renderer.DrawPoint(p, size, color);
     }
 
     /// <summary>
@@ -165,7 +165,7 @@ namespace OkuEngine
       for (int i = 0; i < min; i++)
         _vertices.Add(points[i] + _area.Min);
 
-      OkuManagers.Renderer.DrawPoints(_vertices.InternalArray, color, count, size);
+      OkuDrivers.Instance.Renderer.DrawPoints(_vertices.InternalArray, color, count, size);
     }
 
   }

@@ -36,7 +36,7 @@ namespace OkuEngine.Rendering
     public void Render(Scene scene)
     {
       if (_image != null)
-        OkuManagers.Renderer.DrawImage(_image, Vector2f.Zero);
+        OkuDrivers.Instance.Renderer.DrawImage(_image, Vector2f.Zero);
     }
 
     public AABB GetBoundingBox()
@@ -63,7 +63,7 @@ namespace OkuEngine.Rendering
       _image = OkuData.Instance.Images[_imageId];
       if (_image == null)
       {
-        OkuManagers.Logger.LogError("There is no image with the id " + _imageId + "!");
+        OkuManagers.Instance.Logger.LogError("There is no image with the id " + _imageId + "!");
         return false;
       }
       return true;

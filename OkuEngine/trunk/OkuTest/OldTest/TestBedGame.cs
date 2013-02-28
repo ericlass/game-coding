@@ -98,34 +98,35 @@ namespace OkuTest
     {
       _rotation += dt * 90;
 
-      if (OkuManagers.Input.Mouse.ButtonPressed(MouseButton.Left))
+      if (OkuManagers.Instance.Input.Mouse.ButtonPressed(MouseButton.Left))
         _sound.Play();
 
       float speed = 200 * dt;
       Vector2f center = OkuData.Instance.SceneManager.ActiveScene.Viewport.Center;
-      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Left))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(Keys.Left))
         center.X -= speed;
-      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Right))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(Keys.Right))
         center.X += speed;
-      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Up))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(Keys.Up))
         center.Y -= speed;
-      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Down))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(Keys.Down))
         center.Y += speed;      
 
       speed = dt;
       Vector2f scale = OkuData.Instance.SceneManager.ActiveScene.Viewport.Scale;
-      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Add))
+      OkuManagers.Instance.EventManager.Update(0);
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(Keys.Add))
       {
         scale.X += speed;
         scale.Y += speed;
       }
-      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Subtract))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(Keys.Subtract))
       {
         scale.X -= speed;
         scale.Y -= speed;
       }
 
-      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.NumPad0))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(Keys.NumPad0))
         scale = Vector2f.One;
       
       OkuData.Instance.SceneManager.ActiveScene.Viewport.Center = center;
@@ -137,21 +138,21 @@ namespace OkuTest
       switch (pass)
       {
         case 0:
-          OkuManagers.Renderer.DrawImage(_smiley, _pos1);
+          OkuDrivers.Instance.Renderer.DrawImage(_smiley, _pos1);
           _mesh.Draw();
 
           _text.Draw();
 
           Vector2f[] transformed = new Vector2f[_guiText.Vertices.Positions.Length];
           OkuData.Instance.SceneManager.ActiveScene.Viewport.ScreenSpaceMatrix.Transform(_guiText.Vertices.Positions, transformed);
-          OkuManagers.Renderer.DrawMesh(transformed, _guiText.Vertices.TexCoords, _guiText.Vertices.Colors, _guiText.Vertices.Positions.Length, _guiText.Mode, _guiText.Texture);
+          OkuDrivers.Instance.Renderer.DrawMesh(transformed, _guiText.Vertices.TexCoords, _guiText.Vertices.Colors, _guiText.Vertices.Positions.Length, _guiText.Mode, _guiText.Texture);
           break;
 
         case 1:
           //OkuDrivers.Renderer.UseShader(_shader);
-          ImageContent passResult = OkuManagers.Renderer.GetPassResult(pass - 1, 0);
+          ImageContent passResult = OkuDrivers.Instance.Renderer.GetPassResult(pass - 1, 0);
           //OkuDrivers.Renderer.SetShaderTexture(_shader, "texture", passResult);
-          OkuManagers.Renderer.DrawScreenAlignedQuad(passResult);
+          OkuDrivers.Instance.Renderer.DrawScreenAlignedQuad(passResult);
           //OkuDrivers.Renderer.UseShader(null);
           //_smiley.Draw(_pos1, _rotation);
           break;

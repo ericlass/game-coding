@@ -32,7 +32,7 @@ namespace OkuEngine
         }
       }
 
-      OkuManagers.Renderer.DrawLines(_vertices.InternalArray, _colors.InternalArray, index, 1, VertexInterpretation.LineSegments);
+      OkuDrivers.Instance.Renderer.DrawLines(_vertices.InternalArray, _colors.InternalArray, index, 1, VertexInterpretation.LineSegments);
 
 
       /*List<Vector> points = new List<Vector>();

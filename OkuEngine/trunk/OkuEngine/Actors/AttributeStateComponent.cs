@@ -68,7 +68,7 @@ namespace OkuEngine.Actors
           _attributes.AddAll(attrs.Attributes, true);
         }
         else
-          OkuManagers.Logger.LogError("Trying to merge a " + other.GetType().Name + " with a AttributeStateComponent!");
+          OkuManagers.Instance.Logger.LogError("Trying to merge a " + other.GetType().Name + " with a AttributeStateComponent!");
       }
 
       return true;

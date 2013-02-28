@@ -41,7 +41,7 @@ namespace OkuEngine.Scenes
 
     private void Transform_OnChange(Transformation transform)
     {
-      OkuManagers.EventManager.QueueEvent(EventTypes.SceneNodeMoved, this);
+      OkuManagers.Instance.EventManager.QueueEvent(EventTypes.SceneNodeMoved, this);
     }
 
     /// <summary>

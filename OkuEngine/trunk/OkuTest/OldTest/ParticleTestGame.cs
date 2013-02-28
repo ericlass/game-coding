@@ -13,7 +13,7 @@ namespace OkuTest
 
     public override void Initialize()
     {
-      OkuManagers.Renderer.ClearColor = Color.White;
+      OkuDrivers.Instance.Renderer.ClearColor = Color.White;
 
       _system = new ParticleSystem<LineEmitter, DefaultParticleController, PointParticleRenderer>(new LineEmitter(), new DefaultParticleController(), new PointParticleRenderer());
       //_system.Emitter.Center = new Vector(0, 0);
@@ -39,9 +39,9 @@ namespace OkuTest
       dt = dt * 0.5f;
 
       float torque = 90 * dt;
-      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Left))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(Keys.Left))
         _system.Emitter.Angle += torque;
-      if (OkuManagers.Input.Keyboard.KeyIsDown(Keys.Right))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(Keys.Right))
         _system.Emitter.Angle -= torque;
 
       _system.Update(dt);
@@ -55,7 +55,7 @@ namespace OkuTest
 
       if (_system.Emitter is LineEmitter)
       {
-        OkuManagers.Renderer.DrawLine(_system.Emitter.Start, _system.Emitter.End, 2.0f, Color.Green);
+        OkuDrivers.Instance.Renderer.DrawLine(_system.Emitter.Start, _system.Emitter.End, 2.0f, Color.Green);
       }
 
       _system.Draw();      

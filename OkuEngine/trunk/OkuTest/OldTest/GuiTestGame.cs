@@ -81,10 +81,10 @@ namespace OkuTest
 
       //OkuDrivers.Renderer.Display.Text = "H: " + hotText + "; A: " + activeText + "; F: " + focusedText;
 
-      if (OkuManagers.Input.Keyboard.KeyPressed(Keys.Add))
+      if (OkuManagers.Instance.Input.Keyboard.KeyPressed(Keys.Add))
         _progress.Position = Math.Min(_progress.Position + 5, _progress.Max);
 
-      if (OkuManagers.Input.Keyboard.KeyPressed(Keys.Subtract))
+      if (OkuManagers.Instance.Input.Keyboard.KeyPressed(Keys.Subtract))
         _progress.Position = Math.Max(_progress.Position - 5, _progress.Min);
     }
 
@@ -96,7 +96,7 @@ namespace OkuTest
       }
       else
       {
-        OkuManagers.Renderer.DrawScreenAlignedQuad(OkuManagers.Renderer.GetPassResult(pass - 1, 0));
+        OkuDrivers.Instance.Renderer.DrawScreenAlignedQuad(OkuDrivers.Instance.Renderer.GetPassResult(pass - 1, 0));
       }
       //Vector mousePos = OkuDrivers.Renderer.ScreenToWorld(OkuDrivers.Input.Mouse.X, OkuDrivers.Input.Mouse.Y);
       //OkuDrivers.Renderer.DrawPoint(mousePos, 4.0f, Color.Red);

@@ -387,7 +387,7 @@ namespace OkuEngine.Driver.Renderer
         Gl.glGetTexLevelParameteriv(Gl.GL_TEXTURE_2D, 0, Gl.GL_TEXTURE_COMPRESSED_IMAGE_SIZE, out compSize);
         int uncompSize = image.Width * image.Height * 4;
         float ratio = (compSize / (float)uncompSize) * 100.0f;
-        OkuManagers.Logger.LogError("Image \"" + content.Name + "\" (ID " + content.Id + ") Compressed: " + compSize + "; Uncompressed: " + uncompSize + "; Ratio: " + ratio + "%");
+        OkuManagers.Instance.Logger.LogError("Image \"" + content.Name + "\" (ID " + content.Id + ") Compressed: " + compSize + "; Uncompressed: " + uncompSize + "; Ratio: " + ratio + "%");
       }
       Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, GetGLTexFilter());
       Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, GetGLTexFilter());
@@ -494,7 +494,7 @@ namespace OkuEngine.Driver.Renderer
         }
         else
         {
-          OkuManagers.Logger.LogError("Trying to initialize a pixel shader without source!");
+          OkuManagers.Instance.Logger.LogError("Trying to initialize a pixel shader without source!");
         }
       }
     }
@@ -514,7 +514,7 @@ namespace OkuEngine.Driver.Renderer
         }
         else
         {
-          OkuManagers.Logger.LogError("Pixel shader with content id '" + content.Id + "' was not initialized yet!");
+          OkuManagers.Instance.Logger.LogError("Pixel shader with content id '" + content.Id + "' was not initialized yet!");
         }
       }
       else
@@ -567,7 +567,7 @@ namespace OkuEngine.Driver.Renderer
       }
       else
       {
-        OkuManagers.Logger.LogError("Trying to set texture on uninitialized pixel shader content with id '" + shader.Id + "'!");
+        OkuManagers.Instance.Logger.LogError("Trying to set texture on uninitialized pixel shader content with id '" + shader.Id + "'!");
       }
     }
 
@@ -604,7 +604,7 @@ namespace OkuEngine.Driver.Renderer
       }
       else
       {
-        OkuManagers.Logger.LogError("Trying to set float on uninitialized pixel shader content with id '" + shader.Id + "'!");
+        OkuManagers.Instance.Logger.LogError("Trying to set float on uninitialized pixel shader content with id '" + shader.Id + "'!");
       }
     }
 

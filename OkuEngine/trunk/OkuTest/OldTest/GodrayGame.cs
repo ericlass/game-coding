@@ -55,7 +55,7 @@ namespace OkuTest
     public override void Update(float dt)
     {
       //Get mouse position in window client coordinates
-      Point m = OkuManagers.Renderer.Display.PointToClient(new Point(OkuManagers.Input.Mouse.X, OkuManagers.Input.Mouse.Y));
+      Point m = OkuDrivers.Instance.Renderer.Display.PointToClient(new Point(OkuManagers.Instance.Input.Mouse.X, OkuManagers.Instance.Input.Mouse.Y));
 
       //Calculate mouse coordinates in world space
       _mousePos.X = OkuData.Instance.SceneManager.ActiveScene.Viewport.Left + m.X;
@@ -79,18 +79,18 @@ namespace OkuTest
       switch (pass)
       {
         case 0:
-          OkuManagers.Renderer.DrawPoint(_mousePos, 50, _lightColor);
-          OkuManagers.Renderer.DrawScreenAlignedQuad(_mask);
+          OkuDrivers.Instance.Renderer.DrawPoint(_mousePos, 50, _lightColor);
+          OkuDrivers.Instance.Renderer.DrawScreenAlignedQuad(_mask);
           break;
 
         case 1:
-          OkuManagers.Renderer.UseShader(_rayShader);
-          OkuManagers.Renderer.SetShaderFloat(_rayShader, "lightPos", new float[] { _lightPos.X, _lightPos.Y });
-          OkuManagers.Renderer.SetShaderTexture(_rayShader, "tex", OkuManagers.Renderer.GetPassResult(0, 0));
+          OkuDrivers.Instance.Renderer.UseShader(_rayShader);
+          OkuDrivers.Instance.Renderer.SetShaderFloat(_rayShader, "lightPos", new float[] { _lightPos.X, _lightPos.Y });
+          OkuDrivers.Instance.Renderer.SetShaderTexture(_rayShader, "tex", OkuDrivers.Instance.Renderer.GetPassResult(0, 0));
 
-          OkuManagers.Renderer.DrawScreenAlignedQuad(OkuManagers.Renderer.GetPassResult(0, 0));
+          OkuDrivers.Instance.Renderer.DrawScreenAlignedQuad(OkuDrivers.Instance.Renderer.GetPassResult(0, 0));
 
-          OkuManagers.Renderer.UseShader(null);
+          OkuDrivers.Instance.Renderer.UseShader(null);
           break;
 
         default:

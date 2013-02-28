@@ -44,7 +44,7 @@ namespace OkuEngine.Rendering
 
     public void Render(Scene scene)
     {
-      OkuManagers.Renderer.DrawMesh(_vertices.Positions, _vertices.TexCoords, _vertices.Colors, _vertices.Count, _mode, _image);
+      OkuDrivers.Instance.Renderer.DrawMesh(_vertices.Positions, _vertices.TexCoords, _vertices.Colors, _vertices.Count, _mode, _image);
     }
 
     public AABB GetBoundingBox()
@@ -67,7 +67,7 @@ namespace OkuEngine.Rendering
       _image = OkuData.Instance.Images[_imageId];
       if (_image == null)
       {
-        OkuManagers.Logger.LogError("There is no image with the id " + _imageId + "!");
+        OkuManagers.Instance.Logger.LogError("There is no image with the id " + _imageId + "!");
         return false;
       }
       return _vertices.AfterLoad();

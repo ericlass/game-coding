@@ -30,7 +30,7 @@ namespace OkuEngine
     /// </summary>
     public void Play()
     {
-      OkuManagers.SoundEngine.Play(this);
+      OkuDrivers.Instance.SoundEngine.Play(this);
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ namespace OkuEngine
     /// </summary>
     public void Pause()
     {
-      OkuManagers.SoundEngine.Pause(this);
+      OkuDrivers.Instance.SoundEngine.Pause(this);
     }
 
     /// <summary>
@@ -46,7 +46,7 @@ namespace OkuEngine
     /// </summary>
     public void Stop()
     {
-      OkuManagers.SoundEngine.Stop(this);
+      OkuDrivers.Instance.SoundEngine.Stop(this);
     }
 
     /// <summary>

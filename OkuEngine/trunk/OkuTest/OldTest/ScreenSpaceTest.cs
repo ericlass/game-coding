@@ -26,23 +26,23 @@ namespace OkuTest
 
     public override void Update(float dt)
     {
-      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Left))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Left))
         OkuData.Instance.SceneManager.ActiveScene.Viewport.Left += 100 * dt;
-      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Right))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Right))
         OkuData.Instance.SceneManager.ActiveScene.Viewport.Left -= 100 * dt;
-      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Up))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Up))
         OkuData.Instance.SceneManager.ActiveScene.Viewport.Top -= 100 * dt;
-      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Down))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Down))
         OkuData.Instance.SceneManager.ActiveScene.Viewport.Top += 100;
     }
 
     public override void Render(int pass)
     {
-      OkuManagers.Renderer.DrawImage(_yin, Vector2f.Zero);
+      OkuDrivers.Instance.Renderer.DrawImage(_yin, Vector2f.Zero);
 
-      OkuManagers.Renderer.BeginScreenSpace();
-      OkuManagers.Renderer.DrawImage(_earth, new Vector2f(50, 50));
-      OkuManagers.Renderer.EndScreenSpace();
+      OkuDrivers.Instance.Renderer.BeginScreenSpace();
+      OkuDrivers.Instance.Renderer.DrawImage(_earth, new Vector2f(50, 50));
+      OkuDrivers.Instance.Renderer.EndScreenSpace();
     }
 
   }

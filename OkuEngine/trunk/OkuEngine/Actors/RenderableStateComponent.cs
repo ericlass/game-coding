@@ -70,7 +70,7 @@ namespace OkuEngine.Actors
           _renderable = render.Renderable.Copy();
         }
         else
-          OkuManagers.Logger.LogError("Trying to merge a " + other.GetType().Name + " with a RenderableStateComponent!");
+          OkuManagers.Instance.Logger.LogError("Trying to merge a " + other.GetType().Name + " with a RenderableStateComponent!");
       }
 
       return true;

@@ -71,11 +71,11 @@ namespace OkuEngine.Scripting
 
         /*Kernel32.QueryPerformanceCounter(out tick2);
         float time = (tick2 - tick1) / ((float)freq / 1000);
-        OkuManagers.Logger.LogInfo("Script execution took " + time.ToString("0.######") + "ms");*/
+        OkuManagers.Instance.Logger.LogInfo("Script execution took " + time.ToString("0.######") + "ms");*/
       }
       catch (Exception ex)
       {
-        OkuManagers.Logger.LogError("Error while executing script! Cause: " + ex.Message);
+        OkuManagers.Instance.Logger.LogError("Error while executing script! Cause: " + ex.Message);
         return false;
       }
       return true;
@@ -102,7 +102,7 @@ namespace OkuEngine.Scripting
           }
           else
           {
-            OkuManagers.Logger.LogError("Parameter " + paramNum + " is of a type that is not supported by the script engine! Script: " + _source);
+            OkuManagers.Instance.Logger.LogError("Parameter " + paramNum + " is of a type that is not supported by the script engine! Script: " + _source);
             return false;
           }
           paramNum++;
@@ -118,7 +118,7 @@ namespace OkuEngine.Scripting
       }
       catch (Exception ex)
       {
-        OkuManagers.Logger.LogError("Error while executing script! Cause: " + ex.Message);
+        OkuManagers.Instance.Logger.LogError("Error while executing script! Cause: " + ex.Message);
         return false;
       }
 

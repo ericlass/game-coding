@@ -59,7 +59,7 @@ namespace OkuTest
       world.GetCollisions(cols);
       foreach (CollisionInfo<ColTest> col in cols)
       {
-        OkuManagers.Logger.LogInfo(col.MTD.ToString());
+        OkuManagers.Instance.Logger.LogInfo(col.MTD.ToString());
       }
     }
 

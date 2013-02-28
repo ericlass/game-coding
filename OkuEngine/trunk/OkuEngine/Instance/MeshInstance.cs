@@ -96,7 +96,7 @@ namespace OkuEngine
     /// </summary>
     public void Draw()
     {
-      OkuManagers.Renderer.DrawMesh(_vertices.Positions, _vertices.TexCoords, _vertices.Colors, _vertices.Positions.Length, _mode, _texture);
+      OkuDrivers.Instance.Renderer.DrawMesh(_vertices.Positions, _vertices.TexCoords, _vertices.Colors, _vertices.Positions.Length, _mode, _texture);
     }
     
   }

@@ -51,9 +51,9 @@ namespace OkuEngine
     private void Init(WaveForm wave)
     {
       if (wave != null)
-        OkuManagers.SoundEngine.InitContent(this, wave);
+        OkuDrivers.Instance.SoundEngine.InitContent(this, wave);
       else
-        OkuManagers.Logger.LogInfo("Trying to init a null waveform!");
+        OkuManagers.Instance.Logger.LogInfo("Trying to init a null waveform!");
     }
 
     public override bool AfterLoad()

@@ -112,7 +112,7 @@ namespace OkuEngine.Scenes.Backdrops
       }
 
       //Render everything at once
-      OkuManagers.Renderer.DrawMesh(_vertPoints.InternalArray, _vertTexCoords.InternalArray, _vertColors.InternalArray, _vertPoints.Count, OkuEngine.Driver.Renderer.DrawMode.Quads, _image);
+      OkuDrivers.Instance.Renderer.DrawMesh(_vertPoints.InternalArray, _vertTexCoords.InternalArray, _vertColors.InternalArray, _vertPoints.Count, OkuEngine.Driver.Renderer.DrawMode.Quads, _image);
     }
 
     /// <summary>
@@ -179,7 +179,7 @@ namespace OkuEngine.Scenes.Backdrops
       _image = OkuData.Instance.Images[_imageId];
       if (_image == null)
       {
-        OkuManagers.Logger.LogError("Could not find image with id " + _imageId + "!");
+        OkuManagers.Instance.Logger.LogError("Could not find image with id " + _imageId + "!");
         return false;
       }
 

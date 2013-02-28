@@ -273,7 +273,7 @@ namespace OkuEngine
         }
         else
         {
-          OkuManagers.Logger.LogError("AABB '" + str + "' has wrong format!");
+          OkuManagers.Instance.Logger.LogError("AABB '" + str + "' has wrong format!");
         }
       }
       return false;

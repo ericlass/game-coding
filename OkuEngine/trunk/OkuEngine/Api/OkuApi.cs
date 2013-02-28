@@ -46,7 +46,7 @@ namespace OkuEngine.Api
     {
       Actor actor = OkuData.Instance.SceneObjects.Get<Actor>(actorId);
       if (actor == null)
-        OkuManagers.Logger.LogError("No actor with the id " + actorId + " exists!");
+        OkuManagers.Instance.Logger.LogError("No actor with the id " + actorId + " exists!");
 
       return actor;
     }
@@ -55,7 +55,7 @@ namespace OkuEngine.Api
     {
       SceneObject so = OkuData.Instance.SceneObjects[objectId];
       if (so == null)
-        OkuManagers.Logger.LogError("No scene object with the id " + objectId + " exists!");
+        OkuManagers.Instance.Logger.LogError("No scene object with the id " + objectId + " exists!");
       
       return so;
     }
@@ -208,7 +208,7 @@ namespace OkuEngine.Api
         }
         else
         {
-          OkuManagers.Logger.LogError("There is no actor state with the name " + state + "!");
+          OkuManagers.Instance.Logger.LogError("There is no actor state with the name " + state + "!");
           return false;
         }
       }
@@ -230,7 +230,7 @@ namespace OkuEngine.Api
         if (value != null)
           return value.ValueString;
         else
-          OkuManagers.Logger.LogError("The is no actor attribute with the name " + attribute + "!");
+          OkuManagers.Instance.Logger.LogError("The is no actor attribute with the name " + attribute + "!");
       }
       return null;
     }
@@ -250,7 +250,7 @@ namespace OkuEngine.Api
         if (value != null)
           attrValue.ValueString = value;
         else
-          OkuManagers.Logger.LogError("The is no actor attribute with the name " + attribute + "!");
+          OkuManagers.Instance.Logger.LogError("The is no actor attribute with the name " + attribute + "!");
       }
     }
 

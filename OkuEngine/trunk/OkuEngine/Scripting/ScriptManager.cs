@@ -56,7 +56,7 @@ namespace OkuEngine.Scripting
       }
       catch (Exception ex)
       {
-        OkuManagers.Logger.LogError("Script could not be compiled! Cause: " + ex.Message + Environment.NewLine + code);
+        OkuManagers.Instance.Logger.LogError("Script could not be compiled! Cause: " + ex.Message + Environment.NewLine + code);
         return null;
       }
 

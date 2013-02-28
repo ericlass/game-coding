@@ -33,7 +33,7 @@ namespace OkuEngine.Rendering
 
     public void Render(Scene scene)
     {
-      OkuManagers.Renderer.DrawPoints(_vertices.Positions, _vertices.Colors, _vertices.Count, _size);
+      OkuDrivers.Instance.Renderer.DrawPoints(_vertices.Positions, _vertices.Colors, _vertices.Count, _size);
     }
 
     public AABB GetBoundingBox()

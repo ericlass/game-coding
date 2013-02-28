@@ -64,7 +64,7 @@ namespace OkuEngine.Events
 
       if (_listeners[eventType].Contains(eventDelegate))
       {
-        OkuManagers.Logger.LogError("Trying to register '" + eventDelegate.ToString() + "' twice for event '" + eventType + "'!");
+        OkuManagers.Instance.Logger.LogError("Trying to register '" + eventDelegate.ToString() + "' twice for event '" + eventType + "'!");
         return false;
       }
 

@@ -24,7 +24,7 @@ namespace OkuTest
 
     public override void Initialize()
     {
-      OkuManagers.Renderer.Display.Text = "Inertia Test";
+      OkuDrivers.Instance.Renderer.Display.Text = "Inertia Test";
 
       _image = new ImageContent(".\\content\\yinyang.png");
       _angleInertia = new InertialMovement();
@@ -38,21 +38,21 @@ namespace OkuTest
     {
       //Update inertia direction depending on pressed keys
       _angleInertia.Direction = 0;
-      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.NumPad4))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.NumPad4))
         _angleInertia.Direction += 1;
-      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.NumPad6))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.NumPad6))
         _angleInertia.Direction -= 1;
 
       _xInertia.Direction = 0;
-      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Left))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Left))
         _xInertia.Direction -= 1;
-      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Right))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Right))
         _xInertia.Direction += 1;
 
       _yInertia.Direction = 0;
-      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Down))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Down))
         _yInertia.Direction -= 1;
-      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Up))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Up))
         _yInertia.Direction += 1;
 
       //Update inertia for X and Y coordinate and rotation angle and apply changes
@@ -67,7 +67,7 @@ namespace OkuTest
 
     public override void Render(int pass)
     {
-      OkuManagers.Renderer.DrawImage(_image, _position, _angle);
+      OkuDrivers.Instance.Renderer.DrawImage(_image, _position, _angle);
     }
 
   }

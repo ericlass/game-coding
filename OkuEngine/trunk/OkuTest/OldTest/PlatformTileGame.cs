@@ -55,23 +55,23 @@ namespace OkuTest
     {
       float speed = 1000 * dt;
       float dx = 0;
-      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.NumPad6))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.NumPad6))
         dx += speed;
-      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.NumPad4))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.NumPad4))
         dx -= speed;
 
       OkuData.Instance.SceneManager.ActiveScene.Viewport.Left += dx;
 
       speed = 200 * dt;
       _playerVelocity.X = 0;
-      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Right))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Right))
         _playerVelocity.X = speed;
-      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Left))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Left))
         _playerVelocity.X = -speed;
 
       _playerVelocity.Y -= 5 * dt;
 
-      if (!_jumping && OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Up))
+      if (!_jumping && OkuManagers.Instance.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Up))
       {
         _jumping = true;
         _playerVelocity.Y = 500 * dt;
@@ -108,9 +108,9 @@ namespace OkuTest
     public override void Render(int pass)
     {
       _tileMap.Draw();
-      OkuManagers.Renderer.DrawLines(_transformedPlayer, Color.Blue, _transformedPlayer.Length, 2, VertexInterpretation.PolygonClosed);
-      OkuManagers.Renderer.DrawLine(_playerPos, _playerPos + (_playerVelocity * 20), 2, Color.Green);
-      OkuManagers.Renderer.DrawLine(_playerPos, _playerPos + (_mtd * 20), 2, Color.Red);
+      OkuDrivers.Instance.Renderer.DrawLines(_transformedPlayer, Color.Blue, _transformedPlayer.Length, 2, VertexInterpretation.PolygonClosed);
+      OkuDrivers.Instance.Renderer.DrawLine(_playerPos, _playerPos + (_playerVelocity * 20), 2, Color.Green);
+      OkuDrivers.Instance.Renderer.DrawLine(_playerPos, _playerPos + (_mtd * 20), 2, Color.Red);
     }
 
   }

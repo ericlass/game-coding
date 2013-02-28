@@ -78,7 +78,7 @@ namespace OkuEngine
       }
       else
       {
-        OkuManagers.Logger.LogError("Trying to add the sequence '" + name + "' twice!");
+        OkuManagers.Instance.Logger.LogError("Trying to add the sequence '" + name + "' twice!");
       }
       return false;
     }

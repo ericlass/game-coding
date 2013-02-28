@@ -39,7 +39,7 @@ namespace OkuEngine.Scripting
         _handlers.Add(eventId, new List<ScriptInstance>());
 
       _handlers[eventId].Add(script);
-      OkuManagers.EventManager.AddListener(eventId, new EventListenerDelegate(EventReceived));
+      OkuManagers.Instance.EventManager.AddListener(eventId, new EventListenerDelegate(EventReceived));
     }
 
     public bool LoadHandlers(XmlNode node)
@@ -60,7 +60,7 @@ namespace OkuEngine.Scripting
               value = child.GetTagValue("script");
               if (value != null)
               {
-                script = OkuManagers.ScriptManager.CompileScript(value);
+                script = OkuManagers.Instance.ScriptManager.CompileScript(value);
                 if (script != null)
                 {
                   AddHandler(eventId, script);                
@@ -71,7 +71,7 @@ namespace OkuEngine.Scripting
 
           if (eventId == 0 || script == null)
           {
-            OkuManagers.Logger.LogError("Behavior " + Name + " has an invalid handler!");
+            OkuManagers.Instance.Logger.LogError("Behavior " + Name + " has an invalid handler!");
             return false;
           }
         }
@@ -89,7 +89,7 @@ namespace OkuEngine.Scripting
       {
         foreach (ScriptInstance script in handler.Value)
         {
-          if (!OkuManagers.ScriptManager.Recompile(script))
+          if (!OkuManagers.Instance.ScriptManager.Recompile(script))
             return false;
         }
       }

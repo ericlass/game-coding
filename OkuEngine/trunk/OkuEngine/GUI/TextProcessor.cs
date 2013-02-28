@@ -128,7 +128,7 @@ namespace OkuEngine
       }
       else
       {
-        char pressed = OkuManagers.Input.Keyboard.KeyToChar(key);
+        char pressed = OkuManagers.Instance.Input.Keyboard.KeyToChar(key);
         if (pressed > 0)
         {
           _text = _text.Insert(_cursorPos, pressed.ToString());

@@ -44,9 +44,9 @@ namespace OkuTest
 
     public override void Update(float dt)
     {
-      if (OkuManagers.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.Add))
+      if (OkuManagers.Instance.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.Add))
         _ease.Strength += 1;
-      if (OkuManagers.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.Subtract))
+      if (OkuManagers.Instance.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.Subtract))
         _ease.Strength -= 1;
 
       long tick1, tick2, freq;
@@ -70,12 +70,12 @@ namespace OkuTest
       }
 
       float time = passed / (float)freq;
-      OkuManagers.Renderer.Display.Text = time.ToString();
+      OkuDrivers.Instance.Renderer.Display.Text = time.ToString();
 
-      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Right))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Right))
         _control = Math.Min(1.0f, _control + dt);
 
-      if (OkuManagers.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Left))
+      if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.Left))
         _control = Math.Max(-1.0f, _control - dt);
 
       _angle = 135.0f * _imageEase.GetValueAt(_control);
@@ -83,10 +83,10 @@ namespace OkuTest
 
     public override void Render(int pass)
     {
-      OkuManagers.Renderer.DrawLines(_points, Color.Blue, _points.Length, 1.0f, VertexInterpretation.Polygon);
-      OkuManagers.Renderer.DrawPoints(_points, Color.Red, _points.Length, 2.0f);
+      OkuDrivers.Instance.Renderer.DrawLines(_points, Color.Blue, _points.Length, 1.0f, VertexInterpretation.Polygon);
+      OkuDrivers.Instance.Renderer.DrawPoints(_points, Color.Red, _points.Length, 2.0f);
 
-      OkuManagers.Renderer.DrawImage(_image, Vector2f.Zero, _angle);
+      OkuDrivers.Instance.Renderer.DrawImage(_image, Vector2f.Zero, _angle);
     }
 
   }

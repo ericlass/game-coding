@@ -52,9 +52,9 @@ namespace OkuEngine.Rendering
     public void Render(Scene scene)
     {
       if (_closed)
-        OkuManagers.Renderer.DrawLines(_vertices.Positions, _vertices.Colors, _vertices.Count, _width, VertexInterpretation.PolygonClosed);
+        OkuDrivers.Instance.Renderer.DrawLines(_vertices.Positions, _vertices.Colors, _vertices.Count, _width, VertexInterpretation.PolygonClosed);
       else
-        OkuManagers.Renderer.DrawLines(_vertices.Positions, _vertices.Colors, _vertices.Count, _width, VertexInterpretation.Polygon);
+        OkuDrivers.Instance.Renderer.DrawLines(_vertices.Positions, _vertices.Colors, _vertices.Count, _width, VertexInterpretation.Polygon);
     }
 
     public AABB GetBoundingBox()

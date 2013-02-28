@@ -17,7 +17,7 @@ namespace OkuEngine.Scripting
     /// </summary>
     public void Initialize()
     {
-      _engine.SetGlobalFunction("print", new Action<string>((message) => OkuManagers.Logger.LogInfo(message)));
+      _engine.SetGlobalFunction("print", new Action<string>((message) => OkuManagers.Instance.Logger.LogInfo(message)));
 
       ExposeApi();
 
@@ -80,7 +80,7 @@ namespace OkuEngine.Scripting
 
         if (hasUnsupportedType)
         {
-          OkuManagers.Logger.LogError("API method " + method.Name + " has unsupported parameter types!");
+          OkuManagers.Instance.Logger.LogError("API method " + method.Name + " has unsupported parameter types!");
           continue;
         }
 
@@ -94,7 +94,7 @@ namespace OkuEngine.Scripting
         }
         else
         {
-          OkuManagers.Logger.LogError("Method " + method.Name + " could not be converted to a delegate type!");
+          OkuManagers.Instance.Logger.LogError("Method " + method.Name + " could not be converted to a delegate type!");
         }
       }
     }

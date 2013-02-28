@@ -26,7 +26,7 @@ namespace OkuEngine.Scenes
     public Scene()
     {
       _viewport.Change += new ViewPortChangeEventHandler(_viewport_Change);
-      OkuManagers.EventManager.AddListener(EventTypes.SceneNodeMoved, new EventListenerDelegate(OnEventReceived));
+      OkuManagers.Instance.EventManager.AddListener(EventTypes.SceneNodeMoved, new EventListenerDelegate(OnEventReceived));
       _collisionWorld = new CollisionWorld<SceneNode>(new NoBroadPhaseDetector<SceneNode>(), new AABBPrecisePhaseDetector<SceneNode>());
     }
 
@@ -41,7 +41,7 @@ namespace OkuEngine.Scenes
       _name = name;
 
       _viewport.Change += new ViewPortChangeEventHandler(_viewport_Change);
-      OkuManagers.EventManager.AddListener(EventTypes.SceneNodeMoved, new EventListenerDelegate(OnEventReceived));
+      OkuManagers.Instance.EventManager.AddListener(EventTypes.SceneNodeMoved, new EventListenerDelegate(OnEventReceived));
       _collisionWorld = new CollisionWorld<SceneNode>(new NoBroadPhaseDetector<SceneNode>(), new AABBPrecisePhaseDetector<SceneNode>());
     }
 
@@ -74,7 +74,7 @@ namespace OkuEngine.Scenes
     private void _viewport_Change(ViewPort sender)
     {
       if (_active)
-        OkuManagers.EventManager.TriggerEvent(EventTypes.ViewPortChanged, sender);
+        OkuManagers.Instance.EventManager.TriggerEvent(EventTypes.ViewPortChanged, sender);
     }
 
     /// <summary>
@@ -168,8 +168,8 @@ namespace OkuEngine.Scenes
       {
         foreach (CollisionInfo<SceneNode> collision in collisions)
         {
-          OkuManagers.EventManager.QueueEvent(EventTypes.CollisionOccurred, collision.BodyA.Data.Properties.ObjectId, collision.BodyB.Data.Properties.ObjectId);
-          OkuManagers.Logger.LogInfo(Environment.TickCount + " - COLLISION: " + collision.BodyA.Data.Properties.ObjectId + " <> " + collision.BodyB.Data.Properties.ObjectId);
+          OkuManagers.Instance.EventManager.QueueEvent(EventTypes.CollisionOccurred, collision.BodyA.Data.Properties.ObjectId, collision.BodyB.Data.Properties.ObjectId);
+          OkuManagers.Instance.Logger.LogInfo(Environment.TickCount + " - COLLISION: " + collision.BodyA.Data.Properties.ObjectId + " <> " + collision.BodyB.Data.Properties.ObjectId);
           //collision.BodyA.Data.Properties.Transform.Translation = collision.BodyA.Data.Properties.Transform.Translation + collision.MTD;
         }
       }
@@ -209,7 +209,7 @@ namespace OkuEngine.Scenes
     {
       _matrixStack.Push(_currentTransform);
       _currentTransform = transform.AsMatrix() * _currentTransform;
-      OkuManagers.Renderer.ApplyAndPushTransform(transform);
+      OkuDrivers.Instance.Renderer.ApplyAndPushTransform(transform);
     }
 
     /// <summary>
@@ -218,7 +218,7 @@ namespace OkuEngine.Scenes
     public void PopTransform()
     {
       _currentTransform = _matrixStack.Pop();
-      OkuManagers.Renderer.PopTransform();
+      OkuDrivers.Instance.Renderer.PopTransform();
     }
 
     /// <summary>
@@ -246,8 +246,8 @@ namespace OkuEngine.Scenes
     /// <returns>The converted world space position.</returns>
     public Vector2f ScreenToWorld(int x, int y)
     {
-      Point client = OkuManagers.Renderer.Display.PointToClient(new Point(x, y));
-      return new Vector2f(client.X, OkuManagers.Renderer.Display.ClientSize.Height - client.Y);
+      Point client = OkuDrivers.Instance.Renderer.Display.PointToClient(new Point(x, y));
+      return new Vector2f(client.X, OkuDrivers.Instance.Renderer.Display.ClientSize.Height - client.Y);
     }
 
     /// <summary>
@@ -266,7 +266,7 @@ namespace OkuEngine.Scenes
     /// </summary>
     public void Activate()
     {
-      OkuManagers.EventManager.TriggerEvent(EventTypes.ViewPortChanged, _viewport);
+      OkuManagers.Instance.EventManager.TriggerEvent(EventTypes.ViewPortChanged, _viewport);
       _active = true;
     }
 

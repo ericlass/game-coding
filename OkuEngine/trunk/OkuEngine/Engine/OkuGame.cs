@@ -54,11 +54,11 @@ namespace OkuEngine
       Kernel32.QueryPerformanceCounter(out tick2);
 
       User32.NativeMessage msg = new User32.NativeMessage();
-      HandleRef hRef = new HandleRef(OkuManagers.Renderer.Display, OkuManagers.Renderer.Display.Handle);
+      HandleRef hRef = new HandleRef(OkuDrivers.Instance.Renderer.Display, OkuDrivers.Instance.Renderer.Display.Handle);
 
       while (true)
       {
-        if (!OkuManagers.Renderer.Display.Created)
+        if (!OkuDrivers.Instance.Renderer.Display.Created)
           break;
 
         if (User32.PeekMessage(out msg, hRef, 0, 0, 1))
@@ -73,16 +73,16 @@ namespace OkuEngine
           }
           else if (msg.msg == User32.WM_KEYDOWN)
           {
-            if (OkuManagers.InputManager != null)
+            if (OkuManagers.Instance.InputManager != null)
             {
-              OkuManagers.InputManager.OnKeyAction((Keys)msg.wParam, KeyAction.Down);
+              OkuManagers.Instance.InputManager.OnKeyAction((Keys)msg.wParam, KeyAction.Down);
             }
           }
           else if (msg.msg == User32.WM_KEYUP)
           {
-            if (OkuManagers.InputManager != null)
+            if (OkuManagers.Instance.InputManager != null)
             {
-              OkuManagers.InputManager.OnKeyAction((Keys)msg.wParam, KeyAction.Up);
+              OkuManagers.Instance.InputManager.OnKeyAction((Keys)msg.wParam, KeyAction.Up);
             }
           }
           else
@@ -111,8 +111,8 @@ namespace OkuEngine
         }
       }
 
-      OkuManagers.Renderer.Finish();
-      OkuManagers.SoundEngine.Finish();
+      OkuDrivers.Instance.Renderer.Finish();
+      OkuDrivers.Instance.SoundEngine.Finish();
     }
 
     /// <summary>
@@ -141,142 +141,39 @@ namespace OkuEngine
     {
       KeySequence.Initialize();
 
-      OkuManagers.Logger = new Logger();
-      OkuManagers.Logger.AddWriter(new DebugConsoleLogWriter());
-
-      OkuManagers.EventManager = new EventManager("OkuMainEventManager");
-
-      OkuManagers.InputManager = new InputManager();
-
-      OkuScriptManager scriptManager = new OkuScriptManager();
-      scriptManager.Initialize();
-      OkuManagers.ScriptManager = scriptManager;
-
-      OkuManagers.ProcessManager = new ProcessManager();
+      // Scared that managers might not be initialized in the correct order
+      OkuManagers.Instance.ToString();
 
       ResourceCacheParams resParams = new ResourceCacheParams();
       SetupResourceCache(ref resParams);
       ResourceCache resCache = new ResourceCache(resParams);
-      OkuManagers.ResourceCache = resCache;
+      OkuManagers.Instance.ResourceCache = resCache;
       if (resCache.Initialize())
       {
         ResourceHandle configHandle = resCache.GetHandle(new Resource(GetConfigFileName()));
         if (configHandle != null)
         {
-          /*
-          XmlDocument config = new XmlDocument();
-          config.Load(configHandle.Buffer);
-
-          XmlNode rootNode = config.DocumentElement;
-
-          XmlNode engineNode = rootNode["engine"];
-          XmlNode gameNode = rootNode["game"];
-
-          XmlNode attribsNode = null;
-          XmlNode imagesNode = null;
-          XmlNode scenesNode = null;
-          XmlNode actorTypesNode = null;
-          XmlNode animationsNode = null;
-          XmlNode inputBindingsNode = null;
-          XmlNode userEventsNode = null;
-          XmlNode behaviorsNode = null;
-          XmlNode sceneObjectNode = null;
-
-          if (gameNode != null)
-          {
-            attribsNode = gameNode["attributes"];
-            imagesNode = gameNode["images"];
-            scenesNode = gameNode["scenes"];
-            actorTypesNode = gameNode["actortypes"];
-            animationsNode = gameNode["animations"];
-            inputBindingsNode = gameNode["keybindings"];
-            userEventsNode = gameNode["userevents"];
-            behaviorsNode = gameNode["behaviors"];
-            sceneObjectNode = gameNode["sceneobjects"];
-          }
-
-          if (engineNode != null)
-            LoadSettings(engineNode);
-
-          if (userEventsNode != null)
-            OkuData.Instance.UserEvents.Load(userEventsNode);
-
-          if (inputBindingsNode != null)
-            OkuManagers.InputManager.Load(inputBindingsNode);
-
-          if (behaviorsNode != null)
-            OkuData.Instance.Behaviors.Load(behaviorsNode);
-
-          if (imagesNode != null)
-            OkuData.Instance.Images.Load(imagesNode);
-
-          if (animationsNode != null)
-            OkuData.Instance.Animations.Load(animationsNode);
-
-          if (actorTypesNode != null)
-            OkuData.Instance.ActorTypes.Load(actorTypesNode);
-
-          if (sceneObjectNode != null)
-            OkuData.Instance.SceneObjects.Load(sceneObjectNode);
-      
-          if (scenesNode != null)
-            OkuData.Instance.SceneManager.Load(scenesNode);
-
-          if (attribsNode != null)
-          {
-            LoadGameAttribs(attribsNode);
-            if (_startScene > 0)
-              OkuData.Instance.SceneManager.SetActiveScene(_startScene);
-            else
-              OkuData.Instance.SceneManager.SetActiveScene(new OkuEngine.Scenes.Scene(-1, "Empty Scene"));
-          }
-          */
-
           StreamReader reader = new StreamReader(configHandle.Buffer);
           string configText = reader.ReadToEnd();
           reader.Close();
 
-          long tick1, tick2, freq;
-          Kernel32.QueryPerformanceFrequency(out freq);
-
-          Kernel32.QueryPerformanceCounter(out tick1);
           OkuData.Instance = JsonConvert.DeserializeObject<OkuData>(configText, OkuData.JsonSettings);
-          Kernel32.QueryPerformanceCounter(out tick2);
 
-          float time = (tick2 - tick1) / (float)freq;
-          OkuManagers.Logger.LogInfo("JSON deserialisation took: " + time + " seconds");
-
-          if (!AfterLoad())
+          if (!OkuDrivers.Instance.Initialize())
+            return;
+          
+          if (!OkuData.Instance.AfterLoad())
             return;
 
+          //TODO: Remove
           Initialize();
         }
       }
       else
       {
-        OkuManagers.Logger.LogError("Could not initialize resource cache!");
+        OkuManagers.Instance.Logger.LogError("Could not initialize resource cache!");
         System.Windows.Forms.Application.Exit();
       }
-    }
-
-    private bool AfterLoad()
-    {
-      IRenderer renderer = RendererFactory.Instance.CreateRenderer(OkuData.Instance.RenderSettings);
-      if (renderer != null)
-      {
-        OkuManagers.Renderer = renderer;
-        OkuManagers.EventManager.AddListener(EventTypes.ViewPortChanged, new EventListenerDelegate(OkuManagers.Renderer.OnViewportEvent));
-      }
-      else
-        throw new OkuException("Could not create renderer!");
-
-      ISoundEngine sound = SoundEngineFactory.Instance.CreateSoundEngine(OkuData.Instance.AudioSettings);
-      if (sound != null)
-        OkuManagers.SoundEngine = sound;
-      else
-        throw new OkuException("Could not create sound engine!");
-
-      return OkuData.Instance.AfterLoad();
     }
 
     /// <summary>
@@ -325,23 +222,23 @@ namespace OkuEngine
       OkuData.Instance.SceneManager.ActiveScene.Update(dt);
 
       //Update script engine (global timedelta value)
-      OkuManagers.ScriptManager.Update(dt);
+      OkuManagers.Instance.ScriptManager.Update(dt);
 
       //Update sound engine (does nothing atm)
-      OkuManagers.SoundEngine.Update(dt);
+      OkuDrivers.Instance.SoundEngine.Update(dt);
       
       //Update input data
-      OkuManagers.Input.Update();
-      OkuManagers.Input.Mouse.WheelDelta = _mouseDelta / 120.0f;
+      OkuManagers.Instance.Input.Update();
+      OkuManagers.Instance.Input.Mouse.WheelDelta = _mouseDelta / 120.0f;
       _mouseDelta = 0;
 
       // Update input manager (runs state behaviors)
-      OkuManagers.InputManager.Update();
+      OkuManagers.Instance.InputManager.Update();
       
       //Process events
-      OkuManagers.EventManager.Update(float.MaxValue);
+      OkuManagers.Instance.EventManager.Update(float.MaxValue);
       //Update processes (not used atm)
-      OkuManagers.ProcessManager.UpdateProcesses(dt);
+      OkuManagers.Instance.ProcessManager.UpdateProcesses(dt);
 
       Update(dt);
     }
@@ -360,22 +257,22 @@ namespace OkuEngine
     /// </summary>
     public void DoRender()
     {
-      if (OkuManagers.Renderer.RenderPasses > 0)
+      if (OkuDrivers.Instance.Renderer.RenderPasses > 0)
       {
-        for (int i = 0; i < OkuManagers.Renderer.RenderPasses; i++)
+        for (int i = 0; i < OkuDrivers.Instance.Renderer.RenderPasses; i++)
         {
-          OkuManagers.Renderer.Begin(i);
+          OkuDrivers.Instance.Renderer.Begin(i);
           OkuData.Instance.SceneManager.ActiveScene.Render();
           Render(i);
-          OkuManagers.Renderer.End(i);
+          OkuDrivers.Instance.Renderer.End(i);
         }
       }
       else
       {
-        OkuManagers.Renderer.Begin(0);
+        OkuDrivers.Instance.Renderer.Begin(0);
         OkuData.Instance.SceneManager.ActiveScene.Render();
         Render(0);
-        OkuManagers.Renderer.End(0);
+        OkuDrivers.Instance.Renderer.End(0);
       }
     }
 

@@ -44,8 +44,8 @@ namespace OkuTest
 
     public override void Render(int pass)
     {
-      OkuManagers.Renderer.DrawImage(_coin.CurrentImage, Vector2f.Zero);
-      OkuManagers.Renderer.DrawImage(_anim.CurrentImage, Vector2f.Zero);
+      OkuDrivers.Instance.Renderer.DrawImage(_coin.CurrentImage, Vector2f.Zero);
+      OkuDrivers.Instance.Renderer.DrawImage(_anim.CurrentImage, Vector2f.Zero);
     }
 
   }

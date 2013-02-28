@@ -333,7 +333,7 @@ namespace OkuEngine
           {
             position.X = (x * _tileSize) + _origin.X + (_tileSize / 2.0f);
             position.Y = (y * _tileSize) + _origin.Y + (_tileSize / 2.0f);
-            OkuManagers.Renderer.DrawImage(_tileImages[tile.Image], position);
+            OkuDrivers.Instance.Renderer.DrawImage(_tileImages[tile.Image], position);
           }
         }
       }

@@ -90,7 +90,7 @@ namespace OkuEngine.Collision
           _boundingBox = _renderable.GetBoundingBox();
         else
         {
-          OkuManagers.Logger.LogError("Brush " + Id + " does not have a renderable or shape!");
+          OkuManagers.Instance.Logger.LogError("Brush " + Id + " does not have a renderable or shape!");
           return false;
         }
       }

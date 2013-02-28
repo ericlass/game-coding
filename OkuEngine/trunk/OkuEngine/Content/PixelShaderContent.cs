@@ -20,7 +20,7 @@ namespace OkuEngine
     public PixelShaderContent(String source)
     {
       _source = source;
-      OkuManagers.Renderer.InitShaderContent(this);
+      OkuDrivers.Instance.Renderer.InitShaderContent(this);
     }
 
     /// <summary>
@@ -35,7 +35,7 @@ namespace OkuEngine
 
     public override bool AfterLoad()
     {
-      OkuManagers.Renderer.InitShaderContent(this);
+      OkuDrivers.Instance.Renderer.InitShaderContent(this);
       return true;
     }
 

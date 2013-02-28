@@ -38,7 +38,7 @@ namespace OkuEngine.Actors
     /// </summary>
     private void _states_OnStateChange()
     {
-      OkuManagers.EventManager.QueueEvent(EventTypes.ActorStateChanged, Id, _states.PreviousStateName, _states.CurrentStateName);
+      OkuManagers.Instance.EventManager.QueueEvent(EventTypes.ActorStateChanged, Id, _states.PreviousStateName, _states.CurrentStateName);
     }
 
     /// <summary>
@@ -137,7 +137,7 @@ namespace OkuEngine.Actors
       _type = OkuData.Instance.ActorTypes[_actorTypeId];
       if (_type == null)
       {
-        OkuManagers.Logger.LogError("Could not find actor type with id " + _actorTypeId + " for actor " + _name + "!");
+        OkuManagers.Instance.Logger.LogError("Could not find actor type with id " + _actorTypeId + " for actor " + _name + "!");
         return false;
       }
       return _states.AfterLoad();

@@ -96,7 +96,7 @@ namespace OkuEngine.Scenes
       _object = OkuData.Instance.SceneObjects[_objectId];
       if (_object == null)
       {
-        OkuManagers.Logger.LogError("No scene object found with the id " + _objectId + " while loading scene node! Is the initialization order correct?");
+        OkuManagers.Instance.Logger.LogError("No scene object found with the id " + _objectId + " while loading scene node! Is the initialization order correct?");
         return false;
       }
 

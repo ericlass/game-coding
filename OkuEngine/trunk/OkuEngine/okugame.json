@@ -353,5 +353,67 @@
         "Name": "CollisionBrush"
       }
     ]
-  }
+  },
+  "KeyBindings": [
+    {
+      "Key": "A",
+      "Action": "Down",
+      "State": true,
+      "Event": 1000001
+    },
+    {
+      "Key": "D",
+      "Action": "Down",
+      "State": true,
+      "Event": 1000002
+    },
+    {
+      "Key": "S",
+      "Action": "Down",
+      "State": false,
+      "Event": 1000003
+    },
+    {
+      "Key": "W",
+      "Action": "Down",
+      "State": false,
+      "Event": 1000004
+    },
+    {
+      "Key": "Left",
+      "Action": "Down",
+      "State": true,
+      "Event": 1000005
+    },
+    {
+      "Key": "Right",
+      "Action": "Down",
+      "State": true,
+      "Event": 1000006
+    },
+    {
+      "Key": "NumPad4",
+      "Action": "Down",
+      "State": true,
+      "Event": 1000007
+    },
+    {
+      "Key": "NumPad6",
+      "Action": "Down",
+      "State": true,
+      "Event": 1000008
+    },
+    {
+      "Key": "8",
+      "Action": "Down",
+      "State": true,
+      "Event": 1000009
+    },
+    {
+      "Key": "NumPad2",
+      "Action": "Down",
+      "State": true,
+      "Event": 1000010
+    }
+  ]
 }

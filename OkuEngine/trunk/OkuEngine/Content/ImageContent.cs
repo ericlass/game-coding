@@ -35,7 +35,7 @@ namespace OkuEngine
       Bitmap bm = new Bitmap(filename);
       _width = bm.Width;
       _height = bm.Height;
-      OkuManagers.Renderer.InitImageContent(this, bm);
+      OkuDrivers.Instance.Renderer.InitImageContent(this, bm);
     }
 
     /// <summary>
@@ -47,7 +47,7 @@ namespace OkuEngine
       Bitmap bm = new Bitmap(fileStream);
       _width = bm.Width;
       _height = bm.Height;
-      OkuManagers.Renderer.InitImageContent(this, bm);
+      OkuDrivers.Instance.Renderer.InitImageContent(this, bm);
     }
 
     /// <summary>
@@ -67,7 +67,7 @@ namespace OkuEngine
       Marshal.Copy(rawData, 0, data.Scan0, rawData.Length);
       bm.UnlockBits(data);
 
-      OkuManagers.Renderer.InitImageContent(this, bm);
+      OkuDrivers.Instance.Renderer.InitImageContent(this, bm);
     }
 
     /// <summary>
@@ -78,7 +78,7 @@ namespace OkuEngine
     {
       _width = image.Width;
       _height = image.Height;
-      OkuManagers.Renderer.InitImageContent(this, image);
+      OkuDrivers.Instance.Renderer.InitImageContent(this, image);
     }
 
     /// <summary>
@@ -130,7 +130,7 @@ namespace OkuEngine
     /// <param name="image">The bitmap to put in the updated rectangle.</param>
     public void Update(int x, int y, int width, int height, Bitmap image)
     {
-      OkuManagers.Renderer.UpdateContent(this, x, y, width, height, image);
+      OkuDrivers.Instance.Renderer.UpdateContent(this, x, y, width, height, image);
     }
 
     public override bool AfterLoad()
@@ -138,17 +138,17 @@ namespace OkuEngine
       if (_resource == null)
         return false;
 
-      ResourceHandle handle = OkuManagers.ResourceCache.GetHandle(new Resource(_resource));
+      ResourceHandle handle = OkuManagers.Instance.ResourceCache.GetHandle(new Resource(_resource));
       if (handle != null)
       {
         Bitmap bm = (handle.Extras as TextureExtraData).Image;
-        OkuManagers.Renderer.InitImageContent(this, bm);
+        OkuDrivers.Instance.Renderer.InitImageContent(this, bm);
         _width = bm.Width;
         _height = bm.Height;
       }
       else
       {
-        OkuManagers.Logger.LogError("Image resource '" + _resource + "' was not found!");
+        OkuManagers.Instance.Logger.LogError("Image resource '" + _resource + "' was not found!");
         return false;
       }
 

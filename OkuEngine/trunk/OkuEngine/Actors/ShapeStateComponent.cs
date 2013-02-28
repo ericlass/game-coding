@@ -69,7 +69,7 @@ namespace OkuEngine.Actors
           _shape = shape.Shape.Copy();
         }
         else
-          OkuManagers.Logger.LogError("Trying to merge a " + other.GetType().Name + " with a ShapeStateComponent!");
+          OkuManagers.Instance.Logger.LogError("Trying to merge a " + other.GetType().Name + " with a ShapeStateComponent!");
       }
 
       return true;

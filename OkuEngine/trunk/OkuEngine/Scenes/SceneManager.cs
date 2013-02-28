@@ -59,7 +59,7 @@ namespace OkuEngine.Scenes
       _activeScene = scene;
       _activeScene.Activate();
 
-      OkuManagers.EventManager.TriggerEvent(EventTypes.ActiveSceneChanged, _activeScene.Id);
+      OkuManagers.Instance.EventManager.TriggerEvent(EventTypes.ActiveSceneChanged, _activeScene.Id);
     }
 
     /// <summary>

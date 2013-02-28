@@ -12,6 +12,7 @@ using OkuEngine.Collision;
 using OkuEngine.Driver.Renderer;
 using OkuEngine.Driver.Audio;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace OkuEngine
 {
@@ -24,7 +25,21 @@ namespace OkuEngine
     /// <summary>
     /// Defines the engine wide serializer settings.
     /// </summary>
-    public static JsonSerializerSettings JsonSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
+    private static JsonSerializerSettings _jsonSettings = null;
+
+    public static JsonSerializerSettings JsonSettings
+    {
+      get
+      {
+        if (_jsonSettings == null)
+        {
+          _jsonSettings = new JsonSerializerSettings();
+          _jsonSettings.TypeNameHandling = TypeNameHandling.Auto;
+          _jsonSettings.Converters.Add(new StringEnumConverter());
+        }
+        return _jsonSettings;
+      }
+    }
 
     private static OkuData _instance = null;
 
@@ -46,13 +61,15 @@ namespace OkuEngine
     private GameProperties _gameProperties = new GameProperties();
     private RenderSettings _renderSettings = new RenderSettings();
     private AudioSettings _audioSettings = new AudioSettings();
-    private SceneManager _sceneManager = new SceneManager();
-    private EntityManager<ActorType> _actorTypes = new EntityManager<ActorType>("actortypes", "actortype", KeySequence.ActorTypeSequence);
-    private EntityManager<ImageContent> _images = new EntityManager<ImageContent>("images", "image", KeySequence.ImageSequence);
-    private EntityManager<Animation> _animations = new EntityManager<Animation>("animations", "animation", KeySequence.AnimationSequence);
+
+    private List<KeyBinding> _keyBindings = new List<KeyBinding>();
     private EntityManager<UserEvent> _userEvents = new EntityManager<UserEvent>("userevents", "event", KeySequence.UserEventSequence);
     private EntityManager<Behavior> _behaviors = new EntityManager<Behavior>("behaviors", "behavior", KeySequence.BehaviorSequence);
+    private EntityManager<ImageContent> _images = new EntityManager<ImageContent>("images", "image", KeySequence.ImageSequence);
+    private EntityManager<Animation> _animations = new EntityManager<Animation>("animations", "animation", KeySequence.AnimationSequence);
+    private EntityManager<ActorType> _actorTypes = new EntityManager<ActorType>("actortypes", "actortype", KeySequence.ActorTypeSequence);
     private SceneObjectManager _sceneObjects = new SceneObjectManager();
+    private SceneManager _sceneManager = new SceneManager();
 
     public bool AfterLoad()
     {
@@ -157,17 +174,15 @@ namespace OkuEngine
       set { _sceneObjects = value; }
     }
 
-    public bool Load(System.Xml.XmlNode node)
+    /// <summary>
+    /// Gets the list of key bindings.
+    /// </summary>
+    [JsonPropertyAttribute]
+    public List<KeyBinding> KeyBindings
     {
-      throw new NotImplementedException();
+      get { return _keyBindings; }
+      set { _keyBindings = value; }
     }
-
-    public bool Save(System.Xml.XmlWriter writer)
-    {
-      throw new NotImplementedException();
-    }
-
-    
 
   }
 }
