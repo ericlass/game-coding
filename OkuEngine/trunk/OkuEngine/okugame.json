@@ -144,7 +144,16 @@
           "States": [
             {
               "Name": "normal",
-              "Components": []
+              "Components": [
+                {
+                  "$type": "OkuEngine.Actors.RenderableStateComponent, OkuEngine",
+                  "Renderable":
+                  {
+                    "$type": "OkuEngine.Rendering.RenderableImage, OkuEngine",
+                    "ImageId": 2
+                  }
+                }
+              ]
             }
           ]
         },
@@ -245,12 +254,12 @@
         "Handlers": {
           "1000001": [
             {
-              "Source": "\r\n              okuObjectSetAngle(1, okuObjectGetAngle(1) + (90 * timeDelta));\r\n              "
+              "Source": "okuObjectSetAngle(1, okuObjectGetAngle(1) + (90 * timeDelta));"
             }
           ],
           "1000002": [
             {
-              "Source": "\r\n              okuObjectSetAngle(1, okuObjectGetAngle(1) - (90 * timeDelta));\r\n              "
+              "Source": "okuObjectSetAngle(1, okuObjectGetAngle(1) - (90 * timeDelta));"
             }
           ]
         },
@@ -261,47 +270,47 @@
         "Handlers": {
           "1000003": [
             {
-              "Source": "\r\n              var test = okuActorGetAttribute(1, \"Test\");\r\n              test = \"Saublöd!\";              \r\n              okuActorSetAttribute(1, \"test\", test);\r\n              "
+              "Source": "var test = okuActorGetAttribute(1, \"Test\");\r\ntest = \"Saublöd!\";\r\nokuActorSetAttribute(1, \"test\", test);"
             }
           ],
           "1000004": [
             {
-              "Source": "\r\n              print(okuActorGetCurrentState(1));\r\n              okuActorSetCurrentState(1, \"normal\");\r\n              "
+              "Source": "print(okuActorGetCurrentState(1));\r\nokuActorSetCurrentState(1, \"normal\");"
             }
           ],
           "1000005": [
             {
-              "Source": "\r\n              var x = okuObjectGetX(1);\r\n              x = x - (100 * timeDelta);\r\n              okuObjectSetX(1, x);\r\n              "
+              "Source": "var x = okuObjectGetX(1);\r\nx = x - (100 * timeDelta);\r\nokuObjectSetX(1, x);"
             }
           ],
           "1000006": [
             {
-              "Source": "\r\n              var x = okuObjectGetX(1);\r\n              x = x + (100 * timeDelta);\r\n              okuObjectSetX(1, x);\r\n              "
+              "Source": "var x = okuObjectGetX(1);\r\nx = x + (100 * timeDelta);\r\nokuObjectSetX(1, x);"
             }
           ],
           "1000": [
             {
-              "Source": "\r\n              print(param1);\r\n              print(param2);\r\n              print(param3);\r\n              "
+              "Source": "print(param1);\r\nprint(param2);\r\nprint(param3);"
             }
           ],
           "1000007": [
             {
-              "Source": "\r\n              okuMoveViewport(-500 * timeDelta, 0);\r\n              "
+              "Source": "okuMoveViewport(-500 * timeDelta, 0);"
             }
           ],
           "1000008": [
             {
-              "Source": "\r\n              okuMoveViewport(500 * timeDelta, 0);\r\n              "
+              "Source": "okuMoveViewport(500 * timeDelta, 0);"
             }
           ],
           "1000009": [
             {
-              "Source": "\r\n              okuMoveViewport(0, 500 * timeDelta);\r\n              "
+              "Source": "okuMoveViewport(0, 500 * timeDelta);"
             }
           ],
           "1000010": [
             {
-              "Source": "\r\n              okuMoveViewport(0, -500 * timeDelta);\r\n              "
+              "Source": "okuMoveViewport(0, -500 * timeDelta);"
             }
           ]
         },
@@ -404,7 +413,7 @@
       "Event": 1000008
     },
     {
-      "Key": "8",
+      "Key": "NumPad8",
       "Action": "Down",
       "State": true,
       "Event": 1000009

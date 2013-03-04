@@ -250,7 +250,11 @@ namespace OkuEngine.Scenes
     public bool AfterLoad()
     {
       _props.Body.Data = this;
-      return _props.AfterLoad();
+      if (!_props.AfterLoad())
+        return false;
+      
+      _props.SceneObject.SceneNode = this;
+      return true;
     }
 
   }

@@ -145,6 +145,7 @@
     <Compile Include="Scenes\SceneObject.cs" />
     <Compile Include="Scenes\SceneObjectManager.cs" />
     <Compile Include="Scripting\Behavior.cs" />
+    <Compile Include="Scripting\BehaviorManager.cs" />
     <Compile Include="Scripting\OkuScriptManager.cs" />
     <Compile Include="Attributes\AttributeValue.cs" />
     <Compile Include="Attributes\AttributeType.cs" />

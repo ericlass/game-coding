@@ -165,6 +165,8 @@ namespace OkuEngine
           if (!OkuData.Instance.AfterLoad())
             return;
 
+          OkuManagers.Instance.InputManager.AfterLoad();
+
           //TODO: Remove
           Initialize();
         }

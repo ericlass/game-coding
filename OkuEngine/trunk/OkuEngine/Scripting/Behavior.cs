@@ -36,10 +36,13 @@ namespace OkuEngine.Scripting
     private void AddHandler(int eventId, ScriptInstance script)
     {
       if (!_handlers.ContainsKey(eventId))
+      {
         _handlers.Add(eventId, new List<ScriptInstance>());
+        OkuManagers.Instance.EventManager.AddListener(eventId, new EventListenerDelegate(EventReceived));
+      }
 
       _handlers[eventId].Add(script);
-      OkuManagers.Instance.EventManager.AddListener(eventId, new EventListenerDelegate(EventReceived));
+      
     }
 
     public bool LoadHandlers(XmlNode node)
@@ -92,6 +95,7 @@ namespace OkuEngine.Scripting
           if (!OkuManagers.Instance.ScriptManager.Recompile(script))
             return false;
         }
+        OkuManagers.Instance.EventManager.AddListener(handler.Key, new EventListenerDelegate(EventReceived));
       }
       return true;
     }
