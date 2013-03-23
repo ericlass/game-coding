@@ -16,7 +16,7 @@ namespace OkuEngine.States
     protected string _name = null;
     protected HashSet<IStateComponent> _components = new HashSet<IStateComponent>();
 
-    protected Dictionary<string, IStateComponent> _componentMap = new Dictionary<string,IStateComponent>();
+    protected Dictionary<string, IStateComponent> _componentMap = new Dictionary<string, IStateComponent>();
 
     /// <summary>
     /// Gets the name of the state.

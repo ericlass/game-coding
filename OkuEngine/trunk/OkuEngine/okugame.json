@@ -136,33 +136,6 @@
       }
     ]
   },
-  "ActorTypes": {
-    "Entities": [
-      {
-        "States": {
-          "DefaultStateName": "normal",
-          "States": [
-            {
-              "Name": "normal",
-              "Components": [
-                {
-                  "$type": "OkuEngine.Actors.RenderableStateComponent, OkuEngine",
-                  "Renderable":
-                  {
-                    "$type": "OkuEngine.Rendering.RenderableImage, OkuEngine",
-                    "ImageId": 2
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        "Attributes": {},
-        "Id": 1,
-        "Name": "Car Image"
-      }
-    ]
-  },
   "Images": {
     "Entities": [
       {
@@ -332,6 +305,14 @@
               "Components": [
                 {
                   "$type": "OkuEngine.Actors.AABBStateComponent, OkuEngine"
+                },
+                {
+                  "$type": "OkuEngine.Actors.RenderableStateComponent, OkuEngine",
+                  "Renderable":
+                  {
+                    "$type": "OkuEngine.Rendering.RenderableImage, OkuEngine",
+                    "ImageId": 2
+                  }
                 }
               ]
             }

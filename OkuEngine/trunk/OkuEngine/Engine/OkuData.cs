@@ -67,7 +67,6 @@ namespace OkuEngine
     private EntityManager<Behavior> _behaviors = new EntityManager<Behavior>("behaviors", "behavior", KeySequence.BehaviorSequence);
     private EntityManager<ImageContent> _images = new EntityManager<ImageContent>("images", "image", KeySequence.ImageSequence);
     private EntityManager<Animation> _animations = new EntityManager<Animation>("animations", "animation", KeySequence.AnimationSequence);
-    private EntityManager<ActorType> _actorTypes = new EntityManager<ActorType>("actortypes", "actortype", KeySequence.ActorTypeSequence);
     private SceneObjectManager _sceneObjects = new SceneObjectManager();
     private SceneManager _sceneManager = new SceneManager();
 
@@ -78,7 +77,6 @@ namespace OkuEngine
         _behaviors.AfterLoad() &&
         _images.AfterLoad() &&
         _animations.AfterLoad() &&
-        _actorTypes.AfterLoad() &&
         _sceneObjects.AfterLoad() &&
         _sceneManager.AfterLoad();
     }
@@ -112,16 +110,6 @@ namespace OkuEngine
     {
       get { return _sceneManager; }
       set { _sceneManager = value; }
-    }
-
-    /// <summary>
-    /// Gets the actor type manager that contains all actor types.
-    /// </summary>
-    [JsonPropertyAttribute]
-    public EntityManager<ActorType> ActorTypes
-    {
-      get { return _actorTypes; }
-      set { _actorTypes = value; }
     }
 
     /// <summary>

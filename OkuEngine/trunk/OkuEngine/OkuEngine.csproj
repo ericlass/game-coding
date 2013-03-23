@@ -62,7 +62,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actors\AABBStateComponent.cs" />
-    <Compile Include="Actors\ActorType.cs" />
     <Compile Include="Actors\AttributeStateComponent.cs" />
     <Compile Include="Actors\RenderableStateComponent.cs" />
     <Compile Include="Actors\ShapeStateComponent.cs" />

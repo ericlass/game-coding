@@ -10,45 +10,28 @@ namespace OkuEngine.States
   /// <summary>
   /// Handles a set of entity states.
   /// </summary>
-  [JsonObjectAttribute(MemberSerialization.OptIn)]
-  public class StateManager<T> : IStoreable where T : State, new()
+  public class StateManager : IStoreable
   {
     /// <summary>
-    /// Delegate for the change event.
+    /// Delegate for the state change event.
     /// </summary>
     public delegate void StateChangedDelegate();
 
     private string _defaultName = null;
-    private HashSet<T> _states = new HashSet<T>();
+    private HashSet<State> _states = new HashSet<State>();
 
-    private Dictionary<string, T> _stateMap = new Dictionary<string, T>();
+    private Dictionary<string, State> _stateMap = new Dictionary<string, State>();
     private string _previousStateName = null;
     private string _currentStateName = null;
-    private bool _overwriteStates = false;
 
     public StateManager()
     {
     }
 
     /// <summary>
-    /// Creates a new state manager defining if existing
-    /// statets are overwritten while loading or not.
-    /// </summary>
-    /// <param name="overwriteStates">If true, existing states are overwritten when the Load() method is executed.</param>
-    public StateManager(bool overwriteStates)
-    {
-      _overwriteStates = overwriteStates;
-    }
-
-    /// <summary>
     /// Event is fired when the current state is changed.
     /// </summary>
     public event StateChangedDelegate OnStateChange;
-
-    public bool OverwriteStates
-    {
-      get { return _overwriteStates; }
-    }
 
     /// <summary>
     /// Gets or sets the name of the default state.
@@ -61,7 +44,7 @@ namespace OkuEngine.States
     }
 
     [JsonPropertyAttribute]
-    public HashSet<T> States
+    public HashSet<State> States
     {
       get { return _states; }
       set { _states = value; }
@@ -104,7 +87,7 @@ namespace OkuEngine.States
     /// Gets the current state object.
     /// </summary>
     /// <returns>The current state object or null if there is no current state.</returns>
-    public T GetCurrentState()
+    public State GetCurrentState()
     {
       if (_stateMap.ContainsKey(_currentStateName))
         return _stateMap[_currentStateName];
@@ -117,7 +100,7 @@ namespace OkuEngine.States
     /// </summary>
     /// <param name="state">The state to be added.</param>
     /// <returns>True if the state was added, false if there already is a state with the same name.</returns>
-    public bool Add(T state)
+    public bool Add(State state)
     {
       if (!_stateMap.ContainsKey(state.Name))
       {
@@ -133,7 +116,7 @@ namespace OkuEngine.States
     /// </summary>
     /// <param name="state">The state to be removed.</param>
     /// <returns>True if the state was removed, false if the manager did not contain the state.</returns>
-    public bool Remove(T state)
+    public bool Remove(State state)
     {
       _states.Remove(state);
       return _stateMap.Remove(state.Name);
@@ -153,15 +136,7 @@ namespace OkuEngine.States
     /// </summary>
     public int Count
     {
-      get { return _stateMap.Count; }
-    }
-
-    /// <summary>
-    /// Gets a list of all states the manager contains.
-    /// </summary>
-    public List<T> Values
-    {
-      get { return new List<T>(_stateMap.Values); }
+      get { return _states.Count; }
     }
 
     public bool AfterLoad()
@@ -170,7 +145,7 @@ namespace OkuEngine.States
       _previousStateName = _defaultName;
 
       _stateMap.Clear();
-      foreach (T state in _states)
+      foreach (State state in _states)
       {
         if (!state.AfterLoad())
           return false;

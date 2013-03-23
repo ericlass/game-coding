@@ -20,9 +20,7 @@ namespace OkuEngine.Actors
     public const string ActorStateAttributeComponentName = "attributes";
     public const string ActorStateAABBComponentName = "boundingbox";
 
-    private int _actorTypeId = 0;
-    private ActorType _type = null;
-    private StateManager<State> _states = new StateManager<State>(true);
+    private StateManager _states = new StateManager();
     private AttributeMap _attributes = new AttributeMap();
 
     /// <summary>
@@ -30,32 +28,13 @@ namespace OkuEngine.Actors
     /// </summary>
     public Actor()
     {
-      _states.OnStateChange += new StateManager<State>.StateChangedDelegate(_states_OnStateChange);
-    }
-
-    /// <summary>
-    /// Posts an event if the state of the actor was changed.
-    /// </summary>
-    private void _states_OnStateChange()
-    {
-      OkuManagers.Instance.EventManager.QueueEvent(EventTypes.ActorStateChanged, Id, _states.PreviousStateName, _states.CurrentStateName);
-    }
-
-    /// <summary>
-    /// Gets or sets the id of the type of the actor.
-    /// </summary>
-    [JsonPropertyAttribute]
-    public int ActorTypeId
-    {
-      get { return _actorTypeId; }
-      set { _actorTypeId = value; }
     }
 
     /// <summary>
     /// Gets the states that are associated with the actor.
     /// </summary>
     [JsonPropertyAttribute]
-    public StateManager<State> States
+    public StateManager States
     {
       get { return _states; }
       set { _states = value; }
@@ -132,14 +111,28 @@ namespace OkuEngine.Actors
       get { return false; }
     }
 
+    /// <summary>
+    /// Gets an attribute value for the given name. First looks at the current state.
+    /// If it does not contain an attribute with this name, checks the actors attributes.
+    /// </summary>
+    /// <param name="name">The name of the attribute.</param>
+    /// <returns>The value of the attribute or null if there is no attribute with the given name.</returns>
+    public AttributeValue GetAttributeValue(string name)
+    {
+      if (_states.GetCurrentState().Contains(ActorStateAttributeComponentName))
+      {
+        AttributeStateComponent stateAttrs = _states.GetCurrentState().GetComponent<AttributeStateComponent>(ActorStateAttributeComponentName);
+        if (stateAttrs != null && stateAttrs.Attributes.ContainsKey(name))
+          return stateAttrs.Attributes[name];
+      }
+      else if (_attributes.ContainsKey(name))
+        return _attributes[name];
+
+      return null;
+    }
+
     public override bool AfterLoad()
     {
-      _type = OkuData.Instance.ActorTypes[_actorTypeId];
-      if (_type == null)
-      {
-        OkuManagers.Instance.Logger.LogError("Could not find actor type with id " + _actorTypeId + " for actor " + _name + "!");
-        return false;
-      }
       return _states.AfterLoad();
     }
 
