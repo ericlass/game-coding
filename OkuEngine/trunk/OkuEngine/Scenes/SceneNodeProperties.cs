@@ -18,7 +18,6 @@ namespace OkuEngine.Scenes
 
     private SceneObject _object = null;
     private Transformation _previousTransform = new Transformation();
-    private Body<SceneNode> _body = new Body<SceneNode>();
 
     /// <summary>
     /// Creates new scene node properties.
@@ -63,11 +62,7 @@ namespace OkuEngine.Scenes
     public Transformation Transform
     {
       get { return _transform; }
-      set 
-      { 
-        _transform = value;
-        _body.Transform = value;
-      }
+      set { _transform = value; }
     }
 
     /// <summary>
@@ -76,19 +71,7 @@ namespace OkuEngine.Scenes
     public Transformation PreviousTransform
     {
       get { return _previousTransform; }
-      set 
-      { 
-        _previousTransform = value;
-        _body.PreviousTransform = value;
-      }
-    }
-
-    /// <summary>
-    /// Gets the collision body that is assigned to the scene node.
-    /// </summary>
-    public Body<SceneNode> Body
-    {
-      get { return _body; }
+      set { _previousTransform = value; }
     }
 
     public bool AfterLoad()
@@ -99,13 +82,6 @@ namespace OkuEngine.Scenes
         OkuManagers.Instance.Logger.LogError("No scene object found with the id " + _objectId + " while loading scene node! Is the initialization order correct?");
         return false;
       }
-
-      // Setup some body stuff here. The rest is setup in SceneNode.AfterLoad() and SceneLayer.AfterLoad()
-      _body = new Body<SceneNode>();
-      _body.BoundingBox = _object.BoundingBox;
-      _body.Transform = _transform;
-      _body.PreviousTransform = _previousTransform;
-      _body.Shape = _object.Shape;
 
       return _transform.AfterLoad();
     }

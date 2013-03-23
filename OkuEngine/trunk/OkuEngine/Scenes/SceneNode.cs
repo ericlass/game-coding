@@ -249,7 +249,6 @@ namespace OkuEngine.Scenes
 
     public bool AfterLoad()
     {
-      _props.Body.Data = this;
       if (!_props.AfterLoad())
         return false;
       

@@ -14,7 +14,6 @@ namespace OkuEngine
     public const int InvalidId = 0;
 
     //Default system sequences
-    public const string ActorTypeSequence = "actortypes";
     public const string SceneSequence = "scenes";
     public const string LayerSequence = "layers";
     public const string ContentInstanceSequence = "contentinstances";
@@ -32,7 +31,6 @@ namespace OkuEngine
     public static void Initialize()
     {
       //Initialize default sequences
-      AddSequence(ActorTypeSequence);
       AddSequence(SceneSequence);
       AddSequence(LayerSequence);
       AddSequence(ContentInstanceSequence);

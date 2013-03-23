@@ -25,9 +25,7 @@ namespace OkuEngine.Scenes
 
     public Scene()
     {
-      _viewport.Change += new ViewPortChangeEventHandler(_viewport_Change);
-      OkuManagers.Instance.EventManager.AddListener(EventTypes.SceneNodeMoved, new EventListenerDelegate(OnEventReceived));
-      _collisionWorld = new CollisionWorld<SceneNode>(new NoBroadPhaseDetector<SceneNode>(), new AABBPrecisePhaseDetector<SceneNode>());
+      Init();
     }
 
     /// <summary>
@@ -39,9 +37,12 @@ namespace OkuEngine.Scenes
     {
       _id = id;
       _name = name;
+      Init();
+    }
 
+    private void Init()
+    {
       _viewport.Change += new ViewPortChangeEventHandler(_viewport_Change);
-      OkuManagers.Instance.EventManager.AddListener(EventTypes.SceneNodeMoved, new EventListenerDelegate(OnEventReceived));
       _collisionWorld = new CollisionWorld<SceneNode>(new NoBroadPhaseDetector<SceneNode>(), new AABBPrecisePhaseDetector<SceneNode>());
     }
 
@@ -50,20 +51,6 @@ namespace OkuEngine.Scenes
     {
       get { return _layers; }
       set { _layers = value; }
-    }
-
-    /// <summary>
-    /// Handler for events.
-    /// </summary>
-    /// <param name="eventType">The type of event received.</param>
-    /// <param name="eventData">The optional data of the event.</param>
-    private void OnEventReceived(int eventType, params object[] eventData)
-    {
-      if (eventType == EventTypes.SceneNodeMoved)
-      {
-        SceneNode node = eventData[0] as SceneNode;
-        _collisionWorld.UpdateBody(node.Properties.Body);
-      }
     }
 
     /// <summary>
