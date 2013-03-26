@@ -25,7 +25,7 @@ namespace OkuEngine.Actors
     /// <summary>
     /// Adds a actor to the manager.
     /// </summary>
-    /// <param name="sceneObject">The actor to add.</param>
+    /// <param name="actor">The actor to add.</param>
     /// <returns>True if the actor was added, false if there already is a actor with the same id.</returns>
     public bool Add(Actor actor)
     {
@@ -41,7 +41,7 @@ namespace OkuEngine.Actors
     /// <summary>
     /// Removes the given actor from the manager.
     /// </summary>
-    /// <param name="sceneObject">The actor to be removed.</param>
+    /// <param name="actor">The actor to be removed.</param>
     /// <returns>True if the actor was removed, false if the manager did not contain the actor.</returns>
     public bool Remove(Actor actor)
     {

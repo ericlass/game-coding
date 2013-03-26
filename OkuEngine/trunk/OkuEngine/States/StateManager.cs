@@ -77,7 +77,8 @@ namespace OkuEngine.States
       {
         _previousStateName = _currentStateName;
         _currentStateName = name;
-        OnStateChange();
+        if (OnStateChange != null)
+          OnStateChange();
         return true;
       }
       return false;

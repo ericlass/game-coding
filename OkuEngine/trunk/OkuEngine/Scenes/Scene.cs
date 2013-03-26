@@ -276,7 +276,7 @@ namespace OkuEngine.Scenes
       layerIndex = 0;
       foreach (SceneLayer layer in _layerMap.Values)
       {
-        if (layer.ContainsObject(objectId))
+        if (layer.ContainsActor(objectId))
         {
           layerIndex = layer.Id;
           return true;

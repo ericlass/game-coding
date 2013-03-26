@@ -40,7 +40,7 @@ namespace OkuEngine.Events
     #region Collision Events
 
     /// <summary>
-    /// Is triggered when an object collides with another one. Event data are the ids of the scene objects that collided.
+    /// Is triggered when an object collides with another one. Event data are the ids of the actors that collided.
     /// </summary>
     public const int CollisionOccurred = 3000;
 

@@ -14,7 +14,7 @@ namespace OkuEngine.Scenes
   public class SceneLayer : StoreableEntity
   {
     private SceneNode _root = new SceneNode(-1);
-    private Dictionary<int, SceneNode> _objectMap = new Dictionary<int, SceneNode>();
+    private Dictionary<int, SceneNode> _actorMap = new Dictionary<int, SceneNode>();
     private Backdrop _backdrop = null;
 
     internal SceneLayer()
@@ -58,74 +58,74 @@ namespace OkuEngine.Scenes
     /// </summary>
     public List<SceneNode> AllNodes
     {
-      get { return new List<SceneNode>(_objectMap.Values); }
+      get { return new List<SceneNode>(_actorMap.Values); }
     }
 
     /// <summary>
-    /// Adds the scene object with the given id to the layer below the given parent.
+    /// Adds the actor with the given id to the layer below the given parent.
     /// </summary>
-    /// <param name="objectId">The id of the scene object.</param>
+    /// <param name="actorId">The id of the actor.</param>
     /// <param name="parent">The parent of the new node. Null can be given to add it below the root.</param>
-    /// <returns>The scene node of the scene object that has just been added.</returns>
-    public SceneNode Add(int objectId, SceneNode parent)
+    /// <returns>The scene node of the actor that has just been added.</returns>
+    public SceneNode Add(int actorId, SceneNode parent)
     {
-      if (!_objectMap.ContainsKey(objectId))
+      if (!_actorMap.ContainsKey(actorId))
       {
-        SceneNode node = new SceneNode(objectId);
+        SceneNode node = new SceneNode(actorId);
 
         if (parent == null)
           node.SetParent(_root);
         else
           node.SetParent(parent);
 
-        _objectMap.Add(objectId, node);
+        _actorMap.Add(actorId, node);
         return node;
       }
-      throw new ArgumentException("Cannot add the same scene object to a layer twice! Scene object Id = " + objectId);
+      throw new ArgumentException("Cannot add the same actor to a layer twice! Actor Id = " + actorId);
     }
 
     /// <summary>
-    /// Remove the scene node with the given scene object id.
+    /// Remove the scene node with the given actor id.
     /// </summary>
-    /// <param name="objectId">The scene object id to remove.</param>
-    /// <returns>True if the scene object was removed. False if the scene object was not part of the layer.</returns>
-    public bool Remove(int objectId)
+    /// <param name="actorId">The actor id to remove.</param>
+    /// <returns>True if the actor was removed. False if the actor was not part of the layer.</returns>
+    public bool Remove(int actorId)
     {
-      if (_objectMap.ContainsKey(objectId))
+      if (_actorMap.ContainsKey(actorId))
       {
-        SceneNode node = _objectMap[objectId];
+        SceneNode node = _actorMap[actorId];
         node.SetParent(null);
-        _objectMap.Remove(objectId);
+        _actorMap.Remove(actorId);
         return true;
       }
       return false;
     }
 
     /// <summary>
-    /// Gets the node for the scene object id.
+    /// Gets the node for the actor id.
     /// </summary>
-    /// <param name="objectId">The scene object id to find.</param>
-    /// <returns>The scene node for the given scene object id or null if the scene object is not in the layer.</returns>
-    public SceneNode GetNode(int objectId)
+    /// <param name="actorId">The actor id to find.</param>
+    /// <returns>The scene node for the given actor id or null if the actor is not in the layer.</returns>
+    public SceneNode GetNode(int actorId)
     {
-      if (_objectMap.ContainsKey(objectId))
-        return _objectMap[objectId];
+      if (_actorMap.ContainsKey(actorId))
+        return _actorMap[actorId];
 
       return null;
     }
 
     /// <summary>
-    /// Checks if the layer contains the scene object with the given id.
+    /// Checks if the layer contains the actor with the given id.
     /// </summary>
-    /// <param name="objectId">The scene object id to find.</param>
-    /// <returns>True if the scene object with the given id is part of this layer, else false.</returns>
-    public bool ContainsObject(int objectId)
+    /// <param name="actorId">The actor id to find.</param>
+    /// <returns>True if the actor with the given id is part of this layer, else false.</returns>
+    public bool ContainsActor(int actorId)
     {
-      return _objectMap.ContainsKey(objectId);
+      return _actorMap.ContainsKey(actorId);
     }
 
     /// <summary>
-    /// Updates the layer and all scene objects inside it.
+    /// Updates the layer and all actors inside it.
     /// </summary>
     /// <param name="scene">The scenen to use.</param>
     /// <param name="dt">The time passed since the last frame in secoonds.</param>
@@ -137,7 +137,7 @@ namespace OkuEngine.Scenes
     }
 
     /// <summary>
-    /// Renders the layer and all it's scene objects and nodes.
+    /// Renders the layer and all it's actor and nodes.
     /// </summary>
     /// <param name="scene">The scene to use.</param>
     public void Render(Scene scene)
@@ -152,7 +152,7 @@ namespace OkuEngine.Scenes
     }
 
     /// <summary>
-    /// Restores the layer and all its scene objects and nodes.
+    /// Restores the layer and all its actor and nodes.
     /// </summary>
     /// <param name="scene">The scene to use.</param>
     public void Restore(Scene scene)
@@ -161,15 +161,15 @@ namespace OkuEngine.Scenes
     }
 
     /// <summary>
-    /// Moves the given scene object one number to the front in the drawing order of the layer.
+    /// Moves the given actor one number to the front in the drawing order of the layer.
     /// </summary>
-    /// <param name="objectId">The scene object to move up.</param>
-    /// <returns>True if the scene object was moved, else false.</returns>
-    public bool MoveOneUp(int objectId)
+    /// <param name="actorId">The actor to move up.</param>
+    /// <returns>True if the actor was moved, else false.</returns>
+    public bool MoveOneUp(int actorId)
     {
-      if (_objectMap.ContainsKey(objectId))
+      if (_actorMap.ContainsKey(actorId))
       {
-        SceneNode node = _objectMap[objectId];
+        SceneNode node = _actorMap[actorId];
         List<SceneNode> children = node.Parent.Children;
         int index = children.IndexOf(node);
         if (index < children.Count - 1)
@@ -183,15 +183,15 @@ namespace OkuEngine.Scenes
     }
 
     /// <summary>
-    /// Moves the given scene object one number to the back in the drawing order of the layer.
+    /// Moves the given actor one number to the back in the drawing order of the layer.
     /// </summary>
-    /// <param name="objectId">The scene object to move back.</param>
-    /// <returns>True if the scene object was moved, else false.</returns>
-    public bool MoveOneDown(int objectId)
+    /// <param name="actorId">The actor to move back.</param>
+    /// <returns>True if the actor was moved, else false.</returns>
+    public bool MoveOneDown(int actorId)
     {
-      if (_objectMap.ContainsKey(objectId))
+      if (_actorMap.ContainsKey(actorId))
       {
-        SceneNode node = _objectMap[objectId];
+        SceneNode node = _actorMap[actorId];
         List<SceneNode> children = node.Parent.Children;
         int index = children.IndexOf(node);
         if (index > 0)
@@ -205,16 +205,16 @@ namespace OkuEngine.Scenes
     }
 
     /// <summary>
-    /// Moves the given scene object to the front in the drawing order of the layer.
-    /// This makes the scene object be drawn last and occlude all other scene objects.
+    /// Moves the given actor to the front in the drawing order of the layer.
+    /// This makes the actor be drawn last and occlude all other actors.
     /// </summary>
-    /// <param name="objectId">The scene object to move.</param>
-    /// <returns>True if the scene object was moved, else false.</returns>
-    public bool MoveToFront(int objectId)
+    /// <param name="actorId">The actor to move.</param>
+    /// <returns>True if the actor was moved, else false.</returns>
+    public bool MoveToFront(int actorId)
     {
-      if (_objectMap.ContainsKey(objectId))
+      if (_actorMap.ContainsKey(actorId))
       {
-        SceneNode node = _objectMap[objectId];
+        SceneNode node = _actorMap[actorId];
         List<SceneNode> children = node.Parent.Children;
         children.Remove(node);
         children.Add(node);
@@ -224,16 +224,16 @@ namespace OkuEngine.Scenes
     }
 
     /// <summary>
-    /// Moves the given scene object to the back in the drawing order of the layer.
-    /// This makes the scene object be drawn first and be occluded by all other scene objects.
+    /// Moves the given actor to the back in the drawing order of the layer.
+    /// This makes the actor be drawn first and be occluded by all other actors.
     /// </summary>
-    /// <param name="objectId">The scene object to move.</param>
-    /// <returns>True if the scene object was moved, else false.</returns>
-    public bool MoveToBack(int objectId)
+    /// <param name="actorId">The actor to move.</param>
+    /// <returns>True if the actor was moved, else false.</returns>
+    public bool MoveToBack(int actorId)
     {
-      if (_objectMap.ContainsKey(objectId))
+      if (_actorMap.ContainsKey(actorId))
       {
-        SceneNode node = _objectMap[objectId];
+        SceneNode node = _actorMap[actorId];
         List<SceneNode> children = node.Parent.Children;
         children.Remove(node);
         children.Insert(0, node);
@@ -249,14 +249,14 @@ namespace OkuEngine.Scenes
 
       KeySequence.SetCurrentValue(KeySequence.LayerSequence, Id);
 
-      _objectMap.Clear();
+      _actorMap.Clear();
       List<SceneNode> allNodes = new List<SceneNode>();
       _root.GetAllChildren(allNodes);
       foreach (SceneNode node in allNodes)
       {
         if (!node.AfterLoad())
           return false;
-        _objectMap.Add(node.Properties.ActorId, node);
+        _actorMap.Add(node.Properties.ActorId, node);
       }
       return true;
     }

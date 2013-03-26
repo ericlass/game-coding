@@ -234,7 +234,7 @@ namespace OkuEngine.Api
       if (actor != null)
       {
         AttributeValue attrValue = actor.Attributes.GetInheritedValue(attribute.Trim().ToLower());
-        if (value != null)
+        if (attrValue != null)
           attrValue.ValueString = value;
         else
           OkuManagers.Instance.Logger.LogError("The is no actor attribute with the name " + attribute + "!");
