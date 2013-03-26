@@ -31,11 +31,11 @@ namespace OkuEngine.Scenes
     /// <summary>
     /// Creates a new scene node with the given paramters.
     /// </summary>
-    /// <param name="objectId">The id of the object that is connected to the scene node.</param>
+    /// <param name="actorId">The id of the actor that is connected to the scene node.</param>
     /// <param name="name">The name of the scene node.</param>
-    internal SceneNode(int objectId)
+    internal SceneNode(int actorId)
     {
-      _props = new SceneNodeProperties(objectId);
+      _props = new SceneNodeProperties(actorId);
       _props.Transform.OnChange += new Transformation.OnChangeDelegate(Transform_OnChange);
     }
 
@@ -169,8 +169,8 @@ namespace OkuEngine.Scenes
     /// <returns>True if the node is visible, else false.</returns>
     public virtual bool IsVisible(Scene scene)
     {
-      if (_props.SceneObject != null)
-        return scene.IsVisible(_props.SceneObject.BoundingBox);
+      if (_props.Actor != null)
+        return scene.IsVisible(_props.Actor.BoundingBox);
 
       return false;
     }
@@ -185,8 +185,8 @@ namespace OkuEngine.Scenes
       scene.ApplyAndPushTransform(_props.Transform);
       try
       {
-        if (_props.SceneObject != null)
-          _props.SceneObject.Render(scene);
+        if (_props.Actor != null)
+          _props.Actor.Render(scene);
       }
       finally
       {
@@ -252,7 +252,7 @@ namespace OkuEngine.Scenes
       if (!_props.AfterLoad())
         return false;
       
-      _props.SceneObject.SceneNode = this;
+      _props.Actor.SceneNode = this;
       return true;
     }
 

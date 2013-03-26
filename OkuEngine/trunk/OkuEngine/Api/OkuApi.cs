@@ -44,88 +44,79 @@ namespace OkuEngine.Api
     /// <returns>The actor with the given id or null is there is no actor with this id.</returns>
     private Actor GetActor(int actorId)
     {
-      Actor actor = OkuData.Instance.SceneObjects.Get<Actor>(actorId);
+      Actor actor = OkuData.Instance.Actors[actorId];
       if (actor == null)
         OkuManagers.Instance.Logger.LogError("No actor with the id " + actorId + " exists!");
 
       return actor;
     }
-    
-    private SceneObject GetSceneObject(int objectId)
-    {
-      SceneObject so = OkuData.Instance.SceneObjects[objectId];
-      if (so == null)
-        OkuManagers.Instance.Logger.LogError("No scene object with the id " + objectId + " exists!");
-      
-      return so;
-    }
-    
-    #region Scene Object Functions
-    
+
+    #region Actor Functions
+
     /// <summary>
-    /// Gets the x position of the scene object with the given id.
+    /// Gets the x position of the actor with the given id.
     /// </summary>
-    /// <param name="objectId">The id of the scene object.</param>
-    /// <returns>The x position of the scene object or 0 if there is no scene object with this id.</returns>
-    public double ObjectGetX(int objectId)
+    /// <param name="actorId">The id of the actor.</param>
+    /// <returns>The x position of the actor or 0 if there is no actor with this id.</returns>
+    public double ActorGetX(int actorId)
     {
-      SceneObject sceneObject = GetSceneObject(objectId);
-      if (sceneObject != null)
-        return sceneObject.SceneNode.Properties.Transform.Translation.X;
+      Actor actor = GetActor(actorId);
+      if (actor != null)
+        return actor.SceneNode.Properties.Transform.Translation.X;
       else
         return 0;
     }
 
     /// <summary>
-    /// Sets the x psotion of the scene object with the given id.
+    /// Sets the x psotion of the actor with the given id.
     /// </summary>
-    /// <param name="objectId">The id of the scene object.</param>
-    /// <param name="x">The new x position of the scene object.</param>
-    public void ObjectSetX(int objectId, double x)
+    /// <param name="actorId">The id of the actor.</param>
+    /// <param name="x">The new x position of the actor.</param>
+    public void ActorSetX(int actorId, double x)
     {
-      SceneObject sceneObject = GetSceneObject(objectId);
-      if (sceneObject != null)
-        sceneObject.SceneNode.Properties.Transform.SetX((float)x);
+      Actor actor = GetActor(actorId);
+      if (actor != null)
+        actor.SceneNode.Properties.Transform.SetX((float)x);
     }
 
     /// <summary>
-    /// Gets the y position of the scene object ith the given id.
+    /// Gets the y position of the actor ith the given id.
     /// </summary>
-    /// <param name="objectId">The id of the scene object.</param>
-    /// <returns>The y position of the scene object or 0 if there is no scene object with this id.</returns>
-    public double ObjectGetY(int objectId)
+    /// <param name="actorId">The id of the actor.</param>
+    /// <returns>The y position of the actor or 0 if there is no actor with this id.</returns>
+    public double ActorGetY(int actorId)
     {
-      SceneObject sceneObject = GetSceneObject(objectId);
-      if (sceneObject != null)
-        return sceneObject.SceneNode.Properties.Transform.Translation.Y;
+      Actor actor = GetActor(actorId);
+      if (actor != null)
+        return actor.SceneNode.Properties.Transform.Translation.Y;
       else
         return 0;
     }
 
     /// <summary>
-    /// Sets the y position of the scene object with the given id.
+    /// Sets the y position of the actor with the given id.
     /// </summary>
-    /// <param name="objectId">The id of the scene object.</param>
-    /// <param name="y">The new y position of the scene object.</param>
-    public void ObjectSetY(int objectId, double y)
+    /// <param name="actorId">The id of the actor.</param>
+    /// <param name="y">The new y position of the actor.</param>
+    public void ActorSetY(int actorId, double y)
     {
-      SceneObject sceneObject = GetSceneObject(objectId);
-      if (sceneObject != null)
-        sceneObject.SceneNode.Properties.Transform.SetY((float)y);
+      Actor actor = GetActor(actorId);
+      if (actor != null)
+        actor.SceneNode.Properties.Transform.SetY((float)y);
     }
 
     /// <summary>
-    /// Sets the x and y position of the scene object with the given id.
+    /// Sets the x and y position of the actor with the given id.
     /// </summary>
-    /// <param name="objectId">The id of the scene object.</param>
-    /// <param name="x">The new x position of the scene object.</param>
-    /// <param name="y">The new y position of the scene object.</param>
-    public void ObjectSetPos(int objectId, double x, double y)
+    /// <param name="actorId">The id of the actor.</param>
+    /// <param name="x">The new x position of the actor.</param>
+    /// <param name="y">The new y position of the actor.</param>
+    public void ActorSetPos(int actorId, double x, double y)
     {
-      SceneObject sceneObject = GetSceneObject(objectId);
-      if (sceneObject != null)
+      Actor actor = GetActor(actorId);
+      if (actor != null)
       {
-        Transformation trans = sceneObject.SceneNode.Properties.Transform;
+        Transformation trans = actor.SceneNode.Properties.Transform;
         Vector2f pos = trans.Translation;
         pos.X = (float)x;
         pos.Y = (float)y;
@@ -134,34 +125,30 @@ namespace OkuEngine.Api
     }
 
     /// <summary>
-    /// Gets the rotation angle of the scene object with the given id.
+    /// Gets the rotation angle of the actor with the given id.
     /// </summary>
-    /// <param name="objectId">The id of the scene object.</param>
-    /// <returns>The angle of the scene object.</returns>
-    public double ObjectGetAngle(int objectId)
+    /// <param name="actorId">The id of the actor.</param>
+    /// <returns>The angle of the actor.</returns>
+    public double ActorGetAngle(int actorId)
     {
-      SceneObject sceneObject = GetSceneObject(objectId);
-      if (sceneObject != null)
-        return sceneObject.SceneNode.Properties.Transform.Rotation;
+      Actor actor = GetActor(actorId);
+      if (actor != null)
+        return actor.SceneNode.Properties.Transform.Rotation;
       else
         return 0.0;
     }
 
     /// <summary>
-    /// Sets the rotation angle of the scene object with the given id.
+    /// Sets the rotation angle of the actor with the given id.
     /// </summary>
-    /// <param name="objectId">The id of the scene object.</param>
-    /// <param name="angle">The new rotation angle of the scene object.</param>
-    public void ObjectSetAngle(int objectId, double angle)
+    /// <param name="actorId">The id of the actor.</param>
+    /// <param name="angle">The new rotation angle of the actor.</param>
+    public void ActorSetAngle(int actorId, double angle)
     {
-      SceneObject sceneObject = GetSceneObject(objectId);
-      if (sceneObject != null)
-        sceneObject.SceneNode.Properties.Transform.Rotation = (float)angle;
+      Actor actor = GetActor(actorId);
+      if (actor != null)
+        actor.SceneNode.Properties.Transform.Rotation = (float)angle;
     }
-    
-    #endregion
-
-    #region Actor Functions
 
     /// <summary>
     /// Gets the name of the current state of the actor with the given id.

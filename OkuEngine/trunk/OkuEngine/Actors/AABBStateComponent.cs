@@ -44,7 +44,7 @@ namespace OkuEngine.Actors
       if (!_aabbValid)
       {
         RenderableStateComponent renderable = _owner.GetComponent<RenderableStateComponent>(Actor.ActorStateRenderableComponentName);
-        ShapeStateComponent shape = _owner.GetComponent<ShapeStateComponent>(Actor.ActorStateShapeComponentName);
+        CollisionStateComponent shape = _owner.GetComponent<CollisionStateComponent>(Actor.ActorStateCollisionComponentName);
 
         if (shape != null && shape.Shape != null)
         {

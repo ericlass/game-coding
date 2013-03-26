@@ -64,7 +64,7 @@
     <Compile Include="Actors\AABBStateComponent.cs" />
     <Compile Include="Actors\AttributeStateComponent.cs" />
     <Compile Include="Actors\RenderableStateComponent.cs" />
-    <Compile Include="Actors\ShapeStateComponent.cs" />
+    <Compile Include="Actors\CollisionStateComponent.cs" />
     <Compile Include="Api\OkuApi.cs" />
     <Compile Include="Attributes\AttributeMap.cs" />
     <Compile Include="Animation\Animation.cs" />
@@ -77,7 +77,6 @@
     <Compile Include="Collision\BroadPhaseDetector.cs" />
     <Compile Include="Collision\CollisionInfo.cs" />
     <Compile Include="Collections\PairList.cs" />
-    <Compile Include="Collision\Brush.cs" />
     <Compile Include="Collision\CollisionWorld.cs" />
     <Compile Include="Collision\ICollidable.cs" />
     <Compile Include="Collision\NoBroadPhaseDetector.cs" />
@@ -141,8 +140,7 @@
     <Compile Include="Scenes\SceneManager.cs" />
     <Compile Include="Scenes\SceneNode.cs" />
     <Compile Include="Scenes\SceneNodeProperties.cs" />
-    <Compile Include="Scenes\SceneObject.cs" />
-    <Compile Include="Scenes\SceneObjectManager.cs" />
+    <Compile Include="Actors\ActorManager.cs" />
     <Compile Include="Scripting\Behavior.cs" />
     <Compile Include="Scripting\BehaviorManager.cs" />
     <Compile Include="Scripting\OkuScriptManager.cs" />

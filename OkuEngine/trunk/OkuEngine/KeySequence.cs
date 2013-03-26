@@ -24,7 +24,7 @@ namespace OkuEngine
     public const string ScriptSequence = "scripts";
     public const string UserEventSequence = "userevents";
     public const string BehaviorSequence = "behaviors";
-    public const string SceneObjectSequence = "sceneobjects";
+    public const string ActorSequence = "actors";
 
     private static Dictionary<string, int> _sequences = new Dictionary<string, int>();
 
@@ -41,7 +41,7 @@ namespace OkuEngine
       AddSequence(ScriptSequence);
       AddSequence(UserEventSequence);
       AddSequence(BehaviorSequence);
-      AddSequence(SceneObjectSequence);
+      AddSequence(ActorSequence);
     }
 
     public static bool ResetSequence(string name)

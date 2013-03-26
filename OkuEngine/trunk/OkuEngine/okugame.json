@@ -59,7 +59,7 @@
             },
             "Root": {
               "Properties": {
-                "ObjectId": -1,
+                "ActorId": -1,
                 "Transform": {
                   "Translation": {
                     "X": 0.0,
@@ -75,7 +75,7 @@
               "Children": [
                 {
                   "Properties": {
-                    "ObjectId": 1,
+                    "ActorId": 1,
                     "Transform": {
                       "Translation": {
                         "X": 0.0,
@@ -91,7 +91,7 @@
                   "Children": [
                     {
                       "Properties": {
-                        "ObjectId": 2,
+                        "ActorId": 2,
                         "Transform": {
                           "Translation": {
                             "X": 0.0,
@@ -110,7 +110,7 @@
                 },
                 {
                   "Properties": {
-                    "ObjectId": 3,
+                    "ActorId": 3,
                     "Transform": {
                       "Translation": {
                         "X": -100.0,
@@ -227,12 +227,12 @@
         "Handlers": {
           "1000001": [
             {
-              "Source": "okuObjectSetAngle(1, okuObjectGetAngle(1) + (90 * timeDelta));"
+              "Source": "okuActorSetAngle(1, okuActorGetAngle(1) + (90 * timeDelta));"
             }
           ],
           "1000002": [
             {
-              "Source": "okuObjectSetAngle(1, okuObjectGetAngle(1) - (90 * timeDelta));"
+              "Source": "okuActorSetAngle(1, okuActorGetAngle(1) - (90 * timeDelta));"
             }
           ]
         },
@@ -253,12 +253,12 @@
           ],
           "1000005": [
             {
-              "Source": "var x = okuObjectGetX(1);\r\nx = x - (100 * timeDelta);\r\nokuObjectSetX(1, x);"
+              "Source": "var x = okuActorGetX(1);\r\nx = x - (100 * timeDelta);\r\nokuActorSetX(1, x);"
             }
           ],
           "1000006": [
             {
-              "Source": "var x = okuObjectGetX(1);\r\nx = x + (100 * timeDelta);\r\nokuObjectSetX(1, x);"
+              "Source": "var x = okuActorGetX(1);\r\nx = x + (100 * timeDelta);\r\nokuActorSetX(1, x);"
             }
           ],
           "1000": [
@@ -292,11 +292,9 @@
       }
     ]
   },
-  "SceneObjects": {
-    "Objects": [
+  "Actors": {
+    "Actors": [
       {
-        "$type": "OkuEngine.Actors.Actor, OkuEngine",
-        "ActorTypeId": 1,
         "States": {
           "DefaultStateName": "normal",
           "States": [
@@ -323,24 +321,48 @@
         "Name": "Car"
       },
       {
-        "$type": "OkuEngine.Collision.Brush, OkuEngine",
-        "Renderable": {
-          "$type": "OkuEngine.Rendering.RenderableImage, OkuEngine",
-          "ImageId": 1
+        "States": {
+          "DefaultStateName": "normal",
+          "States": [
+            {
+              "Name": "normal",
+              "Components": [
+                {
+                  "$type": "OkuEngine.Actors.RenderableStateComponent, OkuEngine",
+                  "Renderable": {
+                    "$type": "OkuEngine.Rendering.RenderableImage, OkuEngine",
+                    "ImageId": 1
+                  },
+                }
+              ]
+            }
+          ]
         },
-        "Shape": null,
+        "Attributes": {},
         "Id": 2,
-        "Name": "TestBrush"
+        "Name": "Test"
       },
       {
-        "$type": "OkuEngine.Collision.Brush, OkuEngine",
-        "Renderable": {
-          "$type": "OkuEngine.Rendering.RenderableImage, OkuEngine",
-          "ImageId": 1
+        "States": {
+          "DefaultStateName": "normal",
+          "States": [
+            {
+              "Name": "normal",
+              "Components": [
+                {
+                  "$type": "OkuEngine.Actors.RenderableStateComponent, OkuEngine",
+                  "Renderable": {
+                    "$type": "OkuEngine.Rendering.RenderableImage, OkuEngine",
+                    "ImageId": 1
+                  },
+                }
+              ]
+            }
+          ]
         },
-        "Shape": null,
+        "Attributes": {},
         "Id": 3,
-        "Name": "CollisionBrush"
+        "Name": "Collision"
       }
     ]
   },

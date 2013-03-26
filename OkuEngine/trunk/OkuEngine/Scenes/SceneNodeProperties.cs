@@ -13,10 +13,10 @@ namespace OkuEngine.Scenes
   /// </summary>
   public class SceneNodeProperties : IStoreable
   {
-    private int _objectId = 0;
+    private int _actorId = 0;
     private Transformation _transform = new Transformation();
 
-    private SceneObject _object = null;
+    private Actor _actor = null;
     private Transformation _previousTransform = new Transformation();
 
     /// <summary>
@@ -27,32 +27,32 @@ namespace OkuEngine.Scenes
     }
 
     /// <summary>
-    /// Creates properties with the given object id and name.
+    /// Creates properties with the given actor id and name.
     /// </summary>
-    /// <param name="objectId">The object id.</param>
+    /// <param name="actorId">The actor id.</param>
     /// <param name="name">The name.</param>
-    internal SceneNodeProperties(int objectId)
+    internal SceneNodeProperties(int actorId)
     {
-      _objectId = objectId;
+      _actorId = actorId;
     }
 
     /// <summary>
-    /// Gets the scene object for the scene node.
+    /// Gets the actor for the scene node.
     /// This can be null if the scene node is only used for transformation.
     /// </summary>
-    public SceneObject SceneObject
+    public Actor Actor
     {
-      get { return _object; }
+      get { return _actor; }
     }
 
     /// <summary>
-    /// Gets or sets the object id associated with the scene node.
+    /// Gets or sets the actor id associated with the scene node.
     /// </summary>
     [JsonPropertyAttribute]
-    public int ObjectId
+    public int ActorId
     {
-      get { return _objectId; }
-      set { _objectId = value; }
+      get { return _actorId; }
+      set { _actorId = value; }
     }
 
     /// <summary>
@@ -76,10 +76,10 @@ namespace OkuEngine.Scenes
 
     public bool AfterLoad()
     {
-      _object = OkuData.Instance.SceneObjects[_objectId];
-      if (_object == null)
+      _actor = OkuData.Instance.Actors[_actorId];
+      if (_actor == null)
       {
-        OkuManagers.Instance.Logger.LogError("No scene object found with the id " + _objectId + " while loading scene node! Is the initialization order correct?");
+        OkuManagers.Instance.Logger.LogError("No actor found with the id " + _actorId + " while loading scene node! Is the initialization order correct?");
         return false;
       }
 

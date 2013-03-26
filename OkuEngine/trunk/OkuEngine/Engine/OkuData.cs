@@ -67,18 +67,30 @@ namespace OkuEngine
     private EntityManager<Behavior> _behaviors = new EntityManager<Behavior>("behaviors", "behavior", KeySequence.BehaviorSequence);
     private EntityManager<ImageContent> _images = new EntityManager<ImageContent>("images", "image", KeySequence.ImageSequence);
     private EntityManager<Animation> _animations = new EntityManager<Animation>("animations", "animation", KeySequence.AnimationSequence);
-    private SceneObjectManager _sceneObjects = new SceneObjectManager();
+    private ActorManager _actors = new ActorManager();
     private SceneManager _sceneManager = new SceneManager();
 
     public bool AfterLoad()
     {
-      return
-        _userEvents.AfterLoad() &&
-        _behaviors.AfterLoad() &&
-        _images.AfterLoad() &&
-        _animations.AfterLoad() &&
-        _sceneObjects.AfterLoad() &&
-        _sceneManager.AfterLoad();
+      if (!_userEvents.AfterLoad())
+        return false;
+
+      if (!_behaviors.AfterLoad())
+        return false;
+
+      if (!_images.AfterLoad())
+        return false;
+
+      if (!_animations.AfterLoad())
+        return false;
+
+      if (!_actors.AfterLoad())
+        return false;
+
+      if (!_sceneManager.AfterLoad())
+        return false;
+
+      return true;
     }
 
     [JsonPropertyAttribute]
@@ -153,13 +165,13 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Gets the manager that contains all scene objects.
+    /// Gets the manager that contains all actors.
     /// </summary>
     [JsonPropertyAttribute]
-    public SceneObjectManager SceneObjects
+    public ActorManager Actors
     {
-      get { return _sceneObjects; }
-      set { _sceneObjects = value; }
+      get { return _actors; }
+      set { _actors = value; }
     }
 
     /// <summary>

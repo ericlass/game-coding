@@ -13,21 +13,32 @@ namespace OkuEngine.Actors
   /// <summary>
   /// Defines a single actor in the game. Not to be confused with an ActorType.
   /// </summary>
-  public class Actor : SceneObject
+  public class Actor : StoreableEntity
   {
     public const string ActorStateRenderableComponentName = "renderable";
-    public const string ActorStateShapeComponentName = "shape";
+    public const string ActorStateCollisionComponentName = "collision";
     public const string ActorStateAttributeComponentName = "attributes";
     public const string ActorStateAABBComponentName = "boundingbox";
 
     private StateManager _states = new StateManager();
     private AttributeMap _attributes = new AttributeMap();
 
+    private SceneNode _sceneNode = null;
+
     /// <summary>
     /// Creates a new actor.
     /// </summary>
     public Actor()
     {
+    }
+
+    /// <summary>
+    /// Gets or sets the scene node of the actor.
+    /// </summary>
+    public SceneNode SceneNode
+    {
+      get { return _sceneNode; }
+      set { _sceneNode = value; }
     }
 
     /// <summary>
@@ -53,7 +64,7 @@ namespace OkuEngine.Actors
     /// Renders the actor with its current state using the given scene.
     /// </summary>
     /// <param name="scene">The scene to use.</param>
-    public override void Render(Scene scene)
+    public void Render(Scene scene)
     {
       if (_states.GetCurrentState() != null)
       {
@@ -66,7 +77,7 @@ namespace OkuEngine.Actors
     /// <summary>
     /// Gets the bounding box of the current state of the actor.
     /// </summary>
-    public override AABB BoundingBox
+    public AABB BoundingBox
     {
       get
       {
@@ -85,13 +96,13 @@ namespace OkuEngine.Actors
     /// Gets the shape of the current state of the actor.
     /// Can be null if only bounding box is used.
     /// </summary>
-    public override Vector2f[] Shape
+    public Vector2f[] Shape
     {
       get
       {
         if (_states.GetCurrentState() != null)
         {
-          ShapeStateComponent shape = _states.GetCurrentState().GetComponent<ShapeStateComponent>(ActorStateShapeComponentName);
+          CollisionStateComponent shape = _states.GetCurrentState().GetComponent<CollisionStateComponent>(ActorStateCollisionComponentName);
           if (shape != null && shape.Shape != null)
             return shape.Shape.Vertices;
         }
@@ -106,7 +117,7 @@ namespace OkuEngine.Actors
     /// <summary>
     /// Gets if the actor is static. An actor is assumed to be never static (false).
     /// </summary>
-    public override bool IsStatic
+    public bool IsStatic
     {
       get { return false; }
     }
@@ -133,7 +144,16 @@ namespace OkuEngine.Actors
 
     public override bool AfterLoad()
     {
-      return _states.AfterLoad();
+      if (!_states.AfterLoad())
+        return false;
+
+      foreach (State state in _states.States)
+      {
+        if (!state.Contains(Actor.ActorStateAABBComponentName))
+          state.Add(new AABBStateComponent());
+      }
+      
+      return true;
     }
 
   }

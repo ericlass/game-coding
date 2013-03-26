@@ -27,7 +27,7 @@ namespace OkuEngine.Collision
     /// collision filtering. Only bodies with the same group id
     /// can collide.
     /// </summary>
-    public int GroupId // Is used filter collisions event further
+    public int GroupId // Is used to filter collisions event further
     { 
       get { return _groupId; }
       set { _groupId = value; }
