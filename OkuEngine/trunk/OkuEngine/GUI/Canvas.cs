@@ -12,7 +12,7 @@ namespace OkuEngine
   /// </summary>
   public class Canvas
   {
-    private AABB _area;
+    private Rectangle2f _area;
     private DynamicArray<Vector2f> _vertices = new DynamicArray<Vector2f>();
     private DynamicArray<Color> _colors = new DynamicArray<Color>();
 
@@ -20,7 +20,7 @@ namespace OkuEngine
     /// Creates a new Canvas with the given area.
     /// </summary>
     /// <param name="area"></param>
-    public Canvas(AABB area)
+    public Canvas(Rectangle2f area)
     {
       _area = area;
     }
@@ -28,7 +28,7 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets the drawing area.
     /// </summary>
-    public AABB Area
+    public Rectangle2f Area
     {
       get { return _area; }
       set { _area = value; }

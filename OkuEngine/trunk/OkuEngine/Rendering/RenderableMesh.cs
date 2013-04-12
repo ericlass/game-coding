@@ -47,7 +47,7 @@ namespace OkuEngine.Rendering
       OkuDrivers.Instance.Renderer.DrawMesh(_vertices.Positions, _vertices.TexCoords, _vertices.Colors, _vertices.Count, _mode, _image);
     }
 
-    public AABB GetBoundingBox()
+    public Rectangle2f GetBoundingBox()
     {
       return _vertices.GetAABB();
     }

@@ -21,7 +21,7 @@ namespace OkuEngine
     private float _cursorBlinkTime = 0.5f;
     private float _hoverTime = 0.0f;
     private Vector2f _hintPos = Vector2f.Zero;
-    private Canvas _canvas = new Canvas(new AABB());
+    private Canvas _canvas = new Canvas(new Rectangle2f());
 
     /// <summary>
     /// Creates a new widget container with the system default font.
@@ -273,7 +273,7 @@ namespace OkuEngine
         if (!Hint.Visible && newHot != null && _hoverTime <= 0.0f && newHot.HintText != null && newHot.HintText.Length > 0)
         {
           Hint.Text = newHot.HintText;
-          Hint.Area = new AABB(_hintPos, Vector2f.Zero);
+          Hint.Area = new Rectangle2f(_hintPos, Vector2f.Zero);
           Hint.Visible = true;
         }
       }

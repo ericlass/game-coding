@@ -61,10 +61,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actors\AABBStateComponent.cs" />
-    <Compile Include="Actors\AttributeStateComponent.cs" />
-    <Compile Include="Actors\RenderableStateComponent.cs" />
-    <Compile Include="Actors\CollisionStateComponent.cs" />
+    <Compile Include="Actors\AABBComponent.cs" />
+    <Compile Include="Actors\AttributeComponent.cs" />
+    <Compile Include="Actors\BoundingCircleComponent.cs" />
+    <Compile Include="Actors\RenderableComponent.cs" />
+    <Compile Include="Actors\CollisionComponent.cs" />
     <Compile Include="Api\OkuApi.cs" />
     <Compile Include="Attributes\AttributeMap.cs" />
     <Compile Include="Animation\Animation.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Events\IEventManager.cs" />
     <Compile Include="Events\UserEvent.cs" />
     <Compile Include="GameProperties.cs" />
+    <Compile Include="Geometry\Circle.cs" />
     <Compile Include="Geometry\Polygon.cs" />
     <Compile Include="Geometry\RegularGrid.cs" />
     <Compile Include="Collision\QuadTree.cs" />
@@ -199,7 +201,7 @@
     <Compile Include="Driver\Audio\OpenALSoundEngine.cs" />
     <Compile Include="Driver\Renderer\OpenGLRenderer.cs" />
     <Compile Include="Rendering\Vertices.cs" />
-    <Compile Include="Geometry\AABB.cs" />
+    <Compile Include="Geometry\Rectangle.cs" />
     <Compile Include="Particles\DefaultParticleController.cs" />
     <Compile Include="Particles\ForceEffector.cs" />
     <Compile Include="Particles\IParticleController.cs" />

@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 using OkuEngine.States;
-using OkuEngine.Attributes;
+using OkuEngine.Rendering;
 using Newtonsoft.Json;
 
 namespace OkuEngine.Actors
 {
   /// <summary>
-  /// Defines a state component that contains a series of attributes.
+  /// Defines a state component that contains a renderable
+  /// for rendering.
   /// </summary>
-  public class AttributeStateComponent : IStateComponent
+  public class RenderableComponent : IStateComponent
   {
+    public const string ComponentName = "renderable";
+
     private State _owner = null;
-    private AttributeMap _attributes = null;
+    private IRenderable _renderable = null;
 
     /// <summary>
     /// Gets or sets the owning state of the component.
@@ -26,20 +29,21 @@ namespace OkuEngine.Actors
     }
 
     /// <summary>
+    /// Gets or sets the renderable of the component.
+    /// </summary>
+    [JsonPropertyAttribute]
+    public IRenderable Renderable
+    {
+      get { return _renderable; }
+      set { _renderable = value; }
+    }
+
+    /// <summary>
     /// Gets the name of the component.
     /// </summary>
     public string ComponentTypeName
     {
-      get { return Actor.ActorStateAttributeComponentName; }
-    }
-
-    /// <summary>
-    /// Gets the attribute for the component.
-    /// </summary>
-    [JsonPropertyAttribute]
-    public AttributeMap Attributes
-    {
-      get { return _attributes; }
+      get { return ComponentName; }
     }
 
     /// <summary>
@@ -48,8 +52,8 @@ namespace OkuEngine.Actors
     /// <returns>A copy of the component.</returns>
     public IStateComponent Copy()
     {
-      AttributeStateComponent result = new AttributeStateComponent();
-      result._attributes = _attributes.Copy();
+      RenderableComponent result = new RenderableComponent();
+      result.Renderable = _renderable.Copy();
       return result;
     }
 
@@ -62,13 +66,13 @@ namespace OkuEngine.Actors
     {
       if (other != null)
       {
-        if (other is AttributeStateComponent)
+        if (other is RenderableComponent)
         {
-          AttributeStateComponent attrs = other as AttributeStateComponent;
-          _attributes.AddAll(attrs.Attributes, true);
+          RenderableComponent render = other as RenderableComponent;
+          _renderable = render.Renderable.Copy();
         }
         else
-          OkuManagers.Instance.Logger.LogError("Trying to merge a " + other.GetType().Name + " with a AttributeStateComponent!");
+          OkuManagers.Instance.Logger.LogError("Trying to merge a " + other.GetType().Name + " with a RenderableStateComponent!");
       }
 
       return true;
@@ -76,7 +80,7 @@ namespace OkuEngine.Actors
 
     public bool AfterLoad()
     {
-      return true;
+      return _renderable.AfterLoad();
     }
 
   }

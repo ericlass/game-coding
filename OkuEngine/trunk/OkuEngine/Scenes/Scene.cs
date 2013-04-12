@@ -290,7 +290,7 @@ namespace OkuEngine.Scenes
     /// </summary>
     /// <param name="boudingBox">The bounding box to be checked.</param>
     /// <returns>True if the given AABB is visible, else false.</returns>
-    public bool IsVisible(AABB boudingBox)
+    public bool IsVisible(Rectangle2f boudingBox)
     {
       return Intersections.AABBs(boudingBox, Viewport.GetBoundingBox());
     }

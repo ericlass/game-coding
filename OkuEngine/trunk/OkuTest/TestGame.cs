@@ -42,14 +42,14 @@ namespace OkuTest
       CollisionWorld<ColTest> world = new CollisionWorld<ColTest>(new NoBroadPhaseDetector<ColTest>(), new AABBPrecisePhaseDetector<ColTest>());
       
       Body<ColTest> body = new Body<ColTest>();
-      body.BoundingBox = new AABB(-10.0f, -10.0f, 20, 20);
+      body.BoundingBox = new Rectangle2f(-10.0f, -10.0f, 20, 20);
       body.Data = new ColTest("body1");
       body.GroupId = 0;
       body.Transform = new Transformation(new Vector2f(10, 10), Vector2f.One, 0.0f);
       world.AddBody(body);
 
       body = new Body<ColTest>();
-      body.BoundingBox = new AABB(-10.0f, -10.0f, 20, 20);
+      body.BoundingBox = new Rectangle2f(-10.0f, -10.0f, 20, 20);
       body.Data = new ColTest("body2");
       body.GroupId = 0;
       body.Transform = new Transformation(new Vector2f(15, 15), Vector2f.One, 0.0f);

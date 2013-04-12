@@ -259,9 +259,9 @@ namespace OkuEngine
       }
     }
 
-    public static bool TryParseAABB(string str, out AABB result)
+    public static bool TryParseAABB(string str, out Rectangle2f result)
     {
-      result = new AABB();
+      result = new Rectangle2f();
       if (str != null)
       {
         Vector2f[] minMax = Converter.ParseVectors(str);

@@ -15,7 +15,7 @@ namespace OkuEngine.Geometry
   {
     private Vector2f[] _vertices = null;
     private bool _aabbValid = false;
-    private AABB _aabb = new AABB();
+    private Rectangle2f _aabb = new Rectangle2f();
 
     /// <summary>
     /// Create a new polygon.
@@ -49,7 +49,7 @@ namespace OkuEngine.Geometry
     /// Calculates the bounding box of the polygon.
     /// </summary>
     /// <returns>The bounding box of the polygon.</returns>
-    public AABB GetBoundingBox()
+    public Rectangle2f GetBoundingBox()
     {
       if (!_aabbValid)
       {

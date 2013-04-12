@@ -175,7 +175,7 @@ namespace OkuEngine.Geometry
     /// <param name="clip">If the grid size is not a multiple of the cell size, true clips the cells to the grid size.</param>
     /// <param name="bounds">The bounds of the cell are returned here.</param>
     /// <returns>True if the given cell is inside of the grid, else false.</returns>
-    public bool GetCellBounds(int x, int y, bool clip, out AABB bounds)
+    public bool GetCellBounds(int x, int y, bool clip, out Rectangle2f bounds)
     {
       float left = Left + (x * _cellSize);
       float right = left + _cellSize;
@@ -189,7 +189,7 @@ namespace OkuEngine.Geometry
         top = Math.Min(top, Top);
       }
 
-      bounds = new AABB(left, bottom, right - left, top - bottom);
+      bounds = new Rectangle2f(left, bottom, right - left, top - bottom);
 
       //TODO: return false if x and y define a cell that is outside of the grid.
       return true;
@@ -232,7 +232,7 @@ namespace OkuEngine.Geometry
     /// <param name="box">The aabb to check.</param>
     /// <param name="min">The minimum cell indices (left, bottom) are returned here.</param>
     /// <param name="max">The maximum cell indices (right, top) are returned here.</param>
-    public void GetCellsIntersecting(AABB box, ref Vector2i min, ref Vector2i max)
+    public void GetCellsIntersecting(Rectangle2f box, ref Vector2i min, ref Vector2i max)
     {
       int x, y;
 
@@ -269,7 +269,7 @@ namespace OkuEngine.Geometry
       int cx, cy;
       GetCellOf(x1, y1, out cx, out cy);
 
-      AABB cellBounds;
+      Rectangle2f cellBounds;
       GetCellBounds(cx, cy, false, out cellBounds);
 
       float dirX = x2 - x1;

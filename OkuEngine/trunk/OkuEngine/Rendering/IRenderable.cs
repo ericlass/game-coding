@@ -12,7 +12,7 @@ namespace OkuEngine.Rendering
   {
     void Update(float dt);
     void Render(Scene scene);
-    AABB GetBoundingBox();
+    Rectangle2f GetBoundingBox();
 
     IRenderable Copy();
   }

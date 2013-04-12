@@ -11,8 +11,10 @@ namespace OkuEngine.Actors
   /// <summary>
   /// Defines a state component that stores a shape.
   /// </summary>
-  class CollisionStateComponent : IStateComponent
+  class CollisionComponent : IStateComponent
   {
+    public const string ComponentName = "collision";
+
     private State _owner = null;
     private Polygon _shape = null;
 
@@ -30,7 +32,7 @@ namespace OkuEngine.Actors
     /// </summary>
     public string ComponentTypeName
     {
-      get { return Actor.ActorStateCollisionComponentName; }
+      get { return ComponentName; }
     }
 
     /// <summary>
@@ -49,7 +51,7 @@ namespace OkuEngine.Actors
     /// <returns>A copy of the component.</returns>
     public IStateComponent Copy()
     {
-      CollisionStateComponent result = new CollisionStateComponent();
+      CollisionComponent result = new CollisionComponent();
       result._shape = _shape.Copy();
       return result;
     }
@@ -63,9 +65,9 @@ namespace OkuEngine.Actors
     {
       if (other != null)
       {
-        if (other is CollisionStateComponent)
+        if (other is CollisionComponent)
         {
-          CollisionStateComponent shape = other as CollisionStateComponent;
+          CollisionComponent shape = other as CollisionComponent;
           _shape = shape.Shape.Copy();
         }
         else

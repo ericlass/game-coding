@@ -15,7 +15,7 @@ namespace OkuEngine.Collision
     private int _groupId = 0;
     private Transformation _previousTransform = Transformation.Identity;
     private Transformation _transform = Transformation.Identity;
-    private AABB _boundingBox = new AABB();
+    private Rectangle2f _boundingBox = new Rectangle2f();
     private Vector2f[] _shape = null;
     private T _data = default(T);
 
@@ -54,7 +54,7 @@ namespace OkuEngine.Collision
     /// <summary>
     /// Gets or sets the bounding box of the body.
     /// </summary>
-    public AABB BoundingBox //Mandatory
+    public Rectangle2f BoundingBox //Mandatory
     {
       get { return _boundingBox; }
       set { _boundingBox = value; }
@@ -82,7 +82,7 @@ namespace OkuEngine.Collision
     /// Calculates the transformed AABB which is the AABB of the box after it got transformed.
     /// </summary>
     /// <returns>The AABB of the transformed AABB.</returns>
-    public AABB GetTransformedBoundingBox()
+    public Rectangle2f GetTransformedBoundingBox()
     {
       BoundingBox.GetPoints(_transBox);
       Transform.AsMatrix().Transform(_transBox);

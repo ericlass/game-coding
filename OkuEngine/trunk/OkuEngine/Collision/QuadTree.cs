@@ -11,14 +11,14 @@ namespace OkuEngine.Collision
     private const int MaxLevels = 8;
     private const int SplitThreshold = 5;
     
-    private AABB _area = new AABB();
+    private Rectangle2f _area = new Rectangle2f();
     private QuadTree _parent = null;
     private QuadTree[] _children = null;
     private int _level = 0;
     private HashSet<ICollidable> _bodies = new HashSet<ICollidable>();
     private HashSet<ICollidable> _buffer = new HashSet<ICollidable>();
     
-    public AABB Area
+    public Rectangle2f Area
     {
       get { return _area; }
     }
@@ -27,7 +27,7 @@ namespace OkuEngine.Collision
     /// Used to construct the top level quad tree cell.
     /// </summary>
     /// <param name="area">The area of the whole quad tree.</param>
-    public QuadTree(AABB area)
+    public QuadTree(Rectangle2f area)
     {
     }
 
@@ -53,7 +53,7 @@ namespace OkuEngine.Collision
     {
       QuadTree result = this;
       
-      if (!_area.Contains(body.BoundingBox))
+      if (!_area.Contains(body.BoundingCircle))
         throw new ArgumentException();
         
       if (_children == null) //Cell has not been split yet
@@ -63,7 +63,7 @@ namespace OkuEngine.Collision
         {
           _buffer.Clear();
           _children = new QuadTree[4];
-          AABB[] childAreas = _area.Split(2, 2);
+          Rectangle2f[] childAreas = _area.Split(2, 2);
           for (int i = 0; i < _children.Length; i++)
           {
             QuadTree child = new QuadTree(_level + 1);
@@ -72,7 +72,7 @@ namespace OkuEngine.Collision
             child.Parent = this;
             foreach (ICollidable currentBody in _bodies)
             {
-              if (child.Area.Contains(currentBody.BoundingBox))
+              if (child.Area.Contains(currentBody.BoundingCircle))
               {
                 result = child.Add(currentBody);
                 _buffer.Add(currentBody);
@@ -88,7 +88,7 @@ namespace OkuEngine.Collision
         bool handled = false;
         for (int i = 0; i < _children.Length; i++)
         {
-          if (_children[i].Area.Contains(body.BoundingBox))
+          if (_children[i].Area.Contains(body.BoundingCircle))
           {
             result = _children[i].Add(body);
             handled = true;
@@ -120,7 +120,7 @@ namespace OkuEngine.Collision
       return false;
     }
 
-    public void GetBodies(AABB aabb, ref List<ICollidable> result)
+    public void GetBodies(Rectangle2f aabb, ref List<ICollidable> result)
     {
       if (!_area.Intersects(aabb))
         throw new ArgumentException();

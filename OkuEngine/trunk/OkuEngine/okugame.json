@@ -302,10 +302,10 @@
               "Name": "normal",
               "Components": [
                 {
-                  "$type": "OkuEngine.Actors.AABBStateComponent, OkuEngine"
+                  "$type": "OkuEngine.Actors.AABBComponent, OkuEngine"
                 },
                 {
-                  "$type": "OkuEngine.Actors.RenderableStateComponent, OkuEngine",
+                  "$type": "OkuEngine.Actors.RenderableComponent, OkuEngine",
                   "Renderable":
                   {
                     "$type": "OkuEngine.Rendering.RenderableImage, OkuEngine",
@@ -328,7 +328,7 @@
               "Name": "normal",
               "Components": [
                 {
-                  "$type": "OkuEngine.Actors.RenderableStateComponent, OkuEngine",
+                  "$type": "OkuEngine.Actors.RenderableComponent, OkuEngine",
                   "Renderable": {
                     "$type": "OkuEngine.Rendering.RenderableImage, OkuEngine",
                     "ImageId": 1
@@ -350,7 +350,7 @@
               "Name": "normal",
               "Components": [
                 {
-                  "$type": "OkuEngine.Actors.RenderableStateComponent, OkuEngine",
+                  "$type": "OkuEngine.Actors.RenderableComponent, OkuEngine",
                   "Renderable": {
                     "$type": "OkuEngine.Rendering.RenderableImage, OkuEngine",
                     "ImageId": 1

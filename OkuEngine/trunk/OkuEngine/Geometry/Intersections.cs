@@ -296,7 +296,7 @@ namespace OkuEngine
     /// <param name="box1">The first box.</param>
     /// <param name="box2">The second box.</param>
     /// <returns>True if the boxes intersect, else false.</returns>
-    public static bool AABBs(AABB box1, AABB box2)
+    public static bool AABBs(Rectangle2f box1, Rectangle2f box2)
     {
       return AABBs(box1.Min, box1.Max, box2.Min, box2.Max);
     }
@@ -392,6 +392,99 @@ namespace OkuEngine
       if (y > maxY)
         return false;
       return true;
+    }
+
+    /// <summary>
+    /// Calculates if the two circle given by the parameters (c1,r1) and (c2,r2) do intersect.
+    /// </summary>
+    /// <param name="c1">The center of the first circle.</param>
+    /// <param name="r1">The radius of the first circle.</param>
+    /// <param name="c2">The center of the first circle.</param>
+    /// <param name="r2">The radius of the first circle.</param>
+    /// <returns>True if the circles intersect, else false.</returns>
+    public static bool Circles(Vector2f c1, float r1, Vector2f c2, float r2)
+    {
+      float a = r1 + r2;
+      float dx = c1.X - c2.X;
+      float dy = c1.Y - c2.Y;
+      return a * a > (dx * dx + dy * dy);
+    }
+
+    /// <summary>
+    /// Calculates if the two circle given by the parameters (c1,r1) and (c2,r2) do intersect.
+    /// </summary>
+    /// <param name="c1">The center of the first circle.</param>
+    /// <param name="r1">The radius of the first circle.</param>
+    /// <param name="c2">The center of the first circle.</param>
+    /// <param name="r2">The radius of the first circle.</param>
+    /// <param name="mtd">The minimum translation distance is returned here.</param>
+    /// <returns>True if the circles intersect, else false.</returns>
+    public static bool Circles(Vector2f c1, float r1, Vector2f c2, float r2, out Vector2f mtd)
+    {
+      mtd = Vector2f.Zero;
+
+      float a = r1 + r2;
+      float dx = c1.X - c2.X;
+      float dy = c1.Y - c2.Y;
+      bool result = a * a > (dx * dx + dy * dy);
+      if (result)
+      {
+        Vector2f vec = c2 - c1;
+        vec.Normalize();
+        mtd = vec * ((dx * dx + dy * dy) - a * a);
+      }
+      return result;
+    }
+
+    public static bool CircleAABB(Circle circle, Rectangle2f aabb)
+    {
+      Vector2f cc = circle.Center;
+      if (cc.X > aabb.Max.X)
+        cc.X = aabb.Max.X;
+      if (cc.X < aabb.Min.X)
+        cc.X = aabb.Min.X;
+      if (cc.Y > aabb.Max.Y)
+        cc.Y = aabb.Max.Y;
+      if (cc.Y < aabb.Min.Y)
+        cc.Y = aabb.Min.Y;
+
+      float dx = cc.X - circle.Center.X;
+      float dy = cc.Y - circle.Center.Y;
+      return circle.Radius * circle.Radius > (dx * dx + dy * dy);
+    }
+
+    public static bool CircleAABB(Circle circle, Rectangle2f aabb, out Vector2f mtd)
+    {
+      mtd = Vector2f.Zero;
+
+      Vector2f cc = circle.Center;
+      if (cc.X > aabb.Max.X)
+        cc.X = aabb.Max.X;
+      if (cc.X < aabb.Min.X)
+        cc.X = aabb.Min.X;
+      if (cc.Y > aabb.Max.Y)
+        cc.Y = aabb.Max.Y;
+      if (cc.Y < aabb.Min.Y)
+        cc.Y = aabb.Min.Y;
+
+      float dx = cc.X - circle.Center.X;
+      float dy = cc.Y - circle.Center.Y;
+      bool result = circle.Radius * circle.Radius > (dx * dx + dy * dy);
+      if (result)
+      {
+        Vector2f vec = aabb.GetClosestPoint(circle.Center);
+        if (aabb.IsInside(circle.Center))
+        {
+          mtd = vec - circle.Center;
+          if (mtd.X < mtd.Y)
+            mtd.Y += Math.Sign(mtd.Y) * circle.Radius;
+          else
+            mtd.X += Math.Sign(mtd.X) * circle.Radius;
+        }
+        else
+          mtd = circle.Center - vec;
+      }
+      return result;
     }
 
   }

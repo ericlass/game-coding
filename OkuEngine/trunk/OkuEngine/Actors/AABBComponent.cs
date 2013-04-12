@@ -12,11 +12,13 @@ namespace OkuEngine.Actors
   /// Defines a state component that calculates a bounding box
   /// from the renderable or shape components of the same state.
   /// </summary>
-  public class AABBStateComponent : IStateComponent
+  public class AABBComponent : IStateComponent
   {
+    public const string ComponentName = "boundingbox";
+
     private State _owner = null;
     private bool _aabbValid = false;
-    private AABB _aabb = new AABB();
+    private Rectangle2f _aabb = new Rectangle2f();
 
     /// <summary>
     /// Gets or sets the owning state of the component.
@@ -32,19 +34,19 @@ namespace OkuEngine.Actors
     /// </summary>
     public string ComponentTypeName
     {
-      get { return Actor.ActorStateAABBComponentName; }
+      get { return ComponentName; }
     }
 
     /// <summary>
-    /// Gets the bounding box of the state fropm the shape or the renderable.
+    /// Gets the bounding box of the state from the shape or the renderable.
     /// </summary>
     /// <returns>The bounding box of the state.</returns>
-    public AABB GetBoundingBox()
+    public Rectangle2f GetBoundingBox()
     {
       if (!_aabbValid)
       {
-        RenderableStateComponent renderable = _owner.GetComponent<RenderableStateComponent>(Actor.ActorStateRenderableComponentName);
-        CollisionStateComponent shape = _owner.GetComponent<CollisionStateComponent>(Actor.ActorStateCollisionComponentName);
+        RenderableComponent renderable = _owner.GetComponent<RenderableComponent>(RenderableComponent.ComponentName);
+        CollisionComponent shape = _owner.GetComponent<CollisionComponent>(CollisionComponent.ComponentName);
 
         if (shape != null && shape.Shape != null)
         {
@@ -67,7 +69,7 @@ namespace OkuEngine.Actors
     /// <returns>A copy of the component.</returns>
     public IStateComponent Copy()
     {
-      return new AABBStateComponent();
+      return new AABBComponent();
     }
 
     /// <summary>

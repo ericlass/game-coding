@@ -8,7 +8,7 @@ namespace OkuEngine
   /// <summary>
   /// Defines an axis alligned box by its min and max vectors.
   /// </summary>
-  public struct AABB
+  public struct Rectangle2f
   {
     /// <summary>
     /// The min vector.
@@ -24,7 +24,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="min">The min vector.</param>
     /// <param name="max">The max vector.</param>
-    public AABB(Vector2f min, Vector2f max)
+    public Rectangle2f(Vector2f min, Vector2f max)
     {
       Min = min;
       Max = max;
@@ -37,7 +37,7 @@ namespace OkuEngine
     /// <param name="right">The right border of the quad.</param>
     /// <param name="top">The top border of the quad.</param>
     /// <param name="bottom">The bottom border of the quad.</param>
-    public AABB(float left, float bottom, float width, float height)
+    public Rectangle2f(float left, float bottom, float width, float height)
     {
       Min = new Vector2f(left, bottom);
       Max = new Vector2f(left + width, bottom + height);
@@ -106,14 +106,14 @@ namespace OkuEngine
     /// </summary>
     /// <param name="other">The bounding box to add.</param>
     /// <returns>A new AABB that contains this and the given AABB.</returns>
-    public AABB Add(AABB other)
+    public Rectangle2f Add(Rectangle2f other)
     {
       float minX = Math.Min(Min.X, other.Min.X);
       float minY = Math.Min(Min.Y, other.Min.Y);
       float maxX = Math.Max(Max.X, other.Max.X);
       float maxY = Math.Max(Max.Y, other.Max.Y);
 
-      return new AABB(new Vector2f(minX, minY), new Vector2f(maxX, maxY));
+      return new Rectangle2f(new Vector2f(minX, minY), new Vector2f(maxX, maxY));
     }
     
     /// <summary>
@@ -122,9 +122,23 @@ namespace OkuEngine
     /// </summary>
     /// <param name="other">The AABB to check.</param>
     /// <returns>True f the given AABB is completly inside of the AABB, else false.</returns>
-    public bool Contains(AABB other)
+    public bool Contains(Rectangle2f other)
     {
       return Min.X <= other.Min.X && Min.Y <= other.Min.Y && Max.X >= other.Max.X && Max.Y >= other.Max.Y;
+    }
+
+    /// <summary>
+    /// Checks if the AABB completely contains the given circle.
+    /// </summary>
+    /// <param name="circle">The circle to check.</param>
+    /// <returns>True if the AABB completely contains the given circle, else false.</returns>
+    public bool Contains(Circle circle)
+    {
+      return
+        Min.X <= (circle.Center.X - circle.Radius) &&
+        Min.Y <= (circle.Center.Y - circle.Radius) &&
+        Max.X >= (circle.Center.X + circle.Radius) &&
+        Max.Y >= (circle.Center.Y + circle.Radius);
     }
     
     /// <summary>
@@ -132,9 +146,56 @@ namespace OkuEngine
     /// </summary>
     /// <param name="other">The AABB to check intersection with.</param>
     /// <returns>True if the AABBs intersect, else false.</returns>
-    public bool Intersects(AABB other)
+    public bool Intersects(Rectangle2f other)
     {
       return Intersections.AABBs(this, other);
+    }
+
+    //public bool Intersects(
+
+    /// <summary>
+    /// Calculates the point on the perimeter of the aabb theat is closest to the given point.
+    /// </summary>
+    /// <param name="p">The point.</param>
+    /// <returns>The point on the perimeter that is closest to p.</returns>
+    public Vector2f GetClosestPoint(Vector2f p)
+    {
+      Vector2f result = Vector2f.Zero;
+      if (IsInside(p))
+      {
+        Vector2f center = GetCenter();
+
+        float borderX, borderY;
+        if (p.X >= center.X)
+          borderX = Max.X;
+        else
+          borderX = Min.X;
+
+        if (p.Y >= center.Y)
+          borderY = Max.Y;
+        else
+          borderY = Min.Y;
+
+        float dx = Math.Abs(p.X - borderX);
+        float dy = Math.Abs(p.Y - borderY);
+        if (dx < dy)
+          return new Vector2f(borderX, p.Y);
+        else
+          return new Vector2f(p.X, borderY);
+      }
+      else
+      {
+        result = p;
+        if (result.X > Max.X)
+          result.X = Max.X;
+        if (result.X < Min.X)
+          result.X = Min.X;
+        if (result.Y > Max.Y)
+          result.Y = Max.Y;
+        if (result.Y < Min.Y)
+          result.Y = Min.Y;
+      }
+      return result;
     }
 
     /// <summary>
@@ -143,9 +204,9 @@ namespace OkuEngine
     /// <param name="vertical">The number of vertical cells.</param>
     /// <param name="horizontal">The number of horizontal cells.</param>
     /// <returns>An array containing the split AABBs in the order from left-bottom to right top.</returns>
-    public AABB[] Split(int vertical, int horizontal)
+    public Rectangle2f[] Split(int vertical, int horizontal)
     {
-      AABB[] result = new AABB[vertical * horizontal];
+      Rectangle2f[] result = new Rectangle2f[vertical * horizontal];
       float xStep = Width / vertical;
       float yStep = Height / horizontal;
       for (int y = 0; y < horizontal - 1; y++)
@@ -155,7 +216,7 @@ namespace OkuEngine
           float left = Min.X + (x * xStep);
           float bottom = Min.Y + (y * yStep);
 
-          result[(y * vertical) + x] = new AABB(new Vector2f(left, bottom), new Vector2f(left + xStep, left + yStep));
+          result[(y * vertical) + x] = new Rectangle2f(new Vector2f(left, bottom), new Vector2f(left + xStep, left + yStep));
         }
       }
       return result;

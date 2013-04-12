@@ -9,8 +9,8 @@ namespace OkuEngine.Collision
   {
     public override CollisionInfo<T> GetCollisionInfo(Body<T> bodyA, Body<T> bodyB)
     {
-      AABB boxA = bodyA.GetTransformedBoundingBox();
-      AABB boxB = bodyB.GetTransformedBoundingBox();
+      Rectangle2f boxA = bodyA.GetTransformedBoundingBox();
+      Rectangle2f boxB = bodyB.GetTransformedBoundingBox();
 
       if (boxA.Intersects(boxB))
       {

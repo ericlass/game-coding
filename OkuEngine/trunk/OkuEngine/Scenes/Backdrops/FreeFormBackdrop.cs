@@ -87,7 +87,7 @@ namespace OkuEngine.Scenes.Backdrops
       Vector2i min = Vector2i.Zero;
       Vector2i max = Vector2i.Zero;
 
-      AABB viewportBox = scene.Viewport.GetBoundingBox();
+      Rectangle2f viewportBox = scene.Viewport.GetBoundingBox();
 
       _grid.GetCellsIntersecting(viewportBox, ref min, ref max);
 
@@ -135,7 +135,7 @@ namespace OkuEngine.Scenes.Backdrops
       {
         if (_shapes != null && _shapes.Length > 0)
         {
-          AABB total = new AABB();
+          Rectangle2f total = new Rectangle2f();
           foreach (Polygon poly in _shapes)
           {
             total = total.Add(poly.Vertices.GetBoundingBox());
@@ -151,14 +151,14 @@ namespace OkuEngine.Scenes.Backdrops
       Vector2i minCell = _grid.GetMinCell();
       Vector2i maxCell = _grid.GetMaxCell();
 
-      AABB cellBounds;
+      Rectangle2f cellBounds;
       for (int y = minCell.Y; y <= maxCell.Y; y++)
       {
         for (int x = minCell.X; x <= maxCell.X; x++)
         {
           _grid.GetCellBounds(x, y, true, out cellBounds);
-          Vector2f[] points = AABB.GetPoints(cellBounds.Min, cellBounds.Max);
-          Vector2f[] texCoords = AABB.GetPoints(cellBounds.Min, cellBounds.Max);
+          Vector2f[] points = Rectangle2f.GetPoints(cellBounds.Min, cellBounds.Max);
+          Vector2f[] texCoords = Rectangle2f.GetPoints(cellBounds.Min, cellBounds.Max);
           for (int i = 0; i < texCoords.Length; i++)
           {
             Vector2f texCoord = texCoords[i];

@@ -10,7 +10,7 @@ namespace OkuEngine
   public class Widget
   {
     private int _id = KeySequence.NextValue(KeySequence.WidgetSequence);
-    private AABB _area = new AABB();
+    private Rectangle2f _area = new Rectangle2f();
     private string _hintText = null;
     private bool _visible = true;
 
@@ -28,7 +28,7 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets the area of the widget.
     /// </summary>
-    public AABB Area
+    public Rectangle2f Area
     {
       get { return _area; }
       set

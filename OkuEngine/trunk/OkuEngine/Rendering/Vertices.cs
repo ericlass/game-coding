@@ -19,7 +19,7 @@ namespace OkuEngine.Rendering
     private Vector2f[] _positions = null;
     private Vector2f[] _texCoords = null;
     private Color[] _colors = null;
-    private AABB _boundingBox = new AABB();
+    private Rectangle2f _boundingBox = new Rectangle2f();
     private bool _aabbValid = false;
 
     /// <summary>
@@ -152,7 +152,7 @@ namespace OkuEngine.Rendering
       return result;
     }
 
-    public AABB GetAABB()
+    public Rectangle2f GetAABB()
     {
       if (!_aabbValid)
       {

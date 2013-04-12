@@ -23,7 +23,7 @@ namespace OkuEngine.Scenes
 
     private bool _valid = false;
     private Matrix3 _screenToWorld = Matrix3.Identity;
-    private AABB _boundingBox;
+    private Rectangle2f _boundingBox;
 
     /// <summary>
     /// Create a new viewport centered at the world space coordinate (0,0)
@@ -211,10 +211,10 @@ namespace OkuEngine.Scenes
     /// Gets the bounding box of the area the viewport shows.
     /// </summary>
     /// <returns>The bounding box the viewport shows.</returns>
-    public AABB GetBoundingBox()
+    public Rectangle2f GetBoundingBox()
     {
       if (!_valid)
-        _boundingBox = new AABB(Left, Bottom, Width, Height);
+        _boundingBox = new Rectangle2f(Left, Bottom, Width, Height);
       return _boundingBox;
     }
 

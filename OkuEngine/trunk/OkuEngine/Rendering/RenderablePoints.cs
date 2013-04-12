@@ -36,7 +36,7 @@ namespace OkuEngine.Rendering
       OkuDrivers.Instance.Renderer.DrawPoints(_vertices.Positions, _vertices.Colors, _vertices.Count, _size);
     }
 
-    public AABB GetBoundingBox()
+    public Rectangle2f GetBoundingBox()
     {
       return _vertices.GetAABB();
     }

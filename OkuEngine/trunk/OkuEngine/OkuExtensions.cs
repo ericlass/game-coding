@@ -84,7 +84,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="vectors">The vectors to calculate the AABB for.</param>
     /// <returns>The AABB of the vectors.</returns>
-    public static AABB GetBoundingBox(this Vector2f[] vectors)
+    public static Rectangle2f GetBoundingBox(this Vector2f[] vectors)
     {
       if (vectors.Length > 0)
       {
@@ -105,9 +105,76 @@ namespace OkuEngine
             maxY = vec.Y;
         }
 
-        return new AABB(new Vector2f(minX, minY), new Vector2f(maxX, maxY));
+        return new Rectangle2f(new Vector2f(minX, minY), new Vector2f(maxX, maxY));
       }
-      return new AABB();
+      return new Rectangle2f();
+    }
+    
+    /// <summary>
+    /// Calculates the arithmetic center of the points in the vector array.
+    /// </summary>
+    /// <param name="vectors">The vectors to get the center for.</param>
+    /// <returns>The arithmetic center of the points.</returns>
+    public static Vector2f GetCenter(this Vector2f[] vectors)
+    {
+      if (vectors.Length > 0)
+      {
+        float minX = float.MaxValue;
+        float minY = float.MaxValue;
+        float maxX = float.MinValue;
+        float maxY = float.MinValue;
+
+        foreach (Vector2f vec in vectors)
+        {
+          if (vec.X < minX)
+            minX = vec.X;
+          if (vec.X > maxX)
+            maxX = vec.X;
+          if (vec.Y < minY)
+            minY = vec.Y;
+          if (vec.Y > maxY)
+            maxY = vec.Y;
+        }
+
+        return new Vector2f((minX + maxX) * 0.5f, (minY + maxY) * 0.5f);
+      }
+      return new Vector2f();
+    }
+
+    /// <summary>
+    /// Calculates the bounding circle of the vectors with the given center.
+    /// </summary>
+    /// <param name="vectors">The vectors to get the circle for.</param>
+    /// <param name="center">The center of the calculated circle.</param>
+    /// <returns>The bounding circle of the vectors.</returns>
+    public static Circle GetBoundingCircle(this Vector2f[] vectors, Vector2f center)
+    {
+      if (vectors.Length > 0)
+      {
+        float maxDist = 0;
+
+        foreach (Vector2f vec in vectors)
+        {
+          float dx = vec.X - center.X;
+          float dy = vec.Y - center.Y;
+          float dist = dx * dx + dy * dy;
+          if (dist > maxDist)
+            maxDist = dist;
+        }
+
+        return new Circle(center, (float)Math.Sqrt(maxDist));
+      }
+      return new Circle();
+    }
+
+    /// <summary>
+    /// Calculates the bounding circle using the arithmetic center of the vectors.
+    /// </summary>
+    /// <param name="vectors">The vectors to the boudning circle for.</param>
+    /// <returns>The bounding circle of the vectors.</returns>
+    public static Circle GetBoundingCircleCentered(this Vector2f[] vectors)
+    {
+      return vectors.GetBoundingCircle(vectors.GetCenter());
     }
 
     /// <summary>

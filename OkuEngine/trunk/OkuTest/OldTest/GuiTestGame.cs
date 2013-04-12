@@ -30,7 +30,7 @@ namespace OkuTest
       _gui = new WidgetContainer( new SpriteFont("Arial", 10, System.Drawing.FontStyle.Regular, true));
 
       ButtonWidget button = new ButtonWidget();
-      button.Area = new AABB(5, 5, 100, 30);
+      button.Area = new Rectangle2f(5, 5, 100, 30);
       button.Text = "Button 1";
       button.HintText = "Hint 1";
       _button = button;
@@ -40,7 +40,7 @@ namespace OkuTest
       ImageContent glyph = new ImageContent(".\\content\\orange_tile.png");
 
       button = new OkuEngine.ButtonWidget();
-      button.Area = new AABB(5, 40, 100, 30);
+      button.Area = new Rectangle2f(5, 40, 100, 30);
       button.Text = "Button 2";
       button.HintText = "Hint 2";
       button.Glyph = glyph;
@@ -48,20 +48,20 @@ namespace OkuTest
       _gui.AddWidget(button);
 
       LabelWidget label = new LabelWidget();
-      label.Area = new AABB(5, 90, 100, 0);
+      label.Area = new Rectangle2f(5, 90, 100, 0);
       label.Text = "Label 1";
 
       _gui.AddWidget(label);
 
       _progress = new ProgressBarWidget();
-      _progress.Area = new AABB(5, 95, 200, 20);
+      _progress.Area = new Rectangle2f(5, 95, 200, 20);
 
       _progress.Position = 40;
 
       _gui.AddWidget(_progress);
 
       TextBoxWidget text = new TextBoxWidget();
-      text.Area = new AABB(5, 120, 200, 20);
+      text.Area = new Rectangle2f(5, 120, 200, 20);
 
       _gui.AddWidget(text);
     }

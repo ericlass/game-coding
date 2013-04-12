@@ -15,7 +15,7 @@ namespace OkuEngine.Rendering
     private ImageContent _image = null;
     private int _imageId = 0;
 
-    private AABB _boundingBox = new AABB();
+    private Rectangle2f _boundingBox = new Rectangle2f();
     private bool _aabbValid = false;
 
     public void Update(float dt)
@@ -39,11 +39,11 @@ namespace OkuEngine.Rendering
         OkuDrivers.Instance.Renderer.DrawImage(_image, Vector2f.Zero);
     }
 
-    public AABB GetBoundingBox()
+    public Rectangle2f GetBoundingBox()
     {
       if (!_aabbValid)
       {
-        _boundingBox = new AABB(_image.Width * -0.5f, _image.Height  * -0.5f, _image.Width, _image.Height);
+        _boundingBox = new Rectangle2f(_image.Width * -0.5f, _image.Height  * -0.5f, _image.Width, _image.Height);
         _aabbValid = true;
       }
       return _boundingBox;

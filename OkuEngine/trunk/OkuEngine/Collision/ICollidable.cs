@@ -7,7 +7,7 @@ namespace OkuEngine.Collision
 {
   public interface ICollidable
   {
-    AABB BoundingBox { get; }
+    Circle BoundingCircle { get; }
     Vector2f[] Shape { get; }
   }
 }

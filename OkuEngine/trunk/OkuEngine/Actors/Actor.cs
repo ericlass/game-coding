@@ -6,6 +6,7 @@ using OkuEngine.Scenes;
 using OkuEngine.Attributes;
 using OkuEngine.States;
 using OkuEngine.Events;
+using OkuEngine.Collision;
 using Newtonsoft.Json;
 
 namespace OkuEngine.Actors
@@ -13,13 +14,8 @@ namespace OkuEngine.Actors
   /// <summary>
   /// Defines a single actor in the game. Not to be confused with an ActorType.
   /// </summary>
-  public class Actor : StoreableEntity
+  public class Actor : StoreableEntity, ICollidable
   {
-    public const string ActorStateRenderableComponentName = "renderable";
-    public const string ActorStateCollisionComponentName = "collision";
-    public const string ActorStateAttributeComponentName = "attributes";
-    public const string ActorStateAABBComponentName = "boundingbox";
-
     private StateManager _states = new StateManager();
     private AttributeMap _attributes = new AttributeMap();
 
@@ -68,7 +64,7 @@ namespace OkuEngine.Actors
     {
       if (_states.GetCurrentState() != null)
       {
-        RenderableStateComponent renderable = _states.GetCurrentState().GetComponent<RenderableStateComponent>(ActorStateRenderableComponentName);
+        RenderableComponent renderable = _states.GetCurrentState().GetComponent<RenderableComponent>(RenderableComponent.ComponentName);
         if (renderable != null && renderable.Renderable != null)
           renderable.Renderable.Render(scene);
       }
@@ -77,18 +73,36 @@ namespace OkuEngine.Actors
     /// <summary>
     /// Gets the bounding box of the current state of the actor.
     /// </summary>
-    public AABB BoundingBox
+    public Rectangle2f BoundingBox
     {
       get
       {
         if (_states.GetCurrentState() != null)
         {
-          AABBStateComponent component = _states.GetCurrentState().GetComponent<AABBStateComponent>(ActorStateAABBComponentName);
+          AABBComponent component = _states.GetCurrentState().GetComponent<AABBComponent>(AABBComponent.ComponentName);
           if (component != null)
             return component.GetBoundingBox();
         }
 
-        return default(AABB);
+        return default(Rectangle2f);
+      }
+    }
+
+    /// <summary>
+    /// Gets the bounding circle of the current state of the actor.
+    /// </summary>
+    public Circle BoundingCircle
+    {
+      get 
+      {
+        if (_states.GetCurrentState() != null)
+        {
+          BoundingCircleComponent component = _states.GetCurrentState().GetComponent<BoundingCircleComponent>(BoundingCircleComponent.ComponentName);
+          if (component != null)
+            return component.GetBoundingCircle();
+        }
+
+        return default(Circle);
       }
     }
 
@@ -102,7 +116,7 @@ namespace OkuEngine.Actors
       {
         if (_states.GetCurrentState() != null)
         {
-          CollisionStateComponent shape = _states.GetCurrentState().GetComponent<CollisionStateComponent>(ActorStateCollisionComponentName);
+          CollisionComponent shape = _states.GetCurrentState().GetComponent<CollisionComponent>(CollisionComponent.ComponentName);
           if (shape != null && shape.Shape != null)
             return shape.Shape.Vertices;
         }
@@ -130,9 +144,9 @@ namespace OkuEngine.Actors
     /// <returns>The value of the attribute or null if there is no attribute with the given name.</returns>
     public AttributeValue GetAttributeValue(string name)
     {
-      if (_states.GetCurrentState().Contains(ActorStateAttributeComponentName))
+      if (_states.GetCurrentState().Contains(AttributeComponent.ComponentName))
       {
-        AttributeStateComponent stateAttrs = _states.GetCurrentState().GetComponent<AttributeStateComponent>(ActorStateAttributeComponentName);
+        AttributeComponent stateAttrs = _states.GetCurrentState().GetComponent<AttributeComponent>(AttributeComponent.ComponentName);
         if (stateAttrs != null && stateAttrs.Attributes.ContainsKey(name))
           return stateAttrs.Attributes[name];
       }
@@ -149,10 +163,10 @@ namespace OkuEngine.Actors
 
       foreach (State state in _states.States)
       {
-        if (!state.Contains(Actor.ActorStateAABBComponentName))
-          state.Add(new AABBStateComponent());
+        if (!state.Contains(BoundingCircleComponent.ComponentName))
+          state.Add(new BoundingCircleComponent());
       }
-      
+
       return true;
     }
 
