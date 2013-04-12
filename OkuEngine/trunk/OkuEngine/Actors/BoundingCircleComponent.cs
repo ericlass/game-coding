@@ -62,16 +62,6 @@ namespace OkuEngine.Actors
       return _circle;
     }
 
-    public IStateComponent Copy()
-    {
-      return new BoundingCircleComponent();
-    }
-
-    public bool Merge(IStateComponent other)
-    {
-      return true;
-    }
-
     public bool AfterLoad()
     {
       _circleValid = false;

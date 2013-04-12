@@ -45,38 +45,6 @@ namespace OkuEngine.Actors
       set { _shape = value; }
     }
 
-    /// <summary>
-    /// Copies the component with all of its data.
-    /// </summary>
-    /// <returns>A copy of the component.</returns>
-    public IStateComponent Copy()
-    {
-      CollisionComponent result = new CollisionComponent();
-      result._shape = _shape.Copy();
-      return result;
-    }
-
-    /// <summary>
-    /// Merges the data of the component with the given one.
-    /// </summary>
-    /// <param name="other">The component to merge into this component.</param>
-    /// <returns>True if the merge was successfull, else false.</returns>
-    public bool Merge(IStateComponent other)
-    {
-      if (other != null)
-      {
-        if (other is CollisionComponent)
-        {
-          CollisionComponent shape = other as CollisionComponent;
-          _shape = shape.Shape.Copy();
-        }
-        else
-          OkuManagers.Instance.Logger.LogError("Trying to merge a " + other.GetType().Name + " with a ShapeStateComponent!");
-      }
-
-      return true;
-    }
-
     public bool AfterLoad()
     {
       return _shape.AfterLoad();

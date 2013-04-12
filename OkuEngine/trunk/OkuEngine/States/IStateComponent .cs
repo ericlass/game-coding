@@ -22,18 +22,5 @@ namespace OkuEngine.States
     /// unique identifier as it is used in the XML.
     /// </summary>
     string ComponentTypeName { get; }
-
-    /// <summary>
-    /// Creates a deep copy of the component.
-    /// </summary>
-    /// <returns>A copy of the component.</returns>
-    IStateComponent Copy();
-
-    /// <summary>
-    /// Merges the values of the given state into this state.
-    /// </summary>
-    /// <param name="other">The state to merge values from.</param>
-    /// <returns>True if the merging was successful, else false.</returns>
-    bool Merge(IStateComponent other);
   }
 }

@@ -44,38 +44,6 @@ namespace OkuEngine.Actors
       get { return _attributes; }
     }
 
-    /// <summary>
-    /// Copies the component with all of its data.
-    /// </summary>
-    /// <returns>A copy of the component.</returns>
-    public IStateComponent Copy()
-    {
-      AttributeComponent result = new AttributeComponent();
-      result._attributes = _attributes.Copy();
-      return result;
-    }
-
-    /// <summary>
-    /// Merges the data of the component with the given one.
-    /// </summary>
-    /// <param name="other">The component to merge into this component.</param>
-    /// <returns>True if the merge was successfull, else false.</returns>
-    public bool Merge(IStateComponent other)
-    {
-      if (other != null)
-      {
-        if (other is AttributeComponent)
-        {
-          AttributeComponent attrs = other as AttributeComponent;
-          _attributes.AddAll(attrs.Attributes, true);
-        }
-        else
-          OkuManagers.Instance.Logger.LogError("Trying to merge a " + other.GetType().Name + " with a AttributeStateComponent!");
-      }
-
-      return true;
-    }
-
     public bool AfterLoad()
     {
       return true;

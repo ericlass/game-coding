@@ -129,32 +129,6 @@ namespace OkuEngine.States
       return default(T);
     }
 
-    /// <summary>
-    /// Creates a deep copy of the state including all components.
-    /// </summary>
-    /// <returns>A copy of the state.</returns>
-    public State Copy()
-    {
-      string json = JsonConvert.SerializeObject(this, OkuData.JsonSettings);
-      return JsonConvert.DeserializeObject<State>(json);
-    }
-
-    /// <summary>
-    /// Merges the components of the state with the components of the given state.
-    /// Duplicate components are merged too.
-    /// </summary>
-    /// <param name="state">The state to merge with.</param>
-    public void Merge(State state)
-    {
-      foreach (KeyValuePair<string, IStateComponent> comp in state._componentMap)
-      {
-        if (_componentMap.ContainsKey(comp.Key))
-          _componentMap[comp.Key].Merge(comp.Value);
-        else
-          Add(comp.Value);
-      }
-    }
-
     public bool AfterLoad()
     {
       _componentMap.Clear();

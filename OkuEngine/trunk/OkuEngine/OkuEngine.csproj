@@ -201,7 +201,7 @@
     <Compile Include="Driver\Audio\OpenALSoundEngine.cs" />
     <Compile Include="Driver\Renderer\OpenGLRenderer.cs" />
     <Compile Include="Rendering\Vertices.cs" />
-    <Compile Include="Geometry\Rectangle.cs" />
+    <Compile Include="Geometry\Rectangle2f.cs" />
     <Compile Include="Particles\DefaultParticleController.cs" />
     <Compile Include="Particles\ForceEffector.cs" />
     <Compile Include="Particles\IParticleController.cs" />

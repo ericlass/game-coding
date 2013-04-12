@@ -63,25 +63,6 @@ namespace OkuEngine.Actors
       return _aabb;
     }
 
-    /// <summary>
-    /// Copies the component with all of its data.
-    /// </summary>
-    /// <returns>A copy of the component.</returns>
-    public IStateComponent Copy()
-    {
-      return new AABBComponent();
-    }
-
-    /// <summary>
-    /// Merges the data of the component with the given one.
-    /// </summary>
-    /// <param name="other">The component to merge into this component.</param>
-    /// <returns>True if the merge was successfull, else false.</returns>
-    public bool Merge(IStateComponent other)
-    {
-      return true;
-    }
-
     public bool AfterLoad()
     {
       _aabbValid = false;
