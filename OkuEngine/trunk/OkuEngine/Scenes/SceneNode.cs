@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using OkuEngine.Actors;
 using OkuEngine.Events;
 using Newtonsoft.Json;
 
@@ -15,17 +16,17 @@ namespace OkuEngine.Scenes
   /// </summary>
   public class SceneNode : IStoreable
   {
-    protected SceneNodeProperties _props = null;
-    protected SceneNode _parent = null;
-    protected List<SceneNode> _children = new List<SceneNode>();
+    private int _actorId = 0;
+
+    private Actor _actor = null;
+    private SceneNode _parent = null;
+    private List<SceneNode> _children = new List<SceneNode>();
 
     /// <summary>
     /// Creates a new scene node.
     /// </summary>
     internal SceneNode()
     {
-      _props = new SceneNodeProperties();
-      _props.Transform.OnChange += new Transformation.OnChangeDelegate(Transform_OnChange);
     }
 
     /// <summary>
@@ -35,22 +36,26 @@ namespace OkuEngine.Scenes
     /// <param name="name">The name of the scene node.</param>
     internal SceneNode(int actorId)
     {
-      _props = new SceneNodeProperties(actorId);
-      _props.Transform.OnChange += new Transformation.OnChangeDelegate(Transform_OnChange);
-    }
-
-    private void Transform_OnChange(Transformation transform)
-    {
-      OkuManagers.Instance.EventManager.QueueEvent(EventTypes.SceneNodeMoved, this);
+      _actorId = actorId;
     }
 
     /// <summary>
-    /// Gets the properties of the scene node.
+    /// Gets or sets the id of the actor that is associated with the scene node.
     /// </summary>
     [JsonPropertyAttribute]
-    public SceneNodeProperties Properties
+    public int ActorId
     {
-      get { return _props; }
+      get { return _actorId; }
+      set { _actorId = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the actor that is associated with the scene node.
+    /// </summary>
+    public Actor Actor
+    {
+      get { return _actor; }
+      set { _actor = value; }
     }
 
     /// <summary>
@@ -123,8 +128,6 @@ namespace OkuEngine.Scenes
     /// <returns>True if the update was successful, else false.</returns>
     public virtual bool Update(Scene scene, float dt)
     {
-      _props.PreviousTransform.Apply(_props.Transform);
-
       foreach (SceneNode child in _children)
       {
         child.Update(scene, dt);
@@ -169,8 +172,8 @@ namespace OkuEngine.Scenes
     /// <returns>True if the node is visible, else false.</returns>
     public virtual bool IsVisible(Scene scene)
     {
-      if (_props.Actor != null)
-        return scene.IsVisible(_props.Actor.BoundingBox);
+      if (_actor != null)
+        return scene.IsVisible(_actor.BoundingBox);
 
       return false;
     }
@@ -182,15 +185,25 @@ namespace OkuEngine.Scenes
     /// <returns>True if the node was rendered successfully, else false.</returns>
     public virtual bool Render(Scene scene)
     {
-      scene.ApplyAndPushTransform(_props.Transform);
+      if (_actor == null)
+        return true;
+
+      bool transformed = false;
+      TransformComponent transComp = _actor.GetComponent<TransformComponent>(TransformComponent.ComponentName);
+      if (transComp != null)
+      {
+        scene.ApplyAndPushTransform(transComp.Transform);
+        transformed = true;
+      }
+
       try
       {
-        if (_props.Actor != null)
-          _props.Actor.Render(scene);
+        _actor.Render(scene);
       }
       finally
       {
-        scene.PopTransform();
+        if (transformed)
+          scene.PopTransform();
       }
 
       return true;
@@ -203,7 +216,17 @@ namespace OkuEngine.Scenes
     /// <returns>True if the children were rendered, else false.</returns>
     public virtual bool RenderChildren(Scene scene)
     {
-      scene.ApplyAndPushTransform(_props.Transform);
+      bool transformed = false;
+      if (_actor != null)
+      {
+        TransformComponent transComp = _actor.GetComponent<TransformComponent>(TransformComponent.ComponentName);
+        if (transComp != null)
+        {
+          scene.ApplyAndPushTransform(transComp.Transform);
+          transformed = true;
+        }
+      }
+
       try
       {
         foreach (SceneNode child in _children)
@@ -214,7 +237,8 @@ namespace OkuEngine.Scenes
       }
       finally
       {
-        scene.PopTransform();
+        if (transformed)
+          scene.PopTransform();
       }
       return true;
     }
@@ -249,10 +273,14 @@ namespace OkuEngine.Scenes
 
     public bool AfterLoad()
     {
-      if (!_props.AfterLoad())
-        return false;
-      
-      _props.Actor.SceneNode = this;
+      if (_actorId > 0)
+      {
+        _actor = OkuData.Instance.Actors[_actorId];
+        if (_actor == null)
+          return false;
+      }
+
+      _actor.SceneNode = this;
       return true;
     }
 

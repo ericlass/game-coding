@@ -155,8 +155,8 @@ namespace OkuEngine.Scenes
       {
         foreach (CollisionInfo<SceneNode> collision in collisions)
         {
-          OkuManagers.Instance.EventManager.QueueEvent(EventTypes.CollisionOccurred, collision.BodyA.Data.Properties.ActorId, collision.BodyB.Data.Properties.ActorId);
-          OkuManagers.Instance.Logger.LogInfo(Environment.TickCount + " - COLLISION: " + collision.BodyA.Data.Properties.ActorId + " <> " + collision.BodyB.Data.Properties.ActorId);
+          OkuManagers.Instance.EventManager.QueueEvent(EventTypes.CollisionOccurred, collision.BodyA.Data.ActorId, collision.BodyB.Data.ActorId);
+          OkuManagers.Instance.Logger.LogInfo(Environment.TickCount + " - COLLISION: " + collision.BodyA.Data.ActorId + " <> " + collision.BodyB.Data.ActorId);
           //collision.BodyA.Data.Properties.Transform.Translation = collision.BodyA.Data.Properties.Transform.Translation + collision.MTD;
         }
       }
@@ -180,7 +180,6 @@ namespace OkuEngine.Scenes
         {
           item.Value.Remove(actorId);
           SceneNode newNode = _layerMap[newLayerId].Add(actorId, newParent);
-          newNode.Properties.Transform = node.Properties.Transform;
           //TODO: What about the children of the node?
           return true;
         }

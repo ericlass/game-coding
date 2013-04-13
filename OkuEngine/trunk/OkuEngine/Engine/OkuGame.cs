@@ -1,17 +1,9 @@
 ﻿using System.Runtime.InteropServices;
 using System.IO;
-using System.Xml;
 using System.Windows.Forms;
-using OkuEngine.Driver.Audio;
 using OkuEngine.Resources;
-using OkuEngine.Processes;
-using OkuEngine.Events;
-using OkuEngine.Scripting;
-using OkuEngine.Driver.Renderer;
-using OkuEngine.Logging;
 using OkuEngine.Input;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace OkuEngine
 {
@@ -22,7 +14,6 @@ namespace OkuEngine
   {
     private int _mouseDelta = 0;
     private string _name = "OkuGame";
-    private int _startScene = 0;
 
     /// <summary>
     /// Creates a new game.
@@ -175,33 +166,6 @@ namespace OkuEngine
       {
         OkuManagers.Instance.Logger.LogError("Could not initialize resource cache!");
         System.Windows.Forms.Application.Exit();
-      }
-    }
-
-    /// <summary>
-    /// Loads game attributes from the given xml node.
-    /// </summary>
-    /// <param name="node">The xml node to read from.</param>
-    private void LoadGameAttribs(XmlNode node)
-    {
-      XmlNode child = node.FirstChild;
-      while (child != null)
-      {
-        switch (child.Name.ToLower())
-        {
-          case "name":
-            _name = child.FirstChild.Value;
-            break;
-
-          case "startscene":
-            _startScene = int.Parse(child.FirstChild.Value);
-            break;
-
-          default:
-            break;
-        }
-
-        child = child.NextSibling;
       }
     }
 

@@ -256,7 +256,7 @@ namespace OkuEngine.Scenes
       {
         if (!node.AfterLoad())
           return false;
-        _actorMap.Add(node.Properties.ActorId, node);
+        _actorMap.Add(node.ActorId, node);
       }
       return true;
     }

@@ -61,8 +61,8 @@ namespace OkuEngine.Api
     public double ActorGetX(int actorId)
     {
       Actor actor = GetActor(actorId);
-      if (actor != null)
-        return actor.SceneNode.Properties.Transform.Translation.X;
+      if (actor != null && actor.GetTransform() != null)
+        return actor.GetTransform().Translation.X;
       else
         return 0;
     }
@@ -75,8 +75,8 @@ namespace OkuEngine.Api
     public void ActorSetX(int actorId, double x)
     {
       Actor actor = GetActor(actorId);
-      if (actor != null)
-        actor.SceneNode.Properties.Transform.SetX((float)x);
+      if (actor != null && actor.GetTransform() != null)
+        actor.GetTransform().SetX((float)x);
     }
 
     /// <summary>
@@ -87,8 +87,8 @@ namespace OkuEngine.Api
     public double ActorGetY(int actorId)
     {
       Actor actor = GetActor(actorId);
-      if (actor != null)
-        return actor.SceneNode.Properties.Transform.Translation.Y;
+      if (actor != null && actor.GetTransform() != null)
+        return actor.GetTransform().Translation.Y;
       else
         return 0;
     }
@@ -101,8 +101,8 @@ namespace OkuEngine.Api
     public void ActorSetY(int actorId, double y)
     {
       Actor actor = GetActor(actorId);
-      if (actor != null)
-        actor.SceneNode.Properties.Transform.SetY((float)y);
+      if (actor != null && actor.GetTransform() != null)
+        actor.GetTransform().SetY((float)y);
     }
 
     /// <summary>
@@ -116,7 +116,7 @@ namespace OkuEngine.Api
       Actor actor = GetActor(actorId);
       if (actor != null)
       {
-        Transformation trans = actor.SceneNode.Properties.Transform;
+        Transformation trans = actor.GetTransform();
         Vector2f pos = trans.Translation;
         pos.X = (float)x;
         pos.Y = (float)y;
@@ -132,8 +132,8 @@ namespace OkuEngine.Api
     public double ActorGetAngle(int actorId)
     {
       Actor actor = GetActor(actorId);
-      if (actor != null)
-        return actor.SceneNode.Properties.Transform.Rotation;
+      if (actor != null && actor.GetTransform() != null)
+        return actor.GetTransform().Rotation;
       else
         return 0.0;
     }
@@ -146,8 +146,8 @@ namespace OkuEngine.Api
     public void ActorSetAngle(int actorId, double angle)
     {
       Actor actor = GetActor(actorId);
-      if (actor != null)
-        actor.SceneNode.Properties.Transform.Rotation = (float)angle;
+      if (actor != null && actor.GetTransform() != null)
+        actor.GetTransform().Rotation = (float)angle;
     }
 
     /// <summary>
