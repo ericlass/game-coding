@@ -300,19 +300,21 @@
           "States": [
             {
               "Name": "normal",
-              "Components": [
-                {
-                  "$type": "OkuEngine.Actors.AABBComponent, OkuEngine"
-                },
-                {
-                  "$type": "OkuEngine.Actors.RenderableComponent, OkuEngine",
-                  "Renderable":
+              "Components": {
+                "Components": [
                   {
-                    "$type": "OkuEngine.Rendering.RenderableImage, OkuEngine",
-                    "ImageId": 2
+                    "$type": "OkuEngine.Actors.AABBComponent, OkuEngine"
+                  },
+                  {
+                    "$type": "OkuEngine.Actors.RenderableComponent, OkuEngine",
+                    "Renderable":
+                    {
+                      "$type": "OkuEngine.Rendering.RenderableImage, OkuEngine",
+                      "ImageId": 2
+                    }
                   }
-                }
-              ]
+                ]
+              }
             }
           ]
         },
@@ -326,15 +328,17 @@
           "States": [
             {
               "Name": "normal",
-              "Components": [
-                {
-                  "$type": "OkuEngine.Actors.RenderableComponent, OkuEngine",
-                  "Renderable": {
-                    "$type": "OkuEngine.Rendering.RenderableImage, OkuEngine",
-                    "ImageId": 1
-                  },
-                }
-              ]
+              "Components": {
+                "Components": [
+                  {
+                    "$type": "OkuEngine.Actors.RenderableComponent, OkuEngine",
+                    "Renderable": {
+                      "$type": "OkuEngine.Rendering.RenderableImage, OkuEngine",
+                      "ImageId": 1
+                    },
+                  }
+                ]
+              }
             }
           ]
         },
@@ -348,15 +352,17 @@
           "States": [
             {
               "Name": "normal",
-              "Components": [
-                {
-                  "$type": "OkuEngine.Actors.RenderableComponent, OkuEngine",
-                  "Renderable": {
-                    "$type": "OkuEngine.Rendering.RenderableImage, OkuEngine",
-                    "ImageId": 1
-                  },
-                }
-              ]
+              "Components": {
+                "Components": [
+                  {
+                    "$type": "OkuEngine.Actors.RenderableComponent, OkuEngine",
+                    "Renderable": {
+                      "$type": "OkuEngine.Rendering.RenderableImage, OkuEngine",
+                      "ImageId": 1
+                    },
+                  }
+                ]
+              }
             }
           ]
         },
