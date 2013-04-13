@@ -64,7 +64,6 @@
     <Compile Include="Actors\AABBComponent.cs" />
     <Compile Include="Actors\AttributeComponent.cs" />
     <Compile Include="Actors\BoundingCircleComponent.cs" />
-    <Compile Include="Actors\HierarchicalTransformComponent.cs" />
     <Compile Include="Actors\RenderableComponent.cs" />
     <Compile Include="Actors\CollisionComponent.cs" />
     <Compile Include="Actors\TransformComponent.cs" />

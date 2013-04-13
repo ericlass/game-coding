@@ -12,7 +12,7 @@ namespace OkuEngine.Actors
     public const string ComponentName = "transform";
 
     private ComponentManager _owner = null;
-    protected Transformation _transform = new Transformation();
+    private Transformation _transform = new Transformation();
 
     public ComponentManager Owner
     {
@@ -30,11 +30,6 @@ namespace OkuEngine.Actors
     {
       get { return _transform; }
       set { _transform = value; }
-    }
-
-    public virtual Matrix3 GetWorldSpaceMatrix()
-    {
-      return _transform.AsMatrix();
     }
 
     public virtual bool AfterLoad()
