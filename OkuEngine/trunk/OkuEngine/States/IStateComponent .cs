@@ -15,7 +15,7 @@ namespace OkuEngine.States
     /// <summary>
     /// Gets or sets the ownering state of the component.
     /// </summary>
-    State Owner { get; set; }
+    ComponentManager Owner { get; set; }
 
     /// <summary>
     /// Gets the name of the component type. This must be a

@@ -17,7 +17,7 @@ namespace OkuEngine.Actors
   public class Actor : StoreableEntity, ICollidable
   {
     private StateManager _states = new StateManager();
-    private AttributeMap _attributes = new AttributeMap();
+    private ComponentManager _components = new ComponentManager();
 
     private SceneNode _sceneNode = null;
 
@@ -38,7 +38,7 @@ namespace OkuEngine.Actors
     }
 
     /// <summary>
-    /// Gets the states that are associated with the actor.
+    /// Gets or sets the states that are associated with the actor.
     /// </summary>
     [JsonPropertyAttribute]
     public StateManager States
@@ -48,12 +48,13 @@ namespace OkuEngine.Actors
     }
 
     /// <summary>
-    /// Gets the attributes of the actor.
+    /// Gets or sets the global components of the actor.
     /// </summary>
     [JsonPropertyAttribute]
-    public AttributeMap Attributes
+    public ComponentManager Components
     {
-      get { return _attributes; }
+      get { return _components; }
+      set { _components = value; }
     }
 
     /// <summary>
@@ -64,7 +65,7 @@ namespace OkuEngine.Actors
     {
       if (_states.GetCurrentState() != null)
       {
-        RenderableComponent renderable = _states.GetCurrentState().GetComponent<RenderableComponent>(RenderableComponent.ComponentName);
+        RenderableComponent renderable = _states.GetCurrentState().Components.GetComponent<RenderableComponent>(RenderableComponent.ComponentName);
         if (renderable != null && renderable.Renderable != null)
           renderable.Renderable.Render(scene);
       }
@@ -79,7 +80,7 @@ namespace OkuEngine.Actors
       {
         if (_states.GetCurrentState() != null)
         {
-          AABBComponent component = _states.GetCurrentState().GetComponent<AABBComponent>(AABBComponent.ComponentName);
+          AABBComponent component = _states.GetCurrentState().Components.GetComponent<AABBComponent>(AABBComponent.ComponentName);
           if (component != null)
             return component.GetBoundingBox();
         }
@@ -97,7 +98,7 @@ namespace OkuEngine.Actors
       {
         if (_states.GetCurrentState() != null)
         {
-          BoundingCircleComponent component = _states.GetCurrentState().GetComponent<BoundingCircleComponent>(BoundingCircleComponent.ComponentName);
+          BoundingCircleComponent component = _states.GetCurrentState().Components.GetComponent<BoundingCircleComponent>(BoundingCircleComponent.ComponentName);
           if (component != null)
             return component.GetBoundingCircle();
         }
@@ -116,7 +117,7 @@ namespace OkuEngine.Actors
       {
         if (_states.GetCurrentState() != null)
         {
-          CollisionComponent shape = _states.GetCurrentState().GetComponent<CollisionComponent>(CollisionComponent.ComponentName);
+          CollisionComponent shape = _states.GetCurrentState().Components.GetComponent<CollisionComponent>(CollisionComponent.ComponentName);
           if (shape != null && shape.Shape != null)
             return shape.Shape.Vertices;
         }
@@ -137,23 +138,48 @@ namespace OkuEngine.Actors
     }
 
     /// <summary>
-    /// Gets an attribute value for the given name. First looks at the current state.
-    /// If it does not contain an attribute with this name, checks the actors attributes.
+    /// Gets an attribute value for the given name. First looks at the attribute component of the current state.
+    /// If it does not contain an attribute with this name, checks the actors global attribute component.
     /// </summary>
     /// <param name="name">The name of the attribute.</param>
     /// <returns>The value of the attribute or null if there is no attribute with the given name.</returns>
     public AttributeValue GetAttributeValue(string name)
     {
-      if (_states.GetCurrentState().Contains(AttributeComponent.ComponentName))
+      AttributeComponent attrComp = null;
+      if (_states.GetCurrentState().Components.Contains(AttributeComponent.ComponentName))
       {
-        AttributeComponent stateAttrs = _states.GetCurrentState().GetComponent<AttributeComponent>(AttributeComponent.ComponentName);
-        if (stateAttrs != null && stateAttrs.Attributes.ContainsKey(name))
-          return stateAttrs.Attributes[name];
+        attrComp = _states.GetCurrentState().Components.GetComponent<AttributeComponent>(AttributeComponent.ComponentName);
+        if (attrComp != null && attrComp.Attributes.ContainsKey(name))
+          return attrComp.Attributes[name];
       }
-      else if (_attributes.ContainsKey(name))
-        return _attributes[name];
+
+      if (_components.Contains(AttributeComponent.ComponentName))
+      {
+        attrComp = _components.GetComponent<AttributeComponent>(AttributeComponent.ComponentName);
+        if (attrComp != null && attrComp.Attributes.ContainsKey(name))
+          return attrComp.Attributes[name];
+      }
 
       return null;
+    }
+
+    /// <summary>
+    /// Gets the component with the given name. First looks into the components of the current state.
+    /// If it does not contain such a component, it looks into the global components of the actor.
+    /// </summary>
+    /// <typeparam name="T">The type of the component to get.</typeparam>
+    /// <param name="name">The name of the component.</param>
+    /// <returns>The component for the given name, or null if there is no such component.</returns>
+    public T GetComponent<T>(string name) where T : IStateComponent
+    {
+      T component = _states.GetCurrentState().Components.GetComponent<T>(name);
+
+      if (component != null)
+        return component;
+
+      component = _components.GetComponent<T>(name);
+
+      return component;
     }
 
     public override bool AfterLoad()
@@ -163,8 +189,8 @@ namespace OkuEngine.Actors
 
       foreach (State state in _states.States)
       {
-        if (!state.Contains(BoundingCircleComponent.ComponentName))
-          state.Add(new BoundingCircleComponent());
+        if (!state.Components.Contains(BoundingCircleComponent.ComponentName))
+          state.Components.Add(new BoundingCircleComponent());
       }
 
       return true;

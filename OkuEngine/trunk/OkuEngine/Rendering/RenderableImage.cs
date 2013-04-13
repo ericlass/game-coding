@@ -18,6 +18,9 @@ namespace OkuEngine.Rendering
     private Rectangle2f _boundingBox = new Rectangle2f();
     private bool _aabbValid = false;
 
+    private Circle _circle = new Circle();
+    private bool _circleValid = false;
+
     public void Update(float dt)
     {
       //Nothing to do for an image
@@ -49,12 +52,15 @@ namespace OkuEngine.Rendering
       return _boundingBox;
     }
 
-    public IRenderable Copy()
+    public Circle GetBoundingCircle()
     {
-      RenderableImage result = new RenderableImage();
-      result._image = _image;
-      result._imageId = _imageId;
-      return result;
+      if (!_circleValid)
+      {
+        _circle = new Circle(Vector2f.Zero, (float)Math.Sqrt(_image.Width * _image.Width + _image.Height * _image.Height) * 0.5f);
+        _circleValid = true;
+      }
+
+      return _circle;
     }
 
     public bool AfterLoad()

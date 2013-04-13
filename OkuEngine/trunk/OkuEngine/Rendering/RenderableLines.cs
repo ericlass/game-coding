@@ -62,13 +62,12 @@ namespace OkuEngine.Rendering
       return _vertices.GetAABB();
     }
 
-    public IRenderable Copy()
+    public Circle GetBoundingCircle()
     {
-      RenderableLines result = new RenderableLines();
-      result._closed = _closed;
-      result._vertices = _vertices.Copy();
-      result._width = _width;
-      return result;
+      if (_vertices.Positions != null)
+        return _vertices.Positions.GetBoundingCircleCentered();
+
+      return default(Circle);
     }
 
     public bool AfterLoad()

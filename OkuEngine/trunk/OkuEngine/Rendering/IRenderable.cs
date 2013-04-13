@@ -13,7 +13,6 @@ namespace OkuEngine.Rendering
     void Update(float dt);
     void Render(Scene scene);
     Rectangle2f GetBoundingBox();
-
-    IRenderable Copy();
+    Circle GetBoundingCircle();
   }
 }

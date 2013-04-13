@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Xml;
-using System.Text;
 using OkuEngine.States;
-using OkuEngine.Geometry;
-using Newtonsoft.Json;
 
 namespace OkuEngine.Actors
 {
@@ -16,14 +11,14 @@ namespace OkuEngine.Actors
   {
     public const string ComponentName = "boundingbox";
 
-    private State _owner = null;
+    private ComponentManager _owner = null;
     private bool _aabbValid = false;
     private Rectangle2f _aabb = new Rectangle2f();
 
     /// <summary>
     /// Gets or sets the owning state of the component.
     /// </summary>
-    public State Owner
+    public ComponentManager Owner
     {
       get { return _owner; }
       set { _owner = value; }

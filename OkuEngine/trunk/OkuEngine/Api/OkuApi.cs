@@ -213,7 +213,7 @@ namespace OkuEngine.Api
       Actor actor = GetActor(actorId);
       if (actor != null)
       {
-        AttributeValue value = actor.Attributes.GetInheritedValue(attribute.Trim().ToLower());
+        AttributeValue value = actor.GetAttributeValue(attribute.Trim().ToLower());
         if (value != null)
           return value.ValueString;
         else
@@ -233,7 +233,7 @@ namespace OkuEngine.Api
       Actor actor = GetActor(actorId);
       if (actor != null)
       {
-        AttributeValue attrValue = actor.Attributes.GetInheritedValue(attribute.Trim().ToLower());
+        AttributeValue attrValue = actor.GetAttributeValue(attribute.Trim().ToLower());
         if (attrValue != null)
           attrValue.ValueString = value;
         else

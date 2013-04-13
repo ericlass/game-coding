@@ -16,13 +16,13 @@ namespace OkuEngine.Actors
   {
     public const string ComponentName = "renderable";
 
-    private State _owner = null;
+    private ComponentManager _owner = null;
     private IRenderable _renderable = null;
 
     /// <summary>
     /// Gets or sets the owning state of the component.
     /// </summary>
-    public State Owner
+    public ComponentManager Owner
     {
       get { return _owner; }
       set { _owner = value; }

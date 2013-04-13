@@ -15,13 +15,13 @@ namespace OkuEngine.Actors
   {
     public const string ComponentName = "collision";
 
-    private State _owner = null;
+    private ComponentManager _owner = null;
     private Polygon _shape = null;
 
     /// <summary>
     /// Gets or sets the owning state of the component.
     /// </summary>
-    public State Owner
+    public ComponentManager Owner
     {
       get { return _owner; }
       set { _owner = value; }

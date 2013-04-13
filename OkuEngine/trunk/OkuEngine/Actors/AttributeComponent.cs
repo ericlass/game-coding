@@ -15,13 +15,13 @@ namespace OkuEngine.Actors
   {
     public const string ComponentName = "attributes";
 
-    private State _owner = null;
+    private ComponentManager _owner = null;
     private AttributeMap _attributes = null;
 
     /// <summary>
     /// Gets or sets the owning state of the component.
     /// </summary>
-    public State Owner
+    public ComponentManager Owner
     {
       get { return _owner; }
       set { _owner = value; }
@@ -42,6 +42,7 @@ namespace OkuEngine.Actors
     public AttributeMap Attributes
     {
       get { return _attributes; }
+      set { _attributes = value; }
     }
 
     public bool AfterLoad()

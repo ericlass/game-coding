@@ -14,14 +14,14 @@ namespace OkuEngine.Actors
   {
     public const string ComponentName = "boundingcircle";
 
-    private State _owner = null;
+    private ComponentManager _owner = null;
     private Circle _circle = new Circle();
     private bool _circleValid = false;
 
     /// <summary>
     /// Gets or sets the owning state of the component.
     /// </summary>
-    public State Owner
+    public ComponentManager Owner
     {
       get { return _owner; }
       set { _owner = value; }
@@ -53,8 +53,7 @@ namespace OkuEngine.Actors
         }
         else if (renderable != null && renderable.Renderable != null)
         {
-          //TODO: This is inefficient. The renderables should create the bounding circle themselves.
-          _circle = Circle.FromAABB(renderable.Renderable.GetBoundingBox());
+          _circle = renderable.Renderable.GetBoundingCircle();
           _circleValid = true;
         }
       }

@@ -64,8 +64,10 @@
     <Compile Include="Actors\AABBComponent.cs" />
     <Compile Include="Actors\AttributeComponent.cs" />
     <Compile Include="Actors\BoundingCircleComponent.cs" />
+    <Compile Include="Actors\HierarchicalTransformComponent.cs" />
     <Compile Include="Actors\RenderableComponent.cs" />
     <Compile Include="Actors\CollisionComponent.cs" />
+    <Compile Include="Actors\TransformComponent.cs" />
     <Compile Include="Api\OkuApi.cs" />
     <Compile Include="Attributes\AttributeMap.cs" />
     <Compile Include="Animation\Animation.cs" />
@@ -170,6 +172,7 @@
     <Compile Include="OkuException.cs" />
     <Compile Include="PropertyMap.cs" />
     <Compile Include="PropertyEntry.cs" />
+    <Compile Include="States\ComponentManager.cs" />
     <Compile Include="States\IStateComponent .cs" />
     <Compile Include="States\State.cs" />
     <Compile Include="States\StateManager.cs" />
