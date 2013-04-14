@@ -62,15 +62,51 @@
               "Children": [
                 {
                   "ActorId": 1,
+                  "Transform":
+                  {
+                    "Translation" : {
+                      "X" : 100.0,
+                      "Y" : 0.0
+                    },
+                    "Rotation" : 15,
+                    "Scale" : {
+                      "X" : 1,
+                      "Y" : 1
+                    }
+                  },
                   "Children": [
                     {
                       "ActorId": 2,
+                      "Transform":
+                      {
+                        "Translation" : {
+                          "X" : 0.0,
+                          "Y" : 100.0
+                        },
+                        "Rotation" : 0,
+                        "Scale" : {
+                          "X" : 0.5,
+                          "Y" : 0.5
+                        }
+                      },
                       "Children": []
                     }
                   ]
                 },
                 {
                   "ActorId": 3,
+                  "Transform":
+                  {
+                    "Translation" : {
+                      "X" : 0.0,
+                      "Y" : 0.0
+                    },
+                    "Rotation" : 0,
+                    "Scale" : {
+                      "X" : 1,
+                      "Y" : 1
+                    }
+                  },
                   "Children": []
                 }
               ]
@@ -260,21 +296,6 @@
                       "$type": "OkuEngine.Rendering.RenderableImage, OkuEngine",
                       "ImageId": 2
                     }
-                  },
-                  {
-                    "$type": "OkuEngine.Actors.TransformComponent, OkuEngine",
-                    "Transform":
-                    {
-                      "Translation" : {
-                        "X" : 100.0,
-                        "Y" : 0.0
-                      },
-                      "Rotation" : 15,
-                      "Scale" : {
-                        "X" : 1,
-                        "Y" : 1
-                      }
-                    }
                   }
                 ]
               }
@@ -299,21 +320,6 @@
                       "$type": "OkuEngine.Rendering.RenderableImage, OkuEngine",
                       "ImageId": 1
                     },
-                  },
-                  {
-                    "$type": "OkuEngine.Actors.TransformComponent, OkuEngine",
-                    "Transform":
-                    {
-                      "Translation" : {
-                        "X" : 0.0,
-                        "Y" : -100.0
-                      },
-                      "Rotation" : 0,
-                      "Scale" : {
-                        "X" : 0.5,
-                        "Y" : 0.5
-                      }
-                    }
                   }
                 ]
               }

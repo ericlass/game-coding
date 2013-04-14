@@ -17,6 +17,7 @@ namespace OkuEngine.Scenes
   public class SceneNode : IStoreable
   {
     private int _actorId = 0;
+    private Transformation _transform = new Transformation();
 
     private Actor _actor = null;
     private SceneNode _parent = null;
@@ -47,6 +48,16 @@ namespace OkuEngine.Scenes
     {
       get { return _actorId; }
       set { _actorId = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the transformation of the scene node.
+    /// </summary>
+    [JsonPropertyAttribute]
+    public Transformation Transform
+    {
+      get { return _transform; }
+      set { _transform = value; }
     }
 
     /// <summary>
@@ -188,22 +199,14 @@ namespace OkuEngine.Scenes
       if (_actor == null)
         return true;
 
-      bool transformed = false;
-      TransformComponent transComp = _actor.GetComponent<TransformComponent>(TransformComponent.ComponentName);
-      if (transComp != null)
-      {
-        scene.ApplyAndPushTransform(transComp.Transform);
-        transformed = true;
-      }
-
+      scene.ApplyAndPushTransform(_transform);
       try
       {
         _actor.Render(scene);
       }
       finally
       {
-        if (transformed)
-          scene.PopTransform();
+        scene.PopTransform();
       }
 
       return true;
@@ -216,17 +219,7 @@ namespace OkuEngine.Scenes
     /// <returns>True if the children were rendered, else false.</returns>
     public virtual bool RenderChildren(Scene scene)
     {
-      bool transformed = false;
-      if (_actor != null)
-      {
-        TransformComponent transComp = _actor.GetComponent<TransformComponent>(TransformComponent.ComponentName);
-        if (transComp != null)
-        {
-          scene.ApplyAndPushTransform(transComp.Transform);
-          transformed = true;
-        }
-      }
-
+      scene.ApplyAndPushTransform(_transform);
       try
       {
         foreach (SceneNode child in _children)
@@ -237,8 +230,7 @@ namespace OkuEngine.Scenes
       }
       finally
       {
-        if (transformed)
-          scene.PopTransform();
+        scene.PopTransform();
       }
       return true;
     }

@@ -182,15 +182,6 @@ namespace OkuEngine.Actors
       return component;
     }
 
-    public Transformation GetTransform()
-    {
-      TransformComponent transComp = GetComponent<TransformComponent>(TransformComponent.ComponentName);
-      if (transComp != null)
-        return transComp.Transform;
-      else
-        return null;
-    }
-
     public override bool AfterLoad()
     {
       if (!_states.AfterLoad())
