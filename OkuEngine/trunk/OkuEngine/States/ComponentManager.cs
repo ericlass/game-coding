@@ -9,28 +9,20 @@ namespace OkuEngine.States
   /// <summary>
   /// Defines a manager for components. Allows fast access by name.
   /// </summary>
-  public class ComponentManager : IStoreable
+  public class ComponentManager : HashSet<IStateComponent>, IStoreable
   {
-    protected HashSet<IStateComponent> _components = new HashSet<IStateComponent>();
     protected Dictionary<string, IStateComponent> _componentMap = new Dictionary<string, IStateComponent>();
-
-    [JsonPropertyAttribute]
-    public HashSet<IStateComponent> Components
-    {
-      get { return _components; }
-      set { _components = value; }
-    }
 
     /// <summary>
     /// Adds a new component to the manager.
     /// </summary>
     /// <param name="component">The component to be added.</param>
     /// <returns>True if the component was added successfully, false if the manager already contains a component of the same type.</returns>
-    public bool Add(IStateComponent component)
+    public new bool Add(IStateComponent component)
     {
       if (!_componentMap.ContainsKey(component.ComponentTypeName))
       {
-        _components.Add(component);
+        base.Add(component);
         _componentMap.Add(component.ComponentTypeName, component);
         component.Owner = this;
         return true;
@@ -44,11 +36,11 @@ namespace OkuEngine.States
     /// </summary>
     /// <param name="component">The component to be removed.</param>
     /// <returns>True if the component was removed successfully, false if the manager does not contain the given component.</returns>
-    public bool Remove(IStateComponent component)
+    public new bool Remove(IStateComponent component)
     {
       if (_componentMap.ContainsKey(component.ComponentTypeName))
       {
-        _components.Remove(component);
+        base.Remove(component);
         _componentMap[component.ComponentTypeName].Owner = null; // Is this really needed?
         _componentMap.Remove(component.ComponentTypeName);
         return true;
@@ -64,14 +56,6 @@ namespace OkuEngine.States
     public bool Contains(string name)
     {
       return _componentMap.ContainsKey(name);
-    }
-
-    /// <summary>
-    /// Gets the number of components the manager contains.
-    /// </summary>
-    public int Count
-    {
-      get { return _components.Count; }
     }
 
     /// <summary>
@@ -106,7 +90,7 @@ namespace OkuEngine.States
     public bool AfterLoad()
     {
       _componentMap.Clear();
-      foreach (IStateComponent component in _components)
+      foreach (IStateComponent component in this)
       {
         if (!component.AfterLoad())
           return false;

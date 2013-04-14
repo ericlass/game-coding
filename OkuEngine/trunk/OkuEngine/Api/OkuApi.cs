@@ -251,7 +251,7 @@ namespace OkuEngine.Api
     /// <returns>The x component of the current viewport center.</returns>
     public double GetViewportX()
     {
-      return OkuData.Instance.SceneManager.ActiveScene.Viewport.Center.X;
+      return OkuData.Instance.Scenes.ActiveScene.Viewport.Center.X;
     }
 
     /// <summary>
@@ -260,7 +260,7 @@ namespace OkuEngine.Api
     /// <returns>The y component of the current viewport center.</returns>
     public double GetViewportY()
     {
-      return OkuData.Instance.SceneManager.ActiveScene.Viewport.Center.Y;
+      return OkuData.Instance.Scenes.ActiveScene.Viewport.Center.Y;
     }
 
     /// <summary>
@@ -270,7 +270,7 @@ namespace OkuEngine.Api
     /// <param name="y">The y component.</param>
     public void SetViewportPosition(double x, double y)
     {
-      OkuData.Instance.SceneManager.ActiveScene.Viewport.Center = new Vector2f((float)x, (float)y);
+      OkuData.Instance.Scenes.ActiveScene.Viewport.Center = new Vector2f((float)x, (float)y);
     }
 
     /// <summary>
@@ -280,10 +280,10 @@ namespace OkuEngine.Api
     /// <param name="y">The amount to move along the y axis.</param>
     public void MoveViewport(double x, double y)
     {
-      Vector2f pos = OkuData.Instance.SceneManager.ActiveScene.Viewport.Center;
+      Vector2f pos = OkuData.Instance.Scenes.ActiveScene.Viewport.Center;
       pos.X += (float)x;
       pos.Y += (float)y;
-      OkuData.Instance.SceneManager.ActiveScene.Viewport.Center = pos;
+      OkuData.Instance.Scenes.ActiveScene.Viewport.Center = pos;
     }
 
     #endregion

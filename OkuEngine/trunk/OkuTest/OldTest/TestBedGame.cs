@@ -38,8 +38,8 @@ namespace OkuTest
       Vector2f[] verts = new Vector2f[50];
       Color[] colors = new Color[verts.Length];
       Random rand = new Random();
-      int width = (int)OkuData.Instance.SceneManager.ActiveScene.Viewport.Width;
-      int height = (int)OkuData.Instance.SceneManager.ActiveScene.Viewport.Height;
+      int width = (int)OkuData.Instance.Scenes.ActiveScene.Viewport.Width;
+      int height = (int)OkuData.Instance.Scenes.ActiveScene.Viewport.Height;
       for (int i = 0; i < verts.Length; i++)
       {
         verts[i] = new Vector2f((float)(rand.NextDouble() - 0.5) * width, (float)(rand.NextDouble() - 0.5) * height);
@@ -102,7 +102,7 @@ namespace OkuTest
         _sound.Play();
 
       float speed = 200 * dt;
-      Vector2f center = OkuData.Instance.SceneManager.ActiveScene.Viewport.Center;
+      Vector2f center = OkuData.Instance.Scenes.ActiveScene.Viewport.Center;
       if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(Keys.Left))
         center.X -= speed;
       if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(Keys.Right))
@@ -113,7 +113,7 @@ namespace OkuTest
         center.Y += speed;      
 
       speed = dt;
-      Vector2f scale = OkuData.Instance.SceneManager.ActiveScene.Viewport.Scale;
+      Vector2f scale = OkuData.Instance.Scenes.ActiveScene.Viewport.Scale;
       OkuManagers.Instance.EventManager.Update(0);
       if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(Keys.Add))
       {
@@ -129,8 +129,8 @@ namespace OkuTest
       if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(Keys.NumPad0))
         scale = Vector2f.One;
       
-      OkuData.Instance.SceneManager.ActiveScene.Viewport.Center = center;
-      OkuData.Instance.SceneManager.ActiveScene.Viewport.Scale = scale;
+      OkuData.Instance.Scenes.ActiveScene.Viewport.Center = center;
+      OkuData.Instance.Scenes.ActiveScene.Viewport.Scale = scale;
     }
 
     public override void Render(int pass)
@@ -144,7 +144,7 @@ namespace OkuTest
           _text.Draw();
 
           Vector2f[] transformed = new Vector2f[_guiText.Vertices.Positions.Length];
-          OkuData.Instance.SceneManager.ActiveScene.Viewport.ScreenSpaceMatrix.Transform(_guiText.Vertices.Positions, transformed);
+          OkuData.Instance.Scenes.ActiveScene.Viewport.ScreenSpaceMatrix.Transform(_guiText.Vertices.Positions, transformed);
           OkuDrivers.Instance.Renderer.DrawMesh(transformed, _guiText.Vertices.TexCoords, _guiText.Vertices.Colors, _guiText.Vertices.Positions.Length, _guiText.Mode, _guiText.Texture);
           break;
 

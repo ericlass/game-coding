@@ -10,6 +10,7 @@ namespace OkuEngine.Input
   /// <summary>
   /// Defines the binding of a single key to an event.
   /// </summary>
+  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class KeyBinding : IStoreable
   {
     private Keys _key = default(Keys);

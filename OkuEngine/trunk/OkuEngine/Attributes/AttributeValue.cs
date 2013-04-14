@@ -9,6 +9,7 @@ namespace OkuEngine.Attributes
   /// <summary>
   /// Defines a single attribute value of a specific type.
   /// </summary>
+  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class AttributeValue : IStoreable
   {
     private string _name = null;

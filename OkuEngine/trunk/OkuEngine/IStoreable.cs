@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 
 namespace OkuEngine
 {
-  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public interface IStoreable
   {
     bool AfterLoad();

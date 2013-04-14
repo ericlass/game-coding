@@ -187,7 +187,7 @@ namespace OkuEngine.Actors
       if (!_states.AfterLoad())
         return false;
 
-      foreach (State state in _states.States)
+      foreach (State state in _states.Items)
       {
         if (!state.Components.Contains(BoundingCircleComponent.ComponentName))
           state.Components.Add(new BoundingCircleComponent());

@@ -10,6 +10,7 @@ namespace OkuEngine.States
   /// <summary>
   /// Handles a set of entity states.
   /// </summary>
+  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class StateManager : IStoreable
   {
     /// <summary>
@@ -18,7 +19,7 @@ namespace OkuEngine.States
     public delegate void StateChangedDelegate();
 
     private string _defaultName = null;
-    private HashSet<State> _states = new HashSet<State>();
+    private HashSet<State> _items = new HashSet<State>();
 
     private Dictionary<string, State> _stateMap = new Dictionary<string, State>();
     private string _previousStateName = null;
@@ -44,10 +45,10 @@ namespace OkuEngine.States
     }
 
     [JsonPropertyAttribute]
-    public HashSet<State> States
+    public HashSet<State> Items
     {
-      get { return _states; }
-      set { _states = value; }
+      get { return _items; }
+      set { _items = value; }
     }
 
     /// <summary>
@@ -105,7 +106,7 @@ namespace OkuEngine.States
     {
       if (!_stateMap.ContainsKey(state.Name))
       {
-        _states.Add(state);
+        _items.Add(state);
         _stateMap.Add(state.Name, state);
         return true;
       }
@@ -119,7 +120,7 @@ namespace OkuEngine.States
     /// <returns>True if the state was removed, false if the manager did not contain the state.</returns>
     public bool Remove(State state)
     {
-      _states.Remove(state);
+      _items.Remove(state);
       return _stateMap.Remove(state.Name);
     }
 
@@ -128,16 +129,8 @@ namespace OkuEngine.States
     /// </summary>
     public void Clear()
     {
-      _states.Clear();
+      _items.Clear();
       _stateMap.Clear();
-    }
-
-    /// <summary>
-    /// Gets the number of states the manager contains.
-    /// </summary>
-    public int Count
-    {
-      get { return _states.Count; }
     }
 
     public bool AfterLoad()
@@ -146,7 +139,7 @@ namespace OkuEngine.States
       _previousStateName = _defaultName;
 
       _stateMap.Clear();
-      foreach (State state in _states)
+      foreach (State state in _items)
       {
         if (!state.AfterLoad())
           return false;

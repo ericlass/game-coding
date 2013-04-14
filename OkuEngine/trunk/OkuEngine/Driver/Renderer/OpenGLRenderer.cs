@@ -1131,7 +1131,7 @@ namespace OkuEngine.Driver.Renderer
 
     public Vector2f ScreenToWorld(int x, int y)
     {
-      return OkuData.Instance.SceneManager.ActiveScene.Viewport.ScreenSpaceMatrix.Transform(ScreenToDisplay(x, y));
+      return OkuData.Instance.Scenes.ActiveScene.Viewport.ScreenSpaceMatrix.Transform(ScreenToDisplay(x, y));
     }
 
     public void BeginScreenSpace()

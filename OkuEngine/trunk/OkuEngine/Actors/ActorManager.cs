@@ -9,9 +9,8 @@ namespace OkuEngine.Actors
   /// <summary>
   /// Manages actors.
   /// </summary>
-  public class ActorManager : IStoreable
+  public class ActorManager : HashSet<Actor>, IStoreable
   {
-    private HashSet<Actor> _actors = new HashSet<Actor>();
     private Dictionary<int, Actor> _actorMap = new Dictionary<int, Actor>();
 
     /// <summary>
@@ -27,12 +26,12 @@ namespace OkuEngine.Actors
     /// </summary>
     /// <param name="actor">The actor to add.</param>
     /// <returns>True if the actor was added, false if there already is a actor with the same id.</returns>
-    public bool Add(Actor actor)
+    public new bool Add(Actor actor)
     {
       if (_actorMap.ContainsKey(actor.Id))
         return false;
 
-      _actors.Add(actor);
+      base.Add(actor);
       _actorMap.Add(actor.Id, actor);
 
       return true;
@@ -43,20 +42,10 @@ namespace OkuEngine.Actors
     /// </summary>
     /// <param name="actor">The actor to be removed.</param>
     /// <returns>True if the actor was removed, false if the manager did not contain the actor.</returns>
-    public bool Remove(Actor actor)
+    public new bool Remove(Actor actor)
     {
-      _actors.Remove(actor);
+      base.Remove(actor);
       return _actorMap.Remove(actor.Id);
-    }
-
-    /// <summary>
-    /// Gets or sets the actor of the manager.
-    /// </summary>
-    [JsonPropertyAttribute]
-    public HashSet<Actor> Actors
-    {
-      get { return _actors; }
-      set { _actors = value; }
     }
 
     /// <summary>
@@ -78,7 +67,7 @@ namespace OkuEngine.Actors
     public bool AfterLoad()
     {
       int maxId = -1;
-      foreach (Actor actor in _actors)
+      foreach (Actor actor in this)
       {
         if (!actor.AfterLoad())
           return false;

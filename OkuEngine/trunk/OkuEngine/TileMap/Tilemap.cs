@@ -319,7 +319,7 @@ namespace OkuEngine
     {
       int left, right, top, bottom;
       
-      ViewPort view = OkuData.Instance.SceneManager.ActiveScene.Viewport;
+      ViewPort view = OkuData.Instance.Scenes.ActiveScene.Viewport;
       WorldToTile(view.Left, view.Top, out left, out top);
       WorldToTile(view.Right, view.Bottom, out right, out bottom);
 

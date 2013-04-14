@@ -68,7 +68,7 @@ namespace OkuEngine
     private EntityManager<ImageContent> _images = new EntityManager<ImageContent>("images", "image", KeySequence.ImageSequence);
     private EntityManager<Animation> _animations = new EntityManager<Animation>("animations", "animation", KeySequence.AnimationSequence);
     private ActorManager _actors = new ActorManager();
-    private SceneManager _sceneManager = new SceneManager();
+    private SceneManager _scenes = new SceneManager();
 
     public bool AfterLoad()
     {
@@ -87,7 +87,7 @@ namespace OkuEngine
       if (!_actors.AfterLoad())
         return false;
 
-      if (!_sceneManager.AfterLoad())
+      if (!_scenes.AfterLoad())
         return false;
 
       return true;
@@ -118,10 +118,10 @@ namespace OkuEngine
     /// Gets the scene manager.
     /// </summary>
     [JsonPropertyAttribute]
-    public SceneManager SceneManager
+    public SceneManager Scenes
     {
-      get { return _sceneManager; }
-      set { _sceneManager = value; }
+      get { return _scenes; }
+      set { _scenes = value; }
     }
 
     /// <summary>

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 using OkuEngine.Collections;
+using Newtonsoft.Json;
 
 namespace OkuEngine.Attributes
 {
   /// <summary>
   /// Defines an inheriting dictionary of attribute names to attribute values.
   /// </summary>
+  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class AttributeMap : InheritingDictionary<string, AttributeValue>, IStoreable
   {
     /// <summary>

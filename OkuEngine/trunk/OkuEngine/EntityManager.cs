@@ -11,10 +11,8 @@ namespace OkuEngine
   /// management and loading and saving of entities.
   /// </summary>
   /// <typeparam name="T">The type of entities to be managed.</typeparam>
-  [JsonObjectAttribute(MemberSerialization.OptIn)]
-  public class EntityManager<T> : IStoreable where T : StoreableEntity, new()
+  public class EntityManager<T> : HashSet<T>, IStoreable where T : StoreableEntity, new()
   {
-    protected HashSet<T> _entities = new HashSet<T>();
     protected Dictionary<int, T> _entityMap = new Dictionary<int, T>();
     private string _groupName = null;
     private string _entityName = null;
@@ -31,13 +29,6 @@ namespace OkuEngine
       _groupName = groupName;
       _entityName = entityName;
       _sequenceName = sequenceName;
-    }
-
-    [JsonPropertyAttribute]
-    public HashSet<T> Entities
-    {
-      get { return _entities; }
-      set { _entities = value; }
     }
 
     /// <summary>
@@ -69,11 +60,11 @@ namespace OkuEngine
     /// </summary>
     /// <param name="entity">The entity to be added.</param>
     /// <returns>True if the entity was added, false if there already is an entity with the same id.</returns>
-    public bool Add(T entity)
+    public new bool Add(T entity)
     {
       if (!_entityMap.ContainsKey(entity.Id))
       {
-        _entities.Add(entity);
+        base.Add(entity);
         _entityMap.Add(entity.Id, entity);
         return true;
       }
@@ -85,9 +76,9 @@ namespace OkuEngine
     /// </summary>
     /// <param name="entity">The entity to be removed.</param>
     /// <returns>True if the entity was removed, false if the manager did not contain the entity.</returns>
-    public bool Remove(T entity)
+    public new bool Remove(T entity)
     {
-      return _entityMap.Remove(entity.Id) || _entities.Remove(entity);
+      return _entityMap.Remove(entity.Id) || base.Remove(entity);
     }
 
     /// <summary>
@@ -110,7 +101,7 @@ namespace OkuEngine
     {
       _entityMap.Clear();
       int maxId = -1;
-      foreach (T entity in _entities)
+      foreach (T entity in this)
       {
         if (!entity.AfterLoad())
           return false;

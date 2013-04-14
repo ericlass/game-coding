@@ -141,7 +141,6 @@
     <Compile Include="Scenes\SceneLayer.cs" />
     <Compile Include="Scenes\SceneManager.cs" />
     <Compile Include="Scenes\SceneNode.cs" />
-    <Compile Include="Scenes\SceneNodeProperties.cs" />
     <Compile Include="Actors\ActorManager.cs" />
     <Compile Include="Scripting\Behavior.cs" />
     <Compile Include="Scripting\BehaviorManager.cs" />

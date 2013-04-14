@@ -185,7 +185,7 @@ namespace OkuEngine
     public void DoUpdate(float dt)
     {
       //Update scene (previous transforms...)
-      OkuData.Instance.SceneManager.ActiveScene.Update(dt);
+      OkuData.Instance.Scenes.ActiveScene.Update(dt);
 
       //Update script engine (global timedelta value)
       OkuManagers.Instance.ScriptManager.Update(dt);
@@ -228,7 +228,7 @@ namespace OkuEngine
         for (int i = 0; i < OkuDrivers.Instance.Renderer.RenderPasses; i++)
         {
           OkuDrivers.Instance.Renderer.Begin(i);
-          OkuData.Instance.SceneManager.ActiveScene.Render();
+          OkuData.Instance.Scenes.ActiveScene.Render();
           Render(i);
           OkuDrivers.Instance.Renderer.End(i);
         }
@@ -236,7 +236,7 @@ namespace OkuEngine
       else
       {
         OkuDrivers.Instance.Renderer.Begin(0);
-        OkuData.Instance.SceneManager.ActiveScene.Render();
+        OkuData.Instance.Scenes.ActiveScene.Render();
         Render(0);
         OkuDrivers.Instance.Renderer.End(0);
       }
