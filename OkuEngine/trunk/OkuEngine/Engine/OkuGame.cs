@@ -158,6 +158,10 @@ namespace OkuEngine
 
           OkuManagers.Instance.InputManager.AfterLoad();
 
+          // JSON Serialiazing for tests
+          /*string json = JsonConvert.SerializeObject(OkuData.Instance, Formatting.Indented, OkuData.JsonSettings);
+          Clipboard.SetText(json);*/
+
           //TODO: Remove
           Initialize();
         }

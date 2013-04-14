@@ -90,6 +90,10 @@ namespace OkuEngine
       if (!_scenes.AfterLoad())
         return false;
 
+      foreach (KeyBinding binding in _keyBindings)
+        if (!binding.AfterLoad())
+          return false;
+
       return true;
     }
 
@@ -115,13 +119,23 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Gets the scene manager.
+    /// Gets the manager that stores all user defined events.
     /// </summary>
     [JsonPropertyAttribute]
-    public SceneManager Scenes
+    public EntityManager<UserEvent> UserEvents
     {
-      get { return _scenes; }
-      set { _scenes = value; }
+      get { return _userEvents; }
+      set { _userEvents = value; }
+    }
+
+    /// <summary>
+    /// Gets the manager that contains all behaviors.
+    /// </summary>
+    [JsonPropertyAttribute]
+    public EntityManager<Behavior> Behaviors
+    {
+      get { return _behaviors; }
+      set { _behaviors = value; }
     }
 
     /// <summary>
@@ -145,26 +159,6 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Gets the manager that stores all user defined events.
-    /// </summary>
-    [JsonPropertyAttribute]
-    public EntityManager<UserEvent> UserEvents
-    {
-      get { return _userEvents; }
-      set { _userEvents = value; }
-    }
-
-    /// <summary>
-    /// Gets the manager that contains all behaviors.
-    /// </summary>
-    [JsonPropertyAttribute]
-    public EntityManager<Behavior> Behaviors
-    {
-      get { return _behaviors; }
-      set { _behaviors = value; }
-    }
-
-    /// <summary>
     /// Gets the manager that contains all actors.
     /// </summary>
     [JsonPropertyAttribute]
@@ -172,6 +166,16 @@ namespace OkuEngine
     {
       get { return _actors; }
       set { _actors = value; }
+    }
+
+    /// <summary>
+    /// Gets the scene manager.
+    /// </summary>
+    [JsonPropertyAttribute]
+    public SceneManager Scenes
+    {
+      get { return _scenes; }
+      set { _scenes = value; }
     }
 
     /// <summary>

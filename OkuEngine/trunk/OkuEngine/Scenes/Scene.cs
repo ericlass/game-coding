@@ -157,7 +157,6 @@ namespace OkuEngine.Scenes
         {
           OkuManagers.Instance.EventManager.QueueEvent(EventTypes.CollisionOccurred, collision.BodyA.Data.ActorId, collision.BodyB.Data.ActorId);
           OkuManagers.Instance.Logger.LogInfo(Environment.TickCount + " - COLLISION: " + collision.BodyA.Data.ActorId + " <> " + collision.BodyB.Data.ActorId);
-          //collision.BodyA.Data.Properties.Transform.Translation = collision.BodyA.Data.Properties.Transform.Translation + collision.MTD;
         }
       }
 

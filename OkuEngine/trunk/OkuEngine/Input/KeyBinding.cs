@@ -48,7 +48,7 @@ namespace OkuEngine.Input
 
     public bool AfterLoad()
     {
-      throw new NotImplementedException();
+      return true;
     }
 
   }

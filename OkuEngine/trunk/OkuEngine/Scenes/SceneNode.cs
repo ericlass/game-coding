@@ -14,6 +14,7 @@ namespace OkuEngine.Scenes
   /// by special scene node. If you override one of these methods
   /// make sure to call the base method.
   /// </summary>
+  [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class SceneNode : IStoreable
   {
     private int _actorId = 0;
