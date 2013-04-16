@@ -190,7 +190,8 @@ namespace OkuEngine
     {
       Translate(transform.Translation);
       Scale(transform.Scale);
-      Rotate(transform.Rotation);
+      //Rotation must be negated to match OpenGLs Matrix!
+      Rotate(-transform.Rotation);
     }
 
     /// <summary>
