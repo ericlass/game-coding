@@ -73,14 +73,15 @@
     <Compile Include="Animation\Easing.cs" />
     <Compile Include="Animation\EasingController.cs" />
     <Compile Include="Animation\InertialMovement.cs" />
-    <Compile Include="Collision\AABBPrecisePhaseDetector.cs" />
     <Compile Include="Collision\Body.cs" />
+    <Compile Include="Collision\BoundingCirclePrecisePhaseDetector.cs" />
     <Compile Include="Collision\BroadPhaseDetector.cs" />
     <Compile Include="Collision\CollisionInfo.cs" />
     <Compile Include="Collections\PairList.cs" />
     <Compile Include="Collision\CollisionWorld.cs" />
     <Compile Include="Collision\ICollidable.cs" />
     <Compile Include="Collision\NoBroadPhaseDetector.cs" />
+    <Compile Include="Collision\NoPrecisePhaseDetector.cs" />
     <Compile Include="Collision\PrecisePhaseDetector.cs" />
     <Compile Include="Driver\Audio\AudioSettings.cs" />
     <Compile Include="Driver\Audio\NullSoundEngine.cs" />

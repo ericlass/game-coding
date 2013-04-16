@@ -5,29 +5,29 @@ using System.Text;
 
 namespace OkuEngine.Collision
 {
-  public class NoBroadPhaseDetector<T> : BroadPhaseDetector<T>
+  public class NoBroadPhaseDetector : BroadPhaseDetector
   {
-    private List<Body<T>> _bodies = new List<Body<T>>();
+    private List<Body> _bodies = new List<Body>();
 
-    public override void AddBody(Body<T> body)
+    public override void AddBody(Body body)
     {
       _bodies.Add(body);
     }
 
-    public override void UpdateBody(Body<T> body)
+    public override void UpdateBody(Body body)
     {     
     }
 
-    public override void RemoveBody(Body<T> body)
+    public override void RemoveBody(Body body)
     {
       _bodies.Remove(body);
     }
 
-    public override List<Body<T>> GetCollisionCandidates(Body<T> body)
+    public override List<Body> GetCollisionCandidates(Body body)
     {
-      List<Body<T>> result = new List<Body<T>>();
+      List<Body> result = new List<Body>();
 
-      foreach (Body<T> cand in _bodies)
+      foreach (Body cand in _bodies)
       {
         if (cand != body && cand.GroupId == body.GroupId)
         {

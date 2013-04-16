@@ -10,13 +10,13 @@ namespace OkuEngine.Collision
   /// Also, the broad phase detector is the only one who cares about the group id as this is some kind of broad filter too.
   /// </summary>
   /// <typeparam name="T"></typeparam>
-  public abstract class BroadPhaseDetector<T>
+  public abstract class BroadPhaseDetector
   {
-    public abstract void AddBody(Body<T> body); //Is called when body is added to world
-    public abstract void UpdateBody(Body<T> body); //Is called when body moves somehow
-    public abstract void RemoveBody(Body<T> body); //Is called wheb body is removed from world
+    public abstract void AddBody(Body body); //Is called when body is added to world
+    public abstract void UpdateBody(Body body); //Is called when body moves somehow
+    public abstract void RemoveBody(Body body); //Is called wheb body is removed from world
     public abstract void Clear();
 
-    public abstract List<Body<T>> GetCollisionCandidates(Body<T> body);
+    public abstract List<Body> GetCollisionCandidates(Body body);
   }
 }

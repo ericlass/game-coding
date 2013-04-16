@@ -182,6 +182,25 @@ namespace OkuEngine.Actors
       return component;
     }
 
+    /// <summary>
+    /// Checks if the their is a global or state component with the given name in the actor.
+    /// </summary>
+    /// <param name="name">The name of the actor.</param>
+    /// <returns>True if the global components or any states contain a component with the given name, else false.</returns>
+    public bool ContainsComponent(string name)
+    {
+      foreach (State state in _states.Items)
+      {
+        if (state.Components.Contains(name))
+          return true;
+      }
+
+      if (_components.Contains(name))
+        return true;
+
+      return false;
+    }
+
     public override bool AfterLoad()
     {
       if (!_states.AfterLoad())
@@ -192,6 +211,8 @@ namespace OkuEngine.Actors
         if (!state.Components.Contains(BoundingCircleComponent.ComponentName))
           state.Components.Add(new BoundingCircleComponent());
       }
+
+      _components.AfterLoad();
 
       return true;
     }

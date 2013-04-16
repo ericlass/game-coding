@@ -128,7 +128,7 @@ namespace OkuEngine.Scenes
     /// Updates the layer and all actors inside it.
     /// </summary>
     /// <param name="scene">The scenen to use.</param>
-    /// <param name="dt">The time passed since the last frame in secoonds.</param>
+    /// <param name="dt">The time passed since the last frame in seconds.</param>
     public void Update(Scene scene, float dt)
     {
       if (_backdrop != null)

@@ -23,12 +23,14 @@ namespace OkuEngine.Scenes
     private Actor _actor = null;
     private SceneNode _parent = null;
     private List<SceneNode> _children = new List<SceneNode>();
+    private List<SceneNode> _allChildren = new List<SceneNode>();
 
     /// <summary>
     /// Creates a new scene node.
     /// </summary>
     internal SceneNode()
     {
+      Init();
     }
 
     /// <summary>
@@ -39,6 +41,23 @@ namespace OkuEngine.Scenes
     internal SceneNode(int actorId)
     {
       _actorId = actorId;
+      Init();
+    }
+
+    private void Init()
+    {
+      _transform.OnChange += new Transformation.OnChangeDelegate(_transform_OnChange);
+    }
+
+    private void _transform_OnChange(Transformation transform)
+    {
+      OkuManagers.Instance.EventManager.QueueEvent(EventTypes.SceneNodeMoved, this);
+      _allChildren.Clear();
+      GetAllChildren(_allChildren);
+      foreach (SceneNode child in _allChildren)
+      {
+        OkuManagers.Instance.EventManager.QueueEvent(EventTypes.SceneNodeMoved, child);
+      }
     }
 
     /// <summary>
@@ -204,6 +223,12 @@ namespace OkuEngine.Scenes
       try
       {
         _actor.Render(scene);
+
+        BoundingCircleComponent comp = _actor.GetComponent<BoundingCircleComponent>(BoundingCircleComponent.ComponentName);
+        if (comp != null)
+        {
+          OkuDrivers.Instance.Renderer.DrawLines(comp.GetBoundingCircle().GetPoints(16), Color.Green, 16, 1.0f, OkuEngine.Driver.Renderer.VertexInterpretation.PolygonClosed);
+        }
       }
       finally
       {
@@ -264,6 +289,36 @@ namespace OkuEngine.Scenes
       }
     }
 
+    /// <summary>
+    /// Gets the matrix that transforms the scene node into world 
+    /// space taking into account hierarchical transforms of the parents.
+    /// </summary>
+    /// <returns>The world transformation matrix.</returns>
+    public Matrix3 GetWorldMatrix()
+    {
+      List<Matrix3> transforms = new List<Matrix3>();
+
+      SceneNode node = this;
+      while (node != null)
+      {
+        transforms.Add(node.Transform.AsMatrix());
+        node = node.Parent;
+      }
+
+      Matrix3 result = Matrix3.Identity;
+      for (int i = transforms.Count - 1; i >= 0; i--)
+      {
+        result = result * transforms[i];
+      }
+
+      return result;
+
+      /*Matrix3 result = _transform.AsMatrix();
+      if (_parent != null)
+        result = result * _parent.GetWorldMatrix();
+      return result;*/
+    }
+
     public bool AfterLoad()
     {
       if (_actorId > 0)
@@ -272,6 +327,10 @@ namespace OkuEngine.Scenes
         if (_actor == null)
           return false;
       }
+
+      List<SceneNode> childrenCopy = new List<SceneNode>(_children);
+      foreach (SceneNode child in childrenCopy)
+        child.SetParent(this);
 
       _actor.SceneNode = this;
       return true;

@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using OkuEngine.Scenes;
-using OkuEngine.Resources;
 using OkuEngine.Actors;
 using OkuEngine.Input;
 using OkuEngine.Events;
 using OkuEngine.Scripting;
-using OkuEngine.Collision;
 using OkuEngine.Driver.Renderer;
 using OkuEngine.Driver.Audio;
 using Newtonsoft.Json;

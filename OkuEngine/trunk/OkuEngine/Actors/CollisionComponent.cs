@@ -47,7 +47,10 @@ namespace OkuEngine.Actors
 
     public bool AfterLoad()
     {
-      return _shape.AfterLoad();
+      if (_shape != null)
+        return _shape.AfterLoad();
+      else
+        return true;
     }
 
   }

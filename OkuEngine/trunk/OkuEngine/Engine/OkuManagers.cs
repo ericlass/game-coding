@@ -28,8 +28,6 @@ namespace OkuEngine
     }
 
     private InputBase _input = null;
-    private ISoundEngine _sound = null;
-    private IRenderer _renderer = null;
     private ProcessManager _processManager = null;
     private IEventManager _eventManager = null;
     private ScriptManager _scriptManager = null;
@@ -75,24 +73,6 @@ namespace OkuEngine
     {
       get { return _resources; }
       set { _resources = value; }
-    }
-
-    /// <summary>
-    /// Gets or sets the sound engine that is used.
-    /// </summary>
-    public ISoundEngine SoundEngine
-    {
-      get { return _sound; }
-      set { _sound = value; }
-    }
-
-    /// <summary>
-    /// Gets or sets the renderer that is used.
-    /// </summary>
-    public IRenderer Renderer
-    {
-      get { return _renderer; }
-      set { _renderer = value; }
     }
 
     /// <summary>

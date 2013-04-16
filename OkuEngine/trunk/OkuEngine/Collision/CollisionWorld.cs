@@ -3,41 +3,56 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OkuEngine.Collections;
+using OkuEngine.Events;
+using OkuEngine.Scenes;
 
 namespace OkuEngine.Collision
 {
-  public class CollisionWorld<T>
+  public class CollisionWorld
   {
-    private HashSet<Body<T>> _bodies = new HashSet<Body<T>>();
-    private BroadPhaseDetector<T> _broadDetector = null;
-    private PrecisePhaseDetector<T> _preciseDetector = null;
-    private HashSet<Body<T>> _updatedBodies = new HashSet<Body<T>>();
-    private PairList<Body<T>> _collidedPairs = new PairList<Body<T>>();
+    private HashSet<Body> _bodies = new HashSet<Body>();
+    private BroadPhaseDetector _broadDetector = null;
+    private PrecisePhaseDetector _preciseDetector = null;
+    private HashSet<Body> _updatedBodies = new HashSet<Body>();
+    private PairList<Body> _collidedPairs = new PairList<Body>();
+    private Dictionary<int, Body> _actorBodyMap = new Dictionary<int, Body>();
 
-    public CollisionWorld(BroadPhaseDetector<T> broadDetector, PrecisePhaseDetector<T> preciseDetector)
+    public CollisionWorld(BroadPhaseDetector broadDetector, PrecisePhaseDetector preciseDetector)
     {
       _broadDetector = broadDetector;
       _preciseDetector = preciseDetector;
+
+      OkuManagers.Instance.EventManager.AddListener(EventTypes.SceneNodeMoved, new EventListenerDelegate(SceneNodeMovedEventHandler));
     }
 
-    public void AddBody(Body<T> body)
+    private void SceneNodeMovedEventHandler(int eventType, params object[] eventData)
+    {
+      if (eventType == EventTypes.SceneNodeMoved)
+      {
+        SceneNode node = eventData[0] as SceneNode;
+        if (_actorBodyMap.ContainsKey(node.ActorId))
+        {
+          Body body = _actorBodyMap[node.ActorId];
+          _broadDetector.UpdateBody(body);
+          _updatedBodies.Add(body);
+        }
+      }
+    }
+
+    public void AddBody(Body body)
     {
       _bodies.Add(body);
       _updatedBodies.Add(body);
       _broadDetector.AddBody(body);
+      _actorBodyMap.Add(body.SceneNode.ActorId, body);
     }
 
-    public void UpdateBody(Body<T> body)
-    {
-      _broadDetector.UpdateBody(body);
-      _updatedBodies.Add(body);
-    }
-
-    public void RemoveBody(Body<T> body)
+    public void RemoveBody(Body body)
     {
       _broadDetector.RemoveBody(body);
       _updatedBodies.Remove(body);
       _bodies.Remove(body);
+      _actorBodyMap.Remove(body.SceneNode.ActorId);
     }
 
     public void Clear()
@@ -46,20 +61,21 @@ namespace OkuEngine.Collision
       _updatedBodies.Clear();
       _collidedPairs.Clear();
       _broadDetector.Clear();
+      _actorBodyMap.Clear();
     }
 
-    public bool GetCollisions(List<CollisionInfo<T>> collisions)
+    public bool GetCollisions(List<CollisionInfo> collisions)
     {
       collisions.Clear();
       _collidedPairs.Clear();
-      foreach (Body<T> body in _updatedBodies)
+      foreach (Body body in _updatedBodies)
       {
-        List<Body<T>> candidates = _broadDetector.GetCollisionCandidates(body);
-        foreach (Body<T> candidate in candidates)
+        List<Body> candidates = _broadDetector.GetCollisionCandidates(body);
+        foreach (Body candidate in candidates)
         {
           if (!_collidedPairs.Contains(body, candidate))
           {
-            CollisionInfo<T> info = _preciseDetector.GetCollisionInfo(body, candidate);
+            CollisionInfo info = _preciseDetector.GetCollisionInfo(body, candidate);
             if (info != null)
             {
               collisions.Add(info);

@@ -5,6 +5,7 @@ using System.Text;
 using System.Drawing;
 using OkuEngine.Events;
 using OkuEngine.Collision;
+using OkuEngine.Actors;
 using Newtonsoft.Json;
 
 namespace OkuEngine.Scenes
@@ -21,7 +22,7 @@ namespace OkuEngine.Scenes
     private Matrix3 _currentTransform = Matrix3.Identity;
     private ViewPort _viewport = new ViewPort(1024, 768);
     private bool _active = false;
-    private CollisionWorld<SceneNode> _collisionWorld = null;    
+    private CollisionWorld _collisionWorld = null;    
 
     public Scene()
     {
@@ -43,7 +44,7 @@ namespace OkuEngine.Scenes
     private void Init()
     {
       _viewport.Change += new ViewPortChangeEventHandler(_viewport_Change);
-      _collisionWorld = new CollisionWorld<SceneNode>(new NoBroadPhaseDetector<SceneNode>(), new AABBPrecisePhaseDetector<SceneNode>());
+      _collisionWorld = new CollisionWorld(new NoBroadPhaseDetector(), new BoundingCirclePrecisePhaseDetector());
     }
 
     [JsonPropertyAttribute]
@@ -150,13 +151,13 @@ namespace OkuEngine.Scenes
         item.Value.Update(this, dt);
       }
 
-      List<CollisionInfo<SceneNode>> collisions = new List<CollisionInfo<SceneNode>>();
+      List<CollisionInfo> collisions = new List<CollisionInfo>();
       if (_collisionWorld.GetCollisions(collisions))
       {
-        foreach (CollisionInfo<SceneNode> collision in collisions)
+        foreach (CollisionInfo collision in collisions)
         {
-          OkuManagers.Instance.EventManager.QueueEvent(EventTypes.CollisionOccurred, collision.BodyA.Data.ActorId, collision.BodyB.Data.ActorId);
-          OkuManagers.Instance.Logger.LogInfo(Environment.TickCount + " - COLLISION: " + collision.BodyA.Data.ActorId + " <> " + collision.BodyB.Data.ActorId);
+          OkuManagers.Instance.EventManager.QueueEvent(EventTypes.CollisionOccurred, collision.BodyA.SceneNode.ActorId, collision.BodyB.SceneNode.ActorId);
+          OkuManagers.Instance.Logger.LogInfo(Environment.TickCount + " - COLLISION: " + collision.BodyA.SceneNode.ActorId + " <> " + collision.BodyB.SceneNode.ActorId);
         }
       }
 
@@ -295,11 +296,20 @@ namespace OkuEngine.Scenes
 
     public override bool AfterLoad()
     {
+      _collisionWorld.Clear();
+
       foreach (SceneLayer layer in _layers)
       {
         if (!layer.AfterLoad())
           return false;
         _layerMap.Add(layer.Id, layer);
+
+        List<SceneNode> nodes = layer.AllNodes;
+        foreach (SceneNode node in nodes)
+        {
+          if (node.Actor != null && node.Actor.ContainsComponent(CollisionComponent.ComponentName))
+            _collisionWorld.AddBody(new Body(node, layer.Id));
+        }
       }
       return true;
     }

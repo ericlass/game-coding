@@ -3,24 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OkuEngine.Geometry;
+using OkuEngine.Scenes;
+using OkuEngine.Actors;
 
 namespace OkuEngine.Collision
 {
   /// <summary>
   /// Defines a single bodie in the collision world
   /// </summary>
-  /// <typeparam name="T">The type of data to store in the body.</typeparam>
-  public class Body<T>
+  public class Body
   {
     private int _groupId = 0;
-    private Transformation _previousTransform = Transformation.Identity;
-    private Transformation _transform = Transformation.Identity;
-    private Rectangle2f _boundingBox = new Rectangle2f();
-    private Vector2f[] _shape = null;
-    private T _data = default(T);
+    private SceneNode _sceneNode = null;
 
     private Vector2f[] _transBox = new Vector2f[4];
     private Vector2f[] _transShape = null;
+
+    private Vector2f[] _testPoints = new Vector2f[] { Vector2f.Zero, new Vector2f(1.0f, 0.0f) };
+    private Vector2f[] _transPoints = new Vector2f[2];
+
+    public Body(SceneNode sceneNode)
+    {
+      _sceneNode = sceneNode;
+    }
+
+    public Body(SceneNode sceneNode, int groupId)
+    {
+      _sceneNode = sceneNode;
+      _groupId = groupId;
+    }
 
     /// <summary>
     /// Gets or sets a group id for the body that is used for coarse
@@ -36,28 +47,23 @@ namespace OkuEngine.Collision
     /// <summary>
     /// Gets or sets the current transformation of the body.
     /// </summary>
-    public Transformation Transform //Transforms objects space AABB and Shape to world space
+    public Matrix3 WorldTransform
     {
-      get { return _transform; }
-      set { _transform = value; }
-    }
-
-    /// <summary>
-    /// Gets or sets the previous transformation of the body.
-    /// </summary>
-    public Transformation PreviousTransform //Transforms objects space AABB and Shape to world space
-    {
-      get { return _previousTransform; }
-      set { _previousTransform = value; }
+      get { return _sceneNode.GetWorldMatrix(); }
     }
 
     /// <summary>
     /// Gets or sets the bounding box of the body.
     /// </summary>
-    public Rectangle2f BoundingBox //Mandatory
+    public Circle BoundingCircle //Mandatory
     {
-      get { return _boundingBox; }
-      set { _boundingBox = value; }
+      get
+      {
+        BoundingCircleComponent comp = _sceneNode.Actor.GetComponent<BoundingCircleComponent>(BoundingCircleComponent.ComponentName);
+        if (comp == null)
+          return default(Circle);
+        return comp.GetBoundingCircle();
+      }
     }
 
     /// <summary>
@@ -65,28 +71,31 @@ namespace OkuEngine.Collision
     /// </summary>
     public Vector2f[] Shape //Optional
     {
-      get { return _shape; }
-      set { _shape = value; }
+      get 
+      {
+        CollisionComponent comp = _sceneNode.Actor.GetComponent<CollisionComponent>(CollisionComponent.ComponentName);
+        if (comp == null)
+          return null;
+        return comp.Shape.Vertices;
+      }
     }
 
     /// <summary>
     /// Gets or sets the user data that is connected to this body.
     /// </summary>
-    public T Data
+    public SceneNode SceneNode
     {
-      get { return _data; }
-      set { _data = value; }
+      get { return _sceneNode; }
     }
 
     /// <summary>
     /// Calculates the transformed AABB which is the AABB of the box after it got transformed.
     /// </summary>
     /// <returns>The AABB of the transformed AABB.</returns>
-    public Rectangle2f GetTransformedBoundingBox()
+    public Circle GetTransformedBoundingCircle()
     {
-      BoundingBox.GetPoints(_transBox);
-      Transform.AsMatrix().Transform(_transBox);
-      return _transBox.GetBoundingBox();
+      WorldTransform.Transform(_testPoints, _transPoints);
+      return new Circle(_transPoints[0], BoundingCircle.Radius * Vector2f.Distance(_transPoints[0], _transPoints[1]));
     }
 
     /// <summary>
@@ -100,7 +109,7 @@ namespace OkuEngine.Collision
         if (_transShape == null)
           _transShape = new Vector2f[Shape.Length];
 
-        Transform.AsMatrix().Transform(Shape, _transShape);
+        WorldTransform.Transform(Shape, _transShape);
         return _transShape;
       }
       return null;

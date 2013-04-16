@@ -193,7 +193,11 @@
           }
         ]
       },
-      "Components": [],
+      "Components": [
+        {
+          "$type": "OkuEngine.Actors.CollisionComponent, OkuEngine"
+        }
+      ],
       "Id": 1,
       "Name": "Car"
     },
@@ -218,7 +222,11 @@
           }
         ]
       },
-      "Components": [],
+      "Components": [
+        {
+          "$type": "OkuEngine.Actors.CollisionComponent, OkuEngine"
+        }
+      ],
       "Id": 2,
       "Name": "Test"
     },
@@ -243,7 +251,11 @@
           }
         ]
       },
-      "Components": [],
+      "Components": [
+        {
+          "$type": "OkuEngine.Actors.CollisionComponent, OkuEngine"
+        }
+      ],
       "Id": 3,
       "Name": "Collision"
     }
