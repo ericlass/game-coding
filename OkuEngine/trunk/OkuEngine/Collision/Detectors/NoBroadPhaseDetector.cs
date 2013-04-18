@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OkuEngine.Collision
+namespace OkuEngine.Collision.Detectors
 {
   public class NoBroadPhaseDetector : BroadPhaseDetector
   {
@@ -23,19 +23,15 @@ namespace OkuEngine.Collision
       _bodies.Remove(body);
     }
 
-    public override List<Body> GetCollisionCandidates(Body body)
+    public override void GetCollisionCandidates(Body body, ref List<Body> candidates)
     {
-      List<Body> result = new List<Body>();
-
       foreach (Body cand in _bodies)
       {
         if (cand != body && cand.GroupId == body.GroupId)
         {
-          result.Add(cand);
+          candidates.Add(cand);
         }
       }
-
-      return result;
     }
 
     public override void Clear()

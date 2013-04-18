@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OkuEngine.Collision
+namespace OkuEngine.Collision.Detectors
 {
   public class BoundingCirclePrecisePhaseDetector : PrecisePhaseDetector
   {

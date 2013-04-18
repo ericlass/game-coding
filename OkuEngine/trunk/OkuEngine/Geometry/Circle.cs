@@ -33,6 +33,15 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Calculates the bounding box of the circle.
+    /// </summary>
+    /// <returns>The bounding box of the circle.</returns>
+    public Rectangle2f GetBoundingBox()
+    {
+      return new Rectangle2f(Center.X - Radius, Center.Y - Radius, Center.X - Radius, Center.Y - Radius);
+    }
+
+    /// <summary>
     /// Calculates a bounding circle for the given AABB.
     /// </summary>
     /// <param name="aabb">The AABB.</param>

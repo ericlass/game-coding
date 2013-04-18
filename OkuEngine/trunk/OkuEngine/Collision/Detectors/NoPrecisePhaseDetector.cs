@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OkuEngine.Collision
+namespace OkuEngine.Collision.Detectors
 {
   /// <summary>
   /// Defines a precise phase detector that actually does not detect collisions.

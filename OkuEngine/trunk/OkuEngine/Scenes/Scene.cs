@@ -5,6 +5,7 @@ using System.Text;
 using System.Drawing;
 using OkuEngine.Events;
 using OkuEngine.Collision;
+using OkuEngine.Collision.Detectors;
 using OkuEngine.Actors;
 using Newtonsoft.Json;
 
@@ -44,7 +45,7 @@ namespace OkuEngine.Scenes
     private void Init()
     {
       _viewport.Change += new ViewPortChangeEventHandler(_viewport_Change);
-      _collisionWorld = new CollisionWorld(new NoBroadPhaseDetector(), new BoundingCirclePrecisePhaseDetector());
+      _collisionWorld = new CollisionWorld(new RegularGridBroadPhaseDetector(2048, 2048, 128), new BoundingCirclePrecisePhaseDetector());
     }
 
     [JsonPropertyAttribute]

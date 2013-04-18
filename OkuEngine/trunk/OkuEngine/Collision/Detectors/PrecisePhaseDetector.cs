@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OkuEngine.Collision
+namespace OkuEngine.Collision.Detectors
 {
   /// <summary>
   /// This is a detector that checks two specific bodies for collision like SAT or Continuous.

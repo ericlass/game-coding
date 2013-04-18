@@ -246,6 +246,30 @@ namespace OkuEngine.Geometry
     }
 
     /// <summary>
+    /// Calculates the cells that intersect with the given circle.
+    /// </summary>
+    /// <param name="circle">The circle to check.</param>
+    /// <param name="cells">The cells that intersect are returned in this list.</param>
+    public void GetCellsIntersecting(Circle circle, ref List<Vector2i> cells)
+    {
+      Vector2i min = Vector2i.Zero;
+      Vector2i max = Vector2i.Zero;
+      Rectangle2f circleBox = circle.GetBoundingBox();
+      GetCellsIntersecting(circleBox, ref min, ref max);
+
+      Rectangle2f cellBounds = new Rectangle2f();
+      for (int y = min.Y; y <= max.Y; y++)
+      {
+        for (int x = min.X; x <= max.X; x++)
+        {
+          GetCellBounds(x, y, true, out cellBounds);
+          if (Intersections.CircleAABB(circle, cellBounds))
+            cells.Add(new Vector2i(x, y));
+        }
+      }
+    }
+
+    /// <summary>
     /// Traverses the line given by start and end through the grid.
     /// </summary>
     /// <param name="start">The start of the line.</param>

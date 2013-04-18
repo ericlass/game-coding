@@ -5,6 +5,7 @@ using System.Text;
 using OkuEngine.Collections;
 using OkuEngine.Events;
 using OkuEngine.Scenes;
+using OkuEngine.Collision.Detectors;
 
 namespace OkuEngine.Collision
 {
@@ -16,6 +17,7 @@ namespace OkuEngine.Collision
     private HashSet<Body> _updatedBodies = new HashSet<Body>();
     private PairList<Body> _collidedPairs = new PairList<Body>();
     private Dictionary<int, Body> _actorBodyMap = new Dictionary<int, Body>();
+    private List<Body> _candidates = new List<Body>();
 
     public CollisionWorld(BroadPhaseDetector broadDetector, PrecisePhaseDetector preciseDetector)
     {
@@ -70,9 +72,13 @@ namespace OkuEngine.Collision
       _collidedPairs.Clear();
       foreach (Body body in _updatedBodies)
       {
-        List<Body> candidates = _broadDetector.GetCollisionCandidates(body);
-        foreach (Body candidate in candidates)
+        _candidates.Clear();
+        _broadDetector.GetCollisionCandidates(body, ref _candidates);
+        foreach (Body candidate in _candidates)
         {
+          if (body == candidate)
+            throw new OkuException("Colliding an actor with itself!");
+
           if (!_collidedPairs.Contains(body, candidate))
           {
             CollisionInfo info = _preciseDetector.GetCollisionInfo(body, candidate);

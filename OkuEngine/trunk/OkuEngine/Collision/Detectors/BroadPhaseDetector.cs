@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OkuEngine.Collision
+namespace OkuEngine.Collision.Detectors
 {
   /// <summary>
   /// This is something like a regular grid or quad tree or any other spatial partitioning thing.
@@ -17,6 +17,6 @@ namespace OkuEngine.Collision
     public abstract void RemoveBody(Body body); //Is called wheb body is removed from world
     public abstract void Clear();
 
-    public abstract List<Body> GetCollisionCandidates(Body body);
+    public abstract void GetCollisionCandidates(Body body, ref List<Body> candidates);
   }
 }
