@@ -20,6 +20,7 @@ namespace OkuEngine.Scenes
     private int _actorId = 0;
     private Transformation _transform = new Transformation();
 
+    private Transformation _previousTransform = new Transformation();
     private Actor _actor = null;
     private SceneNode _parent = null;
     private List<SceneNode> _children = new List<SceneNode>();
@@ -159,6 +160,8 @@ namespace OkuEngine.Scenes
     /// <returns>True if the update was successful, else false.</returns>
     public virtual bool Update(Scene scene, float dt)
     {
+      _previousTransform.Apply(_transform);
+
       foreach (SceneNode child in _children)
       {
         child.Update(scene, dt);

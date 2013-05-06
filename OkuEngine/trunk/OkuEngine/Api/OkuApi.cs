@@ -133,7 +133,7 @@ namespace OkuEngine.Api
     {
       Actor actor = GetActor(actorId);
       if (actor != null && actor.SceneNode.Transform != null)
-        return actor.SceneNode.Transform.Rotation;
+        return actor.SceneNode.Transform.Orientation;
       else
         return 0.0;
     }
@@ -147,7 +147,7 @@ namespace OkuEngine.Api
     {
       Actor actor = GetActor(actorId);
       if (actor != null && actor.SceneNode.Transform != null)
-        actor.SceneNode.Transform.Rotation = (float)angle;
+        actor.SceneNode.Transform.Orientation = (float)angle;
     }
 
     /// <summary>

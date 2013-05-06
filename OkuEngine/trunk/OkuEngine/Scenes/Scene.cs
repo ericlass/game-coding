@@ -152,6 +152,7 @@ namespace OkuEngine.Scenes
         item.Value.Update(this, dt);
       }
 
+      //TODO: Collision should really be done after actors have finished moving
       List<CollisionInfo> collisions = new List<CollisionInfo>();
       if (_collisionWorld.GetCollisions(collisions))
       {

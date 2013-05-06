@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace OkuEngine
 {
   /// <summary>
-  /// Determines a full transformation with translation, rotation and scale.
+  /// Determines a full transformation with translation, orientation and scale.
   /// </summary>
   [JsonObjectAttribute(MemberSerialization.OptIn)]
   public class Transformation : IStoreable
@@ -23,29 +23,29 @@ namespace OkuEngine
 
     private Vector2f _translation = Vector2f.Zero;
     private Vector2f _scale = Vector2f.One;
-    private float _rotation = 0.0f;
+    private float _orientation = 0.0f;
 
     private bool _matrixValid = false;
     private Matrix3 _matrix = Matrix3.Identity;
 
     /// <summary>
-    /// Creates a new transformation with translation (0,0), scale (1,1) and rotation (0).
+    /// Creates a new transformation with translation (0,0), scale (1,1) and orientation (0).
     /// </summary>
     public Transformation()
     {
     }
 
     /// <summary>
-    /// Creates a new transformation with the given values for translation, scale and rotation.
+    /// Creates a new transformation with the given values for translation, scale and orientation.
     /// </summary>
     /// <param name="translation">The translation vector.</param>
     /// <param name="scale">The scale vector.</param>
-    /// <param name="rotation">The rotation angle in degrees.</param>
-    public Transformation(Vector2f translation, Vector2f scale, float rotation)
+    /// <param name="orientation">The orientation angle in degrees.</param>
+    public Transformation(Vector2f translation, Vector2f scale, float orientation)
     {
       _translation = translation;
       _scale = scale;
-      _rotation = rotation;
+      _orientation = orientation;
     }
 
     public void DoChange()
@@ -90,15 +90,15 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Gets or sets the rotation angle in degrees.
+    /// Gets or sets the orientation angle in degrees.
     /// </summary>
     [JsonPropertyAttribute]
-    public float Rotation 
+    public float Orientation 
     {
-      get { return _rotation; }
+      get { return _orientation; }
       set 
       {
-        _rotation = value;
+        _orientation = value;
         DoChange();
       }
     }
@@ -140,7 +140,7 @@ namespace OkuEngine
     public bool Equals(Transformation other)
     {
       return _translation.Equals(other._translation) &&
-        _rotation == other._rotation &&
+        _orientation == other._orientation &&
         _scale.Equals(other._scale);
     }
 
@@ -152,7 +152,7 @@ namespace OkuEngine
     {
       _translation = transform.Translation;
       _scale = transform.Scale;
-      _rotation = transform.Rotation;
+      _orientation = transform.Orientation;
       DoChange();
     }
 
@@ -163,13 +163,30 @@ namespace OkuEngine
     /// <returns>True if the transformation is and identity, else false.</returns>
     public bool IsIdentity()
     {
-      return (_translation == Vector2f.Zero) && (_scale == Vector2f.One) && _rotation == 0.0f;
+      return (_translation == Vector2f.Zero) && (_scale == Vector2f.One) && _orientation == 0.0f;
     }
 
     public bool AfterLoad()
     {
       _matrixValid = false;
       return true;
+    }
+
+    /// <summary>
+    /// Linearly interpolates between the two given tranformations t1 and t2
+    /// where t = 0 means t1 and t = 1 means t2.
+    /// The result is returned in target.
+    /// </summary>
+    /// <param name="t1">The first transform.</param>
+    /// <param name="t2">The second transform.</param>
+    /// <param name="t">The control parameter.</param>
+    /// <param name="target">The interpolated values are returned here.</param>
+    public static void Lerp(Transformation t1, Transformation t2, float t, ref Transformation target)
+    {
+      float negT = 1 - t;
+      target.Translation = OkuMath.InterpolateLinear(t1.Translation, t2.Translation, t);
+      target.Scale = OkuMath.InterpolateLinear(t1.Scale, t2.Scale, t);
+      target.Orientation = OkuMath.InterpolateLinear(t1.Orientation, t2.Orientation, t);
     }
 
   }

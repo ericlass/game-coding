@@ -1167,7 +1167,7 @@ namespace OkuEngine.Driver.Renderer
 
       Gl.glTranslatef(transform.Translation.X, transform.Translation.Y, 0.0f);
       Gl.glScalef(transform.Scale.X, transform.Scale.Y, 1.0f);
-      Gl.glRotatef(transform.Rotation, 0.0f, 0.0f, 1.0f);
+      Gl.glRotatef(transform.Orientation, 0.0f, 0.0f, 1.0f);
     }
 
     public void PopTransform()

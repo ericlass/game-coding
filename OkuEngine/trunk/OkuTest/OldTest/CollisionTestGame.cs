@@ -85,7 +85,7 @@ namespace OkuTest
       if (OkuManagers.Instance.Input.Keyboard.KeyIsDown(Keys.NumPad6))
         rotation += step;
 
-      _transform2.Rotation += rotation;
+      _transform2.Orientation += rotation;
       _transform2.Translation += new Vector2f(dx, dy);
 
       Matrix3 transform = Matrix3.Identity;
