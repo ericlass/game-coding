@@ -58,7 +58,7 @@ namespace OkuBase.Input
         OnKeyReleased(key);
     }
 
-    public override void Initialize()
+    public override void Initialize(OkuSettings settings)
     {
       throw new NotImplementedException();
     }

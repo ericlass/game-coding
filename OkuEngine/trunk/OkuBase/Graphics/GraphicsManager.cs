@@ -22,7 +22,7 @@ namespace OkuBase.Graphics
     {
     }
 
-    public override void Initialize()
+    public override void Initialize(OkuSettings settings)
     {
       throw new NotImplementedException();
     }

@@ -50,6 +50,7 @@
     <Compile Include="Input\MouseInput.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="Oku.cs" />
+    <Compile Include="OkuException.cs" />
     <Compile Include="OkuGame.cs" />
     <Compile Include="OkuSettings.cs" />
     <Compile Include="Platform\Kernel32.cs" />

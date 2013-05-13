@@ -14,7 +14,7 @@ namespace OkuBase.Audio
       get { return _driver; }
     }
 
-    public override void Initialize()
+    public override void Initialize(OkuSettings settings)
     {
       throw new NotImplementedException();
     }

@@ -15,31 +15,15 @@ namespace OkuBase.Driver
   /// </summary>
   public class DriverManager : Manager
   {
-    private class DriverInfo
-    {
-      public DriverInfo()
-      {
-      }
-
-      public DriverInfo(string assemblyPath, string typeName)
-      {
-        AssemblyPath = assemblyPath;
-        TypeName = typeName;
-      }
-
-      public string AssemblyPath { get; set; }
-      public string TypeName { get; set; }
-    }
-
-    private Dictionary<string, DriverInfo> _graphicsDrivers = new Dictionary<string, DriverInfo>();
-    private Dictionary<string, DriverInfo> _audioDrivers = new Dictionary<string, DriverInfo>();
+    private IGraphicsDriver _graphicsDriver = null;
+    private IAudioDriver _audioDriver = null;
     private AppDomain _graphicsDomain = null;
     private AppDomain _audioDomain = null;
 
-    public override void Initialize()
+    public override void Initialize(OkuSettings settings)
     {
-      _graphicsDrivers.Clear();
-      _audioDrivers.Clear();
+      _graphicsDriver = null;
+      _audioDriver = null;
 
       //Get path of executing assembly
       string basePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
@@ -68,28 +52,37 @@ namespace OkuBase.Driver
             foreach (Type itf in interfaces)
             {
               //Check for graphics drivers
-              if (itf.Equals(typeof(IGraphicsDriver)))
+              if (_graphicsDriver == null && itf.Equals(typeof(IGraphicsDriver)))
               {
                 IGraphicsDriver graphicsDriver = (IGraphicsDriver)assembly.CreateInstance(t.FullName);
 
-                if (graphicsDriver.DriverName == null && !_graphicsDrivers.ContainsKey(graphicsDriver.DriverName))
-                  _graphicsDrivers.Add(graphicsDriver.DriverName, new DriverInfo(fullPath, t.FullName));
+                if (graphicsDriver.DriverName == null && 
+                  graphicsDriver.DriverName.Equals(settings.GraphicsDriverName, StringComparison.CurrentCultureIgnoreCase))
+                  _graphicsDriver = graphicsDriver;
 
                 continue;
               }
 
               //Check for audio drivers
-              if (itf.Equals(typeof(IAudioDriver)))
+              if (_audioDriver != null && itf.Equals(typeof(IAudioDriver)))
               {
                 IAudioDriver audioDriver = (IAudioDriver)assembly.CreateInstance(t.FullName);
 
-                if (audioDriver.DriverName == null && !_audioDrivers.ContainsKey(audioDriver.DriverName))
-                  _audioDrivers.Add(audioDriver.DriverName, new DriverInfo(fullPath, t.FullName));
+                if (audioDriver.DriverName == null && audioDriver.DriverName.Equals(settings.AudioDriverName, StringComparison.CurrentCultureIgnoreCase))
+                  _audioDriver = audioDriver;
 
                 continue;
               }
             }
           }
+
+          //Check that the desired graphics driver was found
+          if (_graphicsDriver == null)
+            throw new OkuException("Could not load the graphics driver with the name \"" + settings.GraphicsDriverName + "\"!");
+
+          //Check that the desired audio driver was found
+          if (_audioDriver == null)
+            throw new OkuException("Could not load the audio driver with the name \"" + settings.AudioDriverName + "\"!");
 
           //Unload appdomain including assemblies
           AppDomain.Unload(domain);
@@ -97,56 +90,14 @@ namespace OkuBase.Driver
       }
     }
 
-    /// <summary>
-    /// Gets the renderer with the given driver name.
-    /// </summary>
-    /// <param name="driverName">The unique driver name that identifies a specific driver.</param>
-    /// <returns>The driver with the given name or null if there is no driver with this name.</returns>
-    public IGraphicsDriver GetGraphicsDriver(string driverName)
+    public IGraphicsDriver GraphicsDriver
     {
-      if (!_graphicsDrivers.ContainsKey(driverName))
-        return null;
-
-      if (_graphicsDomain != null)
-      {
-        AppDomain.Unload(_graphicsDomain);
-        _graphicsDomain = null;
-      }
-
-      DriverInfo info = _graphicsDrivers[driverName];
-      _graphicsDomain = AppDomain.CreateDomain("GraphicsDomain");
-
-      AssemblyName assemblyName = AssemblyName.GetAssemblyName(info.AssemblyPath);
-      Assembly assembly = _graphicsDomain.Load(assemblyName);
-      IGraphicsDriver result = (IGraphicsDriver)assembly.CreateInstance(info.TypeName);
-
-      return result;
+      get { return _graphicsDriver; }
     }
 
-    /// <summary>
-    /// Gets the audio driver with the given driver name.
-    /// </summary>
-    /// <param name="driverName">The unique driver name that identifies a specific driver.</param>
-    /// <returns>The driver with the given name or null if there is no driver with this name.</returns>
-    public IAudioDriver GetAudioDriver(string driverName)
+    public IAudioDriver AudioDriver
     {
-      if (!_audioDrivers.ContainsKey(driverName))
-        return null;
-
-      if (_audioDomain != null)
-      {
-        AppDomain.Unload(_audioDomain);
-        _audioDomain = null;
-      }
-
-      DriverInfo info = _audioDrivers[driverName];
-      _audioDomain = AppDomain.CreateDomain("AudioDomain");
-
-      AssemblyName assemblyName = AssemblyName.GetAssemblyName(info.AssemblyPath);
-      Assembly assembly = _audioDomain.Load(assemblyName);
-      IAudioDriver result = (IAudioDriver)assembly.CreateInstance(info.TypeName);
-
-      return result;
+      get { return _audioDriver; }
     }
 
     public override void Finish()

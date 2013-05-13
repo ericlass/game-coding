@@ -34,10 +34,10 @@ namespace OkuBase
       _managers.Add(_input);
     }
 
-    public void Initialize()
+    public void Initialize(OkuSettings settings)
     {
       foreach (Manager man in _managers)
-        man.Initialize();
+        man.Initialize(settings);
     }
 
     public void Update(float dt)

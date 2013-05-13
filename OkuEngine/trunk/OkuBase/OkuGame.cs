@@ -35,7 +35,9 @@ namespace OkuBase
     /// </summary>
     public void Run()
     {
-      DoInitialize();
+      OkuSettings settings = Configure();
+
+      DoInitialize(settings);
 
       long tick1, tick2, freq;
       long perf1, perf2;
@@ -98,12 +100,17 @@ namespace OkuBase
       Oku.Instance.Finish();
     }
 
+    public virtual OkuSettings Configure()
+    {
+      return new OkuSettings();
+    }
+
     /// <summary>
     /// Triggers the initialization of all engine parts.
     /// </summary>
-    public void DoInitialize()
+    public void DoInitialize(OkuSettings settings)
     {
-      Oku.Instance.Initialize();
+      Oku.Instance.Initialize(settings);
     }
 
     /// <summary>
