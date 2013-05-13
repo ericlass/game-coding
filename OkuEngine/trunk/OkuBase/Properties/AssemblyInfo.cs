@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Allgemeine Informationen über eine Assembly werden über die folgenden 
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die mit einer Assembly verknüpft sind.
-[assembly: AssemblyTitle("OkuEngine")]
+[assembly: AssemblyTitle("OkuBase")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Play Time Continuum")]
-[assembly: AssemblyProduct("OkuEngine")]
+[assembly: AssemblyProduct("OkuBase")]
 [assembly: AssemblyCopyright("Copyright © Play Time Continuum 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Die folgende GUID bestimmt die ID der Typbibliothek, wenn dieses Projekt für COM verfügbar gemacht wird
-[assembly: Guid("d8d71e42-2e30-4960-a9ae-3940b4e5546f")]
+[assembly: Guid("43032682-3bb8-4f98-bc71-f99540dab363")]
 
 // Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
 //

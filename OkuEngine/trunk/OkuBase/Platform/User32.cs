@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace OkuEngine
+namespace OkuBase.Platform
 {
   /// <summary>
   /// Wraps functions from user32.dll.
@@ -28,11 +27,9 @@ namespace OkuEngine
       public IntPtr wParam;
       public IntPtr lParam;
       public uint time;
-      public System.Drawing.Point p;
+      //public System.Drawing.Point p;
     }
 
-    public const uint WM_DESTROY = 0x0002;
-    public const uint WM_CLOSE = 0x0010;
     public const uint WM_QUIT = 0x0012;
     public const uint WM_PAINT = 0x000F;
     public const uint WM_MOUSEWHEEL = 0x020A;

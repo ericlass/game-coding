@@ -1,11 +1,8 @@
-﻿using System.Runtime.InteropServices;
-using System.IO;
-using System.Windows.Forms;
-using OkuEngine.Resources;
-using OkuEngine.Input;
-using Newtonsoft.Json;
+﻿/*using System.IO;
+using System.Runtime.InteropServices;
+using OkuBase.Platform;
 
-namespace OkuEngine
+namespace OkuBase
 {
   /// <summary>
   /// Main game class that runs the whole game.
@@ -54,8 +51,7 @@ namespace OkuEngine
 
         if (User32.PeekMessage(out msg, hRef, 0, 0, 1))
         {
-          OkuManagers.Instance.Logger.LogInfo("MESSAGE: " + msg.msg);
-          if (msg.msg == User32.WM_QUIT || msg.msg == User32.WM_CLOSE || msg.msg == User32.WM_DESTROY)
+          if (msg.msg == User32.WM_QUIT)
           {
             break;
           }
@@ -159,10 +155,6 @@ namespace OkuEngine
 
           OkuManagers.Instance.InputManager.AfterLoad();
 
-          // JSON Serialiazing for tests
-          /*string json = JsonConvert.SerializeObject(OkuData.Instance, Formatting.Indented, OkuData.JsonSettings);
-          Clipboard.SetText(json);*/
-
           //TODO: Remove
           Initialize();
         }
@@ -257,3 +249,4 @@ namespace OkuEngine
 
   }
 }
+*/
