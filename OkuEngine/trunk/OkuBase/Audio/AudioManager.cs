@@ -1,25 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using OkuBase.Driver.Graphics;
+using OkuBase.Driver.Audio;
 
-namespace OkuBase.Graphics
+namespace OkuBase.Audio
 {
-  public class GraphicsManager : Manager
+  public class AudioManager : Manager
   {
-    private IGraphicsDriver _driver = null;
+    IAudioDriver _driver = null;
 
-    internal IGraphicsDriver Driver
+    public IAudioDriver Driver
     {
       get { return _driver; }
-    }
-
-    internal void Begin()
-    {
-    }
-
-    internal void End()
-    {
     }
 
     public override void Initialize()

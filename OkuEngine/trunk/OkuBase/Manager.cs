@@ -7,6 +7,7 @@ namespace OkuBase
   public abstract class Manager
   {
     public abstract void Initialize();
+    public abstract void Update(float dt);
     public abstract void Finish();
   }
 }

@@ -163,6 +163,11 @@ namespace OkuBase.Driver
         _audioDomain = null;
       }
     }
+ 
+    public override void Update(float dt)
+    {
+      throw new NotImplementedException();
+    }
 
   }
 }

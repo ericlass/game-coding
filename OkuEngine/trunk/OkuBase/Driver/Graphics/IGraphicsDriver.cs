@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Forms;
 
 namespace OkuBase.Driver.Graphics
 {
@@ -12,9 +13,10 @@ namespace OkuBase.Driver.Graphics
     string DriverName { get; }
 
     /// <summary>
-    /// Gets the handle of the window that is used to render.
+    /// Gets the control that is used to render.
+    /// This may be a window or some other control in a window.
     /// </summary>
-    IntPtr DisplayHandle { get; }
+    Control Display { get; }
 
   }
 }

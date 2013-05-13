@@ -33,13 +33,22 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audio\AudioManager.cs" />
     <Compile Include="Driver\Audio\IAudioDriver.cs" />
     <Compile Include="Driver\DriverManager.cs" />
     <Compile Include="Driver\Graphics\IGraphicsDriver.cs" />
     <Compile Include="Graphics\GraphicsManager.cs" />
+    <Compile Include="Input\InputBase.cs" />
+    <Compile Include="Input\InputManager.cs" />
+    <Compile Include="Input\JoystickInfo.cs" />
+    <Compile Include="Input\JoystickInput.cs" />
+    <Compile Include="Input\KeyAction.cs" />
+    <Compile Include="Input\KeyboardInput.cs" />
+    <Compile Include="Input\MouseInput.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="Oku.cs" />
     <Compile Include="OkuGame.cs" />

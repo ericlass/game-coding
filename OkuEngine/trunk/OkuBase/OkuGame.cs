@@ -1,5 +1,7 @@
-﻿/*using System.IO;
+﻿using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using OkuBase.Input;
 using OkuBase.Platform;
 
 namespace OkuBase
@@ -42,11 +44,11 @@ namespace OkuBase
       Kernel32.QueryPerformanceCounter(out tick2);
 
       User32.NativeMessage msg = new User32.NativeMessage();
-      HandleRef hRef = new HandleRef(OkuDrivers.Instance.Renderer.Display, OkuDrivers.Instance.Renderer.Display.Handle);
+      HandleRef hRef = new HandleRef(Oku.Instance.Graphics.Driver.Display, Oku.Instance.Graphics.Driver.Display.Handle);
 
       while (true)
       {
-        if (!OkuDrivers.Instance.Renderer.Display.Created)
+        if (!Oku.Instance.Graphics.Driver.Display.Created)
           break;
 
         if (User32.PeekMessage(out msg, hRef, 0, 0, 1))
@@ -61,17 +63,11 @@ namespace OkuBase
           }
           else if (msg.msg == User32.WM_KEYDOWN)
           {
-            if (OkuManagers.Instance.InputManager != null)
-            {
-              OkuManagers.Instance.InputManager.OnKeyAction((Keys)msg.wParam, KeyAction.Down);
-            }
+            Oku.Instance.Input.OnKeyAction((Keys)msg.wParam, KeyAction.Down);
           }
           else if (msg.msg == User32.WM_KEYUP)
           {
-            if (OkuManagers.Instance.InputManager != null)
-            {
-              OkuManagers.Instance.InputManager.OnKeyAction((Keys)msg.wParam, KeyAction.Up);
-            }
+            Oku.Instance.Input.OnKeyAction((Keys)msg.wParam, KeyAction.Up);
           }
           else
           {
@@ -99,27 +95,7 @@ namespace OkuBase
         }
       }
 
-      OkuDrivers.Instance.Renderer.Finish();
-      OkuDrivers.Instance.SoundEngine.Finish();
-    }
-
-    /// <summary>
-    /// Used to setup parameters for the resource cache.
-    /// </summary>
-    /// <param name="resourceParams">The parameters of the resource cache.</param>
-    protected virtual void SetupResourceCache(ref ResourceCacheParams resourceParams)
-    {
-      resourceParams.ResourceFile = new FileSystemResourceFile();
-      resourceParams.SizeInMb = 256;
-    }
-
-    /// <summary>
-    /// Gets the name of the config file that is used to initializes the engine.
-    /// </summary>
-    /// <returns>The name of the config file. Can include path.</returns>
-    protected virtual string GetConfigFileName()
-    {
-      return "okugame.xml";
+      Oku.Instance.Finish();
     }
 
     /// <summary>
@@ -127,7 +103,9 @@ namespace OkuBase
     /// </summary>
     public void DoInitialize()
     {
-      KeySequence.Initialize();
+      Oku.Instance.Initialize();
+
+      /*KeySequence.Initialize();
 
       // Scared that managers might not be initialized in the correct order
       OkuManagers.Instance.ToString();
@@ -163,7 +141,7 @@ namespace OkuBase
       {
         OkuManagers.Instance.Logger.LogError("Could not initialize resource cache!");
         System.Windows.Forms.Application.Exit();
-      }
+      }*/
     }
 
     /// <summary>
@@ -181,6 +159,8 @@ namespace OkuBase
     /// <param name="dt"></param>
     public void DoUpdate(float dt)
     {
+      Oku.Instance.Update(dt);
+      /*
       //Update scene (previous transforms...)
       OkuData.Instance.Scenes.ActiveScene.Update(dt);
 
@@ -202,7 +182,7 @@ namespace OkuBase
       OkuManagers.Instance.EventManager.Update(float.MaxValue);
       //Update processes (not used atm)
       OkuManagers.Instance.ProcessManager.UpdateProcesses(dt);
-
+      */
       Update(dt);
     }
 
@@ -220,7 +200,11 @@ namespace OkuBase
     /// </summary>
     public void DoRender()
     {
-      if (OkuDrivers.Instance.Renderer.RenderPasses > 0)
+      Oku.Instance.Graphics.Begin();
+      Render();
+      Oku.Instance.Graphics.End();
+
+      /*if (OkuDrivers.Instance.Renderer.RenderPasses > 0)
       {
         for (int i = 0; i < OkuDrivers.Instance.Renderer.RenderPasses; i++)
         {
@@ -236,17 +220,16 @@ namespace OkuBase
         OkuData.Instance.Scenes.ActiveScene.Render();
         Render(0);
         OkuDrivers.Instance.Renderer.End(0);
-      }
+      }*/
     }
 
     /// <summary>
     /// Can be overriden to add custom rendering code. This method is called every
     /// frame just after the Update method.
     /// </summary>
-    public virtual void Render(int pass)
+    public virtual void Render()
     {
     }
 
   }
 }
-*/

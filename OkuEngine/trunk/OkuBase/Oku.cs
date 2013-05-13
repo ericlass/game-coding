@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using OkuBase.Graphics;
+using OkuBase.Audio;
+using OkuBase.Input;
 
 namespace OkuBase
 {
@@ -9,7 +11,7 @@ namespace OkuBase
   {
     private static Oku _instance = null;
 
-    private static Oku Instance
+    public static Oku Instance
     {
       get
       {
@@ -19,20 +21,50 @@ namespace OkuBase
       }
     }
 
+    private List<Manager> _managers = new List<Manager>();
+
+    private GraphicsManager _graphics = new GraphicsManager();
+    private AudioManager _audio = new AudioManager();
+    private InputManager _input = new InputManager();
+
     private Oku()
     {
+      _managers.Add(_graphics);
+      _managers.Add(_audio);
+      _managers.Add(_input);
     }
 
-    private GraphicsManager _graphics = null;
+    public void Initialize()
+    {
+      foreach (Manager man in _managers)
+        man.Initialize();
+    }
+
+    public void Update(float dt)
+    {
+      foreach (Manager man in _managers)
+        man.Update(dt);
+    }
+
+    public void Finish()
+    {
+      foreach (Manager man in _managers)
+        man.Finish();
+    }
 
     public GraphicsManager Graphics
     {
-      get
-      {
-        if (_graphics == null)
-          _graphics = new GraphicsManager();
-        return _graphics;
-      }
+      get { return _graphics; }
+    }
+
+    public AudioManager Audio
+    {
+      get { return _audio; }
+    }
+
+    public InputManager Input
+    {
+      get { return _input; }
     }
 
   }
