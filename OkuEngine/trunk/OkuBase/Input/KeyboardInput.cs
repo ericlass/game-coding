@@ -28,7 +28,6 @@ namespace OkuBase.Input
     /// </summary>
     public KeyboardInput()
     {
-
     }
 
     /// <summary>

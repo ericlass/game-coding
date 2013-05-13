@@ -12,6 +12,9 @@ namespace OkuBase.Input
   {
     public delegate void KeyEventDelegate(Keys key);
 
+    private MouseInput _mouse = new MouseInput();
+    private KeyboardInput _keyboard = new KeyboardInput();
+
     /// <summary>
     /// Creates a new input mananger.
     /// </summary>
@@ -21,23 +24,38 @@ namespace OkuBase.Input
 
     public event KeyEventDelegate OnKeyPressed;
     public event KeyEventDelegate OnKeyReleased;
+    public event KeyEventDelegate OnMousePressed;
+    public event KeyEventDelegate OnMouseReleased;
 
-    /// <summary>
-    /// Is called when any key action happens. Enqueues the corresponding events.
-    /// </summary>
-    /// <param name="key">The key that was pressed.</param>
-    /// <param name="action">The action that was performed on the key.</param>
-    /// <returns>True if the key was handled, else false.</returns>
-    public bool OnKeyAction(Keys key, KeyAction action)
+    public MouseInput Mouse
     {
-      bool handled = false;
+      get { return _mouse; }
+    }
 
-      if (action == KeyAction.Down)
+    public KeyboardInput Keyboard
+    {
+      get { return _keyboard; }
+    }
+
+    private bool isMouseButton(Keys key)
+    {
+      return (key == Keys.LButton) || (key == Keys.RButton) || (key == Keys.MButton) || (key == Keys.XButton1) || (key == Keys.XButton2);
+    }
+
+    internal void KeyPressed(Keys key)
+    {
+      if (isMouseButton(key))
+        OnMousePressed(key);
+      else
         OnKeyPressed(key);
+    }
+
+    internal void KeyReleased(Keys key)
+    {
+      if (isMouseButton(key))
+        OnMouseReleased(key);
       else
         OnKeyReleased(key);
-
-      return handled;
     }
 
     public override void Initialize()
@@ -50,6 +68,8 @@ namespace OkuBase.Input
     /// </summary>
     public override void Update(float dt)
     {
+      _mouse.Update();
+      _keyboard.Update();
     }
 
     public override void Finish()

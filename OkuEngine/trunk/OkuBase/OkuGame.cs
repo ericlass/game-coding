@@ -63,11 +63,11 @@ namespace OkuBase
           }
           else if (msg.msg == User32.WM_KEYDOWN)
           {
-            Oku.Instance.Input.OnKeyAction((Keys)msg.wParam, KeyAction.Down);
+            Oku.Instance.Input.KeyPressed((Keys)msg.wParam);
           }
           else if (msg.msg == User32.WM_KEYUP)
           {
-            Oku.Instance.Input.OnKeyAction((Keys)msg.wParam, KeyAction.Up);
+            Oku.Instance.Input.KeyReleased((Keys)msg.wParam);
           }
           else
           {
@@ -104,44 +104,6 @@ namespace OkuBase
     public void DoInitialize()
     {
       Oku.Instance.Initialize();
-
-      /*KeySequence.Initialize();
-
-      // Scared that managers might not be initialized in the correct order
-      OkuManagers.Instance.ToString();
-
-      ResourceCacheParams resParams = new ResourceCacheParams();
-      SetupResourceCache(ref resParams);
-      ResourceCache resCache = new ResourceCache(resParams);
-      OkuManagers.Instance.ResourceCache = resCache;
-      if (resCache.Initialize())
-      {
-        ResourceHandle configHandle = resCache.GetHandle(new Resource(GetConfigFileName()));
-        if (configHandle != null)
-        {
-          StreamReader reader = new StreamReader(configHandle.Buffer);
-          string configText = reader.ReadToEnd();
-          reader.Close();
-
-          OkuData.Instance = JsonConvert.DeserializeObject<OkuData>(configText, OkuData.JsonSettings);
-
-          if (!OkuDrivers.Instance.Initialize())
-            return;
-          
-          if (!OkuData.Instance.AfterLoad())
-            return;
-
-          OkuManagers.Instance.InputManager.AfterLoad();
-
-          //TODO: Remove
-          Initialize();
-        }
-      }
-      else
-      {
-        OkuManagers.Instance.Logger.LogError("Could not initialize resource cache!");
-        System.Windows.Forms.Application.Exit();
-      }*/
     }
 
     /// <summary>
@@ -160,29 +122,6 @@ namespace OkuBase
     public void DoUpdate(float dt)
     {
       Oku.Instance.Update(dt);
-      /*
-      //Update scene (previous transforms...)
-      OkuData.Instance.Scenes.ActiveScene.Update(dt);
-
-      //Update script engine (global timedelta value)
-      OkuManagers.Instance.ScriptManager.Update(dt);
-
-      //Update sound engine (does nothing atm)
-      OkuDrivers.Instance.SoundEngine.Update(dt);
-      
-      //Update input data
-      OkuManagers.Instance.Input.Update();
-      OkuManagers.Instance.Input.Mouse.WheelDelta = _mouseDelta / 120.0f;
-      _mouseDelta = 0;
-
-      // Update input manager (runs state behaviors)
-      OkuManagers.Instance.InputManager.Update();
-      
-      //Process events
-      OkuManagers.Instance.EventManager.Update(float.MaxValue);
-      //Update processes (not used atm)
-      OkuManagers.Instance.ProcessManager.UpdateProcesses(dt);
-      */
       Update(dt);
     }
 
@@ -203,24 +142,6 @@ namespace OkuBase
       Oku.Instance.Graphics.Begin();
       Render();
       Oku.Instance.Graphics.End();
-
-      /*if (OkuDrivers.Instance.Renderer.RenderPasses > 0)
-      {
-        for (int i = 0; i < OkuDrivers.Instance.Renderer.RenderPasses; i++)
-        {
-          OkuDrivers.Instance.Renderer.Begin(i);
-          OkuData.Instance.Scenes.ActiveScene.Render();
-          Render(i);
-          OkuDrivers.Instance.Renderer.End(i);
-        }
-      }
-      else
-      {
-        OkuDrivers.Instance.Renderer.Begin(0);
-        OkuData.Instance.Scenes.ActiveScene.Render();
-        Render(0);
-        OkuDrivers.Instance.Renderer.End(0);
-      }*/
     }
 
     /// <summary>

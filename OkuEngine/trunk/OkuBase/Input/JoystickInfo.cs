@@ -7,7 +7,7 @@ namespace OkuBase.Input
   /// <summary>
   /// Contains the information about one single joystick.
   /// </summary>
-  public class JoystickInfo
+  internal class JoystickInfo
   {
     private uint _id = 0;
     private uint _lastButtons = 0;

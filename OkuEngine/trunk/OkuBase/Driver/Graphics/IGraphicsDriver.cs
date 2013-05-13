@@ -18,5 +18,15 @@ namespace OkuBase.Driver.Graphics
     /// </summary>
     Control Display { get; }
 
+    /// <summary>
+    /// Begin drawing a new frame.
+    /// </summary>
+    void Begin();
+
+    /// <summary>
+    /// Drawing the frame is finished and the frame can be presented.
+    /// </summary>
+    void End();
+
   }
 }

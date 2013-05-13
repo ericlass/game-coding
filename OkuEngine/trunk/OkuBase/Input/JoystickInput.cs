@@ -9,7 +9,7 @@ namespace OkuBase.Input
   /// You should call the <code>Update</code> or <code>UpdateAll</code> method periodically
   /// in your game loop. These will update the current state of the joysticks.
   /// </summary>
-  public class JoystickInput : List<JoystickInfo>
+  internal class JoystickInput : List<JoystickInfo>
   {
     private const int MAX_BUTTONS = 32;
     private JOYINFOEX _state;

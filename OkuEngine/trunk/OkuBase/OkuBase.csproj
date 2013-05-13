@@ -42,7 +42,6 @@
     <Compile Include="Driver\DriverManager.cs" />
     <Compile Include="Driver\Graphics\IGraphicsDriver.cs" />
     <Compile Include="Graphics\GraphicsManager.cs" />
-    <Compile Include="Input\InputBase.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\JoystickInfo.cs" />
     <Compile Include="Input\JoystickInput.cs" />
