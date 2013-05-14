@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using OkuBase.Driver.Audio;
+using OkuBase.Settings;
 
 namespace OkuBase.Audio
 {
@@ -16,17 +17,15 @@ namespace OkuBase.Audio
 
     public override void Initialize(OkuSettings settings)
     {
-      throw new NotImplementedException();
+      _driver = Oku.Instance.Drivers.AudioDriver;
     }
 
     public override void Finish()
     {
-      throw new NotImplementedException();
     }
 
     public override void Update(float dt)
     {
-      throw new NotImplementedException();
     }
 
   }

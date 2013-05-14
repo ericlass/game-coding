@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Drawing;
 using OkuBase.Driver.Graphics;
+using OkuBase.Settings;
 
 namespace OkuBase.Graphics
 {
@@ -14,6 +16,39 @@ namespace OkuBase.Graphics
       get { return _driver; }
     }
 
+    public override void Initialize(OkuSettings settings)
+    {
+      _driver = Oku.Instance.Drivers.GraphicsDriver;
+      _driver.Initialize(settings.Graphics);
+    }
+
+    public override void Update(float dt)
+    {
+    }
+
+    public override void Finish()
+    {
+    }
+
+    #region Images
+
+    public Image LoadImage(string filename)
+    {
+      throw new NotImplementedException();
+    }
+
+    public void UpdateImage(Image image, int x, int y, int width, int height, System.Drawing.Bitmap bitmap)
+    {
+    }
+
+    public void ReleaseImage(Image image)
+    {
+    }
+
+    #endregion
+
+    #region Rendering
+
     internal void Begin()
     {
     }
@@ -22,20 +57,7 @@ namespace OkuBase.Graphics
     {
     }
 
-    public override void Initialize(OkuSettings settings)
-    {
-      throw new NotImplementedException();
-    }
-
-    public override void Finish()
-    {
-      throw new NotImplementedException();
-    }
-
-    public override void Update(float dt)
-    {
-      throw new NotImplementedException();
-    }
+    #endregion
 
   }
 }

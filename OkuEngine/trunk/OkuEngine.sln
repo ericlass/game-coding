@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OkuTest", "OkuTest\OkuTest.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OkuBase", "OkuBase\OkuBase.csproj", "{80362428-9A21-4449-A234-9CB8D2F52009}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OkuDrivers", "OkuDrivers\OkuDrivers.csproj", "{11C8459C-8AAA-470B-9D95-28450CF1B661}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OkuBaseTest", "OkuBaseTest\OkuBaseTest.csproj", "{DFDB838A-0078-43CB-90AA-132890317456}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -29,6 +33,14 @@ Global
 		{80362428-9A21-4449-A234-9CB8D2F52009}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80362428-9A21-4449-A234-9CB8D2F52009}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80362428-9A21-4449-A234-9CB8D2F52009}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11C8459C-8AAA-470B-9D95-28450CF1B661}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11C8459C-8AAA-470B-9D95-28450CF1B661}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11C8459C-8AAA-470B-9D95-28450CF1B661}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11C8459C-8AAA-470B-9D95-28450CF1B661}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFDB838A-0078-43CB-90AA-132890317456}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFDB838A-0078-43CB-90AA-132890317456}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFDB838A-0078-43CB-90AA-132890317456}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFDB838A-0078-43CB-90AA-132890317456}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

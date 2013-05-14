@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using OkuBase.Input;
 using OkuBase.Platform;
+using OkuBase.Settings;
 
 namespace OkuBase
 {
