@@ -62,6 +62,36 @@ namespace OkuDrivers
       throw new NotImplementedException();
     }
 
+    public void DrawImage(Image image, float x, float y, float rotation, float sx, float sy, Color tint)
+    {
+      throw new NotImplementedException();
+    }
+
+    public void DrawScreenAlignedQuad(Image image, Color tint)
+    {
+      throw new NotImplementedException();
+    }
+
+    public void DrawLine(float x1, float y1, float x2, float y2, float width, Color color)
+    {
+      throw new NotImplementedException();
+    }
+
+    public void DrawLines(OkuBase.Geometry.Vector2f[] vertices, Color[] colors, int count, float width, VertexInterpretation interpretation)
+    {
+      throw new NotImplementedException();
+    }
+
+    public void DrawPoint(float x, float y, float size, Color color)
+    {
+      throw new NotImplementedException();
+    }
+
+    public void DrawPoints(OkuBase.Geometry.Vector2f[] points, Color[] colors, int count, float size)
+    {
+      throw new NotImplementedException();
+    }
+
     #endregion
   }
 }
