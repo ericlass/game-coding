@@ -41,19 +41,15 @@ namespace OkuBase.Driver.Graphics
     void Finish();
 
     /// <summary>
-    /// Initializes image content which means that textures are created for them.
-    /// This method also sets the Width and Height properties of the content.
-    /// If the given content has already been initialized, the current texture
-    /// is dropped and a new one is created. This can be used to update the content.
+    /// Initializes an image which means that textures are created for them.
     /// </summary>
-    /// <param name="content">The content to be initialized.</param>
-    /// <param name="data">The pixel data of the image.</param>
-    void LoadImage(Image image, ImageData data);
+    /// <param name="image">The image to be initialized.</param>
+    void LoadImage(Image image);
 
     /// <summary>
     /// Updates a region of the given image content with new image data.
     /// </summary>
-    /// <param name="content">The content to be updated.</param>
+    /// <param name="image">The image to be updated.</param>
     /// <param name="x">The left bound of the region.</param>
     /// <param name="y">The top bound of the region.</param>
     /// <param name="width">The width of the region.</param>
@@ -65,7 +61,7 @@ namespace OkuBase.Driver.Graphics
     /// Releases content that was previously initialized by the renderer. 
     /// This frees all resource that are connected to the given content.
     /// </summary>
-    /// <param name="content">The content to release.</param>
+    /// <param name="image">The image to release.</param>
     void ReleaseImage(Image image);
 
     /// <summary>

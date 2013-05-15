@@ -37,7 +37,7 @@ namespace OkuDrivers
       throw new NotImplementedException();
     }
 
-    public void LoadImage(Image image, ImageData data)
+    public void LoadImage(Image image)
     {
       throw new NotImplementedException();
     }

@@ -32,9 +32,11 @@ namespace OkuBase.Graphics
 
     #region Images
 
-    public Image LoadImage(string filename)
+    public Image NewImage(ImageData data)
     {
-      throw new NotImplementedException();
+      Image result = new Image(data);
+      _driver.LoadImage(result);
+      return result;
     }
 
     public void UpdateImage(Image image, int x, int y, int width, int height, System.Drawing.Bitmap bitmap)
