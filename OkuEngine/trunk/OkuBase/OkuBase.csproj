@@ -62,7 +62,7 @@
     <Compile Include="Input\KeyAction.cs" />
     <Compile Include="Input\KeyboardInput.cs" />
     <Compile Include="Input\MouseInput.cs" />
-    <Compile Include="Geometry\Intersection\Intersections.cs" />
+    <Compile Include="Geometry\Intersection\IntersectionTests.cs" />
     <Compile Include="KeySequence.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="Oku.cs" />

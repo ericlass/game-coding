@@ -10,7 +10,7 @@ namespace OkuBase.Geometry.Intersection
   /// <summary>
   /// Provides a series of intersection tests for various primitives.
   /// </summary>
-  public static class Intersections
+  public static class IntersectionTests
   {
     private static DynamicArray<Vector2f> _vectorBuffer = new DynamicArray<Vector2f>(100);
 

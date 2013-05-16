@@ -89,7 +89,7 @@ namespace OkuBase.Geometry.Shapes
     /// <returns>True if the point is inside the AABB, else false.</returns>
     public bool IsInside(Vector2f point)
     {
-      return Intersections.PointInRectangle(point, Min, Max);
+      return IntersectionTests.PointInRectangle(point, Min, Max);
     }
 
     /// <summary>

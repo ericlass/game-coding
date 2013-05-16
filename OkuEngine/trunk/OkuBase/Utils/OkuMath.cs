@@ -284,7 +284,7 @@ namespace OkuBase.Utils
     public static Vector2f ClosestPointOnRect(Vector2f min, Vector2f max, Vector2f p)
     {
       Vector2f result = Vector2f.Zero;
-      if (Intersections.PointInRectangle(p, min, max))
+      if (IntersectionTests.PointInRectangle(p, min, max))
       {
         Vector2f center = GetRectCenter(min, max);
 
