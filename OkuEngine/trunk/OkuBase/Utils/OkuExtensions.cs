@@ -145,12 +145,12 @@ namespace OkuBase.Utils
     }
 
     /// <summary>
-    /// Calculates the bounding circle of the vectors with the given center.
+    /// Calculates the radius of the bounding circle of the vectors with the given center.
     /// </summary>
-    /// <param name="vectors">The vectors to get the circle for.</param>
+    /// <param name="vectors">The vectors calculate to get the circle for.</param>
     /// <param name="center">The center of the calculated circle.</param>
-    /// <returns>The bounding circle of the vectors.</returns>
-    public static Circle GetBoundingCircle(this Vector2f[] vectors, Vector2f center)
+    /// <returns>The radius of the bounding circle of the vectors.</returns>
+    public static float GetBoundingCircleRadius(this Vector2f[] vectors, Vector2f center)
     {
       if (vectors.Length > 0)
       {
@@ -165,19 +165,19 @@ namespace OkuBase.Utils
             maxDist = dist;
         }
 
-        return new Circle(center, (float)Math.Sqrt(maxDist));
+        return (float)Math.Sqrt(maxDist);
       }
-      return new Circle();
+      return 0.0f;
     }
 
     /// <summary>
-    /// Calculates the bounding circle using the arithmetic center of the vectors.
+    /// Calculates the radius of the bounding circle using the arithmetic center of the vectors.
     /// </summary>
-    /// <param name="vectors">The vectors to the boudning circle for.</param>
-    /// <returns>The bounding circle of the vectors.</returns>
-    public static Circle GetBoundingCircleCentered(this Vector2f[] vectors)
+    /// <param name="vectors">The vectors to calculate the bounding circle for.</param>
+    /// <returns>The radius of the bounding circle of the vectors.</returns>
+    public static float GetBoundingCircleRadiusCentered(this Vector2f[] vectors)
     {
-      return vectors.GetBoundingCircle(vectors.GetCenter());
+      return vectors.GetBoundingCircleRadius(vectors.GetCenter());
     }
 
     /// <summary>
@@ -399,6 +399,21 @@ namespace OkuBase.Utils
     {
       foreach (T item in values)
         collection.Add(item);
+    }
+
+    /// <summary>
+    /// Checks if the polygon is clockwise or counter-clockwise.
+    /// </summary>
+    /// <returns>True if the polygon is clockwise, else false.</returns>
+    public static bool PolygonIsClockwise(this Vector2f[] vertices)
+    {
+      float total = 0.0f;
+      for (int i = 0; i < vertices.Length; i++)
+      {
+        int j = (i + 1) % vertices.Length;
+        total += (vertices[j].X - vertices[i].X) * (vertices[j].Y + vertices[i].Y);
+      }
+      return total >= 0.0f;
     }
 
   }

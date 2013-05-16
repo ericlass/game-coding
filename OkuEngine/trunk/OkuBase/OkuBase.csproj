@@ -46,9 +46,7 @@
     <Compile Include="Driver\Audio\IAudioDriver.cs" />
     <Compile Include="Driver\DriverManager.cs" />
     <Compile Include="Driver\Graphics\IGraphicsDriver.cs" />
-    <Compile Include="Geometry\Shapes\Circle.cs" />
-    <Compile Include="Geometry\Shapes\LineSegment.cs" />
-    <Compile Include="Geometry\Shapes\Polygon.cs" />
+    <Compile Include="Geometry\Shapes\PolygonFactory.cs" />
     <Compile Include="Geometry\Shapes\Spline.cs" />
     <Compile Include="Geometry\Shapes\Rectangle2f.cs" />
     <Compile Include="Geometry\Vector2f.cs" />

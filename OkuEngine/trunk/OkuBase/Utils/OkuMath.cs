@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OkuBase.Geometry;
+using OkuBase.Geometry.Intersection;
 
 namespace OkuBase.Utils
 {
@@ -274,6 +275,62 @@ namespace OkuBase.Utils
       else
         return (int)Math.Ceiling(value);
     }
+
+    /// <summary>
+    /// Calculates the point on the perimeter of the aabb theat is closest to the given point.
+    /// </summary>
+    /// <param name="p">The point.</param>
+    /// <returns>The point on the perimeter that is closest to p.</returns>
+    public static Vector2f ClosestPointOnRect(Vector2f min, Vector2f max, Vector2f p)
+    {
+      Vector2f result = Vector2f.Zero;
+      if (Intersections.PointInRectangle(p, min, max))
+      {
+        Vector2f center = GetRectCenter(min, max);
+
+        float borderX, borderY;
+        if (p.X >= center.X)
+          borderX = max.X;
+        else
+          borderX = min.X;
+
+        if (p.Y >= center.Y)
+          borderY = max.Y;
+        else
+          borderY = min.Y;
+
+        float dx = Math.Abs(p.X - borderX);
+        float dy = Math.Abs(p.Y - borderY);
+        if (dx < dy)
+          return new Vector2f(borderX, p.Y);
+        else
+          return new Vector2f(p.X, borderY);
+      }
+      else
+      {
+        result = p;
+        if (result.X > max.X)
+          result.X = max.X;
+        if (result.X < min.X)
+          result.X = min.X;
+        if (result.Y > max.Y)
+          result.Y = max.Y;
+        if (result.Y < min.Y)
+          result.Y = min.Y;
+      }
+      return result;
+    }
+
+    /// <summary>
+    /// Calculates the center of the rectangle.
+    /// </summary>
+    /// <returns>The center point of the rectangle.</returns>
+    public static Vector2f GetRectCenter(Vector2f min, Vector2f max)
+    {
+      return (min + max) * 0.5f;
+    }
+
+
 
   }
 }

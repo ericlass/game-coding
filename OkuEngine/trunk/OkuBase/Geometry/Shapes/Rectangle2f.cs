@@ -42,14 +42,7 @@ namespace OkuBase.Geometry.Shapes
       Max = new Vector2f(left + width, bottom + height);
     }
 
-    /// <summary>
-    /// Calculates the center of the quad.
-    /// </summary>
-    /// <returns>The center point of the quad.</returns>
-    public Vector2f GetCenter()
-    {
-      return (Min + Max) * 0.5f;
-    }
+
 
     /// <summary>
     /// Gets the width of the quad.
@@ -96,7 +89,7 @@ namespace OkuBase.Geometry.Shapes
     /// <returns>True if the point is inside the AABB, else false.</returns>
     public bool IsInside(Vector2f point)
     {
-      return Intersections.PointInAABB(point, Min, Max);
+      return Intersections.PointInRectangle(point, Min, Max);
     }
 
     /// <summary>
@@ -113,88 +106,6 @@ namespace OkuBase.Geometry.Shapes
       float maxY = Math.Max(Max.Y, other.Max.Y);
 
       return new Rectangle2f(new Vector2f(minX, minY), new Vector2f(maxX, maxY));
-    }
-    
-    /// <summary>
-    /// Checks if the given AABB is completly inside the AABB.
-    /// Also returns true if the AABBs are equal.
-    /// </summary>
-    /// <param name="other">The AABB to check.</param>
-    /// <returns>True f the given AABB is completly inside of the AABB, else false.</returns>
-    public bool Contains(Rectangle2f other)
-    {
-      return Min.X <= other.Min.X && Min.Y <= other.Min.Y && Max.X >= other.Max.X && Max.Y >= other.Max.Y;
-    }
-
-    /// <summary>
-    /// Checks if the AABB completely contains the given circle.
-    /// </summary>
-    /// <param name="circle">The circle to check.</param>
-    /// <returns>True if the AABB completely contains the given circle, else false.</returns>
-    public bool Contains(Circle circle)
-    {
-      return
-        Min.X <= (circle.Center.X - circle.Radius) &&
-        Min.Y <= (circle.Center.Y - circle.Radius) &&
-        Max.X >= (circle.Center.X + circle.Radius) &&
-        Max.Y >= (circle.Center.Y + circle.Radius);
-    }
-    
-    /// <summary>
-    /// Check if the AABB intersects with the given AABB.
-    /// </summary>
-    /// <param name="other">The AABB to check intersection with.</param>
-    /// <returns>True if the AABBs intersect, else false.</returns>
-    public bool Intersects(Rectangle2f other)
-    {
-      return Intersections.AABBs(this, other);
-    }
-
-    //public bool Intersects(
-
-    /// <summary>
-    /// Calculates the point on the perimeter of the aabb theat is closest to the given point.
-    /// </summary>
-    /// <param name="p">The point.</param>
-    /// <returns>The point on the perimeter that is closest to p.</returns>
-    public Vector2f GetClosestPoint(Vector2f p)
-    {
-      Vector2f result = Vector2f.Zero;
-      if (IsInside(p))
-      {
-        Vector2f center = GetCenter();
-
-        float borderX, borderY;
-        if (p.X >= center.X)
-          borderX = Max.X;
-        else
-          borderX = Min.X;
-
-        if (p.Y >= center.Y)
-          borderY = Max.Y;
-        else
-          borderY = Min.Y;
-
-        float dx = Math.Abs(p.X - borderX);
-        float dy = Math.Abs(p.Y - borderY);
-        if (dx < dy)
-          return new Vector2f(borderX, p.Y);
-        else
-          return new Vector2f(p.X, borderY);
-      }
-      else
-      {
-        result = p;
-        if (result.X > Max.X)
-          result.X = Max.X;
-        if (result.X < Min.X)
-          result.X = Min.X;
-        if (result.Y > Max.Y)
-          result.Y = Max.Y;
-        if (result.Y < Min.Y)
-          result.Y = Min.Y;
-      }
-      return result;
     }
 
     /// <summary>

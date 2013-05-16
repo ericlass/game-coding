@@ -54,19 +54,6 @@ namespace OkuBase.Geometry.Intersection
     }
 
     /// <summary>
-    /// Checks if the two given line segments intersect.
-    /// </summary>
-    /// <param name="ls1">The first line segment.</param>
-    /// <param name="ls2">The second line segment.</param>
-    /// <param name="factor">Contains the line formula control value, if there is an intersection.</param>
-    /// <param name="minT">The minimum line formula control value that has to be reached.</param>
-    /// <returns>True if the line segments intersect, otherwise false.</returns>
-    public static bool LineSegments(LineSegment ls1, LineSegment ls2, out float factor, float minT)
-    {
-      return LineSegments(ls1.Start.X, ls1.Start.Y, ls1.End.X, ls1.End.Y, ls2.Start.X, ls2.Start.Y, ls2.End.X, ls2.End.Y, out factor, minT);
-    }
-
-    /// <summary>
     /// Checks if the line segments defined by [p1,p2] and [p3,p4] intersect.
     /// </summary>
     /// <param name="p1">The start of the first line.</param>
@@ -278,7 +265,7 @@ namespace OkuBase.Geometry.Intersection
     /// <param name="min2">The minimum vector of the second bounding box.</param>
     /// <param name="max2">The maximum vector of the second bounding box.</param>
     /// <returns>True if the bounding boxes intersect, else false.</returns>
-    public static bool AABBs(Vector2f min1, Vector2f max1, Vector2f min2, Vector2f max2)
+    public static bool Rectangles(Vector2f min1, Vector2f max1, Vector2f min2, Vector2f max2)
     {
       if (min1.X > max2.X)
         return false;
@@ -289,17 +276,6 @@ namespace OkuBase.Geometry.Intersection
       if (max1.Y < min2.Y)
         return false;
       return true;
-    }
-
-    /// <summary>
-    /// Checks if the givne bounding boxes overlap.
-    /// </summary>
-    /// <param name="box1">The first box.</param>
-    /// <param name="box2">The second box.</param>
-    /// <returns>True if the boxes intersect, else false.</returns>
-    public static bool AABBs(Rectangle2f box1, Rectangle2f box2)
-    {
-      return AABBs(box1.Min, box1.Max, box2.Min, box2.Max);
     }
 
     /// <summary>
@@ -335,7 +311,7 @@ namespace OkuBase.Geometry.Intersection
     /// <param name="min">The min vector of the AABB.</param>
     /// <param name="max">The max vector of the AABB.</param>
     /// <returns>True if the point is inside the AABB, else false.</returns>
-    public static Boolean PointInAABB(Vector2f p, Vector2f min, Vector2f max)
+    public static Boolean PointInRectangle(Vector2f p, Vector2f min, Vector2f max)
     {
       if (p.X < min.X)
         return false;
@@ -358,7 +334,7 @@ namespace OkuBase.Geometry.Intersection
     /// <param name="maxX">The x value of the max vector.</param>
     /// <param name="maxY">The y value of the max vector.</param>
     /// <returns>True if the point is inside the AABB, else false.</returns>
-    public static Boolean PointInAABB(Vector2f p, float minX, float minY, float maxX, float maxY)
+    public static Boolean PointInRectangle(Vector2f p, float minX, float minY, float maxX, float maxY)
     {
       if (p.X < minX)
         return false;
@@ -382,7 +358,7 @@ namespace OkuBase.Geometry.Intersection
     /// <param name="maxX">The x value of the max vector.</param>
     /// <param name="maxY">The y value of the max vector.</param>
     /// <returns>True if the point is inside the AABB, else false.</returns>
-    public static Boolean PointInAABB(float x, float y, float minX, float minY, float maxX, float maxY)
+    public static Boolean PointInRectangle(float x, float y, float minX, float minY, float maxX, float maxY)
     {
       if (x < minX)
         return false;
@@ -437,55 +413,83 @@ namespace OkuBase.Geometry.Intersection
       return result;
     }
 
-    public static bool CircleAABB(Circle circle, Rectangle2f aabb)
+    public static bool CircleAABB(Vector2f center, float radius, Vector2f min, Vector2f max)
     {
-      Vector2f cc = circle.Center;
-      if (cc.X > aabb.Max.X)
-        cc.X = aabb.Max.X;
-      if (cc.X < aabb.Min.X)
-        cc.X = aabb.Min.X;
-      if (cc.Y > aabb.Max.Y)
-        cc.Y = aabb.Max.Y;
-      if (cc.Y < aabb.Min.Y)
-        cc.Y = aabb.Min.Y;
+      Vector2f cc = center;
+      if (cc.X > max.X)
+        cc.X = max.X;
+      if (cc.X < min.X)
+        cc.X = min.X;
+      if (cc.Y > max.Y)
+        cc.Y = max.Y;
+      if (cc.Y < min.Y)
+        cc.Y = min.Y;
 
-      float dx = cc.X - circle.Center.X;
-      float dy = cc.Y - circle.Center.Y;
-      return circle.Radius * circle.Radius > (dx * dx + dy * dy);
+      float dx = cc.X - center.X;
+      float dy = cc.Y - center.Y;
+      return radius * radius > (dx * dx + dy * dy);
     }
 
-    public static bool CircleAABB(Circle circle, Rectangle2f aabb, out Vector2f mtd)
+    public static bool CircleAABB(Vector2f center, float radius, Vector2f min, Vector2f max, out Vector2f mtd)
     {
       mtd = Vector2f.Zero;
 
-      Vector2f cc = circle.Center;
-      if (cc.X > aabb.Max.X)
-        cc.X = aabb.Max.X;
-      if (cc.X < aabb.Min.X)
-        cc.X = aabb.Min.X;
-      if (cc.Y > aabb.Max.Y)
-        cc.Y = aabb.Max.Y;
-      if (cc.Y < aabb.Min.Y)
-        cc.Y = aabb.Min.Y;
+      Vector2f cc = center;
+      if (cc.X > max.X)
+        cc.X = max.X;
+      if (cc.X < min.X)
+        cc.X = min.X;
+      if (cc.Y > max.Y)
+        cc.Y = max.Y;
+      if (cc.Y < min.Y)
+        cc.Y = min.Y;
 
-      float dx = cc.X - circle.Center.X;
-      float dy = cc.Y - circle.Center.Y;
-      bool result = circle.Radius * circle.Radius > (dx * dx + dy * dy);
+      float dx = cc.X - center.X;
+      float dy = cc.Y - center.Y;
+      bool result = radius * radius > (dx * dx + dy * dy);
       if (result)
       {
-        Vector2f vec = aabb.GetClosestPoint(circle.Center);
-        if (aabb.IsInside(circle.Center))
+        Vector2f vec = OkuMath.ClosestPointOnRect(min, max, center);
+        if (PointInRectangle(center, min, max))
         {
-          mtd = vec - circle.Center;
+          mtd = vec - center;
           if (mtd.X < mtd.Y)
-            mtd.Y += Math.Sign(mtd.Y) * circle.Radius;
+            mtd.Y += Math.Sign(mtd.Y) * radius;
           else
-            mtd.X += Math.Sign(mtd.X) * circle.Radius;
+            mtd.X += Math.Sign(mtd.X) * radius;
         }
         else
-          mtd = circle.Center - vec;
+          mtd = center - vec;
       }
       return result;
+    }
+
+    /// <summary>
+    /// Checks if the AABB completely contains the given circle.
+    /// </summary>
+    /// <param name="circle">The circle to check.</param>
+    /// <returns>True if the AABB completely contains the given circle, else false.</returns>
+    public static bool RectContainsCircle(Vector2f min, Vector2f max, Vector2f center, float radius)
+    {
+      return
+        min.X <= (center.X - radius) &&
+        min.Y <= (center.Y - radius) &&
+        max.X >= (center.X + radius) &&
+        max.Y >= (center.Y + radius);
+    }
+
+    /// <summary>
+    /// Checks if the given rectangle defined by [min1,max1] completly contains the rectangle defined by [min2,max2].
+    /// Also returns true if the AABBs are equal.
+    /// </summary>
+    /// <param name="min1">The minimum point of the first rectangle.</param>
+    /// <param name="max1">The maximum point of the first rectangle.</param>
+    /// <param name="min2">The minimum point of the second rectangle.</param>
+    /// <param name="max2">The maximum point of the second rectangle.</param>
+    /// <returns>True if the given AABB is completly inside of the AABB, else false.</returns>
+    public static bool Contains(Vector2f min1, Vector2f max1, Vector2f min2, Vector2f max2)
+    {
+      return min1.X <= min2.X && min1.Y <= min2.Y && max1.X >= max2.X && max1.Y >= max2.Y;
     }
 
   }
