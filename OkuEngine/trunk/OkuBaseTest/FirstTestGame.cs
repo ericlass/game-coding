@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using OkuBase;
+using OkuBase.Geometry;
 using OkuBase.Graphics;
 using OkuBase.Settings;
 
@@ -30,6 +31,9 @@ namespace OkuBaseTest
     public override void Update(float dt)
     {
       _angle -= 180 * dt;
+      Vector2f center = Oku.Instance.Graphics.Viewport.Center;
+      center.X = center.X + (50 * dt);
+      Oku.Instance.Graphics.Viewport.Center = center;
     }
 
     public override void Render()

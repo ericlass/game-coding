@@ -57,6 +57,7 @@
     <Compile Include="Graphics\ImageData.cs" />
     <Compile Include="Graphics\TextureFilter.cs" />
     <Compile Include="Graphics\VertexInterpretation.cs" />
+    <Compile Include="Graphics\ViewPort.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\JoystickInfo.cs" />
     <Compile Include="Input\JoystickInput.cs" />

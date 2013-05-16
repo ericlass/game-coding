@@ -10,16 +10,30 @@ namespace OkuBase.Graphics
   public class GraphicsManager : Manager
   {
     private IGraphicsDriver _driver = null;
+    private ViewPort _viewport = null;
+
+    void OnViewportChange(ViewPort sender)
+    {
+      _driver.SetViewport(sender.Left, sender.Right, sender.Bottom, sender.Top);
+    }
 
     public IGraphicsDriver Driver
     {
       get { return _driver; }
     }
 
+    public ViewPort Viewport
+    {
+      get { return _viewport; }
+    }
+
     public override void Initialize(OkuSettings settings)
     {
       _driver = Oku.Instance.Drivers.GraphicsDriver;
       _driver.Initialize(settings.Graphics);
+
+      _viewport = new ViewPort(settings.Graphics.Width, settings.Graphics.Height);
+      _viewport.Change += new ViewPortChangeEventHandler(OnViewportChange);
     }
 
     public override void Update(float dt)

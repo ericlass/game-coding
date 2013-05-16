@@ -136,6 +136,13 @@ namespace OkuDrivers
         Gl.glDisableClientState(Gl.GL_COLOR_ARRAY);
     }
 
+    private void UpdateViewport(float left, float right, float bottom, float top)
+    {
+      Gl.glMatrixMode(Gl.GL_PROJECTION);
+      Gl.glLoadIdentity();
+      Gl.glOrtho(left, right, bottom, top, -1, 1);
+    }
+
     public string DriverName
     {
       get { return "opengl"; }
@@ -219,9 +226,7 @@ namespace OkuDrivers
 
       Gl.glFrontFace(Gl.GL_CW);
 
-      Gl.glMatrixMode(Gl.GL_PROJECTION);
-      Gl.glLoadIdentity();
-      Gl.glOrtho(_settings.Width * -0.5, _settings.Width * 0.5, settings.Height * -0.5, settings.Height * 0.5, -1, 1);
+      UpdateViewport(settings.Width * -0.5f, settings.Width * 0.5f, settings.Height * -0.5f, settings.Height * 0.5f);
     }
 
     public void Update(float dt)
@@ -465,6 +470,11 @@ namespace OkuDrivers
 
       SetPointers(points, texCoords, colors);
       Gl.glDrawArrays(primitive, 0, count);
+    }
+
+    public void SetViewport(float left, float right, float bottom, float top)
+    {
+      UpdateViewport(left, right, bottom, top);
     }
 
     public void BeginScreenSpace()

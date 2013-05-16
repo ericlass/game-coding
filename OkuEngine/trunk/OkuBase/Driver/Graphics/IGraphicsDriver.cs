@@ -150,6 +150,15 @@ namespace OkuBase.Driver.Graphics
 
 
     /// <summary>
+    /// Set the current part of the world that is shown in the display.
+    /// </summary>
+    /// <param name="left">The left bound of the viewport.</param>
+    /// <param name="right">The right bound of the viewport.</param>
+    /// <param name="bottom">The bottom bound of the viewport.</param>
+    /// <param name="top">The top bound of the viewport.</param>
+    void SetViewport(float left, float right, float bottom, float top);
+
+    /// <summary>
     /// Set the renderer to screen space mode. In this mode
     /// all draw calls are done in screen space.
     /// </summary>
