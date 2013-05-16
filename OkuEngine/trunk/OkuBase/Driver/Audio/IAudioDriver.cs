@@ -7,5 +7,7 @@ namespace OkuBase.Driver.Audio
   public interface IAudioDriver
   {
     string DriverName { get; }
+
+    void Update(float dt);
   }
 }

@@ -8,7 +8,7 @@ namespace OkuBase.Platform
   /// <summary>
   /// Wraps functions from user32.dll.
   /// </summary>
-  class User32
+  public class User32
   {
     /// <summary>
     /// Internal struct to get mouse position.
@@ -57,6 +57,12 @@ namespace OkuBase.Platform
 
     [DllImport("User32.dll")]
     public static extern uint MapVirtualKey(uint code, uint mapType);
+
+    [DllImport("user32.dll")]
+    public static extern IntPtr GetDC(IntPtr hWnd);
+
+    [DllImport("user32.dll")]
+    public static extern bool ReleaseDC(IntPtr hWnd, IntPtr hDC);
 
   }
 }

@@ -136,5 +136,59 @@ namespace OkuBase.Driver.Graphics
     /// <param name="size">The size of the points in pixels.</param>
     void DrawPoints(Vector2f[] points, Color[] colors, int count, float size);
 
+
+    /// <summary>
+    /// Draws a generic mesh using the given parameters.
+    /// </summary>
+    /// <param name="points">The coordinates of the vertices of the mesh in world space. Must not be null.</param>
+    /// <param name="texCoords">The normalized texture coordinates of the vertices. Must be same length as points. If null, no texture is applied.</param>
+    /// <param name="colors">The colors of the vertices. Must be same length as points. If null, white is used as default color.</param>
+    /// <param name="count">The number of points to draw from the given array.</param>
+    /// <param name="type">The type of primitive used to draw the given vertices.</param>
+    /// <param name="texture">The texture to be applied. If not null, texCoords must also be given.</param>
+    void DrawMesh(Vector2f[] points, Vector2f[] texCoords, Color[] colors, int count, PrimitiveType type, Image texture);
+
+
+    /// <summary>
+    /// Set the renderer to screen space mode. In this mode
+    /// all draw calls are done in screen space.
+    /// </summary>
+    void BeginScreenSpace();
+
+    /// <summary>
+    /// Ends the screen space mode.
+    /// </summary>
+    void EndScreenSpace();
+
+    /// <summary>
+    /// Sets a rectangular area of the screen where drawing will happen. 
+    /// Everything outside of the specified area will not be drawn and
+    /// kept form the previous frame.
+    /// The area is specified in display space pixel coordinates and are inclusive.
+    /// </summary>
+    /// <param name="left">The left border of the scissor rectangle.</param>
+    /// <param name="right">The right border of the scissor rectangle.</param>
+    /// <param name="width">The width of the scissor rectangle.</param>
+    /// <param name="height">The height of the scissor rectangle.</param>
+    void SetScissorRectangle(int left, int right, int width, int height);
+
+    /// <summary>
+    /// Clear the scissor rectangle so that thw whole screen is redrawn again.
+    /// </summary>
+    void ClearScissorRectangle();
+
+    /// <summary>
+    /// Pushes the current transformation onto the stack and applies the given transformation.
+    /// </summary>
+    /// <param name="translation">The amount to translate.</param>
+    /// <param name="scale">The scale factors.</param>
+    /// <param name="angle">The angle to rotate.</param>
+    void ApplyAndPushTransform(Vector2f translation, Vector2f scale, float angle);
+
+    /// <summary>
+    /// Pops the current transformation from the stack.
+    /// </summary>
+    void PopTransform();
+
   }
 }

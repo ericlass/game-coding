@@ -11,7 +11,7 @@ namespace OkuBaseTest
     [STAThread]
     static void Main()
     {
-      OkuGame game = new OkuGame();
+      OkuGame game = new FirstTestGame();
       game.Run();
     }
   }

@@ -10,6 +10,7 @@ namespace OkuBase.Graphics
   public class Image
   {
     private int _id = KeySequence.NextValue(KeySequence.ImageSequence);
+    private bool _compressed = false;
     private ImageData _imageData = null;
 
     /// <summary>
@@ -29,11 +30,30 @@ namespace OkuBase.Graphics
     }
 
     /// <summary>
+    /// Creates a new image with the given pixel data.
+    /// </summary>
+    /// <param name="data">The pixel data of the new image.</param>
+    /// <param name="isCompressed">Determines if the image is compressed or not.</param>
+    public Image(ImageData data, bool isCompressed)
+    {
+      _imageData = data;
+      _compressed = isCompressed;
+    }
+
+    /// <summary>
     /// Gets the unique id of this image.
     /// </summary>
     public int Id
     {
       get { return _id; }
+    }
+
+    /// <summary>
+    /// Gets if the image is compressed or not.
+    /// </summary>
+    public bool IsCompressed
+    {
+      get { return _compressed; }
     }
 
     /// <summary>

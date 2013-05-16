@@ -10,7 +10,9 @@ namespace OkuBase.Settings
     private Color _bgColor = Color.Magenta;
     private bool _fullscreen = false;
     private TextureFilter _texFilter = TextureFilter.Linear;
-    private int _renderPasses = 0;
+    private int _width = 800;
+    private int _height = 600;
+    private bool _depthTest = false;
 
     public string DriverName
     {
@@ -36,10 +38,22 @@ namespace OkuBase.Settings
       set { _texFilter = value; }
     }
 
-    private int RenderPasses
+    public int Width
     {
-      get { return _renderPasses; }
-      set { _renderPasses = value; }
+      get { return _width; }
+      set { _width = value; }
+    }
+
+    public int Height
+    {
+      get { return _height; }
+      set { _height = value; }
+    }
+
+    public bool EnableDepthTest
+    {
+      get { return _depthTest; }
+      set { _depthTest = value; }
     }
 
   }

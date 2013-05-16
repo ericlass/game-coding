@@ -51,6 +51,7 @@
     <Compile Include="Geometry\Shapes\Rectangle2f.cs" />
     <Compile Include="Geometry\Vector2f.cs" />
     <Compile Include="Graphics\Color.cs" />
+    <Compile Include="Graphics\PrimitiveType.cs" />
     <Compile Include="Graphics\GraphicsManager.cs" />
     <Compile Include="Graphics\Image.cs" />
     <Compile Include="Graphics\ImageData.cs" />
@@ -68,6 +69,8 @@
     <Compile Include="Oku.cs" />
     <Compile Include="OkuException.cs" />
     <Compile Include="OkuGame.cs" />
+    <Compile Include="Platform\Gdi32.cs" />
+    <Compile Include="Platform\Opengl32.cs" />
     <Compile Include="Settings\AudioSettings.cs" />
     <Compile Include="Settings\GraphicsSettings.cs" />
     <Compile Include="Settings\OkuSettings.cs" />

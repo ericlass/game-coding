@@ -61,7 +61,6 @@ namespace OkuBase.Input
 
     public override void Initialize(OkuSettings settings)
     {
-      throw new NotImplementedException();
     }
 
     /// <summary>
@@ -75,7 +74,6 @@ namespace OkuBase.Input
 
     public override void Finish()
     {
-      throw new NotImplementedException();
     }
 
   }

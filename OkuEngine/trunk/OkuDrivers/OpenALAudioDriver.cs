@@ -11,5 +11,9 @@ namespace OkuDrivers
       get { return "openal"; }
     }
 
+    public void Update(float dt)
+    {
+    }
+
   }
 }

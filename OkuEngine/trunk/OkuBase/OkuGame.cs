@@ -111,7 +111,9 @@ namespace OkuBase
     /// </summary>
     public void DoInitialize(OkuSettings settings)
     {
+      KeySequence.Initialize();
       Oku.Instance.Initialize(settings);
+      Initialize();
     }
 
     /// <summary>

@@ -125,7 +125,8 @@ namespace OkuBase.Driver
  
     public override void Update(float dt)
     {
-      throw new NotImplementedException();
+      _graphicsDriver.Update(dt);
+      _audioDriver.Update(dt);
     }
 
   }

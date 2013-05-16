@@ -59,10 +59,10 @@ namespace OkuBase.Graphics
     /// <summary>
     /// Gets the raw internal pixel data array.
     /// </summary>
-    internal int[] PixelData
+    public int[] PixelData
     {
       get { return _pixelData; }
-      set { _pixelData = value; }
+      //set { _pixelData = value; }
     }
 
     /// <summary>
@@ -133,13 +133,16 @@ namespace OkuBase.Graphics
     /// <returns>The image data version of the bitmap.</returns>
     public static ImageData FromBitmap(Bitmap bitmap)
     {
-      BitmapData bmData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+      Bitmap flipped = new Bitmap(bitmap);
+      flipped.RotateFlip(RotateFlipType.RotateNoneFlipY);
+
+      BitmapData bmData = flipped.LockBits(new Rectangle(0, 0, flipped.Width, flipped.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
       int numBytes = Math.Abs(bmData.Width) * bmData.Height;
       int[] pixels = new int[numBytes];
       System.Runtime.InteropServices.Marshal.Copy(bmData.Scan0, pixels, 0, numBytes);
-      bitmap.UnlockBits(bmData);
+      flipped.UnlockBits(bmData);
 
-      return new ImageData(bitmap.Width, bitmap.Height, pixels);
+      return new ImageData(flipped.Width, flipped.Height, pixels);
     }
     
     /// <summary>
@@ -168,6 +171,7 @@ namespace OkuBase.Graphics
     /// <summary>
     /// Creates new image data with the given width, height and raw pixel data.
     /// The bytes of the ints are expected to have the order BGRA.
+    /// The first pixel is expected to be the one in the bottom left corner.
     /// </summary>
     /// <param name="rawData">The raw pixel data.</param>
     /// <param name="width">The width of the image.</param>

@@ -11,7 +11,7 @@ namespace OkuBase.Graphics
   {
     private IGraphicsDriver _driver = null;
 
-    internal IGraphicsDriver Driver
+    public IGraphicsDriver Driver
     {
       get { return _driver; }
     }
@@ -32,19 +32,26 @@ namespace OkuBase.Graphics
 
     #region Images
 
-    public Image NewImage(ImageData data)
+    public Image NewImage(ImageData data, bool compressed)
     {
-      Image result = new Image(data);
+      Image result = new Image(data, compressed);
       _driver.LoadImage(result);
       return result;
     }
 
-    public void UpdateImage(Image image, int x, int y, int width, int height, System.Drawing.Bitmap bitmap)
+    public Image NewImage(ImageData data)
     {
+      return NewImage(data, false);
+    }
+
+    public void UpdateImage(Image image, int x, int y, int width, int height, ImageData data)
+    {
+      _driver.UpdateImage(image, x, y, width, height, data);
     }
 
     public void ReleaseImage(Image image)
     {
+      _driver.ReleaseImage(image);
     }
 
     #endregion
@@ -53,10 +60,12 @@ namespace OkuBase.Graphics
 
     internal void Begin()
     {
+      _driver.Begin();
     }
 
     internal void End()
     {
+      _driver.End();
     }
 
     #endregion
