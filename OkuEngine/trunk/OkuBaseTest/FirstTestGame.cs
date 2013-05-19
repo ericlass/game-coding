@@ -17,7 +17,7 @@ namespace OkuBaseTest
     {
       OkuSettings result = base.Configure();
 
-      result.Graphics.BackgroundColor = Color.Black;
+      //result.Graphics.BackgroundColor = Color.Black;
 
       return result;
     }
@@ -25,20 +25,25 @@ namespace OkuBaseTest
     public override void Initialize()
     {
       ImageData data = ImageData.FromFile("pilz.png");
-      _image = Oku.Instance.Graphics.NewImage(data);
+      _image = Oku.Graphics.NewImage(data);
     }
 
     public override void Update(float dt)
     {
       _angle -= 180 * dt;
-      Vector2f center = Oku.Instance.Graphics.Viewport.Center;
+      
+      /*Vector2f center = Oku.Graphics.Viewport.Center;
       center.X = center.X + (50 * dt);
-      Oku.Instance.Graphics.Viewport.Center = center;
+      Oku.Graphics.Viewport.Center = center;*/
+
+      Vector2f client = Oku.Graphics.ScreenToWorld(Oku.Input.Mouse.X, Oku.Input.Mouse.Y);
+      Oku.Graphics.Driver.Display.Text = client.ToString();
     }
 
     public override void Render()
     {
-      Oku.Instance.Graphics.Driver.DrawImage(_image, 0, 0, _angle, 1, 1, Color.White);
+      Oku.Graphics.Driver.DrawImage(_image, 0, 0, _angle, 1, 1, Color.White);
+      Oku.Graphics.Driver.DrawPoint(0, 0, 1, Color.Red);
     }
 
   }

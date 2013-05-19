@@ -4,6 +4,8 @@ using System.Text;
 using System.Drawing;
 using OkuBase.Driver.Graphics;
 using OkuBase.Settings;
+using OkuBase.Geometry;
+using OkuBase.Utils;
 
 namespace OkuBase.Graphics
 {
@@ -42,6 +44,35 @@ namespace OkuBase.Graphics
 
     public override void Finish()
     {
+    }
+
+    /// <summary>
+    /// Converts the given screen pixel coordinates to display client coordinates.
+    /// The origin for these coordinates is in the lower left corner.
+    /// </summary>
+    /// <param name="x">The x coordinate of the pixel.</param>
+    /// <param name="y">The y coordinate of the pixel.</param>
+    /// <returns>The client space coordinates of the given pixel. Note that this can be outside of the window in windowed mode.</returns>
+    public Vector2f ScreenToDisplay(int x, int y)
+    {
+      Point p = _driver.Display.PointToClient(new Point((int)x, (int)y));
+      return new Vector2f(p.X, (_driver.Display.ClientSize.Height - 1) - p.Y);
+    }
+
+    /// <summary>
+    /// Converts the given screen pixel coordinates to world coordinates.
+    /// </summary>
+    /// <param name="x">The x coordinate of the pixel.</param>
+    /// <param name="y">The y coordinate of the pixel.</param>
+    /// <returns>The world space coordinates of the given pixel. Note that this can be outside of the window in windowed mode.</returns>
+    public Vector2f ScreenToWorld(int x, int y)
+    {
+      Vector2f pDist = ScreenToDisplay(x, y);
+
+      float wx = OkuMath.InterpolateLinear(_viewport.Left, _viewport.Right, pDist.X / _driver.Display.ClientSize.Width);
+      float wy = OkuMath.InterpolateLinear(_viewport.Bottom, _viewport.Top, pDist.Y / _driver.Display.ClientSize.Height);
+
+      return new Vector2f(wx, wy);
     }
 
     #region Images

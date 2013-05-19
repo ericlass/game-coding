@@ -14,6 +14,7 @@ namespace OkuBase
   {
     private int _mouseDelta = 0;
     private string _name = "OkuGame";
+    private Oku _okuInstance = null;
 
     /// <summary>
     /// Creates a new game.
@@ -32,10 +33,20 @@ namespace OkuBase
     }
 
     /// <summary>
+    /// Gets the oku library.
+    /// </summary>
+    public Oku Oku
+    {
+      get { return _okuInstance; }
+    }
+
+    /// <summary>
     /// Runs the game in an infinite loop.
     /// </summary>
     public void Run()
     {
+      _okuInstance = Oku.Instance;
+
       OkuSettings settings = Configure();
 
       DoInitialize(settings);
