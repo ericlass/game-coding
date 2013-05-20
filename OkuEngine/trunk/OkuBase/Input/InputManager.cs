@@ -45,17 +45,17 @@ namespace OkuBase.Input
 
     internal void KeyPressed(Keys key)
     {
-      if (isMouseButton(key))
+      if (isMouseButton(key) && OnMousePressed != null)
         OnMousePressed(key);
-      else
+      else if (OnKeyPressed != null)
         OnKeyPressed(key);
     }
 
     internal void KeyReleased(Keys key)
     {
-      if (isMouseButton(key))
+      if (isMouseButton(key) && OnMousePressed != null)
         OnMouseReleased(key);
-      else
+      else if (OnKeyReleased != null)
         OnKeyReleased(key);
     }
 

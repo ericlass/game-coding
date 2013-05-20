@@ -6,6 +6,7 @@ using OkuBase.Audio;
 using OkuBase.Input;
 using OkuBase.Driver;
 using OkuBase.Settings;
+using OkuBase.Timer;
 
 namespace OkuBase
 {
@@ -29,6 +30,7 @@ namespace OkuBase
     private GraphicsManager _graphics = new GraphicsManager();
     private AudioManager _audio = new AudioManager();
     private InputManager _input = new InputManager();
+    private TimerManager _timer = new TimerManager();
 
     private Oku()
     {
@@ -37,6 +39,7 @@ namespace OkuBase
       _managers.Add(_graphics);
       _managers.Add(_audio);
       _managers.Add(_input);
+      _managers.Add(_timer);
     }
 
     public void Initialize(OkuSettings settings)
@@ -77,6 +80,11 @@ namespace OkuBase
     public InputManager Input
     {
       get { return _input; }
+    }
+
+    public TimerManager Timer
+    {
+      get { return _timer; }
     }
 
   }

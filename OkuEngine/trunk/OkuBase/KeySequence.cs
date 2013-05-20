@@ -13,6 +13,7 @@ namespace OkuBase
 
     //Default system sequences
     public const string ImageSequence = "images";
+    public const string TimerSequence = "timers";
 
     private static Dictionary<string, int> _sequences = new Dictionary<string, int>();
 
@@ -20,6 +21,7 @@ namespace OkuBase
     {
       //Initialize default sequences
       AddSequence(ImageSequence);
+      AddSequence(TimerSequence);
     }
 
     public static bool ResetSequence(string name)

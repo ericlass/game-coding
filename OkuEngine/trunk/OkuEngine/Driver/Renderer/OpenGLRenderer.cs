@@ -204,7 +204,7 @@ namespace OkuEngine.Driver.Renderer
         }
       }      
 
-      //Bind color buffer to fbo
+      //Bind render buffer to fbo
       Gl.glFramebufferRenderbufferEXT(Gl.GL_FRAMEBUFFER_EXT, Gl.GL_DEPTH_ATTACHMENT_EXT, Gl.GL_RENDERBUFFER_EXT, _renderBuffer);
 
       //Check if fbo is set up correctly
