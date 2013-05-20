@@ -1,9 +1,8 @@
-﻿using System.IO;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using OkuBase.Input;
 using OkuBase.Platform;
 using OkuBase.Settings;
+using OkuBase.Input;
 
 namespace OkuBase
 {
@@ -60,33 +59,103 @@ namespace OkuBase
       User32.NativeMessage msg = new User32.NativeMessage();
       HandleRef hRef = new HandleRef(Oku.Instance.Graphics.Driver.Display, Oku.Instance.Graphics.Driver.Display.Handle);
 
-      while (true)
+      bool running = true;
+      while (running)
       {
         if (!Oku.Instance.Graphics.Driver.Display.Created)
           break;
 
         if (User32.PeekMessage(out msg, hRef, 0, 0, 1))
         {
-          if (msg.msg == User32.WM_QUIT)
+          switch (msg.msg)
           {
-            break;
-          }
-          else if (msg.msg == User32.WM_MOUSEWHEEL)
-          {
-            _mouseDelta = (int)(msg.wParam) >> 16;
-          }
-          else if (msg.msg == User32.WM_KEYDOWN)
-          {
-            Oku.Instance.Input.KeyPressed((Keys)msg.wParam);
-          }
-          else if (msg.msg == User32.WM_KEYUP)
-          {
-            Oku.Instance.Input.KeyReleased((Keys)msg.wParam);
-          }
-          else
-          {
-            User32.TranslateMessage(ref msg);
-            User32.DispatchMessage(ref msg);
+            case User32.WM_QUIT:
+              running = false;
+              break;
+
+            case User32.WM_MOUSEWHEEL:
+              int mouseDelta = (int)(msg.wParam) >> 16;
+              _okuInstance.Input.MouseWheel(mouseDelta);
+              break;
+
+            case User32.WM_KEYDOWN:
+              _okuInstance.Input.KeyPressed((Keys)msg.wParam);
+              break;
+
+            case User32.WM_KEYUP:
+              _okuInstance.Input.KeyReleased((Keys)msg.wParam);
+              break;
+
+            case User32.WM_LBUTTONDBLCLK:
+              _okuInstance.Input.MouseDblClick(MouseButton.Left);
+              break;
+
+            case User32.WM_LBUTTONDOWN:
+              _okuInstance.Input.MousePressed(MouseButton.Left);
+              break;
+
+            case User32.WM_LBUTTONUP:
+              _okuInstance.Input.MouseReleased(MouseButton.Left);
+              break;
+
+            case User32.WM_RBUTTONDBLCLK:
+              _okuInstance.Input.MouseDblClick(MouseButton.Right);
+              break;
+
+            case User32.WM_RBUTTONDOWN:
+              _okuInstance.Input.MousePressed(MouseButton.Right);
+              break;
+
+            case User32.WM_RBUTTONUP:
+              _okuInstance.Input.MouseReleased(MouseButton.Right);
+              break;
+
+            case User32.WM_MBUTTONDBLCLK:
+              _okuInstance.Input.MouseDblClick(MouseButton.Middle);
+              break;
+
+            case User32.WM_MBUTTONDOWN:
+              _okuInstance.Input.MousePressed(MouseButton.Middle);
+              break;
+
+            case User32.WM_MBUTTONUP:
+              _okuInstance.Input.MouseReleased(MouseButton.Middle);
+              break;
+
+            case User32.WM_XBUTTONDBLCLK:
+              uint xButton = (uint)(msg.wParam.ToInt32() >> 16 & 0x0000FFFF);
+              if (xButton == 1)
+                _okuInstance.Input.MouseDblClick(MouseButton.Fourth);
+              else if (xButton == 2)
+                _okuInstance.Input.MouseDblClick(MouseButton.Fifth);
+              else
+                throw new OkuException("Unsupported X Mouse Button: " + xButton);
+              break;
+
+            case User32.WM_XBUTTONDOWN:
+              xButton = (uint)(msg.wParam.ToInt32() >> 16 & 0x0000FFFF);
+              if (xButton == 1)
+                _okuInstance.Input.MousePressed(MouseButton.Fourth);
+              else if (xButton == 2)
+                _okuInstance.Input.MousePressed(MouseButton.Fifth);
+              else
+                throw new OkuException("Unsupported X Mouse Button: " + xButton);
+              break;
+
+            case User32.WM_XBUTTONUP:
+              xButton = (uint)(msg.wParam.ToInt32() >> 16 & 0x0000FFFF);
+              if (xButton == 1)
+                _okuInstance.Input.MouseReleased(MouseButton.Fourth);
+              else if (xButton == 2)
+                _okuInstance.Input.MouseReleased(MouseButton.Fifth);
+              else
+                throw new OkuException("Unsupported X Mouse Button: " + xButton);
+              break;
+
+            default:
+              User32.TranslateMessage(ref msg);
+              User32.DispatchMessage(ref msg);
+              break;
           }
         }
         else

@@ -27,14 +27,25 @@ namespace OkuBase.Platform
       public IntPtr wParam;
       public IntPtr lParam;
       public uint time;
-      //public System.Drawing.Point p;
     }
 
-    public const uint WM_QUIT = 0x0012;
-    public const uint WM_PAINT = 0x000F;
-    public const uint WM_MOUSEWHEEL = 0x020A;
-    public const uint WM_KEYDOWN = 0x0100;
-    public const uint WM_KEYUP = 0x0101;
+    public const uint WM_QUIT           = 0x0012;
+    public const uint WM_PAINT          = 0x000F;
+    public const uint WM_MOUSEWHEEL     = 0x020A;
+    public const uint WM_KEYDOWN        = 0x0100;
+    public const uint WM_KEYUP          = 0x0101;
+    public const uint WM_LBUTTONDBLCLK  = 0x0203;
+    public const uint WM_LBUTTONDOWN    = 0x0201;
+    public const uint WM_LBUTTONUP      = 0x0202;
+    public const uint WM_MBUTTONDBLCLK  = 0x0209;
+    public const uint WM_MBUTTONDOWN    = 0x0207;
+    public const uint WM_MBUTTONUP      = 0x0208;
+    public const uint WM_RBUTTONDBLCLK  = 0x0206;
+    public const uint WM_RBUTTONDOWN    = 0x0204;
+    public const uint WM_RBUTTONUP      = 0x0205;
+    public const uint WM_XBUTTONDBLCLK  = 0x020D;
+    public const uint WM_XBUTTONDOWN    = 0x020B;
+    public const uint WM_XBUTTONUP      = 0x020C;
 
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]

@@ -7,6 +7,7 @@ using OkuBase.Geometry;
 using OkuBase.Graphics;
 using OkuBase.Settings;
 using OkuBase.Timer;
+using OkuBase.Input;
 
 namespace OkuBaseTest
 {
@@ -34,7 +35,16 @@ namespace OkuBaseTest
       ImageData data = ImageData.FromFile("pilz.png");
       _image = Oku.Graphics.NewImage(data);
 
-      Oku.Input.OnKeyPressed += new OkuBase.Input.InputManager.KeyEventDelegate(Input_OnKeyPressed);
+      Oku.Input.OnKeyPressed += new KeyEventDelegate(Input_OnKeyPressed);
+      Oku.Input.OnMouseReleased += new MouseEventDelegate(Input_OnMouseReleased);
+    }
+
+    public void Input_OnMouseReleased(MouseButton button)
+    {
+      if (button == MouseButton.Left)
+      {
+        _position = Oku.Graphics.ScreenToWorld(Oku.Input.Mouse.X, Oku.Input.Mouse.Y);
+      }
     }
 
     public void Input_OnKeyPressed(Keys key)

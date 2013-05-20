@@ -6,13 +6,15 @@ using OkuBase.Settings;
 
 namespace OkuBase.Input
 {
+  public delegate void KeyEventDelegate(Keys key);
+  public delegate void MouseEventDelegate(MouseButton button);
+  public delegate void MouseWheelEventDelegate(int delta);
+
   /// <summary>
   /// Defines a manager that handles input processing and key bindings.
   /// </summary>
   public class InputManager : Manager
   {
-    public delegate void KeyEventDelegate(Keys key);
-
     private MouseInput _mouse = new MouseInput();
     private KeyboardInput _keyboard = new KeyboardInput();
 
@@ -25,8 +27,10 @@ namespace OkuBase.Input
 
     public event KeyEventDelegate OnKeyPressed;
     public event KeyEventDelegate OnKeyReleased;
-    public event KeyEventDelegate OnMousePressed;
-    public event KeyEventDelegate OnMouseReleased;
+    public event MouseEventDelegate OnMousePressed;
+    public event MouseEventDelegate OnMouseReleased;
+    public event MouseEventDelegate OnMouseDblClick;
+    public event MouseWheelEventDelegate OnMouseWheel;
 
     public MouseInput Mouse
     {
@@ -38,25 +42,40 @@ namespace OkuBase.Input
       get { return _keyboard; }
     }
 
-    private bool isMouseButton(Keys key)
-    {
-      return (key == Keys.LButton) || (key == Keys.RButton) || (key == Keys.MButton) || (key == Keys.XButton1) || (key == Keys.XButton2);
-    }
-
     internal void KeyPressed(Keys key)
     {
-      if (isMouseButton(key) && OnMousePressed != null)
-        OnMousePressed(key);
-      else if (OnKeyPressed != null)
+      if (OnKeyPressed != null)
         OnKeyPressed(key);
     }
 
     internal void KeyReleased(Keys key)
     {
-      if (isMouseButton(key) && OnMousePressed != null)
-        OnMouseReleased(key);
-      else if (OnKeyReleased != null)
+      if (OnKeyReleased != null)
         OnKeyReleased(key);
+    }
+
+    internal void MousePressed(MouseButton button)
+    {
+      if (OnMousePressed != null)
+        OnMousePressed(button);
+    }
+
+    internal void MouseReleased(MouseButton button)
+    {
+      if (OnMouseReleased != null)
+        OnMouseReleased(button);
+    }
+
+    internal void MouseWheel(int delta)
+    {
+      if (OnMouseWheel != null)
+        OnMouseWheel(delta);
+    }
+
+    internal void MouseDblClick(MouseButton button)
+    {
+      if (OnMouseDblClick != null)
+        OnMouseDblClick(button);
     }
 
     public override void Initialize(OkuSettings settings)
