@@ -24,6 +24,7 @@ namespace OkuBase.Timer
     /// <param name="data">User definable data that is passed to the delegate.</param>
     public Timer(int id, float millis, TimerEventDelegate onTimer, object data)
     {
+      _id = id;
       _millis = millis;
       _onTimerEvent = onTimer;
       _data = data;

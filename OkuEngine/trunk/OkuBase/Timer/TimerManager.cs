@@ -71,7 +71,7 @@ namespace OkuBase.Timer
     public void SetTimer(int millis, TimerEventDelegate onTimer, object data)
     {
       int newId = KeySequence.NextValue(KeySequence.TimerSequence);
-      _timers.Add(newId, new Interval(newId, millis, onTimer, data));
+      _timers.Add(newId, new Timer(newId, millis, onTimer, data));
     }
 
     /// <summary>
@@ -93,6 +93,8 @@ namespace OkuBase.Timer
     {
       foreach (int clearedId in _clearedIds)
         _timers.Remove(clearedId);
+
+      _clearedIds.Clear();
 
       foreach (ITimer timer in _timers.Values)
       {
