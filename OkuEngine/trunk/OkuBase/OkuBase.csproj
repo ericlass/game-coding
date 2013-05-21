@@ -46,17 +46,21 @@
     <Compile Include="Driver\Audio\IAudioDriver.cs" />
     <Compile Include="Driver\DriverManager.cs" />
     <Compile Include="Driver\Graphics\IGraphicsDriver.cs" />
+    <Compile Include="Geometry\Shapes\Mesh.cs" />
     <Compile Include="Geometry\Shapes\PolygonFactory.cs" />
     <Compile Include="Geometry\Shapes\Spline.cs" />
     <Compile Include="Geometry\Shapes\Rectangle2f.cs" />
+    <Compile Include="Geometry\Vertices.cs" />
     <Compile Include="Geometry\Vector2f.cs" />
     <Compile Include="Graphics\Color.cs" />
+    <Compile Include="Graphics\Font\FontStyle.cs" />
     <Compile Include="Graphics\PrimitiveType.cs" />
     <Compile Include="Graphics\GraphicsManager.cs" />
     <Compile Include="Graphics\Image.cs" />
     <Compile Include="Graphics\ImageData.cs" />
+    <Compile Include="Graphics\Font\SpriteFont.cs" />
     <Compile Include="Graphics\TextureFilter.cs" />
-    <Compile Include="Graphics\VertexInterpretation.cs" />
+    <Compile Include="Graphics\LineMode.cs" />
     <Compile Include="Graphics\ViewPort.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\JoystickInfo.cs" />
@@ -84,7 +88,7 @@
     <Compile Include="Timer\Timer.cs" />
     <Compile Include="Timer\TimerManager.cs" />
     <Compile Include="Utils\Converter.cs" />
-    <Compile Include="Utils\OkuExtensions.cs" />
+    <Compile Include="OkuExtensions.cs" />
     <Compile Include="Utils\OkuMath.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

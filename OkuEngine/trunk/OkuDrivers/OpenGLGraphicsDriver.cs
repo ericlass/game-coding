@@ -52,15 +52,15 @@ namespace OkuDrivers
     /// </summary>
     /// <param name="interpretation">The interpretation to be converted.</param>
     /// <returns>The OpenGL primitive type for the given VertexInterpretation.</returns>
-    private int VertexIntToGLPrimitive(VertexInterpretation interpretation)
+    private int VertexIntToGLPrimitive(LineMode interpretation)
     {
       switch (interpretation)
       {
-        case VertexInterpretation.Polygon:
+        case LineMode.Polygon:
           return Gl.GL_LINE_STRIP;
-        case VertexInterpretation.PolygonClosed:
+        case LineMode.PolygonClosed:
           return Gl.GL_LINE_LOOP;
-        case VertexInterpretation.LineSegments:
+        case LineMode.LineSegments:
           return Gl.GL_LINES;
         default:
           throw new ArgumentOutOfRangeException("Vertex interpretation " + interpretation.ToString() + " is not supported in OpenGLRenderer!");
@@ -398,7 +398,7 @@ namespace OkuDrivers
       } 
     }
 
-    public void DrawLines(OkuBase.Geometry.Vector2f[] vertices, Color[] colors, int count, float width, VertexInterpretation interpretation)
+    public void DrawLines(OkuBase.Geometry.Vector2f[] vertices, Color[] colors, int count, float width, LineMode interpretation)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
       try

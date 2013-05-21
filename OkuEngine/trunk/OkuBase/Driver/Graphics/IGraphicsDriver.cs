@@ -116,7 +116,7 @@ namespace OkuBase.Driver.Graphics
     /// <param name="count">The number of lines to draw from the given array.</param>
     /// <param name="width">The width of the lines in pixels.</param>
     /// <param name="interpretation">Specifies how to interpret the vertices.</param>
-    void DrawLines(Vector2f[] vertices, Color[] colors, int count, float width, VertexInterpretation interpretation);
+    void DrawLines(Vector2f[] vertices, Color[] colors, int count, float width, LineMode interpretation);
 
     /// <summary>
     /// Draws a point at the given point p with the given size and color.

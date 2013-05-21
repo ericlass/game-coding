@@ -11,7 +11,6 @@ namespace OkuBase
   /// </summary>
   public class OkuGame
   {
-    private int _mouseDelta = 0;
     private string _name = "OkuGame";
     private Oku _okuInstance = null;
 

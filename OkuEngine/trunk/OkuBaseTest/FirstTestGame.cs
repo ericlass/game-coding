@@ -4,7 +4,9 @@ using System.Text;
 using System.Windows.Forms;
 using OkuBase;
 using OkuBase.Geometry;
+using OkuBase.Geometry.Shapes;
 using OkuBase.Graphics;
+using OkuBase.Graphics.Font;
 using OkuBase.Settings;
 using OkuBase.Timer;
 using OkuBase.Input;
@@ -21,6 +23,8 @@ namespace OkuBaseTest
     private int _counter = 0;
     private int _intervalId = 0;
 
+    private Mesh _text = null;
+
     public override OkuSettings Configure()
     {
       OkuSettings result = base.Configure();
@@ -34,6 +38,9 @@ namespace OkuBaseTest
     {
       ImageData data = ImageData.FromFile("pilz.png");
       _image = Oku.Graphics.NewImage(data);
+
+      SpriteFont font = new SpriteFont("Calibri", 10.0f, FontStyle.Regular, true);
+      _text = font.GetStringMesh("Hello World!", 0, 0, Color.White);
 
       Oku.Input.OnKeyPressed += new KeyEventDelegate(Input_OnKeyPressed);
       Oku.Input.OnMouseReleased += new MouseEventDelegate(Input_OnMouseReleased);
@@ -82,8 +89,9 @@ namespace OkuBaseTest
 
     public override void Render()
     {
-      Oku.Graphics.Driver.DrawImage(_image, _position.X, _position.Y, _angle, 1, 1, _tint);
-      Oku.Graphics.Driver.DrawPoint(0, 0, 1, Color.Red);
+      Oku.Graphics.DrawImage(_image, _position.X, _position.Y, _angle, 1, 1, _tint);
+      Oku.Graphics.DrawPoint(0, 0, 1, Color.Red);
+      Oku.Graphics.DrawMesh(_text);
     }
 
   }

@@ -5,7 +5,7 @@ namespace OkuBase.Graphics
   /// <summary>
   /// Defines how vertices should be interpreted.
   /// </summary>
-  public enum VertexInterpretation {
+  public enum LineMode {
     /// <summary>
     /// Draws a polygon ffrom the vertices where the first and the last vertex are not connected.
     /// </summary>

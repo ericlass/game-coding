@@ -7,8 +7,9 @@ using System.Reflection;
 using OkuBase.Geometry;
 using OkuBase.Geometry.Shapes;
 using OkuBase.Graphics;
+using OkuBase.Utils;
 
-namespace OkuBase.Utils
+namespace OkuBase
 {
   public static class OkuExtensions
   {
