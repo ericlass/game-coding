@@ -32,60 +32,57 @@ namespace OkuBase.Driver
       string[] dllFiles = Directory.GetFiles(basePath, "*.dll");
       foreach (string dll in dllFiles)
       {
-        if (Path.GetFileName(dll) != "OkuBase.dll") //Ignore own assembly
+        //Create new app domain
+        AppDomain domain = AppDomain.CreateDomain("DriverDomain");
+        
+        //Load assembly into appdomain
+        AssemblyName assemblyName = AssemblyName.GetAssemblyName(dll);
+        Assembly assembly = domain.Load(assemblyName);
+
+        bool containsDriver = false;
+
+        //Get all types of the assembly and check if any type implements one of the driver interfaces
+        Type[] allTypes = assembly.GetTypes();
+        foreach (Type t in allTypes)
         {
-          //Create new app domain
-          AppDomain domain = AppDomain.CreateDomain("DriverDomain");
-          
-          //Load assembly into appdomain
-          AssemblyName assemblyName = AssemblyName.GetAssemblyName(dll);
-          Assembly assembly = domain.Load(assemblyName);
-
-          bool containsDriver = false;
-
-          //Get all types of the assembly and check if any type implements one of the driver interfaces
-          Type[] allTypes = assembly.GetTypes();
-          foreach (Type t in allTypes)
+          Type[] interfaces = t.GetInterfaces();
+          foreach (Type itf in interfaces)
           {
-            Type[] interfaces = t.GetInterfaces();
-            foreach (Type itf in interfaces)
+            //Check for graphics drivers
+            if (_graphicsDriver == null && itf.Equals(typeof(IGraphicsDriver)))
             {
-              //Check for graphics drivers
-              if (_graphicsDriver == null && itf.Equals(typeof(IGraphicsDriver)))
+              IGraphicsDriver graphicsDriver = (IGraphicsDriver)assembly.CreateInstance(t.FullName);
+
+              if (graphicsDriver.DriverName != null && graphicsDriver.DriverName.Equals(settings.Graphics.DriverName, StringComparison.CurrentCultureIgnoreCase))
               {
-                IGraphicsDriver graphicsDriver = (IGraphicsDriver)assembly.CreateInstance(t.FullName);
-
-                if (graphicsDriver.DriverName != null && graphicsDriver.DriverName.Equals(settings.Graphics.DriverName, StringComparison.CurrentCultureIgnoreCase))
-                {
-                  _graphicsDriver = graphicsDriver;
-                  _graphicsDomain = domain;
-                  containsDriver = true;
-                }
-
-                continue;
+                _graphicsDriver = graphicsDriver;
+                _graphicsDomain = domain;
+                containsDriver = true;
               }
 
-              //Check for audio drivers
-              if (_audioDriver == null && itf.Equals(typeof(IAudioDriver)))
+              continue;
+            }
+
+            //Check for audio drivers
+            if (_audioDriver == null && itf.Equals(typeof(IAudioDriver)))
+            {
+              IAudioDriver audioDriver = (IAudioDriver)assembly.CreateInstance(t.FullName);
+
+              if (audioDriver.DriverName != null && audioDriver.DriverName.Equals(settings.Audio.DriverName, StringComparison.CurrentCultureIgnoreCase))
               {
-                IAudioDriver audioDriver = (IAudioDriver)assembly.CreateInstance(t.FullName);
-
-                if (audioDriver.DriverName != null && audioDriver.DriverName.Equals(settings.Audio.DriverName, StringComparison.CurrentCultureIgnoreCase))
-                {
-                  _audioDriver = audioDriver;
-                  _audioDomain = domain;
-                  containsDriver = true;
-                }
-
-                continue;
+                _audioDriver = audioDriver;
+                _audioDomain = domain;
+                containsDriver = true;
               }
+
+              continue;
             }
           }
-
-          //Unload appdomain including assemblies if the assembly did not contain one of the desired drivers
-          if (!containsDriver)
-            AppDomain.Unload(domain);
         }
+
+        //Unload appdomain including assemblies if the assembly did not contain one of the desired drivers
+        if (!containsDriver)
+          AppDomain.Unload(domain);
       }
 
       //Check that the desired graphics driver was found
