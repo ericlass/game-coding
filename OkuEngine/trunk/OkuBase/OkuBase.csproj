@@ -42,6 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Audio\AudioManager.cs" />
+    <Compile Include="Audio\Source.cs" />
+    <Compile Include="Audio\Sound.cs" />
+    <Compile Include="Audio\WaveLoader.cs" />
     <Compile Include="Collections\DynamicArray.cs" />
     <Compile Include="Driver\IAudioDriver.cs" />
     <Compile Include="Driver\DriverManager.cs" />

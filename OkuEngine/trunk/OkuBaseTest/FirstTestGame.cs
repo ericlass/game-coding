@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using OkuBase;
+using OkuBase.Audio;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
 using OkuBase.Settings;
@@ -17,6 +18,7 @@ namespace OkuBaseTest
     private float _angle = 0.0f;
     private Vector2f _position = Vector2f.Zero;
     private Color _tint = Color.White;
+    private Source _source = null;
 
     private int _counter = 0;
     private int _intervalId = 0;
@@ -37,11 +39,14 @@ namespace OkuBaseTest
       ImageData data = ImageData.FromFile("pilz.png");
       _image = Oku.Graphics.NewImage(data);
 
-      SpriteFont font = new SpriteFont("Calibri", 10.0f, FontStyle.Regular, true);
+      SpriteFont font = new SpriteFont("Calibri", 12.0f, FontStyle.Regular, true);
       _text = font.GetStringMesh("Hello World!", 0, 0, Color.White);
 
       Oku.Input.OnKeyPressed += new KeyEventDelegate(Input_OnKeyPressed);
       Oku.Input.OnMouseReleased += new MouseEventDelegate(Input_OnMouseReleased);
+
+      Sound sound = Sound.FromFile("sinus.wav");
+      _source = Oku.Audio.NewSource(sound);
     }
 
     public void Input_OnMouseReleased(MouseButton button)
@@ -62,6 +67,10 @@ namespace OkuBaseTest
       if (key == Keys.T)
       {
         Oku.Timer.SetTimer(1000, new TimerEventDelegate(OnTimer));
+      }
+      if (key == Keys.S)
+      {
+        Oku.Audio.Play(_source);
       }
     }
 
