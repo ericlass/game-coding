@@ -1,11 +1,10 @@
 ﻿using System;
 using OkuBase.Geometry;
-using OkuBase.Geometry.Shapes;
 using OkuBase.Graphics;
 using OkuBase.Collections;
 using OkuBase.Utils;
 
-namespace OkuBase.Geometry.Intersection
+namespace OkuBase.Geometry
 {
   /// <summary>
   /// Provides a series of intersection tests for various primitives.

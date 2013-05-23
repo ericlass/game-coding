@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OkuBase.Geometry;
-using OkuBase.Geometry.Intersection;
 
 namespace OkuBase.Utils
 {

@@ -6,7 +6,7 @@ using OkuBase.Geometry;
 using OkuBase.Graphics;
 using OkuBase.Settings;
 
-namespace OkuBase.Driver.Graphics
+namespace OkuBase.Driver
 {
   public interface IGraphicsDriver
   {

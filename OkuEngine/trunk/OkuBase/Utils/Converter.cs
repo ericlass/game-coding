@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using OkuBase.Geometry;
-using OkuBase.Geometry.Shapes;
 using OkuBase.Graphics;
 
 namespace OkuBase.Utils

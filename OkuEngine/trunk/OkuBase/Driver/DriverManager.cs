@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Reflection;
-using OkuBase.Driver.Audio;
-using OkuBase.Driver.Graphics;
+using OkuBase.Driver;
 using OkuBase.Settings;
 
 namespace OkuBase.Driver

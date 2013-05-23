@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OkuBase.Graphics.Font
+namespace OkuBase.Graphics
 {
   public enum FontStyle
   {

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using OkuBase.Driver.Graphics;
+using OkuBase.Driver;
 using System.Windows.Forms;
 using OkuBase.Geometry;
 using OkuBase.Graphics;

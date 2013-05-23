@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OkuBase.Driver.Audio
+namespace OkuBase.Driver
 {
   public interface IAudioDriver
   {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using OkuBase.Graphics;
 
-namespace OkuBase.Geometry.Shapes
+namespace OkuBase.Geometry
 {
   /// <summary>
   /// Defines a mesh with vertices and an optional texture.

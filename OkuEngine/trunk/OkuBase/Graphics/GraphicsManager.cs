@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
-using OkuBase.Driver.Graphics;
+using OkuBase.Driver;
 using OkuBase.Settings;
 using OkuBase.Geometry;
 using OkuBase.Utils;
-using OkuBase.Geometry.Shapes;
 
 namespace OkuBase.Graphics
 {

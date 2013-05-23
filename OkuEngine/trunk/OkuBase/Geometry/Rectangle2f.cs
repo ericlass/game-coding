@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using OkuBase.Geometry.Intersection;
+using OkuBase.Geometry;
 
-namespace OkuBase.Geometry.Shapes
+namespace OkuBase.Geometry
 {
   /// <summary>
   /// Defines an axis alligned box by its min and max vectors.

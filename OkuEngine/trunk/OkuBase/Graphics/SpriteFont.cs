@@ -4,9 +4,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using OkuBase.Geometry;
-using OkuBase.Geometry.Shapes;
 
-namespace OkuBase.Graphics.Font
+namespace OkuBase.Graphics
 {
   public class SpriteFont
   {

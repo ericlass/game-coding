@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using OkuBase.Utils;
 
-namespace OkuBase.Geometry.Shapes
+namespace OkuBase.Geometry
 {
   /// <summary>
   /// Defines a hermite spline in 2D space.

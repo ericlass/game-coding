@@ -5,7 +5,6 @@ using System.IO;
 using System.Xml;
 using System.Reflection;
 using OkuBase.Geometry;
-using OkuBase.Geometry.Shapes;
 using OkuBase.Graphics;
 using OkuBase.Utils;
 

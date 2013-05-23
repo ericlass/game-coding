@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OkuBase.Geometry.Shapes
+namespace OkuBase.Geometry
 {
   /// <summary>
   /// Defines a set of function to create poylgons.
