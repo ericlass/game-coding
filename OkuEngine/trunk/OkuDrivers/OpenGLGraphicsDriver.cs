@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using OkuBase.Driver;
 using System.Windows.Forms;
+using OkuBase;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
 using OkuBase.Settings;
@@ -14,9 +15,11 @@ namespace OkuDrivers
   {
     private GraphicsSettings _settings = null;
     private Control _display = null;
+    private IntPtr _displayHandle = IntPtr.Zero;
     private IntPtr _dc = IntPtr.Zero;
     private IntPtr _rc = IntPtr.Zero;
 
+    private int _frameBuffer = 0;
     private Dictionary<int, int> _textures = new Dictionary<int, int>(); //Maps content id to opengl texture names
 
     /// <summary>
@@ -153,6 +156,11 @@ namespace OkuDrivers
       get { return _display; }
     }
 
+    public void SetBackgroundColor(Color color)
+    {
+      Gl.glClearColor(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
+    }
+
     public void Initialize(GraphicsSettings settings)
     {
       _settings = settings;
@@ -171,6 +179,7 @@ namespace OkuDrivers
 
       form.Show();
       _display = form;
+      _displayHandle = _display.Handle;
 
       _display.Resize += new EventHandler(OnFormResize);
 
@@ -212,7 +221,8 @@ namespace OkuDrivers
         Gl.glEnable(Gl.GL_DEPTH_TEST);
       }
 
-      Gl.glClearColor(settings.BackgroundColor.R / 255.0f, settings.BackgroundColor.G / 255.0f, settings.BackgroundColor.B / 255.0f, settings.BackgroundColor.A / 255.0f);
+      SetBackgroundColor(settings.BackgroundColor);
+      //Gl.glClearColor(settings.BackgroundColor.R / 255.0f, settings.BackgroundColor.G / 255.0f, settings.BackgroundColor.B / 255.0f, settings.BackgroundColor.A / 255.0f);
 
       Gl.glLineWidth(1.0f);
       Gl.glEnable(Gl.GL_LINE_SMOOTH);
@@ -238,7 +248,7 @@ namespace OkuDrivers
     {
       Opengl32.wglMakeCurrent(IntPtr.Zero, IntPtr.Zero);
       Opengl32.wglDeleteContext(_rc);
-      User32.ReleaseDC(_display.Handle, _dc);
+      User32.ReleaseDC(_displayHandle, _dc);
     }
 
     public void LoadImage(Image image)
@@ -288,6 +298,75 @@ namespace OkuDrivers
       }
     }
 
+    public void InitRenderTarget(RenderTarget target)
+    {
+      //Create color buffer texture
+      int textureId = 0;
+      Gl.glGenTextures(1, out textureId);
+      _textures.Add(target.Id, textureId);
+      Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
+      Gl.glTexImage2D(Gl.GL_TEXTURE_2D, 0, 4, target.Width, target.Height, 0, Gl.GL_BGRA, Gl.GL_UNSIGNED_BYTE, null);
+      Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, GetGLTexFilter());
+      Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, GetGLTexFilter());
+      Gl.glBindTexture(Gl.GL_TEXTURE_2D, 0);
+
+      //Create frame buffer if it was not created yet
+      if (_frameBuffer == 0)
+      {
+        int fbo = 0;
+        Gl.glGenFramebuffersEXT(1, out fbo);
+        _frameBuffer = fbo;
+      }
+
+      //Bind buffer for checking
+      Gl.glBindFramebufferEXT(Gl.GL_FRAMEBUFFER_EXT, _frameBuffer);
+
+      //Bind color buffer to FBO
+      Gl.glFramebufferTexture2DEXT(Gl.GL_FRAMEBUFFER_EXT, Gl.GL_COLOR_ATTACHMENT0_EXT, Gl.GL_TEXTURE_2D, textureId, 0);
+
+      //Check if fbo is set up correctly
+      int result = Gl.glCheckFramebufferStatusEXT(Gl.GL_FRAMEBUFFER_EXT);
+
+      //Unbind fbo again
+      Gl.glBindFramebufferEXT(Gl.GL_FRAMEBUFFER_EXT, 0);
+
+      if (result != Gl.GL_FRAMEBUFFER_COMPLETE_EXT)
+        throw new OkuException("Frame buffer was not setup correctly! ID: " + target.Id);
+    }
+
+    public void SetRenderTarget(RenderTarget target)
+    {
+      if (target == null)
+      {
+        Gl.glBindFramebufferEXT(Gl.GL_FRAMEBUFFER_EXT, 0);
+        return;
+      }
+      else
+      {
+        if (!_textures.ContainsKey(target.Id))
+          throw new OkuException("Trying to bind an uninitialized render target! ID: " + target.Id);
+
+        Gl.glBindFramebufferEXT(Gl.GL_FRAMEBUFFER_EXT, _frameBuffer);
+        Gl.glFramebufferTexture2DEXT(Gl.GL_FRAMEBUFFER_EXT, Gl.GL_COLOR_ATTACHMENT0_EXT, Gl.GL_TEXTURE_2D, _textures[target.Id], 0);
+
+        Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
+      }
+
+      //TODO: Not sure if this is really needed?
+      //Gl.glMatrixMode(Gl.GL_MODELVIEW);
+      //Gl.glLoadIdentity();
+    }
+
+    public void ReleaseRenderTarget(RenderTarget target)
+    {
+      if (_textures.ContainsKey(target.Id))
+      {
+        int texId = _textures[target.Id];
+        Gl.glDeleteTextures(1, ref texId);
+        _textures.Remove(target.Id);
+      }
+    }
+
     public void Begin()
     {
       Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
@@ -301,7 +380,7 @@ namespace OkuDrivers
       Gdi32.SwapBuffers(_dc);
     }
 
-    public void DrawImage(Image image, float x, float y, float rotation, float sx, float sy, Color tint)
+    public void DrawImage(ImageBase image, float x, float y, float rotation, float sx, float sy, Color tint)
     {
       if (!_textures.ContainsKey(image.Id))
         return;
@@ -341,7 +420,7 @@ namespace OkuDrivers
       Gl.glPopMatrix();
     }
 
-    public void DrawScreenAlignedQuad(Image image, Color tint)
+    public void DrawScreenAlignedQuad(ImageBase image, Color tint)
     {
       Gl.glMatrixMode(Gl.GL_PROJECTION);
       Gl.glPushMatrix();
@@ -453,7 +532,7 @@ namespace OkuDrivers
       }
     }
 
-    public void DrawMesh(OkuBase.Geometry.Vector2f[] points, OkuBase.Geometry.Vector2f[] texCoords, Color[] colors, int count, PrimitiveType type, Image texture)
+    public void DrawMesh(OkuBase.Geometry.Vector2f[] points, OkuBase.Geometry.Vector2f[] texCoords, Color[] colors, int count, PrimitiveType type, ImageBase texture)
     {
       if (texture != null)
       {

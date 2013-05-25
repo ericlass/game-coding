@@ -13,6 +13,7 @@ namespace OkuBase.Graphics
   {
     private IGraphicsDriver _driver = null;
     private ViewPort _viewport = null;
+    private GraphicsSettings _settings = null;
 
     void OnViewportChange(ViewPort sender)
     {
@@ -29,10 +30,30 @@ namespace OkuBase.Graphics
       get { return _viewport; }
     }
 
+    public Color BackgroundColor
+    {
+      get { return _settings.BackgroundColor; }
+      set
+      {
+        _settings.BackgroundColor = value;
+        _driver.SetBackgroundColor(value);
+      }
+    }
+
+    /// <summary>
+    /// Gets or sets the title of the display.
+    /// </summary>
+    public string Title
+    {
+      get { return _driver.Display.Text; }
+      set { _driver.Display.Text = value; }
+    }
+
     public override void Initialize(OkuSettings settings)
     {
       _driver = Oku.Instance.Drivers.GraphicsDriver;
       _driver.Initialize(settings.Graphics);
+      _settings = settings.Graphics;
 
       _viewport = new ViewPort(settings.Graphics.Width, settings.Graphics.Height);
       _viewport.Change += new ViewPortChangeEventHandler(OnViewportChange);
@@ -40,10 +61,12 @@ namespace OkuBase.Graphics
 
     public override void Update(float dt)
     {
+      _driver.Update(dt);
     }
 
     public override void Finish()
     {
+      _driver.Finish();
     }
 
     /// <summary>
@@ -99,6 +122,23 @@ namespace OkuBase.Graphics
       _driver.ReleaseImage(image);
     }
 
+    public RenderTarget NewRenderTarget(int width, int height)
+    {
+      RenderTarget result = new RenderTarget(width, height);
+      _driver.InitRenderTarget(result);
+      return result;
+    }
+
+    public void SetRenderTarget(RenderTarget target)
+    {
+      _driver.SetRenderTarget(target);
+    }
+
+    public void ReleaseRenderTarget(RenderTarget target)
+    {
+      _driver.ReleaseRenderTarget(target);
+    }
+
     #endregion
 
     #region Rendering
@@ -124,9 +164,32 @@ namespace OkuBase.Graphics
     /// <param name="sx">The scale factor on the x axis.</param>
     /// <param name="sy">The scale factor on the y axis.</param>
     /// <param name="tint">A color that is used to tint the image with.</param>
-    public void DrawImage(Image image, float x, float y, float rotation, float sx, float sy, Color tint)
+    public void DrawImage(ImageBase image, float x, float y, float rotation, float sx, float sy, Color tint)
     {
       _driver.DrawImage(image, x, y, rotation, sx, sy, tint);
+    }
+
+    /// <summary>
+    /// Draws the given image at the given position.
+    /// </summary>
+    /// <param name="image">The image to be drawn.</param>
+    /// <param name="x">The x coordinate of the position.</param>
+    /// <param name="y">The y coordinate of the position.</param>
+    public void DrawImage(ImageBase image, float x, float y)
+    {
+      _driver.DrawImage(image, x, y, 0, 1, 1, Color.White);
+    }
+
+    /// <summary>
+    /// Draws the given image at the given position. The image is tinted with given tint color.
+    /// </summary>
+    /// <param name="image">The image to be drawn.</param>
+    /// <param name="x">The x coordinate of the position.</param>
+    /// <param name="y">The y coordinate of the position.</param>
+    /// <param name="tint">A color that is used to tint the image with.</param>
+    public void DrawImage(ImageBase image, float x, float y, Color tint)
+    {
+      _driver.DrawImage(image, x, y, 0, 1, 1, tint);
     }
 
     /// <summary>
@@ -135,9 +198,18 @@ namespace OkuBase.Graphics
     /// </summary>
     /// <param name="image">The image to be drawn.</param>
     /// <param name="tint">The color tint the image with.</param>
-    public void DrawScreenAlignedQuad(Image image, Color tint)
+    public void DrawScreenAlignedQuad(ImageBase image, Color tint)
     {
       _driver.DrawScreenAlignedQuad(image, tint);
+    }
+
+    /// <summary>
+    /// Draws the given image on a screen aligned quad so it fills the whole screen.
+    /// </summary>
+    /// <param name="image">The image to be drawn.</param>
+    public void DrawScreenAlignedQuad(ImageBase image)
+    {
+      _driver.DrawScreenAlignedQuad(image, Color.White);
     }
 
     /// <summary>
@@ -202,7 +274,7 @@ namespace OkuBase.Graphics
     /// <param name="count">The number of points to draw from the given array.</param>
     /// <param name="type">The type of primitive used to draw the given vertices.</param>
     /// <param name="texture">The texture to be applied. If not null, texCoords must also be given.</param>
-    public void DrawMesh(Vector2f[] points, Vector2f[] texCoords, Color[] colors, int count, PrimitiveType type, Image texture)
+    public void DrawMesh(Vector2f[] points, Vector2f[] texCoords, Color[] colors, int count, PrimitiveType type, ImageBase texture)
     {
       _driver.DrawMesh(points, texCoords, colors, count, type, texture);
     }

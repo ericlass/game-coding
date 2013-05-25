@@ -19,6 +19,10 @@ namespace OkuBase.Driver
       get { return null; }
     }
 
+    public void SetBackgroundColor(Color color)
+    {
+    }
+
     public void Initialize(GraphicsSettings settings)
     {
     }
@@ -43,6 +47,18 @@ namespace OkuBase.Driver
     {
     }
 
+    public void InitRenderTarget(RenderTarget target)
+    {
+    }
+
+    public void SetRenderTarget(RenderTarget target)
+    {
+    }
+
+    public void ReleaseRenderTarget(RenderTarget target)
+    {
+    }
+
     public void Begin()
     {
     }
@@ -51,11 +67,11 @@ namespace OkuBase.Driver
     {
     }
 
-    public void DrawImage(Image image, float x, float y, float rotation, float sx, float sy, Color tint)
+    public void DrawImage(ImageBase image, float x, float y, float rotation, float sx, float sy, Color tint)
     {
     }
 
-    public void DrawScreenAlignedQuad(Image image, Color tint)
+    public void DrawScreenAlignedQuad(ImageBase image, Color tint)
     {
     }
 
@@ -75,7 +91,7 @@ namespace OkuBase.Driver
     {
     }
 
-    public void DrawMesh(OkuBase.Geometry.Vector2f[] points, OkuBase.Geometry.Vector2f[] texCoords, Color[] colors, int count, PrimitiveType type, Image texture)
+    public void DrawMesh(OkuBase.Geometry.Vector2f[] points, OkuBase.Geometry.Vector2f[] texCoords, Color[] colors, int count, PrimitiveType type, ImageBase texture)
     {
     }
 

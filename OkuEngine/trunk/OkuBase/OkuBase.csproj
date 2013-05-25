@@ -59,10 +59,12 @@
     <Compile Include="Geometry\Vector2f.cs" />
     <Compile Include="Graphics\Color.cs" />
     <Compile Include="Graphics\FontStyle.cs" />
+    <Compile Include="Graphics\ImageBase.cs" />
     <Compile Include="Graphics\PrimitiveType.cs" />
     <Compile Include="Graphics\GraphicsManager.cs" />
     <Compile Include="Graphics\Image.cs" />
     <Compile Include="Graphics\ImageData.cs" />
+    <Compile Include="Graphics\RenderTarget.cs" />
     <Compile Include="Graphics\SpriteFont.cs" />
     <Compile Include="Graphics\TextureFilter.cs" />
     <Compile Include="Graphics\LineMode.cs" />

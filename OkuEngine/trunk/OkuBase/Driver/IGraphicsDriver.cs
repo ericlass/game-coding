@@ -22,6 +22,12 @@ namespace OkuBase.Driver
     Control Display { get; }
 
     /// <summary>
+    /// Sets the current background color.
+    /// </summary>
+    /// <param name="color">The new background color.</param>
+    void SetBackgroundColor(Color color);
+
+    /// <summary>
     /// Is called once at the start of the application. It should do all necessary initialization
     /// that is needed by the renderer. It has to create the form that is used to display the game.
     /// </summary>
@@ -66,6 +72,24 @@ namespace OkuBase.Driver
     void ReleaseImage(Image image);
 
     /// <summary>
+    /// Initializes a new rendertarget.
+    /// </summary>
+    /// <param name="target">The render target to be initialized.</param>
+    void InitRenderTarget(RenderTarget target);
+
+    /// <summary>
+    /// Activates the given render target. All subsequent draw calls will be drawn to the render target.
+    /// </summary>
+    /// <param name="target">The target to be used or null to switch back to draw to the screen.</param>
+    void SetRenderTarget(RenderTarget target);
+
+    /// <summary>
+    /// Releases an existing render target.
+    /// </summary>
+    /// <param name="target">The render target to be release.</param>
+    void ReleaseRenderTarget(RenderTarget target);
+
+    /// <summary>
     /// Begin drawing a new frame.
     /// </summary>
     void Begin();
@@ -86,7 +110,7 @@ namespace OkuBase.Driver
     /// <param name="sx">The scale factor on the x axis.</param>
     /// <param name="sy">The scale factor on the y axis.</param>
     /// <param name="tint">A color that is used to tint the image with.</param>
-    void DrawImage(Image image, float x, float y, float rotation, float sx, float sy, Color tint);
+    void DrawImage(ImageBase image, float x, float y, float rotation, float sx, float sy, Color tint);
 
     /// <summary>
     /// Draws the given image on a screen aligned quad so it fills the whole 
@@ -94,7 +118,7 @@ namespace OkuBase.Driver
     /// </summary>
     /// <param name="image">The image to be drawn.</param>
     /// <param name="tint">The color tint the image with.</param>
-    void DrawScreenAlignedQuad(Image image, Color tint);
+    void DrawScreenAlignedQuad(ImageBase image, Color tint);
 
     /// <summary>
     /// Draws a line from start to end with the given width and color.
@@ -146,7 +170,7 @@ namespace OkuBase.Driver
     /// <param name="count">The number of points to draw from the given array.</param>
     /// <param name="type">The type of primitive used to draw the given vertices.</param>
     /// <param name="texture">The texture to be applied. If not null, texCoords must also be given.</param>
-    void DrawMesh(Vector2f[] points, Vector2f[] texCoords, Color[] colors, int count, PrimitiveType type, Image texture);
+    void DrawMesh(Vector2f[] points, Vector2f[] texCoords, Color[] colors, int count, PrimitiveType type, ImageBase texture);
 
 
     /// <summary>

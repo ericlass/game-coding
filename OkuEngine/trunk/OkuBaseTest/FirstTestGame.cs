@@ -19,6 +19,7 @@ namespace OkuBaseTest
     private Vector2f _position = Vector2f.Zero;
     private Color _tint = Color.White;
     private Source _source = null;
+    private RenderTarget _target = null;
 
     private int _counter = 0;
     private int _intervalId = 0;
@@ -47,6 +48,8 @@ namespace OkuBaseTest
 
       Sound sound = Sound.FromFile("sinus.wav");
       _source = Oku.Audio.NewSource(sound);
+
+      _target = Oku.Graphics.NewRenderTarget(512, 512);
     }
 
     public void Input_OnMouseReleased(MouseButton button)
@@ -54,6 +57,7 @@ namespace OkuBaseTest
       if (button == MouseButton.Left)
       {
         _position = Oku.Graphics.ScreenToWorld(Oku.Input.Mouse.X, Oku.Input.Mouse.Y);
+        Oku.Graphics.Title = _position.ToString();
       }
     }
 
@@ -96,9 +100,18 @@ namespace OkuBaseTest
 
     public override void Render()
     {
+      Oku.Graphics.BackgroundColor = Color.Magenta;
+      Oku.Graphics.SetRenderTarget(_target);
+      
       Oku.Graphics.DrawImage(_image, _position.X, _position.Y, _angle, 1, 1, _tint);
       Oku.Graphics.DrawPoint(0, 0, 1, Color.Red);
       Oku.Graphics.DrawMesh(_text);
+
+      Oku.Graphics.BackgroundColor = Color.Black;
+      Oku.Graphics.SetRenderTarget(null);
+      
+      Oku.Graphics.DrawImage(_target, 0, 0);
+      //Oku.Graphics.DrawScreenAlignedQuad(_target);
     }
 
   }

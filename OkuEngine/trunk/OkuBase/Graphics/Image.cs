@@ -7,45 +7,38 @@ namespace OkuBase.Graphics
   /// <summary>
   /// Defines a single image.
   /// </summary>
-  public class Image
+  public class Image : ImageBase
   {
-    private int _id = KeySequence.NextValue(KeySequence.ImageSequence);
     private bool _compressed = false;
-    private ImageData _imageData = null;
 
     /// <summary>
     /// Creates a new empty image with no pixel data.
+    /// Do not use directly. Use Graphics.NewImage().
     /// </summary>
-    public Image()
+    internal Image()
     {
     }
 
     /// <summary>
     /// Creates a new image with the given pixel data.
+    /// Do not use directly. Use Graphics.NewImage().
     /// </summary>
     /// <param name="data">The pixel data of the new image.</param>
-    public Image(ImageData data)
+    internal Image(ImageData data)
     {
       _imageData = data;
     }
 
     /// <summary>
     /// Creates a new image with the given pixel data.
+    /// Do not use directly. Use Graphics.NewImage().
     /// </summary>
     /// <param name="data">The pixel data of the new image.</param>
     /// <param name="isCompressed">Determines if the image is compressed or not.</param>
-    public Image(ImageData data, bool isCompressed)
+    internal Image(ImageData data, bool isCompressed)
     {
       _imageData = data;
       _compressed = isCompressed;
-    }
-
-    /// <summary>
-    /// Gets the unique id of this image.
-    /// </summary>
-    public int Id
-    {
-      get { return _id; }
     }
 
     /// <summary>
@@ -54,22 +47,6 @@ namespace OkuBase.Graphics
     public bool IsCompressed
     {
       get { return _compressed; }
-    }
-
-    /// <summary>
-    /// Gets the width of the image.
-    /// </summary>
-    public int Width
-    {
-      get { return _imageData != null ? _imageData.Width : 0; }
-    }
-
-    /// <summary>
-    /// Gets the height of the image.
-    /// </summary>
-    public int Height
-    {
-      get { return _imageData != null ? _imageData.Height : 0; }
     }
 
     /// <summary>
