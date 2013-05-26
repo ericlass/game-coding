@@ -16,6 +16,8 @@ namespace OkuBase
     public const string TimerSequence = "timers";
     public const string SoundSequence = "sounds";
     public const string SourceSequence = "sources";
+    public const string ShaderSequence = "shaders";
+    public const string ProgramSequence = "programs";
 
     private static Dictionary<string, int> _sequences = new Dictionary<string, int>();
 
@@ -26,6 +28,8 @@ namespace OkuBase
       AddSequence(TimerSequence);
       AddSequence(SoundSequence);
       AddSequence(SourceSequence);
+      AddSequence(ShaderSequence);
+      AddSequence(ProgramSequence);
     }
 
     public static bool ResetSequence(string name)

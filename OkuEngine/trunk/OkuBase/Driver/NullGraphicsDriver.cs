@@ -127,5 +127,13 @@ namespace OkuBase.Driver
     {
     }
 
+    public void SetShaderFloat(Shader shader, string name, params float[] values)
+    {
+    }
+
+    public void SetShaderTexture(Shader shader, string name, ImageBase image)
+    {
+    }
+
   }
 }

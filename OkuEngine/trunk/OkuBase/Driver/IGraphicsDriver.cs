@@ -228,5 +228,21 @@ namespace OkuBase.Driver
     /// </summary>
     void PopTransform();
 
+    /// <summary>
+    /// Sets the float variable with the given name to the given value(s).
+    /// </summary>
+    /// <param name="shader">The shader to set the float value in.</param>
+    /// <param name="name">The name of the variable to set.</param>
+    /// <param name="values">The value(s) to be set.</param>
+    void SetShaderFloat(Shader shader, string name, params float[] values);
+
+    /// <summary>
+    /// Sets the texture variable with the given name to the given image.
+    /// </summary>
+    /// <param name="shader">The shader to set the texture in.</param>
+    /// <param name="name">The name of the texture variable.</param>
+    /// <param name="image">The image to set as texture.</param>
+    void SetShaderTexture(Shader shader, string name, ImageBase image);
+
   }
 }

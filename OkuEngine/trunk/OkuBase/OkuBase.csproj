@@ -65,6 +65,9 @@
     <Compile Include="Graphics\Image.cs" />
     <Compile Include="Graphics\ImageData.cs" />
     <Compile Include="Graphics\RenderTarget.cs" />
+    <Compile Include="Graphics\Shader.cs" />
+    <Compile Include="Graphics\ShaderProgram.cs" />
+    <Compile Include="Graphics\ShaderType.cs" />
     <Compile Include="Graphics\SpriteFont.cs" />
     <Compile Include="Graphics\TextureFilter.cs" />
     <Compile Include="Graphics\LineMode.cs" />
