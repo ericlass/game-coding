@@ -15,7 +15,7 @@ namespace OkuBase.Graphics
     private ViewPort _viewport = null;
     private GraphicsSettings _settings = null;
 
-    void OnViewportChange(ViewPort sender)
+    private void OnViewportChange(ViewPort sender)
     {
       _driver.SetViewport(sender.Left, sender.Right, sender.Bottom, sender.Top);
     }
@@ -103,7 +103,7 @@ namespace OkuBase.Graphics
     public Image NewImage(ImageData data, bool compressed)
     {
       Image result = new Image(data, compressed);
-      _driver.LoadImage(result);
+      _driver.InitImage(result);
       return result;
     }
 

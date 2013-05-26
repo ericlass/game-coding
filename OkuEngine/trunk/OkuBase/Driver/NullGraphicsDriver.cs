@@ -35,7 +35,7 @@ namespace OkuBase.Driver
     {
     }
 
-    public void LoadImage(Image image)
+    public void InitImage(Image image)
     {
     }
 

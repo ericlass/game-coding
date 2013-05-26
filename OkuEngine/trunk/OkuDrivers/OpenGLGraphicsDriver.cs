@@ -251,7 +251,7 @@ namespace OkuDrivers
       User32.ReleaseDC(_displayHandle, _dc);
     }
 
-    public void LoadImage(Image image)
+    public void InitImage(Image image)
     {
       int textureId = 0;
       int textureFormat = image.IsCompressed ? Gl.GL_COMPRESSED_RGBA : 4;
@@ -339,7 +339,7 @@ namespace OkuDrivers
       if (target == null)
       {
         Gl.glBindFramebufferEXT(Gl.GL_FRAMEBUFFER_EXT, 0);
-        return;
+        Gl.glViewport(0, 0, _display.ClientSize.Width, _display.ClientSize.Height);
       }
       else
       {
@@ -350,6 +350,7 @@ namespace OkuDrivers
         Gl.glFramebufferTexture2DEXT(Gl.GL_FRAMEBUFFER_EXT, Gl.GL_COLOR_ATTACHMENT0_EXT, Gl.GL_TEXTURE_2D, _textures[target.Id], 0);
 
         Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
+        Gl.glViewport(0, 0, target.Width, target.Height);
       }
 
       //TODO: Not sure if this is really needed?

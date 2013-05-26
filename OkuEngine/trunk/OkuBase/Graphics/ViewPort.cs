@@ -58,7 +58,7 @@ namespace OkuBase.Graphics
     /// Is called when any of the viewport parameters is changed.
     /// </summary>
     /// <param name="sender">The viewport that triggered the event.</param>
-    public virtual void OnChange(ViewPort sender)
+    private void OnChange(ViewPort sender)
     {
       if (Change != null)
         Change(sender);
@@ -143,6 +143,15 @@ namespace OkuBase.Graphics
     public float Height
     {
       get { return _halfHeight * 2; }
+    }
+
+    public void SetValues(float left, float right, float bottom, float top)
+    {
+      _center.X = (left + right) * 0.5f;
+      _center.Y = (bottom + top) * 0.5f;
+      _halfWidth = (right - left) * 0.5f;
+      _halfHeight = (top - bottom) * 0.5f;
+      OnChange(this);
     }
 
     /// <summary>

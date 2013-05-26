@@ -31,6 +31,7 @@ namespace OkuBaseTest
       OkuSettings result = base.Configure();
 
       result.Graphics.BackgroundColor = Color.Black;
+      //result.Graphics.TextureFilter = TextureFilter.NearestNeighbor;
 
       return result;
     }
@@ -49,7 +50,7 @@ namespace OkuBaseTest
       Sound sound = Sound.FromFile("sinus.wav");
       _source = Oku.Audio.NewSource(sound);
 
-      _target = Oku.Graphics.NewRenderTarget(512, 512);
+      _target = Oku.Graphics.NewRenderTarget(800, 600);
     }
 
     public void Input_OnMouseReleased(MouseButton button)
@@ -102,7 +103,7 @@ namespace OkuBaseTest
     {
       Oku.Graphics.BackgroundColor = Color.Magenta;
       Oku.Graphics.SetRenderTarget(_target);
-      
+
       Oku.Graphics.DrawImage(_image, _position.X, _position.Y, _angle, 1, 1, _tint);
       Oku.Graphics.DrawPoint(0, 0, 1, Color.Red);
       Oku.Graphics.DrawMesh(_text);
@@ -110,8 +111,8 @@ namespace OkuBaseTest
       Oku.Graphics.BackgroundColor = Color.Black;
       Oku.Graphics.SetRenderTarget(null);
       
-      Oku.Graphics.DrawImage(_target, 0, 0);
-      //Oku.Graphics.DrawScreenAlignedQuad(_target);
+      //Oku.Graphics.DrawImage(_target, 0, 0);
+      Oku.Graphics.DrawScreenAlignedQuad(_target);
     }
 
   }

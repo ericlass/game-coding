@@ -51,7 +51,7 @@ namespace OkuBase.Driver
     /// Initializes an image which means that textures are created for them.
     /// </summary>
     /// <param name="image">The image to be initialized.</param>
-    void LoadImage(Image image);
+    void InitImage(Image image);
 
     /// <summary>
     /// Updates a region of the given image content with new image data.
