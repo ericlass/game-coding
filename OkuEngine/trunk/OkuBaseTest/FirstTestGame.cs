@@ -42,7 +42,7 @@ namespace OkuBaseTest
       _image = Oku.Graphics.NewImage(data);
 
       SpriteFont font = new SpriteFont("Calibri", 12.0f, FontStyle.Regular, true);
-      _text = font.GetStringMesh("Hello World!", 0, 0, Color.White);
+      _text = font.GetStringMesh("Hello World!", 0, 600, Color.White);
 
       Oku.Input.OnKeyPressed += new KeyEventDelegate(Input_OnKeyPressed);
       Oku.Input.OnMouseReleased += new MouseEventDelegate(Input_OnMouseReleased);
@@ -107,14 +107,17 @@ namespace OkuBaseTest
 
       Oku.Graphics.DrawImage(_image, _position.X, _position.Y, _angle, 1, 1, _tint);
       Oku.Graphics.DrawPoint(0, 0, 1, Color.Red);
-      Oku.Graphics.DrawMesh(_text);
-
+      
       Oku.Graphics.SetRenderTarget(null);
       Oku.Graphics.BackgroundColor = Color.Black;
       Oku.Graphics.Clear();
       
       //Oku.Graphics.DrawImage(_target, 0, 0);
       Oku.Graphics.DrawScreenAlignedQuad(_target);
+
+      Oku.Graphics.BeginScreenSpace();
+      Oku.Graphics.DrawMesh(_text);
+      Oku.Graphics.EndScreenSpace();
     }
 
   }

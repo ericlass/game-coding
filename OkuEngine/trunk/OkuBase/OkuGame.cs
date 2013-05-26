@@ -12,7 +12,7 @@ namespace OkuBase
   public class OkuGame
   {
     private string _name = "OkuGame";
-    private Oku _okuInstance = null;
+    private OkuManager _okuInstance = null;
 
     /// <summary>
     /// Creates a new game.
@@ -33,7 +33,7 @@ namespace OkuBase
     /// <summary>
     /// Gets the oku library.
     /// </summary>
-    public Oku Oku
+    public OkuManager Oku
     {
       get { return _okuInstance; }
     }
@@ -43,7 +43,7 @@ namespace OkuBase
     /// </summary>
     public void Run()
     {
-      _okuInstance = Oku.Instance;
+      _okuInstance = OkuManager.Instance;
 
       OkuSettings settings = Configure();
 
@@ -56,12 +56,12 @@ namespace OkuBase
       Kernel32.QueryPerformanceCounter(out tick2);
 
       User32.NativeMessage msg = new User32.NativeMessage();
-      HandleRef hRef = new HandleRef(Oku.Instance.Graphics.Driver.Display, Oku.Instance.Graphics.Driver.Display.Handle);
+      HandleRef hRef = new HandleRef(OkuManager.Instance.Graphics.Driver.Display, OkuManager.Instance.Graphics.Driver.Display.Handle);
 
       bool running = true;
       while (running)
       {
-        if (!Oku.Instance.Graphics.Driver.Display.Created)
+        if (!OkuManager.Instance.Graphics.Driver.Display.Created)
           break;
 
         if (User32.PeekMessage(out msg, hRef, 0, 0, 1))
@@ -177,7 +177,7 @@ namespace OkuBase
         }
       }
 
-      Oku.Instance.Finish();
+      OkuManager.Instance.Finish();
     }
 
     public virtual OkuSettings Configure()
@@ -191,7 +191,7 @@ namespace OkuBase
     public void DoInitialize(OkuSettings settings)
     {
       KeySequence.Initialize();
-      Oku.Instance.Initialize(settings);
+      OkuManager.Instance.Initialize(settings);
       Initialize();
     }
 
@@ -210,7 +210,7 @@ namespace OkuBase
     /// <param name="dt"></param>
     public void DoUpdate(float dt)
     {
-      Oku.Instance.Update(dt);
+      OkuManager.Instance.Update(dt);
       Update(dt);
     }
 
@@ -228,9 +228,9 @@ namespace OkuBase
     /// </summary>
     public void DoRender()
     {
-      Oku.Instance.Graphics.Begin();
+      OkuManager.Instance.Graphics.Begin();
       Render();
-      Oku.Instance.Graphics.End();
+      OkuManager.Instance.Graphics.End();
     }
 
     /// <summary>

@@ -78,7 +78,7 @@
     <Compile Include="Geometry\IntersectionTests.cs" />
     <Compile Include="KeySequence.cs" />
     <Compile Include="Manager.cs" />
-    <Compile Include="Oku.cs" />
+    <Compile Include="OkuManager.cs" />
     <Compile Include="OkuException.cs" />
     <Compile Include="OkuGame.cs" />
     <Compile Include="Platform\Gdi32.cs" />

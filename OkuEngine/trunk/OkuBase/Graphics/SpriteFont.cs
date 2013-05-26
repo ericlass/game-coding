@@ -131,9 +131,9 @@ namespace OkuBase.Graphics
       {
         //_fontSheet.Save("D:\\sheet.png");
         if (_fontSheetContent == null)
-          _fontSheetContent = Oku.Instance.Graphics.NewImage(ImageData.FromBitmap(_fontSheet));
+          _fontSheetContent = OkuManager.Instance.Graphics.NewImage(ImageData.FromBitmap(_fontSheet));
         else
-          Oku.Instance.Graphics.UpdateImage(_fontSheetContent, 0, 0, _fontSheetContent.Width, _fontSheetContent.Height, ImageData.FromBitmap(_fontSheet));
+          OkuManager.Instance.Graphics.UpdateImage(_fontSheetContent, 0, 0, _fontSheetContent.Width, _fontSheetContent.Height, ImageData.FromBitmap(_fontSheet));
       }
     }
 

@@ -10,16 +10,16 @@ using OkuBase.Timer;
 
 namespace OkuBase
 {
-  public class Oku
+  public class OkuManager
   {
-    private static Oku _instance = null;
+    private static OkuManager _instance = null;
 
-    public static Oku Instance
+    public static OkuManager Instance
     {
       get
       {
         if (_instance == null)
-          _instance = new Oku();
+          _instance = new OkuManager();
         return _instance;
       }
     }
@@ -32,7 +32,7 @@ namespace OkuBase
     private InputManager _input = new InputManager();
     private TimerManager _timer = new TimerManager();
 
-    private Oku()
+    private OkuManager()
     {
       //CAUTION: The order is important!!!
       _managers.Add(_drivers);

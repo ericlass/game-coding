@@ -51,7 +51,7 @@ namespace OkuBase.Graphics
 
     public override void Initialize(OkuSettings settings)
     {
-      _driver = Oku.Instance.Drivers.GraphicsDriver;
+      _driver = OkuManager.Instance.Drivers.GraphicsDriver;
       _driver.Initialize(settings.Graphics);
       _settings = settings.Graphics;
 
@@ -151,6 +151,16 @@ namespace OkuBase.Graphics
     internal void End()
     {
       _driver.End();
+    }
+
+    public void BeginScreenSpace()
+    {
+      _driver.BeginScreenSpace();
+    }
+
+    public void EndScreenSpace()
+    {
+      _driver.EndScreenSpace();
     }
 
     /// <summary>

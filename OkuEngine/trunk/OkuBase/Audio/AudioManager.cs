@@ -46,7 +46,7 @@ namespace OkuBase.Audio
 
     public override void Initialize(OkuSettings settings)
     {
-      _driver = Oku.Instance.Drivers.AudioDriver;
+      _driver = OkuManager.Instance.Drivers.AudioDriver;
       _driver.Initialize(settings.Audio);
     }
 
