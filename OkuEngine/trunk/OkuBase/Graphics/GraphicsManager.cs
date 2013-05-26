@@ -154,6 +154,14 @@ namespace OkuBase.Graphics
     }
 
     /// <summary>
+    /// Clears the screen or current render target with the current background color.
+    /// </summary>
+    public void Clear()
+    {
+      _driver.Clear();
+    }
+
+    /// <summary>
     /// Draws the given image at the given position, rotating and scaling it by the given 
     /// values. The image is tinted with given tint color.
     /// </summary>

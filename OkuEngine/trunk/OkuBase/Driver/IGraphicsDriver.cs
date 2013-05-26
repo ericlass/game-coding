@@ -100,6 +100,11 @@ namespace OkuBase.Driver
     void End();
 
     /// <summary>
+    /// Clears the screen or render target with the given color.
+    /// </summary>
+    void Clear();
+
+    /// <summary>
     /// Draws the given image at the given position, rotating and scaling it by the given 
     /// values. The image is tinted with given tint color.
     /// </summary>

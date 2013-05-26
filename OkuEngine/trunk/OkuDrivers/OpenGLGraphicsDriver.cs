@@ -381,6 +381,11 @@ namespace OkuDrivers
       Gdi32.SwapBuffers(_dc);
     }
 
+    public void Clear()
+    {
+      Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
+    }
+
     public void DrawImage(ImageBase image, float x, float y, float rotation, float sx, float sy, Color tint)
     {
       if (!_textures.ContainsKey(image.Id))

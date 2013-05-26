@@ -67,6 +67,10 @@ namespace OkuBase.Driver
     {
     }
 
+    public void Clear()
+    {
+    }
+
     public void DrawImage(ImageBase image, float x, float y, float rotation, float sx, float sy, Color tint)
     {
     }

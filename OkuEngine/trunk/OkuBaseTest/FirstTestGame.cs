@@ -50,7 +50,7 @@ namespace OkuBaseTest
       Sound sound = Sound.FromFile("sinus.wav");
       _source = Oku.Audio.NewSource(sound);
 
-      _target = Oku.Graphics.NewRenderTarget(800, 600);
+      _target = Oku.Graphics.NewRenderTarget(400, 300);
     }
 
     public void Input_OnMouseReleased(MouseButton button)
@@ -101,15 +101,17 @@ namespace OkuBaseTest
 
     public override void Render()
     {
-      Oku.Graphics.BackgroundColor = Color.Magenta;
       Oku.Graphics.SetRenderTarget(_target);
+      Oku.Graphics.BackgroundColor = Color.Magenta;
+      Oku.Graphics.Clear();
 
       Oku.Graphics.DrawImage(_image, _position.X, _position.Y, _angle, 1, 1, _tint);
       Oku.Graphics.DrawPoint(0, 0, 1, Color.Red);
       Oku.Graphics.DrawMesh(_text);
 
-      Oku.Graphics.BackgroundColor = Color.Black;
       Oku.Graphics.SetRenderTarget(null);
+      Oku.Graphics.BackgroundColor = Color.Black;
+      Oku.Graphics.Clear();
       
       //Oku.Graphics.DrawImage(_target, 0, 0);
       Oku.Graphics.DrawScreenAlignedQuad(_target);
