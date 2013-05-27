@@ -304,5 +304,37 @@ namespace OkuBase.Graphics
 
     #endregion
 
+    #region Shaders
+
+    public ShaderProgram NewShaderProgram(Shader vertexShader, Shader pixelShader)
+    {
+      ShaderProgram program = new ShaderProgram(vertexShader, pixelShader);
+      if (!_driver.InitShaderProgram(program))
+        throw new OkuException("Could not initialize shader program! See debug output for details.");
+      return program;
+    }
+
+    public void UseShaderProgram(ShaderProgram program)
+    {
+      _driver.UseShaderProgram(program);
+    }
+
+    public void SetShaderFloat(ShaderProgram program, string name, params float[] values)
+    {
+      _driver.SetShaderFloat(program, name, values);
+    }
+
+    public void SetShaderTexture(ShaderProgram program, string name, ImageBase image)
+    {
+      _driver.SetShaderTexture(program, name, image);
+    }
+
+    public void ReleaseShaderProgram(ShaderProgram program)
+    {
+      _driver.ReleaseShaderProgram(program);
+    }
+
+    #endregion
+
   }
 }

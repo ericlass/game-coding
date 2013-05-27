@@ -11,8 +11,11 @@ namespace OkuBase.Graphics
     private Shader _vertexShader = null;
     private Shader _pixelShader = null;
 
-    public ShaderProgram(Shader vertexShader, Shader pixelShader)
+    internal ShaderProgram(Shader vertexShader, Shader pixelShader)
     {
+      if (vertexShader == null || pixelShader == null)
+        throw new OkuException("Both vertex and pixel shader must be given for a shader program!");
+
       if (vertexShader.ShaderType != ShaderType.VertexShader)
         throw new OkuException("Trying to set a " + vertexShader.ShaderType + " as a VertexShader! ID: " + vertexShader.Id);
 
@@ -23,6 +26,11 @@ namespace OkuBase.Graphics
       _pixelShader = pixelShader;
     }
 
+    public int Id
+    {
+      get { return _id; }
+    }
+
     public Shader VertexShader
     {
       get { return _vertexShader; }
@@ -31,6 +39,16 @@ namespace OkuBase.Graphics
     public Shader PixelShader
     {
       get { return _pixelShader; }
+    }
+
+    public void SetFloats(string name, params float[] values)
+    {
+      OkuManager.Instance.Graphics.Driver.SetShaderFloat(this, name, values);
+    }
+
+    public void SetTexture(string name, ImageBase image)
+    {
+      OkuManager.Instance.Graphics.Driver.SetShaderTexture(this, name, image);
     }
 
   }

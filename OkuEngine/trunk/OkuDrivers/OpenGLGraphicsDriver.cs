@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using OkuBase.Driver;
 using System.Windows.Forms;
 using OkuBase;
@@ -21,6 +22,10 @@ namespace OkuDrivers
 
     private int _frameBuffer = 0;
     private Dictionary<int, int> _textures = new Dictionary<int, int>(); //Maps content id to opengl texture names
+
+    private Dictionary<int, int> _shaders = new Dictionary<int, int>(); //Maps shader ids to opengl shader names
+    private Dictionary<int, int> _shaderPrograms = new Dictionary<int, int>(); //Maps shader program ids to opengl shader program names
+    private Dictionary<int, Dictionary<string, int>> _uniformLocations = new Dictionary<int, Dictionary<string, int>>(); //Maps shader program ids to maps that map uniform names to opengl uniform locations
 
     /// <summary>
     /// Handles resizing of the form. The OpenGL viewport is reset to fit the new size of the form.
@@ -434,9 +439,11 @@ namespace OkuDrivers
       Gl.glLoadIdentity();
       Gl.glOrtho(0, 1, 0, 1, -1, 1);
 
-      int textureId = _textures[image.Id];
-
-      Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
+      if (image != null)
+      {
+        int textureId = _textures[image.Id];
+        Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
+      }
 
       Gl.glBegin(Gl.GL_QUADS);
 
@@ -456,7 +463,8 @@ namespace OkuDrivers
 
       Gl.glEnd();
 
-      Gl.glBindTexture(Gl.GL_TEXTURE_2D, 0);
+      if (image != null)
+        Gl.glBindTexture(Gl.GL_TEXTURE_2D, 0);
 
       Gl.glMatrixMode(Gl.GL_PROJECTION);
       Gl.glPopMatrix();
@@ -604,12 +612,183 @@ namespace OkuDrivers
       Gl.glPopMatrix();
     }
 
-    public void SetShaderFloat(Shader shader, string name, params float[] values)
+    private int GetGlShaderType(ShaderType shaderType)
     {
+      switch (shaderType)
+      {
+        case ShaderType.VertexShader:
+          return Gl.GL_VERTEX_SHADER;
+        case ShaderType.PixelShader:
+          return Gl.GL_FRAGMENT_SHADER;
+        default:
+          throw new OkuException("ShaderType." + shaderType + " cannot is not supported by OkuDrivers.OpenGLGraphicsDriver!");
+      }
     }
 
-    public void SetShaderTexture(Shader shader, string name, ImageBase image)
+    private int CompileShader(Shader shader)
     {
+      if (_shaders.ContainsKey(shader.Id))
+        return 0;
+
+      if (shader.Source == null)
+        throw new OkuException("Trying to compile a shader with no source! ID: " + shader.Id);
+
+      if (shader.ShaderType == ShaderType.None)
+        throw new OkuException("Trying to compile a shader with the type ShaderType.None! ID: " + shader.Id);
+
+      string[] lines = shader.Source.Split('\n');
+      int shaderName = Gl.glCreateShader(GetGlShaderType(shader.ShaderType));
+      Gl.glShaderSource(shaderName, lines.Length, lines, null);
+      Gl.glCompileShader(shaderName);
+
+      _shaders.Add(shader.Id, shaderName);
+      return shaderName;
+    }
+
+    private String GetShaderInfoLog(int shader)
+    {
+      int length = 0;
+      StringBuilder builder = new StringBuilder();
+
+      int[] lengths = new int[1];
+      Gl.glGetObjectParameterivARB(shader, Gl.GL_INFO_LOG_LENGTH, lengths);
+      length = lengths[0];
+
+      if (length > 1)
+      {
+        builder.Capacity = length;
+        Gl.glGetInfoLogARB(shader, length, lengths, builder);
+      }
+      return builder.ToString();
+    }
+
+    public int GetUniformLocation(ShaderProgram program, string name)
+    {
+      if (!_shaderPrograms.ContainsKey(program.Id))
+        throw new OkuException("Trying to access a variable of an uninitialized shader program! ID: " + program.Id + "; Variable: " + name);
+
+      Dictionary<string, int> shaderUniforms = null;
+      if (!_uniformLocations.ContainsKey(program.Id))
+      {
+        shaderUniforms = new Dictionary<string,int>();
+        _uniformLocations.Add(program.Id, shaderUniforms);
+      }
+      else
+        shaderUniforms = _uniformLocations[program.Id];
+
+      if (shaderUniforms.ContainsKey(name))
+        return shaderUniforms[name];
+
+      int programName = _shaderPrograms[program.Id];
+      int location = Gl.glGetUniformLocation(programName, name);
+      shaderUniforms.Add(name, location);
+      return location;
+    }
+
+    public bool InitShaderProgram(ShaderProgram program)
+    {
+      //Compile shaders
+      int vs = CompileShader(program.VertexShader);
+      int ps = CompileShader(program.PixelShader);
+
+      //Create and link program
+      int programName = Gl.glCreateProgram();
+      Gl.glAttachShader(programName, vs);
+      Gl.glAttachShader(programName, ps);
+
+      Gl.glLinkProgram(programName);
+
+      //Check if program could be linked
+      int linkStatus = 0;
+      Gl.glGetProgramiv(programName, Gl.GL_LINK_STATUS, out linkStatus);
+
+      if (linkStatus == Gl.GL_FALSE)
+      {
+        string shaderLog = GetShaderInfoLog(programName);
+        System.Diagnostics.Debug.WriteLine(shaderLog);
+        throw new OkuException("Could not compile shader program! ID: " + program.Id + "\nCompiler output:\n\n" + shaderLog);
+      }
+
+      _shaderPrograms.Add(program.Id, programName);
+      return true;
+    }
+
+    public void UseShaderProgram(ShaderProgram program)
+    {
+      if (program != null)
+      {
+        if (!_shaderPrograms.ContainsKey(program.Id))
+          throw new OkuException("Trying to use an uninitialized shader program! ID: " + program.Id);
+
+        int programName = _shaderPrograms[program.Id];
+        Gl.glUseProgram(programName);
+      }
+      else
+      {
+        Gl.glUseProgram(0);
+      }
+    }
+
+    public void SetShaderFloat(ShaderProgram program, string name, params float[] values)
+    {
+      if (!_shaderPrograms.ContainsKey(program.Id))
+        throw new OkuException("Trying to set a float of an uninitialized shader program! ID: " + program.Id + "; " + name);
+
+      int location = GetUniformLocation(program, name);
+
+      switch (values.Length)
+      {
+        case 1:
+          Gl.glUniform1f(location, values[0]);
+          break;
+
+        case 2:
+          Gl.glUniform2f(location, values[0], values[1]);
+          break;
+
+        case 3:
+          Gl.glUniform3f(location, values[0], values[1], values[2]);
+          break;
+
+        case 4:
+          Gl.glUniform4f(location, values[0], values[1], values[2], values[3]);
+          break;
+
+        default:
+          throw new OkuException("Unsupported number of values: " + values.Length + "!");
+      }
+    }
+
+    public void SetShaderTexture(ShaderProgram program, string name, ImageBase image)
+    {
+      if (!_shaderPrograms.ContainsKey(program.Id))
+        throw new OkuException("Trying to set a texture of an uninitialized shader program! ID: " + program.Id + "; " + name);
+
+      int location = GetUniformLocation(program, name);
+
+      Gl.glActiveTexture(Gl.GL_TEXTURE0 + 1);
+      Gl.glBindTexture(Gl.GL_TEXTURE_2D, _textures[image.Id]);
+      Gl.glUniform1i(location, 1);
+      Gl.glActiveTexture(Gl.GL_TEXTURE0);
+    }
+
+    public void ReleaseShaderProgram(ShaderProgram program)
+    {
+      if (!_shaderPrograms.ContainsKey(program.Id))
+        return;
+
+      int vs = _shaders[program.VertexShader.Id];
+      int ps = _shaders[program.PixelShader.Id];
+      int prog = _shaderPrograms[program.Id];
+
+      Gl.glDeleteShader(vs);
+      Gl.glDeleteShader(ps);
+      Gl.glDeleteProgram(prog);
+
+      _shaders.Remove(program.VertexShader.Id);
+      _shaders.Remove(program.PixelShader.Id);
+      _shaderPrograms.Remove(program.Id);
+      _uniformLocations.Remove(program.Id);
     }
 
   }

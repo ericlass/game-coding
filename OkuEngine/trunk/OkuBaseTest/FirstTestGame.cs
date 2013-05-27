@@ -26,6 +26,33 @@ namespace OkuBaseTest
 
     private Mesh _text = null;
 
+    private Shader _ps = null;
+    private Shader _vs = null;
+    private ShaderProgram _program = null;
+
+    private const String _vertexShader =
+      "varying vec2 texCoord;\n" +
+      "\n" +
+      "void main( void )\n" +
+      "{\n" +
+      "  gl_Position = ftransform();\n" +
+      "  texCoord = gl_MultiTexCoord0.xy;\n" +
+      "  gl_FrontColor = gl_Color;\n" +
+      "}";
+
+    private const String _pixelShader =
+      "varying vec2 texCoord;\n" +
+      "uniform sampler2D texture;\n" +
+      "uniform vec4 mycolor;\n" +
+      "\n" +
+      "void main ( void )\n" +
+      "{\n" +
+      "  float dist = 1.0 - (5.0 * (pow(texCoord.x - 0.5, 2.0) + pow(texCoord.y - 0.5, 2.0)));\n" +
+      "  vec4 tex = texture2D(texture, texCoord);\n" +
+      "  gl_FragColor = tex * mycolor * dist;\n" +
+      //"  gl_FragColor = gl_Color;\n" +
+      "}";
+
     public override OkuSettings Configure()
     {
       OkuSettings result = base.Configure();
@@ -51,6 +78,15 @@ namespace OkuBaseTest
       _source = Oku.Audio.NewSource(sound);
 
       _target = Oku.Graphics.NewRenderTarget(400, 300);
+
+      _vs = new Shader(_vertexShader, ShaderType.VertexShader);
+      _ps = new Shader(_pixelShader, ShaderType.PixelShader);
+
+      _program = Oku.Graphics.NewShaderProgram(_vs, _ps);
+      Oku.Graphics.UseShaderProgram(_program);
+      Oku.Graphics.SetShaderFloat(_program, "mycolor", 1.0f, 1.0f, 1.0f, 1.0f);
+      Oku.Graphics.SetShaderTexture(_program, "texture", _target);
+      Oku.Graphics.UseShaderProgram(null);
     }
 
     public void Input_OnMouseReleased(MouseButton button)
@@ -113,7 +149,9 @@ namespace OkuBaseTest
       Oku.Graphics.Clear();
       
       //Oku.Graphics.DrawImage(_target, 0, 0);
-      Oku.Graphics.DrawScreenAlignedQuad(_target);
+      Oku.Graphics.UseShaderProgram(_program);
+      Oku.Graphics.DrawScreenAlignedQuad(null, Color.Red);
+      Oku.Graphics.UseShaderProgram(null);
 
       Oku.Graphics.BeginScreenSpace();
       Oku.Graphics.DrawMesh(_text);

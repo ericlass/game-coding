@@ -229,20 +229,42 @@ namespace OkuBase.Driver
     void PopTransform();
 
     /// <summary>
-    /// Sets the float variable with the given name to the given value(s).
+    /// Initializes the given shader program.
     /// </summary>
-    /// <param name="shader">The shader to set the float value in.</param>
+    /// <param name="program">The shader program to be initialized.</param>
+    /// <returns>True if the program was initialized, false if the program could not be initialized.</returns>
+    bool InitShaderProgram(ShaderProgram program);
+
+    /// <summary>
+    /// Sets the given shader program active. All subsequent draw calls will use this shader.
+    /// To stop using a shader program, pass null to this method.
+    /// </summary>
+    /// <param name="program">The shader program to be used or null to not use any shaders.</param>
+    void UseShaderProgram(ShaderProgram program);
+
+    /// <summary>
+    /// Sets the float variable with the given name to the given value(s).
+    /// CAUTION: This only works if the given program is currently active!
+    /// </summary>
+    /// <param name="program">The program of the shader.</param>
     /// <param name="name">The name of the variable to set.</param>
     /// <param name="values">The value(s) to be set.</param>
-    void SetShaderFloat(Shader shader, string name, params float[] values);
+    void SetShaderFloat(ShaderProgram program, string name, params float[] values);
 
     /// <summary>
     /// Sets the texture variable with the given name to the given image.
+    /// CAUTION: This only works if the given program is currently active!
     /// </summary>
-    /// <param name="shader">The shader to set the texture in.</param>
+    /// <param name="program">The program of the shader.</param>
     /// <param name="name">The name of the texture variable.</param>
     /// <param name="image">The image to set as texture.</param>
-    void SetShaderTexture(Shader shader, string name, ImageBase image);
+    void SetShaderTexture(ShaderProgram program, string name, ImageBase image);
+
+    /// <summary>
+    /// Releases the given shader program.
+    /// </summary>
+    /// <param name="program">The shader program to be released.</param>
+    void ReleaseShaderProgram(ShaderProgram program);
 
   }
 }
