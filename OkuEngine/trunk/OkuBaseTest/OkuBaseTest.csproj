@@ -60,9 +60,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\OkuBase\OkuBase.csproj">
       <Project>{80362428-9A21-4449-A234-9CB8D2F52009}</Project>
       <Name>OkuBase</Name>

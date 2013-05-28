@@ -10,7 +10,7 @@ namespace OkuBase.Driver
   {
     public string DriverName
     {
-      get { return null; }
+      get { return "null"; }
     }
 
     public float Volume
