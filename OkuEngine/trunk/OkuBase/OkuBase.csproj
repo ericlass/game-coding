@@ -80,6 +80,11 @@
     <Compile Include="Input\MouseInput.cs" />
     <Compile Include="Geometry\IntersectionTests.cs" />
     <Compile Include="KeySequence.cs" />
+    <Compile Include="Logging\DebugConsoleLogWriter.cs" />
+    <Compile Include="Logging\ILogWriter.cs" />
+    <Compile Include="Logging\LogEntry.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\LogLevel.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="OkuManager.cs" />
     <Compile Include="OkuException.cs" />
