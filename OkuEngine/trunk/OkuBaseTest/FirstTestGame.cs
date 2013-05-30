@@ -30,6 +30,9 @@ namespace OkuBaseTest
     private Shader _vs = null;
     private ShaderProgram _program = null;
 
+    private bool _consoleVisible = false;
+    private OnScreenConsole _console = null;
+
     private const String _vertexShader =
       "varying vec2 texCoord;\n" +
       "\n" +
@@ -79,7 +82,7 @@ namespace OkuBaseTest
       Sound sound = Sound.FromFile("sinus.wav");
       _source = Oku.Audio.NewSource(sound);
 
-      _target = Oku.Graphics.NewRenderTarget(400, 300);
+      _target = Oku.Graphics.NewRenderTarget(512, 384);
 
       _vs = new Shader(_vertexShader, ShaderType.VertexShader);
       _ps = new Shader(_pixelShader, ShaderType.PixelShader);
@@ -89,6 +92,8 @@ namespace OkuBaseTest
       Oku.Graphics.SetShaderFloat(_program, "mycolor", 1.0f, 1.0f, 1.0f, 1.0f);
       Oku.Graphics.SetShaderTexture(_program, "texture", _target);
       Oku.Graphics.UseShaderProgram(null);
+
+      _console = new OnScreenConsole();
     }
 
     public void Input_OnMouseReleased(MouseButton button)
@@ -114,6 +119,10 @@ namespace OkuBaseTest
       if (key == Keys.S)
       {
         Oku.Audio.Play(_source);
+      }
+      if (key == Keys.Oem5)
+      {
+        _consoleVisible = !_consoleVisible;
       }
     }
 
@@ -149,15 +158,18 @@ namespace OkuBaseTest
       Oku.Graphics.SetRenderTarget(null);
       Oku.Graphics.BackgroundColor = Color.Black;
       Oku.Graphics.Clear();
-      
-      //Oku.Graphics.DrawImage(_target, 0, 0);
-      Oku.Graphics.UseShaderProgram(_program);
-      Oku.Graphics.DrawScreenAlignedQuad(null, Color.Red);
-      Oku.Graphics.UseShaderProgram(null);
 
+      Oku.Graphics.DrawScreenAlignedQuad(_target, Color.White);
+      //Oku.Graphics.DrawImage(_target, 0, 0);
+      //Oku.Graphics.UseShaderProgram(_program);
+      //Oku.Graphics.DrawScreenAlignedQuad(null, Color.Red);
+      //Oku.Graphics.UseShaderProgram(null);
       Oku.Graphics.BeginScreenSpace();
       Oku.Graphics.DrawMesh(_text);
       Oku.Graphics.EndScreenSpace();
+
+      if (_consoleVisible)
+        _console.Draw();
     }
 
   }

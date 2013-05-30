@@ -227,7 +227,6 @@ namespace OkuDrivers
       }
 
       SetBackgroundColor(settings.BackgroundColor);
-      //Gl.glClearColor(settings.BackgroundColor.R / 255.0f, settings.BackgroundColor.G / 255.0f, settings.BackgroundColor.B / 255.0f, settings.BackgroundColor.A / 255.0f);
 
       Gl.glLineWidth(1.0f);
       Gl.glEnable(Gl.GL_LINE_SMOOTH);
@@ -242,6 +241,8 @@ namespace OkuDrivers
       Gl.glFrontFace(Gl.GL_CW);
 
       UpdateViewport(settings.Width * -0.5f, settings.Width * 0.5f, settings.Height * -0.5f, settings.Height * 0.5f);
+
+      //Gl.glPolygonMode(Gl.GL_FRONT_AND_BACK, Gl.GL_LINE);
     }
 
     public void Update(float dt)
@@ -290,7 +291,7 @@ namespace OkuDrivers
         return;
 
       Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
-      Gl.glTexSubImage2D(Gl.GL_TEXTURE_2D, 0, x, y, width, height, Gl.GL_BGRA, Gl.GL_UNSIGNED_BYTE, image.ImageData.PixelData);
+      Gl.glTexSubImage2D(Gl.GL_TEXTURE_2D, 0, x, y, width, height, Gl.GL_BGRA, Gl.GL_UNSIGNED_BYTE, data.PixelData);
     }
 
     public void ReleaseImage(Image image)

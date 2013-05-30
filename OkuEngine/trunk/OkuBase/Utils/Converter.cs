@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Text;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
+using OkuBase.Platform;
 
 namespace OkuBase.Utils
 {

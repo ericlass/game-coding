@@ -34,7 +34,7 @@ namespace OkuBase.Graphics
 
     private Bitmap _fontSheet = null;
     private System.Drawing.Graphics _graphics = null;
-    private Image _fontSheetContent = null;
+    private Image _fontSheetImage = null;
     private int _nextPos = 0;
 
     private Dictionary<char, CharDimensions> _chars = new Dictionary<char, CharDimensions>();
@@ -130,10 +130,10 @@ namespace OkuBase.Graphics
       if (updated)
       {
         //_fontSheet.Save("D:\\sheet.png");
-        if (_fontSheetContent == null)
-          _fontSheetContent = OkuManager.Instance.Graphics.NewImage(ImageData.FromBitmap(_fontSheet));
+        if (_fontSheetImage == null)
+          _fontSheetImage = OkuManager.Instance.Graphics.NewImage(ImageData.FromBitmap(_fontSheet));
         else
-          OkuManager.Instance.Graphics.UpdateImage(_fontSheetContent, 0, 0, _fontSheetContent.Width, _fontSheetContent.Height, ImageData.FromBitmap(_fontSheet));
+          OkuManager.Instance.Graphics.UpdateImage(_fontSheetImage, 0, 0, _fontSheetImage.Width, _fontSheetImage.Height, ImageData.FromBitmap(_fontSheet));
       }
     }
 
@@ -191,7 +191,7 @@ namespace OkuBase.Graphics
       }
 
       Vertices content = new Vertices(positions.ToArray(), texCoords.ToArray(), colors.ToArray());
-      return new Mesh(content, _fontSheetContent, PrimitiveType.Quads);
+      return new Mesh(content, _fontSheetImage, PrimitiveType.Quads);
     }
 
     /// <summary>

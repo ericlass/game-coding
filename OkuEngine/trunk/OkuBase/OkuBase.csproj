@@ -60,6 +60,7 @@
     <Compile Include="Graphics\Color.cs" />
     <Compile Include="Graphics\FontStyle.cs" />
     <Compile Include="Graphics\ImageBase.cs" />
+    <Compile Include="Graphics\OnScreenConsole.cs" />
     <Compile Include="Graphics\PrimitiveType.cs" />
     <Compile Include="Graphics\GraphicsManager.cs" />
     <Compile Include="Graphics\Image.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Graphics\ShaderProgram.cs" />
     <Compile Include="Graphics\ShaderType.cs" />
     <Compile Include="Graphics\SpriteFont.cs" />
+    <Compile Include="Graphics\TextProcessor.cs" />
     <Compile Include="Graphics\TextureFilter.cs" />
     <Compile Include="Graphics\LineMode.cs" />
     <Compile Include="Graphics\ViewPort.cs" />

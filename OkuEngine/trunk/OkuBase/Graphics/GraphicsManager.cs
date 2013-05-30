@@ -14,6 +14,10 @@ namespace OkuBase.Graphics
     private IGraphicsDriver _driver = null;
     private ViewPort _viewport = null;
     private GraphicsSettings _settings = null;
+    private RenderTarget _renderTarget = null;
+
+    private Vector2f[] _quad = new Vector2f[4];
+    private Color[] _quadColor = new Color[4];
 
     private void OnViewportChange(ViewPort sender)
     {
@@ -47,6 +51,24 @@ namespace OkuBase.Graphics
     {
       get { return _driver.Display.Text; }
       set { _driver.Display.Text = value; }
+    }
+
+    /// <summary>
+    /// Gets the width of the current display in pixels.
+    /// This is either the window or the current render target.
+    /// </summary>
+    public int DisplayWidth
+    {
+      get { return _renderTarget == null ? _driver.Display.ClientSize.Width : _renderTarget.Width; }
+    }
+
+    /// <summary>
+    /// Gets the height of the current display in pixels.
+    /// This is either the window or the current render target.
+    /// </summary>
+    public int DisplayHeight
+    {
+      get { return _renderTarget == null ? _driver.Display.ClientSize.Height : _renderTarget.Height; }
     }
 
     public override void Initialize(OkuSettings settings)
@@ -132,11 +154,13 @@ namespace OkuBase.Graphics
     public void SetRenderTarget(RenderTarget target)
     {
       _driver.SetRenderTarget(target);
+      _renderTarget = target;
     }
 
     public void ReleaseRenderTarget(RenderTarget target)
     {
       _driver.ReleaseRenderTarget(target);
+      _renderTarget = null;
     }
 
     #endregion
@@ -300,6 +324,28 @@ namespace OkuBase.Graphics
     public void DrawMesh(Mesh mesh)
     {
       _driver.DrawMesh(mesh.Vertices.Positions, mesh.Vertices.TexCoords, mesh.Vertices.Colors, mesh.Vertices.Count, mesh.PrimitiveType, mesh.Texture);
+    }
+
+    public void DrawRectangle(float left, float right, float bottom, float top, Color color)
+    {
+      _quad[0].X = left;
+      _quad[0].Y = bottom;
+
+      _quad[1].X = left;
+      _quad[1].Y = top;
+
+      _quad[2].X = right;
+      _quad[2].Y = top;
+
+      _quad[3].X = right;
+      _quad[3].Y = bottom;
+
+      _quadColor[0] = color;
+      _quadColor[1] = color;
+      _quadColor[2] = color;
+      _quadColor[3] = color;
+
+      _driver.DrawMesh(_quad, null, _quadColor, 4, PrimitiveType.Quads, null);
     }
 
     #endregion
