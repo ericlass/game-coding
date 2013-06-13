@@ -46,6 +46,7 @@
     <Compile Include="Audio\Sound.cs" />
     <Compile Include="Audio\WaveLoader.cs" />
     <Compile Include="Collections\DynamicArray.cs" />
+    <Compile Include="Collections\SizedList.cs" />
     <Compile Include="Driver\IAudioDriver.cs" />
     <Compile Include="Driver\DriverManager.cs" />
     <Compile Include="Driver\IGraphicsDriver.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Graphics\TextureFilter.cs" />
     <Compile Include="Graphics\LineMode.cs" />
     <Compile Include="Graphics\ViewPort.cs" />
+    <Compile Include="Input\IInputHandler.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\JoystickInfo.cs" />
     <Compile Include="Input\JoystickInput.cs" />

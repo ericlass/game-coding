@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using OkuBase;
+using OkuBase.Collections;
 using OkuBase.Audio;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
@@ -12,7 +13,7 @@ using OkuBase.Input;
 
 namespace OkuBaseTest
 {
-  public class FirstTestGame : OkuGame
+  public class FirstTestGame : OkuGame, IInputHandler
   {
     private Image _image = null;
     private float _angle = 0.0f;
@@ -61,7 +62,7 @@ namespace OkuBaseTest
       OkuSettings result = base.Configure();
 
       result.Graphics.BackgroundColor = Color.Black;
-      //result.Graphics.TextureFilter = TextureFilter.NearestNeighbor;
+      result.Graphics.TextureFilter = TextureFilter.NearestNeighbor;
 
       result.Audio.DriverName = "null";
 
@@ -75,9 +76,6 @@ namespace OkuBaseTest
 
       SpriteFont font = new SpriteFont("Calibri", 12.0f, FontStyle.Regular, true);
       _text = font.GetStringMesh("Hello World!", 0, 600, Color.White);
-
-      Oku.Input.OnKeyPressed += new KeyEventDelegate(Input_OnKeyPressed);
-      Oku.Input.OnMouseReleased += new MouseEventDelegate(Input_OnMouseReleased);
 
       Sound sound = Sound.FromFile("sinus.wav");
       _source = Oku.Audio.NewSource(sound);
@@ -94,36 +92,16 @@ namespace OkuBaseTest
       Oku.Graphics.UseShaderProgram(null);
 
       _console = new OnScreenConsole();
+      _console.CloseKey = Keys.Escape;
+      _console.OnClose += new ConsoleCloseDelegate(Console_OnClose);
+
+      Oku.Input.InputHandler = this;
     }
 
-    public void Input_OnMouseReleased(MouseButton button)
+    private void Console_OnClose()
     {
-      if (button == MouseButton.Left)
-      {
-        _position = Oku.Graphics.ScreenToWorld(Oku.Input.Mouse.X, Oku.Input.Mouse.Y);
-        Oku.Graphics.Title = _position.ToString();
-      }
-    }
-
-    public void Input_OnKeyPressed(Keys key)
-    {
-      if (key == Keys.Space && _counter <= 0)
-      {
-        _counter = 5;
-        _intervalId = Oku.Timer.SetInterval(1000, new TimerEventDelegate(OnInterval));
-      }
-      if (key == Keys.T)
-      {
-        Oku.Timer.SetTimer(1000, new TimerEventDelegate(OnTimer));
-      }
-      if (key == Keys.S)
-      {
-        Oku.Audio.Play(_source);
-      }
-      if (key == Keys.Oem5)
-      {
-        _consoleVisible = !_consoleVisible;
-      }
+      _consoleVisible = false;
+      Oku.Input.InputHandler = this;
     }
 
     private void OnInterval(int id, object data)
@@ -143,7 +121,10 @@ namespace OkuBaseTest
 
     public override void Update(float dt)
     {
-      _angle -= 180 * dt;
+      if (!_consoleVisible)
+      {
+        _angle -= 180 * dt;
+      }
     }
 
     public override void Render()
@@ -172,5 +153,46 @@ namespace OkuBaseTest
         _console.Draw();
     }
 
+
+    #region IInputHandler Member
+
+    public void KeyPressed(Keys key)
+    {
+      if (key == Keys.Space && _counter <= 0)
+      {
+        _counter = 5;
+        _intervalId = Oku.Timer.SetInterval(1000, new TimerEventDelegate(OnInterval));
+      }
+      if (key == Keys.T)
+      {
+        Oku.Timer.SetTimer(1000, new TimerEventDelegate(OnTimer));
+      }
+      if (key == Keys.S)
+      {
+        Oku.Audio.Play(_source);
+      }
+      if (key == Keys.Oem5)
+      {
+        _consoleVisible = true;
+        Oku.Input.InputHandler = _console;
+      }
+    }
+
+    public void KeyReleased(Keys key) { }
+    public void MousePressed(MouseButton button) { }
+
+    public void MouseReleased(MouseButton button)
+    {
+      if (button == MouseButton.Left)
+      {
+        _position = Oku.Graphics.ScreenToWorld(Oku.Input.Mouse.X, Oku.Input.Mouse.Y);
+        Oku.Graphics.Title = _position.ToString();
+      }
+    }
+
+    public void MouseDblClick(MouseButton button) { }
+    public void MouseWheel(int delta) { }
+
+    #endregion
   }
 }
