@@ -75,6 +75,15 @@
     <Compile Include="Graphics\TextureFilter.cs" />
     <Compile Include="Graphics\LineMode.cs" />
     <Compile Include="Graphics\ViewPort.cs" />
+    <Compile Include="GUI\ButtonWidget.cs" />
+    <Compile Include="GUI\Canvas.cs" />
+    <Compile Include="GUI\ColorMap.cs" />
+    <Compile Include="GUI\HintWidget.cs" />
+    <Compile Include="GUI\LabelWidget.cs" />
+    <Compile Include="GUI\ProgressBarWidget.cs" />
+    <Compile Include="GUI\TextBoxWidget.cs" />
+    <Compile Include="GUI\Widget.cs" />
+    <Compile Include="GUI\WidgetContainer.cs" />
     <Compile Include="Input\IInputHandler.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\JoystickInfo.cs" />

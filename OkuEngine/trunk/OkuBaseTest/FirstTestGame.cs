@@ -62,7 +62,7 @@ namespace OkuBaseTest
       OkuSettings result = base.Configure();
 
       result.Graphics.BackgroundColor = Color.Black;
-      result.Graphics.TextureFilter = TextureFilter.NearestNeighbor;
+      //result.Graphics.TextureFilter = TextureFilter.NearestNeighbor;
 
       result.Audio.DriverName = "null";
 

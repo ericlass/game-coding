@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using OkuBase.Collections;
 using OkuBase.Driver;
 using OkuBase.Settings;
 using OkuBase.Geometry;
@@ -18,6 +19,7 @@ namespace OkuBase.Graphics
 
     private Vector2f[] _quad = new Vector2f[4];
     private Color[] _quadColor = new Color[4];
+    private DynamicArray<Color> _colors = new DynamicArray<Color>();
 
     private void OnViewportChange(ViewPort sender)
     {
@@ -118,6 +120,29 @@ namespace OkuBase.Graphics
       float wy = OkuMath.InterpolateLinear(_viewport.Bottom, _viewport.Top, pDist.Y / _driver.Display.ClientSize.Height);
 
       return new Vector2f(wx, wy);
+    }
+
+    /// <summary>
+    /// Sets a rectangular area of the screen where drawing will happen. 
+    /// Everything outside of the specified area will not be drawn and
+    /// kept form the previous frame.
+    /// The area is specified in display space pixel coordinates and are inclusive.
+    /// </summary>
+    /// <param name="left">The left border of the scissor rectangle.</param>
+    /// <param name="right">The right border of the scissor rectangle.</param>
+    /// <param name="width">The width of the scissor rectangle.</param>
+    /// <param name="height">The height of the scissor rectangle.</param>
+    public void SetScissorRectangle(int left, int right, int width, int height)
+    {
+      _driver.SetScissorRectangle(left, right, width, height);
+    }
+
+    /// <summary>
+    /// Clear the scissor rectangle so that thw whole screen is redrawn again.
+    /// </summary>
+    public void ClearScissorRectangle()
+    {
+      _driver.ClearScissorRectangle();
     }
 
     #region Images
@@ -280,6 +305,24 @@ namespace OkuBase.Graphics
     public void DrawLines(Vector2f[] vertices, Color[] colors, int count, float width, LineMode interpretation)
     {
       _driver.DrawLines(vertices, colors, count, width, interpretation);
+    }
+
+    /// <summary>
+    /// Draws a series of lines using the given vertices with the given width and color.
+    /// How the vertices are interpreted is specified by interpretation.
+    /// </summary>
+    /// <param name="vertices">The vertices to draw the lines with.</param>
+    /// <param name="color">The color of the all lines.</param>
+    /// <param name="count">The number of lines to draw from the given array.</param>
+    /// <param name="width">The width of the lines in pixels.</param>
+    /// <param name="interpretation">Specifies how to interpret the vertices.</param>
+    public void DrawLines(Vector2f[] vertices, Color color, int count, float width, LineMode interpretation)
+    {
+      _colors.Clear();
+      for (int i = 0; i < vertices.Length; i++)
+        _colors.Add(color);
+
+      _driver.DrawLines(vertices, _colors.InternalArray, count, width, interpretation);
     }
 
     /// <summary>
