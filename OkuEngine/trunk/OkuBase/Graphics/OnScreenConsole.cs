@@ -6,6 +6,7 @@ using OkuBase;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
 using OkuBase.Input;
+using OkuBase.Logging;
 
 namespace OkuBase.Graphics
 {
@@ -17,7 +18,7 @@ namespace OkuBase.Graphics
   /// The console needs to receive keyboard input to work. Therefore it must be
   /// set as the current input handler.
   /// </summary>
-  public class OnScreenConsole : IInputHandler
+  public class OnScreenConsole : IInputHandler, ILogWriter
   {
     private SpriteFont _font = null;
     private List<string> _entries = new List<string>();
@@ -126,8 +127,6 @@ namespace OkuBase.Graphics
       OkuManager.Instance.Graphics.EndScreenSpace();
     }
 
-    #region IInputHandler Member
-
     public void KeyPressed(Keys key)
     {
       switch (key)
@@ -155,7 +154,10 @@ namespace OkuBase.Graphics
     public void MouseDblClick(MouseButton button) { }
     public void MouseWheel(int delta) { }
 
-    #endregion
+    public void WriteLine(LogEntry entry)
+    {
+      AddLine(entry.ToString());
+    }
 
   }
 }
