@@ -59,6 +59,8 @@
     <Compile Include="Geometry\Vertices.cs" />
     <Compile Include="Geometry\Vector2f.cs" />
     <Compile Include="Graphics\Color.cs" />
+    <Compile Include="Graphics\Display.cs" />
+    <Compile Include="Graphics\DisplayMode.cs" />
     <Compile Include="Graphics\FontStyle.cs" />
     <Compile Include="Graphics\ImageBase.cs" />
     <Compile Include="Graphics\OnScreenConsole.cs" />
