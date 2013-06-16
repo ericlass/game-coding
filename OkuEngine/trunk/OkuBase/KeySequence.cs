@@ -19,6 +19,7 @@ namespace OkuBase
     public const string ShaderSequence = "shaders";
     public const string ProgramSequence = "programs";
     public const string WidgetSequence = "widgets";
+    public const string ParticleSequence = "particles";
 
     private static Dictionary<string, int> _sequences = new Dictionary<string, int>();
 
@@ -32,6 +33,7 @@ namespace OkuBase
       AddSequence(ShaderSequence);
       AddSequence(ProgramSequence);
       AddSequence(WidgetSequence);
+      AddSequence(ParticleSequence);
     }
 
     public static bool ResetSequence(string name)
@@ -64,23 +66,17 @@ namespace OkuBase
         _sequences.Add(name, 0);
         return true;
       }
-      else
-      {
-        //OkuManagers.Instance.Logger.LogError("Trying to add the sequence '" + name + "' twice!");
-      }
       return false;
     }
 
     public static int NextValue(string sequence)
     {
-      if (_sequences.ContainsKey(sequence))
-      {
-        int value = _sequences[sequence] + 1;
-        _sequences[sequence] = value;
-        return value;
-      }
+      if (!_sequences.ContainsKey(sequence))
+        throw new OkuException("Sequence '" + sequence + "' is unknown!");
 
-      throw new OkuException("Sequence '" + sequence + "' is unknown!");
+      int value = _sequences[sequence] + 1;
+      _sequences[sequence] = value;
+      return value;
     }
 
     public static bool SetCurrentValue(string sequence, int value)
