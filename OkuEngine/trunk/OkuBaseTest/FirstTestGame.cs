@@ -92,7 +92,6 @@ namespace OkuBaseTest
       Oku.Graphics.UseShaderProgram(null);
 
       _console = new OnScreenConsole();
-      _console.CloseKey = Keys.Escape;
       _console.OnClose += new ConsoleCloseDelegate(Console_OnClose);
 
       Oku.Input.InputHandler = this;

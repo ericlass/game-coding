@@ -290,7 +290,7 @@ namespace OkuBase.Graphics
     /// <param name="color">The color of the line.</param>
     public void DrawLine(float x1, float y1, float x2, float y2, float width, Color color)
     {
-      _driver.DrawLine(x1, y1, x2, y1, width, color);
+      _driver.DrawLine(x1, y1, x2, y2, width, color);
     }
 
     /// <summary>

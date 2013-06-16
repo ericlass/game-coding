@@ -26,6 +26,7 @@ namespace OkuBase.Graphics
     private Color _bgColor = new Color(0, 0, 0, 128);
     private TextProcessor _input = new TextProcessor();
     private Keys _closeKey = Keys.Oem5;
+    private int _historyIndex = -1;
 
     /// <summary>
     /// Creates a new console with a default font.
@@ -88,6 +89,14 @@ namespace OkuBase.Graphics
     public void AddLine(string line)
     {
       _entries.Add(line);
+      while (_entries.Count > 100)
+        _entries.RemoveAt(0);
+    }
+
+    public void Clear()
+    {
+      _entries.Clear();
+      _historyIndex = -1;
     }
 
     /// <summary>
@@ -100,6 +109,7 @@ namespace OkuBase.Graphics
 
       float bottom = OkuManager.Instance.Graphics.DisplayHeight - _height;
 
+      //Draw transparent background
       OkuManager.Instance.Graphics.DrawRectangle(
         0, 
         OkuManager.Instance.Graphics.DisplayWidth, 
@@ -107,6 +117,7 @@ namespace OkuBase.Graphics
         OkuManager.Instance.Graphics.DisplayHeight,
         _bgColor);
 
+      //Draw entries
       float maxY = OkuManager.Instance.Graphics.DisplayHeight + _font.Height;
       for (int i = _entries.Count - 1; i >= 0; i--)
       {
@@ -118,11 +129,17 @@ namespace OkuBase.Graphics
         OkuManager.Instance.Graphics.DrawMesh(mesh);
       }
 
+      //Draw splitting line
       float splitY = bottom + _font.Height;
       OkuManager.Instance.Graphics.DrawLine(0, splitY, OkuManager.Instance.Graphics.DisplayWidth, splitY, 1.0f, Color.Silver);
 
+      //Draw input line
       Mesh inputMesh = _font.GetStringMesh(_input.Text, 5, splitY, Color.White);
       OkuManager.Instance.Graphics.DrawMesh(inputMesh);
+
+      //Draw cursor
+      float cursorPos = _font.GetTextWidth(_input.Text, _input.CursorPosition) + 5;
+      OkuManager.Instance.Graphics.DrawLine(cursorPos, splitY - 2, cursorPos, splitY - (_font.Height - 2), 1.0f, Color.White);
 
       OkuManager.Instance.Graphics.EndScreenSpace();
     }
@@ -137,6 +154,30 @@ namespace OkuBase.Graphics
           if (OnCommandEntered != null)
             OnCommandEntered(text);
           _input.Text = "";
+          _historyIndex = -1;
+          break;
+
+        case Keys.Up:
+          if (_entries.Count <= 0)
+            break;
+          if (_historyIndex < 0)
+            _historyIndex = _entries.Count;
+          _historyIndex--;
+          if (_historyIndex < 0)
+            _historyIndex = 0;
+          _input.Text = _entries[_historyIndex];
+          break;
+
+        case Keys.Down:
+          if (_entries.Count <= 0)
+            break;
+          if (_historyIndex >= 0)
+          {
+            _historyIndex++;
+            if (_historyIndex >= _entries.Count)
+              _historyIndex = _entries.Count - 1;
+            _input.Text = _entries[_historyIndex];
+          }
           break;
 
         default:
