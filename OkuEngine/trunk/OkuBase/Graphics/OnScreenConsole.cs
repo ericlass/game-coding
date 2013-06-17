@@ -11,22 +11,21 @@ using OkuBase.Logging;
 namespace OkuBase.Graphics
 {
   public delegate void ConsoleCommandEnteredDelegate(string command);
-  public delegate void ConsoleCloseDelegate();
 
   /// <summary>
   /// Defines an on-screen console that is drawn as an overlay over the game.
   /// The console needs to receive keyboard input to work. Therefore it must be
   /// set as the current input handler.
   /// </summary>
-  public class OnScreenConsole : IInputHandler, ILogWriter
+  public class OnScreenConsole : ILogWriter
   {
     private SpriteFont _font = null;
     private List<string> _entries = new List<string>();
     private float _height = 200.0f;
     private Color _bgColor = new Color(0, 0, 0, 128);
     private TextProcessor _input = new TextProcessor();
-    private Keys _closeKey = Keys.Oem5;
     private int _historyIndex = -1;
+    private bool _active = false;
 
     /// <summary>
     /// Creates a new console with a default font.
@@ -34,6 +33,7 @@ namespace OkuBase.Graphics
     public OnScreenConsole()
     {
       _font = new SpriteFont("Courier New", 10.0f, FontStyle.Regular, false);
+      Init();
     }
 
     /// <summary>
@@ -43,6 +43,12 @@ namespace OkuBase.Graphics
     public OnScreenConsole(SpriteFont font)
     {
       _font = font;
+      Init();
+    }
+
+    private void Init()
+    {
+      OkuManager.Instance.Input.OnKeyPressed += new KeyEventDelegate(KeyPressed);
     }
 
     /// <summary>
@@ -64,23 +70,19 @@ namespace OkuBase.Graphics
     }
 
     /// <summary>
-    /// Gets or sets the key that is used to close the console.
+    /// Gets or sets if the console is currently active. An active console
+    /// processes keyboard events, an inactive one does not.
     /// </summary>
-    public Keys CloseKey
+    public bool Active
     {
-      get { return _closeKey; }
-      set { _closeKey = value; }
+      get { return _active; }
+      set { _active = value; }
     }
 
     /// <summary>
     /// Is triggered when the user enters a command and hits the enter key.
     /// </summary>
     public event ConsoleCommandEnteredDelegate OnCommandEntered;
-
-    /// <summary>
-    /// Is triggered when the close key is pressed.
-    /// </summary>
-    public event ConsoleCloseDelegate OnClose;
 
     /// <summary>
     /// Adds the given new line to the console.
@@ -146,6 +148,9 @@ namespace OkuBase.Graphics
 
     public void KeyPressed(Keys key)
     {
+      if (!_active)
+        return;
+
       switch (key)
       {
         case Keys.Enter:
@@ -180,20 +185,15 @@ namespace OkuBase.Graphics
           }
           break;
 
+        // A little hack to get rid of the ^
+        case Keys.Oem5:
+          break;
+
         default:
-          if (key == _closeKey && OnClose != null)
-            OnClose();
-          else
-            _input.ProcessKey(key);
+          _input.ProcessKey(key);
           break;
       }
     }
-
-    public void KeyReleased(Keys key) { }
-    public void MousePressed(MouseButton button) { }
-    public void MouseReleased(MouseButton button) { }
-    public void MouseDblClick(MouseButton button) { }
-    public void MouseWheel(int delta) { }
 
     public void WriteLine(LogEntry entry)
     {

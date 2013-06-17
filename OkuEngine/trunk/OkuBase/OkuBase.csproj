@@ -86,7 +86,6 @@
     <Compile Include="GUI\TextBoxWidget.cs" />
     <Compile Include="GUI\Widget.cs" />
     <Compile Include="GUI\WidgetContainer.cs" />
-    <Compile Include="Input\IInputHandler.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\JoystickInfo.cs" />
     <Compile Include="Input\JoystickInput.cs" />

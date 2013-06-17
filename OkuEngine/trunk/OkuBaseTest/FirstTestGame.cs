@@ -13,7 +13,7 @@ using OkuBase.Input;
 
 namespace OkuBaseTest
 {
-  public class FirstTestGame : OkuGame, IInputHandler
+  public class FirstTestGame : OkuGame
   {
     private Image _image = null;
     private float _angle = 0.0f;
@@ -91,16 +91,10 @@ namespace OkuBaseTest
       Oku.Graphics.SetShaderTexture(_program, "texture", _target);
       Oku.Graphics.UseShaderProgram(null);
 
+      Oku.Input.OnKeyPressed += new KeyEventDelegate(KeyPressed);
+      Oku.Input.OnMouseReleased +=new MouseEventDelegate(MouseReleased);
+
       _console = new OnScreenConsole();
-      _console.OnClose += new ConsoleCloseDelegate(Console_OnClose);
-
-      Oku.Input.InputHandler = this;
-    }
-
-    private void Console_OnClose()
-    {
-      _consoleVisible = false;
-      Oku.Input.InputHandler = this;
     }
 
     private void OnInterval(int id, object data)
@@ -152,11 +146,11 @@ namespace OkuBaseTest
         _console.Draw();
     }
 
-
-    #region IInputHandler Member
-
     public void KeyPressed(Keys key)
     {
+      if (_consoleVisible && (key != Keys.Oem5))
+        return;
+
       if (key == Keys.Space && _counter <= 0)
       {
         _counter = 5;
@@ -172,13 +166,10 @@ namespace OkuBaseTest
       }
       if (key == Keys.Oem5)
       {
-        _consoleVisible = true;
-        Oku.Input.InputHandler = _console;
+        _consoleVisible = !_consoleVisible;
+        _console.Active = _consoleVisible;
       }
     }
-
-    public void KeyReleased(Keys key) { }
-    public void MousePressed(MouseButton button) { }
 
     public void MouseReleased(MouseButton button)
     {
@@ -189,9 +180,5 @@ namespace OkuBaseTest
       }
     }
 
-    public void MouseDblClick(MouseButton button) { }
-    public void MouseWheel(int delta) { }
-
-    #endregion
   }
 }

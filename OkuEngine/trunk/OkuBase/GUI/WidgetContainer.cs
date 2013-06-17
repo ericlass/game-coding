@@ -12,7 +12,7 @@ namespace OkuBase.GUI
   /// Container for GUI widgets that manages updating an rendering widget.
   /// Every widget has to added to a container to work.
   /// </summary>
-  public class WidgetContainer : IInputHandler
+  public class WidgetContainer
   {
     private List<Widget> _widgets = new List<Widget>();
     private Widget _hotWidget = null; //The widget that the mouse hovers over.
@@ -309,39 +309,5 @@ namespace OkuBase.GUI
       OkuManager.Instance.Graphics.EndScreenSpace();
     }
 
-
-    #region IInputHandler Member
-
-    public void KeyPressed(Keys key)
-    {
-      throw new NotImplementedException();
-    }
-
-    public void KeyReleased(Keys key)
-    {
-      throw new NotImplementedException();
-    }
-
-    public void MousePressed(MouseButton button)
-    {
-      throw new NotImplementedException();
-    }
-
-    public void MouseReleased(MouseButton button)
-    {
-      throw new NotImplementedException();
-    }
-
-    public void MouseDblClick(MouseButton button)
-    {
-      throw new NotImplementedException();
-    }
-
-    public void MouseWheel(int delta)
-    {
-      throw new NotImplementedException();
-    }
-
-    #endregion
   }
 }

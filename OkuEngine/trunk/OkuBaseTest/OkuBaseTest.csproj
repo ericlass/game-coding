@@ -58,6 +58,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="TestGame.cs" />
+    <Compile Include="TestManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OkuBase\OkuBase.csproj">
