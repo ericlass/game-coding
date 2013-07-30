@@ -1,4 +1,5 @@
 ﻿using System;
+using OkuBase.Geometry;
 
 namespace OkuEngine
 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OkuBase.Geometry;
 
 namespace OkuEngine.Collision
 {
@@ -53,7 +54,8 @@ namespace OkuEngine.Collision
     {
       QuadTree result = this;
       
-      if (!_area.Contains(body.BoundingCircle))
+      Rectangle2f circleBB = body.BoundingCircle.GetBoundingBox();
+      if (IntersectionTests.Contains(_area.Min, _area.Max, circleBB.Min, circleBB.Max))
         throw new ArgumentException();
         
       if (_children == null) //Cell has not been split yet
@@ -72,7 +74,8 @@ namespace OkuEngine.Collision
             child.Parent = this;
             foreach (ICollidable currentBody in _bodies)
             {
-              if (child.Area.Contains(currentBody.BoundingCircle))
+              circleBB = currentBody.BoundingCircle.GetBoundingBox();
+              if (IntersectionTests.Contains(child.Area.Min, child.Area.Max, circleBB.Min, circleBB.Max))
               {
                 result = child.Add(currentBody);
                 _buffer.Add(currentBody);
@@ -88,7 +91,8 @@ namespace OkuEngine.Collision
         bool handled = false;
         for (int i = 0; i < _children.Length; i++)
         {
-          if (_children[i].Area.Contains(body.BoundingCircle))
+          circleBB = body.BoundingCircle.GetBoundingBox();
+          if (IntersectionTests.Contains(_children[i].Area.Min, _children[i].Area.Max, circleBB.Min, circleBB.Max))
           {
             result = _children[i].Add(body);
             handled = true;
@@ -122,13 +126,13 @@ namespace OkuEngine.Collision
 
     public void GetBodies(Rectangle2f aabb, ref List<ICollidable> result)
     {
-      if (!_area.Intersects(aabb))
+      if (IntersectionTests.Rectangles(_area.Min, _area.Max, aabb.Min, aabb.Max))
         throw new ArgumentException();
           
       result.AddRange(_bodies);
       for (int i = 0; i < _children.Length; i++)
       {
-        if (_children[i].Area.Intersects(aabb))
+        if (IntersectionTests.Rectangles(_children[i].Area.Min, _children[i].Area.Max, aabb.Min, aabb.Max))
           _children[i].GetBodies(aabb, ref result);
       }
     }

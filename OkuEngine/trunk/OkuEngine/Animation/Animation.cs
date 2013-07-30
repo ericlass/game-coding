@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using OkuBase.Graphics;
 using Newtonsoft.Json;
 
 namespace OkuEngine
@@ -86,7 +87,7 @@ namespace OkuEngine
     /// <summary>
     /// Gets the current image that should be displayed
     /// </summary>
-    public ImageContent CurrentImage
+    public ImageBase CurrentImage
     {
       get { return OkuData.Instance.Images[_frames[_currentFrame].ImageId]; }
     }

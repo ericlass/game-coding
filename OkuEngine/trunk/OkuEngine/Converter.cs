@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
-using OkuEngine.Driver.Renderer;
+using OkuBase;
+using OkuBase.Geometry;
+using OkuBase.Graphics;
 using OkuEngine.Attributes;
 
 namespace OkuEngine
@@ -273,7 +275,7 @@ namespace OkuEngine
         }
         else
         {
-          OkuManagers.Instance.Logger.LogError("AABB '" + str + "' has wrong format!");
+          OkuManager.Instance.Logging.LogError("AABB '" + str + "' has wrong format!");
         }
       }
       return false;

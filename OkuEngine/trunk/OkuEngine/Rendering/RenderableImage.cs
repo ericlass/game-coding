@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using OkuBase.Geometry;
+using OkuBase.Graphics;
 using OkuEngine.Scenes;
 using Newtonsoft.Json;
 
@@ -12,7 +14,7 @@ namespace OkuEngine.Rendering
   /// </summary>
   public class RenderableImage : IRenderable
   {
-    private ImageContent _image = null;
+    private ImageBase _image = null;
     private int _imageId = 0;
 
     private Rectangle2f _boundingBox = new Rectangle2f();
@@ -39,7 +41,7 @@ namespace OkuEngine.Rendering
     public void Render(Scene scene)
     {
       if (_image != null)
-        OkuDrivers.Instance.Renderer.DrawImage(_image, Vector2f.Zero);
+        OkuBase.OkuManager.Instance.Graphics.DrawImage(_image, 0, 0);
     }
 
     public Rectangle2f GetBoundingBox()
@@ -69,7 +71,7 @@ namespace OkuEngine.Rendering
       _image = OkuData.Instance.Images[_imageId];
       if (_image == null)
       {
-        OkuManagers.Instance.Logger.LogError("There is no image with the id " + _imageId + "!");
+        OkuBase.OkuManager.Instance.Logging.LogError("There is no image with the id " + _imageId + "!");
         return false;
       }
       return true;

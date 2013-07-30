@@ -32,7 +32,7 @@ namespace OkuEngine.Resources
       }
       catch (Exception e)
       {
-        OkuManagers.Instance.Logger.LogError(e.Message);
+        OkuBase.OkuManager.Instance.Logging.LogError(e.Message);
         return false;
       }
       

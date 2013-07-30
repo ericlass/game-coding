@@ -47,14 +47,6 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Tao.OpenAl, Version=1.1.0.1, Culture=neutral, PublicKeyToken=a7579dda88828311, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\Tao.OpenAl.dll</HintPath>
-    </Reference>
-    <Reference Include="Tao.OpenGl, Version=2.1.0.12, Culture=neutral, PublicKeyToken=1ca010269a4501ef, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\Tao.OpenGl.dll</HintPath>
-    </Reference>
     <Reference Include="Tao.Platform.Windows, Version=1.0.0.5, Culture=neutral, PublicKeyToken=701104b2da67a104, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\Tao.Platform.Windows.dll</HintPath>
@@ -84,19 +76,8 @@
     <Compile Include="Collision\Detectors\NoBroadPhaseDetector.cs" />
     <Compile Include="Collision\Detectors\NoPrecisePhaseDetector.cs" />
     <Compile Include="Collision\Detectors\PrecisePhaseDetector.cs" />
-    <Compile Include="Driver\Audio\AudioSettings.cs" />
-    <Compile Include="Driver\Audio\NullSoundEngine.cs" />
-    <Compile Include="Driver\Renderer\RenderSettings.cs" />
-    <Compile Include="Driver\Audio\SoundEngineFactory.cs" />
-    <Compile Include="Driver\Renderer\DrawMode.cs" />
-    <Compile Include="Driver\Renderer\NullRenderer.cs" />
-    <Compile Include="Driver\Renderer\RendererFactory.cs" />
-    <Compile Include="Collections\DynamicArray.cs" />
-    <Compile Include="Color.cs" />
-    <Compile Include="Content\PixelShaderContent.cs" />
     <Compile Include="Converter.cs" />
     <Compile Include="Actors\Actor.cs" />
-    <Compile Include="Engine\OkuDrivers.cs" />
     <Compile Include="EntityManager.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\EventListenerDelegate.cs" />
@@ -112,11 +93,8 @@
     <Compile Include="Geometry\Vector2i.cs" />
     <Compile Include="Collections\InheritingDictionary.cs" />
     <Compile Include="Input\KeyBinding.cs" />
-    <Compile Include="Instance\ContentInstance.cs" />
-    <Compile Include="Instance\MeshInstance.cs" />
-    <Compile Include="Instance\SoundInstance.cs" />
     <Compile Include="Input\InputManager.cs" />
-    <Compile Include="Input\KeyAction.cs" />
+    <Compile Include="OkuExtensions.cs" />
     <Compile Include="Rendering\IRenderable.cs" />
     <Compile Include="Processes\DelayProcess.cs" />
     <Compile Include="Processes\Process.cs" />
@@ -152,22 +130,7 @@
     <Compile Include="Scripting\ScriptInstance.cs" />
     <Compile Include="Scripting\ScriptManager.cs" />
     <Compile Include="Geometry\EarClipper.cs" />
-    <Compile Include="GUI\ButtonWidget.cs" />
-    <Compile Include="GUI\Canvas.cs" />
-    <Compile Include="GUI\ColorMap.cs" />
-    <Compile Include="GUI\HintWidget.cs" />
-    <Compile Include="GUI\LabelWidget.cs" />
-    <Compile Include="GUI\ProgressBarWidget.cs" />
-    <Compile Include="GUI\TextBoxWidget.cs" />
-    <Compile Include="GUI\TextProcessor.cs" />
-    <Compile Include="GUI\WidgetContainer.cs" />
-    <Compile Include="GUI\Widget.cs" />
     <Compile Include="IStoreable.cs" />
-    <Compile Include="Logging\DebugConsoleLogWriter.cs" />
-    <Compile Include="Logging\ILogWriter.cs" />
-    <Compile Include="Logging\LogEntry.cs" />
-    <Compile Include="Logging\Logger.cs" />
-    <Compile Include="Logging\LogLevel.cs" />
     <Compile Include="OkuException.cs" />
     <Compile Include="PropertyMap.cs" />
     <Compile Include="PropertyEntry.cs" />
@@ -179,61 +142,20 @@
     <Compile Include="VirtualFileSystem\VirtualFile.cs" />
     <Compile Include="VirtualFileSystem\VirtualFileSystem.cs" />
     <Compile Include="VirtualFileSystem\VirtualFileType.cs" />
-    <Compile Include="Rendering\Display.cs" />
-    <Compile Include="Rendering\DisplayMode.cs" />
-    <Compile Include="Content\ImageContent.cs" />
-    <Compile Include="Driver\Renderer\MeshMode.cs" />
-    <Compile Include="Driver\Renderer\TextureFilter.cs" />
-    <Compile Include="Driver\Renderer\VertexInterpretation.cs" />
     <Compile Include="Scenes\ViewPort.cs" />
     <Compile Include="Geometry\ContinuousCollision.cs" />
     <Compile Include="Geometry\OkuMath.cs" />
     <Compile Include="Geometry\SpatialHashMap.cs" />
-    <Compile Include="OkuExtensions.cs" />
-    <Compile Include="Geometry\Intersections.cs" />
-    <Compile Include="Geometry\PolygonFactory.cs" />
-    <Compile Include="Driver\Renderer\IRenderer.cs" />
-    <Compile Include="Driver\Audio\ISoundEngine.cs" />
     <Compile Include="KeySequence.cs" />
     <Compile Include="Geometry\LineSegment.cs" />
     <Compile Include="Geometry\Matrix3.cs" />
     <Compile Include="Engine\OkuData.cs" />
     <Compile Include="Engine\OkuManagers.cs" />
-    <Compile Include="Engine\OkuGame.cs" />
-    <Compile Include="Driver\Audio\OpenALSoundEngine.cs" />
-    <Compile Include="Driver\Renderer\OpenGLRenderer.cs" />
-    <Compile Include="Rendering\Vertices.cs" />
-    <Compile Include="Geometry\Rectangle2f.cs" />
-    <Compile Include="Particles\DefaultParticleController.cs" />
-    <Compile Include="Particles\ForceEffector.cs" />
-    <Compile Include="Particles\IParticleController.cs" />
-    <Compile Include="Particles\IParticleEffector.cs" />
-    <Compile Include="Particles\LineEmitter.cs" />
-    <Compile Include="Particles\LineParticleRenderer.cs" />
-    <Compile Include="Particles\ParticleEmitter.cs" />
-    <Compile Include="Particles\IParticleRenderer.cs" />
-    <Compile Include="Particles\Particle.cs" />
-    <Compile Include="Particles\ParticleSystem.cs" />
-    <Compile Include="Particles\PointEmitter.cs" />
-    <Compile Include="Particles\PointParticleRenderer.cs" />
     <Compile Include="PerlinNoise.cs" />
-    <Compile Include="Content\SoundContent.cs" />
-    <Compile Include="Geometry\Spline.cs" />
-    <Compile Include="SpriteFont.cs" />
     <Compile Include="TileMap\Tile.cs" />
     <Compile Include="TileMap\Tilemap.cs" />
     <Compile Include="Geometry\Transformation.cs" />
-    <Compile Include="Platform\User32.cs" />
-    <Compile Include="Geometry\Vector2f.cs" />
-    <Compile Include="Input\InputBase.cs" />
-    <Compile Include="Input\JoystickInfo.cs" />
-    <Compile Include="Input\JoystickInput.cs" />
-    <Compile Include="Platform\Kernel32.cs" />
-    <Compile Include="Input\KeyboardInput.cs" />
-    <Compile Include="Input\MouseInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WaveLoader.cs" />
-    <Compile Include="Platform\Winmm.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="okugame.xml">
@@ -244,16 +166,18 @@
     <EmbeddedResource Include="OkuRuntime.js" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
     <None Include="lib\Jurassic.dll" />
-    <None Include="lib\Tao.OpenAl.dll" />
-    <None Include="lib\Tao.OpenGl.dll" />
-    <None Include="lib\Tao.Platform.Windows.dll" />
     <None Include="okugame.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="lib\Newtonsoft.Json.dll" />
     <Content Include="lib\Newtonsoft.Json.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OkuBase\OkuBase.csproj">
+      <Project>{80362428-9A21-4449-A234-9CB8D2F52009}</Project>
+      <Name>OkuBase</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

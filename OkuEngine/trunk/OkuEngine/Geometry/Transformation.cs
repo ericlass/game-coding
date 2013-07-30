@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using OkuBase.Geometry;
 using Newtonsoft.Json;
 
 namespace OkuEngine

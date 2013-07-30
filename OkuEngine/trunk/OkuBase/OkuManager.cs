@@ -7,6 +7,7 @@ using OkuBase.Input;
 using OkuBase.Driver;
 using OkuBase.Settings;
 using OkuBase.Timer;
+using OkuBase.Logging;
 
 namespace OkuBase
 {
@@ -26,6 +27,7 @@ namespace OkuBase
 
     private List<Manager> _managers = new List<Manager>();
 
+    private Logger _logging = new Logger();
     private DriverManager _drivers = new DriverManager();
     private GraphicsManager _graphics = new GraphicsManager();
     private AudioManager _audio = new AudioManager();
@@ -34,7 +36,10 @@ namespace OkuBase
 
     private OkuManager()
     {
+      _logging.AddWriter(new DebugConsoleLogWriter()); //Add default console log writer.
+
       //CAUTION: The order is important!!!
+      _managers.Add(_logging);
       _managers.Add(_drivers);
       _managers.Add(_graphics);
       _managers.Add(_audio);
@@ -65,6 +70,11 @@ namespace OkuBase
     internal DriverManager Drivers
     {
       get { return _drivers; }
+    }
+
+    public Logger Logging
+    {
+      get { return _logging; }
     }
 
     public GraphicsManager Graphics

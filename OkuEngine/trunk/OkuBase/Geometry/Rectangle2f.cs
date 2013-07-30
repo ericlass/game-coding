@@ -82,6 +82,11 @@ namespace OkuBase.Geometry
       points[3] = new Vector2f(Max.X, Min.Y);
     }
 
+    public Vector2f GetCenter()
+    {
+      return (Min + Max) * 0.5f;
+    }
+
     /// <summary>
     /// Checks if the given point is inside of the AABB.
     /// </summary>

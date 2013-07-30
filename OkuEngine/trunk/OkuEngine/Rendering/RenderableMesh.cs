@@ -2,39 +2,23 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using OkuBase;
+using OkuBase.Geometry;
+using OkuBase.Graphics;
 using OkuEngine.Scenes;
-using OkuEngine.Driver.Renderer;
 using Newtonsoft.Json;
 
 namespace OkuEngine.Rendering
 {
   public class RenderableMesh : IRenderable
   {
-    private Vertices _vertices = null;
-    private int _imageId = 0;
-    private DrawMode _mode = DrawMode.ClosedPolygon;
-
-    private ImageContent _image = null;
+    private Mesh _mesh = null;
 
     [JsonPropertyAttribute]
-    public int ImageId
+    public Mesh Mesh
     {
-      get { return _imageId; }
-      set { _imageId = value; }
-    }
-
-    [JsonPropertyAttribute]
-    public DrawMode Mode
-    {
-      get { return _mode; }
-      set { _mode = value; }
-    }
-
-    [JsonPropertyAttribute]
-    public Vertices Vertices
-    {
-      get { return _vertices; }
-      set { _vertices = value; }
+      get { return _mesh; }
+      set { _mesh = value; }
     }
 
     public void Update(float dt)
@@ -44,31 +28,25 @@ namespace OkuEngine.Rendering
 
     public void Render(Scene scene)
     {
-      OkuDrivers.Instance.Renderer.DrawMesh(_vertices.Positions, _vertices.TexCoords, _vertices.Colors, _vertices.Count, _mode, _image);
+       OkuManager.Instance.Graphics.DrawMesh(_mesh);
     }
 
     public Rectangle2f GetBoundingBox()
     {
-      return _vertices.GetAABB();
+      return _mesh.Vertices.Positions.GetBoundingBox();
     }
 
     public Circle GetBoundingCircle()
     {
-      if (_vertices.Positions != null)
-        return _vertices.Positions.GetBoundingCircleCentered();
+      if (_mesh.Vertices.Positions != null)
+        return _mesh.Vertices.Positions.GetBoundingCircleCentered();
 
       return default(Circle);
     }
 
     public bool AfterLoad()
     {
-      _image = OkuData.Instance.Images[_imageId];
-      if (_image == null)
-      {
-        OkuManagers.Instance.Logger.LogError("There is no image with the id " + _imageId + "!");
-        return false;
-      }
-      return _vertices.AfterLoad();
+      return true;
     }
 
   }

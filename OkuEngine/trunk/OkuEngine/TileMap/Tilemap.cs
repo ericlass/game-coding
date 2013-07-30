@@ -4,6 +4,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using OkuBase.Geometry;
+using OkuBase.Graphics;
 using OkuEngine.Scenes;
 
 namespace OkuEngine
@@ -33,7 +35,7 @@ namespace OkuEngine
     private Tile[,] _tiles = null;
 
     //The tile images
-    private List<ImageContent> _tileImages = new List<ImageContent>();
+    private List<ImageBase> _tileImages = new List<ImageBase>();
     
     private int _tileSize = 32;
     private int _mapWidth = 0;
@@ -95,7 +97,7 @@ namespace OkuEngine
     /// Gets or set the images that are used to draw the tile map. The indices of the
     /// images in the list must match the Image value of the tiles.
     /// </summary>
-    public List<ImageContent> TileImages
+    public List<ImageBase> TileImages
     {
       get { return _tileImages; }
       set { _tileImages = value; }
@@ -173,7 +175,7 @@ namespace OkuEngine
           aabbVertices[3] = p;
 
           byte col = _tiles[x, y].Collision;
-          if (col > TILE_COLLISION_NONE && Intersections.Intersect(_bounds[col], aabbVertices, out td))
+          if (col > TILE_COLLISION_NONE && IntersectionTests.Intersect(_bounds[col], aabbVertices, out td))
           {
             mtd += td *_tileSize;
             result = true;
@@ -219,7 +221,7 @@ namespace OkuEngine
       {
         //If line oprigin is outside of tilemap, get first intersection with tilemap
         float t = 0;
-        if (Intersections.LineSegmentAABB(p1.X, p1.Y, p2.X, p2.Y, mapLeft, mapRight, mapTop, mapBottom, out t, float.MaxValue))
+        if (IntersectionTests.LineSegmentAABB(p1.X, p1.Y, p2.X, p2.Y, mapLeft, mapRight, mapTop, mapBottom, out t, float.MaxValue))
         {
           Vector2f p = OkuMath.InterpolateLinear(p1, p2, t);
           lineOrgMapPixelSpace.X = p.X - mapLeft;
@@ -278,7 +280,7 @@ namespace OkuEngine
           {
             int j = (i + 1) % shape.Length;
             float t = 0;
-            if (Intersections.LineSegments(lineTileTileSpaceStart, lineTileTileSpaceEnd, shape[i], shape[j], out t, minT))
+            if (IntersectionTests.LineSegments(lineTileTileSpaceStart, lineTileTileSpaceEnd, shape[i], shape[j], out t, minT))
             {
               minT = t;
               intersects = true;
@@ -319,7 +321,7 @@ namespace OkuEngine
     {
       int left, right, top, bottom;
       
-      ViewPort view = OkuData.Instance.Scenes.ActiveScene.Viewport;
+      OkuEngine.Scenes.ViewPort view = OkuData.Instance.Scenes.ActiveScene.Viewport;
       WorldToTile(view.Left, view.Top, out left, out top);
       WorldToTile(view.Right, view.Bottom, out right, out bottom);
 
@@ -333,7 +335,7 @@ namespace OkuEngine
           {
             position.X = (x * _tileSize) + _origin.X + (_tileSize / 2.0f);
             position.Y = (y * _tileSize) + _origin.Y + (_tileSize / 2.0f);
-            OkuDrivers.Instance.Renderer.DrawImage(_tileImages[tile.Image], position);
+            OkuBase.OkuManager.Instance.Graphics.DrawImage(_tileImages[tile.Image], position.X, position.Y);
           }
         }
       }

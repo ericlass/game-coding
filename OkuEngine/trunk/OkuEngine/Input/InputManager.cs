@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 using System.Windows.Forms;
+using OkuBase.Input;
 using Newtonsoft.Json;
 
 namespace OkuEngine.Input
@@ -130,7 +131,7 @@ namespace OkuEngine.Input
       foreach (KeyBinding binding in OkuData.Instance.KeyBindings)
       {
         if (!AddBinding(binding.Key, binding.Action, binding.Event, binding.State))
-          OkuManagers.Instance.Logger.LogError("Trying to bind the same key to the same action twice!" + binding.Key + ", " + binding.Action);
+          OkuBase.OkuManager.Instance.Logging.LogError("Trying to bind the same key to the same action twice!" + binding.Key + ", " + binding.Action);
       }
       return true;
     }

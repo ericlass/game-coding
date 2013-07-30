@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using OkuBase.Platform;
+using OkuBase.Settings;
 
 namespace OkuBase.Logging
 {
   /// <summary>
   /// Defines a simple logger.
   /// </summary>
-  public class Logger
+  public class Logger : Manager
   {
     private int _maxEntries = 1000;
     private List<LogEntry> _entries = new List<LogEntry>();
@@ -143,6 +144,18 @@ namespace OkuBase.Logging
         builder.Append(Environment.NewLine);
       }
       return builder.ToString();
+    }
+
+    public override void Initialize(OkuSettings settings)
+    {
+    }
+
+    public override void Update(float dt)
+    {
+    }
+
+    public override void Finish()
+    {
     }
 
   }

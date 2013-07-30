@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using OkuBase;
+using OkuBase.Geometry;
 using OkuEngine.Collision;
 using Newtonsoft.Json;
 

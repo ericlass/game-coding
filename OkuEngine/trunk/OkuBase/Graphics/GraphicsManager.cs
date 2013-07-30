@@ -425,5 +425,28 @@ namespace OkuBase.Graphics
 
     #endregion
 
+    #region Transform
+
+    /// <summary>
+    /// Pushes the current transformation onto the stack and applies the given transformation.
+    /// </summary>
+    /// <param name="translation">The amount to translate.</param>
+    /// <param name="scale">The scale factors.</param>
+    /// <param name="angle">The angle to rotate.</param>
+    public void ApplyAndPushTransform(Vector2f translation, Vector2f scale, float angle)
+    {
+      _driver.ApplyAndPushTransform(translation, scale, angle);
+    }
+
+    /// <summary>
+    /// Pops the current transformation from the stack.
+    /// </summary>
+    public void PopTransform()
+    {
+      _driver.PopTransform();
+    }
+
+    #endregion
+
   }
 }

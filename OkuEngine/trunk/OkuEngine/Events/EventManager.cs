@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OkuBase;
+using OkuBase.Platform;
 
 namespace OkuEngine.Events
 {
@@ -64,7 +66,7 @@ namespace OkuEngine.Events
 
       if (_listeners[eventType].Contains(eventDelegate))
       {
-        OkuManagers.Instance.Logger.LogError("Trying to register '" + eventDelegate.ToString() + "' twice for event '" + eventType + "'!");
+        OkuBase.OkuManager.Instance.Logging.LogError("Trying to register '" + eventDelegate.ToString() + "' twice for event '" + eventType + "'!");
         return false;
       }
 

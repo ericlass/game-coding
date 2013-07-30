@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using OkuBase;
+using OkuBase.Geometry;
+using OkuBase.Graphics;
+using OkuBase.Collections;
 using OkuEngine.Geometry;
 using OkuEngine.Rendering;
 using OkuEngine.Collections;
@@ -25,7 +29,7 @@ namespace OkuEngine.Scenes.Backdrops
     private float _width = 0.0f;
     private float _height = 0.0f;
 
-    private ImageContent _image = null;
+    private ImageBase _image = null;
     private RegularGrid _grid = null;
     private Dictionary<Vector2i, Vertices> _sliceData = new Dictionary<Vector2i, Vertices>();
     private DynamicArray<Vector2f> _vertPoints = new DynamicArray<Vector2f>();
@@ -112,7 +116,7 @@ namespace OkuEngine.Scenes.Backdrops
       }
 
       //Render everything at once
-      OkuDrivers.Instance.Renderer.DrawMesh(_vertPoints.InternalArray, _vertTexCoords.InternalArray, _vertColors.InternalArray, _vertPoints.Count, OkuEngine.Driver.Renderer.DrawMode.Quads, _image);
+      OkuBase.OkuManager.Instance.Graphics.DrawMesh(_vertPoints.InternalArray, _vertTexCoords.InternalArray, _vertColors.InternalArray, _vertPoints.Count, PrimitiveType.Quads, _image);
     }
 
     /// <summary>
@@ -179,7 +183,7 @@ namespace OkuEngine.Scenes.Backdrops
       _image = OkuData.Instance.Images[_imageId];
       if (_image == null)
       {
-        OkuManagers.Instance.Logger.LogError("Could not find image with id " + _imageId + "!");
+        OkuBase.OkuManager.Instance.Logging.LogError("Could not find image with id " + _imageId + "!");
         return false;
       }
 

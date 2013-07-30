@@ -271,7 +271,7 @@ namespace OkuDrivers
         Gl.glGetTexLevelParameteriv(Gl.GL_TEXTURE_2D, 0, Gl.GL_TEXTURE_COMPRESSED_IMAGE_SIZE, out compSize);
         int uncompSize = image.Width * image.Height * 4;
         float ratio = (compSize / (float)uncompSize) * 100.0f;
-        //OkuManagers.Instance.Logger.LogError("Image \"" + content.Name + "\" (ID " + content.Id + ") Compressed: " + compSize + "; Uncompressed: " + uncompSize + "; Ratio: " + ratio + "%");
+        //OkuBase.OkuManager.Instance.Logging.LogError("Image \"" + content.Name + "\" (ID " + content.Id + ") Compressed: " + compSize + "; Uncompressed: " + uncompSize + "; Ratio: " + ratio + "%");
       }
       Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, GetGLTexFilter());
       Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, GetGLTexFilter());

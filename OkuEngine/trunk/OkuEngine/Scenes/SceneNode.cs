@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using OkuBase.Graphics;
 using OkuEngine.Actors;
 using OkuEngine.Events;
 using Newtonsoft.Json;
@@ -230,7 +231,7 @@ namespace OkuEngine.Scenes
         BoundingCircleComponent comp = _actor.GetComponent<BoundingCircleComponent>(BoundingCircleComponent.ComponentName);
         if (comp != null)
         {
-          OkuDrivers.Instance.Renderer.DrawLines(comp.GetBoundingCircle().GetPoints(16), Color.Green, 16, 1.0f, OkuEngine.Driver.Renderer.VertexInterpretation.PolygonClosed);
+          OkuBase.OkuManager.Instance.Graphics.DrawLines(comp.GetBoundingCircle().GetPoints(16), Color.Green, 16, 1.0f, LineMode.PolygonClosed);
         }
       }
       finally

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using OkuBase.Geometry;
 
 namespace OkuEngine.Geometry
 {
@@ -141,7 +141,8 @@ namespace OkuEngine.Geometry
     /// <returns>True if the point is inside, else false.</returns>
     public bool IsInside(Vector2f point)
     {
-      return Intersections.PointInAABB(point, Left, Bottom, Right, Top);
+      Rectangle2f test = new Rectangle2f(Left, Bottom, Width, Height);
+      return test.IsInside(point);
     }
 
     /// <summary>
@@ -152,7 +153,8 @@ namespace OkuEngine.Geometry
     /// <returns>True if the point is inside, else false.</returns>
     public bool IsInside(float x, float y)
     {
-      return Intersections.PointInAABB(x, y, Left, Bottom, Right, Top);
+      Rectangle2f test = new Rectangle2f(Left, Bottom, Width, Height);
+      return test.IsInside(new Vector2f(x, y));
     }
 
     public Vector2i GetMinCell()
@@ -263,7 +265,7 @@ namespace OkuEngine.Geometry
         for (int x = min.X; x <= max.X; x++)
         {
           GetCellBounds(x, y, true, out cellBounds);
-          if (Intersections.CircleAABB(circle, cellBounds))
+          if (IntersectionTests.CircleAABB(circle.Center, circle.Radius, cellBounds.Min, cellBounds.Max))
             cells.Add(new Vector2i(x, y));
         }
       }

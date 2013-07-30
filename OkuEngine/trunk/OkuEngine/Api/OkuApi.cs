@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using OkuBase.Geometry;
 using OkuEngine.Actors;
 using OkuEngine.Attributes;
 using OkuEngine.Scenes;
@@ -46,7 +47,7 @@ namespace OkuEngine.Api
     {
       Actor actor = OkuData.Instance.Actors[actorId];
       if (actor == null)
-        OkuManagers.Instance.Logger.LogError("No actor with the id " + actorId + " exists!");
+        OkuBase.OkuManager.Instance.Logging.LogError("No actor with the id " + actorId + " exists!");
 
       return actor;
     }
@@ -195,7 +196,7 @@ namespace OkuEngine.Api
         }
         else
         {
-          OkuManagers.Instance.Logger.LogError("There is no actor state with the name " + state + "!");
+          OkuBase.OkuManager.Instance.Logging.LogError("There is no actor state with the name " + state + "!");
           return false;
         }
       }
@@ -217,7 +218,7 @@ namespace OkuEngine.Api
         if (value != null)
           return value.ValueString;
         else
-          OkuManagers.Instance.Logger.LogError("The is no actor attribute with the name " + attribute + "!");
+          OkuBase.OkuManager.Instance.Logging.LogError("The is no actor attribute with the name " + attribute + "!");
       }
       return null;
     }
@@ -237,7 +238,7 @@ namespace OkuEngine.Api
         if (attrValue != null)
           attrValue.ValueString = value;
         else
-          OkuManagers.Instance.Logger.LogError("The is no actor attribute with the name " + attribute + "!");
+          OkuBase.OkuManager.Instance.Logging.LogError("The is no actor attribute with the name " + attribute + "!");
       }
     }
 

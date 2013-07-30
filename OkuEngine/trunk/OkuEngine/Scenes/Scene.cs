@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 using System.Drawing;
+using OkuBase.Geometry;
 using OkuEngine.Events;
 using OkuEngine.Collision;
 using OkuEngine.Collision.Detectors;
@@ -159,7 +160,7 @@ namespace OkuEngine.Scenes
         foreach (CollisionInfo collision in collisions)
         {
           OkuManagers.Instance.EventManager.QueueEvent(EventTypes.CollisionOccurred, collision.BodyA.SceneNode.ActorId, collision.BodyB.SceneNode.ActorId);
-          OkuManagers.Instance.Logger.LogInfo(Environment.TickCount + " - COLLISION: " + collision.BodyA.SceneNode.ActorId + " <> " + collision.BodyB.SceneNode.ActorId);
+          OkuBase.OkuManager.Instance.Logging.LogInfo(Environment.TickCount + " - COLLISION: " + collision.BodyA.SceneNode.ActorId + " <> " + collision.BodyB.SceneNode.ActorId);
         }
       }
 
@@ -197,7 +198,7 @@ namespace OkuEngine.Scenes
     {
       _matrixStack.Push(_currentTransform);
       _currentTransform = transform.AsMatrix() * _currentTransform;
-      OkuDrivers.Instance.Renderer.ApplyAndPushTransform(transform);
+      OkuBase.OkuManager.Instance.Graphics.ApplyAndPushTransform(transform.Translation, transform.Scale, transform.Orientation);
     }
 
     /// <summary>
@@ -206,7 +207,7 @@ namespace OkuEngine.Scenes
     public void PopTransform()
     {
       _currentTransform = _matrixStack.Pop();
-      OkuDrivers.Instance.Renderer.PopTransform();
+      OkuBase.OkuManager.Instance.Graphics.PopTransform();
     }
 
     /// <summary>
@@ -234,8 +235,7 @@ namespace OkuEngine.Scenes
     /// <returns>The converted world space position.</returns>
     public Vector2f ScreenToWorld(int x, int y)
     {
-      Point client = OkuDrivers.Instance.Renderer.Display.PointToClient(new Point(x, y));
-      return new Vector2f(client.X, OkuDrivers.Instance.Renderer.Display.ClientSize.Height - client.Y);
+      return OkuBase.OkuManager.Instance.Graphics.ScreenToWorld(x, y);
     }
 
     /// <summary>
@@ -293,7 +293,8 @@ namespace OkuEngine.Scenes
     /// <returns>True if the given AABB is visible, else false.</returns>
     public bool IsVisible(Rectangle2f boudingBox)
     {
-      return Intersections.AABBs(boudingBox, Viewport.GetBoundingBox());
+      Rectangle2f viewportRect = Viewport.GetBoundingBox();
+      return IntersectionTests.Rectangles(boudingBox.Min, boudingBox.Max, viewportRect.Min, viewportRect.Max);
     }
 
     public override bool AfterLoad()

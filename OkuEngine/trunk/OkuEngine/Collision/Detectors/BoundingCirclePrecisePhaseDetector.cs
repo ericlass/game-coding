@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OkuBase.Geometry;
 
 namespace OkuEngine.Collision.Detectors
 {
@@ -14,7 +15,7 @@ namespace OkuEngine.Collision.Detectors
 
       CollisionInfo result = null;
       Vector2f mtd = Vector2f.Zero;
-      if (Intersections.Circles(circleA.Center, circleA.Radius, circleB.Center, circleB.Radius, out mtd))
+      if (IntersectionTests.Circles(circleA.Center, circleA.Radius, circleB.Center, circleB.Radius, out mtd))
       {
         result = new CollisionInfo();
         result.BodyA = bodyA;

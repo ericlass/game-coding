@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Collections.Generic;
 using System.IO;
+using OkuBase;
 using OkuEngine.Api;
 
 namespace OkuEngine.Scripting
@@ -17,7 +18,7 @@ namespace OkuEngine.Scripting
     /// </summary>
     public void Initialize()
     {
-      _engine.SetGlobalFunction("print", new Action<string>((message) => OkuManagers.Instance.Logger.LogInfo(message)));
+      _engine.SetGlobalFunction("print", new Action<string>((message) => OkuBase.OkuManager.Instance.Logging.LogInfo(message)));
 
       ExposeApi();
 
@@ -80,7 +81,7 @@ namespace OkuEngine.Scripting
 
         if (hasUnsupportedType)
         {
-          OkuManagers.Instance.Logger.LogError("API method " + method.Name + " has unsupported parameter types!");
+          OkuBase.OkuManager.Instance.Logging.LogError("API method " + method.Name + " has unsupported parameter types!");
           continue;
         }
 
@@ -94,7 +95,7 @@ namespace OkuEngine.Scripting
         }
         else
         {
-          OkuManagers.Instance.Logger.LogError("Method " + method.Name + " could not be converted to a delegate type!");
+          OkuBase.OkuManager.Instance.Logging.LogError("Method " + method.Name + " could not be converted to a delegate type!");
         }
       }
     }

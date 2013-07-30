@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OkuBase.Geometry;
 
 namespace OkuEngine
 {
@@ -36,14 +37,14 @@ namespace OkuEngine
 
       // Only continue if the swept bounding boxes intersect
       bool result = false;
-      if (Intersections.AABBs(min1, max1, min2, max2))
+      if (IntersectionTests.Rectangles(min1, max1, min2, max2))
       {
         float lmtd = float.MaxValue;
 
         //Porject vertices of poly1 onto poly2
         for (int i = 0; i < poly1.Length; i++)
         {
-          if (Intersections.RayPolygon(poly1[i], poly1[i] + translation, poly2, out lmtd))
+          if (IntersectionTests.RayPolygon(poly1[i], poly1[i] + translation, poly2, out lmtd))
           {
             mtd = Math.Min(mtd, lmtd);
             result = true;
@@ -53,7 +54,7 @@ namespace OkuEngine
         //Project vertices of poy2 backwards onto poly1
         for (int i = 0; i < poly2.Length; i++)
         {
-          if (Intersections.RayPolygon(poly2[i], poly2[i] - translation, poly1, out lmtd))
+          if (IntersectionTests.RayPolygon(poly2[i], poly2[i] - translation, poly1, out lmtd))
           {
             mtd = Math.Min(mtd, lmtd);
             result = true;

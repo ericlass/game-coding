@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+using OkuBase;
+using OkuBase.Geometry;
+using OkuBase.Graphics;
+using OkuBase.Settings;
 using OkuEngine.Scenes;
 using OkuEngine.Actors;
 using OkuEngine.Input;
 using OkuEngine.Events;
 using OkuEngine.Scripting;
-using OkuEngine.Driver.Renderer;
-using OkuEngine.Driver.Audio;
+using OkuEngine.Rendering;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -54,13 +57,13 @@ namespace OkuEngine
     }
 
     private GameProperties _gameProperties = new GameProperties();
-    private RenderSettings _renderSettings = new RenderSettings();
+    private GraphicsSettings _renderSettings = new GraphicsSettings();
     private AudioSettings _audioSettings = new AudioSettings();
 
     private List<KeyBinding> _keyBindings = new List<KeyBinding>();
     private EntityManager<UserEvent> _userEvents = new EntityManager<UserEvent>("userevents", "event", KeySequence.UserEventSequence);
     private EntityManager<Behavior> _behaviors = new EntityManager<Behavior>("behaviors", "behavior", KeySequence.BehaviorSequence);
-    private EntityManager<ImageContent> _images = new EntityManager<ImageContent>("images", "image", KeySequence.ImageSequence);
+    private List<ImageBase> _images = new List<ImageBase>();
     private EntityManager<Animation> _animations = new EntityManager<Animation>("animations", "animation", KeySequence.AnimationSequence);
     private ActorManager _actors = new ActorManager();
     private SceneManager _scenes = new SceneManager();
@@ -71,9 +74,6 @@ namespace OkuEngine
         return false;
 
       if (!_behaviors.AfterLoad())
-        return false;
-
-      if (!_images.AfterLoad())
         return false;
 
       if (!_animations.AfterLoad())
@@ -93,6 +93,13 @@ namespace OkuEngine
     }
 
     [JsonPropertyAttribute]
+    public List<ImageBase> Images
+    {
+      get { return _images; }
+      set { _images = value; }
+    }
+
+    [JsonPropertyAttribute]
     public GameProperties GameProperties
     {
       get { return _gameProperties; }
@@ -100,7 +107,7 @@ namespace OkuEngine
     }
 
     [JsonPropertyAttribute]
-    public RenderSettings RenderSettings
+    public GraphicsSettings RenderSettings
     {
       get { return _renderSettings; }
       set { _renderSettings = value; }
@@ -131,16 +138,6 @@ namespace OkuEngine
     {
       get { return _behaviors; }
       set { _behaviors = value; }
-    }
-
-    /// <summary>
-    /// Gets the image manager that contains all images.
-    /// </summary>
-    [JsonPropertyAttribute]
-    public EntityManager<ImageContent> Images
-    {
-      get { return _images; }
-      set { _images = value; }
     }
 
     /// <summary>

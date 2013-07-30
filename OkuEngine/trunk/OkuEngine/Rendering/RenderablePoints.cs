@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using OkuBase;
+using OkuBase.Geometry;
 using OkuEngine.Scenes;
 using Newtonsoft.Json;
 
@@ -33,12 +35,12 @@ namespace OkuEngine.Rendering
 
     public void Render(Scene scene)
     {
-      OkuDrivers.Instance.Renderer.DrawPoints(_vertices.Positions, _vertices.Colors, _vertices.Count, _size);
+      OkuManager.Instance.Graphics.DrawPoints(_vertices.Positions, _vertices.Colors, _vertices.Count, _size);
     }
 
     public Rectangle2f GetBoundingBox()
     {
-      return _vertices.GetAABB();
+      return _vertices.Positions.GetBoundingBox();
     }
 
     public Circle GetBoundingCircle()
@@ -51,7 +53,7 @@ namespace OkuEngine.Rendering
 
     public bool AfterLoad()
     {
-      return _vertices.AfterLoad();
+      return true;
     }
 
   }

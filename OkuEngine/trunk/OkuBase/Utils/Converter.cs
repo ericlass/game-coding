@@ -212,7 +212,7 @@ namespace OkuBase.Utils
         }
         else
         {
-          //OkuManagers.Instance.Logger.LogError("AABB '" + str + "' has wrong format!");
+          //OkuBase.OkuManager.Instance.Logging.LogError("AABB '" + str + "' has wrong format!");
         }
       }
       return false;
