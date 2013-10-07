@@ -42,6 +42,8 @@ namespace OkuBase.Input
       get { return _keyboard; }
     }
 
+    //TODO: Track state of modifier keys (Strg, Shift, Caps)
+
     internal void KeyPressed(Keys key)
     {
       if (OnKeyPressed != null)

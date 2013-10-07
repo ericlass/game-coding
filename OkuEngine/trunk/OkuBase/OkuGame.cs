@@ -78,11 +78,11 @@ namespace OkuBase
               break;
 
             case User32.WM_KEYDOWN:
-              _okuInstance.Input.KeyPressed((Keys)msg.wParam);
+              _okuInstance.Input.KeyPressed((Keys)((int)msg.wParam));
               break;
 
             case User32.WM_KEYUP:
-              _okuInstance.Input.KeyReleased((Keys)msg.wParam);
+              _okuInstance.Input.KeyReleased((Keys)((int)msg.wParam));
               break;
 
             case User32.WM_LBUTTONDBLCLK:
