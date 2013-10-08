@@ -56,6 +56,7 @@
     <Compile Include="BoundingBoxComponent.cs" />
     <Compile Include="ComponentMap.cs" />
     <Compile Include="Entity.cs" />
+    <Compile Include="EntityMap.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="EventId.cs" />
     <Compile Include="EventQueue.cs" />

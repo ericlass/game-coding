@@ -5,7 +5,6 @@ namespace RougeLike
 {
   public abstract class BehaviorComponent : IComponent
   {
-    private string _id = null;
     private Entity _owner = null;
     
     public abstract string Id { get; }

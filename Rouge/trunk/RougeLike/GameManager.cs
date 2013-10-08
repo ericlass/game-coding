@@ -2,7 +2,7 @@
 
 namespace RougeLike
 {
-  public class GameManager
+  public class GameManager : IUpdatable
   {
     private static GameManager _instance = null;
 
@@ -18,12 +18,20 @@ namespace RougeLike
     }
 
     private EventQueue _eventQueue = null;
+    private EntityMap _entities = null;
 
     private Entity _playerEntity = null;
 
     private GameManager()
     {
       _eventQueue = new EventQueue();
+      _entities = new EntityMap();
+    }
+    
+    public void Update(float dt)
+    {
+      _entities.Update(dt);
+      _eventQueue.ProcessEvents();
     }
 
     public EventQueue EventQueue
@@ -39,6 +47,11 @@ namespace RougeLike
     internal void setPlayerEntity(Entity entity)
     {
       _playerEntity = entity;
+    }
+    
+    public EntityMap Entities
+    {
+      get { return _entities; }
     }
 
   }
