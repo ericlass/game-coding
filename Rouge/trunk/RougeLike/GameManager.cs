@@ -20,7 +20,9 @@ namespace RougeLike
     private EventQueue _eventQueue = null;
     private EntityMap _entities = null;
 
-    private Entity _playerEntity = null;
+    //Important global entities
+    private Entity _playerEntity = null; //The entity for the player character
+    private Entity _mapEntity = null; //The entity that contains the map data
 
     private GameManager()
     {
@@ -52,6 +54,16 @@ namespace RougeLike
     public EntityMap Entities
     {
       get { return _entities; }
+    }
+    
+    public Entity MapEntity
+    {
+      get { return _mapEntity; }
+    }
+
+    internal void setMapEntity(Entity entity)
+    {
+      _mapEntity = entity;
     }
 
   }
