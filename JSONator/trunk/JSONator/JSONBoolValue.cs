@@ -35,7 +35,7 @@ namespace JSONator
     /// <returns>The boolean vaule as a string.</returns>
     public override string ToString()
     {
-      return Value.ToString();
+      return Value ? "true": "false";
     }
 
   }

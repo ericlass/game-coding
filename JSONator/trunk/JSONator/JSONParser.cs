@@ -335,7 +335,6 @@ namespace JSONator
     /// <returns>The parsed JSON number value.</returns>
     private JSONNumberValue ReadNumber()
     {
-      //CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator
       StringBuilder builder = new StringBuilder();
       while (_numberChars.Contains(CurrentChar) && !EOF)
       {
@@ -344,7 +343,7 @@ namespace JSONator
       }
       //_currentPos++;
 
-      string str = builder.ToString();
+      string str = builder.ToString().Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
 
       if (str == null || str.Length == 0)
         GeneralError("Empty number value!");
