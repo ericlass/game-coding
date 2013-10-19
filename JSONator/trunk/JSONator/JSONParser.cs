@@ -363,6 +363,8 @@ namespace JSONator
     {
       string value = ReadName();
 
+      //TODO: read escape sequences
+
       if (value == null)
         value = "";
 

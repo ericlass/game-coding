@@ -5,31 +5,53 @@ using System.Globalization;
 
 namespace JSONator
 {
+  /// <summary>
+  /// Defines a JSON writer that can be used to convert JSON objects into a JSON string.
+  /// Supports creation of minified or indented JSON strings.
+  /// </summary>
   public class JSONWriter
   {
     private bool _readable = false;
     private int _currentIndent = 0;
 
+    /// <summary>
+    /// Creates a new JSON writer that create minified JSON.
+    /// </summary>
     public JSONWriter()
     {
     }
 
+    /// <summary>
+    /// Creates a new JSON writer and allows to define if minified or indented JSON should be created.
+    /// </summary>
+    /// <param name="readable">True for indented JSON. False for minified.</param>
     public JSONWriter(bool readable)
     {
       _readable = readable;
     }
 
+    /// <summary>
+    /// Gets or sets if the generated JSON is minified (false) or indented (true).
+    /// </summary>
     public bool Readable
     {
       get { return _readable; }
       set { _readable = value; }
     }
 
+    /// <summary>
+    /// Gets the current indentation as a string.
+    /// </summary>
     private string CurrentIndent
     {
       get { return _readable ? new string(' ', _currentIndent * 2) : ""; }
     }
 
+    /// <summary>
+    /// Creates a JSON string from the given JSON object.
+    /// </summary>
+    /// <param name="root">The root object of the JSON.</param>
+    /// <returns>A string represenation of the JSON object and all its members.</returns>
     public string WriteJson(JSONObjectValue root)
     {
       StringBuilder builder = new StringBuilder();
@@ -39,6 +61,11 @@ namespace JSONator
       return builder.ToString().Trim();
     }
 
+    /// <summary>
+    /// Writes a JSON value to the given string builder.
+    /// </summary>
+    /// <param name="value">The value to be written.</param>
+    /// <param name="builder">The builder to write to.</param>
     private void WriteValue(JSONValue value, StringBuilder builder)
     {
       switch (value.ValueType)
@@ -66,21 +93,40 @@ namespace JSONator
       }
     }
 
+    /// <summary>
+    /// Writes a null value to the given string builder.
+    /// </summary>
+    /// <param name="builder">The builder to write to.</param>
     private void WriteNull(StringBuilder builder)
     {
       builder.Append("null");
     }
 
+    /// <summary>
+    /// Writes a bool value to the given string builder.
+    /// </summary>
+    /// <param name="value">The bool value to be written.</param>
+    /// <param name="builder">The builder to write to.</param>
     private void WriteBool(JSONBoolValue value, StringBuilder builder)
     {
-      builder.Append(value.Value.ToString());
+      builder.Append(value.ToString());
     }
 
+    /// <summary>
+    /// Writes a number value to the given string builder.
+    /// </summary>
+    /// <param name="value">The number value to be written.</param>
+    /// <param name="builder">The builder to write to.</param>
     private void WriteNumber(JSONNumberValue value, StringBuilder builder)
     {
       builder.Append(value.Value.ToString().Replace(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator, "."));
     }
 
+    /// <summary>
+    /// Writes a string value to the given string builder.
+    /// </summary>
+    /// <param name="value">The string value to be written.</param>
+    /// <param name="builder">The builder to write to.</param>
     private void WriteString(JSONStringValue value, StringBuilder builder)
     {
       builder.Append('"');
@@ -88,6 +134,11 @@ namespace JSONator
       builder.Append('"');
     }
 
+    /// <summary>
+    /// Writes an array value to the given string builder.
+    /// </summary>
+    /// <param name="value">The array value to be written.</param>
+    /// <param name="builder">The builder to write to.</param>
     private void WriteArray(JSONArrayValue value, StringBuilder builder)
     {
       if (value.Count == 0)
@@ -122,6 +173,11 @@ namespace JSONator
       builder.Append(']');
     }
 
+    /// <summary>
+    /// Writes an object value to the given string builder.
+    /// </summary>
+    /// <param name="value">The object value to be written.</param>
+    /// <param name="builder">The builder to write to.</param>
     private void WriteObject(JSONObjectValue value, StringBuilder builder)
     {
       if (_readable)
