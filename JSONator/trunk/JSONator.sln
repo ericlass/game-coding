@@ -5,10 +5,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSONator", "JSONator\JSONat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "Test\TestApp.csproj", "{F422DBD8-C153-4C72-890D-65465501DD36}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSONatorTests", "JSONatorTests\JSONatorTests.csproj", "{8F168E78-44BF-4E92-9481-6A4B2E35BD70}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{83DE0299-D4F2-4E74-BDAC-E59DB8C3F9FD}"
+	ProjectSection(SolutionItems) = preProject
+		JSONator.vsmdi = JSONator.vsmdi
+		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
 		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = JSONator.vsmdi
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +34,10 @@ Global
 		{F422DBD8-C153-4C72-890D-65465501DD36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F422DBD8-C153-4C72-890D-65465501DD36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F422DBD8-C153-4C72-890D-65465501DD36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F168E78-44BF-4E92-9481-6A4B2E35BD70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F168E78-44BF-4E92-9481-6A4B2E35BD70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F168E78-44BF-4E92-9481-6A4B2E35BD70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F168E78-44BF-4E92-9481-6A4B2E35BD70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
