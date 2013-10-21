@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSONator", "JSONator\JSONator.csproj", "{7B44E646-EB21-4A5E-9DCF-96010F4F9EED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{F422DBD8-C153-4C72-890D-65465501DD36}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "Test\TestApp.csproj", "{F422DBD8-C153-4C72-890D-65465501DD36}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
