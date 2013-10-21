@@ -15,6 +15,8 @@ namespace JSONator
 
     private int _line = 0;
     private HashSet<char> _whiteSpaces = null;
+    private HashSet<char> _digits = null;
+    private HashSet<char> _hexDigits = null;
     private HashSet<char> _numberChars = null;
 
     /// <summary>
@@ -28,17 +30,33 @@ namespace JSONator
       _whiteSpaces.Add('\r');
       _whiteSpaces.Add('\t');
 
-      _numberChars = new HashSet<char>();
-      _numberChars.Add('0');
-      _numberChars.Add('1');
-      _numberChars.Add('2');
-      _numberChars.Add('3');
-      _numberChars.Add('4');
-      _numberChars.Add('5');
-      _numberChars.Add('6');
-      _numberChars.Add('7');
-      _numberChars.Add('8');
-      _numberChars.Add('9');
+      _digits = new HashSet<char>();
+      _digits.Add('0');
+      _digits.Add('1');
+      _digits.Add('2');
+      _digits.Add('3');
+      _digits.Add('4');
+      _digits.Add('5');
+      _digits.Add('6');
+      _digits.Add('7');
+      _digits.Add('8');
+      _digits.Add('9');
+
+      _hexDigits = new HashSet<char>(_digits);
+      _hexDigits.Add('A');
+      _hexDigits.Add('B');
+      _hexDigits.Add('C');
+      _hexDigits.Add('D');
+      _hexDigits.Add('E');
+      _hexDigits.Add('F');
+      _hexDigits.Add('a');
+      _hexDigits.Add('b');
+      _hexDigits.Add('c');
+      _hexDigits.Add('d');
+      _hexDigits.Add('e');
+      _hexDigits.Add('f');
+
+      _numberChars = new HashSet<char>(_digits);
       _numberChars.Add('.');
       _numberChars.Add('+');
       _numberChars.Add('-');
@@ -77,15 +95,15 @@ namespace JSONator
     /// </summary>
     private void SkipWhiteSpaces()
     {
-      while (_whiteSpaces.Contains(_json[_currentPos]))
+      while (_whiteSpaces.Contains(CurrentChar))
       {
+        if (CurrentChar == '\n')
+          _line++;
+
         _currentPos++;
 
         if (EOF)
           EndOfFileError();
-
-        if (CurrentChar == '\n')
-          _line++;
       }
     }
 
@@ -106,7 +124,7 @@ namespace JSONator
     {
       _json = json.ToCharArray();
       _currentPos = 0;
-      _line = 0;
+      _line = 1;
 
       SkipWhiteSpaces();
 
@@ -128,13 +146,83 @@ namespace JSONator
     /// Read the name of an object member.
     /// </summary>
     /// <returns>The parsed name.</returns>
-    private string ReadName()
+    private string ReadString()
     {
       _currentPos++;
       StringBuilder builder = new StringBuilder();
       while (CurrentChar != '"' && !EOF)
       {
-        builder.Append(CurrentChar);
+        if (CurrentChar == '\\')
+        {
+          //Escape sequences
+          _currentPos++;
+          switch (CurrentChar)
+          {
+            case '\\':
+              builder.Append('\\');
+              break;
+
+            case '"':
+              builder.Append('"');
+              break;
+
+            case '/':
+              builder.Append('/');
+              break;
+
+            case 'b':
+            case 'B':
+              builder.Append('\b');
+              break;
+
+            case 'f':
+            case 'F':
+              builder.Append('\f');
+              break;
+
+            case 'n':
+            case 'N':
+              builder.Append('\n');
+              break;
+
+            case 'r':
+            case 'R':
+              builder.Append('\r');
+              break;
+
+            case 't':
+            case 'T':
+              builder.Append('\t');
+              break;
+
+            case 'u':
+            case 'U':
+              _currentPos++;
+              StringBuilder numBuilder = new StringBuilder();
+              for (int i = 0; i < 4; i++)
+              {
+                if (!_hexDigits.Contains(CurrentChar))
+                  ExpectedError("Four hex digits");
+
+                numBuilder.Append(CurrentChar);
+                _currentPos++;
+                if (EOF)
+                  EndOfFileError();
+              }
+              int number = Convert.ToInt32(numBuilder.ToString(), 16);
+              builder.Append(Char.ConvertFromUtf32(number));
+              _currentPos--;
+              break;
+
+            default:
+              builder.Append("\\");
+              builder.Append(CurrentChar);
+              break;
+          }
+        }
+        else
+          builder.Append(CurrentChar);
+
         _currentPos++;
       }
       _currentPos++;
@@ -184,7 +272,7 @@ namespace JSONator
           return ReadNumber();
 
         case '"':
-          return ReadString();
+          return ReadStringValue();
 
         default:
           GeneralError("Unknown value '" + CurrentChar.ToString() + "'!");
@@ -214,7 +302,7 @@ namespace JSONator
         if (CurrentChar != '"')
           ExpectedError("\"");
 
-        string name = ReadName();
+        string name = ReadString();
 
         if (name == null || name.Length == 0)
           GeneralError("Member name cannot be empty!");
@@ -341,7 +429,6 @@ namespace JSONator
         builder.Append(CurrentChar);
         _currentPos++;        
       }
-      //_currentPos++;
 
       string str = builder.ToString().Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
 
@@ -359,9 +446,9 @@ namespace JSONator
     /// Reads a string value.
     /// </summary>
     /// <returns>The parsed JSON string value.</returns>
-    private JSONStringValue ReadString()
+    private JSONStringValue ReadStringValue()
     {
-      string value = ReadName();
+      string value = ReadString();
 
       //TODO: read escape sequences
 

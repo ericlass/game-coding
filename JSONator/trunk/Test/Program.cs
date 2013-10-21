@@ -27,7 +27,7 @@ namespace Test
         "  }\n" +
         "}";
 
-      json =
+      /*json =
         "{\"web-app\": {\n" +
         "  \"servlet\": [   \n" +
         "    {\n" +
@@ -115,7 +115,7 @@ namespace Test
         " \n" +
         "  \"taglib\": {\n" +
         "    \"taglib-uri\": \"cofax.tld\",\n" +
-        "    \"taglib-location\": \"/WEB-INF/tlds/cofax.tld\"}}}";
+        "    \"taglib-location\": \"/WEB-INF/tlds/cofax.tld\"}}}";*/
 
       JSONParser parser = new JSONParser();
       JSONObjectValue obj = parser.Parse(json);
