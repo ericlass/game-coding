@@ -23,3 +23,8 @@ Create a tool that generates C# classes from official header files
 - Extension loading
   - Use wglGetprocAddress with name of function. If 0 is returned, the function is not supported.
   - Marshal function pointer to delegate and rememeber in dictionary
+  
+- Regex replacements (EmEditor)
+  - constants: "#define (GL_[^\s]*)[\s]*(0x[0123456789AaBbCcDdEeFf]*)" -> "public const uint \1 = \2;"
+  - function pointer types: "typedef[\s]*([^\s]*)[\s]*(\**)\(APIENTRYP[\s]*(PFN[^\)]*)\)[\s]*([^;]*)" -> "private delegate \1\2 \3\4"
+  - funcions: "GLAPI[\s]*([^\s]*)[\s]*(\**)APIENTRY[\s]*([^\s\(]*)[^\(]*([^;]*)" -> "public static \1\2 \3\4"
