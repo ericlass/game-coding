@@ -1,9 +1,10 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace ThinGL
 {
-  public class Gl
+  public static class Gl
   {
     /* Boolean values */
     public const uint GL_FALSE = 0x0;
@@ -692,9 +693,15 @@ namespace ThinGL
     public static extern int glRenderMode(uint mode);
     [DllImport("OpenGL32.dll")]
     public static extern uint glGetError();
-    [DllImport("OpenGL32.dll")]
-    [return: MarshalAs(UnmanagedType.LPStr)]
-    public static extern string glGetString(uint name);
+
+    [DllImport("OpenGL32.dll", EntryPoint = "glGetString")]
+    private static extern IntPtr glGetStringInt(uint name);
+
+    public static string glGetString(uint name)
+    {
+      return Marshal.PtrToStringAnsi(glGetStringInt(name));
+    }
+
     [DllImport("OpenGL32.dll")]
     public static extern void glFinish();
     [DllImport("OpenGL32.dll")]
@@ -1316,7 +1323,70 @@ namespace ThinGL
     [DllImport("OpenGL32.dll")]
     public static extern void glDrawElements(uint mode, int count, uint type, ref object[] indices);
     [DllImport("OpenGL32.dll")]
-    public static extern void interleavedArrays(uint format, int stride, ref object[] pointer);
+    public static extern void glInterleavedArrays(uint format, int stride, ref object[] pointer);
+
+    private static IntPtr _dc = IntPtr.Zero;
+    private static IntPtr _rc = IntPtr.Zero;
+
+    public static void InitGL(Control canvas, int major, int minor)
+    {
+      CreateContext(canvas.Handle, major, minor);
+    }
+
+    public static void Shutdown()
+    {
+      if (_rc != IntPtr.Zero)
+      {
+        Wgl.wglMakeCurrent(_dc, IntPtr.Zero);
+        Wgl.wglDeleteContext(_rc);
+      }
+    }
+
+    private static void CreateContext(IntPtr handle, int major, int minor)
+    {
+      _dc = User.GetDC(handle);
+
+      Gdi.PIXELFORMATDESCRIPTOR pfd = new Gdi.PIXELFORMATDESCRIPTOR();
+      pfd.nSize = (ushort)Marshal.SizeOf(pfd);
+      pfd.nVersion = 1;
+      pfd.dwFlags = Gdi.PFD_DOUBLEBUFFER | Gdi.PFD_SUPPORT_OPENGL | Gdi.PFD_DRAW_TO_WINDOW;
+      pfd.iPixelType = Gdi.PFD_TYPE_RGBA;
+      pfd.cColorBits = 32;
+      pfd.cDepthBits = 32;
+      pfd.iLayerType = Gdi.PFD_MAIN_PLANE;
+
+      int pixelFormat = Gdi.ChoosePixelFormat(_dc, ref pfd);
+
+      if (pixelFormat == 0)
+        throw new InvalidOperationException("Could not find a pixel format!");
+
+      bool result = Gdi.SetPixelFormat(_dc, pixelFormat, ref pfd);
+
+      if (!result)
+        throw new InvalidOperationException("Could not set current pixel format!");
+
+      _rc = Wgl.wglCreateContext(_dc);
+      Wgl.wglMakeCurrent(_dc, _rc);
+
+      int realMajor, realMinor;
+      GetVersion(out realMajor, out realMinor);
+
+      if (realMajor < major || (realMajor == major && realMinor < minor))
+        throw new InvalidOperationException("OpenGL version " + major + "." + minor + " is not supported. The maximum version is " + realMajor + "." + realMinor + "!");
+
+      if (major < 3)
+        return;
+
+      //TODO: Create new context
+    }
+
+    private static void GetVersion(out int major, out int minor)
+    {
+      string version = glGetString(Gl.GL_VERSION);
+
+      major = int.Parse(version[0].ToString());
+      minor = int.Parse(version[2].ToString());
+    }
 
   }
 }

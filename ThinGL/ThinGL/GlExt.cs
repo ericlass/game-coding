@@ -1,8 +1,14 @@
 using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace ThinGL
 {
-  public static class GlExt
+  public struct GLsync
+  {
+  }
+
+  public static partial class GlExt
   {
     public const uint GL_1PASS_EXT = 0x80A1;
     public const uint GL_1PASS_SGIS = 0x80A1;
@@ -3478,7 +3484,7 @@ namespace ThinGL
     public const uint GL_TIME_ELAPSED = 0x88BF;
     public const uint GL_TIME_ELAPSED_EXT = 0x88BF;
     public const uint GL_TIMEOUT_EXPIRED = 0x911B;
-    public const uint GL_TIMEOUT_IGNORED = 0xFFFFFFFFFFFFFFFF;ull
+    public const uint GL_TIMEOUT_IGNORED = 0xFFFFFFFF;
     public const uint GL_TIMESTAMP = 0x8E28;
     public const uint GL_TOP_LEVEL_ARRAY_SIZE = 0x930C;
     public const uint GL_TOP_LEVEL_ARRAY_STRIDE = 0x930D;
@@ -3981,7 +3987,7 @@ namespace ThinGL
     private delegate bool glPointAlongPathNV(uint path, int startSegment, int numSegments, float distance, ref float[] x, ref float[] y, ref float[] tangentX, ref float[] tangentY);
     private delegate bool glTestFenceAPPLE(uint fence);
     private delegate bool glTestFenceNV(uint fence);
-    private delegate bool glTestObjectAPPLE(uint object, uint name);
+    private delegate bool glTestObjectAPPLE(uint obj, uint name);
     private delegate bool glUnmapBuffer(uint target);
     private delegate bool glUnmapBufferARB(uint target);
     private delegate bool glUnmapNamedBufferEXT(uint buffer);
@@ -3995,7 +4001,7 @@ namespace ThinGL
     private delegate int glGetFragDataIndex(uint program, ref sbyte[] name);
     private delegate int glGetFragDataLocation(uint program, ref sbyte[] name);
     private delegate int glGetFragDataLocationEXT(uint program, ref sbyte[] name);
-    private delegate int glGetInstrumentsSGIX(void);
+    private delegate int glGetInstrumentsSGIX();
     private delegate int glGetProgramResourceLocation(uint program, uint programInterface, ref sbyte[] name);
     private delegate int glGetProgramResourceLocationIndex(uint program, uint programInterface, ref sbyte[] name);
     private delegate int glGetSubroutineUniformLocation(uint program, uint shadertype, ref sbyte[] name);
@@ -4017,11 +4023,11 @@ namespace ThinGL
     private delegate uint glCheckFramebufferStatusEXT(uint target);
     private delegate uint glCheckNamedFramebufferStatusEXT(uint framebuffer, uint target);
     private delegate uint glClientWaitSync(GLsync sync, uint flags, ulong timeout);
-    private delegate uint glCreateProgram(void);
-    private delegate uint glCreateProgramObjectARB(void);
+    private delegate uint glCreateProgram();
+    private delegate uint glCreateProgramObjectARB();
     private delegate uint glCreateShader(uint type);
     private delegate uint glCreateShaderObjectARB(uint shaderType);
-    private delegate uint glCreateShaderProgramEXT(uint type, ref sbyte[] string);
+    private delegate uint glCreateShaderProgramEXT(uint type, ref sbyte[] str);
     private delegate uint glCreateShaderProgramv(uint type, int count, ref sbyte[] strings);
     private delegate uint glGenAsyncMarkersSGIX(int range);
     private delegate uint glGenFragmentShadersATI(uint range);
@@ -4031,7 +4037,7 @@ namespace ThinGL
     private delegate uint glGetDebugMessageLog(uint count, int bufSize, ref uint[] sources, ref uint[] types, ref uint[] ids, ref uint[] severities, ref int[] lengths, ref sbyte[] messageLog);
     private delegate uint glGetDebugMessageLogAMD(uint count, int bufsize, ref uint[] categories, ref uint[] severities, ref uint[] ids, ref int[] lengths, ref sbyte[] message);
     private delegate uint glGetDebugMessageLogARB(uint count, int bufSize, ref uint[] sources, ref uint[] types, ref uint[] ids, ref uint[] severities, ref int[] lengths, ref sbyte[] messageLog);
-    private delegate uint glGetGraphicsResetStatusARB(void);
+    private delegate uint glGetGraphicsResetStatusARB();
     private delegate uint glGetHandleARB(uint pname);
     private delegate uint glGetProgramResourceIndex(uint program, uint programInterface, ref sbyte[] name);
     private delegate uint glGetSubroutineIndex(uint program, uint shadertype, ref sbyte[] name);
@@ -4055,7 +4061,7 @@ namespace ThinGL
     private delegate void glAlphaFragmentOp1ATI(uint op, uint dst, uint dstMod, uint arg1, uint arg1Rep, uint arg1Mod);
     private delegate void glAlphaFragmentOp2ATI(uint op, uint dst, uint dstMod, uint arg1, uint arg1Rep, uint arg1Mod, uint arg2, uint arg2Rep, uint arg2Mod);
     private delegate void glAlphaFragmentOp3ATI(uint op, uint dst, uint dstMod, uint arg1, uint arg1Rep, uint arg1Mod, uint arg2, uint arg2Rep, uint arg2Mod, uint arg3, uint arg3Rep, uint arg3Mod);
-    private delegate void glAlphaFuncxOES(uint func, int ref);
+    private delegate void glAlphaFuncxOES(uint func, int reference);
     private delegate void glApplyTextureEXT(uint mode);
     private delegate void glArrayElementEXT(int i);
     private delegate void glArrayObjectATI(uint array, int size, uint type, int stride, uint buffer, uint offset);
@@ -4065,7 +4071,7 @@ namespace ThinGL
     private delegate void glBeginConditionalRender(uint id, uint mode);
     private delegate void glBeginConditionalRenderNV(uint id, uint mode);
     private delegate void glBeginConditionalRenderNVX(uint id);
-    private delegate void glBeginFragmentShaderATI(void);
+    private delegate void glBeginFragmentShaderATI();
     private delegate void glBeginOcclusionQueryNV(uint id);
     private delegate void glBeginPerfMonitorAMD(uint monitor);
     private delegate void glBeginQuery(uint target, uint id);
@@ -4074,7 +4080,7 @@ namespace ThinGL
     private delegate void glBeginTransformFeedback(uint primitiveMode);
     private delegate void glBeginTransformFeedbackEXT(uint primitiveMode);
     private delegate void glBeginTransformFeedbackNV(uint primitiveMode);
-    private delegate void glBeginVertexShaderEXT(void);
+    private delegate void glBeginVertexShaderEXT();
     private delegate void glBeginVideoCaptureNV(uint video_capture_slot);
     private delegate void glBindAttribLocation(uint program, uint index, ref sbyte[] name);
     private delegate void glBindAttribLocationARB(uint programObj, uint index, ref sbyte[] name);
@@ -4130,7 +4136,7 @@ namespace ThinGL
     private delegate void glBinormal3svEXT(ref short[] v);
     private delegate void glBinormalPointerEXT(uint type, int stride, IntPtr pointer);
     private delegate void glBitmapxOES(int width, int height, int xorig, int yorig, int xmove, int ymove, ref byte[] bitmap);
-    private delegate void glBlendBarrierNV(void);
+    private delegate void glBlendBarrierNV();
     private delegate void glBlendColor(float red, float green, float blue, float alpha);
     private delegate void glBlendColorEXT(float red, float green, float blue, float alpha);
     private delegate void glBlendColorxOES(int red, int green, int blue, int alpha);
@@ -4310,9 +4316,9 @@ namespace ThinGL
     private delegate void glCullParameterdvEXT(uint pname, ref double[] parameters);
     private delegate void glCullParameterfvEXT(uint pname, ref float[] parameters);
     private delegate void glCurrentPaletteMatrixARB(int index);
-    private delegate void glDebugMessageCallback(GLDEBUGPROC callback, IntPtr userParam);
-    private delegate void glDebugMessageCallbackAMD(GLDEBUGPROCAMD callback, IntPtr userParam);
-    private delegate void glDebugMessageCallbackARB(GLDEBUGPROCARB callback, IntPtr userParam);
+    //private delegate void glDebugMessageCallback(GLDEBUGPROC callback, IntPtr userParam);
+    //private delegate void glDebugMessageCallbackAMD(GLDEBUGPROCAMD callback, IntPtr userParam);
+    //private delegate void glDebugMessageCallbackARB(GLDEBUGPROCARB callback, IntPtr userParam);
     private delegate void glDebugMessageControl(uint source, uint type, uint severity, int count, ref uint[] ids, bool enabled);
     private delegate void glDebugMessageControlARB(uint source, uint type, uint severity, int count, ref uint[] ids, bool enabled);
     private delegate void glDebugMessageEnableAMD(uint category, uint severity, int count, ref uint[] ids, bool enabled);
@@ -4423,19 +4429,19 @@ namespace ThinGL
     private delegate void glEnableVertexAttribAPPLE(uint index, uint pname);
     private delegate void glEnableVertexAttribArray(uint index);
     private delegate void glEnableVertexAttribArrayARB(uint index);
-    private delegate void glEndConditionalRender(void);
-    private delegate void glEndConditionalRenderNV(void);
-    private delegate void glEndConditionalRenderNVX(void);
-    private delegate void glEndFragmentShaderATI(void);
-    private delegate void glEndOcclusionQueryNV(void);
+    private delegate void glEndConditionalRender();
+    private delegate void glEndConditionalRenderNV();
+    private delegate void glEndConditionalRenderNVX();
+    private delegate void glEndFragmentShaderATI();
+    private delegate void glEndOcclusionQueryNV();
     private delegate void glEndPerfMonitorAMD(uint monitor);
     private delegate void glEndQuery(uint target);
     private delegate void glEndQueryARB(uint target);
     private delegate void glEndQueryIndexed(uint target, uint index);
-    private delegate void glEndTransformFeedback(void);
-    private delegate void glEndTransformFeedbackEXT(void);
-    private delegate void glEndTransformFeedbackNV(void);
-    private delegate void glEndVertexShaderEXT(void);
+    private delegate void glEndTransformFeedback();
+    private delegate void glEndTransformFeedbackEXT();
+    private delegate void glEndTransformFeedbackNV();
+    private delegate void glEndVertexShaderEXT();
     private delegate void glEndVideoCaptureNV(uint video_capture_slot);
     private delegate void glEvalCoord1xOES(int u);
     private delegate void glEvalCoord1xvOES(ref int[] coords);
@@ -4448,16 +4454,16 @@ namespace ThinGL
     private delegate void glFinalCombinerInputNV(uint variable, uint input, uint mapping, uint componentUsage);
     private delegate void glFinishFenceAPPLE(uint fence);
     private delegate void glFinishFenceNV(uint fence);
-    private delegate void glFinishObjectAPPLE(uint object, int name);
-    private delegate void glFinishTextureSUNX(void);
+    private delegate void glFinishObjectAPPLE(uint obj, int name);
+    private delegate void glFinishTextureSUNX();
     private delegate void glFlushMappedBufferRange(uint target, IntPtr offset, IntPtr length);
     private delegate void glFlushMappedBufferRangeAPPLE(uint target, IntPtr offset, IntPtr size);
     private delegate void glFlushMappedNamedBufferRangeEXT(uint buffer, IntPtr offset, IntPtr length);
     private delegate void glFlushPixelDataRangeNV(uint target);
-    private delegate void glFlushRasterSGIX(void);
+    private delegate void glFlushRasterSGIX();
     private delegate void glFlushStaticDataIBM(uint target);
     private delegate void glFlushVertexArrayRangeAPPLE(int length, IntPtr pointer);
-    private delegate void glFlushVertexArrayRangeNV(void);
+    private delegate void glFlushVertexArrayRangeNV();
     private delegate void glFogCoordd(double coord);
     private delegate void glFogCoorddEXT(double coord);
     private delegate void glFogCoorddv(ref double[] coord);
@@ -4508,7 +4514,7 @@ namespace ThinGL
     private delegate void glFramebufferTextureLayer(uint target, uint attachment, uint texture, int level, int layer);
     private delegate void glFramebufferTextureLayerARB(uint target, uint attachment, uint texture, int level, int layer);
     private delegate void glFramebufferTextureLayerEXT(uint target, uint attachment, uint texture, int level, int layer);
-    private delegate void glFrameTerminatorGREMEDY(void);
+    private delegate void glFrameTerminatorGREMEDY();
     private delegate void glFrameZoomSGIX(int factor);
     private delegate void glFreeObjectBufferATI(uint buffer);
     private delegate void glFrustumfOES(float l, float r, float b, float t, float n, float f);
@@ -4678,9 +4684,9 @@ namespace ThinGL
     private delegate void glGetNamedProgramLocalParameterfvEXT(uint program, uint target, uint index, ref float[] parameters);
     private delegate void glGetNamedProgramLocalParameterIivEXT(uint program, uint target, uint index, ref int[] parameters);
     private delegate void glGetNamedProgramLocalParameterIuivEXT(uint program, uint target, uint index, ref uint[] parameters);
-    private delegate void glGetNamedProgramStringEXT(uint program, uint target, uint pname, IntPtr string);
+    private delegate void glGetNamedProgramStringEXT(uint program, uint target, uint pname, IntPtr str);
     private delegate void glGetNamedRenderbufferParameterivEXT(uint renderbuffer, uint pname, ref int[] parameters);
-    private delegate void glGetNamedStringARB(int namelen, ref sbyte[] name, int bufSize, ref int[] stringlen, ref sbyte[] string);
+    private delegate void glGetNamedStringARB(int namelen, ref sbyte[] name, int bufSize, ref int[] stringlen, ref sbyte[] str);
     private delegate void glGetNamedStringivARB(int namelen, ref sbyte[] name, uint pname, ref int[] parameters);
     private delegate void glGetnColorTableARB(uint target, uint format, uint type, int bufSize, IntPtr table);
     private delegate void glGetnCompressedTexImageARB(uint target, int lod, int bufSize, IntPtr img);
@@ -4758,7 +4764,7 @@ namespace ThinGL
     private delegate void glGetProgramResourceiv(uint program, uint programInterface, uint index, int propCount, ref uint[] props, int bufSize, ref int[] length, ref int[] parameters);
     private delegate void glGetProgramResourceName(uint program, uint programInterface, uint index, int bufSize, ref int[] length, ref sbyte[] name);
     private delegate void glGetProgramStageiv(uint program, uint shadertype, uint pname, ref int[] values);
-    private delegate void glGetProgramStringARB(uint target, uint pname, IntPtr string);
+    private delegate void glGetProgramStringARB(uint target, uint pname, IntPtr str);
     private delegate void glGetProgramStringNV(uint id, uint pname, ref byte[] program);
     private delegate void glGetProgramSubroutineParameteruivNV(uint target, uint index, ref uint[] param);
     private delegate void glGetQueryIndexediv(uint target, uint index, uint pname, ref int[] parameters);
@@ -4879,7 +4885,7 @@ namespace ThinGL
     private delegate void glImageTransformParameteriHP(uint target, uint pname, int param);
     private delegate void glImageTransformParameterivHP(uint target, uint pname, ref int[] parameters);
     private delegate void glIndexFormatNV(uint type, int stride);
-    private delegate void glIndexFuncEXT(uint func, float ref);
+    private delegate void glIndexFuncEXT(uint func, float reference);
     private delegate void glIndexMaterialEXT(uint face, uint mode);
     private delegate void glIndexPointerEXT(uint type, int stride, int count, IntPtr pointer);
     private delegate void glIndexPointerListIBM(uint type, int stride, IntPtr pointer, int ptrstride);
@@ -5136,11 +5142,11 @@ namespace ThinGL
     private delegate void glNamedProgramLocalParameters4fvEXT(uint program, uint target, uint index, int count, ref float[] parameters);
     private delegate void glNamedProgramLocalParametersI4ivEXT(uint program, uint target, uint index, int count, ref int[] parameters);
     private delegate void glNamedProgramLocalParametersI4uivEXT(uint program, uint target, uint index, int count, ref uint[] parameters);
-    private delegate void glNamedProgramStringEXT(uint program, uint target, uint format, int len, IntPtr string);
+    private delegate void glNamedProgramStringEXT(uint program, uint target, uint format, int len, IntPtr str);
     private delegate void glNamedRenderbufferStorageEXT(uint renderbuffer, uint internalformat, int width, int height);
     private delegate void glNamedRenderbufferStorageMultisampleCoverageEXT(uint renderbuffer, int coverageSamples, int colorSamples, uint internalformat, int width, int height);
     private delegate void glNamedRenderbufferStorageMultisampleEXT(uint renderbuffer, int samples, uint internalformat, int width, int height);
-    private delegate void glNamedStringARB(uint type, int namelen, ref sbyte[] name, int stringlen, ref sbyte[] string);
+    private delegate void glNamedStringARB(uint type, int namelen, ref sbyte[] name, int stringlen, ref sbyte[] str);
     private delegate void glNormal3fVertex3fSUN(float nx, float ny, float nz, float x, float y, float z);
     private delegate void glNormal3fVertex3fvSUN(ref float[] n, ref float[] v);
     private delegate void glNormal3hNV(ushort nx, ushort ny, ushort nz);
@@ -5184,13 +5190,13 @@ namespace ThinGL
     private delegate void glPathParameteriNV(uint path, uint pname, int value);
     private delegate void glPathParameterivNV(uint path, uint pname, ref int[] value);
     private delegate void glPathStencilDepthOffsetNV(float factor, float units);
-    private delegate void glPathStencilFuncNV(uint func, int ref, uint mask);
+    private delegate void glPathStencilFuncNV(uint func, int reference, uint mask);
     private delegate void glPathStringNV(uint path, uint format, int length, IntPtr pathString);
     private delegate void glPathSubCommandsNV(uint path, int commandStart, int commandsToDelete, int numCommands, ref byte[] commands, int numCoords, uint coordType, IntPtr coords);
     private delegate void glPathSubCoordsNV(uint path, int coordStart, int numCoords, uint coordType, IntPtr coords);
     private delegate void glPathTexGenNV(uint texCoordSet, uint genMode, int components, ref float[] coeffs);
-    private delegate void glPauseTransformFeedback(void);
-    private delegate void glPauseTransformFeedbackNV(void);
+    private delegate void glPauseTransformFeedback();
+    private delegate void glPauseTransformFeedbackNV();
     private delegate void glPixelDataRangeNV(uint target, int length, IntPtr pointer);
     private delegate void glPixelMapx(uint map, int size, ref int[] values);
     private delegate void glPixelStorex(uint pname, int param);
@@ -5223,12 +5229,12 @@ namespace ThinGL
     private delegate void glPointSizexOES(int size);
     private delegate void glPolygonOffsetEXT(float factor, float bias);
     private delegate void glPolygonOffsetxOES(int factor, int units);
-    private delegate void glPopDebugGroup(void);
+    private delegate void glPopDebugGroup();
     private delegate void glPresentFrameDualFillNV(uint video_slot, ulong minPresentTime, uint beginPresentTimeId, uint presentDurationId, uint type, uint target0, uint fill0, uint target1, uint fill1, uint target2, uint fill2, uint target3, uint fill3);
     private delegate void glPresentFrameKeyedNV(uint video_slot, ulong minPresentTime, uint beginPresentTimeId, uint presentDurationId, uint type, uint target0, uint fill0, uint key0, uint target1, uint fill1, uint key1);
     private delegate void glPrimitiveRestartIndex(uint index);
     private delegate void glPrimitiveRestartIndexNV(uint index);
-    private delegate void glPrimitiveRestartNV(void);
+    private delegate void glPrimitiveRestartNV();
     private delegate void glPrioritizeTexturesEXT(int n, ref uint[] textures, ref float[] priorities);
     private delegate void glPrioritizeTexturesxOES(int n, ref uint[] textures, ref int[] priorities);
     private delegate void glProgramBinary(uint program, uint binaryFormat, IntPtr binary, int length);
@@ -5270,7 +5276,7 @@ namespace ThinGL
     private delegate void glProgramParameteriEXT(uint program, uint pname, int value);
     private delegate void glProgramParameters4dvNV(uint target, uint index, int count, ref double[] v);
     private delegate void glProgramParameters4fvNV(uint target, uint index, int count, ref float[] v);
-    private delegate void glProgramStringARB(uint target, uint format, int len, IntPtr string);
+    private delegate void glProgramStringARB(uint target, uint format, int len, IntPtr str);
     private delegate void glProgramSubroutineParametersuivNV(uint target, int count, ref uint[] parameters);
     private delegate void glProgramUniform1d(uint program, int location, double v0);
     private delegate void glProgramUniform1dEXT(uint program, int location, double x);
@@ -5411,7 +5417,7 @@ namespace ThinGL
     private delegate void glRectxOES(int x1, int y1, int x2, int y2);
     private delegate void glRectxvOES(ref int[] v1, ref int[] v2);
     private delegate void glReferencePlaneSGIX(ref double[] equation);
-    private delegate void glReleaseShaderCompiler(void);
+    private delegate void glReleaseShaderCompiler();
     private delegate void glRenderbufferStorage(uint target, uint internalformat, int width, int height);
     private delegate void glRenderbufferStorageEXT(uint target, uint internalformat, int width, int height);
     private delegate void glRenderbufferStorageMultisample(uint target, int samples, uint internalformat, int width, int height);
@@ -5445,9 +5451,9 @@ namespace ThinGL
     private delegate void glResetHistogramEXT(uint target);
     private delegate void glResetMinmax(uint target);
     private delegate void glResetMinmaxEXT(uint target);
-    private delegate void glResizeBuffersMESA(void);
-    private delegate void glResumeTransformFeedback(void);
-    private delegate void glResumeTransformFeedbackNV(void);
+    private delegate void glResizeBuffersMESA();
+    private delegate void glResumeTransformFeedback();
+    private delegate void glResumeTransformFeedbackNV();
     private delegate void glRotatexOES(int angle, int x, int y, int z);
     private delegate void glSampleCoverage(float value, bool invert);
     private delegate void glSampleCoverageARB(float value, bool invert);
@@ -5522,20 +5528,20 @@ namespace ThinGL
     private delegate void glShaderOp1EXT(uint op, uint res, uint arg1);
     private delegate void glShaderOp2EXT(uint op, uint res, uint arg1, uint arg2);
     private delegate void glShaderOp3EXT(uint op, uint res, uint arg1, uint arg2, uint arg3);
-    private delegate void glShaderSource(uint shader, int count, ref sbyte[] string, ref int[] length);
-    private delegate void glShaderSourceARB(uint shaderObj, int count, IntPtr string, ref int[] length);
+    private delegate void glShaderSource(uint shader, int count, ref sbyte[] str, ref int[] length);
+    private delegate void glShaderSourceARB(uint shaderObj, int count, IntPtr str, ref int[] length);
     private delegate void glShaderStorageBlockBinding(uint program, uint storageBlockIndex, uint storageBlockBinding);
     private delegate void glSharpenTexFuncSGIS(uint target, int n, ref float[] points);
     private delegate void glSpriteParameterfSGIX(uint pname, float param);
     private delegate void glSpriteParameterfvSGIX(uint pname, ref float[] parameters);
     private delegate void glSpriteParameteriSGIX(uint pname, int param);
     private delegate void glSpriteParameterivSGIX(uint pname, ref int[] parameters);
-    private delegate void glStartInstrumentsSGIX(void);
+    private delegate void glStartInstrumentsSGIX();
     private delegate void glStencilClearTagEXT(int stencilTagBits, uint stencilClearTag);
     private delegate void glStencilFillPathInstancedNV(int numPaths, uint pathNameType, IntPtr paths, uint pathBase, uint fillMode, uint mask, uint transformType, ref float[] transformValues);
     private delegate void glStencilFillPathNV(uint path, uint fillMode, uint mask);
-    private delegate void glStencilFuncSeparate(uint face, uint func, int ref, uint mask);
-    private delegate void glStencilFuncSeparateATI(uint frontfunc, uint backfunc, int ref, uint mask);
+    private delegate void glStencilFuncSeparate(uint face, uint func, int reference, uint mask);
+    private delegate void glStencilFuncSeparateATI(uint frontfunc, uint backfunc, int reference, uint mask);
     private delegate void glStencilMaskSeparate(uint face, uint mask);
     private delegate void glStencilOpSeparate(uint face, uint sfail, uint dpfail, uint dppass);
     private delegate void glStencilOpSeparateATI(uint face, uint sfail, uint dpfail, uint dppass);
@@ -5543,10 +5549,10 @@ namespace ThinGL
     private delegate void glStencilStrokePathInstancedNV(int numPaths, uint pathNameType, IntPtr paths, uint pathBase, int reference, uint mask, uint transformType, ref float[] transformValues);
     private delegate void glStencilStrokePathNV(uint path, int reference, uint mask);
     private delegate void glStopInstrumentsSGIX(int marker);
-    private delegate void glStringMarkerGREMEDY(int len, IntPtr string);
-    private delegate void glSwizzleEXT(uint res, uint in, uint outX, uint outY, uint outZ, uint outW);
+    private delegate void glStringMarkerGREMEDY(int len, IntPtr str);
+    private delegate void glSwizzleEXT(uint res, uint inp, uint outX, uint outY, uint outZ, uint outW);
     private delegate void glSyncTextureINTEL(uint texture);
-    private delegate void glTagSampleBufferSGIX(void);
+    private delegate void glTagSampleBufferSGIX();
     private delegate void glTangent3bEXT(sbyte tx, sbyte ty, sbyte tz);
     private delegate void glTangent3bvEXT(ref sbyte[] v);
     private delegate void glTangent3dEXT(double tx, double ty, double tz);
@@ -5648,7 +5654,7 @@ namespace ThinGL
     private delegate void glTexSubImage3D(uint target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, uint format, uint type, IntPtr pixels);
     private delegate void glTexSubImage3DEXT(uint target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, uint format, uint type, IntPtr pixels);
     private delegate void glTexSubImage4DSGIS(uint target, int level, int xoffset, int yoffset, int zoffset, int woffset, int width, int height, int depth, int size4d, uint format, uint type, IntPtr pixels);
-    private delegate void glTextureBarrierNV(void);
+    private delegate void glTextureBarrierNV();
     private delegate void glTextureBufferEXT(uint texture, uint target, uint internalformat, uint buffer);
     private delegate void glTextureBufferRangeEXT(uint texture, uint target, uint internalformat, uint buffer, IntPtr offset, IntPtr size);
     private delegate void glTextureColorMaskSGIS(bool red, bool green, bool blue, bool alpha);
@@ -5791,7 +5797,7 @@ namespace ThinGL
     private delegate void glUniformSubroutinesuiv(uint shadertype, int count, ref uint[] indices);
     private delegate void glUniformui64NV(int location, ulong value);
     private delegate void glUniformui64vNV(int location, int count, ref ulong[] value);
-    private delegate void glUnlockArraysEXT(void);
+    private delegate void glUnlockArraysEXT();
     private delegate void glUnmapObjectBufferATI(uint buffer);
     private delegate void glUnmapTexture2DINTEL(uint texture, int level);
     private delegate void glUpdateObjectBufferATI(uint buffer, uint offset, int size, IntPtr pointer, uint preserve);
@@ -5812,7 +5818,7 @@ namespace ThinGL
     private delegate void glVariantubvEXT(uint id, ref byte[] addr);
     private delegate void glVariantuivEXT(uint id, ref uint[] addr);
     private delegate void glVariantusvEXT(uint id, ref ushort[] addr);
-    private delegate void glVDPAUFiniNV(void);
+    private delegate void glVDPAUFiniNV();
     private delegate void glVDPAUGetSurfaceivNV(IntPtr surface, uint pname, int bufSize, ref int[] length, ref int[] values);
     private delegate void glVDPAUInitNV(IntPtr vdpDevice, IntPtr getProcAddress);
     private delegate void glVDPAUIsSurfaceNV(IntPtr surface);
@@ -6207,7 +6213,7 @@ namespace ThinGL
     private delegate void glWindowPos4ivMESA(ref int[] v);
     private delegate void glWindowPos4sMESA(short x, short y, short z, short w);
     private delegate void glWindowPos4svMESA(ref short[] v);
-    private delegate void glWriteMaskEXT(uint res, uint in, uint outX, uint outY, uint outZ, uint outW);
+    private delegate void glWriteMaskEXT(uint res, uint inp, uint outX, uint outY, uint outZ, uint outW);
     private delegate IntPtr glMapBuffer(uint target, uint access);
     private delegate IntPtr glMapBufferARB(uint target, uint access);
     private delegate IntPtr glMapBufferRange(uint target, IntPtr offset, IntPtr length, uint access);
@@ -6215,8 +6221,6 @@ namespace ThinGL
     private delegate IntPtr glMapNamedBufferRangeEXT(uint buffer, IntPtr offset, IntPtr length, uint access);
     private delegate IntPtr glMapObjectBufferATI(uint buffer);
     private delegate IntPtr glMapTexture2DINTEL(uint texture, int level, uint access, ref int[] stride, ref uint[] layout);
-    
-        
     
   }
 }
