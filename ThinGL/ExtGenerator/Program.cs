@@ -61,44 +61,79 @@ namespace ExtGenerator
           }
           
           string str = MethodTemplate;
-          str = str.Replace("<#rettype>", info.ReturnType.ToString());
+          str = str.Replace("<#rettype>", GetFriendlyName(info.ReturnType));
           str = str.Replace("<#name>", nested.Name.Substring(2));
           str = str.Replace("<#params>", parameters.ToString());
           str = str.Replace("<#delname>", nested.Name);
           str = str.Replace("<#callparams>", callParams.ToString());
           if (info.ReturnType != typeof(void))
             str = str.Replace("<#ret>", "return ");
+          else
+            str = str.Replace("<#ret>", "");
           
           builder.Append(str);
+          builder.Append('\n');
         }
       }
       
       Console.WriteLine(builder.ToString());
-      Console.ReadLine();
+      //Console.ReadLine();
     }
     
     public static string GetFriendlyName(Type type)
     {
-      if (type == typeof(int))
-          return "int";
-      else if (type == typeof(short))
-          return "short";
-      else if (type == typeof(byte))
-          return "byte";
-      else if (type == typeof(bool)) 
-          return "bool";
-      else if (type == typeof(long))
-          return "long";
-      else if (type == typeof(float))
-          return "float";
-      else if (type == typeof(double))
-          return "double";
-      else if (type == typeof(decimal))
-          return "decimal";
-      else if (type == typeof(string))
-          return "string";
+      Type originalType = type;
+      Type arrayType = null;
+      Type elementType = type;
+
+      if (originalType.IsByRef)
+      {
+        elementType = originalType.GetElementType();
+      }
+
+      if (elementType.IsArray)
+      {
+        arrayType = elementType;
+        elementType = arrayType.GetElementType();
+      }
+
+      string result = null;
+
+      if (elementType == typeof(int))
+        result = "int";
+      else if (elementType == typeof(uint))
+        result = "uint";
+      else if (elementType == typeof(short))
+        result = "short";
+      else if (elementType == typeof(ushort))
+        result = "ushort";
+      else if (elementType == typeof(byte))
+        result = "byte";
+      else if (elementType == typeof(sbyte))
+        result = "sbyte";
+      else if (elementType == typeof(bool))
+        result = "bool";
+      else if (elementType == typeof(long))
+        result = "long";
+      else if (elementType == typeof(ulong))
+        result = "ulong";
+      else if (elementType == typeof(float))
+        result = "float";
+      else if (elementType == typeof(double))
+        result = "double";
+      else if (elementType == typeof(decimal))
+        result = "decimal";
+      else if (elementType == typeof(string))
+        result = "string";
+      else if (elementType == typeof(void))
+        result = "void";
       else
-          return type.Name;
+        result = elementType.Name;
+
+      if (arrayType != null)
+        result += "[]";
+
+      return result;
     }
     
   }
