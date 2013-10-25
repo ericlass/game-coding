@@ -29,10 +29,10 @@ namespace ThinGL
       return result;
     }
 
-    public static void ClearBufferData(uint target, uint internalformat, uint format, uint type, IntPtr data)
+    public static bool AreProgramsResidentNV(int n, ref uint[] programs, ref byte[] residences)
     {
-      glClearBufferData del = (glClearBufferData)GetProc<glClearBufferData>();
-      del(target, internalformat, format, type, data);
+      glAreProgramsResidentNV del = (glAreProgramsResidentNV)GetProc<glAreProgramsResidentNV>();
+      return del(n, ref programs, ref residences);
     }
 
   }

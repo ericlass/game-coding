@@ -1,9 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
+# SharpDevelop 3.2.1.6466
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThinGL", "ThinGL\ThinGL.csproj", "{530D0945-D9A2-47A9-B224-9FB55F667828}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThinGLTest", "ThinGLTest\ThinGLTest.csproj", "{4861AB85-B528-4FFC-A1C7-40A15129385E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtGenerator", "ExtGenerator\ExtGenerator.csproj", "{116AF778-03BC-4475-96B7-7459D25D59FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +22,10 @@ Global
 		{4861AB85-B528-4FFC-A1C7-40A15129385E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4861AB85-B528-4FFC-A1C7-40A15129385E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4861AB85-B528-4FFC-A1C7-40A15129385E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{116AF778-03BC-4475-96B7-7459D25D59FC}.Debug|Any CPU.Build.0 = Debug|x86
+		{116AF778-03BC-4475-96B7-7459D25D59FC}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{116AF778-03BC-4475-96B7-7459D25D59FC}.Release|Any CPU.Build.0 = Release|x86
+		{116AF778-03BC-4475-96B7-7459D25D59FC}.Release|Any CPU.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
