@@ -8,7 +8,7 @@ namespace ThinGL
   {
     private static Dictionary<string, Delegate> _delegates = new Dictionary<string, Delegate>();
 
-    private static Delegate GetProc<T>()
+    internal static Delegate GetProc<T>()
     {
       string name = typeof(T).Name;
       Delegate result = null;
@@ -27,6 +27,22 @@ namespace ThinGL
         result = _delegates[name];
 
       return result;
+    }
+    
+    public static bool IsSupported(string extensionName)
+    {
+      if (_delegates.ContainsKey(extensionName))
+        return true;
+        
+      IntPtr proc = Wgl.wglGetProcAddress(extensionName);
+      
+      if (proc == null || proc == IntPtr.Zero)
+        return false;
+
+      Delegate result = Marshal.GetDelegateForFunctionPointer(proc, delegateType);
+      _delegates.Add(extensionName, result);
+      
+      return true;
     }
 
     public static bool AreProgramsResidentNV(int n, ref uint[] programs, ref byte[] residences)
