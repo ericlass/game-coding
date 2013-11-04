@@ -64,7 +64,7 @@ namespace OkuBaseTest
       result.Graphics.BackgroundColor = Color.Black;
       //result.Graphics.TextureFilter = TextureFilter.NearestNeighbor;
 
-      result.Audio.DriverName = "null";
+      result.Audio.DriverName = "openal";
 
       return result;
     }
