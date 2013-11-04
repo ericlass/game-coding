@@ -2,15 +2,15 @@
   <PropertyGroup>
     <ProjectGuid>{707C919A-A8DD-4DBE-9266-71400AE0266C}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">Any CPU</Platform>
     <OutputType>WinExe</OutputType>
     <RootNamespace>RougeLike</RootNamespace>
     <AssemblyName>RougeLike</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <AppDesignerFolder>Properties</AppDesignerFolder>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Platform)' == 'Any CPU' ">
+    <PlatformTarget>Any CPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -36,6 +36,8 @@
     <Reference Include="OkuDrivers">
       <HintPath>lib\OkuDrivers.dll</HintPath>
     </Reference>
+    <Reference Include="SharpDX, Version=2.5.0.0, Culture=neutral, PublicKeyToken=627a3d6d1956f55a, processorArchitecture=MSIL" />
+    <Reference Include="SharpDX.XAudio2, Version=2.5.0.0, Culture=neutral, PublicKeyToken=627a3d6d1956f55a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -52,7 +54,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BehaviorComponent.cs" />
     <Compile Include="BoundingBoxComponent.cs" />
     <Compile Include="ComponentMap.cs" />
     <Compile Include="Entity.cs" />
