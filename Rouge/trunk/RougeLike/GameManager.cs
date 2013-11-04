@@ -19,36 +19,25 @@ namespace RougeLike
 
     private EventQueue _eventQueue = null;
     private EntityMap _entities = null;
-
-    //Important global entities
-    private Entity _playerEntity = null; //The entity for the player character
-    private Entity _mapEntity = null; //The entity that contains the map data
+    private ProcessManager _processes = null;
 
     private GameManager()
     {
       _eventQueue = new EventQueue();
       _entities = new EntityMap();
+      _processes = new ProcessManager();
     }
     
     public void Update(float dt)
     {
       _entities.Update(dt);
       _eventQueue.ProcessEvents();
+      _processes.Update(dt);
     }
 
     public EventQueue EventQueue
     {
       get { return _eventQueue; }
-    }
-
-    public Entity PlayerEntity
-    {
-      get { return _playerEntity; }
-    }
-
-    internal void setPlayerEntity(Entity entity)
-    {
-      _playerEntity = entity;
     }
     
     public EntityMap Entities
@@ -56,14 +45,9 @@ namespace RougeLike
       get { return _entities; }
     }
     
-    public Entity MapEntity
+    public ProcessManager Processes
     {
-      get { return _mapEntity; }
-    }
-
-    internal void setMapEntity(Entity entity)
-    {
-      _mapEntity = entity;
+      get { return _processes; }
     }
 
   }

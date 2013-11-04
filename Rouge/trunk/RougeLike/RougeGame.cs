@@ -1,13 +1,17 @@
 ﻿using System;
 using OkuBase;
+using OkuBase.Settings;
 
 namespace RougeLike
 {
   public class RougeGame : OkuGame
   {
-    public override OkuBase.Settings.OkuSettings Configure()
+    public override OkuSettings Configure()
     {
-      return base.Configure();
+      OkuSettings settings = base.Configure();
+      settings.Audio.DriverName = "null";
+
+      return settings;
     }
     
     public override void Initialize()
@@ -17,7 +21,7 @@ namespace RougeLike
     
     public override void Update(float dt)
     {
-      base.Update(dt);
+      GameManager.Instance.Update(dt);
     }
     
     public override void Render()

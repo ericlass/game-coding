@@ -67,6 +67,9 @@
     <Compile Include="IIdObject.cs" />
     <Compile Include="InventoryComponent.cs" />
     <Compile Include="IUpdatable.cs" />
+    <Compile Include="ProcessBase.cs" />
+    <Compile Include="ProcessManager.cs" />
+    <Compile Include="ProcessResult.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RougeGame.cs" />
