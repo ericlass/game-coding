@@ -52,6 +52,11 @@ namespace RougeLike
     {
       return _objects.ContainsKey(id);
     }
+
+    internal Dictionary<string, T> Items
+    {
+      get { return _objects; }
+    }
       
   }
 }

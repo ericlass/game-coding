@@ -26,7 +26,7 @@ namespace RougeLike
     
     public override void Render()
     {
-      base.Render();
+      GameManager.Instance.Renderer.Render();
     }
     
   }

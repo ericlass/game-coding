@@ -20,12 +20,14 @@ namespace RougeLike
     private EventQueue _eventQueue = null;
     private EntityMap _entities = null;
     private ProcessManager _processes = null;
+    private RenderManager _renderer = null;
 
     private GameManager()
     {
       _eventQueue = new EventQueue();
       _entities = new EntityMap();
       _processes = new ProcessManager();
+      _renderer = new RenderManager();
     }
     
     public void Update(float dt)
@@ -48,6 +50,11 @@ namespace RougeLike
     public ProcessManager Processes
     {
       get { return _processes; }
+    }
+
+    public RenderManager Renderer
+    {
+      get { return _renderer; }
     }
 
   }
