@@ -1342,6 +1342,12 @@ namespace ThinGL
       }
     }
 
+    public static void Present()
+    {
+      glFlush();
+      Gdi.SwapBuffers(_dc);
+    }
+
     private static void CreateContext(IntPtr handle, int major, int minor)
     {
       _dc = User.GetDC(handle);
@@ -1365,8 +1371,8 @@ namespace ThinGL
       if (!result)
         throw new InvalidOperationException("Could not set current pixel format!");
 
-      _rc = Wgl.wglCreateContext(_dc);
-      Wgl.wglMakeCurrent(_dc, _rc);
+      IntPtr tempContext = Wgl.wglCreateContext(_dc);
+      Wgl.wglMakeCurrent(_dc, tempContext);
 
       int realMajor, realMinor;
       GetVersion(out realMajor, out realMinor);
@@ -1375,9 +1381,27 @@ namespace ThinGL
         throw new InvalidOperationException("OpenGL version " + major + "." + minor + " is not supported. The maximum version is " + realMajor + "." + realMinor + "!");
 
       if (major < 3)
+      {
+        _rc = tempContext;
         return;
+      }
 
-      //TODO: Create new context
+      int[] attribs = new int[] 
+      { 
+        (int)Wgl.WGL_CONTEXT_MAJOR_VERSION_ARB, major,
+        (int)Wgl.WGL_CONTEXT_MINOR_VERSION_ARB, minor,
+        (int)Wgl.WGL_CONTEXT_FLAGS_ARB, (int)Wgl.WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
+        (int)Wgl.WGL_CONTEXT_PROFILE_MASK_ARB, (int)Wgl.WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
+        0
+      };
+
+      _rc = Wgl.wglCreateContextAttribs(_dc, IntPtr.Zero, ref attribs);
+
+      Wgl.wglMakeCurrent(IntPtr.Zero, IntPtr.Zero);
+      Wgl.wglDeleteContext(tempContext);
+
+      if (_rc == IntPtr.Zero)
+        throw new Exception("OpenGL context could not be initialized!");
     }
 
     private static void GetVersion(out int major, out int minor)
