@@ -80,5 +80,12 @@ namespace RougeLike
       _backgroundQueue.Clear();
     }
 
+    public void Clear()
+    {
+      _activeQueue.Clear();
+      _backgroundQueue.Clear();
+      _listeners.Clear();
+    }
+
   }
 }

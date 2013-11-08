@@ -9,7 +9,10 @@ namespace RougeLike
   {
     public void Render()
     {
-      foreach (Entity entity in GameManager.Instance.Entities.Items.Values)
+      if (GameManager.Instance.ActiveScene == null)
+        throw new InvalidOperationException("Trying to render when there is no active scene!");
+
+      foreach (Entity entity in GameManager.Instance.ActiveScene.Entities.Items.Values)
       {
         RenderComponent comp = entity.GetComponent<RenderComponent>(RenderComponent.ComponentId);
         if (comp == null)

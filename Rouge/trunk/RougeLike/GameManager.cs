@@ -1,4 +1,5 @@
 ﻿using System;
+using OkuBase;
 
 namespace RougeLike
 {
@@ -18,43 +19,66 @@ namespace RougeLike
     }
 
     private EventQueue _eventQueue = null;
-    private EntityMap _entities = null;
-    private ProcessManager _processes = null;
     private RenderManager _renderer = null;
+    private SceneMap _scenes = null;
+    private Scene _activeScene = null;
 
     private GameManager()
     {
       _eventQueue = new EventQueue();
-      _entities = new EntityMap();
-      _processes = new ProcessManager();
       _renderer = new RenderManager();
+      _scenes = new SceneMap();
     }
     
+    public void Initialize()
+    {
+      Scene scene = SceneFactory.Instance.GetHardCodedExampleScene();
+      _scenes.Add(scene);
+      SetActiveScene(scene.Id);
+    }
+
     public void Update(float dt)
     {
-      _entities.Update(dt);
+      _activeScene.Update(dt);
       _eventQueue.ProcessEvents();
-      _processes.Update(dt);
-    }
+    }    
 
     public EventQueue EventQueue
     {
       get { return _eventQueue; }
     }
     
-    public EntityMap Entities
-    {
-      get { return _entities; }
-    }
-    
-    public ProcessManager Processes
-    {
-      get { return _processes; }
-    }
-
     public RenderManager Renderer
     {
       get { return _renderer; }
+    }
+
+    public SceneMap Scenes
+    {
+      get { return _scenes; }
+      set { _scenes = value; }
+    }
+
+    public Scene ActiveScene
+    {
+      get { return _activeScene; }
+    }
+
+    internal void SetActiveScene(string sceneId)
+    {
+      if (!_scenes.ContainsId(sceneId))
+        throw new OkuException("Trying to activate scene \"" + sceneId + "\" which does not exist!");
+
+      if (_activeScene != null)
+      {
+        if (_activeScene.Id == sceneId)
+          return;
+        _activeScene.Deactivate();
+      }
+
+      _eventQueue.Clear();
+      _activeScene = _scenes[sceneId];
+      _activeScene.Activate();      
     }
 
   }

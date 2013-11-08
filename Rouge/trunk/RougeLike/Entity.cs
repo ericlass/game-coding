@@ -8,6 +8,11 @@ namespace RougeLike
     private ComponentMap _components = new ComponentMap();
     private StateMachine _stateMachine = new StateMachine();
 
+    public Entity(string id)
+    {
+      _id = id;
+    }
+
     public string Id
     {
       get { return _id; }
@@ -40,13 +45,15 @@ namespace RougeLike
 
     public T GetComponent<T>(string componentId) where T : IComponent
     {
-      if (_stateMachine.CurrentState == null)
-        return default(T);
+      IComponent result = null;
 
-      IComponent result = _stateMachine.CurrentState.Components[componentId];
+      if (_stateMachine.CurrentState != null)
+      {
+        result = _stateMachine.CurrentState.Components[componentId];
 
-      if (result != null)
-        return (T)result;
+        if (result != null)
+          return (T)result;
+      }
 
       result = _components[componentId];
       return (T)result;

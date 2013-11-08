@@ -16,7 +16,7 @@ namespace RougeLike
     
     public override void Initialize()
     {
-      base.Initialize();
+      GameManager.Instance.Initialize();
     }
     
     public override void Update(float dt)

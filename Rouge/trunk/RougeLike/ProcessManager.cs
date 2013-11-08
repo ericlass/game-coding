@@ -37,10 +37,23 @@ namespace RougeLike
         if (process.Result == ProcessResult.Finished && process.Successor != null)
         {
           _processes.Add(process.Successor);
+          process.Successor.Initialize();
         }
         process.Destroy();
       }
       _stopped.Clear();
+    }
+
+    public void InitAll()
+    {
+      foreach (ProcessBase process in _processes)
+        process.Initialize();
+    }
+
+    public void DestroyAll()
+    {
+      foreach (ProcessBase process in _processes)
+        process.Destroy();
     }
 
   }

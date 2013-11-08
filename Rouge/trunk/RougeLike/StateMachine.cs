@@ -98,7 +98,13 @@ namespace RougeLike
 
     public State CurrentState
     {
-      get { return _states[_currentState]; }
+      get
+      {
+        if (_currentState == null)
+          return null;
+
+        return _states[_currentState];
+      }
     }
 
     private void OnEvent(EventId eventId, int data)
