@@ -7,6 +7,11 @@ namespace RougeLike
     private string _id = null;
     private ComponentMap _components = new ComponentMap();
 
+    public State(string id)
+    {
+      _id = id;
+    }
+
     public string Id
     {
       get { return _id; }

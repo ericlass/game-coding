@@ -9,6 +9,11 @@ namespace RougeLike
     public override OkuSettings Configure()
     {
       OkuSettings settings = base.Configure();
+
+      settings.Graphics.Width = 1280;
+      settings.Graphics.Height = 720;
+      settings.Graphics.TextureFilter = OkuBase.Graphics.TextureFilter.NearestNeighbor;
+
       settings.Audio.DriverName = "null";
 
       return settings;

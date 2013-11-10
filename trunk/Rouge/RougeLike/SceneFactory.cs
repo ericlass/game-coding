@@ -24,20 +24,41 @@ namespace RougeLike
     {
     }
 
+    private RenderComponent RenderComponentFromFile(string filename)
+    {
+      ImageData data = ImageData.FromFile(filename);
+      Image img = OkuManager.Instance.Graphics.NewImage(data);
+      RenderComponent result = new RenderComponent();
+      result.Mesh = Mesh.ForImage(img, Color.White);
+      return result;
+    }
+
     public Scene GetHardCodedExampleScene()
     {
       Scene result = new Scene("example");
 
-      Entity ent = new Entity("ent01");
+      Entity ent = new Entity("player");
 
       TransformComponent trans = new TransformComponent();
       ent.AddComponent(trans);
 
-      ImageData data = ImageData.FromFile("./Content/Graphics/square.png");
-      Image img = OkuManager.Instance.Graphics.NewImage(data);
-      RenderComponent render = new RenderComponent();
-      render.Mesh = Mesh.ForImage(img, Color.Blue);
-      ent.AddComponent(render);
+      State state = new State("idle");
+      ent.StateMachine.States.Add(state);
+      state = new State("up_attack");
+      ent.StateMachine.States.Add(state);
+      state = new State("down_attack");
+      ent.StateMachine.States.Add(state);
+      state = new State("left_attack");
+      ent.StateMachine.States.Add(state);
+      state = new State("right_attack");
+      ent.StateMachine.States.Add(state);
+      
+      ent.AddStateComponent("idle", RenderComponentFromFile("./Content/Graphics/player_idle.png"));
+      ent.AddStateComponent("up_attack", RenderComponentFromFile("./Content/Graphics/player_up_attack.png"));
+      ent.AddStateComponent("down_attack", RenderComponentFromFile("./Content/Graphics/player_down_attack.png"));
+      ent.AddStateComponent("left_attack", RenderComponentFromFile("./Content/Graphics/player_left_attack.png"));
+      ent.AddStateComponent("right_attack", RenderComponentFromFile("./Content/Graphics/player_right_attack.png"));
+      ent.StateMachine.CurrentStateId = "idle";
 
       result.Entities.Add(ent);
 

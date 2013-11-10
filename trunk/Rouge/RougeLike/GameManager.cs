@@ -35,6 +35,7 @@ namespace RougeLike
       Scene scene = SceneFactory.Instance.GetHardCodedExampleScene();
       _scenes.Add(scene);
       SetActiveScene(scene.Id);
+      _renderer.Initialize();
     }
 
     public void Update(float dt)
