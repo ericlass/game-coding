@@ -1,0 +1,431 @@
+﻿{
+  "GameProperties": {
+    "Name": "Oku Game",
+    "StartSceneId": 1
+  },
+  "RenderSettings": {
+    "Type": "opengl",
+    "Fullscreen": false,
+    "Width": 1024,
+    "Height": 768,
+    "DepthTest": false,
+    "ClearColor": {
+      "R": 255,
+      "G": 0,
+      "B": 255,
+      "A": 255
+    }
+  },
+  "AudioSettings": {
+    "Type": "null",
+    "Volume": 1.0
+  },
+  "UserEvents": [
+    {
+      "Id": 1000001,
+      "Name": "Steer Left"
+    },
+    {
+      "Id": 1000002,
+      "Name": "Steer Right"
+    },
+    {
+      "Id": 1000003,
+      "Name": "Test Attributes"
+    },
+    {
+      "Id": 1000004,
+      "Name": "Test States"
+    },
+    {
+      "Id": 1000005,
+      "Name": "Test Move Left"
+    },
+    {
+      "Id": 1000006,
+      "Name": "Test Move Right"
+    },
+    {
+      "Id": 1000007,
+      "Name": "Move Viewport Left"
+    },
+    {
+      "Id": 1000008,
+      "Name": "Move Viewport Right"
+    },
+    {
+      "Id": 1000009,
+      "Name": "Move Viewport Up"
+    },
+    {
+      "Id": 1000010,
+      "Name": "Move Viewport Down"
+    }
+  ],
+  "Behaviors": [
+    {
+      "Handlers": {
+        "1000001": [
+          {
+            "Source": "okuActorSetAngle(1, okuActorGetAngle(1) + (90 * timeDelta));"
+          }
+        ],
+        "1000002": [
+          {
+            "Source": "okuActorSetAngle(1, okuActorGetAngle(1) - (90 * timeDelta));"
+          }
+        ]
+      },
+      "Id": 1,
+      "Name": "Turn Car"
+    },
+    {
+      "Handlers": {
+        "1000003": [
+          {
+            "Source": "var test = okuActorGetAttribute(1, \"Test\");\r\ntest = \"Saublöd!\";\r\nokuActorSetAttribute(1, \"test\", test);"
+          }
+        ],
+        "1000004": [
+          {
+            "Source": "print(okuActorGetCurrentState(1));\r\nokuActorSetCurrentState(1, \"normal\");"
+          }
+        ],
+        "1000005": [
+          {
+            "Source": "var x = okuActorGetX(1);\r\nx = x - (100 * timeDelta);\r\nokuActorSetX(1, x);"
+          }
+        ],
+        "1000006": [
+          {
+            "Source": "var x = okuActorGetX(1);\r\nx = x + (100 * timeDelta);\r\nokuActorSetX(1, x);"
+          }
+        ],
+        "1000": [
+          {
+            "Source": "print(param1);\r\nprint(param2);\r\nprint(param3);"
+          }
+        ],
+        "1000007": [
+          {
+            "Source": "okuMoveViewport(-500 * timeDelta, 0);"
+          }
+        ],
+        "1000008": [
+          {
+            "Source": "okuMoveViewport(500 * timeDelta, 0);"
+          }
+        ],
+        "1000009": [
+          {
+            "Source": "okuMoveViewport(0, 500 * timeDelta);"
+          }
+        ],
+        "1000010": [
+          {
+            "Source": "okuMoveViewport(0, -500 * timeDelta);"
+          }
+        ]
+      },
+      "Id": 2,
+      "Name": "Test Script"
+    }
+  ],
+  "Images": [
+    {
+      "Resource": "yinyang.png",
+      "Compressed": false,
+      "Id": 1,
+      "Name": "Yin-Yang"
+    },
+    {
+      "Resource": "car.png",
+      "Compressed": false,
+      "Id": 2,
+      "Name": "Car"
+    },
+    {
+      "Resource": "zelda_map.png",
+      "Compressed": true,
+      "Id": 3,
+      "Name": "Zelda Map"
+    }
+  ],
+  "Animations": [
+    {
+      "Loop": true,
+      "Frames": [
+        {
+          "ImageId": 1,
+          "Duration": 50.0
+        },
+        {
+          "ImageId": 2,
+          "Duration": 50.0
+        }
+      ],
+      "Id": 1,
+      "Name": "Switching"
+    }
+  ],
+  "Actors": [
+    {
+      "States": {
+        "DefaultStateName": "normal",
+        "Items": [
+          {
+            "Name": "normal",
+            "Components": [
+              {
+                "$type": "OkuEngine.Actors.AABBComponent, OkuEngine"
+              },
+              {
+                "$type": "OkuEngine.Actors.RenderableComponent, OkuEngine",
+                "Renderable": {
+                  "$type": "OkuEngine.Rendering.RenderableImage, OkuEngine",
+                  "ImageId": 2
+                }
+              },
+              {
+                "$type": "OkuEngine.Actors.BoundingCircleComponent, OkuEngine"
+              }
+            ]
+          }
+        ]
+      },
+      "Components": [
+        {
+          "$type": "OkuEngine.Actors.CollisionComponent, OkuEngine"
+        }
+      ],
+      "Id": 1,
+      "Name": "Car"
+    },
+    {
+      "States": {
+        "DefaultStateName": "normal",
+        "Items": [
+          {
+            "Name": "normal",
+            "Components": [
+              {
+                "$type": "OkuEngine.Actors.RenderableComponent, OkuEngine",
+                "Renderable": {
+                  "$type": "OkuEngine.Rendering.RenderableImage, OkuEngine",
+                  "ImageId": 1
+                }
+              },
+              {
+                "$type": "OkuEngine.Actors.BoundingCircleComponent, OkuEngine"
+              }
+            ]
+          }
+        ]
+      },
+      "Components": [
+        {
+          "$type": "OkuEngine.Actors.CollisionComponent, OkuEngine"
+        }
+      ],
+      "Id": 2,
+      "Name": "Test"
+    },
+    {
+      "States": {
+        "DefaultStateName": "normal",
+        "Items": [
+          {
+            "Name": "normal",
+            "Components": [
+              {
+                "$type": "OkuEngine.Actors.RenderableComponent, OkuEngine",
+                "Renderable": {
+                  "$type": "OkuEngine.Rendering.RenderableImage, OkuEngine",
+                  "ImageId": 1
+                }
+              },
+              {
+                "$type": "OkuEngine.Actors.BoundingCircleComponent, OkuEngine"
+              }
+            ]
+          }
+        ]
+      },
+      "Components": [
+        {
+          "$type": "OkuEngine.Actors.CollisionComponent, OkuEngine"
+        }
+      ],
+      "Id": 3,
+      "Name": "Collision"
+    }
+  ],
+  "Scenes": [
+    {
+      "Layers": [
+        {
+          "Backdrop": {
+            "$type": "OkuEngine.Scenes.Backdrops.FreeFormBackdrop, OkuEngine",
+            "Shapes": [
+              {
+                "Vertices": [
+                  {
+                    "X": -150.0,
+                    "Y": -150.0
+                  },
+                  {
+                    "X": -150.0,
+                    "Y": 150.0
+                  },
+                  {
+                    "X": 150.0,
+                    "Y": 150.0
+                  },
+                  {
+                    "X": 150.0,
+                    "Y": -150.0
+                  }
+                ]
+              }
+            ],
+            "Width": 2048.0,
+            "Height": 2048.0,
+            "Offset": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "ImageId": 3
+          },
+          "Root": {
+            "ActorId": -1,
+            "Transform": {
+              "Translation": {
+                "X": 0.0,
+                "Y": 0.0
+              },
+              "Rotation": 0.0,
+              "Scale": {
+                "X": 1.0,
+                "Y": 1.0
+              }
+            },
+            "Children": [
+              {
+                "ActorId": 1,
+                "Transform": {
+                  "Translation": {
+                    "X": 100.0,
+                    "Y": 0.0
+                  },
+                  "Rotation": 15.0,
+                  "Scale": {
+                    "X": 1.0,
+                    "Y": 1.0
+                  }
+                },
+                "Children": [
+                  {
+                    "ActorId": 2,
+                    "Transform": {
+                      "Translation": {
+                        "X": 0.0,
+                        "Y": 100.0
+                      },
+                      "Rotation": 0.0,
+                      "Scale": {
+                        "X": 0.5,
+                        "Y": 0.5
+                      }
+                    },
+                    "Children": []
+                  }
+                ]
+              },
+              {
+                "ActorId": 3,
+                "Transform": {
+                  "Translation": {
+                    "X": 0.0,
+                    "Y": 0.0
+                  },
+                  "Rotation": 0.0,
+                  "Scale": {
+                    "X": 1.0,
+                    "Y": 1.0
+                  }
+                },
+                "Children": []
+              }
+            ]
+          },
+          "Id": 1,
+          "Name": "Layer 01"
+        }
+      ],
+      "Id": 1,
+      "Name": "Main Scene"
+    }
+  ],
+  "KeyBindings": [
+    {
+      "Key": "A",
+      "Action": "Down",
+      "State": true,
+      "Event": 1000001
+    },
+    {
+      "Key": "D",
+      "Action": "Down",
+      "State": true,
+      "Event": 1000002
+    },
+    {
+      "Key": "S",
+      "Action": "Down",
+      "State": false,
+      "Event": 1000003
+    },
+    {
+      "Key": "W",
+      "Action": "Down",
+      "State": false,
+      "Event": 1000004
+    },
+    {
+      "Key": "Left",
+      "Action": "Down",
+      "State": true,
+      "Event": 1000005
+    },
+    {
+      "Key": "Right",
+      "Action": "Down",
+      "State": true,
+      "Event": 1000006
+    },
+    {
+      "Key": "NumPad4",
+      "Action": "Down",
+      "State": true,
+      "Event": 1000007
+    },
+    {
+      "Key": "NumPad6",
+      "Action": "Down",
+      "State": true,
+      "Event": 1000008
+    },
+    {
+      "Key": "NumPad8",
+      "Action": "Down",
+      "State": true,
+      "Event": 1000009
+    },
+    {
+      "Key": "NumPad2",
+      "Action": "Down",
+      "State": true,
+      "Event": 1000010
+    }
+  ]
+}

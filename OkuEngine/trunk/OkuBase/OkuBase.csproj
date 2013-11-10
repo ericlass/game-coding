@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{80362428-9A21-4449-A234-9CB8D2F52009}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OkuBase</RootNamespace>
+    <AssemblyName>OkuBase</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\OkuBase.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Audio\AudioManager.cs" />
+    <Compile Include="Audio\Source.cs" />
+    <Compile Include="Audio\Sound.cs" />
+    <Compile Include="Audio\WaveLoader.cs" />
+    <Compile Include="Collections\DynamicArray.cs" />
+    <Compile Include="Collections\SizedList.cs" />
+    <Compile Include="Driver\IAudioDriver.cs" />
+    <Compile Include="Driver\DriverManager.cs" />
+    <Compile Include="Driver\IGraphicsDriver.cs" />
+    <Compile Include="Driver\NullAudioDriver.cs" />
+    <Compile Include="Driver\NullGraphicsDriver.cs" />
+    <Compile Include="Geometry\Mesh.cs" />
+    <Compile Include="Geometry\PolygonFactory.cs" />
+    <Compile Include="Geometry\Spline.cs" />
+    <Compile Include="Geometry\Rectangle2f.cs" />
+    <Compile Include="Geometry\Vertices.cs" />
+    <Compile Include="Geometry\Vector2f.cs" />
+    <Compile Include="Graphics\Color.cs" />
+    <Compile Include="Graphics\Display.cs" />
+    <Compile Include="Graphics\DisplayMode.cs" />
+    <Compile Include="Graphics\FontStyle.cs" />
+    <Compile Include="Graphics\ImageBase.cs" />
+    <Compile Include="Graphics\OnScreenConsole.cs" />
+    <Compile Include="Graphics\PrimitiveType.cs" />
+    <Compile Include="Graphics\GraphicsManager.cs" />
+    <Compile Include="Graphics\Image.cs" />
+    <Compile Include="Graphics\ImageData.cs" />
+    <Compile Include="Graphics\RenderTarget.cs" />
+    <Compile Include="Graphics\Shader.cs" />
+    <Compile Include="Graphics\ShaderProgram.cs" />
+    <Compile Include="Graphics\ShaderType.cs" />
+    <Compile Include="Graphics\SpriteFont.cs" />
+    <Compile Include="Graphics\TextProcessor.cs" />
+    <Compile Include="Graphics\TextureFilter.cs" />
+    <Compile Include="Graphics\LineMode.cs" />
+    <Compile Include="Graphics\ViewPort.cs" />
+    <Compile Include="GUI\ButtonWidget.cs" />
+    <Compile Include="GUI\Canvas.cs" />
+    <Compile Include="GUI\ColorMap.cs" />
+    <Compile Include="GUI\HintWidget.cs" />
+    <Compile Include="GUI\LabelWidget.cs" />
+    <Compile Include="GUI\ProgressBarWidget.cs" />
+    <Compile Include="GUI\TextBoxWidget.cs" />
+    <Compile Include="GUI\Widget.cs" />
+    <Compile Include="GUI\WidgetContainer.cs" />
+    <Compile Include="Input\InputManager.cs" />
+    <Compile Include="Input\JoystickInfo.cs" />
+    <Compile Include="Input\JoystickInput.cs" />
+    <Compile Include="Input\KeyAction.cs" />
+    <Compile Include="Input\KeyboardInput.cs" />
+    <Compile Include="Input\MouseInput.cs" />
+    <Compile Include="Geometry\IntersectionTests.cs" />
+    <Compile Include="KeySequence.cs" />
+    <Compile Include="Logging\DebugConsoleLogWriter.cs" />
+    <Compile Include="Logging\ILogWriter.cs" />
+    <Compile Include="Logging\LogEntry.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\LogLevel.cs" />
+    <Compile Include="Manager.cs" />
+    <Compile Include="OkuManager.cs" />
+    <Compile Include="OkuException.cs" />
+    <Compile Include="OkuGame.cs" />
+    <Compile Include="Particles\DefaultParticleController.cs" />
+    <Compile Include="Particles\ForceEffector.cs" />
+    <Compile Include="Particles\IParticleController.cs" />
+    <Compile Include="Particles\IParticleEffector.cs" />
+    <Compile Include="Particles\IParticleRenderer.cs" />
+    <Compile Include="Particles\LineEmitter.cs" />
+    <Compile Include="Particles\LineParticleRenderer.cs" />
+    <Compile Include="Particles\Particle.cs" />
+    <Compile Include="Particles\ParticleEmitter.cs" />
+    <Compile Include="Particles\ParticleSystem.cs" />
+    <Compile Include="Particles\PointEmitter.cs" />
+    <Compile Include="Particles\PointParticleRenderer.cs" />
+    <Compile Include="Platform\Gdi32.cs" />
+    <Compile Include="Platform\Opengl32.cs" />
+    <Compile Include="Settings\AudioSettings.cs" />
+    <Compile Include="Settings\GraphicsSettings.cs" />
+    <Compile Include="Settings\OkuSettings.cs" />
+    <Compile Include="Platform\Kernel32.cs" />
+    <Compile Include="Platform\User32.cs" />
+    <Compile Include="Platform\Winmm.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Timer\Interval.cs" />
+    <Compile Include="Timer\ITimer.cs" />
+    <Compile Include="Timer\Timer.cs" />
+    <Compile Include="Timer\TimerManager.cs" />
+    <Compile Include="Utils\Converter.cs" />
+    <Compile Include="OkuExtensions.cs" />
+    <Compile Include="Utils\OkuMath.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

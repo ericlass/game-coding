@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F3B2D36E-9E34-4AF0-9E6B-CCE0C6130B98}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OkuEngine</RootNamespace>
+    <AssemblyName>OkuEngine</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Jurassic">
+      <HintPath>lib\Jurassic.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Actors\AABBComponent.cs" />
+    <Compile Include="Actors\AttributeComponent.cs" />
+    <Compile Include="Actors\BoundingCircleComponent.cs" />
+    <Compile Include="Actors\RenderableComponent.cs" />
+    <Compile Include="Actors\CollisionComponent.cs" />
+    <Compile Include="Api\OkuApi.cs" />
+    <Compile Include="Attributes\AttributeMap.cs" />
+    <Compile Include="Animation\Animation.cs" />
+    <Compile Include="Animation\AnimationFrame.cs" />
+    <Compile Include="Animation\Easing.cs" />
+    <Compile Include="Animation\EasingController.cs" />
+    <Compile Include="Animation\InertialMovement.cs" />
+    <Compile Include="Collision\Body.cs" />
+    <Compile Include="Collision\Detectors\BoundingCirclePrecisePhaseDetector.cs" />
+    <Compile Include="Collision\Detectors\BroadPhaseDetector.cs" />
+    <Compile Include="Collision\CollisionInfo.cs" />
+    <Compile Include="Collections\PairList.cs" />
+    <Compile Include="Collision\CollisionWorld.cs" />
+    <Compile Include="Collision\Detectors\RegularGridBroadPhaseDetector.cs" />
+    <Compile Include="Collision\ICollidable.cs" />
+    <Compile Include="Collision\Detectors\NoBroadPhaseDetector.cs" />
+    <Compile Include="Collision\Detectors\NoPrecisePhaseDetector.cs" />
+    <Compile Include="Collision\Detectors\PrecisePhaseDetector.cs" />
+    <Compile Include="Converter.cs" />
+    <Compile Include="Actors\Actor.cs" />
+    <Compile Include="EntityManager.cs" />
+    <Compile Include="Events\Event.cs" />
+    <Compile Include="Events\EventListenerDelegate.cs" />
+    <Compile Include="Events\EventManager.cs" />
+    <Compile Include="Events\EventTypes.cs" />
+    <Compile Include="Events\IEventManager.cs" />
+    <Compile Include="Events\UserEvent.cs" />
+    <Compile Include="GameProperties.cs" />
+    <Compile Include="Geometry\Circle.cs" />
+    <Compile Include="Geometry\Polygon.cs" />
+    <Compile Include="Geometry\RegularGrid.cs" />
+    <Compile Include="Collision\QuadTree.cs" />
+    <Compile Include="Geometry\Vector2i.cs" />
+    <Compile Include="Collections\InheritingDictionary.cs" />
+    <Compile Include="Input\KeyBinding.cs" />
+    <Compile Include="Input\InputManager.cs" />
+    <Compile Include="OkuExtensions.cs" />
+    <Compile Include="Rendering\IRenderable.cs" />
+    <Compile Include="Processes\DelayProcess.cs" />
+    <Compile Include="Processes\Process.cs" />
+    <Compile Include="Processes\ProcessManager.cs" />
+    <Compile Include="Processes\ProcessState.cs" />
+    <Compile Include="Rendering\RenderableImage.cs" />
+    <Compile Include="Rendering\RenderableLines.cs" />
+    <Compile Include="Rendering\RenderableMesh.cs" />
+    <Compile Include="Rendering\RenderablePoints.cs" />
+    <Compile Include="Resources\DefaultResourceLoader.cs" />
+    <Compile Include="Resources\FileSystemResourceFile.cs" />
+    <Compile Include="Resources\IResourceExtraData.cs" />
+    <Compile Include="Resources\IResourceFile.cs" />
+    <Compile Include="Resources\IResourceLoader.cs" />
+    <Compile Include="Resources\Resource.cs" />
+    <Compile Include="Resources\ResourceCache.cs" />
+    <Compile Include="Resources\ResourceCacheParams.cs" />
+    <Compile Include="Resources\ResourceHandle.cs" />
+    <Compile Include="Resources\TextureExtraData.cs" />
+    <Compile Include="Resources\TextureResourceLoader.cs" />
+    <Compile Include="Scenes\Backdrops\Backdrop.cs" />
+    <Compile Include="Scenes\Backdrops\FreeFormBackdrop.cs" />
+    <Compile Include="Scenes\Scene.cs" />
+    <Compile Include="Scenes\SceneLayer.cs" />
+    <Compile Include="Scenes\SceneManager.cs" />
+    <Compile Include="Scenes\SceneNode.cs" />
+    <Compile Include="Actors\ActorManager.cs" />
+    <Compile Include="Scripting\Behavior.cs" />
+    <Compile Include="Scripting\BehaviorManager.cs" />
+    <Compile Include="Scripting\OkuScriptManager.cs" />
+    <Compile Include="Attributes\AttributeValue.cs" />
+    <Compile Include="Attributes\AttributeType.cs" />
+    <Compile Include="Scripting\ScriptInstance.cs" />
+    <Compile Include="Scripting\ScriptManager.cs" />
+    <Compile Include="Geometry\EarClipper.cs" />
+    <Compile Include="IStoreable.cs" />
+    <Compile Include="OkuException.cs" />
+    <Compile Include="PropertyMap.cs" />
+    <Compile Include="PropertyEntry.cs" />
+    <Compile Include="States\ComponentManager.cs" />
+    <Compile Include="States\IStateComponent .cs" />
+    <Compile Include="States\State.cs" />
+    <Compile Include="States\StateManager.cs" />
+    <Compile Include="StoreableEntity.cs" />
+    <Compile Include="VirtualFileSystem\VirtualFile.cs" />
+    <Compile Include="VirtualFileSystem\VirtualFileSystem.cs" />
+    <Compile Include="VirtualFileSystem\VirtualFileType.cs" />
+    <Compile Include="Scenes\ViewPort.cs" />
+    <Compile Include="Geometry\ContinuousCollision.cs" />
+    <Compile Include="Geometry\OkuMath.cs" />
+    <Compile Include="Geometry\SpatialHashMap.cs" />
+    <Compile Include="KeySequence.cs" />
+    <Compile Include="Geometry\LineSegment.cs" />
+    <Compile Include="Geometry\Matrix3.cs" />
+    <Compile Include="Engine\OkuData.cs" />
+    <Compile Include="Engine\OkuManagers.cs" />
+    <Compile Include="PerlinNoise.cs" />
+    <Compile Include="TileMap\Tile.cs" />
+    <Compile Include="TileMap\Tilemap.cs" />
+    <Compile Include="Geometry\Transformation.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="okugame.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="OkuRuntime.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="lib\Jurassic.dll" />
+    <None Include="okugame.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lib\Newtonsoft.Json.dll" />
+    <Content Include="lib\Newtonsoft.Json.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OkuBase\OkuBase.csproj">
+      <Project>{80362428-9A21-4449-A234-9CB8D2F52009}</Project>
+      <Name>OkuBase</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
