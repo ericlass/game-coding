@@ -8,8 +8,13 @@ namespace RougeLike
 {
   public class SimpleMovementController : ControllerProcess
   {
+    private enum Orientation { Up, Down, Left, Right };
+
     private const float _speed = 100.0f;
     private bool _left, _right, _up, _down;
+    private Orientation _orientation = Orientation.Down;
+
+    private float _attackTime = 0.0f;
 
     public override void Initialize()
     {
@@ -48,18 +53,26 @@ namespace RougeLike
       {
         case Keys.W:
           _up = true;
+          _orientation = Orientation.Up;
           break;
 
         case Keys.A:
           _left = true;
+          _orientation = Orientation.Left;
           break;
 
         case Keys.S:
           _down = true;
+          _orientation = Orientation.Down;
           break;
 
         case Keys.D:
           _right = true;
+          _orientation = Orientation.Right;
+          break;
+
+        case Keys.Space:
+          _attackTime = 0.1f;
           break;
 
         default:
@@ -86,6 +99,17 @@ namespace RougeLike
 
       foreach (Entity entity in Entities)
       {
+        if (_attackTime >= 0.0f)
+        {
+          entity.StateMachine.CurrentStateId = _orientation.ToString().ToLower() + "_attack";
+          _attackTime -= dt;
+        }
+
+        if (_attackTime <= 0.0f)
+        {
+          entity.StateMachine.CurrentStateId = "idle";
+        }
+
         TransformComponent trans = entity.GetComponent<TransformComponent>(TransformComponent.ComponentId);
         if (trans == null)
           continue;
