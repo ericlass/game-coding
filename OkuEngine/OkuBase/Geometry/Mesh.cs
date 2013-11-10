@@ -73,10 +73,10 @@ namespace OkuBase.Geometry
       float halfHeight = image.Height / 2;
 
       Vector2f[] pos = new Vector2f[4];
-      pos[0] = new Vector2f(-halfWidth, -halfHeight);
-      pos[1] = new Vector2f(halfWidth, -halfHeight);
-      pos[2] = new Vector2f(halfWidth, halfHeight);
-      pos[3] = new Vector2f(-halfWidth, halfHeight);
+      pos[0] = new Vector2f(-halfWidth, halfHeight);
+      pos[1] = new Vector2f(halfWidth, halfHeight);
+      pos[2] = new Vector2f(halfWidth, -halfHeight);
+      pos[3] = new Vector2f(-halfWidth, -halfHeight);
 
       Vector2f[] tex = new Vector2f[4];
       tex[0] = new Vector2f(0, 1);
