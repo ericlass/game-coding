@@ -8,8 +8,6 @@ namespace RougeLike
 {
   public class SimpleMovementController : ControllerProcess
   {
-    private enum Orientation { Up, Down, Left, Right };
-
     private const float _speed = 100.0f;
     private bool _left, _right, _up, _down;
     private Orientation _orientation = Orientation.Down;
