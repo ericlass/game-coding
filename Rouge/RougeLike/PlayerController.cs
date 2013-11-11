@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace RougeLike
 {
-  public class SimpleMovementController : ControllerProcess
+  public class PlayerController : ControllerProcess
   {
     private const float _speed = 100.0f;
     private bool _left, _right, _up, _down;
