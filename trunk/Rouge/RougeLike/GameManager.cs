@@ -21,6 +21,8 @@ namespace RougeLike
     private EventQueue _eventQueue = null;
     private RenderManager _renderer = null;
     private SceneMap _scenes = null;
+    private InventoryItemMap _inventoryItems = null;
+
     private Scene _activeScene = null;
 
     private GameManager()
@@ -28,6 +30,7 @@ namespace RougeLike
       _eventQueue = new EventQueue();
       _renderer = new RenderManager();
       _scenes = new SceneMap();
+      _inventoryItems = new InventoryItemMap();
     }
     
     public void Initialize()
@@ -80,6 +83,12 @@ namespace RougeLike
       _eventQueue.Clear();
       _activeScene = _scenes[sceneId];
       _activeScene.Activate();      
+    }
+
+    public InventoryItemMap InventoryItems
+    {
+      get { return _inventoryItems; }
+      set { _inventoryItems = value; }
     }
 
   }
