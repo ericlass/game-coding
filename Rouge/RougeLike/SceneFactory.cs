@@ -6,6 +6,9 @@ using OkuBase.Graphics;
 
 namespace RougeLike
 {
+  /// <summary>
+  /// Handles the creation of scenes.
+  /// </summary>
   public class SceneFactory
   {
     private static SceneFactory _instance = null;
@@ -33,6 +36,10 @@ namespace RougeLike
       return result;
     }
 
+    /// <summary>
+    /// Creates a hard coded example scene. This is only for testing purposes.
+    /// </summary>
+    /// <returns>A hard coded testing scene.</returns>
     public Scene GetHardCodedExampleScene()
     {
       Scene result = new Scene("example");
@@ -64,12 +71,12 @@ namespace RougeLike
       result.Entities.Add(ent);
 
       //Add player controllers
-      PlayerController cont = new PlayerController();
-      cont.Entities.Add(ent);
-      result.Processes.Add(cont);
+      //SimplePlayerController cont = new SimplePlayerController();
+      //cont.Entities.Add(ent);
+      //result.Processes.Add(cont);
 
-      EnemyController enemyCont = new EnemyController();
-      result.Processes.Add(enemyCont);
+      //SimpleEnemyController enemyCont = new SimpleEnemyController();
+      //result.Processes.Add(enemyCont);
 
       //Add enemies
       Random rand = new Random();
@@ -100,7 +107,7 @@ namespace RougeLike
         ent.StateMachine.CurrentStateId = "idle";
 
         result.Entities.Add(ent);
-        enemyCont.Entities.Add(ent);
+        //enemyCont.Entities.Add(ent);
       }      
 
       return result;
