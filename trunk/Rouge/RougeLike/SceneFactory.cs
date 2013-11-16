@@ -50,8 +50,24 @@ namespace RougeLike
       TransformComponent trans = new TransformComponent();
       ent.AddComponent(trans);
 
-      State state = new State("idle");
+      State state = new State("up_idle");
       ent.StateMachine.States.Add(state);
+      state = new State("down_idle");
+      ent.StateMachine.States.Add(state);
+      state = new State("left_idle");
+      ent.StateMachine.States.Add(state);
+      state = new State("right_idle");
+      ent.StateMachine.States.Add(state);
+
+      state = new State("up_move");
+      ent.StateMachine.States.Add(state);
+      state = new State("down_move");
+      ent.StateMachine.States.Add(state);
+      state = new State("left_move");
+      ent.StateMachine.States.Add(state);
+      state = new State("right_move");
+      ent.StateMachine.States.Add(state);
+
       state = new State("up_attack");
       ent.StateMachine.States.Add(state);
       state = new State("down_attack");
@@ -61,25 +77,34 @@ namespace RougeLike
       state = new State("right_attack");
       ent.StateMachine.States.Add(state);
       
-      ent.AddStateComponent("idle", RenderComponentFromFile("./Content/Graphics/player_idle.png"));
+      ent.AddStateComponent("up_idle", RenderComponentFromFile("./Content/Graphics/player_up_idle.png"));
+      ent.AddStateComponent("down_idle", RenderComponentFromFile("./Content/Graphics/player_down_idle.png"));
+      ent.AddStateComponent("left_idle", RenderComponentFromFile("./Content/Graphics/player_left_idle.png"));
+      ent.AddStateComponent("right_idle", RenderComponentFromFile("./Content/Graphics/player_right_idle.png"));
+
+      ent.AddStateComponent("up_move", RenderComponentFromFile("./Content/Graphics/player_up_move00.png"));
+      ent.AddStateComponent("down_move", RenderComponentFromFile("./Content/Graphics/player_down_move00.png"));
+      ent.AddStateComponent("left_move", RenderComponentFromFile("./Content/Graphics/player_left_move00.png"));
+      ent.AddStateComponent("right_move", RenderComponentFromFile("./Content/Graphics/player_right_move00.png"));
+
       ent.AddStateComponent("up_attack", RenderComponentFromFile("./Content/Graphics/player_up_attack.png"));
       ent.AddStateComponent("down_attack", RenderComponentFromFile("./Content/Graphics/player_down_attack.png"));
       ent.AddStateComponent("left_attack", RenderComponentFromFile("./Content/Graphics/player_left_attack.png"));
       ent.AddStateComponent("right_attack", RenderComponentFromFile("./Content/Graphics/player_right_attack.png"));
-      ent.StateMachine.CurrentStateId = "idle";
+      ent.StateMachine.CurrentStateId = "down_idle";
 
       result.Entities.Add(ent);
 
-      //Add player controllers
-      //SimplePlayerController cont = new SimplePlayerController();
-      //cont.Entities.Add(ent);
-      //result.Processes.Add(cont);
+      //Add player controller
+      PlayerController cont = new PlayerController();
+      cont.Entities.Add(ent);
+      result.Processes.Add(cont);
 
       //SimpleEnemyController enemyCont = new SimpleEnemyController();
       //result.Processes.Add(enemyCont);
 
       //Add enemies
-      Random rand = new Random();
+      /*Random rand = new Random();
       for (int i = 0; i < 5; i++)
       {
         ent = new Entity("enemy" + i);
@@ -108,7 +133,7 @@ namespace RougeLike
 
         result.Entities.Add(ent);
         //enemyCont.Entities.Add(ent);
-      }      
+      }      */
 
       return result;
     }
