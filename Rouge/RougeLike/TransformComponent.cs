@@ -27,7 +27,15 @@ namespace RougeLike
       set { _translation = value; }
     }
 
+    public void EnterState()
+    {
+    }
+    
     public void Update(float dt)
+    {
+    }
+    
+    public void LeaveState()
     {
     }
 

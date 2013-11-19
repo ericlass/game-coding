@@ -50,7 +50,15 @@ namespace RougeLike
     //HasItem - check if _items contains item
     //HasAmount - check if _items contains item and at least the given amount
 
+    public void EnterState()
+    {
+    }
+    
     public void Update(float dt)
+    {
+    }
+    
+    public void LeaveState()
     {
     }
 

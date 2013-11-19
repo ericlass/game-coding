@@ -24,8 +24,16 @@ namespace RougeLike
       set { _mesh = value; }
     }
 
+    public void EnterState()
+    {
+    }
+    
     public void Update(float dt)
-    {      
+    {
+    }
+    
+    public void LeaveState()
+    {
     }
 
     public string Id
