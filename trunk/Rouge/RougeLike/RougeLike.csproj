@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Animation.cs" />
     <Compile Include="ControllerProcess.cs" />
     <Compile Include="BoundingBoxComponent.cs" />
     <Compile Include="ComponentMap.cs" />
