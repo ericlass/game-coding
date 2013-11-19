@@ -13,10 +13,7 @@ namespace RougeLike
   public class StateMachine : IUpdatable
   {
     private StateMap _states = new StateMap();
-    private StateTransitions _transitions = new StateTransitions();
-    private OnEventDelegate _delegate = null;
 
-    private bool _active = false;
     private string _initialState = null;
     private string _currentState = null;
 
@@ -34,54 +31,11 @@ namespace RougeLike
       get { return _states; }
     }
 
-    public StateTransitions Transitions
-    {
-      get { return _transitions; }
-    }
-
     public void Update(float dt)
     {
-      _states.Update(dt);
-    }
-
-    private OnEventDelegate EventDelegate
-    {
-      get
-      {
-        if (_delegate == null)
-          _delegate = new OnEventDelegate(OnEvent);
-
-        return _delegate;
-      }
-    }
-
-    public void Activate()
-    {
-      if (_active)
-        throw new Exception("Trying to active an already active state machine!");
-
-      if (_initialState == null)
-        throw new Exception("No initial state defined!");
-
-      foreach (EventId eventId in _transitions.GetEvents())
-         GameManager.Instance.EventQueue.AddListener(eventId, EventDelegate);
-
-      _currentState = _initialState;
-      _active = true;
-    }
-
-    public void Deactivate()
-    {
-      if (_active)
-        throw new Exception("Trying to deactive a non-active state machine!");
-
-      GameManager.Instance.EventQueue.RemoveListener(EventDelegate);
-      _active = false;
-    }
-
-    public bool IsActive
-    {
-      get { return _active; }
+      State current = CurrentState;
+      if (current != null)
+        current.Update(dt);
     }
 
     public string CurrentStateId
@@ -92,7 +46,12 @@ namespace RougeLike
         if (!_states.ContainsId(value))
           throw new Exception("Target State \"" + value + "\" is not defined!");
 
+        State current = CurrentState;
+        if (current != null)
+          current.Leave();
+          
         _currentState = value;
+        CurrentState.Enter();
       }
     }
 
@@ -105,28 +64,6 @@ namespace RougeLike
 
         return _states[_currentState];
       }
-    }
-
-    private void OnEvent(EventId eventId, int data)
-    {
-      if (!_active)
-      {
-        OkuManager.Instance.Logging.LogError("Inactive state machine is receiving events!");
-        return;
-      }
-
-      string target = _transitions.GetTargetState(eventId, _currentState);
-
-      if (target == null)
-        return;
-
-      if (!_states.ContainsId(target))
-      {
-        OkuManager.Instance.Logging.LogError("Target State \"" + target + "\" is not defined!");
-        return;
-      }
-
-      _currentState = target;
     }
 
   }

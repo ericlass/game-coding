@@ -21,10 +21,20 @@ namespace RougeLike
     {
       get { return _components; }
     }
+    
+    public void Enter()
+    {
+      _component.Enter();
+    }
 
     public void Update(float dt)
     {
       _components.Update(dt);
+    }
+    
+    public void Leave()
+    {
+      _components.Leave();
     }
 
   }

@@ -42,8 +42,16 @@ namespace RougeLike
       get { return _stamina; }
       set { _stamina = value; }
     }
-
+    
+    public void EnterState()
+    {
+    }
+    
     public void Update(float dt)
+    {
+    }
+    
+    public void LeaveState()
     {
     }
 
