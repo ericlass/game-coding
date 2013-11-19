@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OkuBase.Geometry;
+using OkuBase.Graphics;
 
 namespace RougeLike
 {
@@ -24,7 +25,7 @@ namespace RougeLike
     }
 
     public void Update(float dt)
-    {
+    {      
     }
 
     public string Id
