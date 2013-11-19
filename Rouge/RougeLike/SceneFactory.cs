@@ -91,6 +91,7 @@ namespace RougeLike
       ent.AddStateComponent("down_attack", RenderComponentFromFile("./Content/Graphics/player_down_attack.png"));
       ent.AddStateComponent("left_attack", RenderComponentFromFile("./Content/Graphics/player_left_attack.png"));
       ent.AddStateComponent("right_attack", RenderComponentFromFile("./Content/Graphics/player_right_attack.png"));
+      
       ent.StateMachine.CurrentStateId = "down_idle";
 
       result.Entities.Add(ent);

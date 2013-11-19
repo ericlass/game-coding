@@ -25,17 +25,17 @@ namespace RougeLike
     private Orientation VectorToOrientation(Vector2f vec)
     {
       const double quartertPi = Math.PI * 0.25;
-      const double threeQurterPi = Math.PI * 0.75;
+      const double threeQuarterPi = Math.PI * 0.75;
 
       //Vector2f other = Vector2f.Normalize(vec);
       double angle = Math.Atan2(vec.Y, vec.X);
       double angleAbs = Math.Abs(angle);
 
-      if (angleAbs >= 0.0 && angleAbs <= quartertPi)
+      if (angleAbs >= 0.0 && angleAbs < quartertPi)
       {
         return Orientation.Right;
       }
-      else if (angleAbs >= threeQurterPi && angleAbs <= Math.PI)
+      else if (angleAbs > threeQuarterPi && angleAbs <= Math.PI)
       {
         return Orientation.Left;
       }
