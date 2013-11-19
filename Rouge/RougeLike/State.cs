@@ -24,7 +24,7 @@ namespace RougeLike
     
     public void Enter()
     {
-      _component.Enter();
+      _components.Enter();
     }
 
     public void Update(float dt)
