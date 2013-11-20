@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Animation.cs" />
+    <Compile Include="BasicSwordWeapon.cs" />
     <Compile Include="ControllerProcess.cs" />
     <Compile Include="BoundingBoxComponent.cs" />
     <Compile Include="ComponentMap.cs" />
@@ -92,6 +93,8 @@
     <Compile Include="StateTransitions.cs" />
     <Compile Include="StatsComponent.cs" />
     <Compile Include="TransformComponent.cs" />
+    <Compile Include="IWeapon.cs" />
+    <Compile Include="WeaponType.cs" />
     <None Include="lib\OkuBase.dll" />
     <None Include="lib\OkuDrivers.dll">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
