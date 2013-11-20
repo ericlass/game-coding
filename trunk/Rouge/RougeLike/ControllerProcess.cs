@@ -70,7 +70,9 @@ namespace RougeLike
           if (IsMoving(entity, ref movement))
           {
             Orientation direction = VectorToOrientation(movement);
-            entity.StateMachine.CurrentStateId = direction.ToString().ToLower() + "_move";
+            string newState = direction.ToString().ToLower() + "_move";
+            if (entity.StateMachine.CurrentStateId != newState)
+              entity.StateMachine.CurrentStateId = newState;
 
             TransformComponent trans = entity.GetComponent<TransformComponent>(TransformComponent.ComponentId);
             if (trans == null)

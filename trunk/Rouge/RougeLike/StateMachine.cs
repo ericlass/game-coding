@@ -46,6 +46,8 @@ namespace RougeLike
         if (!_states.ContainsId(value))
           throw new Exception("Target State \"" + value + "\" is not defined!");
 
+        System.Diagnostics.Debug.WriteLine("State change: " + _currentState + "->" + value);
+
         State current = CurrentState;
         if (current != null)
           current.Leave();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using OkuBase;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
@@ -27,12 +28,24 @@ namespace RougeLike
     {
     }
 
-    private RenderComponent RenderComponentFromFile(string filename)
+    private RenderComponent RenderComponentFromFile(string path, string filename)
     {
-      ImageData data = ImageData.FromFile(filename);
-      Image img = OkuManager.Instance.Graphics.NewImage(data);
+      Animation anim = new Animation();
+      anim.Loop = true;
+      anim.FrameTime = 150;
+
+      List<string> files = new List<string>(Directory.EnumerateFiles(path, filename + "*"));
+      files.Sort();
+      
+      foreach (string file in files)
+      {
+        ImageData data = ImageData.FromFile(file);
+        Image img = OkuManager.Instance.Graphics.NewImage(data);
+        anim.Frames.Add(img);
+      }
+
       RenderComponent result = new RenderComponent();
-      result.Mesh = Mesh.ForImage(img, Color.White);
+      result.Animation = anim;
       return result;
     }
 
@@ -77,20 +90,20 @@ namespace RougeLike
       state = new State("right_attack");
       ent.StateMachine.States.Add(state);
       
-      ent.AddStateComponent("up_idle", RenderComponentFromFile("./Content/Graphics/player_up_idle.png"));
-      ent.AddStateComponent("down_idle", RenderComponentFromFile("./Content/Graphics/player_down_idle.png"));
-      ent.AddStateComponent("left_idle", RenderComponentFromFile("./Content/Graphics/player_left_idle.png"));
-      ent.AddStateComponent("right_idle", RenderComponentFromFile("./Content/Graphics/player_right_idle.png"));
+      ent.AddStateComponent("up_idle", RenderComponentFromFile("./Content/Graphics", "player_up_idle"));
+      ent.AddStateComponent("down_idle", RenderComponentFromFile("./Content/Graphics", "player_down_idle"));
+      ent.AddStateComponent("left_idle", RenderComponentFromFile("./Content/Graphics", "player_left_idle"));
+      ent.AddStateComponent("right_idle", RenderComponentFromFile("./Content/Graphics", "player_right_idle"));
 
-      ent.AddStateComponent("up_move", RenderComponentFromFile("./Content/Graphics/player_up_move00.png"));
-      ent.AddStateComponent("down_move", RenderComponentFromFile("./Content/Graphics/player_down_move00.png"));
-      ent.AddStateComponent("left_move", RenderComponentFromFile("./Content/Graphics/player_left_move00.png"));
-      ent.AddStateComponent("right_move", RenderComponentFromFile("./Content/Graphics/player_right_move00.png"));
+      ent.AddStateComponent("up_move", RenderComponentFromFile("./Content/Graphics", "player_up_move"));
+      ent.AddStateComponent("down_move", RenderComponentFromFile("./Content/Graphics", "player_down_move"));
+      ent.AddStateComponent("left_move", RenderComponentFromFile("./Content/Graphics", "player_left_move"));
+      ent.AddStateComponent("right_move", RenderComponentFromFile("./Content/Graphics", "player_right_move"));
 
-      ent.AddStateComponent("up_attack", RenderComponentFromFile("./Content/Graphics/player_up_attack.png"));
-      ent.AddStateComponent("down_attack", RenderComponentFromFile("./Content/Graphics/player_down_attack.png"));
-      ent.AddStateComponent("left_attack", RenderComponentFromFile("./Content/Graphics/player_left_attack.png"));
-      ent.AddStateComponent("right_attack", RenderComponentFromFile("./Content/Graphics/player_right_attack.png"));
+      ent.AddStateComponent("up_attack", RenderComponentFromFile("./Content/Graphics", "player_up_attack"));
+      ent.AddStateComponent("down_attack", RenderComponentFromFile("./Content/Graphics", "player_down_attack"));
+      ent.AddStateComponent("left_attack", RenderComponentFromFile("./Content/Graphics", "player_left_attack"));
+      ent.AddStateComponent("right_attack", RenderComponentFromFile("./Content/Graphics", "player_right_attack"));
       
       ent.StateMachine.CurrentStateId = "down_idle";
 

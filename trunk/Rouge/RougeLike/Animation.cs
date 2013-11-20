@@ -53,6 +53,9 @@ namespace RougeLike
     
     public void Update(float dt)
     {
+      if (_frames.Count == 1)
+        return;
+
       _timeOut -= dt;
 
       while (_timeOut <= 0)
@@ -61,8 +64,15 @@ namespace RougeLike
         _currentFrame++;
       }
 
-      if (_currentFrame >= _frames.Count && _loop)
-        _currentFrame = _currentFrame % _frames.Count;
+      int lastFrame = _currentFrame;
+
+      if (_currentFrame >= _frames.Count)
+      {
+        if (_loop)
+          _currentFrame = _currentFrame % _frames.Count;
+        else
+          _currentFrame = _frames.Count - 1;
+      }
     }    
 
     public void Restart()

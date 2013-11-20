@@ -39,7 +39,7 @@ namespace RougeLike
         if (trans != null)
           OkuManager.Instance.Graphics.ApplyAndPushTransform(trans.Translation, Vector2f.One, 0.0f);
 
-        OkuManager.Instance.Graphics.DrawMesh(comp.Mesh);
+        OkuManager.Instance.Graphics.DrawImage(comp.Animation.CurrentFrame, 0, 0);
 
         if (trans != null)
           OkuManager.Instance.Graphics.PopTransform();

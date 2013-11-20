@@ -10,7 +10,7 @@ namespace RougeLike
     public const string ComponentId = "render";
 
     private Entity _owner = null;
-    private Mesh _mesh = null;
+    private Animation _animation = null;
 
     public Entity Owner
     {
@@ -18,18 +18,20 @@ namespace RougeLike
       set { _owner = value; }
     }
 
-    public Mesh Mesh
+    public Animation Animation
     {
-      get { return _mesh; }
-      set { _mesh = value; }
+      get { return _animation; }
+      set { _animation = value; }
     }
 
     public void EnterState()
     {
+      _animation.Restart();
     }
     
     public void Update(float dt)
     {
+      _animation.Update(dt);
     }
     
     public void LeaveState()
