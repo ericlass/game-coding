@@ -93,8 +93,6 @@ namespace RougeLike
         }
       }
 
-      //Attack
-      //Other Actions
       return false;
     }
 
