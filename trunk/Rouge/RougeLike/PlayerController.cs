@@ -15,30 +15,26 @@ namespace RougeLike
       movement.X = 0;
       movement.Y = 0;
 
-      bool result = false;
-
-      if (OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.Up))
-      {
+      if (OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.Up) || OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.W))
         movement.Y += speed;
-        result = true;
-      }
-      if (OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.Down))
-      {
+
+      if (OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.Down) || OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.S))
         movement.Y -= speed;
-        result = true;
-      }
-      if (OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.Left))
-      {
+
+      if (OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.Left) || OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.A))
         movement.X -= speed;
-        result = true;
-      }
-      if (OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.Right))
-      {
+
+      if (OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.Right) || OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.D))
         movement.X += speed;
-        result = true;
+
+      bool moves = Math.Abs(movement.X) > 0 || Math.Abs(movement.Y) > 0;
+      if (moves)
+      {
+        movement.Normalize();
+        movement.Scale(speed);
       }
 
-      return result;
+      return moves;
     }
 
     public override bool IsAttacking(Entity entity)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OkuBase;
 using OkuBase.Geometry;
 
 namespace RougeLike

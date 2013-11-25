@@ -32,7 +32,7 @@ namespace RougeLike
     {
       Animation anim = new Animation();
       anim.Loop = true;
-      anim.FrameTime = 150;
+      anim.FrameTime = 120;
 
       List<string> files = new List<string>(Directory.EnumerateFiles(path, filename + "*"));
       files.Sort();
@@ -63,32 +63,20 @@ namespace RougeLike
       TransformComponent trans = new TransformComponent();
       ent.AddComponent(trans);
 
-      State state = new State("up_idle");
-      ent.StateMachine.States.Add(state);
-      state = new State("down_idle");
-      ent.StateMachine.States.Add(state);
-      state = new State("left_idle");
-      ent.StateMachine.States.Add(state);
-      state = new State("right_idle");
-      ent.StateMachine.States.Add(state);
+      ent.StateMachine.States.Add(new State("up_idle"));
+      ent.StateMachine.States.Add(new State("down_idle"));
+      ent.StateMachine.States.Add(new State("left_idle"));
+      ent.StateMachine.States.Add(new State("right_idle"));
 
-      state = new State("up_move");
-      ent.StateMachine.States.Add(state);
-      state = new State("down_move");
-      ent.StateMachine.States.Add(state);
-      state = new State("left_move");
-      ent.StateMachine.States.Add(state);
-      state = new State("right_move");
-      ent.StateMachine.States.Add(state);
+      ent.StateMachine.States.Add(new State("up_move"));
+      ent.StateMachine.States.Add(new State("down_move"));
+      ent.StateMachine.States.Add(new State("left_move"));
+      ent.StateMachine.States.Add(new State("right_move"));
 
-      state = new State("up_attack");
-      ent.StateMachine.States.Add(state);
-      state = new State("down_attack");
-      ent.StateMachine.States.Add(state);
-      state = new State("left_attack");
-      ent.StateMachine.States.Add(state);
-      state = new State("right_attack");
-      ent.StateMachine.States.Add(state);
+      ent.StateMachine.States.Add(new State("up_attack"));
+      ent.StateMachine.States.Add(new State("down_attack"));
+      ent.StateMachine.States.Add(new State("left_attack"));
+      ent.StateMachine.States.Add(new State("right_attack"));
       
       ent.AddStateComponent("up_idle", RenderComponentFromFile("./Content/Graphics", "player_up_idle"));
       ent.AddStateComponent("down_idle", RenderComponentFromFile("./Content/Graphics", "player_down_idle"));
