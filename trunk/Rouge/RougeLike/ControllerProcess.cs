@@ -64,6 +64,11 @@ namespace RougeLike
             Orientation direction = VectorToOrientation(movement);
             entity.StateMachine.CurrentStateId = direction.ToString().ToLower() + "_move";
           }
+          else if (IsAttacking(entity))
+          {
+            Orientation direction = VectorToOrientation(movement);
+            entity.StateMachine.CurrentStateId = direction.ToString().ToLower() + "_attack";
+          }
         }
         else if (entity.StateMachine.CurrentStateId.EndsWith("move"))
         {
@@ -80,6 +85,11 @@ namespace RougeLike
               throw new InvalidOperationException("Entity " + entity.Id + " has no transform component!");
 
             trans.Translation += movement * dt;
+          }
+          else if (IsAttacking(entity))
+          {
+            Orientation direction = VectorToOrientation(movement);
+            entity.StateMachine.CurrentStateId = direction.ToString().ToLower() + "_attack";
           }
           else
           {

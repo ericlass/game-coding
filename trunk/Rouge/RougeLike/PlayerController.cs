@@ -39,7 +39,7 @@ namespace RougeLike
 
     public override bool IsAttacking(Entity entity)
     {
-      return false;
+      return OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.Space);
     }
   }
 }
