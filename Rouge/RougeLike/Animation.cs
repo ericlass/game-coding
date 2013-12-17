@@ -5,7 +5,7 @@ using OkuBase.Graphics;
 
 namespace RougeLike
 {
-  public class Animation : IUpdatable
+  public class Animation
   {
     private List<ImageBase> _frames = new List<ImageBase>();
     private int _frameTime = 40;
