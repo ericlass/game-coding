@@ -59,10 +59,13 @@
     <Compile Include="Event.cs" />
     <Compile Include="EventId.cs" />
     <Compile Include="EventQueue.cs" />
+    <Compile Include="GameObject.cs" />
+    <Compile Include="IGameObject.cs" />
     <Compile Include="Orientation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RougeGame.cs" />
+    <Compile Include="StringPairMap.cs" />
     <None Include="Content\Graphics\enemy_down_attack.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
