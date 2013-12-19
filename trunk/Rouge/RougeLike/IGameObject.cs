@@ -10,7 +10,7 @@ namespace RougeLike
     string ObjectType { get; }
     void Init();
     void Update(float dt);
-    void Render(float dt);
+    void Render();
     void Finish();
     StringPairMap Save();
     void Load(StringPairMap data);

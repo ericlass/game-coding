@@ -5,11 +5,16 @@ using System.Text;
 
 namespace RougeLike
 {
-  internal class GameObject
+  public class GameObjectWrapper
   {
     public string Id { get; set; }
     public int ZIndex { get; set; }
     public IGameObject GameObject { get; set; }
+
+    public GameObjectWrapper(IGameObject gameObject)
+    {
+      GameObject = gameObject;
+    }
 
     public Dictionary<string, string> Save()
     {
