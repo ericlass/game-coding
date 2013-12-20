@@ -7,23 +7,22 @@ using System.Windows.Forms;
 
 namespace RougeLike
 {
-  class PlayerGameObject : IGameObject
+  class PlayerGameObject : GameObjectBase
   {
-    private Vector2f _position = Vector2f.Zero;
     private Image _sprite = null;
 
-    public string ObjectType
+    public override string ObjectType
     {
       get { return "player"; }
     }
 
-    public void Init()
+    public override void Init()
     {
       ImageData data = ImageData.FromFile(".\\Content\\Graphics\\player_down_idle.png");
       _sprite = OkuManager.Instance.Graphics.NewImage(data);
     }
 
-    public void Update(float dt)
+    public override void Update(float dt)
     {
       float speed = 120.0f * dt;
       float dx = 0;
@@ -38,26 +37,28 @@ namespace RougeLike
       if (OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.Up))
         dy += speed;
 
-      _position.X += dx;
-      _position.Y += dy;
+      Vector2f pos = Position;
+      pos.X += dx;
+      pos.Y += dy;
+      Position = pos;
     }
 
-    public void Render()
+    public override void Render()
     {
-      OkuManager.Instance.Graphics.DrawImage(_sprite, _position.X, _position.Y);
+      OkuManager.Instance.Graphics.DrawImage(_sprite, Position.X, Position.Y);
     }
 
-    public void Finish()
+    public override void Finish()
     {
       OkuManager.Instance.Graphics.ReleaseImage(_sprite);
     }
 
-    public StringPairMap Save()
+    public override StringPairMap DoSave()
     {
       throw new NotImplementedException();
     }
 
-    public void Load(StringPairMap data)
+    public override void DoLoad(StringPairMap data)
     {
       throw new NotImplementedException();
     }
@@ -66,6 +67,6 @@ namespace RougeLike
     {
       return "player";
     }
-
+    
   }
 }
