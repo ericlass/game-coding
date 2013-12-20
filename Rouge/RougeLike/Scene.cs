@@ -21,26 +21,27 @@ namespace RougeLike
 
     public void Init()
     {
-      foreach (GameObjectWrapper go in _gameObjects)
-        go.GameObject.Init();
+      foreach (GameObjectBase go in _gameObjects)
+        go.Init();
     }
 
     public void Update(float dt)
     {
-      foreach (GameObjectWrapper go in _gameObjects)
-        go.GameObject.Update(dt);
+      foreach (GameObjectBase go in _gameObjects)
+        go.Update(dt);
     }
 
     public void Render()
     {
-      foreach (GameObjectWrapper go in _gameObjects)
-        go.GameObject.Render();
+      _gameObjects.Sort();
+      foreach (GameObjectBase go in _gameObjects)
+        go.Render();
     }
 
     public void Finish()
     {
-      foreach (GameObjectWrapper go in _gameObjects)
-        go.GameObject.Finish();
+      foreach (GameObjectBase go in _gameObjects)
+        go.Finish();
     }
 
     public void Load(StringPairMap data)

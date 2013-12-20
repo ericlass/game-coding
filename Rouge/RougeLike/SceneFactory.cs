@@ -28,11 +28,16 @@ namespace RougeLike
       SceneList result = new SceneList();
 
       PlayerGameObject player = new PlayerGameObject();
+
+      SquareObject square = new SquareObject();
+
       Scene scene = new Scene();
       scene.Name = "Test";
-      scene.GameObjects.Add(new GameObjectWrapper(player));
-      result.Add(scene);
 
+      scene.GameObjects.Add(player);
+      scene.GameObjects.Add(square);
+
+      result.Add(scene);
       return result;
     }
 
