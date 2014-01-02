@@ -48,7 +48,7 @@ namespace RougeLike
 
     public bool Finished
     {
-      get { return _currentFrame >= _frames.Count; }
+      get { return _frames.Count > 1 ? _currentFrame >= _frames.Count : true; } // If there is no or only one frame, the animation is always finished
     }
     
     public void Update(float dt)

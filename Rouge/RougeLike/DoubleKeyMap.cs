@@ -1,5 +1,5 @@
 using System;
-using System.Collection.Generic;
+using System.Collections.Generic;
 
 namespace RougeLike
 {
@@ -29,7 +29,9 @@ namespace RougeLike
       if (Contains(key1, key2))
         throw new Exception("Map already contains a value for the key pair " + key1 + " + " + key2 + "!");
         
-      _map.Add(key1, new Dictionary<K2, V>());
+      if (!Contains(key1))
+        _map.Add(key1, new Dictionary<K2, V>());
+
       _map[key1].Add(key2, value);
     }
     
@@ -45,6 +47,21 @@ namespace RougeLike
         _map.Remove(key1);
       
       return true;
+    }
+
+    public List<V> GetAllValues()
+    {
+      List<V> result = new List<V>();
+
+      foreach (K1 key in _map.Keys)
+      {
+        foreach (V value in _map[key].Values)
+        {
+          result.Add(value);
+        }
+      }
+
+      return result;
     }
     
     public V this[K1 key1, K2 key2]

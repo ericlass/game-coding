@@ -23,5 +23,20 @@ namespace RougeLike
       Sort(_comparer);
     }
 
+    public void SortStable()
+    {
+      for (int i = 1; i < Count; i++)
+      {
+        GameObjectBase x = this[i];
+        int j = i;
+        while (j > 0 && _comparer.Compare(this[j-1], x) > 0)
+        {
+          this[j] = this[j-1];
+          j--;
+        }
+        this[j] = x;
+      }
+    }
+
   }
 }

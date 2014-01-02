@@ -33,7 +33,7 @@ namespace RougeLike
 
     public void Render()
     {
-      _gameObjects.Sort();
+      _gameObjects.SortStable();
       foreach (GameObjectBase go in _gameObjects)
         go.Render();
     }
