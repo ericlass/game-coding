@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
+using System.IO;
 using OkuBase;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
-using System.Windows.Forms;
 
 namespace RougeLike
 {
@@ -25,18 +26,30 @@ namespace RougeLike
       get { return "player"; }
     }
     
-    private GetStateString(PlayerState state, Orientation orient)
+    private string GetStateString(PlayerState state, Orientation orient)
     {
-      return ObjectType + "_" + orient.ToString().ToLower() + "_" + state.ToString().Tolower();
+      return ObjectType + "_" + orient.ToString().ToLower() + "_" + state.ToString().ToLower();
     }
     
     //TODO: Put this in a util class
     private Animation LoadAnimation(string baseName)
     {
-      //TODO: Load files that start with baseName and create animation for them
-      //ImageData data = ImageData.FromFile(".\\Content\\Graphics\\player_down_idle.png");
-      //Image sprite = Oku.Graphics.NewImage(data);
-      return null;
+      // Load files that start with baseName and create animation for them
+      string[] files = Directory.GetFiles(".\\Content\\Graphics", baseName + "*.png");
+      Array.Sort(files);
+
+      Animation result = new Animation();
+      result.FrameTime = 100;
+      result.Loop = true;
+
+      foreach (string file in files)
+      {
+        ImageData data = ImageData.FromFile(file);
+        Image image = Oku.Graphics.NewImage(data);
+        result.Frames.Add(image);
+      }
+
+      return result;
     }
 
     public override void Init()
@@ -67,7 +80,7 @@ namespace RougeLike
     
       switch (_state)
       {
-        case Idle:
+        case PlayerState.Idle:
           // If any of the movement buttons was pressed, go to move state
           if (Oku.Input.Keyboard.KeyIsDown(Keys.Left) ||
               Oku.Input.Keyboard.KeyIsDown(Keys.Right) ||
@@ -76,12 +89,12 @@ namespace RougeLike
           {
             SwitchState(PlayerState.Move);
           }
-          
+
           if (Oku.Input.Keyboard.KeyIsDown(Keys.Space))
-            SwitchState(PlayerStates.Attack)
+            SwitchState(PlayerState.Attack);
           break;
-          
-        case Move:
+
+        case PlayerState.Move:
           float speed = 120.0f * dt;
           float dx = 0;
           float dy = 0;
@@ -99,13 +112,22 @@ namespace RougeLike
           pos.X += dx;
           pos.Y += dy;
           Position = pos;
+
+          if (dy > 0)
+            _orientation = Orientation.Up;
+          if (dy < 0)
+            _orientation = Orientation.Down;
+          if (dx > 0)
+            _orientation = Orientation.Right;
+          if (dx < 0)
+            _orientation = Orientation.Left;
           
           if (dx == 0 && dy == 0)
             SwitchState(PlayerState.Idle);
           
           break;
-          
-        case Attack:
+
+        case PlayerState.Attack:
           //Actually, the attack state is an extension of the move state.
           //The player can move while attacking.
         
@@ -119,7 +141,6 @@ namespace RougeLike
           
         default:
           throw new Exception("Unsupported player state: '" + _state.ToString() + "'");
-          break;
         
       }
     }
@@ -131,8 +152,14 @@ namespace RougeLike
 
     public override void Finish()
     {
-      //Oku.Graphics.ReleaseImage(_sprite);
-      //TODO: Release all animation images. Must be able to iterate DoubleKeyMap for this.
+      List<Animation> anims = _animations.GetAllValues();
+      foreach (Animation anim in anims)
+      {
+        foreach (ImageBase img in anim.Frames)
+        {
+          Oku.Graphics.ReleaseImage((Image)img);
+        }
+      }      
     }
 
     public override StringPairMap DoSave()
