@@ -19,6 +19,11 @@ namespace RougeLike
     public int ZIndex { get; set; }
     public int GroupIndex { get; set; }
     public Vector2f Position { get; set; }
+    
+    public OkuManager Oku
+    {
+      get { return OkuManager.Instance; }
+    }
 
     public GameObjectBase()
     {
