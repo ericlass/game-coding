@@ -15,7 +15,7 @@ namespace RougeLike
     Attack
   }
 
-  public class PlayerGameObject : GameObjectBase
+  public class PlayerObject : GameObjectBase
   {
     private Orientation _orientation = Orientation.Down;
     private PlayerState _state = PlayerState.Idle;
@@ -31,27 +31,6 @@ namespace RougeLike
       return ObjectType + "_" + orient.ToString().ToLower() + "_" + state.ToString().ToLower();
     }
     
-    //TODO: Put this in a util class
-    private Animation LoadAnimation(string baseName)
-    {
-      // Load files that start with baseName and create animation for them
-      string[] files = Directory.GetFiles(".\\Content\\Graphics", baseName + "*.png");
-      Array.Sort(files);
-
-      Animation result = new Animation();
-      result.FrameTime = 100;
-      result.Loop = true;
-
-      foreach (string file in files)
-      {
-        ImageData data = ImageData.FromFile(file);
-        Image image = Oku.Graphics.NewImage(data);
-        result.Frames.Add(image);
-      }
-
-      return result;
-    }
-
     public override void Init()
     {
       PlayerState[] states = (PlayerState[])Enum.GetValues(typeof(PlayerState));
@@ -62,7 +41,7 @@ namespace RougeLike
         foreach (Orientation orient in orients)
         {
           string baseName = GetStateString(state, orient);
-          Animation anim = LoadAnimation(baseName);
+          Animation anim = GameUtil.LoadAnimation(baseName);
           _animations.Add(state, orient, anim);
         }
       }
