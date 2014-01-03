@@ -27,7 +27,7 @@ namespace RougeLike
     {
       SceneList result = new SceneList();
 
-      PlayerGameObject player = new PlayerGameObject();
+      PlayerObject player = new PlayerObject();
 
       SquareObject square = new SquareObject();
 
