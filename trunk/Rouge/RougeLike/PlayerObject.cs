@@ -74,7 +74,7 @@ namespace RougeLike
           break;
 
         case PlayerState.Move:
-          float speed = 120.0f * dt;
+          float speed = 100.0f * dt;
           float dx = 0;
           float dy = 0;
 

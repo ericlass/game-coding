@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using OkuBase.Graphics;
 
 namespace RougeLike
 {
@@ -31,11 +30,14 @@ namespace RougeLike
 
       SquareObject square = new SquareObject();
 
+      TileMapObject tilemap = new TileMapObject();
+
       Scene scene = new Scene();
       scene.Name = "Test";
 
       scene.GameObjects.Add(player);
       scene.GameObjects.Add(square);
+      scene.GameObjects.Add(tilemap);
 
       result.Add(scene);
       return result;

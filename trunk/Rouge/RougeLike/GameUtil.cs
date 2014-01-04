@@ -47,17 +47,37 @@ namespace RougeLike
 
       for (int i = 0; i < pixels.Length; i++)
       {
+        // Pixel coordinates in image space
         int x = i % data.Width;
         int y = i / data.Width;
 
-        int tx = x / spriteWidth;
-        int ty = y / spriteHeight;
-        int tileIndex = (ty * tilesX) + tx;
+        // Tile coordinates
+        //int tx = x / spriteWidth;
+        //int ty = y / spriteHeight;
 
+        // Tile index
+        //int tileIndex = (ty * tilesX) + tx;
+        int tileIndex = ((y / spriteHeight) * tilesX) + (x / spriteWidth);
+        
+        // Pixel coordinate in tile space
+        //int tpx = i % spriteWidth;
+        //int tpy = (i / data.Height) % spriteHeight;
+        //int tpIndex = (tpy * spriteWidth) + tpx;
+        int tpIndex = (((i / data.Height) % spriteHeight) * spriteWidth) + (i % spriteWidth);
 
+        tilePixels[tileIndex][tpIndex] = pixels[i];
       }
 
-      return null;
+      List<Image> result = new List<Image>();
+
+      for (int i = 0; i < tilePixels.Length; i++)
+      {
+        data = ImageData.FromRaw(tilePixels[i], spriteWidth, spriteHeight);
+        Image image = OkuManager.Instance.Graphics.NewImage(data);
+        result.Add(image);
+      }
+
+      return result;
     }
 
   }
