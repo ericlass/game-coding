@@ -22,7 +22,7 @@ namespace RougeLike
 
     public override void Render()
     {
-      OkuManager.Instance.Graphics.DrawRectangle(Position.X - 6, Position.X + 6, Position.Y - 8, Position.Y + 8, Color.Green);
+      OkuManager.Instance.Graphics.DrawRectangle(-6, 6, -8, 8, Color.Green);
     }
 
     public override void Finish()

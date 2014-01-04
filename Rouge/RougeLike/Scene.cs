@@ -1,4 +1,6 @@
 ﻿using System;
+using OkuBase;
+using OkuBase.Geometry;
 
 namespace RougeLike
 {
@@ -36,8 +38,16 @@ namespace RougeLike
       _gameObjects.SortStable();
       foreach (GameObjectBase go in _gameObjects)
       {
-        go.Render();
-        OkuBase.OkuManager.Instance.Graphics.DrawPoint(go.Position.X, go.Position.Y, 2.0f, OkuBase.Graphics.Color.Red);
+        OkuManager.Instance.Graphics.ApplyAndPushTransform(go.Position, Vector2f.One, 0);
+        try
+        {
+          go.Render();
+          //OkuBase.OkuManager.Instance.Graphics.DrawPoint(0, 0, 2.0f, OkuBase.Graphics.Color.Red);
+        }
+        finally
+        {
+          OkuManager.Instance.Graphics.PopTransform();
+        }        
       }
     }
 
