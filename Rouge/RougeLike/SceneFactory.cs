@@ -29,8 +29,10 @@ namespace RougeLike
       PlayerObject player = new PlayerObject();
 
       SquareObject square = new SquareObject();
+      square.Position = new OkuBase.Geometry.Vector2f(0, 100);
 
       TileMapObject tilemap = new TileMapObject();
+      tilemap.Position = new OkuBase.Geometry.Vector2f(0, -100);
 
       Scene scene = new Scene();
       scene.Name = "Test";
