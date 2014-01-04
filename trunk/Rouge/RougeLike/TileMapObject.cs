@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using OkuBase;
 using OkuBase.Graphics;
+using OkuBase.Geometry;
 
 namespace RougeLike
 {
@@ -26,12 +27,10 @@ namespace RougeLike
 
     public override void Render()
     {
-      Oku.Graphics.ApplyAndPushTransform(Position, OkuBase.Geometry.Vector2f.One, 0);
       for (int i = 0; i < _tiles.Count; i++)
       {
         Oku.Graphics.DrawImage(_tiles[i], ((i - _tiles.Count / 2) * 10.0f), 0);
       }
-      Oku.Graphics.PopTransform();
     }
 
     public override void Finish()

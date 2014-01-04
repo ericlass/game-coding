@@ -126,7 +126,7 @@ namespace RougeLike
 
     public override void Render()
     {
-      Oku.Graphics.DrawImage(_animations[_state, _orientation].CurrentFrame, Position.X, Position.Y);
+      Oku.Graphics.DrawImage(_animations[_state, _orientation].CurrentFrame, 0, 0);
     }
 
     public override void Finish()
