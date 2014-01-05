@@ -1,0 +1,468 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JSONator</name>
+    </assembly>
+    <members>
+        <member name="T:JSONator.JSONArrayValue">
+            <summary>
+            Defines a JSON array value.
+            </summary>
+        </member>
+        <member name="T:JSONator.JSONValue">
+            <summary>
+            Base class for all JSON values.
+            </summary>
+        </member>
+        <member name="P:JSONator.JSONValue.ValueType">
+            <summary>
+            Gets the type of the value this JSON value stores.
+            </summary>
+        </member>
+        <member name="M:JSONator.JSONArrayValue.IndexOf(JSONator.JSONValue)">
+            <summary>
+            Searches for the given value and returns the zero base index of it.
+            </summary>
+            <param name="item">The value to be found.</param>
+            <returns>The zero based index of the value, or -1 if the value is not found.</returns>
+        </member>
+        <member name="M:JSONator.JSONArrayValue.Insert(System.Int32,JSONator.JSONValue)">
+            <summary>
+            Insert the given value at the given index of the array.
+            </summary>
+            <param name="index">The index of the array.</param>
+            <param name="item">The value.</param>
+        </member>
+        <member name="M:JSONator.JSONArrayValue.RemoveAt(System.Int32)">
+            <summary>
+            Removes the value at the given index.
+            </summary>
+            <param name="index">The index of the value to be removed.</param>
+        </member>
+        <member name="M:JSONator.JSONArrayValue.Add(JSONator.JSONValue)">
+            <summary>
+            Adds the given value to the end of the array.
+            </summary>
+            <param name="item">The value to be added.</param>
+        </member>
+        <member name="M:JSONator.JSONArrayValue.Clear">
+            <summary>
+            Clears all value from the array.
+            </summary>
+        </member>
+        <member name="M:JSONator.JSONArrayValue.Contains(JSONator.JSONValue)">
+            <summary>
+            Check if the array contains the given value.
+            </summary>
+            <param name="item">The value to be found.</param>
+            <returns>True if the value is in the array, else false.</returns>
+        </member>
+        <member name="M:JSONator.JSONArrayValue.CopyTo(JSONator.JSONValue[],System.Int32)">
+            <summary>
+            Copies the entire JSON array to the given array at the given index.
+            </summary>
+            <param name="array">The array to copy to.</param>
+            <param name="arrayIndex">The index to copy to.</param>
+        </member>
+        <member name="M:JSONator.JSONArrayValue.Remove(JSONator.JSONValue)">
+            <summary>
+            Removes the given value from the array.
+            </summary>
+            <param name="item">The value to be removed.</param>
+            <returns>True if the value was removed. False if the array does not contain the given value.</returns>
+        </member>
+        <member name="M:JSONator.JSONArrayValue.GetEnumerator">
+            <summary>
+            Gets the enumerator for the array.
+            </summary>
+            <returns>The enumerator for the array</returns>
+        </member>
+        <member name="M:JSONator.JSONArrayValue.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Gets the enumerator for the array.
+            </summary>
+            <returns>The enumerator for the array</returns>
+        </member>
+        <member name="P:JSONator.JSONArrayValue.ValueType">
+            <summary>
+            Gets the type of the value.
+            </summary>
+        </member>
+        <member name="P:JSONator.JSONArrayValue.Item(System.Int32)">
+            <summary>
+            Gets or sets the value at the given index.
+            </summary>
+            <param name="index">The index of the value.</param>
+            <returns>The value at the given index.</returns>
+        </member>
+        <member name="P:JSONator.JSONArrayValue.Count">
+            <summary>
+            Gets the number of values the array contains.
+            </summary>
+        </member>
+        <member name="P:JSONator.JSONArrayValue.IsReadOnly">
+            <summary>
+            Gets if the array is read only or not.
+            </summary>
+        </member>
+        <member name="T:JSONator.JSONBoolValue">
+            <summary>
+            Defines a JSON boolean value.
+            </summary>
+        </member>
+        <member name="M:JSONator.JSONBoolValue.#ctor(System.Boolean)">
+            <summary>
+            Creates a new JSON boolean value with the given boolean.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:JSONator.JSONBoolValue.ToString">
+            <summary>
+            Creates a string representation of the boolean value.
+            </summary>
+            <returns>The boolean vaule as a string.</returns>
+        </member>
+        <member name="P:JSONator.JSONBoolValue.ValueType">
+            <summary>
+            Gets the type of the value.
+            </summary>
+        </member>
+        <member name="P:JSONator.JSONBoolValue.Value">
+            <summary>
+            Gets or sets the boolean value.
+            </summary>
+        </member>
+        <member name="T:JSONator.JSONNullValue">
+            <summary>
+            Defines a JSON null value.
+            </summary>
+        </member>
+        <member name="M:JSONator.JSONNullValue.ToString">
+            <summary>
+            Creates a string representation of the null value.
+            </summary>
+            <returns>The string "null".</returns>
+        </member>
+        <member name="P:JSONator.JSONNullValue.ValueType">
+            <summary>
+            Gets the type of the value.
+            </summary>
+        </member>
+        <member name="T:JSONator.JSONNumberValue">
+            <summary>
+            Defines a JSON number value.
+            </summary>
+        </member>
+        <member name="M:JSONator.JSONNumberValue.#ctor(System.Double)">
+            <summary>
+            Creates a new number value with the given double value.
+            </summary>
+            <param name="value">The double value.</param>
+        </member>
+        <member name="M:JSONator.JSONNumberValue.ToString">
+            <summary>
+            Converts the value to a string.
+            </summary>
+            <returns>The string representation of the value.</returns>
+        </member>
+        <member name="P:JSONator.JSONNumberValue.ValueType">
+            <summary>
+            Gets the type of the value.
+            </summary>
+        </member>
+        <member name="P:JSONator.JSONNumberValue.Value">
+            <summary>
+            Gets or sets the double value.
+            </summary>
+        </member>
+        <member name="T:JSONator.JSONObjectValue">
+            <summary>
+            Defines a JSON object value which is a collection of named JSON values.
+            </summary>
+        </member>
+        <member name="M:JSONator.JSONObjectValue.Contains(System.String)">
+            <summary>
+            Checks if the object contains a member with the given name.
+            </summary>
+            <param name="name">The name of the member.</param>
+            <returns>True if the object contains a member with the given name, else false.</returns>
+        </member>
+        <member name="M:JSONator.JSONObjectValue.Add(System.String,JSONator.JSONValue)">
+            <summary>
+            Adds a member with the given name and value.
+            </summary>
+            <param name="name">The name of the new member.</param>
+            <param name="value">The value of the new member.</param>
+        </member>
+        <member name="M:JSONator.JSONObjectValue.Remove(System.String)">
+            <summary>
+            Removes the member with the given name.
+            </summary>
+            <param name="name">The name of the member.</param>
+            <returns>True if the member was removed. False if the object does not contain a member with the given name.</returns>
+        </member>
+        <member name="P:JSONator.JSONObjectValue.ValueType">
+            <summary>
+            Gets the type of the value.
+            </summary>
+        </member>
+        <member name="P:JSONator.JSONObjectValue.Item(System.String)">
+            <summary>
+            Gets or sets the value of the member with the given name.
+            </summary>
+            <param name="name">The name of the member.</param>
+            <returns>The value of the member or null if the object does not contain a member with the given name.</returns>
+        </member>
+        <member name="P:JSONator.JSONObjectValue.Names">
+            <summary>
+            Gets a list of the name of all members of the object.
+            </summary>
+        </member>
+        <member name="P:JSONator.JSONObjectValue.Count">
+            <summary>
+            Gets the number of member the object contains.
+            </summary>
+        </member>
+        <member name="T:JSONator.JSONStringValue">
+            <summary>
+            Defines a JSON string value.
+            </summary>
+        </member>
+        <member name="M:JSONator.JSONStringValue.#ctor(System.String)">
+            <summary>
+            Creates a new value with the given string.
+            </summary>
+            <param name="value">The string value.</param>
+        </member>
+        <member name="M:JSONator.JSONStringValue.ToString">
+            <summary>
+            Converts the string value to a string.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:JSONator.JSONStringValue.ValueType">
+            <summary>
+            Gets the type of the value.
+            </summary>
+        </member>
+        <member name="P:JSONator.JSONStringValue.Value">
+            <summary>
+            Gets or sets the string value.
+            </summary>
+        </member>
+        <member name="T:JSONator.JSONValueType">
+            <summary>
+            Defines the possible types of JSON values.
+            </summary>
+        </member>
+        <member name="F:JSONator.JSONValueType.Null">
+            <summary>
+            Defines a null value.
+            </summary>
+        </member>
+        <member name="F:JSONator.JSONValueType.Bool">
+            <summary>
+            Defines a boolean value with true and false.
+            </summary>
+        </member>
+        <member name="F:JSONator.JSONValueType.Number">
+            <summary>
+            Defines a number value. Can be float or integer.
+            </summary>
+        </member>
+        <member name="F:JSONator.JSONValueType.String">
+            <summary>
+            Defines a string value.
+            </summary>
+        </member>
+        <member name="F:JSONator.JSONValueType.Object">
+            <summary>
+            Defines an object value.
+            </summary>
+        </member>
+        <member name="F:JSONator.JSONValueType.Array">
+            <summary>
+            Defines an array value.
+            </summary>
+        </member>
+        <member name="T:JSONator.JSONParser">
+            <summary>
+            Defines a simple parse for a JSON string.
+            </summary>
+        </member>
+        <member name="M:JSONator.JSONParser.#ctor">
+            <summary>
+            Creates a new JSON parser.
+            </summary>
+        </member>
+        <member name="M:JSONator.JSONParser.ExpectedError(System.String)">
+            <summary>
+            Throws an exception that says, that a different character was found than expected.
+            </summary>
+            <param name="expected">The expected character(s).</param>
+        </member>
+        <member name="M:JSONator.JSONParser.EndOfFileError">
+            <summary>
+            Throws an exception that says, that the end of the file has been reached unexpected.
+            </summary>
+        </member>
+        <member name="M:JSONator.JSONParser.GeneralError(System.String)">
+            <summary>
+            Throws a general exception with the given error message.
+            </summary>
+            <param name="error"></param>
+        </member>
+        <member name="M:JSONator.JSONParser.SkipWhiteSpaces">
+            <summary>
+            Skips all white space characters.
+            </summary>
+        </member>
+        <member name="M:JSONator.JSONParser.Parse(System.String)">
+            <summary>
+            Parses the given JSON string into an object hierarchy.
+            </summary>
+            <param name="json">The JSON string to be parsed.</param>
+            <returns>The parsed root JSON object.</returns>
+        </member>
+        <member name="M:JSONator.JSONParser.ReadString">
+            <summary>
+            Read the name of an object member.
+            </summary>
+            <returns>The parsed name.</returns>
+        </member>
+        <member name="M:JSONator.JSONParser.ReadValue">
+            <summary>
+            Reads a value. The type is automatically determined and the result is from this special type.
+            </summary>
+            <returns>The parsed value.</returns>
+        </member>
+        <member name="M:JSONator.JSONParser.ReadObject">
+            <summary>
+            Reads an object value including all members that it contains.
+            </summary>
+            <returns>The parsed JSON object value.</returns>
+        </member>
+        <member name="M:JSONator.JSONParser.ReadArray">
+            <summary>
+            Reads an array value including all items.
+            </summary>
+            <returns>The parsed JSON array value.</returns>
+        </member>
+        <member name="M:JSONator.JSONParser.ReadBool">
+            <summary>
+            Reads a boolean value.
+            </summary>
+            <returns>The parsed JSON boolean value.</returns>
+        </member>
+        <member name="M:JSONator.JSONParser.ReadNull">
+            <summary>
+            Reads a null value.
+            </summary>
+            <returns>The parsed JSON null value.</returns>
+        </member>
+        <member name="M:JSONator.JSONParser.ReadNumber">
+            <summary>
+            Reads a number value.
+            </summary>
+            <returns>The parsed JSON number value.</returns>
+        </member>
+        <member name="M:JSONator.JSONParser.ReadStringValue">
+            <summary>
+            Reads a string value.
+            </summary>
+            <returns>The parsed JSON string value.</returns>
+        </member>
+        <member name="P:JSONator.JSONParser.CurrentChar">
+            <summary>
+            Gets the character the current parse pointer points to.
+            </summary>
+        </member>
+        <member name="P:JSONator.JSONParser.EOF">
+            <summary>
+            Gets if the parse pointer has reached the end of the file.
+            </summary>
+        </member>
+        <member name="T:JSONator.JSONWriter">
+            <summary>
+            Defines a JSON writer that can be used to convert JSON objects into a JSON string.
+            Supports creation of minified or indented JSON strings.
+            </summary>
+        </member>
+        <member name="M:JSONator.JSONWriter.#ctor">
+            <summary>
+            Creates a new JSON writer that create minified JSON.
+            </summary>
+        </member>
+        <member name="M:JSONator.JSONWriter.#ctor(System.Boolean)">
+            <summary>
+            Creates a new JSON writer and allows to define if minified or indented JSON should be created.
+            </summary>
+            <param name="readable">True for indented JSON. False for minified.</param>
+        </member>
+        <member name="M:JSONator.JSONWriter.WriteJson(JSONator.JSONObjectValue)">
+            <summary>
+            Creates a JSON string from the given JSON object.
+            </summary>
+            <param name="root">The root object of the JSON.</param>
+            <returns>A string represenation of the JSON object and all its members.</returns>
+        </member>
+        <member name="M:JSONator.JSONWriter.WriteValue(JSONator.JSONValue,System.Text.StringBuilder)">
+            <summary>
+            Writes a JSON value to the given string builder.
+            </summary>
+            <param name="value">The value to be written.</param>
+            <param name="builder">The builder to write to.</param>
+        </member>
+        <member name="M:JSONator.JSONWriter.WriteNull(System.Text.StringBuilder)">
+            <summary>
+            Writes a null value to the given string builder.
+            </summary>
+            <param name="builder">The builder to write to.</param>
+        </member>
+        <member name="M:JSONator.JSONWriter.WriteBool(JSONator.JSONBoolValue,System.Text.StringBuilder)">
+            <summary>
+            Writes a bool value to the given string builder.
+            </summary>
+            <param name="value">The bool value to be written.</param>
+            <param name="builder">The builder to write to.</param>
+        </member>
+        <member name="M:JSONator.JSONWriter.WriteNumber(JSONator.JSONNumberValue,System.Text.StringBuilder)">
+            <summary>
+            Writes a number value to the given string builder.
+            </summary>
+            <param name="value">The number value to be written.</param>
+            <param name="builder">The builder to write to.</param>
+        </member>
+        <member name="M:JSONator.JSONWriter.WriteString(JSONator.JSONStringValue,System.Text.StringBuilder)">
+            <summary>
+            Writes a string value to the given string builder.
+            </summary>
+            <param name="value">The string value to be written.</param>
+            <param name="builder">The builder to write to.</param>
+        </member>
+        <member name="M:JSONator.JSONWriter.WriteArray(JSONator.JSONArrayValue,System.Text.StringBuilder)">
+            <summary>
+            Writes an array value to the given string builder.
+            </summary>
+            <param name="value">The array value to be written.</param>
+            <param name="builder">The builder to write to.</param>
+        </member>
+        <member name="M:JSONator.JSONWriter.WriteObject(JSONator.JSONObjectValue,System.Text.StringBuilder)">
+            <summary>
+            Writes an object value to the given string builder.
+            </summary>
+            <param name="value">The object value to be written.</param>
+            <param name="builder">The builder to write to.</param>
+        </member>
+        <member name="P:JSONator.JSONWriter.Readable">
+            <summary>
+            Gets or sets if the generated JSON is minified (false) or indented (true).
+            </summary>
+        </member>
+        <member name="P:JSONator.JSONWriter.CurrentIndent">
+            <summary>
+            Gets the current indentation as a string.
+            </summary>
+        </member>
+    </members>
+</doc>

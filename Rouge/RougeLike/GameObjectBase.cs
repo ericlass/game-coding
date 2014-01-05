@@ -12,8 +12,8 @@ namespace RougeLike
     public abstract void Update(float dt);
     public abstract void Render();
     public abstract void Finish();
-    public abstract StringPairMap DoSave();
-    public abstract void DoLoad(StringPairMap data);
+    protected abstract StringPairMap DoSave();
+    protected abstract void DoLoad(StringPairMap data);
 
     public string Id { get; set; }
     public int ZIndex { get; set; }
@@ -32,26 +32,29 @@ namespace RougeLike
     public StringPairMap Save()
     {
       StringPairMap result = DoSave();
-      result.Add("Id", Id);
-      result.Add("ZIndex", ZIndex.ToString());
-      result.Add("GroupIndex", GroupIndex.ToString());
-      result.Add("Position", Position.ToString());
+      result.Add("id", Id);
+      result.Add("zindex", ZIndex.ToString());
+      result.Add("groupindex", GroupIndex.ToString());
+      result.Add("position", Position.ToString());
       return result;
     }
 
     public void Load(StringPairMap data)
     {
-      Id = data["Id"];
-      ZIndex = int.Parse(data["ZIndex"]);
-      GroupIndex = int.Parse(data["GroupIndex"]);
+      Id = data["id"];
+      ZIndex = int.Parse(data["zindex"]);
+      GroupIndex = int.Parse(data["groupindex"]);
       Vector2f pos = Vector2f.Zero;
-      if (Vector2f.TryParse(data["Position"], ref pos))
+      if (Vector2f.TryParse(data["position"], ref pos))
         Position = pos;
       else
         throw new OkuException("Could not parse position vector!");
       
-      data.Remove("Id");
-      data.Remove("ZIndex");
+      data.Remove("id");
+      data.Remove("zindex");
+      data.Remove("groupindex");
+      data.Remove("position");
+
       DoLoad(data);
     }
 

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using OkuBase.Graphics;
+using JSONator;
 
 namespace RougeLike
 {
@@ -43,6 +45,18 @@ namespace RougeLike
 
       result.Add(scene);
       return result;
+    }
+
+    public SceneList LoadScene(string fileName)
+    {
+      if (!File.Exists(fileName))
+        throw new OkuBase.OkuException("Could not load scene! File " + fileName + " does not exist!");
+
+      StreamReader reader = new StreamReader(fileName);
+
+      JSONParser parser = new JSONParser();
+
+      return null;
     }
 
   }
