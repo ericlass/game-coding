@@ -10,6 +10,9 @@ namespace JSONator
   /// </summary>
   public abstract class JSONValue
   {
+    /// <summary>
+    /// Gets the type of the value this JSON value stores.
+    /// </summary>
     public abstract JSONValueType ValueType { get; }
   }
 }
