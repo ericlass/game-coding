@@ -141,14 +141,15 @@ namespace RougeLike
       }      
     }
 
-    public override StringPairMap DoSave()
+    protected override StringPairMap DoSave()
     {
-      throw new NotImplementedException();
+      //Nothing to do at the moment
+      return new StringPairMap();
     }
 
-    public override void DoLoad(StringPairMap data)
+    protected override void DoLoad(StringPairMap data)
     {
-      throw new NotImplementedException();
+      //Nothing to do at the moment
     }
 
     public override string ToString()

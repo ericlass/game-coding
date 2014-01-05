@@ -114,7 +114,7 @@ namespace OkuBase.Graphics
     }
 
     /// <summary>
-    /// Converts the color into a string in the format "R,G,B,A".
+    /// Converts the color into a string in the HTML color format "#RRGGBBAA".
     /// </summary>
     /// <returns>The color as a string.</returns>
     public override string ToString()

@@ -33,6 +33,10 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
   <ItemGroup>
+    <Reference Include="JSONator, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\JSONator.dll</HintPath>
+    </Reference>
     <Reference Include="OkuBase">
       <HintPath>lib\OkuBase.dll</HintPath>
     </Reference>
@@ -62,6 +66,7 @@
     <Compile Include="EventQueue.cs" />
     <Compile Include="GameData.cs" />
     <Compile Include="GameObjectBase.cs" />
+    <Compile Include="GameObjectFactory.cs" />
     <Compile Include="GameObjectList.cs" />
     <Compile Include="GameUtil.cs" />
     <Compile Include="Orientation.cs" />
@@ -170,5 +175,8 @@
     <None Include="Content\Graphics\tiletest.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lib\JSONator.dll" />
   </ItemGroup>
 </Project>

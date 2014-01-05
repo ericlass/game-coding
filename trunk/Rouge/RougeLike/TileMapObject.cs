@@ -8,7 +8,32 @@ namespace RougeLike
 {
   public class TileMapObject : GameObjectBase
   {
-    private List<Image> _tiles = null;
+    private class Tile
+    {
+      public bool Walkable { get; set; }
+      public int TileIndex { get; set; }
+
+      public Tile()
+      {
+
+      }
+
+      public Tile(bool walkable, int tileIndex)
+      {
+        Walkable = walkable;
+        TileIndex = tileIndex;
+      }
+
+    }
+
+    private int _tileWidth = 16;
+    private int _tileHeight = 16;
+    private Tile[,] _tiles = null;
+    private List<Image> _tileImages = null;
+
+    public TileMapObject()
+    {
+    }
 
     public override string ObjectType
     {
@@ -17,7 +42,18 @@ namespace RougeLike
 
     public override void Init()
     {
-      _tiles = GameUtil.LoadSpriteSheet("tiletest.png", 3, 3);
+      _tileWidth = 3;
+      _tileHeight = 3;
+      _tileImages = GameUtil.LoadSpriteSheet("tiletest.png", _tileWidth, _tileHeight);
+
+      _tiles = new Tile[4, 4];
+      for (int y = 0; y < 4; y++)
+      {
+        for (int x = 0; x < 4; x++)
+        {
+          _tiles[x, y] = new Tile(true, (y * 4) + x);
+        }
+      }
     }
 
     public override void Update(float dt)
@@ -27,26 +63,31 @@ namespace RougeLike
 
     public override void Render()
     {
-      for (int i = 0; i < _tiles.Count; i++)
+      float wy = (_tiles.GetLength(1) / 2) * -_tileHeight;
+      for (int y = 0; y < _tiles.GetLength(1); y++)
       {
-        Oku.Graphics.DrawImage(_tiles[i], ((i - _tiles.Count / 2) * 10.0f), 0);
+        float wx = (_tiles.GetLength(0) / 2) * -_tileWidth;
+        for (int x = 0; x < _tiles.GetLength(0); x++)
+        {
+          Oku.Graphics.DrawImage(_tileImages[_tiles[x,y].TileIndex], wx, wy);
+          wx += _tileWidth;
+        }
+        wy += _tileHeight;
       }
     }
 
     public override void Finish()
     {
-      foreach (Image img in _tiles)
-      {
+      foreach (Image img in _tileImages)
         Oku.Graphics.ReleaseImage(img);
-      }
     }
 
-    public override StringPairMap DoSave()
+    protected override StringPairMap DoSave()
     {
       throw new NotImplementedException();
     }
 
-    public override void DoLoad(StringPairMap data)
+    protected override void DoLoad(StringPairMap data)
     {
       throw new NotImplementedException();
     }

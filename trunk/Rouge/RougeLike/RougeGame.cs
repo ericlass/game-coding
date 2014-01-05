@@ -18,7 +18,8 @@ namespace RougeLike
 
       settings.Graphics.Width = ScreenWidth;
       settings.Graphics.Height = ScreenHeight;
-      settings.Graphics.TextureFilter = OkuBase.Graphics.TextureFilter.NearestNeighbor;
+      settings.Graphics.TextureFilter = TextureFilter.NearestNeighbor;
+      settings.Graphics.BackgroundColor = Color.White;
 
       settings.Audio.DriverName = "null";
 

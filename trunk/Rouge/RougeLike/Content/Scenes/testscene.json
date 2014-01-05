@@ -1,0 +1,30 @@
+{
+  "name" : "Test Scene",
+  "objects":
+  [
+    {
+      "type" : "player",
+      "id" : "playerid",
+      "zindex" : "0",
+      "groupindex" : "0",
+      "position" : "0,0"
+    },
+    {
+      "type" : "square",
+      "id" : "squareid",
+      "zindex" : "0",
+      "groupindex" : "0",
+      "position" : "0,100",
+      "width" : "12",
+      "height" : "16",
+      "color" : "#00FF00"
+    },
+    {
+      "type" : "tilemap",
+      "id" : "tilemapid",
+      "zindex" : "0",
+      "groupindex" : "0",
+      "position" : "0,-100"
+    }
+  ]
+}
