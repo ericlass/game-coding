@@ -135,6 +135,9 @@
     <None Include="Content\Graphics\square.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Content\Scenes\testscene.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="lib\OkuBase.dll" />
     <None Include="lib\OkuDrivers.dll">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>

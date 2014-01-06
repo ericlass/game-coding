@@ -84,12 +84,13 @@ namespace RougeLike
 
     protected override StringPairMap DoSave()
     {
-      throw new NotImplementedException();
+      //throw new NotImplementedException();
+      return null;
     }
 
     protected override void DoLoad(StringPairMap data)
     {
-      throw new NotImplementedException();
+      //throw new NotImplementedException();
     }
   }
 }

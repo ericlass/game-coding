@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using OkuBase;
 using OkuBase.Graphics;
+using JSONator;
 
 namespace RougeLike
 {
@@ -75,6 +76,18 @@ namespace RougeLike
         data = ImageData.FromRaw(tilePixels[i], spriteWidth, spriteHeight);
         Image image = OkuManager.Instance.Graphics.NewImage(data);
         result.Add(image);
+      }
+
+      return result;
+    }
+
+    public static StringPairMap JSONObjectToMap(JSONObjectValue jsonObj)
+    {
+      StringPairMap result = new StringPairMap();
+
+      foreach (string member in jsonObj.Names)
+      {
+        result.Add(member, jsonObj[member].ToString());
       }
 
       return result;
