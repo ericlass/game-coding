@@ -99,5 +99,65 @@ namespace JSONator
       get { return _members.Count; }
     }
 
+    /// <summary>
+    /// Gets the member with the given name as a JSON array value.
+    /// </summary>
+    /// <param name="name">The name of the member.</param>
+    /// <returns>The member as a JSON array value.</returns>
+    public JSONArrayValue GetArray(string name)
+    {
+      return (this[name] as JSONArrayValue);
+    }
+
+    /// <summary>
+    /// Gets the member with the given name as a JSON bool.
+    /// </summary>
+    /// <param name="name">The name of the member.</param>
+    /// <returns>The member as a JSON bool value.</returns>
+    public JSONBoolValue GetBool(string name)
+    {
+      return (this[name] as JSONBoolValue);
+    }
+
+    /// <summary>
+    /// Gets the member with the given name as a JSON null value.
+    /// </summary>
+    /// <param name="name">The name of the member.</param>
+    /// <returns>The member as a JSON null value.</returns>
+    public JSONNullValue GetNull(string name)
+    {
+      return (this[name] as JSONNullValue);
+    }
+
+    /// <summary>
+    /// Gets the member with the given name as a JSON number value.
+    /// </summary>
+    /// <param name="name">The name of the member.</param>
+    /// <returns>The member as a JSON number value.</returns>
+    public JSONNumberValue GetNumber(string name)
+    {
+      return (this[name] as JSONNumberValue);
+    }
+
+    /// <summary>
+    /// Gets the member with the given name as a JSON object value.
+    /// </summary>
+    /// <param name="name">The name of the member.</param>
+    /// <returns>The member as a JSON object value.</returns>
+    public JSONObjectValue GetObject(string name)
+    {
+      return (this[name] as JSONObjectValue);
+    }
+
+    /// <summary>
+    /// Gets the member with the given name as a JSON string value.
+    /// </summary>
+    /// <param name="name">The name of the member.</param>
+    /// <returns>The member as a JSON string value.</returns>
+    public JSONStringValue GetString(string name)
+    {
+      return (this[name] as JSONStringValue);
+    }
+
   }
 }
