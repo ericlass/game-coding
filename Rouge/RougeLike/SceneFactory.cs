@@ -49,14 +49,36 @@ namespace RougeLike
 
     public SceneList LoadScene(string fileName)
     {
-      if (!File.Exists(fileName))
-        throw new OkuBase.OkuException("Could not load scene! File " + fileName + " does not exist!");
+      string fullPath = Path.Combine(".\\Content\\Scenes", fileName);
 
-      StreamReader reader = new StreamReader(fileName);
+      if (!File.Exists(fullPath))
+        throw new OkuBase.OkuException("Could not load scene! File " + fullPath + " does not exist!");
+
+      StreamReader reader = new StreamReader(fullPath);
+      string json = reader.ReadToEnd();
+      reader.Close();
 
       JSONParser parser = new JSONParser();
+      JSONObjectValue root = parser.Parse(json);
 
-      return null;
+      JSONObjectValue sceneObj = (JSONObjectValue)root["scene"];
+      JSONArrayValue objectsArray = (JSONArrayValue)root["objects"];
+
+      Scene scene = new Scene();
+      scene.Name = sceneObj["name"].ToString();
+
+      for (int i = 0; i < objectsArray.Count; i++)
+      {
+        JSONObjectValue obj = (JSONObjectValue)objectsArray[i];
+        StringPairMap data = GameUtil.JSONObjectToMap(obj);
+        GameObjectBase gameObject = GameObjectFactory.Instance.CreateObject(data);
+        scene.GameObjects.Add(gameObject);
+      }
+
+      SceneList result = new SceneList();
+      result.Add(scene);
+
+      return result;
     }
 
   }

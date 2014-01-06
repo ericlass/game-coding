@@ -30,7 +30,8 @@ namespace RougeLike
     {
       _target = OkuManager.Instance.Graphics.NewRenderTarget(ScreenWidth / 2, ScreenHeight / 2);
 
-      GameData.Instance.Scenes = SceneFactory.Instance.GetHardCodedScene();
+      //GameData.Instance.Scenes = SceneFactory.Instance.GetHardCodedScene();
+      GameData.Instance.Scenes = SceneFactory.Instance.LoadScene("testscene.json");
       GameData.Instance.ActiveScene = GameData.Instance.Scenes[0];
     }
     
