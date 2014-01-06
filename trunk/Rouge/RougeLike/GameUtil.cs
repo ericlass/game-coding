@@ -93,5 +93,15 @@ namespace RougeLike
       return result;
     }
 
+    public static JSONObjectValue ParseJsonFile(string filePath)
+    {
+      StreamReader reader = new StreamReader(filePath);
+      string jsonStr = reader.ReadToEnd();
+      reader.Close();
+
+      JSONParser parser = new JSONParser();
+      return parser.Parse(jsonStr);
+    }
+
   }
 }

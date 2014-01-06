@@ -201,6 +201,48 @@
             <param name="name">The name of the member.</param>
             <returns>True if the member was removed. False if the object does not contain a member with the given name.</returns>
         </member>
+        <member name="M:JSONator.JSONObjectValue.GetArray(System.String)">
+            <summary>
+            Gets the member with the given name as a JSON array value.
+            </summary>
+            <param name="name">The name of the member.</param>
+            <returns>The member as a JSON array value.</returns>
+        </member>
+        <member name="M:JSONator.JSONObjectValue.GetBool(System.String)">
+            <summary>
+            Gets the member with the given name as a JSON bool.
+            </summary>
+            <param name="name">The name of the member.</param>
+            <returns>The member as a JSON bool value.</returns>
+        </member>
+        <member name="M:JSONator.JSONObjectValue.GetNull(System.String)">
+            <summary>
+            Gets the member with the given name as a JSON null value.
+            </summary>
+            <param name="name">The name of the member.</param>
+            <returns>The member as a JSON null value.</returns>
+        </member>
+        <member name="M:JSONator.JSONObjectValue.GetNumber(System.String)">
+            <summary>
+            Gets the member with the given name as a JSON number value.
+            </summary>
+            <param name="name">The name of the member.</param>
+            <returns>The member as a JSON number value.</returns>
+        </member>
+        <member name="M:JSONator.JSONObjectValue.GetObject(System.String)">
+            <summary>
+            Gets the member with the given name as a JSON object value.
+            </summary>
+            <param name="name">The name of the member.</param>
+            <returns>The member as a JSON object value.</returns>
+        </member>
+        <member name="M:JSONator.JSONObjectValue.GetString(System.String)">
+            <summary>
+            Gets the member with the given name as a JSON string value.
+            </summary>
+            <param name="name">The name of the member.</param>
+            <returns>The member as a JSON string value.</returns>
+        </member>
         <member name="P:JSONator.JSONObjectValue.ValueType">
             <summary>
             Gets the type of the value.
