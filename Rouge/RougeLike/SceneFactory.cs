@@ -54,12 +54,7 @@ namespace RougeLike
       if (!File.Exists(fullPath))
         throw new OkuBase.OkuException("Could not load scene! File " + fullPath + " does not exist!");
 
-      StreamReader reader = new StreamReader(fullPath);
-      string json = reader.ReadToEnd();
-      reader.Close();
-
-      JSONParser parser = new JSONParser();
-      JSONObjectValue root = parser.Parse(json);
+      JSONObjectValue root = GameUtil.ParseJsonFile(fullPath);
 
       JSONObjectValue sceneObj = (JSONObjectValue)root["scene"];
       JSONArrayValue objectsArray = (JSONArrayValue)root["objects"];

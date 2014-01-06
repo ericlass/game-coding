@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using OkuBase;
 using OkuBase.Graphics;
 using OkuBase.Geometry;
+using JSONator;
 
 namespace RougeLike
 {
@@ -23,9 +25,9 @@ namespace RougeLike
         Walkable = walkable;
         TileIndex = tileIndex;
       }
-
     }
 
+    private string _mapFile = null;
     private int _tileWidth = 16;
     private int _tileHeight = 16;
     private Tile[,] _tiles = null;
@@ -42,18 +44,30 @@ namespace RougeLike
 
     public override void Init()
     {
-      _tileWidth = 3;
-      _tileHeight = 3;
-      _tileImages = GameUtil.LoadSpriteSheet("tiletest.png", _tileWidth, _tileHeight);
+      string fullPath = Path.Combine(".\\Content\\Maps", _mapFile);
+      if (!File.Exists(fullPath))
+        throw new OkuException("Map file '" + _mapFile + "' does not exist!");
 
-      _tiles = new Tile[4, 4];
+      JSONObjectValue root = GameUtil.ParseJsonFile(fullPath);
+
+      int width = (int)(root.GetNumber("width").Value);
+      int height = (int)(root.GetNumber("height").Value);
+
+      _tileWidth = (int)(root.GetNumber("tilewidth").Value);
+      _tileHeight = (int)(root.GetNumber("tileheight").Value);
+
+      _tileImages = GameUtil.LoadSpriteSheet(root.GetString("tilesheet").Value, _tileWidth, _tileHeight);
+
+      //TODO: Load tiles
+
+      /*_tiles = new Tile[4, 4];
       for (int y = 0; y < 4; y++)
       {
         for (int x = 0; x < 4; x++)
         {
           _tiles[x, y] = new Tile(true, (y * 4) + x);
         }
-      }
+      }*/
     }
 
     public override void Update(float dt)
@@ -84,13 +98,14 @@ namespace RougeLike
 
     protected override StringPairMap DoSave()
     {
-      //throw new NotImplementedException();
-      return null;
+      StringPairMap result = new StringPairMap();
+      result.Add("mapfile", _mapFile);
+      return result;
     }
 
     protected override void DoLoad(StringPairMap data)
     {
-      //throw new NotImplementedException();
+      _mapFile = data["mapfile"];
     }
   }
 }

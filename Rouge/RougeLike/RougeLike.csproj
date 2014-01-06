@@ -182,4 +182,7 @@
   <ItemGroup>
     <Content Include="lib\JSONator.dll" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\Maps\" />
+  </ItemGroup>
 </Project>

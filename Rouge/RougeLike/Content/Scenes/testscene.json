@@ -27,7 +27,8 @@
       "id" : "tilemapid",
       "zindex" : "0",
       "groupindex" : "0",
-      "position" : "0,-100"
+      "position" : "0,-100",
+      "mapfile" : "testmap.json"
     }
   ]
 }
