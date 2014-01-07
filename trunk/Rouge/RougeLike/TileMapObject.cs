@@ -42,6 +42,29 @@ namespace RougeLike
       get { return "tilemap"; }
     }
 
+    public Vector2f WorldToTile(Vector2f p)
+    {
+      Vector2f result = Vector2f.Zero;
+      result.X = (int)((p.X - Position.X) / _tileWidth);
+      result.X = (int)((p.Y - Position.Y) / _tileHeight);
+      return result;
+    }
+
+    public Vector2f MoveBox(Rectangle2f box, Vector2f movement)
+    {
+      Vector2f min = WorldToTile(box.Min);
+      Vector2f max = WorldToTile(box.Max);
+
+      float bound = 0;
+
+      if (movement.X > 0)
+        bound = box.Max.X;
+      else
+        bound = box.Min.X;
+
+      //TODO: Continue
+    }
+
     public override void Init()
     {
       string fullPath = Path.Combine(".\\Content\\Maps", _mapFile);
