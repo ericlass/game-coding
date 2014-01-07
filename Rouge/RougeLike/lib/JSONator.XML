@@ -19,6 +19,48 @@
             Gets the type of the value this JSON value stores.
             </summary>
         </member>
+        <member name="M:JSONator.JSONArrayValue.GetArray(System.Int32)">
+            <summary>
+            Gets the value at the given index as an array.
+            </summary>
+            <param name="index">The index of the value.</param>
+            <returns>The value at the given index as an array.</returns>
+        </member>
+        <member name="M:JSONator.JSONArrayValue.GetBool(System.Int32)">
+            <summary>
+            Gets the value at the given index as a boolean.
+            </summary>
+            <param name="index">The index of the value.</param>
+            <returns>The value at the given index as a boolean.</returns>
+        </member>
+        <member name="M:JSONator.JSONArrayValue.GetNull(System.Int32)">
+            <summary>
+            Gets the value at the given index as null.
+            </summary>
+            <param name="index">The index of the value.</param>
+            <returns>The value at the given index as null.</returns>
+        </member>
+        <member name="M:JSONator.JSONArrayValue.GetNumber(System.Int32)">
+            <summary>
+            Gets the value at the given index as a number.
+            </summary>
+            <param name="index">The index of the value.</param>
+            <returns>The value at the given index as a number.</returns>
+        </member>
+        <member name="M:JSONator.JSONArrayValue.GetObject(System.Int32)">
+            <summary>
+            Gets the value at the given index as an object.
+            </summary>
+            <param name="index">The index of the value.</param>
+            <returns>The value at the given index as an object.</returns>
+        </member>
+        <member name="M:JSONator.JSONArrayValue.GetString(System.Int32)">
+            <summary>
+            Gets the value at the given index as a string.
+            </summary>
+            <param name="index">The index of the value.</param>
+            <returns>The value at the given index as a string.</returns>
+        </member>
         <member name="M:JSONator.JSONArrayValue.IndexOf(JSONator.JSONValue)">
             <summary>
             Searches for the given value and returns the zero base index of it.

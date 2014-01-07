@@ -135,6 +135,9 @@
     <None Include="Content\Graphics\square.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Content\Maps\testmap.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Content\Scenes\testscene.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -182,7 +185,5 @@
   <ItemGroup>
     <Content Include="lib\JSONator.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Content\Maps\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
