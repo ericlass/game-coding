@@ -58,21 +58,23 @@ namespace RougeLike
 
       _tileImages = GameUtil.LoadSpriteSheet(root.GetString("tilesheet").Value, _tileWidth, _tileHeight);
 
-      //TODO: Load tiles
+      JSONArrayValue tiles = root.GetArray("tiles");
+      JSONArrayValue images = root.GetArray("images");
 
-      /*_tiles = new Tile[4, 4];
-      for (int y = 0; y < 4; y++)
+      _tiles = new Tile[width, height];
+      for (int i = 0; i < tiles.Count; i++)
       {
-        for (int x = 0; x < 4; x++)
+        JSONArrayValue tileRow = tiles.GetArray(i);
+        JSONArrayValue imageRow = images.GetArray(i);
+        for (int j = 0; j < tileRow.Count; j++)
         {
-          _tiles[x, y] = new Tile(true, (y * 4) + x);
+          _tiles[j, i] = new Tile(tileRow.GetBool(j).Value, (int)(imageRow.GetNumber(j).Value));
         }
-      }*/
+      }
     }
 
     public override void Update(float dt)
-    {
-      
+    {      
     }
 
     public override void Render()

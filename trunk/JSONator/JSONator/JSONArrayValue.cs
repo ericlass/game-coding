@@ -18,6 +18,66 @@ namespace JSONator
       get { return JSONValueType.Array; }
     }
 
+    /// <summary>
+    /// Gets the value at the given index as an array.
+    /// </summary>
+    /// <param name="index">The index of the value.</param>
+    /// <returns>The value at the given index as an array.</returns>
+    public JSONArrayValue GetArray(int index)
+    {
+      return this[index] as JSONArrayValue;
+    }
+
+    /// <summary>
+    /// Gets the value at the given index as a boolean.
+    /// </summary>
+    /// <param name="index">The index of the value.</param>
+    /// <returns>The value at the given index as a boolean.</returns>
+    public JSONBoolValue GetBool(int index)
+    {
+      return this[index] as JSONBoolValue;
+    }
+
+    /// <summary>
+    /// Gets the value at the given index as null.
+    /// </summary>
+    /// <param name="index">The index of the value.</param>
+    /// <returns>The value at the given index as null.</returns>
+    public JSONNullValue GetNull(int index)
+    {
+      return this[index] as JSONNullValue;
+    }
+
+    /// <summary>
+    /// Gets the value at the given index as a number.
+    /// </summary>
+    /// <param name="index">The index of the value.</param>
+    /// <returns>The value at the given index as a number.</returns>
+    public JSONNumberValue GetNumber(int index)
+    {
+      return this[index] as JSONNumberValue;
+    }
+
+    /// <summary>
+    /// Gets the value at the given index as an object.
+    /// </summary>
+    /// <param name="index">The index of the value.</param>
+    /// <returns>The value at the given index as an object.</returns>
+    public JSONObjectValue GetObject(int index)
+    {
+      return this[index] as JSONObjectValue;
+    }
+
+    /// <summary>
+    /// Gets the value at the given index as a string.
+    /// </summary>
+    /// <param name="index">The index of the value.</param>
+    /// <returns>The value at the given index as a string.</returns>
+    public JSONStringValue GetString(int index)
+    {
+      return this[index] as JSONStringValue;
+    }
+
     #region IList<JSONValue> Member
 
     /// <summary>
