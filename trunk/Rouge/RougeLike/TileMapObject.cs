@@ -42,25 +42,88 @@ namespace RougeLike
       get { return "tilemap"; }
     }
 
+    public Rectangle2f GetMapRect()
+    {
+      float mapWidth = _tiles.GetLength(0) * _tileWidth;
+      float mapHeight = _tiles.GetLength(1) * _tileHeight;
+
+      float mapLeft = Position.X - (mapWidth * 0.5f);
+      float mapBottom = Position.Y - (mapHeight * 0.5f);
+
+      return new Rectangle2f(mapLeft, mapBottom, mapWidth, mapHeight);
+    }
+
     public Vector2f WorldToTile(Vector2f p)
     {
+      Rectangle2f mapRect = GetMapRect();
       Vector2f result = Vector2f.Zero;
-      result.X = (int)((p.X - Position.X) / _tileWidth);
-      result.X = (int)((p.Y - Position.Y) / _tileHeight);
+      result.X = (int)((p.X - mapRect.Min.X) / _tileWidth);
+      result.X = (int)((p.Y - mapRect.Min.Y) / _tileHeight);
       return result;
+    }
+
+    public Rectangle2f GetTileRect(int x, int y)
+    {
+      Rectangle2f mapRect = GetMapRect();
+
+      float left = mapRect.Min.X + (x * _tileWidth);
+      float bottom = mapRect.Min.Y + (y * _tileHeight);
+
+      return new Rectangle2f(left, bottom, _tileWidth, _tileHeight);
+    }
+
+    public bool IsInside(Vector2f p)
+    {
+      return GetMapRect().IsInside(p);
     }
 
     public Vector2f MoveBox(Rectangle2f box, Vector2f movement)
     {
-      Vector2f min = WorldToTile(box.Min);
-      Vector2f max = WorldToTile(box.Max);
+      Rectangle2f mapRect = GetMapRect();
 
-      float bound = 0;
+      if (movement.X != 0)
+      {
+        if (movement.X > 0)
+        {
+          int left = (int)((box.Min.X - mapRect.Min.X) / _tileWidth);
+          int right = (int)(((box.Max.X + movement.X) - mapRect.Min.X) / _tileWidth);
+          int bottom = (int)((box.Min.Y - mapRect.Min.Y) / _tileHeight);
+          int top = (int)((box.Max.Y - mapRect.Min.Y) / _tileHeight);
 
-      if (movement.X > 0)
-        bound = box.Max.X;
-      else
-        bound = box.Min.X;
+          float disp = movement.X;
+          for (int j = bottom; j <= top; j++)
+          {
+            for (int i = left; i <= right; i++)
+            {
+              if (!_tiles[i, j].Walkable)
+              {
+                Rectangle2f tileRect = GetTileRect(i, j);
+                disp = Math.Min(disp, tileRect.Min.X); // THIS IS STUPID! COMPARING DISPLACEMENT WITH WORLD COORDINATES!
+              }
+            }
+          }
+        }
+        else
+        {
+          int right = (int)((box.Min.X - mapRect.Min.X) / _tileWidth);
+          int left = (int)(((box.Max.X + movement.X) - mapRect.Min.X) / _tileWidth);
+          int bottom = (int)((box.Min.Y - mapRect.Min.Y) / _tileHeight);
+          int top = (int)((box.Max.Y - mapRect.Min.Y) / _tileHeight);
+
+          float disp = movement.X;
+          for (int j = bottom; j <= top; j++)
+          {
+            for (int i = right; i >= left; i--)
+            {
+              if (!_tiles[i, j].Walkable)
+              {
+                Rectangle2f tileRect = GetTileRect(i, j);
+                disp = Math.Max(disp, tileRect.Max.X); // THIS IS STUPID! COMPARING DISPLACEMENT WITH WORLD COORDINATES!
+              }
+            }
+          }
+        }
+      }
 
       //TODO: Continue
     }
