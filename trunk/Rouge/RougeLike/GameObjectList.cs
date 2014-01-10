@@ -38,5 +38,15 @@ namespace RougeLike
       }
     }
 
+    public GameObjectBase GetObjectById(string id)
+    {
+      foreach (GameObjectBase obj in this)
+      {
+        if (obj.Id == id)
+          return obj;
+      }
+      return null;
+    }
+
   }
 }

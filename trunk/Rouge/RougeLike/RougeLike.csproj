@@ -70,6 +70,7 @@
     <Compile Include="GameObjectList.cs" />
     <Compile Include="GameUtil.cs" />
     <Compile Include="Orientation.cs" />
+    <Compile Include="PlayerControllerObject.cs" />
     <Compile Include="PlayerObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
