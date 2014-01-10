@@ -154,7 +154,7 @@ namespace RougeLike
 
     public override string ToString()
     {
-      return "player";
+      return ObjectType;
     }
     
   }
