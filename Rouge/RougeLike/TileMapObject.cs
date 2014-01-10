@@ -80,6 +80,7 @@ namespace RougeLike
     public Vector2f MoveBox(Rectangle2f box, Vector2f movement)
     {
       Rectangle2f mapRect = GetMapRect();
+      Vector2f result = Vector2f.Zero;
 
       if (movement.X != 0)
       {
@@ -90,6 +91,7 @@ namespace RougeLike
           int bottom = (int)((box.Min.Y - mapRect.Min.Y) / _tileHeight);
           int top = (int)((box.Max.Y - mapRect.Min.Y) / _tileHeight);
 
+          float bound = box.Max.X;
           float disp = movement.X;
           for (int j = bottom; j <= top; j++)
           {
@@ -98,10 +100,11 @@ namespace RougeLike
               if (!_tiles[i, j].Walkable)
               {
                 Rectangle2f tileRect = GetTileRect(i, j);
-                disp = Math.Min(disp, tileRect.Min.X); // THIS IS STUPID! COMPARING DISPLACEMENT WITH WORLD COORDINATES!
+                disp = Math.Min(disp, tileRect.Min.X - bound);
               }
             }
           }
+          result.X = disp;
         }
         else
         {
@@ -110,6 +113,7 @@ namespace RougeLike
           int bottom = (int)((box.Min.Y - mapRect.Min.Y) / _tileHeight);
           int top = (int)((box.Max.Y - mapRect.Min.Y) / _tileHeight);
 
+          float bound = box.Min.X;
           float disp = movement.X;
           for (int j = bottom; j <= top; j++)
           {
@@ -118,14 +122,63 @@ namespace RougeLike
               if (!_tiles[i, j].Walkable)
               {
                 Rectangle2f tileRect = GetTileRect(i, j);
-                disp = Math.Max(disp, tileRect.Max.X); // THIS IS STUPID! COMPARING DISPLACEMENT WITH WORLD COORDINATES!
+                disp = Math.Max(disp, tileRect.Max.X - bound);
               }
             }
           }
+          result.X = disp;
         }
       }
 
-      //TODO: Continue
+      if (movement.Y != 0)
+      {
+        if (movement.Y > 0)
+        {
+          int left = (int)((box.Min.X - mapRect.Min.X) / _tileWidth);
+          int right = (int)((box.Max.X - mapRect.Min.X) / _tileWidth);
+          int bottom = (int)((box.Min.Y - mapRect.Min.Y) / _tileHeight);
+          int top = (int)(((box.Max.Y + movement.Y) - mapRect.Min.Y) / _tileHeight);
+
+          float bound = box.Max.Y;
+          float disp = movement.Y;
+          for (int j = left; j <= right; j++)
+          {
+            for (int i = bottom; i <= top; i++)
+            {
+              if (!_tiles[j, i].Walkable)
+              {
+                Rectangle2f tileRect = GetTileRect(j, i);
+                disp = Math.Min(disp, tileRect.Min.Y - bound);
+              }
+            }
+          }
+          result.Y = disp;
+        }
+        else
+        {
+          int left = (int)((box.Min.X - mapRect.Min.X) / _tileWidth);
+          int right = (int)((box.Max.X - mapRect.Min.X) / _tileWidth);
+          int bottom = (int)(((box.Min.Y + movement.Y) - mapRect.Min.Y) / _tileHeight);
+          int top = (int)((box.Max.Y - mapRect.Min.Y) / _tileHeight);
+
+          float bound = box.Min.Y;
+          float disp = movement.Y;
+          for (int j = left; j <= right; j++)
+          {
+            for (int i = bottom; i <= top; i++)
+            {
+              if (!_tiles[j, i].Walkable)
+              {
+                Rectangle2f tileRect = GetTileRect(j, i);
+                disp = Math.Max(disp, tileRect.Max.Y - bound);
+              }
+            }
+          }
+          result.Y = disp;
+        }
+      }
+
+      return result;
     }
 
     public override void Init()
@@ -154,7 +207,7 @@ namespace RougeLike
         JSONArrayValue imageRow = images.GetArray(i);
         for (int j = 0; j < tileRow.Count; j++)
         {
-          _tiles[j, i] = new Tile(tileRow.GetBool(j).Value, (int)(imageRow.GetNumber(j).Value));
+          _tiles[j, (width - i - 1)] = new Tile(tileRow.GetBool(j).Value, (int)(imageRow.GetNumber(j).Value));
         }
       }
     }

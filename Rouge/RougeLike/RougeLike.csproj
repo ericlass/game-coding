@@ -182,6 +182,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Graphics\grass_tiles.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\stonetiles.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="lib\JSONator.dll" />
   </ItemGroup>
   <ItemGroup />
