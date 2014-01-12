@@ -38,6 +38,7 @@ namespace RougeLike
     public override void Update(float dt)
     {
       GameData.Instance.ActiveScene.Update(dt);
+      //System.Threading.Thread.Sleep(20);
     }
     
     public override void Render()

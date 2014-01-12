@@ -29,6 +29,15 @@
       "groupindex" : "0",
       "position" : "0,0",
       "mapfile" : "testmap.json"
+    },
+    {
+      "type" : "playercontroller",
+      "id" : "pc01",
+      "zindex" : "0",
+      "groupindex" : "0",
+      "position" : "0,0",
+      "playerid" : "playerid",
+      "tilemapid" : "tilemapid"
     }
   ]
 }
