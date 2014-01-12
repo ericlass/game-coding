@@ -23,7 +23,7 @@ namespace RougeLike
     {
     }
 
-    private bool _debugDraw = true;
+    private bool _debugDraw = false;
     private SceneList _scenes = new SceneList();
     private Scene _activeScene = null;
 
