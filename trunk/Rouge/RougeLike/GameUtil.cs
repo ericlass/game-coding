@@ -64,7 +64,10 @@ namespace RougeLike
         //int tpx = i % spriteWidth;
         //int tpy = (i / data.Height) % spriteHeight;
         //int tpIndex = (tpy * spriteWidth) + tpx;
-        int tpIndex = (((i / data.Height) % spriteHeight) * spriteWidth) + (i % spriteWidth);
+        //int tpx = x % spriteWidth;
+        //int tpy = y % spriteHeight;
+        //int tpIndex = (tpy * spriteWidth) + tpx;
+        int tpIndex = ((y % spriteHeight) * spriteWidth) + (x % spriteWidth);
 
         tilePixels[tileIndex][tpIndex] = pixels[i];
       }
