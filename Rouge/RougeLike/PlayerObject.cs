@@ -18,7 +18,7 @@ namespace RougeLike
   {
     private Orientation _orientation = Orientation.Down;
     private PlayerState _state = PlayerState.Idle;
-    private Rectangle2f _hitBox = new Rectangle2f(-4, -8, 8, 15);
+    private Rectangle2f _hitBox = new Rectangle2f(-4, -8, 8, 10);
     private DoubleKeyMap<PlayerState, Orientation, Animation> _animations = new DoubleKeyMap<PlayerState, Orientation, Animation>();
 
     public override string ObjectType
