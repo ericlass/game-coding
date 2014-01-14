@@ -189,6 +189,9 @@
     <Content Include="Content\Graphics\stonetiles.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\walls2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\walltiles.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
