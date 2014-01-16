@@ -183,18 +183,21 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Graphics\grass_tiles.png">
+    <None Include="Content\Graphics\grass_tiles.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Graphics\stonetiles.png">
+    </None>
+    <None Include="Content\Graphics\stonetiles.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Graphics\walls2.png">
+    </None>
+    <None Include="Content\Graphics\walls2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Graphics\walltiles.png">
+    </None>
+    <None Include="Content\Graphics\walls3.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
+    <None Include="Content\Graphics\walltiles.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="lib\JSONator.dll" />
   </ItemGroup>
   <ItemGroup />
