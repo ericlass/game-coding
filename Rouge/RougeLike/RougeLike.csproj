@@ -189,13 +189,13 @@
     <None Include="Content\Graphics\stonetiles.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Graphics\walls2.png">
+    <None Include="Content\Graphics\walls_bigger.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Graphics\walls3.png">
+    <None Include="Content\Graphics\walls_shaded.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Graphics\walltiles.png">
+    <None Include="Content\Graphics\walls_simple.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="lib\JSONator.dll" />
