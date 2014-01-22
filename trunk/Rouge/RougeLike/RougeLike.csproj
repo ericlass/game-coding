@@ -72,6 +72,7 @@
     <Compile Include="Orientation.cs" />
     <Compile Include="PlayerControllerObject.cs" />
     <Compile Include="PlayerObject.cs" />
+    <Compile Include="ProceduralTileMapObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RougeGame.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="SceneList.cs" />
     <Compile Include="SquareObject.cs" />
     <Compile Include="StringPairMap.cs" />
+    <Compile Include="TileMapObjectBase.cs" />
     <Compile Include="TileMapObject.cs" />
     <None Include="Content\Graphics\player_down_idle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

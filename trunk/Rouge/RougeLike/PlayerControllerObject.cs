@@ -11,7 +11,7 @@ namespace RougeLike
     private string _tilemapId = null;
 
     private PlayerObject _player = null;
-    private TileMapObject _tileMap = null;
+    private TileMapObjectBase _tileMap = null;
 
     public override string ObjectType
     {
@@ -21,7 +21,7 @@ namespace RougeLike
     public override void Init()
     {
       _player = GameData.Instance.ActiveScene.GameObjects.GetObjectById(_playerId) as PlayerObject;
-      _tileMap = GameData.Instance.ActiveScene.GameObjects.GetObjectById(_tilemapId) as TileMapObject;
+      _tileMap = GameData.Instance.ActiveScene.GameObjects.GetObjectById(_tilemapId) as TileMapObjectBase;
     }
 
     public override void Update(float dt)

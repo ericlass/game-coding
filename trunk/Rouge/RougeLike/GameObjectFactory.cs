@@ -29,6 +29,7 @@ namespace RougeLike
       RegisterCreator("square", new CreateObjectDelegate(CreateSquareObject));
       RegisterCreator("tilemap", new CreateObjectDelegate(CreateTileMapObject));
       RegisterCreator("playercontroller", new CreateObjectDelegate(CreatePlayerControllerObject));
+      RegisterCreator("proceduraltilemap", CreateProceduralTileMapObject);
     }
 
     public void RegisterCreator(string objectType, CreateObjectDelegate creator)
@@ -65,6 +66,13 @@ namespace RougeLike
     private GameObjectBase CreateTileMapObject(StringPairMap data)
     {
       TileMapObject result = new TileMapObject();
+      result.Load(data);
+      return result;
+    }
+
+    private GameObjectBase CreateProceduralTileMapObject(StringPairMap data)
+    {
+      ProceduralTileMapObject result = new ProceduralTileMapObject();
       result.Load(data);
       return result;
     }
