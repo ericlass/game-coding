@@ -13,12 +13,15 @@
       "position" : "0,0"
     },
     {
-      "type" : "tilemap",
+      "type" : "proceduraltilemap",
       "id" : "tilemapid",
       "zindex" : "-1",
       "groupindex" : "0",
       "position" : "0,0",
-      "mapfile" : "testmap.json"
+      "width" : "20",
+      "height" : "20",
+      "rooms" : "1",
+      "tilesheet" : "walls_bigger.png"
     },
     {
       "type" : "playercontroller",
