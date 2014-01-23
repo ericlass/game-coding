@@ -39,9 +39,9 @@ namespace RougeLike
 
       _tiles = new Tile[_width, _height];
 
-      for (int y = 0; y < _tiles.GetLength(0); y++)
+      for (int y = 0; y < _tiles.GetLength(1); y++)
       {
-        for (int x = 0; x < _tiles.GetLength(1); x++)
+        for (int x = 0; x < _tiles.GetLength(0); x++)
         {
           _tiles[x, y] = new Tile(true, 0, -1);
         }
@@ -50,10 +50,10 @@ namespace RougeLike
       Random rand = new Random();
       for (int i = 0; i < _numRooms; i++)
       {
-        int left = _width / 2 - rand.Next(3, 10);
-        int right = _width / 2 + rand.Next(3, 10);
-        int top = _height / 2 + rand.Next(3, 8);
-        int bottom = _height / 2 - rand.Next(3, 8);
+        int left = _width / 2 - rand.Next(3, 6);
+        int right = _width / 2 + rand.Next(3, 6);
+        int top = _height / 2 + rand.Next(3, 5);
+        int bottom = _height / 2 - rand.Next(3, 5);
 
         for (int y = bottom; y <= top; y++)
         {
@@ -65,9 +65,9 @@ namespace RougeLike
         }
       }
 
-      for (int y = 0; y < _tiles.GetLength(0); y++)
+      for (int y = 0; y < _tiles.GetLength(1); y++)
       {
-        for (int x = 0; x < _tiles.GetLength(1); x++)
+        for (int x = 0; x < _tiles.GetLength(0); x++)
         {
           if (IsBorderTile(x, y))
           {
@@ -89,19 +89,19 @@ namespace RougeLike
       if (x == 0 || x == _tiles.GetLength(1) - 1)
         return true;
 
-      if (_tiles[x - 1, y].Tag != thisTag)
+      if (_tiles[x - 1, y].Tag < 0)
         return true;
 
-      if (_tiles[x + 1, y].Tag != thisTag)
+      if (_tiles[x + 1, y].Tag < 0)
         return true;
 
       if (y == 0 || y == _tiles.GetLength(0) - 1)
         return true;
 
-      if (_tiles[x, y - 1].Tag != thisTag)
+      if (_tiles[x, y - 1].Tag < 0)
         return true;
 
-      if (_tiles[x, y + 1].Tag != thisTag)
+      if (_tiles[x, y + 1].Tag < 0)
         return true;
 
       return false;

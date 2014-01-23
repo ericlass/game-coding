@@ -63,6 +63,8 @@ namespace RougeLike
           pos.Y += disp.Y;
           _player.Position = pos;
 
+          //Oku.Graphics.Viewport.Center = pos;
+
           //System.Diagnostics.Debug.WriteLine(_player.Position.ToString());
 
           if (dy > 0)
