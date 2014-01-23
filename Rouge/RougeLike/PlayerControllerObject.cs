@@ -63,8 +63,6 @@ namespace RougeLike
           pos.Y += disp.Y;
           _player.Position = pos;
 
-          //Oku.Graphics.Viewport.Center = pos;
-
           //System.Diagnostics.Debug.WriteLine(_player.Position.ToString());
 
           if (dy > 0)
@@ -97,6 +95,8 @@ namespace RougeLike
           throw new Exception("Unsupported player state: '" + _player.State.ToString() + "'");
 
       }
+
+      Oku.Graphics.Viewport.Center = _player.Position;
     }
 
     public override void Render()
