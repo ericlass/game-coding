@@ -18,9 +18,9 @@
       "zindex" : "-1",
       "groupindex" : "0",
       "position" : "0,0",
-      "width" : "20",
-      "height" : "20",
-      "rooms" : "1",
+      "width" : "40",
+      "height" : "23",
+      "rooms" : "4",
       "tilesheet" : "walls_bigger.png"
     },
     {
