@@ -2,6 +2,7 @@
 using OkuBase;
 using OkuBase.Settings;
 using OkuBase.Graphics;
+using OkuBase.Geometry;
 
 namespace RougeLike
 {
@@ -43,9 +44,11 @@ namespace RougeLike
     
     public override void Render()
     {
+      Vector2f center = Oku.Graphics.Viewport.Center;
+
       OkuManager.Instance.Graphics.SetRenderTarget(_target);
       
-      OkuManager.Instance.Graphics.Viewport.SetValues(ScreenWidth * -0.25f, ScreenWidth * 0.25f, ScreenHeight * -0.25f, ScreenHeight * 0.25f);
+      OkuManager.Instance.Graphics.Viewport.SetValues(ScreenWidth * -0.25f + center.X, ScreenWidth * 0.25f + center.X, ScreenHeight * -0.25f + center.Y, ScreenHeight * 0.25f + center.Y);
       GameData.Instance.ActiveScene.Render();
       
       OkuManager.Instance.Graphics.SetRenderTarget(null);
