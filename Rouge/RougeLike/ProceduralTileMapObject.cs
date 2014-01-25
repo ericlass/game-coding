@@ -63,7 +63,7 @@ namespace RougeLike
           for (int x = left; x <= right; x++)
           {
             _tiles[x, y].Tag = i;
-            _tiles[x, y].TileIndex = 16;
+            _tiles[x, y].TileIndex = 8;
           }
         }
 
@@ -125,6 +125,30 @@ namespace RougeLike
         return true;
 
       return false;
+    }
+
+    private byte GetBorderType(int x, int y)
+    {
+      byte result = 0;
+
+      byte north = 1;
+      byte south = 2;
+      byte east = 4;
+      byte west = 8;
+
+      if (_tiles[x, y + 1].Tag >= 0)
+        result = (byte)(result | north);
+
+      if (_tiles[x, y - 1].Tag >= 0)
+        result = (byte)(result | south);
+
+      if (_tiles[x + 1, y].Tag >= 0)
+        result = (byte)(result | east);
+
+      if (_tiles[x - 1, y].Tag >= 0)
+        result = (byte)(result | west);
+
+      return result;
     }
 
     public override void Update(float dt)
