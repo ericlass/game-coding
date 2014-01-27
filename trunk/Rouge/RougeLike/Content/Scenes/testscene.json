@@ -21,7 +21,8 @@
       "width" : "80",
       "height" : "43",
       "rooms" : "26",
-      "tilesheet" : "walls_bigger.png"
+      "tilesheet" : "walls_bigger.png",
+      "lights" : "light01"
     },
     {
       "type" : "playercontroller",
@@ -31,6 +32,24 @@
       "position" : "0,0",
       "playerid" : "playerid",
       "tilemapid" : "tilemapid"
+    },
+    {
+      "type" : "light",
+      "id" : "light01",
+      "zindex" : "0",
+      "groupindex" : "0",
+      "position" : "0,0",
+      "color" : "#FFF2CC",
+      "radius" : "150"
+    },
+    {
+      "type" : "hardjoint",
+      "id" : "joint01",
+      "zindex" : "0",
+      "groupindex" : "0",
+      "position" : "0,0",
+      "source" : "playerid",
+      "target" : "light01"
     }
   ]
 }
