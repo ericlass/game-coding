@@ -69,6 +69,8 @@
     <Compile Include="GameObjectFactory.cs" />
     <Compile Include="GameObjectList.cs" />
     <Compile Include="GameUtil.cs" />
+    <Compile Include="HardJointObject.cs" />
+    <Compile Include="LightObject.cs" />
     <Compile Include="Orientation.cs" />
     <Compile Include="PlayerControllerObject.cs" />
     <Compile Include="PlayerObject.cs" />
