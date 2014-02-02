@@ -29,7 +29,7 @@ namespace RougeLike
     
     public override void Initialize()
     {
-      _target = OkuManager.Instance.Graphics.NewRenderTarget(ScreenWidth / 2, ScreenHeight / 2);
+      _target = OkuManager.Instance.Graphics.NewRenderTarget(ScreenWidth, ScreenHeight);
 
       //GameData.Instance.Scenes = SceneFactory.Instance.GetHardCodedScene();
       GameData.Instance.Scenes = SceneFactory.Instance.LoadScene("testscene.json");
@@ -48,12 +48,12 @@ namespace RougeLike
 
       OkuManager.Instance.Graphics.SetRenderTarget(_target);
       
-      OkuManager.Instance.Graphics.Viewport.SetValues(ScreenWidth * -0.25f + center.X, ScreenWidth * 0.25f + center.X, ScreenHeight * -0.25f + center.Y, ScreenHeight * 0.25f + center.Y);
+      //OkuManager.Instance.Graphics.Viewport.SetValues(ScreenWidth * -0.25f + center.X, ScreenWidth * 0.25f + center.X, ScreenHeight * -0.25f + center.Y, ScreenHeight * 0.25f + center.Y);
       GameData.Instance.ActiveScene.Render();
       
       OkuManager.Instance.Graphics.SetRenderTarget(null);
       
-      OkuManager.Instance.Graphics.Viewport.SetValues(ScreenWidth * -0.5f, ScreenWidth * 0.5f, ScreenHeight * -0.5f, ScreenHeight * 0.5f);
+      //OkuManager.Instance.Graphics.Viewport.SetValues(ScreenWidth * -0.5f, ScreenWidth * 0.5f, ScreenHeight * -0.5f, ScreenHeight * 0.5f);
       OkuManager.Instance.Graphics.DrawScreenAlignedQuad(_target);
     }
     
