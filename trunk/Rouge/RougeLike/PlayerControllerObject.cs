@@ -77,6 +77,9 @@ namespace RougeLike
           if (dx == 0 && dy == 0)
             _player.SwitchState(PlayerState.Idle);
 
+          if (Oku.Input.Keyboard.KeyIsDown(Keys.Space))
+            _player.SwitchState(PlayerState.Attack);
+
           break;
 
         case PlayerState.Attack:

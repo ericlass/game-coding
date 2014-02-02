@@ -21,8 +21,7 @@
       "width" : "80",
       "height" : "43",
       "rooms" : "26",
-      "tilesheet" : "walls_bigger.png",
-      "lights" : "light01"
+      "tilesheet" : "walls_bigger.png"
     },
     {
       "type" : "playercontroller",
