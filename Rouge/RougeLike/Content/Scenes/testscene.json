@@ -10,18 +10,14 @@
       "id" : "playerid",
       "zindex" : "0",
       "groupindex" : "0",
-      "position" : "0,0"
+      "position" : "0,50"
     },
     {
-      "type" : "proceduraltilemap",
-      "id" : "tilemapid",
+      "type" : "worldmap",
+      "id" : "worldmapid",
       "zindex" : "-1",
       "groupindex" : "0",
-      "position" : "0,0",
-      "width" : "80",
-      "height" : "43",
-      "rooms" : "26",
-      "tilesheet" : "walls_bigger.png"
+      "position" : "0,0"
     },
     {
       "type" : "playercontroller",
@@ -30,7 +26,7 @@
       "groupindex" : "0",
       "position" : "0,0",
       "playerid" : "playerid",
-      "tilemapid" : "tilemapid"
+      "tilemapid" : "worldmapid"
     },
     {
       "type" : "light",
