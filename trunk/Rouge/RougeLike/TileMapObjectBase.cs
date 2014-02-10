@@ -43,58 +43,10 @@ namespace RougeLike
     protected Tile[,] _tiles = null;
     protected List<Image> _tileImages = null;
 
-    private List<string> _lightIds = null;
-    protected List<LightObject> _lights = null;
-
     private const float CollisionOffset = 0.1f; // Defines a fixed offset for collision detection to handle edge cases
 
     public abstract override string ObjectType { get; }
     public abstract override void Update(float dt);
-
-    public override void Init()
-    {
-      _lights = new List<LightObject>();
-      if (_lightIds != null)
-      {
-        foreach (string lightId in _lightIds)
-        {
-          LightObject light = GameData.Instance.ActiveScene.GameObjects.GetObjectById(lightId) as LightObject;
-          _lights.Add(light);
-        }
-        _lightIds = null;
-      }
-    }
-
-    protected override StringPairMap DoSave()
-    {
-      StringBuilder builder = new StringBuilder();
-      bool first = true;
-      foreach (LightObject light in _lights)
-      {
-        if (first)
-          first = false;
-        else
-          builder.Append(',');
-
-        builder.Append(light.Id);        
-      }
-
-      StringPairMap result = new StringPairMap();
-      result.Add("lights", builder.ToString());
-      return result;
-    }
-    
-    protected override void DoLoad(StringPairMap data)
-    {
-      if (data.ContainsKey("lights"))
-      {
-        string lights = data["lights"];
-        string[] singleIds = lights.Split(',');
-        _lightIds = new List<string>();
-        foreach (string lid in singleIds)
-          _lightIds.Add(lid.Trim());
-      }
-    }
 
     public Rectangle2f GetMapRect()
     {
@@ -249,20 +201,6 @@ namespace RougeLike
         for (int x = 0; x < _tiles.GetLength(0); x++)
         {
           Color tint = Color.White;
-
-          if (_lights.Count > 0)
-          {
-            Vector2f tileCenter = GetTileRect(x, y).GetCenter();
-            tint = Color.Black;
-            foreach (LightObject light in _lights)
-            {
-              float ratio = (1.0f - (Math.Min(1.0f, Math.Max(0.0f, (Vector2f.Distance(tileCenter, light.Position) / light.Radius)))));
-              ratio *= ratio;
-              tint.R += (byte)(light.Color.R * ratio);
-              tint.G += (byte)(light.Color.G * ratio);
-              tint.B += (byte)(light.Color.B * ratio);
-            }
-          }
 
           Oku.Graphics.DrawImage(_tileImages[_tiles[x, y].TileIndex], wx, wy, tint);
 

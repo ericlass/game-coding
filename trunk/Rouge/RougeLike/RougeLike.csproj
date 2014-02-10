@@ -85,6 +85,7 @@
     <Compile Include="StringPairMap.cs" />
     <Compile Include="TileMapObjectBase.cs" />
     <Compile Include="TileMapObject.cs" />
+    <Compile Include="WorldMapObject.cs" />
     <None Include="Content\Graphics\player_down_idle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
