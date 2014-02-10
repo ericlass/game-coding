@@ -33,8 +33,6 @@ namespace RougeLike
 
     public override void Init()
     {
-      base.Init();
-
       _tileWidth = 16;
       _tileHeight = 16;
       _tileImages = GameUtil.LoadSpriteSheet("walls_bigger.png", 16, 16);
@@ -159,7 +157,7 @@ namespace RougeLike
 
     protected override StringPairMap DoSave()
     {
-      StringPairMap result = base.DoSave();
+      StringPairMap result = new StringPairMap();
       result.Add("width", _width.ToString());
       result.Add("height", _height.ToString());
       result.Add("rooms", _numRooms.ToString());
@@ -168,8 +166,6 @@ namespace RougeLike
 
     protected override void DoLoad(StringPairMap data)
     {
-      base.DoLoad(data);
-
       _width = int.Parse(data["width"]);
       _height = int.Parse(data["height"]);
       _numRooms = int.Parse(data["rooms"]);
@@ -177,5 +173,6 @@ namespace RougeLike
       if (_width <= 0 || _height <= 0 || _numRooms <= 0)
         throw new OkuException("None of width, height or rooms can be <= 0 for a procedural tile map!");
     }
+
   }
 }

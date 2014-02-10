@@ -23,8 +23,6 @@ namespace RougeLike
 
     public override void Init()
     {
-      base.Init();
-
       string fullPath = Path.Combine(".\\Content\\Maps", _mapFile);
       if (!File.Exists(fullPath))
         throw new OkuException("Map file '" + _mapFile + "' does not exist!");
@@ -66,7 +64,7 @@ namespace RougeLike
 
     protected override StringPairMap DoSave()
     {
-      StringPairMap result = base.DoSave();
+      StringPairMap result = new StringPairMap();
       result.Add("mapfile", _mapFile);
       return result;
     }
