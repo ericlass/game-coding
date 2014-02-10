@@ -72,6 +72,7 @@
     <Compile Include="HardJointObject.cs" />
     <Compile Include="LightObject.cs" />
     <Compile Include="Orientation.cs" />
+    <Compile Include="PerlinNoise.cs" />
     <Compile Include="PlayerControllerObject.cs" />
     <Compile Include="PlayerObject.cs" />
     <Compile Include="ProceduralTileMapObject.cs" />
@@ -201,6 +202,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Content\Graphics\walls_simple.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Graphics\simple_tiles.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="lib\JSONator.dll" />

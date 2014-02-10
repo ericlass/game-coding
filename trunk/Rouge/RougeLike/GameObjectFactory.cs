@@ -32,6 +32,7 @@ namespace RougeLike
       RegisterCreator("proceduraltilemap", CreateProceduralTileMapObject);
       RegisterCreator("light", CreateLightObject);
       RegisterCreator("hardjoint", CreateHardJointObject);
+      RegisterCreator("worldmap", CreateWorldMapObject);
     }
 
     public void RegisterCreator(string objectType, CreateObjectDelegate creator)
@@ -96,6 +97,13 @@ namespace RougeLike
     private GameObjectBase CreateHardJointObject(StringPairMap data)
     {
       HardJointObject result = new HardJointObject();
+      result.Load(data);
+      return result;
+    }
+
+    private GameObjectBase CreateWorldMapObject(StringPairMap data)
+    {
+      WorldMapObject result = new WorldMapObject();
       result.Load(data);
       return result;
     }
