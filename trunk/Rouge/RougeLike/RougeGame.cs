@@ -20,7 +20,7 @@ namespace RougeLike
       settings.Graphics.Width = ScreenWidth;
       settings.Graphics.Height = ScreenHeight;
       settings.Graphics.TextureFilter = TextureFilter.NearestNeighbor;
-      settings.Graphics.BackgroundColor = Color.White;
+      settings.Graphics.BackgroundColor = new Color(54, 154, 239);
 
       settings.Audio.DriverName = "null";
 
@@ -38,8 +38,15 @@ namespace RougeLike
     
     public override void Update(float dt)
     {
+      long freq, tick1, tick2;
+      OkuBase.Platform.Kernel32.QueryPerformanceFrequency(out freq);
+      OkuBase.Platform.Kernel32.QueryPerformanceCounter(out tick1);
+
       GameData.Instance.ActiveScene.Update(dt);
-      //System.Threading.Thread.Sleep(20);
+
+      OkuBase.Platform.Kernel32.QueryPerformanceCounter(out tick2);
+      float time = (tick2 - tick1) / (float)freq;
+      System.Diagnostics.Debug.WriteLine("Update: " + time.ToString());
     }
     
     public override void Render()
@@ -49,7 +56,16 @@ namespace RougeLike
       OkuManager.Instance.Graphics.SetRenderTarget(_target);
       
       //OkuManager.Instance.Graphics.Viewport.SetValues(ScreenWidth * -0.25f + center.X, ScreenWidth * 0.25f + center.X, ScreenHeight * -0.25f + center.Y, ScreenHeight * 0.25f + center.Y);
+
+      long freq, tick1, tick2;
+      OkuBase.Platform.Kernel32.QueryPerformanceFrequency(out freq);
+      OkuBase.Platform.Kernel32.QueryPerformanceCounter(out tick1);
+      
       GameData.Instance.ActiveScene.Render();
+
+      OkuBase.Platform.Kernel32.QueryPerformanceCounter(out tick2);
+      float time = (tick2 - tick1) / (float)freq;
+      System.Diagnostics.Debug.WriteLine("Render: " + time.ToString());
       
       OkuManager.Instance.Graphics.SetRenderTarget(null);
       
