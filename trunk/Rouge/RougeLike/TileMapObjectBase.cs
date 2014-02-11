@@ -207,13 +207,16 @@ namespace RougeLike
       float mapLeft = mapRect.Min.X;
       float mapBottom = mapRect.Min.Y;
 
+      SpriteBatch batch = new SpriteBatch();
+      batch.Begin();
       float wy = mapBottom + (bottom * _tileHeight);
       for (int y = bottom; y <= top; y++)
       {
         float wx = mapLeft + (left * _tileWidth);
         for (int x = left; x <= right; x++)
         {
-          Oku.Graphics.DrawImage(_tileImages[_tiles[x, y].TileIndex], wx, wy);
+          batch.Add(_tileImages[_tiles[x, y].TileIndex], new Vector2f(wx, wy));
+          //Oku.Graphics.DrawImage(_tileImages[_tiles[x, y].TileIndex], wx, wy);
 
           if (GameData.Instance.DebugDraw && !_tiles[x,y].Walkable)
           {
@@ -225,6 +228,8 @@ namespace RougeLike
         }
         wy += _tileHeight;
       }
+      batch.End();
+      batch.Draw();
 
       if (GameData.Instance.DebugDraw)
       {

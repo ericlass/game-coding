@@ -21,6 +21,7 @@ namespace RougeLike
       settings.Graphics.Height = ScreenHeight;
       settings.Graphics.TextureFilter = TextureFilter.NearestNeighbor;
       settings.Graphics.BackgroundColor = new Color(54, 154, 239);
+      settings.Graphics.BackgroundColor = Color.Magenta;
 
       settings.Audio.DriverName = "null";
 
@@ -38,15 +39,15 @@ namespace RougeLike
     
     public override void Update(float dt)
     {
-      long freq, tick1, tick2;
-      OkuBase.Platform.Kernel32.QueryPerformanceFrequency(out freq);
-      OkuBase.Platform.Kernel32.QueryPerformanceCounter(out tick1);
+      //long freq, tick1, tick2;
+      //OkuBase.Platform.Kernel32.QueryPerformanceFrequency(out freq);
+      //OkuBase.Platform.Kernel32.QueryPerformanceCounter(out tick1);
 
       GameData.Instance.ActiveScene.Update(dt);
 
-      OkuBase.Platform.Kernel32.QueryPerformanceCounter(out tick2);
-      float time = (tick2 - tick1) / (float)freq;
-      System.Diagnostics.Debug.WriteLine("Update: " + time.ToString());
+      //OkuBase.Platform.Kernel32.QueryPerformanceCounter(out tick2);
+      //float time = (tick2 - tick1) / (float)freq;
+      //System.Diagnostics.Debug.WriteLine("Update: " + time.ToString());
     }
     
     public override void Render()

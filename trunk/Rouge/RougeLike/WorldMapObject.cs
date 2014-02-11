@@ -29,7 +29,7 @@ namespace RougeLike
       PerlinNoise noise = new PerlinNoise(Environment.TickCount);
       for (int x = 0; x < _tiles.GetLength(0); x++)
       {
-        int floor = (int)(noise.Noise(x, 0, 3, 60) * 15.0f) + (_tiles.GetLength(1) / 3);
+        int floor = (int)(noise.Noise(x, 0, 3, 100) * 15.0f) + (_tiles.GetLength(1) / 3);
         for (int y = 0; y < floor; y++)
         {
           _tiles[x, y].TileIndex = 2;
