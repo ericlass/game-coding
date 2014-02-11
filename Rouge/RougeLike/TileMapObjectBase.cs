@@ -64,7 +64,7 @@ namespace RougeLike
       Rectangle2f mapRect = GetMapRect();
       Vector2f result = Vector2f.Zero;
       result.X = (int)((p.X - mapRect.Min.X) / _tileWidth);
-      result.X = (int)((p.Y - mapRect.Min.Y) / _tileHeight);
+      result.Y = (int)((p.Y - mapRect.Min.Y) / _tileHeight);
       return result;
     }
 
@@ -194,21 +194,33 @@ namespace RougeLike
     {
       Rectangle2f mapRect = GetMapRect();
 
-      float wy = mapRect.Min.Y + (_tileHeight / 2.0f);
-      for (int y = 0; y < _tiles.GetLength(1); y++)
-      {
-        float wx = mapRect.Min.X + (_tileWidth / 2.0f);
-        for (int x = 0; x < _tiles.GetLength(0); x++)
-        {
-          Color tint = Color.White;
+      Vector2f leftBottom = new Vector2f(Oku.Graphics.Viewport.Left, Oku.Graphics.Viewport.Bottom);
+      leftBottom = WorldToTile(leftBottom);
+      Vector2f rightTop = new Vector2f(Oku.Graphics.Viewport.Right, Oku.Graphics.Viewport.Top);
+      rightTop = WorldToTile(rightTop);
 
-          Oku.Graphics.DrawImage(_tileImages[_tiles[x, y].TileIndex], wx, wy, tint);
+      int left = Math.Max(0, (int)leftBottom.X);
+      int right = Math.Min(_tiles.GetLength(0) - 1, (int)rightTop.X + 1);
+      int bottom = Math.Max(0, (int)leftBottom.Y);
+      int top = Math.Min(_tiles.GetLength(1) - 1, (int)rightTop.Y);
+
+      float mapLeft = mapRect.Min.X;
+      float mapBottom = mapRect.Min.Y;
+
+      float wy = mapBottom + (bottom * _tileHeight);
+      for (int y = bottom; y <= top; y++)
+      {
+        float wx = mapLeft + (left * _tileWidth);
+        for (int x = left; x <= right; x++)
+        {
+          Oku.Graphics.DrawImage(_tileImages[_tiles[x, y].TileIndex], wx, wy);
 
           if (GameData.Instance.DebugDraw && !_tiles[x,y].Walkable)
           {
             Rectangle2f tileRect = GetTileRect(x, y);
             Oku.Graphics.DrawRectangle(tileRect.Min.X, tileRect.Max.X, tileRect.Min.Y, tileRect.Max.Y, DebugTintColor);
           }
+
           wx += _tileWidth;
         }
         wy += _tileHeight;

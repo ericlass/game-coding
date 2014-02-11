@@ -14,7 +14,9 @@ namespace RougeLike
 
     public override void Init()
     {
-      _tiles = new Tile[100, 40];
+      _tileImages = GameUtil.LoadSpriteSheet("simple_tiles.png", 16, 16);
+
+      _tiles = new Tile[1000, 75];
 
       for (int y = 0; y < _tiles.GetLength(1); y++)
       {
@@ -22,13 +24,12 @@ namespace RougeLike
         {
           _tiles[x, y] = new Tile(true, 0);
         }
-      }
-      _tileImages = GameUtil.LoadSpriteSheet("simple_tiles.png", 16, 16);
+      }     
 
-      PerlinNoise noise = new PerlinNoise();
+      PerlinNoise noise = new PerlinNoise(Environment.TickCount);
       for (int x = 0; x < _tiles.GetLength(0); x++)
       {
-        int floor = (int)(noise.Noise(x, 0, 3, 50) * 10.0f) + (_tiles.GetLength(1) / 2);
+        int floor = (int)(noise.Noise(x, 0, 3, 60) * 15.0f) + (_tiles.GetLength(1) / 3);
         for (int y = 0; y < floor; y++)
         {
           _tiles[x, y].TileIndex = 2;
