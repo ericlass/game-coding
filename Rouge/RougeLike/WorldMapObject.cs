@@ -22,7 +22,7 @@ namespace RougeLike
       {
         for (int x = 0; x < _tiles.GetLength(0); x++)
         {
-          _tiles[x, y] = new Tile(true, 0);
+          _tiles[x, y] = new Tile(true, -1);
         }
       }     
 

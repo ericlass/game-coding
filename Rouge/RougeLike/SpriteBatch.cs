@@ -13,15 +13,28 @@ namespace RougeLike
   {
     private struct BatchedSprite
     {
+      public Vector2f Positions;
+      public Color Tint;
+
+      public BatchedSprite(Vector2f pos, Color tint)
+      {
+        Positions = pos;
+        Tint = tint;
+      }
+    }
+
+    private struct CompiledBatch
+    {
       public ImageBase Image;
       public Vector2f[] Vertices;
       public Vector2f[] TexCoords;
+      public Color[] Colors;
       public int Count;
     }
 
     private Dictionary<int, ImageBase> _images = new Dictionary<int,ImageBase>();
-    private Dictionary<int, List<Vector2f>> _sprites = new Dictionary<int, List<Vector2f>>();
-    private List<BatchedSprite> _batches = new List<BatchedSprite>();
+    private Dictionary<int, List<BatchedSprite>> _sprites = new Dictionary<int, List<BatchedSprite>>();
+    private List<CompiledBatch> _batches = new List<CompiledBatch>();
     
     /// <summary>
     /// Creates a new sprite batch.
@@ -44,21 +57,32 @@ namespace RougeLike
     /// </summary>
     /// <param name="image">The image to be drawn.</param>
     /// <param name="position">The position to draw at.</param>
-    public void Add(ImageBase image, Vector2f position)
+    /// <param name="tint">The tint color for the sprite.</param>
+    public void Add(ImageBase image, Vector2f position, Color tint)
     {
       if (!_images.ContainsKey(image.Id))
         _images.Add(image.Id, image);
 
-      List<Vector2f> spriteList;
+      List<BatchedSprite> spriteList;
       if (!_sprites.ContainsKey(image.Id))
       {
-        spriteList = new List<Vector2f>();
+        spriteList = new List<BatchedSprite>();
         _sprites.Add(image.Id, spriteList);
       }
       else
         spriteList = _sprites[image.Id];
 
-      spriteList.Add(position);
+      spriteList.Add(new BatchedSprite(position, tint));
+    }
+
+    /// <summary>
+    /// Adds a new sprite to the batch with the given image and position.
+    /// </summary>
+    /// <param name="image">The image to be drawn.</param>
+    /// <param name="position">The position to draw at.</param>
+    public void Add(ImageBase image, Vector2f position)
+    {
+      Add(image, position, Color.White);
     }
 
     /// <summary>
@@ -69,18 +93,19 @@ namespace RougeLike
       foreach (int imageId in _images.Keys)
       {
         ImageBase image = _images[imageId];
-        List<Vector2f> positions = _sprites[imageId];
+        List<BatchedSprite> sprites = _sprites[imageId];
 
-        Vector2f[] pos = new Vector2f[positions.Count * 4];
-        Vector2f[] tex = new Vector2f[positions.Count * 4];
+        Vector2f[] pos = new Vector2f[sprites.Count * 4];
+        Vector2f[] tex = new Vector2f[sprites.Count * 4];
+        Color[] colors = new Color[sprites.Count * 4];
 
-        for (int i = 0; i < positions.Count; i++)
+        for (int i = 0; i < sprites.Count; i++)
         {
           int start = i * 4;
-          Vector2f p = positions[i];
+          BatchedSprite spr = sprites[i];
 
-          float left = p.X;
-          float bottom = p.Y;
+          float left = spr.Positions.X;
+          float bottom = spr.Positions.Y;
           float right = left + image.Width;          
           float top = bottom + image.Height;          
 
@@ -107,13 +132,20 @@ namespace RougeLike
 
           tex[start + 3].X = 1;
           tex[start + 3].Y = 0;
+
+          Color col = spr.Tint;
+          colors[start] = col;
+          colors[start + 1] = col;
+          colors[start + 2] = col;
+          colors[start + 3] = col;
         }
 
-        BatchedSprite batch = new BatchedSprite();
+        CompiledBatch batch = new CompiledBatch();
         batch.Image = image;
         batch.Vertices = pos;
         batch.TexCoords = tex;
-        batch.Count = positions.Count * 4;
+        batch.Count = sprites.Count * 4;
+        batch.Colors = colors;
         _batches.Add(batch);
       }
     }
@@ -123,8 +155,8 @@ namespace RougeLike
     /// </summary>
     public void Draw()
     {
-      foreach (BatchedSprite batch in _batches)
-        OkuBase.OkuManager.Instance.Graphics.DrawMesh(batch.Vertices, batch.TexCoords, null, batch.Count, PrimitiveType.Quads, batch.Image);
+      foreach (CompiledBatch batch in _batches)
+        OkuBase.OkuManager.Instance.Graphics.DrawMesh(batch.Vertices, batch.TexCoords, batch.Colors, batch.Count, PrimitiveType.Quads, batch.Image);
     }
 
   }
