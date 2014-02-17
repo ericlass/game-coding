@@ -215,13 +215,31 @@ namespace RougeLike
         float wx = mapLeft + (left * _tileWidth);
         for (int x = left; x <= right; x++)
         {
-          batch.Add(_tileImages[_tiles[x, y].TileIndex], new Vector2f(wx, wy));
-          //Oku.Graphics.DrawImage(_tileImages[_tiles[x, y].TileIndex], wx, wy);
-
-          if (GameData.Instance.DebugDraw && !_tiles[x,y].Walkable)
+          Tile tile = _tiles[x, y];
+          if (tile.TileIndex >= 0)
           {
-            Rectangle2f tileRect = GetTileRect(x, y);
-            Oku.Graphics.DrawRectangle(tileRect.Min.X, tileRect.Max.X, tileRect.Min.Y, tileRect.Max.Y, DebugTintColor);
+            Color tint = Color.White;
+
+            int y2 = y + 1;
+            float value = 1.0f;
+            while (y2 < _tiles.GetLength(1) && _tiles[x, y2].TileIndex >= 0)
+            {
+              value -= 0.15f;
+              if (value <= 0)
+                break;
+              y2++;
+            }
+
+            tint *= Math.Max(0, value);
+
+            batch.Add(_tileImages[_tiles[x, y].TileIndex], new Vector2f(wx, wy), tint);
+            //Oku.Graphics.DrawImage(_tileImages[_tiles[x, y].TileIndex], wx, wy);
+
+            if (GameData.Instance.DebugDraw && !_tiles[x, y].Walkable)
+            {
+              Rectangle2f tileRect = GetTileRect(x, y);
+              Oku.Graphics.DrawRectangle(tileRect.Min.X, tileRect.Max.X, tileRect.Min.Y, tileRect.Max.Y, DebugTintColor);
+            }
           }
 
           wx += _tileWidth;

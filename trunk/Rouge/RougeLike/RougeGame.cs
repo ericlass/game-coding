@@ -20,8 +20,8 @@ namespace RougeLike
       settings.Graphics.Width = ScreenWidth;
       settings.Graphics.Height = ScreenHeight;
       settings.Graphics.TextureFilter = TextureFilter.NearestNeighbor;
-      settings.Graphics.BackgroundColor = new Color(54, 154, 239);
-      settings.Graphics.BackgroundColor = Color.Magenta;
+      settings.Graphics.BackgroundColor = new Color(111, 161, 231);
+      //settings.Graphics.BackgroundColor = Color.Magenta;
 
       settings.Audio.DriverName = "null";
 
