@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using OkuBase.Geometry;
 
 namespace RougeLike
 {
@@ -40,6 +39,16 @@ namespace RougeLike
 
     public override void Update(float dt)
     {
+      if (Oku.Input.Mouse.ButtonIsDown(OkuBase.Input.MouseButton.Left))
+      {
+        Vector2f mousePos = Oku.Graphics.ScreenToWorld(Oku.Input.Mouse.X, Oku.Input.Mouse.Y);
+        if (IsInside(mousePos))
+        {
+          mousePos = WorldToTile(mousePos);
+          _tiles[(int)mousePos.X, (int)mousePos.Y].TileIndex = -1;
+          _tiles[(int)mousePos.X, (int)mousePos.Y].Walkable = true;
+        }          
+      }
     }
 
     protected override void DoLoad(StringPairMap data)

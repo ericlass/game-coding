@@ -220,11 +220,19 @@ namespace RougeLike
           {
             Color tint = Color.White;
 
-            int y2 = y + 1;
             float value = 1.0f;
-            while (y2 < _tiles.GetLength(1) && _tiles[x, y2].TileIndex >= 0)
+
+            //Light propagation
+
+
+            //Lighting from above
+            int y2 = y + 1;
+            value = 1.0f;
+            while (y2 < _tiles.GetLength(1))
             {
-              value -= 0.15f;
+              if (_tiles[x, y2].TileIndex >= 0)
+                value -= 0.15f;
+
               if (value <= 0)
                 break;
               y2++;
