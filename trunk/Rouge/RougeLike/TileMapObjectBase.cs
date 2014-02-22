@@ -222,16 +222,13 @@ namespace RougeLike
 
             float value = 1.0f;
 
-            //Light propagation
-
-
             //Lighting from above
             int y2 = y + 1;
             value = 1.0f;
             while (y2 < _tiles.GetLength(1))
             {
-              if (_tiles[x, y2].TileIndex >= 0)
-                value -= 0.15f;
+              if (!_tiles[x, y2].Walkable)
+                value -= 0.2f;
 
               if (value <= 0)
                 break;
