@@ -8,10 +8,37 @@ namespace RougeLike
 {
   public class RougeGame : OkuGame
   {
+    private const string VertexShaderSource =
+      "void main()\n" +
+      "{\n" +
+      "  gl_Position    = gl_ModelViewProjectionMatrix * gl_Vertex;\n" +
+      "  gl_TexCoord[0] = gl_MultiTexCoord0;\n" +
+      "}\n";
+
+    private const string BlackPixelShaderSource =
+      "uniform sampler2D tex;\n" +
+      "\n" +
+      "void main()\n" +
+      "{\n" +
+      "  vec4 texCol = texture2D(tex, gl_TexCoord[0].xy);\n" +
+      "  gl_FragColor = vec4(0, 0, 0, texCol.a);\n" +
+      "}";
+
+    private const string ColorPixelShaderSource =
+      "uniform sampler2D tex;\n" +
+      "\n" +
+      "void main()\n" +
+      "{\n" +
+      "  vec4 texCol = texture2D(tex, gl_TexCoord[0].xy);\n" +
+      "  gl_FragColor = texCol;\n" +
+      "}";
+
     private const int ScreenWidth = 1280;
     private const int ScreenHeight = 720;
 
     private RenderTarget _target = null;
+    private ShaderProgram _blackShader = null;
+    private ShaderProgram _colorShader = null;
 
     public override OkuSettings Configure()
     {
@@ -31,6 +58,13 @@ namespace RougeLike
     public override void Initialize()
     {
       _target = OkuManager.Instance.Graphics.NewRenderTarget(ScreenWidth, ScreenHeight);
+
+      Shader vertexShader = new Shader(VertexShaderSource, ShaderType.VertexShader);
+      Shader blackShader = new Shader(BlackPixelShaderSource, ShaderType.PixelShader);
+      _blackShader = OkuManager.Instance.Graphics.NewShaderProgram(vertexShader, blackShader);
+
+      Shader colorShader = new Shader(ColorPixelShaderSource, ShaderType.PixelShader);
+      _colorShader = OkuManager.Instance.Graphics.NewShaderProgram(vertexShader, colorShader);
 
       //GameData.Instance.Scenes = SceneFactory.Instance.GetHardCodedScene();
       GameData.Instance.Scenes = SceneFactory.Instance.LoadScene("testscene.json");
@@ -55,7 +89,9 @@ namespace RougeLike
       Vector2f center = Oku.Graphics.Viewport.Center;
 
       OkuManager.Instance.Graphics.SetRenderTarget(_target);
-      
+      OkuManager.Instance.Graphics.UseShaderProgram(_blackShader);
+      OkuManager.Instance.Graphics.BackgroundColor = Color.White;
+            
       //OkuManager.Instance.Graphics.Viewport.SetValues(ScreenWidth * -0.25f + center.X, ScreenWidth * 0.25f + center.X, ScreenHeight * -0.25f + center.Y, ScreenHeight * 0.25f + center.Y);
 
       long freq, tick1, tick2;
@@ -69,6 +105,7 @@ namespace RougeLike
       System.Diagnostics.Debug.WriteLine("Render: " + time.ToString());
       
       OkuManager.Instance.Graphics.SetRenderTarget(null);
+      OkuManager.Instance.Graphics.UseShaderProgram(null);
       
       //OkuManager.Instance.Graphics.Viewport.SetValues(ScreenWidth * -0.5f, ScreenWidth * 0.5f, ScreenHeight * -0.5f, ScreenHeight * 0.5f);
       OkuManager.Instance.Graphics.DrawScreenAlignedQuad(_target);
