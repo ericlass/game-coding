@@ -36,7 +36,8 @@ namespace RougeLike
     private const int ScreenWidth = 1280;
     private const int ScreenHeight = 720;
 
-    private RenderTarget _target = null;
+    private RenderTarget _shadowTarget = null;
+    private RenderTarget _scaleTarget = null;
     private ShaderProgram _blackShader = null;
     private ShaderProgram _colorShader = null;
 
@@ -57,7 +58,8 @@ namespace RougeLike
     
     public override void Initialize()
     {
-      _target = OkuManager.Instance.Graphics.NewRenderTarget(ScreenWidth, ScreenHeight);
+      _shadowTarget = OkuManager.Instance.Graphics.NewRenderTarget(ScreenWidth, ScreenHeight);
+      _scaleTarget = OkuManager.Instance.Graphics.NewRenderTarget(ScreenWidth, ScreenHeight);
 
       Shader vertexShader = new Shader(VertexShaderSource, ShaderType.VertexShader);
       Shader blackShader = new Shader(BlackPixelShaderSource, ShaderType.PixelShader);
@@ -88,12 +90,10 @@ namespace RougeLike
     {
       Vector2f center = Oku.Graphics.Viewport.Center;
 
-      OkuManager.Instance.Graphics.SetRenderTarget(_target);
+      OkuManager.Instance.Graphics.SetRenderTarget(_shadowTarget);
       OkuManager.Instance.Graphics.UseShaderProgram(_blackShader);
       OkuManager.Instance.Graphics.BackgroundColor = Color.White;
             
-      //OkuManager.Instance.Graphics.Viewport.SetValues(ScreenWidth * -0.25f + center.X, ScreenWidth * 0.25f + center.X, ScreenHeight * -0.25f + center.Y, ScreenHeight * 0.25f + center.Y);
-
       long freq, tick1, tick2;
       OkuBase.Platform.Kernel32.QueryPerformanceFrequency(out freq);
       OkuBase.Platform.Kernel32.QueryPerformanceCounter(out tick1);
@@ -107,8 +107,7 @@ namespace RougeLike
       OkuManager.Instance.Graphics.SetRenderTarget(null);
       OkuManager.Instance.Graphics.UseShaderProgram(null);
       
-      //OkuManager.Instance.Graphics.Viewport.SetValues(ScreenWidth * -0.5f, ScreenWidth * 0.5f, ScreenHeight * -0.5f, ScreenHeight * 0.5f);
-      OkuManager.Instance.Graphics.DrawScreenAlignedQuad(_target);
+      OkuManager.Instance.Graphics.DrawScreenAlignedQuad(_shadowTarget);
     }
     
   }
