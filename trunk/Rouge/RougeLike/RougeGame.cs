@@ -15,13 +15,69 @@ namespace RougeLike
       "  gl_TexCoord[0] = gl_MultiTexCoord0;\n" +
       "}\n";
 
-    private const string BlackPixelShaderSource =
+    private const string SilhouettePixelShaderSource =
       "uniform sampler2D tex;\n" +
       "\n" +
       "void main()\n" +
       "{\n" +
       "  vec4 texCol = texture2D(tex, gl_TexCoord[0].xy);\n" +
       "  gl_FragColor = vec4(0, 0, 0, texCol.a);\n" +
+      "}";
+
+    private const string ShadowPixelShaderSource =
+      "uniform vec2 lightDir;\n" +
+      "uniform sampler2D tex;\n" +
+      "\n" +
+      "const int samples = 100;\n" +
+      "\n" +
+      "void main()\n" +
+      "{\n" +
+      "	float stepSize = 2.0 / 512.0;\n" +
+      "	vec2 lp = normalize(lightDir);\n" +
+      "	vec2 texCoord = gl_TexCoord[0].xy;\n" +
+      "	float baseColor = texture2D(tex, texCoord).r;\n" +
+      "	float color = baseColor;\n" +
+      "\n" +
+      "	float dist = stepSize;\n" +
+      "	for (int i = 0; i < samples; i++)\n" +
+      "	{\n" +
+      "		vec2 tc = texCoord - (lp * dist);\n" +
+      "		tc.x = clamp(tc.x, 0.0, 1.0);\n" +
+      "		tc.y = clamp(tc.y, 0.0, 1.0);\n" +
+      "		float col = texture2D(tex, tc).r;\n" +
+      "		color *= col;\n" +
+      "		dist += stepSize;\n" +
+      "	}\n" +
+      "\n" +
+      "	vec4 invColor = vec4(1.0 - baseColor, 1.0 - baseColor, 1.0 - baseColor, 1.0);\n" +
+      "	color += invColor;\n" +
+      "\n" +
+      "	gl_FragColor = vec4(color, color, color, 1.0);\n" +
+      "}";
+
+    private const string BlurPixelShaderSource =
+      "uniform sampler2D tex;\n" +
+      "\n" +
+      "void main()\n" +
+      "{\n" +
+      "	float div = 1.0 / 600;\n" +
+      "	vec2 texCoord = gl_TexCoord[0].xy;\n" +
+      "	texCoord.x -= div;\n" +
+      "	texCoord.y -= div;\n" +
+      "	\n" +
+      "	vec4 color = vec4(0.0, 0.0, 0.0, 0.0);\n" +
+      "	for (int y = 0; y < 3; y++)\n" +
+      "	{\n" +
+      "		for (int x = 0; x < 3; x++)\n" +
+      "		{\n" +
+      "			color += texture2D(tex, texCoord);\n" +
+      "			texCoord.x += div;\n" +
+      "		}\n" +
+      "		texCoord.y += div;\n" +
+      "		texCoord.x -= div * 3;\n" +
+      "	}\n" +
+      "\n" +
+      "    gl_FragColor = color / 9;\n" +
       "}";
 
     private const string ColorPixelShaderSource =
@@ -36,9 +92,13 @@ namespace RougeLike
     private const int ScreenWidth = 1280;
     private const int ScreenHeight = 720;
 
+    private RenderTarget _silhouetteTarget = null;
     private RenderTarget _shadowTarget = null;
-    private RenderTarget _scaleTarget = null;
-    private ShaderProgram _blackShader = null;
+    private RenderTarget _blurTarget = null;
+
+    private ShaderProgram _silhouetteShader = null;
+    private ShaderProgram _shadowShader = null;
+    private ShaderProgram _blurShader = null;
     private ShaderProgram _colorShader = null;
 
     public override OkuSettings Configure()
@@ -58,15 +118,26 @@ namespace RougeLike
     
     public override void Initialize()
     {
-      _shadowTarget = OkuManager.Instance.Graphics.NewRenderTarget(ScreenWidth, ScreenHeight);
-      _scaleTarget = OkuManager.Instance.Graphics.NewRenderTarget(ScreenWidth, ScreenHeight);
+      _silhouetteTarget = OkuManager.Instance.Graphics.NewRenderTarget(ScreenWidth / 2, ScreenHeight / 2);
+      _shadowTarget = OkuManager.Instance.Graphics.NewRenderTarget(ScreenWidth / 2, ScreenHeight / 2);
+      _blurTarget = OkuManager.Instance.Graphics.NewRenderTarget(ScreenWidth / 2, ScreenHeight / 2);
 
       Shader vertexShader = new Shader(VertexShaderSource, ShaderType.VertexShader);
-      Shader blackShader = new Shader(BlackPixelShaderSource, ShaderType.PixelShader);
-      _blackShader = OkuManager.Instance.Graphics.NewShaderProgram(vertexShader, blackShader);
+      Shader blackShader = new Shader(SilhouettePixelShaderSource, ShaderType.PixelShader);
+      _silhouetteShader = OkuManager.Instance.Graphics.NewShaderProgram(vertexShader, blackShader);
 
       Shader colorShader = new Shader(ColorPixelShaderSource, ShaderType.PixelShader);
       _colorShader = OkuManager.Instance.Graphics.NewShaderProgram(vertexShader, colorShader);
+
+      Shader shadowShader = new Shader(ShadowPixelShaderSource, ShaderType.PixelShader);
+      _shadowShader = OkuManager.Instance.Graphics.NewShaderProgram(vertexShader, shadowShader);
+
+      OkuManager.Instance.Graphics.UseShaderProgram(_shadowShader);
+      OkuManager.Instance.Graphics.SetShaderFloat(_shadowShader, "lightDir", 1.0f, 1.0f);
+      OkuManager.Instance.Graphics.UseShaderProgram(null);
+      
+      Shader blurShader = new Shader(BlurPixelShaderSource, ShaderType.PixelShader);
+      _blurShader = OkuManager.Instance.Graphics.NewShaderProgram(vertexShader, blurShader);
 
       //GameData.Instance.Scenes = SceneFactory.Instance.GetHardCodedScene();
       GameData.Instance.Scenes = SceneFactory.Instance.LoadScene("testscene.json");
@@ -90,23 +161,23 @@ namespace RougeLike
     {
       Vector2f center = Oku.Graphics.Viewport.Center;
 
-      OkuManager.Instance.Graphics.SetRenderTarget(_shadowTarget);
-      OkuManager.Instance.Graphics.UseShaderProgram(_blackShader);
+      OkuManager.Instance.Graphics.SetRenderTarget(_silhouetteTarget);
+      OkuManager.Instance.Graphics.UseShaderProgram(_silhouetteShader);
       OkuManager.Instance.Graphics.BackgroundColor = Color.White;
-            
-      long freq, tick1, tick2;
-      OkuBase.Platform.Kernel32.QueryPerformanceFrequency(out freq);
-      OkuBase.Platform.Kernel32.QueryPerformanceCounter(out tick1);
       
+      //TODO: Only render shadow casters!!!
       GameData.Instance.ActiveScene.Render();
 
-      OkuBase.Platform.Kernel32.QueryPerformanceCounter(out tick2);
-      float time = (tick2 - tick1) / (float)freq;
-      System.Diagnostics.Debug.WriteLine("Render: " + time.ToString());
-      
+      OkuManager.Instance.Graphics.SetRenderTarget(_shadowTarget);
+      OkuManager.Instance.Graphics.UseShaderProgram(_shadowShader);
+      OkuManager.Instance.Graphics.DrawScreenAlignedQuad(_silhouetteTarget);
+
+      OkuManager.Instance.Graphics.SetRenderTarget(_blurTarget);
+      OkuManager.Instance.Graphics.UseShaderProgram(_blurShader);
+      OkuManager.Instance.Graphics.DrawScreenAlignedQuad(_shadowTarget);
+
       OkuManager.Instance.Graphics.SetRenderTarget(null);
       OkuManager.Instance.Graphics.UseShaderProgram(null);
-      
       OkuManager.Instance.Graphics.DrawScreenAlignedQuad(_shadowTarget);
     }
     
