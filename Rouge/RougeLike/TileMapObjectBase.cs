@@ -190,6 +190,80 @@ namespace RougeLike
       return result;
     }
 
+    public int CountTilesOnLine(Vector2f start, Vector2f end)
+    {
+      Vector2f rayDir = end - start;
+
+      if (rayDir.X == 0.0f && rayDir.Y == 0.0f)
+        return 0;
+
+      Rectangle2f mapRect = GetMapRect();
+      if (!mapRect.IsInside(start))
+      {
+        throw new NotImplementedException("");
+      }
+
+      if (!mapRect.IsInside(end))
+      {
+        throw new NotImplementedException("");
+      }
+
+      Vector2f startTile = WorldToTile(start);
+      int x = (int)startTile.X;
+      int y = (int)startTile.Y;      
+
+      int stepX = Math.Sign(rayDir.X);
+      int stepY = Math.Sign(rayDir.Y);
+
+      Rectangle2f startTileRect = GetTileRect(x, y);
+      
+      float tMaxX;
+      float tDeltaX = _tileWidth / Math.Abs(rayDir.X);
+      if (stepX > 0)
+      {
+        tMaxX = (startTileRect.Max.X - start.X) / (end.X - start.X);
+      }
+      else
+      {
+        tMaxX = (start.X - startTileRect.Min.X) / (start.X - end.X);
+      }
+
+      float tMaxY;
+      float tDeltaY = _tileHeight / Math.Abs(rayDir.Y);
+      if (stepY > 0)
+      {
+        tMaxY = (startTileRect.Max.Y - start.Y) / (end.Y - start.Y);
+      }
+      else
+      {
+        tMaxY = (start.Y - startTileRect.Min.Y) / (start.Y - end.Y);
+      }
+
+      int result = 0;
+      while (true)
+      {
+        if (tMaxX < tMaxY)
+        {
+          x += stepX;
+          if (x >= _tiles.GetLength(0) || x < 0)
+            break;
+          tMaxX += tDeltaX;
+        }
+        else
+        {
+          y += stepY;
+          if (y >= _tiles.GetLength(1) || y < 0)
+            break;
+          tMaxY += tDeltaY;
+        }
+
+        if (!_tiles[x, y].Walkable)
+          result++;
+      }
+
+      return result;
+    }
+
     public override void Render()
     {
       Rectangle2f mapRect = GetMapRect();
@@ -238,7 +312,6 @@ namespace RougeLike
             tint *= Math.Max(0, value);
 
             batch.Add(_tileImages[_tiles[x, y].TileIndex], new Vector2f(wx, wy), tint);
-            //Oku.Graphics.DrawImage(_tileImages[_tiles[x, y].TileIndex], wx, wy);
 
             if (GameData.Instance.DebugDraw && !_tiles[x, y].Walkable)
             {

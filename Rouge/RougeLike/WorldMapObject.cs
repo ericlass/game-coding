@@ -6,6 +6,9 @@ namespace RougeLike
 {
   public class WorldMapObject : TileMapObjectBase
   {
+    private Vector2f _lineStart = Vector2f.Zero;
+    private Vector2f _lineEnd = Vector2f.Zero;
+
     public override string ObjectType
     {
       get { return "worldmap"; }
@@ -41,14 +44,21 @@ namespace RougeLike
     {
       if (Oku.Input.Mouse.ButtonIsDown(OkuBase.Input.MouseButton.Left))
       {
-        Vector2f mousePos = Oku.Graphics.ScreenToWorld(Oku.Input.Mouse.X, Oku.Input.Mouse.Y);
-        if (IsInside(mousePos))
+        _lineStart = Oku.Graphics.ScreenToWorld(Oku.Input.Mouse.X, Oku.Input.Mouse.Y);
+        /*if (IsInside(mousePos))
         {
           mousePos = WorldToTile(mousePos);
           _tiles[(int)mousePos.X, (int)mousePos.Y].TileIndex = -1;
           _tiles[(int)mousePos.X, (int)mousePos.Y].Walkable = true;
-        }          
+        }*/         
       }
+
+      if (Oku.Input.Mouse.ButtonIsDown(OkuBase.Input.MouseButton.Right))
+      {
+        _lineEnd = Oku.Graphics.ScreenToWorld(Oku.Input.Mouse.X, Oku.Input.Mouse.Y);
+      }
+
+      Oku.Graphics.Title = CountTilesOnLine(_lineStart, _lineEnd).ToString();
     }
 
     protected override void DoLoad(StringPairMap data)
@@ -60,7 +70,12 @@ namespace RougeLike
       return new StringPairMap();
     }
 
-    
+    public override void Render()
+    {
+      base.Render();
+
+      Oku.Graphics.DrawLine(_lineStart.X, _lineStart.Y, _lineEnd.X, _lineEnd.Y, 2.0f, OkuBase.Graphics.Color.Blue);
+    }
 
   }
 }
