@@ -92,14 +92,7 @@ namespace RougeLike
     private const int ScreenWidth = 1280;
     private const int ScreenHeight = 720;
 
-    private RenderTarget _silhouetteTarget = null;
-    private RenderTarget _shadowTarget = null;
-    private RenderTarget _blurTarget = null;
-
-    private ShaderProgram _silhouetteShader = null;
-    private ShaderProgram _shadowShader = null;
-    private ShaderProgram _blurShader = null;
-    private ShaderProgram _colorShader = null;
+    private RenderTarget _renderTarget = null;
 
     public override OkuSettings Configure()
     {
@@ -118,26 +111,7 @@ namespace RougeLike
     
     public override void Initialize()
     {
-      _silhouetteTarget = OkuManager.Instance.Graphics.NewRenderTarget(ScreenWidth / 2, ScreenHeight / 2);
-      _shadowTarget = OkuManager.Instance.Graphics.NewRenderTarget(ScreenWidth / 2, ScreenHeight / 2);
-      _blurTarget = OkuManager.Instance.Graphics.NewRenderTarget(ScreenWidth / 2, ScreenHeight / 2);
-
-      Shader vertexShader = new Shader(VertexShaderSource, ShaderType.VertexShader);
-      Shader blackShader = new Shader(SilhouettePixelShaderSource, ShaderType.PixelShader);
-      _silhouetteShader = OkuManager.Instance.Graphics.NewShaderProgram(vertexShader, blackShader);
-
-      Shader colorShader = new Shader(ColorPixelShaderSource, ShaderType.PixelShader);
-      _colorShader = OkuManager.Instance.Graphics.NewShaderProgram(vertexShader, colorShader);
-
-      Shader shadowShader = new Shader(ShadowPixelShaderSource, ShaderType.PixelShader);
-      _shadowShader = OkuManager.Instance.Graphics.NewShaderProgram(vertexShader, shadowShader);
-
-      OkuManager.Instance.Graphics.UseShaderProgram(_shadowShader);
-      OkuManager.Instance.Graphics.SetShaderFloat(_shadowShader, "lightDir", 1.0f, 1.0f);
-      OkuManager.Instance.Graphics.UseShaderProgram(null);
-      
-      Shader blurShader = new Shader(BlurPixelShaderSource, ShaderType.PixelShader);
-      _blurShader = OkuManager.Instance.Graphics.NewShaderProgram(vertexShader, blurShader);
+      _renderTarget = OkuManager.Instance.Graphics.NewRenderTarget(ScreenWidth, ScreenHeight);
 
       //GameData.Instance.Scenes = SceneFactory.Instance.GetHardCodedScene();
       GameData.Instance.Scenes = SceneFactory.Instance.LoadScene("testscene.json");
@@ -161,24 +135,13 @@ namespace RougeLike
     {
       Vector2f center = Oku.Graphics.Viewport.Center;
 
-      OkuManager.Instance.Graphics.SetRenderTarget(_silhouetteTarget);
-      OkuManager.Instance.Graphics.UseShaderProgram(_silhouetteShader);
-      OkuManager.Instance.Graphics.BackgroundColor = Color.White;
+      OkuManager.Instance.Graphics.SetRenderTarget(_renderTarget);
       
       //TODO: Only render shadow casters!!!
       GameData.Instance.ActiveScene.Render();
 
-      OkuManager.Instance.Graphics.SetRenderTarget(_shadowTarget);
-      OkuManager.Instance.Graphics.UseShaderProgram(_shadowShader);
-      OkuManager.Instance.Graphics.DrawScreenAlignedQuad(_silhouetteTarget);
-
-      OkuManager.Instance.Graphics.SetRenderTarget(_blurTarget);
-      OkuManager.Instance.Graphics.UseShaderProgram(_blurShader);
-      OkuManager.Instance.Graphics.DrawScreenAlignedQuad(_shadowTarget);
-
       OkuManager.Instance.Graphics.SetRenderTarget(null);
-      OkuManager.Instance.Graphics.UseShaderProgram(null);
-      OkuManager.Instance.Graphics.DrawScreenAlignedQuad(_shadowTarget);
+      OkuManager.Instance.Graphics.DrawScreenAlignedQuad(_renderTarget);
     }
     
   }
