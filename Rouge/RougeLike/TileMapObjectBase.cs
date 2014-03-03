@@ -210,7 +210,9 @@ namespace RougeLike
 
       Vector2f startTile = WorldToTile(start);
       int x = (int)startTile.X;
-      int y = (int)startTile.Y;      
+      int y = (int)startTile.Y;
+
+      Vector2f endTile = WorldToTile(end);
 
       int stepX = Math.Sign(rayDir.X);
       int stepY = Math.Sign(rayDir.Y);
@@ -239,26 +241,29 @@ namespace RougeLike
         tMaxY = (start.Y - startTileRect.Min.Y) / (start.Y - end.Y);
       }
 
+      int xLast = (int)endTile.X + stepX;
+      int yLast = (int)endTile.Y + stepY;
+
       int result = 0;
       while (true)
       {
+        if (!_tiles[x, y].Walkable)
+          result++;
+
         if (tMaxX < tMaxY)
         {
           x += stepX;
-          if (x >= _tiles.GetLength(0) || x < 0)
+          if (x == xLast)
             break;
           tMaxX += tDeltaX;
         }
         else
         {
           y += stepY;
-          if (y >= _tiles.GetLength(1) || y < 0)
+          if (y == yLast)
             break;
           tMaxY += tDeltaY;
         }
-
-        if (!_tiles[x, y].Walkable)
-          result++;
       }
 
       return result;
@@ -281,6 +286,10 @@ namespace RougeLike
       float mapLeft = mapRect.Min.X;
       float mapBottom = mapRect.Min.Y;
 
+      PlayerObject player = GameData.Instance.ActiveScene.GameObjects.GetObjectById("playerid") as PlayerObject;
+
+      float maxDist = _tileWidth * 20;
+
       SpriteBatch batch = new SpriteBatch();
       batch.Begin();
       float wy = mapBottom + (bottom * _tileHeight);
@@ -296,18 +305,17 @@ namespace RougeLike
 
             float value = 1.0f;
 
-            //Lighting from above
-            int y2 = y + 1;
-            value = 1.0f;
-            while (y2 < _tiles.GetLength(1))
-            {
-              if (!_tiles[x, y2].Walkable)
-                value -= 0.2f;
+            Rectangle2f tileRect = GetTileRect(x, y);
+            Vector2f center = tileRect.GetCenter();
 
-              if (value <= 0)
-                break;
-              y2++;
-            }
+            int count = Math.Min(6, CountTilesOnLine(center, player.Position));
+            value = 1.0f - (count / 6.0f);
+
+            float attenuation = GameUtil.Saturate(1.0f - Vector2f.Distance(center, player.Position) / maxDist);
+            attenuation *= attenuation;
+
+            value *= attenuation;
+
 
             tint *= Math.Max(0, value);
 
@@ -315,7 +323,6 @@ namespace RougeLike
 
             if (GameData.Instance.DebugDraw && !_tiles[x, y].Walkable)
             {
-              Rectangle2f tileRect = GetTileRect(x, y);
               Oku.Graphics.DrawRectangle(tileRect.Min.X, tileRect.Max.X, tileRect.Min.Y, tileRect.Max.Y, DebugTintColor);
             }
           }
