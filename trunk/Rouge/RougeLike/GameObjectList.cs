@@ -48,5 +48,16 @@ namespace RougeLike
       return null;
     }
 
+    public List<T> GetObjectsOfType<T>() where T : GameObjectBase
+    {
+      List<T> result = new List<T>();
+      foreach (GameObjectBase obj in this)
+      {
+        if (obj is T)
+          result.Add(obj as T);
+      }
+      return result;
+    }
+
   }
 }

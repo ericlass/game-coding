@@ -34,8 +34,9 @@
       "zindex" : "0",
       "groupindex" : "0",
       "position" : "0,0",
-      "color" : "#FFF2CC",
-      "radius" : "150"
+      "color" : "#0000FF",
+      "radius" : "250",
+      "power" : "1.0"
     },
     {
       "type" : "hardjoint",

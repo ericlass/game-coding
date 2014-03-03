@@ -81,6 +81,11 @@ namespace RougeLike
         _map[key1][key2] = value;
       }
     }
+
+    public void Clear()
+    {
+      _map.Clear();
+    }
     
   }
 }

@@ -7,6 +7,7 @@ namespace RougeLike
   public class LightObject : GameObjectBase
   {
     public Color _color = Color.White;
+    public float _power = 1.0f;
     public float _radius = 100.0f;
 
     public Color Color
@@ -19,6 +20,12 @@ namespace RougeLike
     {
       get { return _radius; }
       set { _radius = value; }
+    }
+
+    public float Power
+    {
+      get { return _power; }
+      set { _power = value; }
     }
 
     public override string ObjectType
@@ -51,6 +58,7 @@ namespace RougeLike
       StringPairMap result = new StringPairMap();
       result.Add("color", _color.ToString());
       result.Add("radius", _radius.ToString());
+      result.Add("power", _power.ToString());
       return result;
     }
 
@@ -63,6 +71,7 @@ namespace RougeLike
         throw new OkuBase.OkuException("Could not parse color '" + data["color"] + "'");
 
       _radius = float.Parse(data["radius"]);
+      //_power = float.Parse(data["power"]);
     }
 
   }

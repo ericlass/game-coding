@@ -269,6 +269,26 @@ namespace RougeLike
       return result;
     }
 
+    public Color GetLightValue(int x, int y, LightObject light)
+    {
+      float value = 1.0f;
+
+      Vector2f center = GetTileRect(x, y).GetCenter();
+
+      int count = Math.Min(6, CountTilesOnLine(center, light.Position));
+      value = 1.0f - (count / 6.0f);
+
+      float attenuation = GameUtil.Saturate(1.0f - Vector2f.Distance(center, light.Position) / light.Radius);
+      attenuation *= attenuation;
+
+      value *= GameUtil.Saturate(attenuation * light.Power);
+
+      if (value > 0.5f)
+        System.Threading.Thread.Sleep(0);
+
+      return light.Color * value;
+    }
+
     public override void Render()
     {
       Rectangle2f mapRect = GetMapRect();
@@ -290,6 +310,8 @@ namespace RougeLike
 
       float maxDist = _tileWidth * 20;
 
+      List<LightObject> lights = GameData.Instance.ActiveScene.GameObjects.GetObjectsOfType<LightObject>();
+
       SpriteBatch batch = new SpriteBatch();
       batch.Begin();
       float wy = mapBottom + (bottom * _tileHeight);
@@ -301,28 +323,18 @@ namespace RougeLike
           Tile tile = _tiles[x, y];
           if (tile.TileIndex >= 0)
           {
-            Color tint = Color.White;
+            Color tint = Color.Black;
 
-            float value = 1.0f;
-
-            Rectangle2f tileRect = GetTileRect(x, y);
-            Vector2f center = tileRect.GetCenter();
-
-            int count = Math.Min(6, CountTilesOnLine(center, player.Position));
-            value = 1.0f - (count / 6.0f);
-
-            float attenuation = GameUtil.Saturate(1.0f - Vector2f.Distance(center, player.Position) / maxDist);
-            attenuation *= attenuation;
-
-            value *= attenuation;
-
-
-            tint *= Math.Max(0, value);
+            foreach (LightObject light in lights)
+            {
+              tint += GetLightValue(x, y, light);
+            }
 
             batch.Add(_tileImages[_tiles[x, y].TileIndex], new Vector2f(wx, wy), tint);
 
             if (GameData.Instance.DebugDraw && !_tiles[x, y].Walkable)
             {
+              Rectangle2f tileRect = GetTileRect(x, y);
               Oku.Graphics.DrawRectangle(tileRect.Min.X, tileRect.Max.X, tileRect.Min.Y, tileRect.Max.Y, DebugTintColor);
             }
           }
