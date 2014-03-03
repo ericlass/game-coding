@@ -106,5 +106,10 @@ namespace RougeLike
       return parser.Parse(jsonStr);
     }
 
+    public static float Saturate(float value)
+    {
+      return Math.Min(1.0f, Math.Max(0.0f, value));
+    }
+
   }
 }

@@ -44,21 +44,22 @@ namespace RougeLike
     {
       if (Oku.Input.Mouse.ButtonIsDown(OkuBase.Input.MouseButton.Left))
       {
-        _lineStart = Oku.Graphics.ScreenToWorld(Oku.Input.Mouse.X, Oku.Input.Mouse.Y);
-        /*if (IsInside(mousePos))
+        //_lineStart = Oku.Graphics.ScreenToWorld(Oku.Input.Mouse.X, Oku.Input.Mouse.Y);
+        Vector2f mousePos = Oku.Graphics.ScreenToWorld(Oku.Input.Mouse.X, Oku.Input.Mouse.Y);
+        if (IsInside(mousePos))
         {
           mousePos = WorldToTile(mousePos);
           _tiles[(int)mousePos.X, (int)mousePos.Y].TileIndex = -1;
           _tiles[(int)mousePos.X, (int)mousePos.Y].Walkable = true;
-        }*/         
+        }
       }
 
-      if (Oku.Input.Mouse.ButtonIsDown(OkuBase.Input.MouseButton.Right))
-      {
-        _lineEnd = Oku.Graphics.ScreenToWorld(Oku.Input.Mouse.X, Oku.Input.Mouse.Y);
-      }
+      //if (Oku.Input.Mouse.ButtonIsDown(OkuBase.Input.MouseButton.Right))
+      //{
+        //_lineEnd = Oku.Graphics.ScreenToWorld(Oku.Input.Mouse.X, Oku.Input.Mouse.Y);
+      //}
 
-      Oku.Graphics.Title = CountTilesOnLine(_lineStart, _lineEnd).ToString();
+      //Oku.Graphics.Title = CountTilesOnLine(_lineStart, _lineEnd).ToString();
     }
 
     protected override void DoLoad(StringPairMap data)
@@ -74,7 +75,9 @@ namespace RougeLike
     {
       base.Render();
 
-      Oku.Graphics.DrawLine(_lineStart.X, _lineStart.Y, _lineEnd.X, _lineEnd.Y, 2.0f, OkuBase.Graphics.Color.Blue);
+      //Oku.Graphics.DrawLine(_lineStart.X, _lineStart.Y, _lineEnd.X, _lineEnd.Y, 2.0f, OkuBase.Graphics.Color.Blue);
+      //Oku.Graphics.DrawPoint(_lineStart.X, _lineStart.Y, 4.0f, OkuBase.Graphics.Color.Red);
+      //Oku.Graphics.DrawPoint(_lineEnd.X, _lineEnd.Y, 4.0f, OkuBase.Graphics.Color.Green);
     }
 
   }
