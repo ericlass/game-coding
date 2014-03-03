@@ -70,7 +70,7 @@ namespace OkuBase.Graphics
 
     public static Color operator +(Color col1, Color col2)
     {
-      return new Color((byte)(col1.R + col2.R), (byte)(col1.R + col2.R), (byte)(col1.R + col2.R));
+      return new Color((byte)(col1.R + col2.R), (byte)(col1.G + col2.G), (byte)(col1.B + col2.B));
     }
 
     /// <summary>
