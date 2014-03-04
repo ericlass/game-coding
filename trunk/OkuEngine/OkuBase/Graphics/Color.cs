@@ -165,6 +165,22 @@ namespace OkuBase.Graphics
     /// hexadecimal HTML color format (#RGB, #RGBA, #RRGGBB or #RRGGBBAA).
     /// </summary>
     /// <param name="str">The string representation of the color.</param>
+    /// <returns>The parsed color.</returns>
+    public static Color Parse(string str)
+    {
+      Color result;
+      if (!TryParse(str, out result))
+        throw new FormatException("String '" + str + "' is not a valid color string! The following formats are supported: #RGB, #RGBA, #RRGGBB, #RRGGBBAA");
+      
+      return result;
+    }
+
+    /// <summary>
+    /// Tries to parse the given string into a color.
+    /// The string is expected to be in the typical
+    /// hexadecimal HTML color format (#RGB, #RGBA, #RRGGBB or #RRGGBBAA).
+    /// </summary>
+    /// <param name="str">The string representation of the color.</param>
     /// <param name="color">The parsed color is returend here if the method returns true.</param>
     /// <returns>True if the given string could be parsed to a color, else false.</returns>
     public static bool TryParse(string str, out Color color)
@@ -193,6 +209,8 @@ namespace OkuBase.Graphics
           color.B = Convert.ToByte(str.Substring(4, 2), 16);
           if (str.Length == 8)
             color.A = Convert.ToByte(str.Substring(6, 2), 16);
+
+          return true;
         }
       }
       return false;

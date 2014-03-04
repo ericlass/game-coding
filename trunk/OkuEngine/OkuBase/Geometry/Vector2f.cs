@@ -376,6 +376,15 @@ namespace OkuBase.Geometry
       return (X == 0.0f) && (Y == 0.0f);
     }
 
+    public static Vector2f Parse(string str)
+    {
+      Vector2f result = Vector2f.Zero;
+      if (!TryParse(str, ref result))
+        throw new FormatException("String '" + str + "' is not a valid vector string in the format '#.#'!");
+
+      return result;
+    }
+
     /// <summary>
     /// Tries to parse the given string into a vector.
     /// The string is expected to be in the format "X,Y"

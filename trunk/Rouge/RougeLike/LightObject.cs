@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OkuBase.Graphics;
+using OkuBase.Utils;
 
 namespace RougeLike
 {
@@ -64,14 +65,9 @@ namespace RougeLike
 
     protected override void DoLoad(StringPairMap data)
     {
-      Color col = Color.Black;
-      if (!Color.TryParse(data["color"], out col))
-        _color = col;
-      else
-        throw new OkuBase.OkuException("Could not parse color '" + data["color"] + "'");
-
-      _radius = float.Parse(data["radius"]);
-      //_power = float.Parse(data["power"]);
+      _color = Color.Parse(data["color"]);
+      _radius = Converter.StrToFloat(data["radius"]);
+      _power = Converter.StrToFloat(data["power"]);
     }
 
   }

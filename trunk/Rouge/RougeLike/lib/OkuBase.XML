@@ -1212,6 +1212,15 @@
             <param name="dark">A dark color for bright backgrounds.</param>
             <returns>Either the bright color or the dak color, depending on the brightness of the background color.</returns>
         </member>
+        <member name="M:OkuBase.Graphics.Color.Parse(System.String)">
+            <summary>
+            Tries to parse the given string into a color.
+            The string is expected to be in the typical
+            hexadecimal HTML color format (#RGB, #RGBA, #RRGGBB or #RRGGBBAA).
+            </summary>
+            <param name="str">The string representation of the color.</param>
+            <returns>The parsed color.</returns>
+        </member>
         <member name="M:OkuBase.Graphics.Color.TryParse(System.String,OkuBase.Graphics.Color@)">
             <summary>
             Tries to parse the given string into a color.
@@ -3061,6 +3070,26 @@
             </summary>
             <param name="index">The index of the entry.</param>
             <returns>The log entry at the given index.</returns>
+        </member>
+        <member name="T:OkuBase.Logging.LogLevel">
+            <summary>
+            Determines the log level of a log message.
+            </summary>
+        </member>
+        <member name="F:OkuBase.Logging.LogLevel.Info">
+            <summary>
+            Info level for general information.
+            </summary>
+        </member>
+        <member name="F:OkuBase.Logging.LogLevel.Warning">
+            <summary>
+            Warning level for issues that do not affect the execution of the application.
+            </summary>
+        </member>
+        <member name="F:OkuBase.Logging.LogLevel.Error">
+            <summary>
+            Error level for issue that keep the application from working correctly.
+            </summary>
         </member>
         <member name="T:OkuBase.OkuGame">
             <summary>

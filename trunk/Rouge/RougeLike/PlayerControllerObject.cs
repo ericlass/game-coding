@@ -44,6 +44,10 @@ namespace RougeLike
 
         case PlayerState.Move:
           float speed = 200.0f * dt;
+
+          if (Oku.Input.Keyboard.KeyIsDown(Keys.LControlKey))
+            speed = 50.0f * dt;
+
           float dx = 0;
           float dy = 0;
 
