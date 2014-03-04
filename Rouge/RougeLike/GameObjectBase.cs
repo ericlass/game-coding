@@ -44,11 +44,7 @@ namespace RougeLike
       Id = data["id"];
       ZIndex = int.Parse(data["zindex"]);
       GroupIndex = int.Parse(data["groupindex"]);
-      Vector2f pos = Vector2f.Zero;
-      if (Vector2f.TryParse(data["position"], ref pos))
-        Position = pos;
-      else
-        throw new OkuException("Could not parse position vector!");
+      Position = Vector2f.Parse(data["position"]);
       
       data.Remove("id");
       data.Remove("zindex");

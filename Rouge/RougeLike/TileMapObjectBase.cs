@@ -190,7 +190,7 @@ namespace RougeLike
       return result;
     }
 
-    public int CountTilesOnLine(Vector2f start, Vector2f end)
+    public int CountTilesOnLine(Vector2f start, Vector2f end, int max)
     {
       Vector2f rayDir = end - start;
 
@@ -248,7 +248,11 @@ namespace RougeLike
       while (true)
       {
         if (!_tiles[x, y].Walkable)
+        {
           result++;
+          if (result >= max)
+            break;
+        }
 
         if (tMaxX < tMaxY)
         {
@@ -275,8 +279,8 @@ namespace RougeLike
 
       Vector2f center = GetTileRect(x, y).GetCenter();
 
-      int count = Math.Min(6, CountTilesOnLine(center, light.Position));
-      value = 1.0f - (count / 6.0f);
+      int count = CountTilesOnLine(center, light.Position, 5);
+      value = 1.0f - (count / 5.0f);
 
       float attenuation = GameUtil.Saturate(1.0f - Vector2f.Distance(center, light.Position) / light.Radius);
       attenuation *= attenuation;
@@ -330,6 +334,7 @@ namespace RougeLike
               tint += GetLightValue(x, y, light);
             }
 
+            //Oku.Graphics.DrawImage(_tileImages[_tiles[x, y].TileIndex], wx, wy, tint);
             batch.Add(_tileImages[_tiles[x, y].TileIndex], new Vector2f(wx, wy), tint);
 
             if (GameData.Instance.DebugDraw && !_tiles[x, y].Walkable)

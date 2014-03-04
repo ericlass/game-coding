@@ -138,7 +138,7 @@ namespace OkuDrivers
       if (colors != null)
       {
         Gl.glEnableClientState(Gl.GL_COLOR_ARRAY);
-        Gl.glColorPointer(4, Gl.GL_UNSIGNED_BYTE, System.Runtime.InteropServices.Marshal.SizeOf(Color.Black), colors);
+        Gl.glColorPointer(Gl.GL_BGRA, Gl.GL_UNSIGNED_BYTE, System.Runtime.InteropServices.Marshal.SizeOf(Color.Black), colors);
       }
       else
         Gl.glDisableClientState(Gl.GL_COLOR_ARRAY);

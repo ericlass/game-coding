@@ -37,10 +37,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\JSONator.dll</HintPath>
     </Reference>
-    <Reference Include="OkuBase">
+    <Reference Include="OkuBase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\OkuBase.dll</HintPath>
     </Reference>
-    <Reference Include="OkuDrivers">
+    <Reference Include="OkuDrivers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\OkuDrivers.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -210,5 +212,4 @@
     </None>
     <Content Include="lib\JSONator.dll" />
   </ItemGroup>
-  <ItemGroup />
 </Project>

@@ -48,12 +48,7 @@ namespace RougeLike
     {
       _width = int.Parse(data["width"]);
       _height = int.Parse(data["height"]);
-
-      Color col = Color.Red;
-      if (!Color.TryParse(data["color"], out col))
-        _color = col;
-      else
-        throw new OkuException("Could not parse color string " + data["color"] + "!");
+      _color = Color.Parse(data["color"]);
     }
   }
 }
