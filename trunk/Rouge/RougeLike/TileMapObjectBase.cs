@@ -273,6 +273,13 @@ namespace RougeLike
       return result;
     }
 
+    /// <summary>
+    /// Calculates the color of the light at the given tile.
+    /// </summary>
+    /// <param name="x">The x coordinate of the tile.</param>
+    /// <param name="y">The y coordinate of the tile.</param>
+    /// <param name="light">The light to calculate.</param>
+    /// <returns>The color of the light at the given tile.</returns>
     public Color GetLightValue(int x, int y, LightObject light)
     {
       float value = 1.0f;
@@ -318,10 +325,10 @@ namespace RougeLike
 
       SpriteBatch batch = new SpriteBatch();
       batch.Begin();
-      float wy = mapBottom + (bottom * _tileHeight);
+      float wy = mapBottom + (bottom * _tileHeight) + (_tileHeight / 2);
       for (int y = bottom; y <= top; y++)
       {
-        float wx = mapLeft + (left * _tileWidth);
+        float wx = mapLeft + (left * _tileWidth) + (_tileWidth / 2);
         for (int x = left; x <= right; x++)
         {
           Tile tile = _tiles[x, y];
