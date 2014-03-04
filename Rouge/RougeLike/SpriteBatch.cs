@@ -13,12 +13,12 @@ namespace RougeLike
   {
     private struct BatchedSprite
     {
-      public Vector2f Positions;
+      public Vector2f Position;
       public Color Tint;
 
       public BatchedSprite(Vector2f pos, Color tint)
       {
-        Positions = pos;
+        Position = pos;
         Tint = tint;
       }
     }
@@ -104,8 +104,8 @@ namespace RougeLike
           int start = i * 4;
           BatchedSprite spr = sprites[i];
 
-          float left = spr.Positions.X;
-          float bottom = spr.Positions.Y;
+          float left = spr.Position.X - (image.Width / 2);
+          float bottom = spr.Position.Y - (image.Height / 2);
           float right = left + image.Width;          
           float top = bottom + image.Height;          
 

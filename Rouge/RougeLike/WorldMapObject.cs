@@ -7,7 +7,7 @@ namespace RougeLike
   public class WorldMapObject : TileMapObjectBase
   {
     private Vector2f _lineStart = Vector2f.Zero;
-    private Vector2f _lineEnd = Vector2f.Zero;
+    private Vector2f _lineEnd = Vector2f.One;
 
     public override string ObjectType
     {
@@ -54,12 +54,12 @@ namespace RougeLike
         }
       }
 
-      //if (Oku.Input.Mouse.ButtonIsDown(OkuBase.Input.MouseButton.Right))
-      //{
-        //_lineEnd = Oku.Graphics.ScreenToWorld(Oku.Input.Mouse.X, Oku.Input.Mouse.Y);
-      //}
+      /*if (Oku.Input.Mouse.ButtonIsDown(OkuBase.Input.MouseButton.Right))
+      {
+        _lineEnd = Oku.Graphics.ScreenToWorld(Oku.Input.Mouse.X, Oku.Input.Mouse.Y);
+      }
 
-      //Oku.Graphics.Title = CountTilesOnLine(_lineStart, _lineEnd).ToString();
+      Oku.Graphics.Title = CountTilesOnRay(_lineStart, _lineEnd - _lineStart, 6).ToString();*/
     }
 
     protected override void DoLoad(StringPairMap data)
@@ -75,9 +75,10 @@ namespace RougeLike
     {
       base.Render();
 
-      //Oku.Graphics.DrawLine(_lineStart.X, _lineStart.Y, _lineEnd.X, _lineEnd.Y, 2.0f, OkuBase.Graphics.Color.Blue);
-      //Oku.Graphics.DrawPoint(_lineStart.X, _lineStart.Y, 4.0f, OkuBase.Graphics.Color.Red);
-      //Oku.Graphics.DrawPoint(_lineEnd.X, _lineEnd.Y, 4.0f, OkuBase.Graphics.Color.Green);
+      /*Vector2f lineEnd = _lineStart + (Vector2f.Normalize(_lineEnd - _lineStart) * 1000);
+      Oku.Graphics.DrawLine(_lineStart.X, _lineStart.Y, lineEnd.X, lineEnd.Y, 2.0f, OkuBase.Graphics.Color.Blue);
+      Oku.Graphics.DrawPoint(_lineStart.X, _lineStart.Y, 4.0f, OkuBase.Graphics.Color.Red);
+      Oku.Graphics.DrawPoint(_lineEnd.X, _lineEnd.Y, 4.0f, OkuBase.Graphics.Color.Green);*/
     }
 
   }
