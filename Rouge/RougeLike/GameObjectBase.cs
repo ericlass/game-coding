@@ -33,18 +33,34 @@ namespace RougeLike
     {
       StringPairMap result = DoSave();
       result.Add("id", Id);
-      result.Add("zindex", ZIndex.ToString());
-      result.Add("groupindex", GroupIndex.ToString());
-      result.Add("position", Position.ToString());
+
+      if (ZIndex != 0)
+        result.Add("zindex", ZIndex.ToString());
+
+      if (GroupIndex != 0)
+        result.Add("groupindex", GroupIndex.ToString());
+
+      if (Position != Vector2f.Zero)
+        result.Add("position", Position.ToString());
+
       return result;
     }
 
     public void Load(StringPairMap data)
     {
-      Id = data["id"];
-      ZIndex = int.Parse(data["zindex"]);
-      GroupIndex = int.Parse(data["groupindex"]);
-      Position = Vector2f.Parse(data["position"]);
+      if (data.ContainsKey("id"))
+        Id = data["id"];
+      else
+        throw new OkuException("Objects have to have an id property!");
+
+      if (data.ContainsKey("zindex"))
+        ZIndex = int.Parse(data["zindex"]);
+
+      if (data.ContainsKey("groupindex"))
+        GroupIndex = int.Parse(data["groupindex"]);
+
+      if (data.ContainsKey("position"))
+        Position = Vector2f.Parse(data["position"]);
       
       data.Remove("id");
       data.Remove("zindex");

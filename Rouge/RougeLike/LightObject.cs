@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OkuBase.Geometry;
 using OkuBase.Graphics;
 using OkuBase.Utils;
 
@@ -7,9 +8,11 @@ namespace RougeLike
 {
   public class LightObject : GameObjectBase
   {
-    public Color _color = Color.White;
-    public float _power = 1.0f;
-    public float _radius = 100.0f;
+    private Color _color = Color.White;
+    private float _power = 1.0f;
+    private float _radius = 100.0f;
+    private LightType _lightType = LightType.Point;
+    private Vector2f _direction = Vector2f.One;
 
     public Color Color
     {
@@ -27,6 +30,18 @@ namespace RougeLike
     {
       get { return _power; }
       set { _power = value; }
+    }
+
+    public LightType LightType
+    {
+      get { return _lightType; }
+      set { _lightType = value; }
+    }
+
+    public Vector2f Direction
+    {
+      get { return _direction; }
+      set { _direction = value; }
     }
 
     public override string ObjectType
@@ -47,6 +62,12 @@ namespace RougeLike
       if (GameData.Instance.DebugDraw)
       {
         Oku.Graphics.DrawPoint(0, 0, 5.0f, Color.Yellow);
+
+        if (_lightType == RougeLike.LightType.Infinit)
+        {
+          Vector2f end = _direction * 20.0f;
+          Oku.Graphics.DrawLine(0, 0, end.X, end.Y, 2.0f, Color.Yellow);
+        }
       }
     }
 
@@ -57,17 +78,41 @@ namespace RougeLike
     protected override StringPairMap DoSave()
     {
       StringPairMap result = new StringPairMap();
-      result.Add("color", _color.ToString());
-      result.Add("radius", _radius.ToString());
-      result.Add("power", _power.ToString());
+      
+      if (!_color.Equals(Color.White))
+        result.Add("color", _color.ToString());
+      
+      if (_radius != 100.0f)
+        result.Add("radius", Converter.FloatToString(_radius));
+
+      if (_power != 1.0f)
+        result.Add("power", Converter.FloatToString(_power));
+
+      if (_lightType != RougeLike.LightType.Point)
+        result.Add("lighttype", _lightType.ToString());
+
+      if (_direction != Vector2f.One)
+        result.Add("direction", _direction.ToString());
+
       return result;
     }
 
     protected override void DoLoad(StringPairMap data)
     {
-      _color = Color.Parse(data["color"]);
-      _radius = Converter.StrToFloat(data["radius"]);
-      _power = Converter.StrToFloat(data["power"]);
+      if (data.ContainsKey("lighttype"))
+        _lightType = Converter.ParseEnum<LightType>(data["lighttype"]);
+      
+      if (data.ContainsKey("color"))
+        _color = Color.Parse(data["color"]);
+
+      if (data.ContainsKey("radius"))
+        _radius = Converter.StrToFloat(data["radius"]);
+
+      if (data.ContainsKey("power"))
+        _power = Converter.StrToFloat(data["power"]);
+      
+      if (data.ContainsKey("direction"))
+        _direction = Vector2f.Normalize(Vector2f.Parse(data["direction"]));
     }
 
   }

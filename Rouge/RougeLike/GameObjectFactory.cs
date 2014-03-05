@@ -45,6 +45,9 @@ namespace RougeLike
 
     public GameObjectBase CreateObject(StringPairMap data)
     {
+      if (!data.ContainsKey("type"))
+        throw new OkuBase.OkuException("Game object has no 'type' property!");
+
       string objectType = data["type"];
       if (!_objectCreators.ContainsKey(objectType))
         throw new OkuBase.OkuException("No creator registered for object type '" + objectType + "'!");

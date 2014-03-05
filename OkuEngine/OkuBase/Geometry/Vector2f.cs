@@ -282,7 +282,7 @@ namespace OkuBase.Geometry
     /// <param name="angle">The angle to rotate in degrees.</param>
     public void Rotate(float angle)
     {
-      float rad = (angle * 180.0f) / (float)Math.PI;
+      float rad = angle * OkuMath.OneDegreeInRadians;
 
       float sin = (float)Math.Sin(rad);
       float cos = (float)Math.Cos(rad);

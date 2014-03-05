@@ -126,8 +126,15 @@ namespace RougeLike
 
     protected override void DoLoad(StringPairMap data)
     {
-      _playerId = data["playerid"];
-      _tilemapId = data["tilemapid"];
+      if (data.ContainsKey("playerid"))
+        _playerId = data["playerid"];
+      else
+        throw new OkuBase.OkuException("The 'playerid' property is mandatory for player controllers!");
+
+      if (data.ContainsKey("tilemapid"))
+        _tilemapId = data["tilemapid"];
+      else
+        throw new OkuBase.OkuException("The 'tilemapid' property is mandatory for player controllers!");
     }
 
     public override string ToString()

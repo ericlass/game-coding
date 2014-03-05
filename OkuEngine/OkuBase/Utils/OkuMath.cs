@@ -12,6 +12,11 @@ namespace OkuBase.Utils
   public static class OkuMath
   {
     /// <summary>
+    /// The radian value of one degree.
+    /// </summary>
+    public const float OneDegreeInRadians = (float)(Math.PI / 180.0);
+
+    /// <summary>
     /// Calculates the left hand normal of a line segment defined by start and end.
     /// </summary>
     /// <param name="start">The start position.</param>
@@ -197,6 +202,22 @@ namespace OkuBase.Utils
     /// <param name="max">The allowed maximum value.</param>
     /// <returns>The clamped value.</returns>
     public static float Clamp(float value, float min, float max)
+    {
+      if (value < min)
+        return min;
+      if (value > max)
+        return max;
+      return value;
+    }
+
+    /// <summary>
+    /// Clamps the given value to the given min and max values.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <param name="min">The allowed minimum value.</param>
+    /// <param name="max">The allowed maximum value.</param>
+    /// <returns>The clamped value.</returns>
+    public static float Clamp(int value, int min, int max)
     {
       if (value < min)
         return min;
