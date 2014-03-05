@@ -9,22 +9,17 @@
       "type" : "player",
       "id" : "playerid",
       "zindex" : "0",
-      "groupindex" : "0",
       "position" : "0,50"
     },
     {
       "type" : "worldmap",
       "id" : "worldmapid",
       "zindex" : "-1",
-      "groupindex" : "0",
       "position" : "0,0"
     },
     {
       "type" : "playercontroller",
       "id" : "pc01",
-      "zindex" : "0",
-      "groupindex" : "0",
-      "position" : "0,0",
       "playerid" : "playerid",
       "tilemapid" : "worldmapid"
     },
@@ -32,20 +27,22 @@
       "type" : "light",
       "id" : "light01",
       "zindex" : "0",
-      "groupindex" : "0",
       "position" : "0,0",
-      "color" : "#FF0000",
-      "radius" : "250",
-      "power" : "1.0"
+      "color" : "#FFF1AD",
+      "radius" : "250"
     },
     {
       "type" : "hardjoint",
       "id" : "joint01",
-      "zindex" : "0",
-      "groupindex" : "0",
-      "position" : "0,0",
       "source" : "playerid",
       "target" : "light01"
+    },
+    {
+      "type" : "light",
+      "id" : "light02",
+      "color" : "#BAE2FF",
+      "lighttype" : "Infinit",
+      "direction" : "-2,1"
     }
   ]
 }

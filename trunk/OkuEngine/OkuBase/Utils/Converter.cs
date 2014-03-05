@@ -41,6 +41,10 @@ namespace OkuBase.Utils
         fraction /= 10.0f;
 
       result += fraction;
+
+      if (result > 0 && str.StartsWith("-"))
+        result *= -1;
+
       return result;
     }
 

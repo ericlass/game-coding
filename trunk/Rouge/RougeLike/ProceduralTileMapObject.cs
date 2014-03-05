@@ -7,8 +7,8 @@ namespace RougeLike
 {
   public class ProceduralTileMapObject : TileMapObjectBase
   {
-    private int _width = 0;
-    private int _height = 0;
+    private int _width = 10;
+    private int _height = 10;
     private int _numRooms = 1;
 
     public int Width
@@ -158,17 +158,28 @@ namespace RougeLike
     protected override StringPairMap DoSave()
     {
       StringPairMap result = new StringPairMap();
-      result.Add("width", _width.ToString());
-      result.Add("height", _height.ToString());
-      result.Add("rooms", _numRooms.ToString());
+      if (_width != 10)
+        result.Add("width", _width.ToString());
+
+      if (_height  != 10)
+        result.Add("height", _height.ToString());
+
+      if (_numRooms != 1)
+        result.Add("rooms", _numRooms.ToString());
+
       return result;
     }
 
     protected override void DoLoad(StringPairMap data)
     {
-      _width = int.Parse(data["width"]);
-      _height = int.Parse(data["height"]);
-      _numRooms = int.Parse(data["rooms"]);
+      if (data.ContainsKey("width"))
+        _width = int.Parse(data["width"]);
+
+      if (data.ContainsKey("height"))
+        _height = int.Parse(data["height"]);
+
+      if (data.ContainsKey("rooms"))
+        _numRooms = int.Parse(data["rooms"]);
 
       if (_width <= 0 || _height <= 0 || _numRooms <= 0)
         throw new OkuException("None of width, height or rooms can be <= 0 for a procedural tile map!");

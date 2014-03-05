@@ -38,17 +38,28 @@ namespace RougeLike
     protected override StringPairMap DoSave()
     {
       StringPairMap result = new StringPairMap();
-      result.Add("width", _width.ToString());
-      result.Add("height", _height.ToString());
-      result.Add("color", _color.ToString());
+      if (_width != 10)
+        result.Add("width", _width.ToString());
+
+      if (_height != 10)
+        result.Add("height", _height.ToString());
+
+      if (!_color.Equals(Color.Red))
+        result.Add("color", _color.ToString());
+
       return result;
     }
 
     protected override void DoLoad(StringPairMap data)
     {
-      _width = int.Parse(data["width"]);
-      _height = int.Parse(data["height"]);
-      _color = Color.Parse(data["color"]);
+      if (data.ContainsKey("width"))
+        _width = int.Parse(data["width"]);
+
+      if (data.ContainsKey("height"))
+        _height = int.Parse(data["height"]);
+
+      if (data.ContainsKey("color"))
+        _color = Color.Parse(data["color"]);
     }
   }
 }

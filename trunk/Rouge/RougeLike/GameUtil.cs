@@ -111,5 +111,10 @@ namespace RougeLike
       return Math.Min(1.0f, Math.Max(0.0f, value));
     }
 
+    public static float Clamp(float value, float min, float max)
+    {
+      return Math.Min(max, Math.Max(min, value));
+    }
+
   }
 }

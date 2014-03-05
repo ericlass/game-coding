@@ -60,8 +60,15 @@ namespace RougeLike
 
     protected override void DoLoad(StringPairMap data)
     {
-      _sourceId = data["source"];
-      _targetId = data["target"];
+      if (data.ContainsKey("source"))
+        _sourceId = data["source"];
+      else
+        throw new OkuBase.OkuException("The 'source' property is mandatory for hard joints!");
+
+      if (data.ContainsKey("target"))
+        _targetId = data["target"];
+      else
+        throw new OkuBase.OkuException("The 'target' property is mandatory for hard joints!");
     }
   }
 }

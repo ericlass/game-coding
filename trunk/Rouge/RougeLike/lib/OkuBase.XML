@@ -3958,6 +3958,11 @@
             Defines a set of math functions that are used by the engine.
             </summary>
         </member>
+        <member name="F:OkuBase.Utils.OkuMath.OneDegreeInRadians">
+            <summary>
+            The radian value of one degree.
+            </summary>
+        </member>
         <member name="M:OkuBase.Utils.OkuMath.GetNormal(OkuBase.Geometry.Vector2f,OkuBase.Geometry.Vector2f)">
             <summary>
             Calculates the left hand normal of a line segment defined by start and end.
@@ -4065,6 +4070,15 @@
             <param name="translation">The translation of the AABB.</param>
         </member>
         <member name="M:OkuBase.Utils.OkuMath.Clamp(System.Single,System.Single,System.Single)">
+            <summary>
+            Clamps the given value to the given min and max values.
+            </summary>
+            <param name="value">The value.</param>
+            <param name="min">The allowed minimum value.</param>
+            <param name="max">The allowed maximum value.</param>
+            <returns>The clamped value.</returns>
+        </member>
+        <member name="M:OkuBase.Utils.OkuMath.Clamp(System.Int32,System.Int32,System.Int32)">
             <summary>
             Clamps the given value to the given min and max values.
             </summary>

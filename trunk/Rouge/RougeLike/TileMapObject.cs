@@ -72,7 +72,11 @@ namespace RougeLike
     protected override void DoLoad(StringPairMap data)
     {
       base.Load(data);
-      _mapFile = data["mapfile"];
+
+      if (data.ContainsKey("mapfile"))
+        _mapFile = data["mapfile"];
+      else
+        throw new OkuBase.OkuException("The 'mapfile' property is mandatory for tile map objects!");
     }
 
   }

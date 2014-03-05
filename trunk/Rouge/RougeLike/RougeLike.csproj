@@ -73,6 +73,7 @@
     <Compile Include="GameUtil.cs" />
     <Compile Include="HardJointObject.cs" />
     <Compile Include="LightObject.cs" />
+    <Compile Include="LightType.cs" />
     <Compile Include="Orientation.cs" />
     <Compile Include="PerlinNoise.cs" />
     <Compile Include="PlayerControllerObject.cs" />

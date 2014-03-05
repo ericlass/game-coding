@@ -203,11 +203,6 @@ namespace RougeLike
         throw new NotImplementedException("");
       }
 
-      if (!mapRect.IsInside(end))
-      {
-        throw new NotImplementedException("");
-      }
-
       Vector2f startTile = WorldToTile(start);
       int x = (int)startTile.X;
       int y = (int)startTile.Y;
@@ -241,8 +236,8 @@ namespace RougeLike
         tMaxY = (start.Y - startTileRect.Min.Y) / (start.Y - end.Y);
       }
 
-      int xLast = (int)endTile.X + stepX;
-      int yLast = (int)endTile.Y + stepY;
+      int xLast = (int)GameUtil.Clamp(endTile.X + stepX, 0.0f, _tiles.GetLength(0));
+      int yLast = (int)GameUtil.Clamp(endTile.Y + stepY, 0.0f, _tiles.GetLength(1));
 
       int result = 0;
       while (true)
@@ -286,11 +281,30 @@ namespace RougeLike
 
       Vector2f center = GetTileRect(x, y).GetCenter();
 
-      int count = CountTilesOnLine(center, light.Position, 5);
+      Vector2f lightPos = Vector2f.Zero;
+      switch (light.LightType)
+      {
+        case LightType.Point:
+          lightPos = light.Position;
+          break;
+
+        case LightType.Infinit:
+          lightPos = center + (light.Direction * 1000.0f);
+          break;
+
+        default:
+          throw new OkuException("Unsupported light type: '" + light.LightType.ToString() + "'!");
+      }
+
+      int count = CountTilesOnLine(center, lightPos, 5);
       value = 1.0f - (count / 5.0f);
 
-      float attenuation = GameUtil.Saturate(1.0f - Vector2f.Distance(center, light.Position) / light.Radius);
-      attenuation *= attenuation;
+      float attenuation = 1.0f;
+      if (light.LightType != LightType.Infinit)
+      {
+        attenuation = GameUtil.Saturate(1.0f - Vector2f.Distance(center, lightPos) / light.Radius);
+        attenuation *= attenuation;
+      }
 
       value *= GameUtil.Saturate(attenuation * light.Power);
 
@@ -341,14 +355,7 @@ namespace RougeLike
               tint += GetLightValue(x, y, light);
             }
 
-            //Oku.Graphics.DrawImage(_tileImages[_tiles[x, y].TileIndex], wx, wy, tint);
             batch.Add(_tileImages[_tiles[x, y].TileIndex], new Vector2f(wx, wy), tint);
-
-            if (GameData.Instance.DebugDraw && !_tiles[x, y].Walkable)
-            {
-              Rectangle2f tileRect = GetTileRect(x, y);
-              Oku.Graphics.DrawRectangle(tileRect.Min.X, tileRect.Max.X, tileRect.Min.Y, tileRect.Max.Y, DebugTintColor);
-            }
           }
 
           wx += _tileWidth;
