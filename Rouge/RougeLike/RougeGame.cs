@@ -136,7 +136,8 @@ namespace RougeLike
       if (_wheelDelta != 0)
       {
         LightObject light = GameData.Instance.ActiveScene.GameObjects.GetObjectById("light02") as LightObject;
-        light.Direction = Vector2f.Rotate(light.Direction, _wheelDelta / 100.0f);
+        if (light != null)
+          light.Direction = Vector2f.Rotate(light.Direction, _wheelDelta / 100.0f);
       }
 
       _wheelDelta = 0;
