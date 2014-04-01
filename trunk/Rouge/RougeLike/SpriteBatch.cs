@@ -32,6 +32,8 @@ namespace RougeLike
       public int Count;
     }
 
+    private const int MaxVertices = 15000;
+
     private Dictionary<int, ImageBase> _images = new Dictionary<int,ImageBase>();
     private Dictionary<int, List<BatchedSprite>> _sprites = new Dictionary<int, List<BatchedSprite>>();
     private List<CompiledBatch> _batches = new List<CompiledBatch>();
@@ -85,6 +87,10 @@ namespace RougeLike
       Add(image, position, Color.White);
     }
 
+    private Vector2f[] pos = new Vector2f[MaxVertices];
+    private Vector2f[] tex = new Vector2f[MaxVertices];
+    private Color[] colors = new Color[MaxVertices];
+
     /// <summary>
     /// Finalizes the batching and create the final vertex buffers for drawing.
     /// </summary>
@@ -94,10 +100,6 @@ namespace RougeLike
       {
         ImageBase image = _images[imageId];
         List<BatchedSprite> sprites = _sprites[imageId];
-
-        Vector2f[] pos = new Vector2f[sprites.Count * 4];
-        Vector2f[] tex = new Vector2f[sprites.Count * 4];
-        Color[] colors = new Color[sprites.Count * 4];
 
         for (int i = 0; i < sprites.Count; i++)
         {
