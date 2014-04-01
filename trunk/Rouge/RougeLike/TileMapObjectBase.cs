@@ -12,36 +12,9 @@ namespace RougeLike
 {
   public abstract class TileMapObjectBase : GameObjectBase
   {
-    protected class Tile
-    {
-      public bool Walkable { get; set; }
-      public int TileIndex { get; set; }
-      public int Tag { get; set; }
-
-      public Tile()
-      {
-
-      }
-
-      public Tile(bool walkable, int tileIndex)
-      {
-        Walkable = walkable;
-        TileIndex = tileIndex;
-      }
-
-      public Tile(bool walkable, int tileIndex, int tag) : this(walkable, tileIndex)
-      {
-        Tag = tag;
-      }
-
-    }
-
     private Color DebugTintColor = new Color(0, 0, 0, 64);
 
-    protected int _tileWidth = 16;
-    protected int _tileHeight = 16;
-    protected Tile[,] _tiles = null;
-    protected List<Image> _tileImages = null;
+    protected TileData _tileData = null;
 
     private const float CollisionOffset = 0.1f; // Defines a fixed offset for collision detection to handle edge cases
 
@@ -50,8 +23,8 @@ namespace RougeLike
 
     public Rectangle2f GetMapRect()
     {
-      float mapWidth = _tiles.GetLength(0) * _tileWidth;
-      float mapHeight = _tiles.GetLength(1) * _tileHeight;
+      float mapWidth = _tileData.Width * _tileData.TileWidth;
+      float mapHeight = _tileData.Height * _tileData.TileHeight;
 
       float mapLeft = Position.X - (mapWidth * 0.5f);
       float mapBottom = Position.Y - (mapHeight * 0.5f);
@@ -63,8 +36,8 @@ namespace RougeLike
     {
       Rectangle2f mapRect = GetMapRect();
       Vector2f result = Vector2f.Zero;
-      result.X = (int)((p.X - mapRect.Min.X) / _tileWidth);
-      result.Y = (int)((p.Y - mapRect.Min.Y) / _tileHeight);
+      result.X = (int)((p.X - mapRect.Min.X) / _tileData.TileWidth);
+      result.Y = (int)((p.Y - mapRect.Min.Y) / _tileData.TileHeight);
       return result;
     }
 
@@ -72,10 +45,10 @@ namespace RougeLike
     {
       Rectangle2f mapRect = GetMapRect();
 
-      float left = mapRect.Min.X + (x * _tileWidth);
-      float bottom = mapRect.Min.Y + (y * _tileHeight);
+      float left = mapRect.Min.X + (x * _tileData.TileWidth);
+      float bottom = mapRect.Min.Y + (y * _tileData.TileHeight);
 
-      return new Rectangle2f(left, bottom, _tileWidth, _tileHeight);
+      return new Rectangle2f(left, bottom, _tileData.TileWidth, _tileData.TileHeight);
     }
 
     public bool IsInside(Vector2f p)
@@ -95,10 +68,10 @@ namespace RougeLike
       {
         if (movement.X > 0)
         {
-          int left = Math.Max(0, Math.Min(_tiles.GetLength(0) - 1, (int)((box.Min.X - mapRect.Min.X) / _tileWidth)));
-          int right = Math.Max(0, Math.Min(_tiles.GetLength(0) - 1, (int)(((box.Max.X + movement.X) - mapRect.Min.X) / _tileWidth)));
-          int bottom = Math.Max(0, Math.Min(_tiles.GetLength(1) - 1, (int)((box.Min.Y - mapRect.Min.Y) / _tileHeight)));
-          int top = Math.Max(0, Math.Min(_tiles.GetLength(1) - 1, (int)((box.Max.Y - mapRect.Min.Y) / _tileHeight)));
+          int left = Math.Max(0, Math.Min(_tileData.Width - 1, (int)((box.Min.X - mapRect.Min.X) / _tileData.TileWidth)));
+          int right = Math.Max(0, Math.Min(_tileData.Width - 1, (int)(((box.Max.X + movement.X) - mapRect.Min.X) / _tileData.TileWidth)));
+          int bottom = Math.Max(0, Math.Min(_tileData.Height - 1, (int)((box.Min.Y - mapRect.Min.Y) / _tileData.TileHeight)));
+          int top = Math.Max(0, Math.Min(_tileData.Height - 1, (int)((box.Max.Y - mapRect.Min.Y) / _tileData.TileHeight)));
 
           float bound = box.Max.X;
           float disp = movement.X;
@@ -106,7 +79,7 @@ namespace RougeLike
           {
             for (int i = left; i <= right; i++)
             {
-              if (!_tiles[i, j].Walkable)
+              if (_tileData[i, j].TileType != TileType.Empty)
               {
                 Rectangle2f tileRect = GetTileRect(i, j);
                 disp = Math.Min(disp, (tileRect.Min.X - CollisionOffset) - bound);
@@ -117,10 +90,10 @@ namespace RougeLike
         }
         else
         {
-          int left = Math.Max(0, Math.Min(_tiles.GetLength(0) - 1, (int)(((box.Min.X + movement.X) - mapRect.Min.X) / _tileWidth)));
-          int right = Math.Max(0, Math.Min(_tiles.GetLength(0) - 1, (int)((box.Max.X - mapRect.Min.X) / _tileWidth)));
-          int bottom = Math.Max(0, Math.Min(_tiles.GetLength(1) - 1, (int)((box.Min.Y - mapRect.Min.Y) / _tileHeight)));
-          int top = Math.Max(0, Math.Min(_tiles.GetLength(1) - 1, (int)((box.Max.Y - mapRect.Min.Y) / _tileHeight)));
+          int left = Math.Max(0, Math.Min(_tileData.Width - 1, (int)(((box.Min.X + movement.X) - mapRect.Min.X) / _tileData.TileWidth)));
+          int right = Math.Max(0, Math.Min(_tileData.Width - 1, (int)((box.Max.X - mapRect.Min.X) / _tileData.TileWidth)));
+          int bottom = Math.Max(0, Math.Min(_tileData.Height - 1, (int)((box.Min.Y - mapRect.Min.Y) / _tileData.TileHeight)));
+          int top = Math.Max(0, Math.Min(_tileData.Height - 1, (int)((box.Max.Y - mapRect.Min.Y) / _tileData.TileHeight)));
 
           float bound = box.Min.X;
           float disp = movement.X;
@@ -128,7 +101,7 @@ namespace RougeLike
           {
             for (int i = left; i <= right; i++)
             {
-              if (!_tiles[i, j].Walkable)
+              if (_tileData[i, j].TileType != TileType.Empty)
               {
                 Rectangle2f tileRect = GetTileRect(i, j);
                 disp = Math.Max(disp, (tileRect.Max.X + CollisionOffset) - bound);
@@ -143,10 +116,10 @@ namespace RougeLike
       {
         if (movement.Y > 0)
         {
-          int left = Math.Max(0, Math.Min(_tiles.GetLength(0) - 1, (int)((box.Min.X - mapRect.Min.X) / _tileWidth)));
-          int right = Math.Max(0, Math.Min(_tiles.GetLength(0) - 1, (int)((box.Max.X - mapRect.Min.X) / _tileWidth)));
-          int bottom = Math.Max(0, Math.Min(_tiles.GetLength(1) - 1, (int)((box.Min.Y - mapRect.Min.Y) / _tileHeight)));
-          int top = Math.Max(0, Math.Min(_tiles.GetLength(1) - 1, (int)(((box.Max.Y + movement.Y) - mapRect.Min.Y) / _tileHeight)));
+          int left = Math.Max(0, Math.Min(_tileData.Width - 1, (int)((box.Min.X - mapRect.Min.X) / _tileData.TileWidth)));
+          int right = Math.Max(0, Math.Min(_tileData.Width - 1, (int)((box.Max.X - mapRect.Min.X) / _tileData.TileWidth)));
+          int bottom = Math.Max(0, Math.Min(_tileData.Height - 1, (int)((box.Min.Y - mapRect.Min.Y) / _tileData.TileHeight)));
+          int top = Math.Max(0, Math.Min(_tileData.Height - 1, (int)(((box.Max.Y + movement.Y) - mapRect.Min.Y) / _tileData.TileHeight)));
 
           float bound = box.Max.Y;
           float disp = movement.Y;
@@ -154,7 +127,7 @@ namespace RougeLike
           {
             for (int i = left; i <= right; i++)
             {
-              if (!_tiles[i, j].Walkable)
+              if (_tileData[i, j].TileType != TileType.Empty)
               {
                 Rectangle2f tileRect = GetTileRect(i, j);
                 disp = Math.Min(disp, (tileRect.Min.Y - CollisionOffset) - bound);
@@ -165,10 +138,10 @@ namespace RougeLike
         }
         else
         {
-          int left = Math.Max(0, Math.Min(_tiles.GetLength(0) - 1, (int)((box.Min.X - mapRect.Min.X) / _tileWidth)));
-          int right = Math.Max(0, Math.Min(_tiles.GetLength(0) - 1, (int)((box.Max.X - mapRect.Min.X) / _tileWidth)));
-          int bottom = Math.Max(0, Math.Min(_tiles.GetLength(1) - 1, (int)(((box.Min.Y + movement.Y) - mapRect.Min.Y) / _tileHeight)));
-          int top = Math.Max(0, Math.Min(_tiles.GetLength(1) - 1, (int)((box.Max.Y - mapRect.Min.Y) / _tileHeight)));
+          int left = Math.Max(0, Math.Min(_tileData.Width - 1, (int)((box.Min.X - mapRect.Min.X) / _tileData.TileWidth)));
+          int right = Math.Max(0, Math.Min(_tileData.Width - 1, (int)((box.Max.X - mapRect.Min.X) / _tileData.TileWidth)));
+          int bottom = Math.Max(0, Math.Min(_tileData.Height - 1, (int)(((box.Min.Y + movement.Y) - mapRect.Min.Y) / _tileData.TileHeight)));
+          int top = Math.Max(0, Math.Min(_tileData.Height - 1, (int)((box.Max.Y - mapRect.Min.Y) / _tileData.TileHeight)));
 
           float bound = box.Min.Y;
           float disp = movement.Y;
@@ -176,7 +149,7 @@ namespace RougeLike
           {
             for (int i = left; i <= right; i++)
             {
-              if (!_tiles[i, j].Walkable)
+              if (_tileData[i, j].TileType != TileType.Empty)
               {
                 Rectangle2f tileRect = GetTileRect(i, j);
                 disp = Math.Max(disp, (tileRect.Max.Y + CollisionOffset) - bound);
@@ -215,7 +188,7 @@ namespace RougeLike
       Rectangle2f startTileRect = GetTileRect(x, y);
       
       float tMaxX;
-      float tDeltaX = _tileWidth / Math.Abs(rayDir.X);
+      float tDeltaX = _tileData.TileWidth / Math.Abs(rayDir.X);
       if (stepX > 0)
       {
         tMaxX = (startTileRect.Max.X - start.X) / (end.X - start.X);
@@ -226,7 +199,7 @@ namespace RougeLike
       }
 
       float tMaxY;
-      float tDeltaY = _tileHeight / Math.Abs(rayDir.Y);
+      float tDeltaY = _tileData.TileHeight / Math.Abs(rayDir.Y);
       if (stepY > 0)
       {
         tMaxY = (startTileRect.Max.Y - start.Y) / (end.Y - start.Y);
@@ -236,13 +209,13 @@ namespace RougeLike
         tMaxY = (start.Y - startTileRect.Min.Y) / (start.Y - end.Y);
       }
 
-      int xLast = (int)GameUtil.Clamp(endTile.X + stepX, 0.0f, _tiles.GetLength(0));
-      int yLast = (int)GameUtil.Clamp(endTile.Y + stepY, 0.0f, _tiles.GetLength(1));
+      int xLast = (int)GameUtil.Clamp(endTile.X + stepX, 0.0f, _tileData.Width);
+      int yLast = (int)GameUtil.Clamp(endTile.Y + stepY, 0.0f, _tileData.Height);
 
       int result = 0;
       while (true)
       {
-        if (!_tiles[x, y].Walkable)
+        if (_tileData[x, y].TileType != TileType.Empty)
         {
           result++;
           if (result >= max)
@@ -324,57 +297,61 @@ namespace RougeLike
       rightTop = WorldToTile(rightTop);
 
       int left = Math.Max(0, (int)leftBottom.X);
-      int right = Math.Min(_tiles.GetLength(0) - 1, (int)rightTop.X + 1);
+      int right = Math.Min(_tileData.Width - 1, (int)rightTop.X + 1);
       int bottom = Math.Max(0, (int)leftBottom.Y);
-      int top = Math.Min(_tiles.GetLength(1) - 1, (int)rightTop.Y);
+      int top = Math.Min(_tileData.Height - 1, (int)rightTop.Y);
 
       float mapLeft = mapRect.Min.X;
       float mapBottom = mapRect.Min.Y;
 
       PlayerObject player = GameData.Instance.ActiveScene.GameObjects.GetObjectById("playerid") as PlayerObject;
 
-      float maxDist = _tileWidth * 20;
+      float maxDist = _tileData.TileWidth * 20;
 
       List<LightObject> lights = GameData.Instance.ActiveScene.GameObjects.GetObjectsOfType<LightObject>();
 
       SpriteBatch batch = new SpriteBatch();
       batch.Begin();
-      float wy = mapBottom + (bottom * _tileHeight) + (_tileHeight / 2);
+      float wy = mapBottom + (bottom * _tileData.TileHeight) + (_tileData.TileHeight / 2);
       for (int y = bottom; y <= top; y++)
       {
-        float wx = mapLeft + (left * _tileWidth) + (_tileWidth / 2);
+        float wx = mapLeft + (left * _tileData.TileWidth) + (_tileData.TileWidth / 2);
         for (int x = left; x <= right; x++)
         {
-          Tile tile = _tiles[x, y];
-          if (tile.TileIndex >= 0)
+          Tile tile = _tileData[x, y];
+          if (tile.TileType != TileType.Empty)
           {
-            Color tint = Color.Black;
+            Color tint = Color.White;
 
-            foreach (LightObject light in lights)
+            if (lights.Count > 0)
             {
-              tint += GetLightValue(x, y, light);
+              tint = Color.Black;
+              foreach (LightObject light in lights)
+              {
+                tint += GetLightValue(x, y, light);
+              }
             }
 
-            batch.Add(_tileImages[_tiles[x, y].TileIndex], new Vector2f(wx, wy), tint);
+            batch.Add(_tileData.GetImage(x, y), new Vector2f(wx, wy), tint);
           }
 
-          wx += _tileWidth;
+          wx += _tileData.TileWidth;
         }
-        wy += _tileHeight;
+        wy += _tileData.TileHeight;
       }
       batch.End();
       batch.Draw();
 
       if (GameData.Instance.DebugDraw)
       {
-        for (int i = 0; i < _tiles.GetLength(0) + 1; i++)
+        for (int i = 0; i < _tileData.Width + 1; i++)
         {
-          float x = mapRect.Min.X + (i * _tileWidth);
+          float x = mapRect.Min.X + (i * _tileData.TileWidth);
           Oku.Graphics.DrawLine(x, mapRect.Min.Y, x, mapRect.Max.Y, 1.0f, Color.Green);
         }
-        for (int i = 0; i < _tiles.GetLength(1) + 1; i++)
+        for (int i = 0; i < _tileData.Height + 1; i++)
         {
-          float y = mapRect.Min.Y + (i * _tileHeight);
+          float y = mapRect.Min.Y + (i * _tileData.TileHeight);
           Oku.Graphics.DrawLine(mapRect.Min.X, y, mapRect.Max.X, y, 1.0f, Color.Green);
         }
       }
@@ -382,7 +359,7 @@ namespace RougeLike
 
     public override void Finish()
     {
-      foreach (Image img in _tileImages)
+      foreach (Image img in _tileData.Images)
         Oku.Graphics.ReleaseImage(img);
     }    
 

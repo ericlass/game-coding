@@ -22,27 +22,6 @@
       "id" : "pc01",
       "playerid" : "playerid",
       "tilemapid" : "worldmapid"
-    },
-    {
-      "type" : "light",
-      "id" : "light01",
-      "zindex" : "0",
-      "position" : "0,0",
-      "color" : "#FFF1AD",
-      "radius" : "250"
-    },
-    {
-      "type" : "hardjoint",
-      "id" : "joint01",
-      "source" : "playerid",
-      "target" : "light01"
-    },
-    {
-      "type" : "light",
-      "id" : "light02",
-      "color" : "#BAE2FF",
-      "lighttype" : "Infinit",
-      "direction" : "-2,1"
     }
   ]
 }

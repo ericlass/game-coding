@@ -24,29 +24,6 @@ namespace RougeLike
     {
     }
 
-    public SceneList GetHardCodedScene()
-    {
-      SceneList result = new SceneList();
-
-      PlayerObject player = new PlayerObject();
-
-      SquareObject square = new SquareObject();
-      square.Position = new OkuBase.Geometry.Vector2f(0, 100);
-
-      TileMapObject tilemap = new TileMapObject();
-      tilemap.Position = new OkuBase.Geometry.Vector2f(0, -100);
-
-      Scene scene = new Scene();
-      scene.Name = "Test";
-
-      scene.GameObjects.Add(player);
-      scene.GameObjects.Add(square);
-      scene.GameObjects.Add(tilemap);
-
-      result.Add(scene);
-      return result;
-    }
-
     public SceneList LoadScene(string fileName)
     {
       string fullPath = Path.Combine(".\\Content\\Scenes", fileName);

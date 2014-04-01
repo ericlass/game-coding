@@ -27,12 +27,9 @@ namespace RougeLike
     {
       RegisterCreator("player", new CreateObjectDelegate(CreatePlayerObject));
       RegisterCreator("square", new CreateObjectDelegate(CreateSquareObject));
-      RegisterCreator("tilemap", new CreateObjectDelegate(CreateTileMapObject));
       RegisterCreator("playercontroller", new CreateObjectDelegate(CreatePlayerControllerObject));
-      RegisterCreator("proceduraltilemap", CreateProceduralTileMapObject);
       RegisterCreator("light", CreateLightObject);
       RegisterCreator("hardjoint", CreateHardJointObject);
-      RegisterCreator("worldmap", CreateWorldMapObject);
     }
 
     public void RegisterCreator(string objectType, CreateObjectDelegate creator)
@@ -69,20 +66,6 @@ namespace RougeLike
       return result;
     }
 
-    private GameObjectBase CreateTileMapObject(StringPairMap data)
-    {
-      TileMapObject result = new TileMapObject();
-      result.Load(data);
-      return result;
-    }
-
-    private GameObjectBase CreateProceduralTileMapObject(StringPairMap data)
-    {
-      ProceduralTileMapObject result = new ProceduralTileMapObject();
-      result.Load(data);
-      return result;
-    }
-
     private GameObjectBase CreatePlayerControllerObject(StringPairMap data)
     {
       PlayerControllerObject result = new PlayerControllerObject();
@@ -100,13 +83,6 @@ namespace RougeLike
     private GameObjectBase CreateHardJointObject(StringPairMap data)
     {
       HardJointObject result = new HardJointObject();
-      result.Load(data);
-      return result;
-    }
-
-    private GameObjectBase CreateWorldMapObject(StringPairMap data)
-    {
-      WorldMapObject result = new WorldMapObject();
       result.Load(data);
       return result;
     }
