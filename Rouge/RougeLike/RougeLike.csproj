@@ -90,6 +90,7 @@
     <Compile Include="Tile.cs" />
     <Compile Include="TileData.cs" />
     <Compile Include="TileMapGenerator.cs" />
+    <Compile Include="TileMapObject.cs" />
     <Compile Include="TileMapObjectBase.cs" />
     <None Include="Content\Graphics\player_down_idle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
