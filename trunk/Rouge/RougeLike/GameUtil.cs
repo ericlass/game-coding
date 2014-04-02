@@ -29,7 +29,7 @@ namespace RougeLike
       return result;
     }
 
-    public static List<Image> LoadSpriteSheet(string fileName, int spriteWidth, int spriteHeight)
+    public static List<ImageBase> LoadSpriteSheet(string fileName, int spriteWidth, int spriteHeight)
     {
       string fullPath = Path.Combine(".\\Content\\Graphics", fileName);
       if (!File.Exists(fullPath))
@@ -72,7 +72,7 @@ namespace RougeLike
         tilePixels[tileIndex][tpIndex] = pixels[i];
       }
 
-      List<Image> result = new List<Image>();
+      List<ImageBase> result = new List<ImageBase>();
 
       for (int i = 0; i < tilePixels.Length; i++)
       {

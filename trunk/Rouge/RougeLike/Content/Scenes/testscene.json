@@ -12,12 +12,6 @@
       "position" : "0,50"
     },
     {
-      "type" : "worldmap",
-      "id" : "worldmapid",
-      "zindex" : "-1",
-      "position" : "0,0"
-    },
-    {
       "type" : "playercontroller",
       "id" : "pc01",
       "playerid" : "playerid",

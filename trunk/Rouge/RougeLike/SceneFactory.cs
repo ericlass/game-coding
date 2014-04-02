@@ -24,6 +24,30 @@ namespace RougeLike
     {
     }
 
+    public SceneList GenerateScene()
+    {
+      int width = 500;
+      int height = 46;
+
+      TileGeneratorParameters parameters = new TileGeneratorParameters();
+      parameters.DetailLevel = 3;
+      parameters.Amplitude = 20;
+      parameters.Seed = 912745896;
+
+      Tile[,] tiles = TileMapGenerator.Instance.GenerateTile(parameters, width, height);
+      List<ImageBase> tileImages = GameUtil.LoadSpriteSheet("simple_tiles.png", 16, 16);
+
+      TileMapObject tileMap = new TileMapObject(new TileData(tiles, tileImages, 16, 16));
+
+      Scene scene = new Scene();
+      scene.GameObjects.Add(tileMap);
+
+      SceneList result = new SceneList();
+      result.Add(scene);
+
+      return result;
+    }
+
     public SceneList LoadScene(string fileName)
     {
       string fullPath = Path.Combine(".\\Content\\Scenes", fileName);
