@@ -42,7 +42,7 @@ namespace RougeLike
         {
           float density = -(y - (height / 2.0f));
 
-          density += noise.Noise(x, y, parameters.DetailLevel, 100) * parameters.Amplitude;
+          density += noise.Noise(x, y, parameters.DetailLevel, 200) * parameters.Amplitude;
 
           Tile tile = new Tile();
           tiles[x, y] = tile;
