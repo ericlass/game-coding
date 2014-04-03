@@ -71,6 +71,7 @@
     <Compile Include="GameObjectFactory.cs" />
     <Compile Include="GameObjectList.cs" />
     <Compile Include="GameUtil.cs" />
+    <Compile Include="GrassObject.cs" />
     <Compile Include="HardJointObject.cs" />
     <Compile Include="LightObject.cs" />
     <Compile Include="LightType.cs" />

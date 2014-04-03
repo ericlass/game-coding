@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using OkuBase.Graphics;
+using OkuBase.Geometry;
 using JSONator;
 
 namespace RougeLike
@@ -27,11 +28,11 @@ namespace RougeLike
     public SceneList GenerateScene()
     {
       int width = 500;
-      int height = 46;
+      int height = 100;
 
       TileGeneratorParameters parameters = new TileGeneratorParameters();
-      parameters.DetailLevel = 3;
-      parameters.Amplitude = 20;
+      parameters.DetailLevel = 6;
+      parameters.Amplitude = 30;
       parameters.Seed = 912745896;
 
       Tile[,] tiles = TileMapGenerator.Instance.GenerateTile(parameters, width, height);
@@ -41,6 +42,19 @@ namespace RougeLike
 
       Scene scene = new Scene();
       scene.GameObjects.Add(tileMap);
+
+      for (int x = 0; x < width; x++)
+      {
+        int y = 0;
+        while (tiles[x, y].TileType != TileType.Empty)
+          y++;
+
+        Rectangle2f tileRect = tileMap.GetTileRect(x, y);
+        GrassObject grass = new GrassObject();
+        grass.Position = new Vector2f(tileRect.GetCenter().X, tileRect.Min.Y);
+        grass.ZIndex = -1;
+        scene.GameObjects.Add(grass);
+      }
 
       SceneList result = new SceneList();
       result.Add(scene);

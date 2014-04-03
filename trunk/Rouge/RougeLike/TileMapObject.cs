@@ -21,7 +21,7 @@ namespace RougeLike
 
     public override void Update(float dt)
     {
-      float speed = 300 * dt;
+      float speed = 500 * dt;
       Vector2f center = Oku.Graphics.Viewport.Center;
 
       if (Oku.Input.Keyboard.KeyIsDown(Keys.Left))
@@ -29,6 +29,12 @@ namespace RougeLike
 
       if (Oku.Input.Keyboard.KeyIsDown(Keys.Right))
         center.X += speed;
+
+      if (Oku.Input.Keyboard.KeyIsDown(Keys.Up))
+        center.Y += speed;
+
+      if (Oku.Input.Keyboard.KeyIsDown(Keys.Down))
+        center.Y -= speed;
 
       Oku.Graphics.Viewport.Center = center;
     }
