@@ -27,16 +27,18 @@ namespace RougeLike
 
     public SceneList GenerateScene()
     {
-      int width = 500;
+      int width = 1000;
       int height = 100;
 
-      TileGeneratorParameters parameters = new TileGeneratorParameters();
-      parameters.DetailLevel = 6;
-      parameters.Amplitude = 30;
-      parameters.Seed = 912745896;
+      Biome biome = BiomeParameters.Instance["rock"];
+
+      if (biome == null)
+        throw new OkuBase.OkuException("There is not biome with the id \"\"!");
+
+      TileGeneratorParameters parameters = biome.GeneratorParameters;
 
       Tile[,] tiles = TileMapGenerator.Instance.GenerateTile(parameters, width, height);
-      List<ImageBase> tileImages = GameUtil.LoadSpriteSheet("simple_tiles.png", 16, 16);
+      List<ImageBase> tileImages = GameUtil.LoadSpriteSheet(biome.Tileset, 16, 16);
 
       TileMapObject tileMap = new TileMapObject(new TileData(tiles, tileImages, 16, 16));
 
@@ -48,12 +50,6 @@ namespace RougeLike
         int y = 0;
         while (tiles[x, y].TileType != TileType.Empty)
           y++;
-
-        Rectangle2f tileRect = tileMap.GetTileRect(x, y);
-        GrassObject grass = new GrassObject();
-        grass.Position = new Vector2f(tileRect.GetCenter().X, tileRect.Min.Y);
-        grass.ZIndex = -1;
-        scene.GameObjects.Add(grass);
       }
 
       SceneList result = new SceneList();

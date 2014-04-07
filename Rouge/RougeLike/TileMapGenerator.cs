@@ -5,14 +5,7 @@ using System.Text;
 
 namespace RougeLike
 {
-  public class TileGeneratorParameters
-  {
-    public int Amplitude { get; set; }
-    public int DetailLevel { get; set; }
-    public int Seed { get; set; }
-  }
-
-  public class TileMapGenerator
+    public class TileMapGenerator
   {
     private static TileMapGenerator _instance = null;
 
@@ -42,7 +35,7 @@ namespace RougeLike
         {
           float density = -(y - (height / 2.0f));
 
-          density += noise.Noise(x, y, parameters.DetailLevel, 200) * parameters.Amplitude;
+          density += noise.Noise(x, y, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude;
 
           Tile tile = new Tile();
           tiles[x, y] = tile;
