@@ -62,6 +62,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Animation.cs" />
+    <Compile Include="Biome.cs" />
+    <Compile Include="BiomeParameters.cs" />
     <Compile Include="DoubleKeyMap.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="EventId.cs" />
@@ -90,6 +92,7 @@
     <Compile Include="StringPairMap.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="TileData.cs" />
+    <Compile Include="TileGeneratorParameters.cs" />
     <Compile Include="TileMapGenerator.cs" />
     <Compile Include="TileMapObject.cs" />
     <Compile Include="TileMapObjectBase.cs" />
