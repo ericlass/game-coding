@@ -35,13 +35,16 @@ namespace RougeLike
         {
           float density = -(y - (height / 2.0f));
 
-          density += noise.Noise(x, y, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude;
+          //density += noise.Noise(x, y, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude;
+
+          density += noise.Noise(x * 1.96f, y * 1.96f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude * 0.51f;
+          density += noise.Noise(x * 1.01f, y * 1.01f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude;
 
           Tile tile = new Tile();
           tiles[x, y] = tile;
           if (density > 0.0f)
           {
-            tile.ImageIndex = 1;
+            tile.ImageIndex = 0;
             tile.TileType = TileType.Filled;
           }
           else

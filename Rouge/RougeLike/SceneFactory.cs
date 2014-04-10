@@ -27,13 +27,13 @@ namespace RougeLike
 
     public SceneList GenerateScene()
     {
-      int width = 1000;
+      int width = 2000;
       int height = 100;
 
-      Biome biome = BiomeParameters.Instance["rock"];
+      Biome biome = BiomeParameters.Instance["mountain"];
 
       if (biome == null)
-        throw new OkuBase.OkuException("There is not biome with the id \"\"!");
+        throw new OkuBase.OkuException("There is no biome with the id \"\"!");
 
       TileGeneratorParameters parameters = biome.GeneratorParameters;
 
@@ -44,13 +44,6 @@ namespace RougeLike
 
       Scene scene = new Scene();
       scene.GameObjects.Add(tileMap);
-
-      for (int x = 0; x < width; x++)
-      {
-        int y = 0;
-        while (tiles[x, y].TileType != TileType.Empty)
-          y++;
-      }
 
       SceneList result = new SceneList();
       result.Add(scene);
