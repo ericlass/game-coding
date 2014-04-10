@@ -24,19 +24,47 @@ namespace RougeLike
 
     private BiomeParameters()
     {
-      Biome RockBiome = new Biome()
+      Biome MountainBiome = new Biome()
       {
-        Id = "rock",
-        Tileset = "simple_tiles.png",
+        Id = "mountain",
+        Tileset = "mountain_tile.png",
         GeneratorParameters = new TileGeneratorParameters()
         {
-          Amplitude = 30,
+          Amplitude = 40,
           DetailLevel = 6,
           DetailSize = 200,
-          Seed = 912745896
+          Seed = 922745886
         }
       };
-      _biomes.Add("rock", RockBiome);
+      _biomes.Add(MountainBiome.Id, MountainBiome);
+
+      Biome GrassLandBiome = new Biome()
+      {
+        Id = "grassland",
+        Tileset = "grass_tile.png",
+        GeneratorParameters = new TileGeneratorParameters()
+        {
+          Amplitude = 15,
+          DetailLevel = 3,
+          DetailSize = 200,
+          Seed = 6846532
+        }
+      };
+      _biomes.Add(GrassLandBiome.Id, GrassLandBiome);
+
+      Biome DesertBiome = new Biome()
+      {
+        Id = "desert",
+        Tileset = "desert_tile.png",
+        GeneratorParameters = new TileGeneratorParameters()
+        {
+          Amplitude = 20,
+          DetailLevel = 2,
+          DetailSize = 250,
+          Seed = 265549
+        }
+      };
+      _biomes.Add(DesertBiome.Id, DesertBiome);
     }
 
     public Biome this[string id]
