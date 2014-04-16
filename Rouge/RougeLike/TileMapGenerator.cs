@@ -24,8 +24,11 @@ namespace RougeLike
     {
     }
 
-    public Tile[,] GenerateTile(TileGeneratorParameters parameters, int width, int height)
+    public Tile[,] GenerateTiles(TileGeneratorParameters parameters, int width, int height)
     {
+      if (width % 16 != 0 || height % 16 != 0)
+        throw new OkuBase.OkuException("Tilemap width and height must be a multiple of 16!");
+
       Tile[,] tiles = new Tile[width, height];
       PerlinNoise noise = new PerlinNoise(parameters.Seed);
 
