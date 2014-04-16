@@ -28,7 +28,7 @@ namespace RougeLike
     public SceneList GenerateScene()
     {
       int width = 2000;
-      int height = 100;
+      int height = 112;
 
       Biome biome = BiomeParameters.Instance["mountain"];
 
@@ -37,7 +37,7 @@ namespace RougeLike
 
       TileGeneratorParameters parameters = biome.GeneratorParameters;
 
-      Tile[,] tiles = TileMapGenerator.Instance.GenerateTile(parameters, width, height);
+      Tile[,] tiles = TileMapGenerator.Instance.GenerateTiles(parameters, width, height);
       List<ImageBase> tileImages = GameUtil.LoadSpriteSheet(biome.Tileset, 16, 16);
 
       TileMapObject tileMap = new TileMapObject(new TileData(tiles, tileImages, 16, 16));
