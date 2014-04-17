@@ -310,8 +310,8 @@ namespace RougeLike
 
       List<LightObject> lights = GameData.Instance.ActiveScene.GameObjects.GetObjectsOfType<LightObject>();
 
-      SpriteBatch batch = new SpriteBatch();
-      batch.Begin();
+      //SpriteBatch batch = new SpriteBatch();
+      //batch.Begin();
       float wy = mapBottom + (bottom * _tileData.TileHeight) + (_tileData.TileHeight / 2);
       for (int y = bottom; y <= top; y++)
       {
@@ -332,15 +332,16 @@ namespace RougeLike
               }
             }
 
-            batch.Add(_tileData.GetImage(x, y), new Vector2f(wx, wy), tint);
+            //batch.Add(_tileData.GetImage(x, y), new Vector2f(wx, wy), tint);
+            Oku.Graphics.DrawImage(_tileData.GetImage(x, y), wx, wy, tint);
           }
 
           wx += _tileData.TileWidth;
         }
         wy += _tileData.TileHeight;
       }
-      batch.End();
-      batch.Draw();
+      //batch.End();
+      //batch.Draw();
 
       if (GameData.Instance.DebugDraw)
       {
