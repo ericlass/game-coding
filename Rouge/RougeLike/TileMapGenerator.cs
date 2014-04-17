@@ -32,6 +32,7 @@ namespace RougeLike
       Tile[,] tiles = new Tile[width, height];
       PerlinNoise noise = new PerlinNoise(parameters.Seed);
 
+      // Generate terrain from noise
       for (int y = 0; y < height; y++)
       {
         for (int x = 0; x < width; x++)
@@ -45,15 +46,50 @@ namespace RougeLike
 
           Tile tile = new Tile();
           tiles[x, y] = tile;
+          tile.ImageIndex = 0;
+
           if (density > 0.0f)
-          {
-            tile.ImageIndex = 0;
             tile.TileType = TileType.Filled;
-          }
           else
-          {
-            tile.ImageIndex = 0;
             tile.TileType = TileType.Empty;
+        }
+      }
+
+      // Create corner tiles
+      for (int y = 1; y < height - 1; y++)
+      {
+        for (int x = 1; x < width - 1; x++)
+        {
+          Tile tile = tiles[x, y];
+          if (tile.TileType == TileType.Empty)
+          {
+            bool upFilled = tiles[x, y + 1].TileType == TileType.Filled;
+            bool downFilled = tiles[x, y - 1].TileType == TileType.Filled;
+            bool leftFilled = tiles[x - 1, y].TileType == TileType.Filled;
+            bool rightFilled = tiles[x + 1, y].TileType == TileType.Filled;
+
+
+            if (rightFilled && downFilled && !leftFilled && !upFilled)
+            {
+              tile.TileType = TileType.SouthEast;
+              tile.ImageIndex = 1;
+            }
+            else if (!rightFilled && downFilled && leftFilled && !upFilled)
+            {
+              tile.TileType = TileType.SouthWest;
+              tile.ImageIndex = 2;
+            }
+            else if (rightFilled && !downFilled && !leftFilled && upFilled)
+            {
+              tile.TileType = TileType.NorthEast;
+              tile.ImageIndex = 3;
+            }
+            else if (!rightFilled && !downFilled && leftFilled && upFilled)
+            {
+              tile.TileType = TileType.NorthWest;
+              tile.ImageIndex = 4;
+            }
+
           }
         }
       }

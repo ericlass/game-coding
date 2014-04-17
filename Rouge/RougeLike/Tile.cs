@@ -8,7 +8,11 @@ namespace RougeLike
   public enum TileType
   {
     Empty,
-    Filled
+    Filled,
+    SouthEast,
+    SouthWest,
+    NorthEast,
+    NorthWest
   }
 
   public class Tile

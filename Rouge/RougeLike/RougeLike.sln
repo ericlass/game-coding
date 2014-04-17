@@ -5,6 +5,10 @@ VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RougeLike", "RougeLike.csproj", "{707C919A-A8DD-4DBE-9266-71400AE0266C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OkuBase", "..\..\OkuEngine\OkuBase\OkuBase.csproj", "{80362428-9A21-4449-A234-9CB8D2F52009}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OkuDrivers", "..\..\OkuEngine\OkuDrivers\OkuDrivers.csproj", "{11C8459C-8AAA-470B-9D95-28450CF1B661}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{707C919A-A8DD-4DBE-9266-71400AE0266C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{707C919A-A8DD-4DBE-9266-71400AE0266C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{707C919A-A8DD-4DBE-9266-71400AE0266C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80362428-9A21-4449-A234-9CB8D2F52009}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80362428-9A21-4449-A234-9CB8D2F52009}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80362428-9A21-4449-A234-9CB8D2F52009}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80362428-9A21-4449-A234-9CB8D2F52009}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11C8459C-8AAA-470B-9D95-28450CF1B661}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11C8459C-8AAA-470B-9D95-28450CF1B661}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11C8459C-8AAA-470B-9D95-28450CF1B661}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11C8459C-8AAA-470B-9D95-28450CF1B661}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
