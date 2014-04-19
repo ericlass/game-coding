@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OkuBase.Geometry;
 using OkuBase.Graphics;
 
 namespace RougeLike
@@ -7,14 +8,14 @@ namespace RougeLike
   public class TileData
   {
     private Tile[,] _tiles = null;
-    private List<ImageBase> _images = null;
+    private ImageBase _tileImages = null;
     private int _tileWidth = 0;
     private int _tileHeight = 0;
 
-    public TileData(Tile[,] tiles, List<ImageBase> images, int tileWidth, int tileHeight)
+    public TileData(Tile[,] tiles, ImageBase images, int tileWidth, int tileHeight)
     {
       _tiles = tiles;
-      _images = images;
+      _tileImages = images;
       _tileWidth = tileWidth;
       _tileHeight = tileHeight;
     }
@@ -30,10 +31,10 @@ namespace RougeLike
       set { _tiles = value; }
     }
 
-    public List<ImageBase> Images
+    public ImageBase Images
     {
-      get { return _images; }
-      set { _images = value; }
+      get { return _tileImages; }
+      set { _tileImages = value; }
     }
 
     public int Width
@@ -56,9 +57,18 @@ namespace RougeLike
       get { return _tileHeight; }
     }
 
-    public ImageBase GetImage(int x, int y)
+    public Rectangle2f GetTileTexCoords(int x, int y)
     {
-      return _images[_tiles[x, y].ImageIndex];
+      int imageIndex = _tiles[x, y].ImageIndex;
+
+      float fwidth = (float)_tileImages.Width;
+      float left = (imageIndex * _tileWidth) / fwidth;
+      float right = left + (_tileWidth / fwidth);
+
+      float top = 1.0f;
+      float bottom = 0.0f;
+
+      return new Rectangle2f(left, bottom, right - left, top - bottom);
     }
 
   }

@@ -20,6 +20,7 @@ namespace OkuBase
     public const string ProgramSequence = "programs";
     public const string WidgetSequence = "widgets";
     public const string ParticleSequence = "particles";
+    public const string BufferSequence = "buffers";
 
     private static Dictionary<string, int> _sequences = new Dictionary<string, int>();
 
@@ -34,8 +35,14 @@ namespace OkuBase
       AddSequence(ProgramSequence);
       AddSequence(WidgetSequence);
       AddSequence(ParticleSequence);
+      AddSequence(BufferSequence);
     }
 
+    /// <summary>
+    /// Resets the given sequence to zero.
+    /// </summary>
+    /// <param name="name">The name of the sequence.</param>
+    /// <returns>True if the sequence was reset, false if there is no sequence with the given name.</returns>
     public static bool ResetSequence(string name)
     {
       if (_sequences.ContainsKey(name))
@@ -46,6 +53,9 @@ namespace OkuBase
       return false;
     }
 
+    /// <summary>
+    /// Resets all sequences to zero.
+    /// </summary>
     public static void ResetAll()
     {
       foreach (string seqName in _sequences.Keys)
@@ -54,11 +64,20 @@ namespace OkuBase
       }
     }
 
+    /// <summary>
+    /// Gets the number of sequences that exist.
+    /// </summary>
     public static int Count
     {
       get { return _sequences.Count; }
     }
 
+    /// <summary>
+    /// Adds a new sequence with the given name.
+    /// The new sequence starts with 1.
+    /// </summary>
+    /// <param name="name">The name of the sequence.</param>
+    /// <returns>True if the sequence was added, false if there already is a sequence with the given name.</returns>
     public static bool AddSequence(string name)
     {
       if (!_sequences.ContainsKey(name))
@@ -69,6 +88,11 @@ namespace OkuBase
       return false;
     }
 
+    /// <summary>
+    /// Gets the next value of a sequence.
+    /// </summary>
+    /// <param name="sequence">The name of the sequence.</param>
+    /// <returns>The next value of the sequence.</returns>
     public static int NextValue(string sequence)
     {
       if (!_sequences.ContainsKey(sequence))
@@ -79,6 +103,12 @@ namespace OkuBase
       return value;
     }
 
+    /// <summary>
+    /// Sets the current value of a sequence.
+    /// </summary>
+    /// <param name="sequence">The name of the sequence.</param>
+    /// <param name="value">The value to set the sequence to.</param>
+    /// <returns>True if the sequence value was set, False if there is no sequence with the given name.</returns>
     public static bool SetCurrentValue(string sequence, int value)
     {
       if (_sequences.ContainsKey(sequence))

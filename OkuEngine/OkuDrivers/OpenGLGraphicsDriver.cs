@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using OkuBase.Driver;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 using OkuBase;
+using OkuBase.Driver;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
 using OkuBase.Settings;
@@ -26,6 +27,7 @@ namespace OkuDrivers
     private Dictionary<int, int> _shaders = new Dictionary<int, int>(); //Maps shader ids to opengl shader names
     private Dictionary<int, int> _shaderPrograms = new Dictionary<int, int>(); //Maps shader program ids to opengl shader program names
     private Dictionary<int, Dictionary<string, int>> _uniformLocations = new Dictionary<int, Dictionary<string, int>>(); //Maps shader program ids to maps that map uniform names to opengl uniform locations
+    private Dictionary<int, int> _vertexBuffers = new Dictionary<int, int>(); //Maps buffer ids to opengl buffer names
 
     /// <summary>
     /// Handles resizing of the form. The OpenGL viewport is reset to fit the new size of the form.
@@ -790,6 +792,89 @@ namespace OkuDrivers
       _shaders.Remove(program.PixelShader.Id);
       _shaderPrograms.Remove(program.Id);
       _uniformLocations.Remove(program.Id);
+    }
+
+    public void InitVertexBuffer(VertexBuffer vbuffer)
+    {
+      if (vbuffer.Vertices == null)
+        throw new OkuException("Vertices of vertex buffer to be initialized cannot be null!");
+
+      if (_vertexBuffers.ContainsKey(vbuffer.Id))
+        throw new OkuException("Trying to initialize a vertex buffer that has already been initialzed!");
+
+      int buffer = 0;
+      Gl.glGenBuffers(1, out buffer);
+
+      Gl.glBindBuffer(Gl.GL_ARRAY_BUFFER, buffer);
+      Gl.glEnableClientState(Gl.GL_VERTEX_ARRAY);
+      
+      Vertex test = new Vertex();
+      int vertexSize = Marshal.SizeOf(test);
+
+      //Gl.glVertexAttribPointer(0, 2, Gl.GL_FLOAT, Gl.GL_FALSE, vertexSize, IntPtr.Zero);
+      //Gl.glVertexAttribPointer(1, 2, Gl.GL_FLOAT, Gl.GL_FALSE,vertexSize, new IntPtr(8));
+      //Gl.glVertexAttribPointer(2, 4, Gl.GL_UNSIGNED_BYTE, Gl.GL_FALSE, vertexSize, new IntPtr(16));
+
+      Gl.glBufferData(Gl.GL_ARRAY_BUFFER, new IntPtr(vbuffer.Vertices.Length * vertexSize), vbuffer.Vertices, Gl.GL_STATIC_DRAW);
+
+      Gl.glBindBuffer(Gl.GL_ARRAY_BUFFER, 0);
+
+      _vertexBuffers.Add(vbuffer.Id, buffer);
+    }
+
+    public void DrawVertexBuffer(VertexBuffer vbuffer, PrimitiveType ptype, ImageBase texture)
+    {
+      if (!_vertexBuffers.ContainsKey(vbuffer.Id))
+        throw new OkuException("Trying to draw a vertex buffer which has not been initialized or has been released!");
+
+      Gl.glEnableClientState(Gl.GL_VERTEX_ARRAY);
+
+      int buffer = _vertexBuffers[vbuffer.Id];
+      Gl.glBindBuffer(Gl.GL_ARRAY_BUFFER, buffer);
+      
+      Vertex test = new Vertex();
+      Gl.glInterleavedArrays(Gl.GL_T2F_C4UB_V3F, Marshal.SizeOf(test), IntPtr.Zero);
+
+      if (texture != null)
+      {
+        if (!_textures.ContainsKey(texture.Id))
+          return;
+
+        int textureId = _textures[texture.Id];
+        Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
+      }
+      else
+        Gl.glBindTexture(Gl.GL_TEXTURE_2D, 0);
+
+      int primitive = PrimitiveToGLPrimitive(ptype);
+      Gl.glDrawArrays(primitive, 0, vbuffer.Vertices.Length);
+    }
+
+    public void UpdateVertexBuffer(VertexBuffer vbuffer)
+    {
+      if (!_vertexBuffers.ContainsKey(vbuffer.Id))
+        throw new OkuException("Trying to update a vertex buffer which has not been initialized or has been released!");
+
+      Gl.glEnableClientState(Gl.GL_VERTEX_ARRAY);
+
+      int buffer = _vertexBuffers[vbuffer.Id];
+      Gl.glBindBuffer(Gl.GL_ARRAY_BUFFER, buffer);
+
+      Vertex test = new Vertex();
+      Gl.glBufferData(Gl.GL_ARRAY_BUFFER, new IntPtr(vbuffer.Vertices.Length * Marshal.SizeOf(test)), vbuffer.Vertices, Gl.GL_STATIC_DRAW);
+
+      Gl.glBindBuffer(Gl.GL_ARRAY_BUFFER, 0);
+    }
+
+    public void ReleaseVertexBuffer(VertexBuffer vbuffer)
+    {
+      if (!_vertexBuffers.ContainsKey(vbuffer.Id))
+        throw new OkuException("Trying to update a vertex buffer which has not been initialized or has been released!");
+
+      int buffer = _vertexBuffers[vbuffer.Id];
+      Gl.glDeleteBuffers(1, ref buffer);
+
+      _vertexBuffers.Remove(vbuffer.Id);
     }
 
   }

@@ -29,6 +29,18 @@ namespace RougeLike
       return result;
     }
 
+    public static ImageBase LoadImage(string fileName)
+    {
+      string fullPath = Path.Combine(".\\Content\\Graphics", fileName);
+      if (!File.Exists(fullPath))
+        throw new OkuException("There is no file called " + fileName + " in the content folder!");
+
+      ImageData data = ImageData.FromFile(fullPath);
+      Image image = OkuManager.Instance.Graphics.NewImage(data);
+
+      return image;
+    }
+
     public static List<ImageBase> LoadSpriteSheet(string fileName, int spriteWidth, int spriteHeight)
     {
       string fullPath = Path.Combine(".\\Content\\Graphics", fileName);

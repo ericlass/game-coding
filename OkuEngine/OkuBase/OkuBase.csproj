@@ -64,6 +64,8 @@
     <Compile Include="Geometry\PolygonFactory.cs" />
     <Compile Include="Geometry\Spline.cs" />
     <Compile Include="Geometry\Rectangle2f.cs" />
+    <Compile Include="Geometry\Vertex.cs" />
+    <Compile Include="Geometry\VertexBuffer.cs" />
     <Compile Include="Geometry\Vertices.cs" />
     <Compile Include="Geometry\Vector2f.cs" />
     <Compile Include="Graphics\Color.cs" />
