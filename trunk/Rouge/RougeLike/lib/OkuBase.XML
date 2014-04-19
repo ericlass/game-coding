@@ -529,6 +529,31 @@
             </summary>
             <param name="program">The shader program to be released.</param>
         </member>
+        <member name="M:OkuBase.Driver.IGraphicsDriver.InitVertexBuffer(OkuBase.Geometry.VertexBuffer)">
+            <summary>
+            Initializes the given vertex buffer.
+            </summary>
+            <param name="vbuffer">The buffer to be initialized.</param>
+        </member>
+        <member name="M:OkuBase.Driver.IGraphicsDriver.DrawVertexBuffer(OkuBase.Geometry.VertexBuffer,OkuBase.Graphics.PrimitiveType,OkuBase.Graphics.ImageBase)">
+            <summary>
+            Draws the given vertex buffer using the given texture.
+            </summary>
+            <param name="vbuffer">The vertex buffer to draw.</param>
+            <param name="texture">The texture to be used, can be null.</param>
+        </member>
+        <member name="M:OkuBase.Driver.IGraphicsDriver.UpdateVertexBuffer(OkuBase.Geometry.VertexBuffer)">
+            <summary>
+            Updates the vertices of the given vertex buffer.
+            </summary>
+            <param name="vbuffer">The buffer to be updated.</param>
+        </member>
+        <member name="M:OkuBase.Driver.IGraphicsDriver.ReleaseVertexBuffer(OkuBase.Geometry.VertexBuffer)">
+            <summary>
+            Release the memory assigned to a vertex buffer.
+            </summary>
+            <param name="vbuffer">The buffer to be released.</param>
+        </member>
         <member name="P:OkuBase.Driver.IGraphicsDriver.DriverName">
             <summary>
             Gets the name of the driver.
@@ -794,6 +819,105 @@
         <member name="P:OkuBase.Geometry.Rectangle2f.Height">
             <summary>
             Gets the height of the quad.
+            </summary>
+        </member>
+        <member name="T:OkuBase.Geometry.Vertex">
+            <summary>
+            Defines a single vertex for use with a vertex buffer.
+            </summary>
+        </member>
+        <member name="F:OkuBase.Geometry.Vertex.TX">
+            <summary>
+            The x component of the texture coordinates.
+            </summary>
+        </member>
+        <member name="F:OkuBase.Geometry.Vertex.TY">
+            <summary>
+            The y component of the texture coordinates.
+            </summary>
+        </member>
+        <member name="F:OkuBase.Geometry.Vertex.B">
+            <summary>
+            The blue value of the color.
+            </summary>
+        </member>
+        <member name="F:OkuBase.Geometry.Vertex.G">
+            <summary>
+            The green value of the color.
+            </summary>
+        </member>
+        <member name="F:OkuBase.Geometry.Vertex.R">
+            <summary>
+            The red value of the color.
+            </summary>
+        </member>
+        <member name="F:OkuBase.Geometry.Vertex.A">
+            <summary>
+            The alpha value of the color.
+            </summary>
+        </member>
+        <member name="F:OkuBase.Geometry.Vertex.VX">
+            <summary>
+            The x component of the position.
+            </summary>
+        </member>
+        <member name="F:OkuBase.Geometry.Vertex.VY">
+            <summary>
+            The y component of the position.
+            </summary>
+        </member>
+        <member name="F:OkuBase.Geometry.Vertex.Reserved">
+            <summary>
+            Reserved. Should always be zero.
+            </summary>
+        </member>
+        <member name="M:OkuBase.Geometry.Vertex.#ctor(System.Single,System.Single,System.Single,System.Single,System.Byte,System.Byte,System.Byte,System.Byte)">
+            <summary>
+            Creates a new vertex with the given vertex data.
+            </summary>
+            <param name="vx">The x component of the position.</param>
+            <param name="vy">The y component of the position.</param>
+            <param name="tx">The x component of the texture coordinates</param>
+            <param name="ty">The y component of the texture coordinates</param>
+            <param name="r">The red value of the color</param>
+            <param name="g">The green value of the color</param>
+            <param name="b">The blue value of the color</param>
+            <param name="a">The alpha value of the color</param>
+        </member>
+        <member name="M:OkuBase.Geometry.Vertex.#ctor(OkuBase.Geometry.Vector2f,OkuBase.Geometry.Vector2f,OkuBase.Graphics.Color)">
+            <summary>
+            Creates a new vertex from the given values.
+            </summary>
+            <param name="pos">The positions of the vertex.</param>
+            <param name="tex">The texture coordinates.</param>
+            <param name="col">The color.</param>
+        </member>
+        <member name="T:OkuBase.Geometry.VertexBuffer">
+            <summary>
+            Defines a vertex buffer which can be used to draw static
+            meshes with maximum performance. The vertices will be stored
+            in graphics card memory (most likely).
+            </summary>
+        </member>
+        <member name="M:OkuBase.Geometry.VertexBuffer.#ctor">
+            <summary>
+            Creates a new, empty vertex buffer.
+            </summary>
+        </member>
+        <member name="M:OkuBase.Geometry.VertexBuffer.#ctor(OkuBase.Geometry.Vertex[])">
+            <summary>
+            Creates a new verex buffer with the given vertices.
+            </summary>
+            <param name="vertices">The vertices of the vertex buffer.</param>
+        </member>
+        <member name="P:OkuBase.Geometry.VertexBuffer.Id">
+            <summary>
+            Gets the id of the vertex buffer.
+            </summary>
+        </member>
+        <member name="P:OkuBase.Geometry.VertexBuffer.Vertices">
+            <summary>
+            Gets or sets the vertices assigned to the vertex buffer.
             </summary>
         </member>
         <member name="T:OkuBase.Geometry.Vertices">
@@ -1309,6 +1433,11 @@
             Gets or sets the display orientation in degrees. Allowed values are 0 and 90.
             </summary>
         </member>
+        <member name="T:OkuBase.Graphics.ImageBase">
+            <summary>
+            Base class for all image types.
+            </summary>
+        </member>
         <member name="P:OkuBase.Graphics.ImageBase.Id">
             <summary>
             Gets the unique id of this image.
@@ -1575,6 +1704,13 @@
             <param name="type">The type of primitive used to draw the given vertices.</param>
             <param name="texture">The texture to be applied. If not null, texCoords must also be given.</param>
         </member>
+        <member name="M:OkuBase.Graphics.GraphicsManager.DrawVertexBuffer(OkuBase.Geometry.VertexBuffer,OkuBase.Graphics.PrimitiveType,OkuBase.Graphics.ImageBase)">
+            <summary>
+            Draws the given vertex buffer using the given texture.
+            </summary>
+            <param name="vbuffer">The vertex buffer to draw.</param>
+            <param name="texture">The texture to be used, can be null.</param>
+        </member>
         <member name="M:OkuBase.Graphics.GraphicsManager.ApplyAndPushTransform(OkuBase.Geometry.Vector2f,OkuBase.Geometry.Vector2f,System.Single)">
             <summary>
             Pushes the current transformation onto the stack and applies the given transformation.
@@ -1587,6 +1723,24 @@
             <summary>
             Pops the current transformation from the stack.
             </summary>
+        </member>
+        <member name="M:OkuBase.Graphics.GraphicsManager.InitVertexBuffer(OkuBase.Geometry.VertexBuffer)">
+            <summary>
+            Initializes the given vertex buffer.
+            </summary>
+            <param name="vbuffer">The buffer to be initialized.</param>
+        </member>
+        <member name="M:OkuBase.Graphics.GraphicsManager.UpdateVertexBuffer(OkuBase.Geometry.VertexBuffer)">
+            <summary>
+            Updates the vertices of the given vertex buffer.
+            </summary>
+            <param name="vbuffer">The buffer to be updated.</param>
+        </member>
+        <member name="M:OkuBase.Graphics.GraphicsManager.ReleaseVertexBuffer(OkuBase.Geometry.VertexBuffer)">
+            <summary>
+            Release the memory assigned to a vertex buffer.
+            </summary>
+            <param name="vbuffer">The buffer to be released.</param>
         </member>
         <member name="P:OkuBase.Graphics.GraphicsManager.Title">
             <summary>
@@ -3001,6 +3155,46 @@
             <summary>
             Internal sequence class that is used to generate content ids and 
             other artifical ids.
+            </summary>
+        </member>
+        <member name="M:OkuBase.KeySequence.ResetSequence(System.String)">
+            <summary>
+            Resets the given sequence to zero.
+            </summary>
+            <param name="name">The name of the sequence.</param>
+            <returns>True if the sequence was reset, false if there is no sequence with the given name.</returns>
+        </member>
+        <member name="M:OkuBase.KeySequence.ResetAll">
+            <summary>
+            Resets all sequences to zero.
+            </summary>
+        </member>
+        <member name="M:OkuBase.KeySequence.AddSequence(System.String)">
+            <summary>
+            Adds a new sequence with the given name.
+            The new sequence starts with 1.
+            </summary>
+            <param name="name">The name of the sequence.</param>
+            <returns>True if the sequence was added, false if there already is a sequence with the given name.</returns>
+        </member>
+        <member name="M:OkuBase.KeySequence.NextValue(System.String)">
+            <summary>
+            Gets the next value of a sequence.
+            </summary>
+            <param name="sequence">The name of the sequence.</param>
+            <returns>The next value of the sequence.</returns>
+        </member>
+        <member name="M:OkuBase.KeySequence.SetCurrentValue(System.String,System.Int32)">
+            <summary>
+            Sets the current value of a sequence.
+            </summary>
+            <param name="sequence">The name of the sequence.</param>
+            <param name="value">The value to set the sequence to.</param>
+            <returns>True if the sequence value was set, False if there is no sequence with the given name.</returns>
+        </member>
+        <member name="P:OkuBase.KeySequence.Count">
+            <summary>
+            Gets the number of sequences that exist.
             </summary>
         </member>
         <member name="T:OkuBase.Logging.Logger">

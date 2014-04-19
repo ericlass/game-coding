@@ -10,11 +10,15 @@ using JSONator;
 
 namespace RougeLike
 {
+  /// <summary>
+  /// Defines the base for all tile map objects with rendering and some helper functions.
+  /// </summary>
   public abstract class TileMapObjectBase : GameObjectBase
   {
     private Color DebugTintColor = new Color(0, 0, 0, 64);
 
     protected TileData _tileData = null;
+    private VertexBuffer _vbuffer = null;
 
     private const float CollisionOffset = 0.1f; // Defines a fixed offset for collision detection to handle edge cases
 
@@ -32,6 +36,11 @@ namespace RougeLike
       return new Rectangle2f(mapLeft, mapBottom, mapWidth, mapHeight);
     }
 
+    /// <summary>
+    /// Converts the given point from world to tile space.
+    /// </summary>
+    /// <param name="p">The point to be converted.</param>
+    /// <returns>The point in tile space.</returns>
     public Vector2f WorldToTile(Vector2f p)
     {
       Rectangle2f mapRect = GetMapRect();
@@ -41,6 +50,12 @@ namespace RougeLike
       return result;
     }
 
+    /// <summary>
+    /// Calculates the area the tile at the given index takes up.
+    /// </summary>
+    /// <param name="x">The x coordinate of the tile.</param>
+    /// <param name="y">The y coordinate of the tile.</param>
+    /// <returns>The area of the tile.</returns>
     public Rectangle2f GetTileRect(int x, int y)
     {
       Rectangle2f mapRect = GetMapRect();
@@ -51,11 +66,22 @@ namespace RougeLike
       return new Rectangle2f(left, bottom, _tileData.TileWidth, _tileData.TileHeight);
     }
 
+    /// <summary>
+    /// Checks if the given point is inside the tile map area.
+    /// </summary>
+    /// <param name="p">The point to check.</param>
+    /// <returns>True if the point is inside the tile map, else false.</returns>
     public bool IsInside(Vector2f p)
     {
       return GetMapRect().IsInside(p);
     }
 
+    /// <summary>
+    /// Checks if the given box can be moved through the tile map as given by the movement vector.
+    /// </summary>
+    /// <param name="box">The box to be moved.</param>
+    /// <param name="movement">The movement vector.</param>
+    /// <returns>The movement the box can actually move without intersecting the tile map.</returns>
     public Vector2f MoveBox(Rectangle2f box, Vector2f movement)
     {
       Rectangle2f mapRect = GetMapRect();
@@ -163,6 +189,14 @@ namespace RougeLike
       return result;
     }
 
+    /// <summary>
+    /// Counts how many tiles a line segment defined by [start, end] touches.
+    /// The max parameter can be used to opt out early.
+    /// </summary>
+    /// <param name="start">The start of the line segment.</param>
+    /// <param name="end">The end of the line segment.</param>
+    /// <param name="max">The maximum number of tiles to count.</param>
+    /// <returns>The number of tiles the line segment touches.</returns>
     public int CountTilesOnLine(Vector2f start, Vector2f end, int max)
     {
       Vector2f rayDir = end - start;
@@ -242,107 +276,84 @@ namespace RougeLike
     }
 
     /// <summary>
-    /// Calculates the color of the light at the given tile.
+    /// Renders the tile map.
     /// </summary>
-    /// <param name="x">The x coordinate of the tile.</param>
-    /// <param name="y">The y coordinate of the tile.</param>
-    /// <param name="light">The light to calculate.</param>
-    /// <returns>The color of the light at the given tile.</returns>
-    public Color GetLightValue(int x, int y, LightObject light)
-    {
-      float value = 1.0f;
-
-      Vector2f center = GetTileRect(x, y).GetCenter();
-
-      Vector2f lightPos = Vector2f.Zero;
-      switch (light.LightType)
-      {
-        case LightType.Point:
-          lightPos = light.Position;
-          break;
-
-        case LightType.Infinit:
-          lightPos = center + (light.Direction * 1000.0f);
-          break;
-
-        default:
-          throw new OkuException("Unsupported light type: '" + light.LightType.ToString() + "'!");
-      }
-
-      int count = CountTilesOnLine(center, lightPos, 5);
-      value = 1.0f - (count / 5.0f);
-
-      float attenuation = 1.0f;
-      if (light.LightType != LightType.Infinit)
-      {
-        attenuation = GameUtil.Saturate(1.0f - Vector2f.Distance(center, lightPos) / light.Radius);
-        attenuation *= attenuation;
-      }
-
-      value *= GameUtil.Saturate(attenuation * light.Power);
-
-      if (value > 0.5f)
-        System.Threading.Thread.Sleep(0);
-
-      return light.Color * value;
-    }
-
     public override void Render()
     {
       Rectangle2f mapRect = GetMapRect();
 
-      Vector2f leftBottom = new Vector2f(Oku.Graphics.Viewport.Left, Oku.Graphics.Viewport.Bottom);
-      leftBottom = WorldToTile(leftBottom);
-      Vector2f rightTop = new Vector2f(Oku.Graphics.Viewport.Right, Oku.Graphics.Viewport.Top);
-      rightTop = WorldToTile(rightTop);
-
-      int left = Math.Max(0, (int)leftBottom.X);
-      int right = Math.Min(_tileData.Width - 1, (int)rightTop.X + 1);
-      int bottom = Math.Max(0, (int)leftBottom.Y);
-      int top = Math.Min(_tileData.Height - 1, (int)rightTop.Y);
-
-      float mapLeft = mapRect.Min.X;
-      float mapBottom = mapRect.Min.Y;
-
-      PlayerObject player = GameData.Instance.ActiveScene.GameObjects.GetObjectById("playerid") as PlayerObject;
-
-      float maxDist = _tileData.TileWidth * 20;
-
-      List<LightObject> lights = GameData.Instance.ActiveScene.GameObjects.GetObjectsOfType<LightObject>();
-
-      //SpriteBatch batch = new SpriteBatch();
-      //batch.Begin();
-      float wy = mapBottom + (bottom * _tileData.TileHeight) + (_tileData.TileHeight / 2);
-      for (int y = bottom; y <= top; y++)
+      if (_vbuffer == null)
       {
-        float wx = mapLeft + (left * _tileData.TileWidth) + (_tileData.TileWidth / 2);
-        for (int x = left; x <= right; x++)
+        //Generate vertex buffer on-the-fly
+        List<Vertex> vertices = new List<Vertex>();
+        for (int y = 0; y < _tileData.Height; y++)
         {
-          Tile tile = _tileData[x, y];
-          if (tile.TileType != TileType.Empty)
+          for (int x = 0; x < _tileData.Width; x++)
           {
-            Color tint = Color.White;
-
-            if (lights.Count > 0)
+            Tile tile = _tileData[x, y];
+            if (tile.TileType != TileType.Empty)
             {
-              tint = Color.Black;
-              foreach (LightObject light in lights)
-              {
-                tint += GetLightValue(x, y, light);
-              }
+              Rectangle2f tileRect = GetTileRect(x, y);
+              Rectangle2f texCoord = _tileData.GetTileTexCoords(x, y);
+
+              Vertex v = new Vertex();
+              v.VX = tileRect.Min.X;
+              v.VY = tileRect.Min.Y;
+              v.TX = texCoord.Min.X;
+              v.TY = texCoord.Min.Y;
+              v.R = 255;
+              v.G = 255;
+              v.B = 255;
+              v.A = 255;
+              vertices.Add(v);
+
+              v = new Vertex();
+              v.VX = tileRect.Min.X;
+              v.VY = tileRect.Max.Y;
+              v.TX = texCoord.Min.X;
+              v.TY = texCoord.Max.Y;
+              v.R = 255;
+              v.G = 255;
+              v.B = 255;
+              v.A = 255;
+              vertices.Add(v);
+
+              v = new Vertex();
+              v.VX = tileRect.Max.X;
+              v.VY = tileRect.Max.Y;
+              v.TX = texCoord.Max.X;
+              v.TY = texCoord.Max.Y;
+              v.R = 255;
+              v.G = 255;
+              v.B = 255;
+              v.A = 255;
+              vertices.Add(v);
+
+              v = new Vertex();
+              v.VX = tileRect.Max.X;
+              v.VY = tileRect.Min.Y;
+              v.TX = texCoord.Max.X;
+              v.TY = texCoord.Min.Y;
+              v.R = 255;
+              v.G = 255;
+              v.B = 255;
+              v.A = 255;
+              vertices.Add(v);
             }
-
-            //batch.Add(_tileData.GetImage(x, y), new Vector2f(wx, wy), tint);
-            Oku.Graphics.DrawImage(_tileData.GetImage(x, y), wx, wy, tint);
           }
-
-          wx += _tileData.TileWidth;
         }
-        wy += _tileData.TileHeight;
-      }
-      //batch.End();
-      //batch.Draw();
 
+        VertexBuffer buffer = new VertexBuffer();
+        buffer.Vertices = vertices.ToArray();
+
+        Oku.Graphics.InitVertexBuffer(buffer);
+        _vbuffer = buffer;
+      }
+
+      //Draw vertex buffer
+      Oku.Graphics.DrawVertexBuffer(_vbuffer, PrimitiveType.Quads, _tileData.Images);
+
+      // Debug drawing
       if (GameData.Instance.DebugDraw)
       {
         for (int i = 0; i < _tileData.Width + 1; i++)
@@ -360,8 +371,7 @@ namespace RougeLike
 
     public override void Finish()
     {
-      foreach (Image img in _tileData.Images)
-        Oku.Graphics.ReleaseImage(img);
+      Oku.Graphics.ReleaseImage(_tileData.Images as Image);
     }    
 
   }

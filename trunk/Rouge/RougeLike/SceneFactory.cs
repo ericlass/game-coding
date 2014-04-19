@@ -38,7 +38,7 @@ namespace RougeLike
       TileGeneratorParameters parameters = biome.GeneratorParameters;
 
       Tile[,] tiles = TileMapGenerator.Instance.GenerateTiles(parameters, width, height);
-      List<ImageBase> tileImages = GameUtil.LoadSpriteSheet(biome.Tileset, 16, 16);
+      ImageBase tileImages = GameUtil.LoadImage(biome.Tileset);
 
       TileMapObject tileMap = new TileMapObject(new TileData(tiles, tileImages, 16, 16));
 

@@ -5,6 +5,9 @@ using System.Text;
 
 namespace OkuBase.Graphics
 {
+  /// <summary>
+  /// Base class for all image types.
+  /// </summary>
   public abstract class ImageBase
   {
     private int _id = KeySequence.NextValue(KeySequence.ImageSequence);

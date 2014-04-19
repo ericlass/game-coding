@@ -266,5 +266,30 @@ namespace OkuBase.Driver
     /// <param name="program">The shader program to be released.</param>
     void ReleaseShaderProgram(ShaderProgram program);
 
+    /// <summary>
+    /// Initializes the given vertex buffer.
+    /// </summary>
+    /// <param name="vbuffer">The buffer to be initialized.</param>
+    void InitVertexBuffer(VertexBuffer vbuffer);
+
+    /// <summary>
+    /// Draws the given vertex buffer using the given texture.
+    /// </summary>
+    /// <param name="vbuffer">The vertex buffer to draw.</param>
+    /// <param name="texture">The texture to be used, can be null.</param>
+    void DrawVertexBuffer(VertexBuffer vbuffer, PrimitiveType ptype, ImageBase texture);
+
+    /// <summary>
+    /// Updates the vertices of the given vertex buffer.
+    /// </summary>
+    /// <param name="vbuffer">The buffer to be updated.</param>
+    void UpdateVertexBuffer(VertexBuffer vbuffer);
+
+    /// <summary>
+    /// Release the memory assigned to a vertex buffer.
+    /// </summary>
+    /// <param name="vbuffer">The buffer to be released.</param>
+    void ReleaseVertexBuffer(VertexBuffer vbuffer);
+
   }
 }

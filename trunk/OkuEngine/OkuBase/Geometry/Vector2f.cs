@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 using OkuBase.Utils;
 
@@ -11,6 +9,7 @@ namespace OkuBase.Geometry
   /// The + and - operators have been overloaded to add / subtract two vectors. The
   /// * operator is overloaded to scale a vector by a float value.
   /// </summary>
+  [StructLayout(LayoutKind.Sequential, Pack = 1)]
   public struct Vector2f
   {
     /// <summary>

@@ -391,6 +391,16 @@ namespace OkuBase.Graphics
       _driver.DrawMesh(_quad, null, _quadColor, 4, PrimitiveType.Quads, null);
     }
 
+    /// <summary>
+    /// Draws the given vertex buffer using the given texture.
+    /// </summary>
+    /// <param name="vbuffer">The vertex buffer to draw.</param>
+    /// <param name="texture">The texture to be used, can be null.</param>
+    public void DrawVertexBuffer(VertexBuffer vbuffer, PrimitiveType ptype, ImageBase texture)
+    {
+      _driver.DrawVertexBuffer(vbuffer, ptype, texture);
+    }
+
     #endregion
 
     #region Shaders
@@ -444,6 +454,37 @@ namespace OkuBase.Graphics
     public void PopTransform()
     {
       _driver.PopTransform();
+    }
+
+    #endregion
+
+    #region Vertex Buffers
+
+    /// <summary>
+    /// Initializes the given vertex buffer.
+    /// </summary>
+    /// <param name="vbuffer">The buffer to be initialized.</param>
+    public void InitVertexBuffer(VertexBuffer vbuffer)
+    {
+      _driver.InitVertexBuffer(vbuffer);
+    }
+
+    /// <summary>
+    /// Updates the vertices of the given vertex buffer.
+    /// </summary>
+    /// <param name="vbuffer">The buffer to be updated.</param>
+    public void UpdateVertexBuffer(VertexBuffer vbuffer)
+    {
+      _driver.UpdateVertexBuffer(vbuffer);
+    }
+
+    /// <summary>
+    /// Release the memory assigned to a vertex buffer.
+    /// </summary>
+    /// <param name="vbuffer">The buffer to be released.</param>
+    void ReleaseVertexBuffer(VertexBuffer vbuffer)
+    {
+      _driver.ReleaseVertexBuffer(vbuffer);
     }
 
     #endregion

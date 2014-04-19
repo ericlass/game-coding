@@ -148,5 +148,20 @@ namespace OkuBase.Driver
     {
     }
 
+    public void InitVertexBuffer(Geometry.VertexBuffer vbuffer)
+    {
+    }
+
+    public void UpdateVertexBuffer(Geometry.VertexBuffer vbuffer)
+    {
+    }
+
+    public void ReleaseVertexBuffer(Geometry.VertexBuffer vbuffer)
+    {
+    }
+
+    public void DrawVertexBuffer(Geometry.VertexBuffer vbuffer, PrimitiveType ptype, ImageBase texture)
+    {
+    }
   }
 }
