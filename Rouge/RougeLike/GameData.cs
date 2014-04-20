@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using RougeLike.States;
 
 namespace RougeLike
 {
@@ -26,6 +25,7 @@ namespace RougeLike
     private bool _debugDraw = false;
     private SceneList _scenes = new SceneList();
     private Scene _activeScene = null;
+    private EventQueue _eventQueue = new EventQueue();
 
     public bool DebugDraw
     {
@@ -50,6 +50,12 @@ namespace RougeLike
         _activeScene = value;
         _activeScene.Init();
       }
+    }
+
+    public EventQueue EventQueue
+    {
+      get { return _eventQueue; }
+      set { _eventQueue = value; }
     }
 
   }

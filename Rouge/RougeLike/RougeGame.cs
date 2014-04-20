@@ -130,6 +130,7 @@ namespace RougeLike
     public override void Update(float dt)
     {
       GameData.Instance.ActiveScene.Update(dt);
+      GameData.Instance.EventQueue.ProcessEvents();
 
       if (Oku.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.F3))
         GameData.Instance.DebugDraw = !GameData.Instance.DebugDraw;
@@ -150,16 +151,7 @@ namespace RougeLike
 
       OkuManager.Instance.Graphics.SetRenderTarget(_renderTarget);
       
-      long tick1, tick2, freq;
-      Kernel32.QueryPerformanceFrequency(out freq);
-      Kernel32.QueryPerformanceCounter(out tick1);
       GameData.Instance.ActiveScene.Render();
-      Kernel32.QueryPerformanceCounter(out tick2);
-
-      double time = (tick2 - tick1) / (double)freq;
-      time *= 1000;
-
-      System.Diagnostics.Debug.WriteLine(time.ToString());
 
       OkuManager.Instance.Graphics.SetRenderTarget(null);
       OkuManager.Instance.Graphics.DrawScreenAlignedQuad(_renderTarget);

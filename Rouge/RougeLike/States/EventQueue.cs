@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using OkuBase;
 
-namespace RougeLike
+namespace RougeLike.States
 {
-  public delegate void OnEventDelegate(EventId eventId, int data);
+  public delegate void OnEventDelegate(string eventId, object data);
 
   public class EventQueue
   {
-    private Dictionary<EventId, HashSet<OnEventDelegate>> _listeners = new Dictionary<EventId, HashSet<OnEventDelegate>>();
+    private Dictionary<string, HashSet<OnEventDelegate>> _listeners = new Dictionary<string, HashSet<OnEventDelegate>>();
     private List<Event> _activeQueue = new List<Event>();
     private List<Event> _backgroundQueue = new List<Event>();
 
-    public bool AddListener(EventId eventId, OnEventDelegate listener)
+    public bool AddListener(string eventId, OnEventDelegate listener)
     {
       if (!_listeners.ContainsKey(eventId))
         _listeners.Add(eventId, new HashSet<OnEventDelegate>());
@@ -21,7 +21,7 @@ namespace RougeLike
     }
 
     // Removes listener from one specific eventId
-    public bool RemoveListener(EventId eventId, OnEventDelegate listener)
+    public bool RemoveListener(string eventId, OnEventDelegate listener)
     {
       if (!_listeners.ContainsKey(eventId))
         return false;
@@ -40,12 +40,12 @@ namespace RougeLike
       return result;
     }
 
-    public void QueueEvent(EventId eventId, int data)
+    public void QueueEvent(string eventId, object data)
     {
       _activeQueue.Add(new Event(eventId, data));
     }
 
-    public void TriggerEvent(EventId eventId, int data)
+    public void TriggerEvent(string eventId, object data)
     {
       if (!_listeners.ContainsKey(eventId))
         return;
@@ -69,17 +69,20 @@ namespace RougeLike
       {
         try
         {
-          TriggerEvent(ev.EventId, ev.Data);
+          TriggerEvent(ev.Id, ev.Data);
         }
         catch (Exception e)
         {
-          OkuManager.Instance.Logging.LogError("Error processing eventId [" + ev.EventId + ", " + ev.Data + "]! Cause: " + e.Message);
+          OkuManager.Instance.Logging.LogError("Error processing eventId [" + ev.Id + ", " + ev.Data + "]! Cause: " + e.Message);
         }
       }
 
       _backgroundQueue.Clear();
     }
 
+    /// <summary>
+    /// Clears the event queue. This includes all queued events AND all listeners.
+    /// </summary>
     public void Clear()
     {
       _activeQueue.Clear();
