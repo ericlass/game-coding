@@ -65,9 +65,8 @@
     <Compile Include="Biome.cs" />
     <Compile Include="BiomeParameters.cs" />
     <Compile Include="DoubleKeyMap.cs" />
-    <Compile Include="Event.cs" />
-    <Compile Include="EventId.cs" />
-    <Compile Include="EventQueue.cs" />
+    <Compile Include="States\Event.cs" />
+    <Compile Include="States\EventQueue.cs" />
     <Compile Include="GameData.cs" />
     <Compile Include="GameObjectBase.cs" />
     <Compile Include="GameObjectFactory.cs" />
@@ -89,6 +88,9 @@
     <Compile Include="SceneList.cs" />
     <Compile Include="SpriteBatch.cs" />
     <Compile Include="SquareObject.cs" />
+    <Compile Include="States\StateBase.cs" />
+    <Compile Include="States\StateMachine.cs" />
+    <Compile Include="States\Transition.cs" />
     <Compile Include="StringPairMap.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="TileData.cs" />
@@ -145,4 +147,5 @@
     </None>
     <Content Include="lib\JSONator.dll" />
   </ItemGroup>
+  <ItemGroup />
 </Project>
