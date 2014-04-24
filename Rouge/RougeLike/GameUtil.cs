@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using OkuBase;
 using OkuBase.Graphics;
 using JSONator;
@@ -126,6 +127,68 @@ namespace RougeLike
     public static float Clamp(float value, float min, float max)
     {
       return Math.Min(max, Math.Max(min, value));
+    }
+
+    /// <summary>
+    /// Gets all types from the given assembly that implement the given interface type and are not abtract.
+    /// </summary>
+    /// <param name="interfaceType">The interface type.</param>
+    /// <param name="assembly">The assembly to search types in.</param>
+    /// <returns>A list of types that implement the interface, never null.</returns>
+    public static List<Type> GetTypesImplementingInterface(Type interfaceType, Assembly assembly)
+    {
+      Type[] allTypes = assembly.GetTypes();
+
+      List<Type> result = new List<Type>();
+      foreach (Type t in allTypes)
+      {
+        if (t.IsAbstract)
+          continue;
+
+        Type[] interfaces = t.GetInterfaces();
+        foreach (Type itf in interfaces)
+        {
+          if (itf.Equals(interfaceType))
+          {
+            result.Add(t);
+            break;
+          }
+        }
+      }
+
+      return result;
+    }
+
+    /// <summary>
+    /// Gets all types from the given assembly that inherit from the given base class.
+    /// The base class itself is never returned. Only non-abstract types are returned.
+    /// </summary>
+    /// <param name="baseClass">The base class to check for.</param>
+    /// <param name="assembly">The assembly to search types in.</param>
+    /// <returns>A list of all type that inherit from the given base class, never null.</returns>
+    public static List<Type> GetTypesInhertingFromClass(Type baseClass, Assembly assembly)
+    {
+      Type[] allTypes = assembly.GetTypes();
+
+      List<Type> result = new List<Type>();
+      foreach (Type t in allTypes)
+      {
+        if (t.IsAbstract)
+          continue;
+
+        Type toCheck = t.BaseType;
+        while (toCheck != null)
+        {
+          if (toCheck.Equals(baseClass))
+          {
+            result.Add(t);
+            break;
+          }
+          toCheck = toCheck.BaseType;
+        }
+      }
+
+      return result;
     }
 
   }

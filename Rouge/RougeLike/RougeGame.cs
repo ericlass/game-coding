@@ -117,8 +117,8 @@ namespace RougeLike
 
       _renderTarget = OkuManager.Instance.Graphics.NewRenderTarget(ScreenWidth, ScreenHeight);
 
-      //GameData.Instance.Scenes = SceneFactory.Instance.LoadScene("testscene.json");
-      GameData.Instance.Scenes = SceneFactory.Instance.GenerateScene();
+      GameData.Instance.Scenes = SceneFactory.Instance.LoadScene("testscene.json");
+      //GameData.Instance.Scenes = SceneFactory.Instance.GenerateScene();
       GameData.Instance.ActiveScene = GameData.Instance.Scenes[0];
     }
 
