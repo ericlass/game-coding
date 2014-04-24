@@ -62,6 +62,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Animation.cs" />
+    <Compile Include="Attributes\AttributeMap.cs" />
+    <Compile Include="Attributes\AttributeValueBase.cs" />
+    <Compile Include="Attributes\AttributeValueFactory.cs" />
+    <Compile Include="Attributes\BoolValue.cs" />
+    <Compile Include="Attributes\IAttributeValue.cs" />
+    <Compile Include="Attributes\NumberValue.cs" />
+    <Compile Include="Attributes\TextValue.cs" />
     <Compile Include="Biome.cs" />
     <Compile Include="BiomeParameters.cs" />
     <Compile Include="DoubleKeyMap.cs" />

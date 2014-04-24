@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Reflection;
 
 namespace RougeLike
 {
@@ -19,20 +18,20 @@ namespace RougeLike
       }
     }
 
-    public delegate GameObjectBase CreateObjectDelegate(StringPairMap data);
-
-    private Dictionary<string, CreateObjectDelegate> _objectCreators = new Dictionary<string, CreateObjectDelegate>();
+    private Dictionary<string, Func<GameObjectBase>> _objectCreators = new Dictionary<string, Func<GameObjectBase>>();
 
     private GameObjectFactory()
     {
-      RegisterCreator("player", new CreateObjectDelegate(CreatePlayerObject));
-      RegisterCreator("square", new CreateObjectDelegate(CreateSquareObject));
-      RegisterCreator("playercontroller", new CreateObjectDelegate(CreatePlayerControllerObject));
-      RegisterCreator("light", CreateLightObject);
-      RegisterCreator("hardjoint", CreateHardJointObject);
+      Assembly assembly = this.GetType().Assembly;
+      List<Type> objectTypes = GameUtil.GetTypesInhertingFromClass(typeof(GameObjectBase), assembly);
+      foreach (Type ot in objectTypes)
+      {
+        GameObjectBase go = assembly.CreateInstance(ot.FullName) as GameObjectBase;
+        RegisterCreator(go.ObjectType, () => assembly.CreateInstance(ot.FullName) as GameObjectBase);
+      }
     }
 
-    public void RegisterCreator(string objectType, CreateObjectDelegate creator)
+    public void RegisterCreator(string objectType, Func<GameObjectBase> creator)
     {
       if (_objectCreators.ContainsKey(objectType))
         throw new OkuBase.OkuException("There already is a creator for object type '" + objectType + "'!");
@@ -49,40 +48,7 @@ namespace RougeLike
       if (!_objectCreators.ContainsKey(objectType))
         throw new OkuBase.OkuException("No creator registered for object type '" + objectType + "'!");
 
-      return _objectCreators[objectType](data);
-    }
-
-    private GameObjectBase CreatePlayerObject(StringPairMap data)
-    {
-      PlayerObject result = new PlayerObject();
-      result.Load(data);
-      return result;
-    }
-
-    private GameObjectBase CreateSquareObject(StringPairMap data)
-    {
-      SquareObject result = new SquareObject();
-      result.Load(data);
-      return result;
-    }
-
-    private GameObjectBase CreatePlayerControllerObject(StringPairMap data)
-    {
-      PlayerControllerObject result = new PlayerControllerObject();
-      result.Load(data);
-      return result;
-    }
-
-    private GameObjectBase CreateLightObject(StringPairMap data)
-    {
-      LightObject result = new LightObject();
-      result.Load(data);
-      return result;
-    }
-
-    private GameObjectBase CreateHardJointObject(StringPairMap data)
-    {
-      HardJointObject result = new HardJointObject();
+      GameObjectBase result = _objectCreators[objectType]();
       result.Load(data);
       return result;
     }

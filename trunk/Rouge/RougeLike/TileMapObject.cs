@@ -8,6 +8,10 @@ namespace RougeLike
   public class TileMapObject : TileMapObjectBase
   {
 
+    public TileMapObject()
+    {
+    }
+
     public TileMapObject(TileData tiles)
     {
       _tileData = tiles;
