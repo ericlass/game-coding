@@ -109,7 +109,7 @@ namespace RougeLike
     /// Gets a list of the names of all attributes of the object.
     /// </summary>
     /// <returns>A list of all attribute names.</returns>
-    public List<string> GetAttributes()
+    public List<string> GetAttributeNames()
     {
       //Fixes attributes
       List<string> result = new List<string>() { "id", "zindex", "groupindex", "x", "y" };
@@ -129,7 +129,7 @@ namespace RougeLike
     /// <returns>True if the object contains the attribute, else false.</returns>
     public bool ContainsAttribute(string attribute)
     {
-      return GetAttributes().Contains(attribute);
+      return GetAttributeNames().Contains(attribute);
     }
 
     /// <summary>
@@ -198,6 +198,32 @@ namespace RougeLike
         _attributes.Add(attribute, value);
         return true;
       }
+    }
+
+    /// <summary>
+    /// Extract dynamic attribute values from the given data set.
+    /// </summary>
+    /// <param name="data">The data set.</param>
+    private void ExtractDynamicAttributes(StringPairMap data)
+    {
+      //This works because at this point (loading data) there are no dynamic attributes yet. At least in theory.
+      HashSet<string> nameSet = new HashSet<string>(GetAttributeNames());
+
+      foreach (KeyValuePair<string, string> value in data)
+      {
+        if (!nameSet.Contains(value.Key))
+          _attributes.Add(value.Key, AttributeValueFactory.Instance.CreateAttributeValue(value.Value));
+      }
+    }
+
+    /// <summary>
+    /// Add the dynamic attributes to the given data set.
+    /// </summary>
+    /// <param name="data">The data set.</param>
+    private void AddDynamicAttributes(StringPairMap data)
+    {
+      foreach (var value in _attributes)
+        data.Add(value.Key, value.Value.GetValueForSaving());
     }
 
   }
