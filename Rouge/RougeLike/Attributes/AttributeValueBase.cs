@@ -16,5 +16,12 @@ namespace RougeLike.Attributes
 
     public abstract string GetValueAsString();
     public abstract void SetValueFromString(string str);
+
+
+    public string GetValueForSaving()
+    {
+      return TypeName + "|" + GetValueAsString();
+    }
+
   }
 }
