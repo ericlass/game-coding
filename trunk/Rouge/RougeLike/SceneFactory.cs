@@ -41,6 +41,7 @@ namespace RougeLike
       ImageBase tileImages = GameUtil.LoadImage(biome.Tileset);
 
       TileMapObject tileMap = new TileMapObject(new TileData(tiles, tileImages, 16, 16));
+      tileMap.Id = "tilemap";
 
       Scene scene = new Scene();
       scene.GameObjects.Add(tileMap);

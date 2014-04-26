@@ -4,6 +4,15 @@ namespace RougeLike.Attributes
 {
   public class NumberValue : AttributeValueBase<double>
   {
+    public NumberValue()
+    {
+    }
+
+    public NumberValue(double value)
+    {
+      _value = value;
+    }
+
     public override string TypeName
     {
       get { return "number"; }

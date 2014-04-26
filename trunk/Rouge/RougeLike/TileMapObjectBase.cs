@@ -7,6 +7,7 @@ using OkuBase.Graphics;
 using OkuBase.Geometry;
 using OkuBase.Utils;
 using JSONator;
+using RougeLike.Attributes;
 
 namespace RougeLike
 {
@@ -34,6 +35,30 @@ namespace RougeLike
       float mapBottom = Position.Y - (mapHeight * 0.5f);
 
       return new Rectangle2f(mapLeft, mapBottom, mapWidth, mapHeight);
+    }
+
+    protected override List<string> DoGetAllAttributes()
+    {
+      return new List<string>() { "width", "height" };
+    }
+
+    protected override IAttributeValue DoGetAttributeValue(string attribute)
+    {
+      if (attribute == "width")
+        return new NumberValue(_tileData.Width);
+      else if (attribute == "height")
+        return new NumberValue(_tileData.Height);
+
+      return null;
+    }
+
+    protected override bool DoSetAttributeValue(string attribute, IAttributeValue value)
+    {
+      //Width and height are read-only!
+      if (attribute == "width" || attribute == "height")
+        return true;
+
+      return false;
     }
 
     /// <summary>

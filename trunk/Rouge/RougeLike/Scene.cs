@@ -1,6 +1,7 @@
 ﻿using System;
 using OkuBase;
 using OkuBase.Geometry;
+using RougeLike.Attributes;
 
 namespace RougeLike
 {
@@ -19,6 +20,15 @@ namespace RougeLike
     {
       get { return _name; }
       set { _name = value; }
+    }
+
+    public IAttributeValue GetObjectAttribute(string objectId, string attributeName)
+    {
+      GameObjectBase go = _gameObjects.GetObjectById(objectId);
+      if (go == null)
+        return null;
+
+      return go.GetAttributeValue(attributeName);
     }
 
     public void Init()
