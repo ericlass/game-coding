@@ -7,5 +7,6 @@ namespace RougeLike.Attributes
     string TypeName { get; }
     string GetValueAsString();
     void SetValueFromString(string str);
+    string GetValueForSaving();
   }
 }
