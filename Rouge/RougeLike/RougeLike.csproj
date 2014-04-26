@@ -72,6 +72,7 @@
     <Compile Include="Biome.cs" />
     <Compile Include="BiomeParameters.cs" />
     <Compile Include="DoubleKeyMap.cs" />
+    <Compile Include="GameObjectBaseAttributes.cs" />
     <Compile Include="States\Event.cs" />
     <Compile Include="States\EventQueue.cs" />
     <Compile Include="GameData.cs" />

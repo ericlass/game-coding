@@ -4,6 +4,15 @@ namespace RougeLike.Attributes
 {
   public class BoolValue : AttributeValueBase<bool>
   {
+    public BoolValue()
+    {
+    }
+
+    public BoolValue(bool value)
+    {
+      _value = value;
+    }
+
     public override string TypeName
     {
       get { return "bool"; }
