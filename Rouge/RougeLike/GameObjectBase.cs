@@ -50,6 +50,8 @@ namespace RougeLike
       if (Position != Vector2f.Zero)
         result.Add("position", Position.ToString());
 
+      AddDynamicAttributes(result);
+
       return result;
     }
 
@@ -75,6 +77,8 @@ namespace RougeLike
       data.Remove("position");
 
       DoLoad(data);
+
+      ExtractDynamicAttributes(data);
     }
 
   }
