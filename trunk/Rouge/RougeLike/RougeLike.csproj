@@ -98,6 +98,7 @@
     <Compile Include="SquareObject.cs" />
     <Compile Include="States\StateBase.cs" />
     <Compile Include="States\StateMachine.cs" />
+    <Compile Include="States\StateMap.cs" />
     <Compile Include="States\Transition.cs" />
     <Compile Include="StringPairMap.cs" />
     <Compile Include="Tile.cs" />
