@@ -4,7 +4,7 @@ using OkuBase;
 
 namespace RougeLike.States
 {
-  public delegate void OnEventDelegate(string eventId, object data);
+  public delegate void OnEventDelegate(string eventId, object data, string objectId);
 
   public class EventQueue
   {
@@ -42,16 +42,26 @@ namespace RougeLike.States
 
     public void QueueEvent(string eventId, object data)
     {
-      _activeQueue.Add(new Event(eventId, data));
+      QueueEvent(eventId, data, null);
     }
 
-    public void TriggerEvent(string eventId, object data)
+    public void QueueEvent(string eventId, object data, string objectId)
+    {
+      _activeQueue.Add(new Event(eventId, data, objectId));
+    }
+
+    public void TriggerEvent(string eventId, object data, string objectId)
     {
       if (!_listeners.ContainsKey(eventId))
         return;
 
       foreach (OnEventDelegate listener in _listeners[eventId])
-        listener(eventId, data);
+        listener(eventId, data, objectId);
+    }
+
+    public void TriggerEvent(string eventId, object data)
+    {
+      TriggerEvent(eventId, data, null);
     }
 
     private void SwapQueues()
@@ -69,11 +79,11 @@ namespace RougeLike.States
       {
         try
         {
-          TriggerEvent(ev.Id, ev.Data);
+          TriggerEvent(ev.EventId, ev.Data, ev.ObjectId);
         }
         catch (Exception e)
         {
-          OkuManager.Instance.Logging.LogError("Error processing eventId [" + ev.Id + ", " + ev.Data + "]! Cause: " + e.Message);
+          OkuManager.Instance.Logging.LogError("Error processing eventId [" + ev.EventId + ", " + ev.Data + "]! Cause: " + e.Message);
         }
       }
 

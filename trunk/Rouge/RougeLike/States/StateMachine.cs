@@ -10,6 +10,7 @@ namespace RougeLike.States
     private StateMap _states = new StateMap();
     private List<Transition> _transitions = new List<Transition>();
     private string _initialState = null;
+    private GameObjectBase _gameObject = null;
 
     private Dictionary<string, Transition> _transitionMap = null;
     private string _currentState = null;
@@ -18,6 +19,11 @@ namespace RougeLike.States
 
     public StateMachine()
     {
+    }
+
+    public StateMachine(GameObjectBase gameObject)
+    {
+      _gameObject = gameObject;
     }
 
     private OnEventDelegate GetEventListener()
@@ -44,6 +50,12 @@ namespace RougeLike.States
       set { _initialState = value; }
     }
 
+    public GameObjectBase GameObject
+    {
+      get { return _gameObject; }
+      set { _gameObject = value; }
+    }
+
     public string CurrentState
     {
       get { return _currentState; }
@@ -67,9 +79,12 @@ namespace RougeLike.States
 
       _currentState = _initialState;
 
-      //Not sure if should be done. If a state play a sound on entering, than the scene will make a lot of noise when it is loaded.
+      //Not sure if should be done. If a state plays a sound on entering, than the scene will make a lot of noise when it is loaded.
       //if (_currentState != null)
         //_states[_currentState].Enter();
+
+      foreach (StateBase state in _states.Values)
+        state.Init();
 
       _transitionMap = new Dictionary<string, Transition>();
       foreach (Transition transition in _transitions)
@@ -81,15 +96,23 @@ namespace RougeLike.States
       _initialized = true;
     }
 
-    private void OnEvent(string eventId, object data)
+    private void OnEvent(string eventId, object data, string objectId)
     {
       if (!_initialized)
         throw new OkuBase.OkuException("Event received in a non-initialized state machine!");
 
       if (_transitionMap.ContainsKey(eventId))
       {
+        Transition trans = _transitionMap[eventId];
+
+        if (_gameObject != null && trans.ForOwningObject)
+        {
+          if (_gameObject.Id != objectId)
+            return;
+        }
+
         _states[_currentState].Leave();
-        _currentState = _transitionMap[eventId].TargetState;
+        _currentState = trans.TargetState;
         _states[_currentState].Enter();
       }
     }
@@ -101,6 +124,9 @@ namespace RougeLike.States
 
       foreach (Transition trans in _transitionMap.Values)
         GameData.Instance.EventQueue.RemoveListener(trans.EventId, GetEventListener());
+
+      foreach (StateBase state in _states.Values)
+        state.Finish();
 
       _transitionMap = null;
 

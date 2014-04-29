@@ -848,6 +848,8 @@ namespace OkuDrivers
 
       int primitive = PrimitiveToGLPrimitive(ptype);
       Gl.glDrawArrays(primitive, 0, vbuffer.Vertices.Length);
+
+      Gl.glBindBuffer(Gl.GL_ARRAY_BUFFER, 0);
     }
 
     public void UpdateVertexBuffer(VertexBuffer vbuffer)
