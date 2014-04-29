@@ -72,6 +72,7 @@
     <Compile Include="Biome.cs" />
     <Compile Include="BiomeParameters.cs" />
     <Compile Include="DoubleKeyMap.cs" />
+    <Compile Include="EntityObjectBase.cs" />
     <Compile Include="GameObjectBaseAttributes.cs" />
     <Compile Include="States\Event.cs" />
     <Compile Include="States\EventQueue.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="SceneList.cs" />
     <Compile Include="SpriteBatch.cs" />
     <Compile Include="SquareObject.cs" />
+    <Compile Include="States\IdleState.cs" />
     <Compile Include="States\StateBase.cs" />
     <Compile Include="States\StateMachine.cs" />
     <Compile Include="States\StateMap.cs" />
@@ -152,6 +154,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Content\Graphics\desert_tile.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Graphics\mario_idle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="lib\JSONator.dll" />

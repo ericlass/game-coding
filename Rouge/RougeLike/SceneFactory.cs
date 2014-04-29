@@ -4,6 +4,7 @@ using System.IO;
 using OkuBase.Graphics;
 using OkuBase.Geometry;
 using JSONator;
+using RougeLike.States;
 
 namespace RougeLike
 {
@@ -43,8 +44,17 @@ namespace RougeLike
       TileMapObject tileMap = new TileMapObject(new TileData(tiles, tileImages, 16, 16));
       tileMap.Id = "tilemap";
 
+      EntityObject mario = new EntityObject();
+      mario.Id = "mario";
+      IdleState idle = new IdleState();
+      mario.StateMachine.States.Add(idle.Id, idle);
+      mario.StateMachine.InitialState = idle.Id;
+      mario.ZIndex = 1;
+      mario.Position = new Vector2f(0, 500);
+
       Scene scene = new Scene();
       scene.GameObjects.Add(tileMap);
+      scene.GameObjects.Add(mario);
 
       SceneList result = new SceneList();
       result.Add(scene);

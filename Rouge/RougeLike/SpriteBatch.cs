@@ -104,8 +104,6 @@ namespace RougeLike
         ImageBase image = _images[imageId];
         List<BatchedSprite> sprites = _sprites[imageId];
 
-        //TODO: Make it work with multiple images. Re-using the same arrays will not work!
-
         for (int i = 0; i < sprites.Count; i++)
         {
           int start = i * 4;

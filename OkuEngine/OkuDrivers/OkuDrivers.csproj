@@ -37,6 +37,10 @@
     <DocumentationFile>bin\Release\OkuDrivers.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="OkuBase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Rouge\RougeLike\lib\OkuBase.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -47,12 +51,6 @@
     <Compile Include="OpenALAudioDriver.cs" />
     <Compile Include="OpenGLGraphicsDriver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\OkuBase\OkuBase.csproj">
-      <Project>{80362428-9A21-4449-A234-9CB8D2F52009}</Project>
-      <Name>OkuBase</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="lib\Tao.OpenAl.dll" />
