@@ -46,11 +46,26 @@ namespace RougeLike
 
       EntityObject mario = new EntityObject();
       mario.Id = "mario";
-      IdleState idle = new IdleState();
-      mario.StateMachine.States.Add(idle.Id, idle);
-      mario.StateMachine.InitialState = idle.Id;
       mario.ZIndex = 1;
       mario.Position = new Vector2f(0, 500);
+      
+      IdleState idle = new IdleState();
+      mario.StateMachine.States.Add(idle.Id, idle);
+
+      WalkLeftState left = new WalkLeftState();
+      mario.StateMachine.States.Add(left.Id, left);
+
+      WalkRightState right = new WalkRightState();
+      mario.StateMachine.States.Add(right.Id, right);
+
+      mario.StateMachine.InitialState = idle.Id;
+
+      mario.StateMachine.Transitions.Add(new Transition("player_left_start", left.Id, false));
+      mario.StateMachine.Transitions.Add(new Transition("player_right_start", right.Id, false));
+
+      mario.StateMachine.Transitions.Add(new Transition("player_left_end", idle.Id, false));
+      mario.StateMachine.Transitions.Add(new Transition("player_right_end", idle.Id, false));
+      
 
       Scene scene = new Scene();
       scene.GameObjects.Add(tileMap);

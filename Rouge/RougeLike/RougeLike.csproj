@@ -102,6 +102,8 @@
     <Compile Include="States\StateMachine.cs" />
     <Compile Include="States\StateMap.cs" />
     <Compile Include="States\Transition.cs" />
+    <Compile Include="States\WalkLeftState.cs" />
+    <Compile Include="States\WalkRightState.cs" />
     <Compile Include="StringPairMap.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="TileData.cs" />
@@ -157,6 +159,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Content\Graphics\mario_idle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Graphics\mario_left.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Graphics\mario_right.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="lib\JSONator.dll" />

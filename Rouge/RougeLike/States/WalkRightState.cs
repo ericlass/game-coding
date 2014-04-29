@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using OkuBase.Geometry;
 using OkuBase.Graphics;
 
 namespace RougeLike.States
 {
-  public class IdleState : StateBase
+  public class WalkRightState : StateBase
   {
     private ImageBase _image = null;
 
     public override string Id
     {
-      get { return "idle"; }
+      get { return "walkright"; }
     }
 
     public override void Init()
     {
-      _image = GameUtil.LoadImage("mario_idle.png");
+      _image = GameUtil.LoadImage("mario_right.png");
     }
 
     public override void Enter()
@@ -24,6 +25,7 @@ namespace RougeLike.States
 
     public override void Update(float dt, GameObjectBase gameObject)
     {
+      gameObject.Position = gameObject.Position + new Vector2f(150 * dt, 0);
     }
 
     public override void Render()

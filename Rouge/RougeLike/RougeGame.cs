@@ -4,6 +4,7 @@ using OkuBase.Settings;
 using OkuBase.Graphics;
 using OkuBase.Geometry;
 using OkuBase.Platform;
+using System.Windows.Forms;
 
 namespace RougeLike
 {
@@ -133,6 +134,18 @@ namespace RougeLike
     
     public override void Update(float dt)
     {
+      if (Oku.Input.Keyboard.KeyPressed(Keys.D))
+        GameData.Instance.EventQueue.QueueEvent("player_right_start", null);
+
+      if (Oku.Input.Keyboard.KeyRaised(Keys.D))
+        GameData.Instance.EventQueue.QueueEvent("player_right_end", null);
+
+      if (Oku.Input.Keyboard.KeyPressed(Keys.A))
+        GameData.Instance.EventQueue.QueueEvent("player_left_start", null);
+
+      if (Oku.Input.Keyboard.KeyRaised(Keys.A))
+        GameData.Instance.EventQueue.QueueEvent("player_left_end", null);
+
       GameData.Instance.ActiveScene.Update(dt);
       GameData.Instance.EventQueue.ProcessEvents();
 

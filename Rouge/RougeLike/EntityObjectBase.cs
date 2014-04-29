@@ -23,7 +23,7 @@ namespace RougeLike
 
     public override void Update(float dt)
     {
-      _stateMachine.States[_stateMachine.CurrentState].Update(dt);
+      _stateMachine.States[_stateMachine.CurrentState].Update(dt, this);
     }
 
     public override void Render()
