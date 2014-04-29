@@ -10,7 +10,7 @@ namespace RougeLike.States
 
     public abstract void Init();
     public abstract void Enter();
-    public abstract void Update(float dt);
+    public abstract void Update(float dt, GameObjectBase gameObject);
     public abstract void Render();
     public abstract void Leave();
     public abstract void Finish();
