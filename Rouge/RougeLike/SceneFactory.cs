@@ -60,11 +60,11 @@ namespace RougeLike
 
       mario.StateMachine.InitialState = idle.Id;
 
-      mario.StateMachine.Transitions.Add(new Transition("player_left_start", left.Id, false));
-      mario.StateMachine.Transitions.Add(new Transition("player_right_start", right.Id, false));
+      mario.StateMachine.Transitions.Add(new Transition("player_left_start", left.Id, false, null));
+      mario.StateMachine.Transitions.Add(new Transition("player_right_start", right.Id, false, null));
 
-      mario.StateMachine.Transitions.Add(new Transition("player_left_end", idle.Id, false));
-      mario.StateMachine.Transitions.Add(new Transition("player_right_end", idle.Id, false));
+      mario.StateMachine.Transitions.Add(new Transition("player_left_end", idle.Id, false, null));
+      mario.StateMachine.Transitions.Add(new Transition("player_right_end", idle.Id, false, null));
       
 
       Scene scene = new Scene();
