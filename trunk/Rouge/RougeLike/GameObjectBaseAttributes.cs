@@ -12,6 +12,7 @@ namespace RougeLike
 
     /// <summary>
     /// Can be overriden by implementing classes to publish additional fixed attributes.
+    /// Does not have to call base method.
     /// </summary>
     /// <param name="attribute">The name of the attribute.</param>
     /// <returns>The value of the attribute. Null if there is not attribute with the given name.</returns>
@@ -22,6 +23,7 @@ namespace RougeLike
 
     /// <summary>
     /// Can be overriden by implementing classes to be able to set published fixed attributes.
+    /// Does not have to call base method.
     /// </summary>
     /// <param name="attribute">The name of the attribute.</param>
     /// <param name="value">The new value of the attribute.</param>
@@ -33,6 +35,7 @@ namespace RougeLike
 
     /// <summary>
     /// Can be overriden by implementing classes. Should return the names of all additional available attributes.
+    /// Does not have to call base method.
     /// </summary>
     /// <returns>A list of attribute names.</returns>
     protected virtual List<string> DoGetAllAttributes()
