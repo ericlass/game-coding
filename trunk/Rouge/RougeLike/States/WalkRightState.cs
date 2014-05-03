@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
+using RougeLike.Attributes;
 
 namespace RougeLike.States
 {
   public class WalkRightState : StateBase
   {
-    private ImageBase _image = null;
+    private Animation _anim = null;
+    private NumberValue _direction = new NumberValue(1);
 
     public override string Id
     {
@@ -16,30 +18,41 @@ namespace RougeLike.States
 
     public override void Init()
     {
-      _image = GameUtil.LoadImage("mario_right.png");
+      ImageBase frame0Img = GameUtil.LoadImage("mario_idle.png");
+      ImageBase frame1Img = GameUtil.LoadImage("mario_right.png");
+
+      _anim = new Animation();
+      _anim.Frames.Add(frame0Img);
+      _anim.Frames.Add(frame1Img);
+      _anim.FrameTime = 50;
+      _anim.Loop = true;
     }
 
-    public override void Enter()
+    public override void Enter(GameObjectBase gameObject)
     {
+      gameObject.SetAttributeValue("direction", _direction);
+      _anim.Restart();
     }
 
     public override void Update(float dt, GameObjectBase gameObject)
     {
-      gameObject.Position = gameObject.Position + new Vector2f(150 * dt, 0);
+      gameObject.Position = gameObject.Position + new Vector2f(200 * dt, 0);
+      _anim.Update(dt);
     }
 
-    public override void Render()
+    public override void Render(GameObjectBase gameObject)
     {
-      Oku.Graphics.DrawImage(_image, 0, 0);
+      Oku.Graphics.DrawImage(_anim.CurrentFrame, 0, 0);
     }
 
-    public override void Leave()
+    public override void Leave(GameObjectBase gameObject)
     {
     }
 
     public override void Finish()
     {
-      Oku.Graphics.ReleaseImage(_image as Image);
+      foreach (ImageBase img in _anim.Frames)
+        Oku.Graphics.ReleaseImage(img as Image);
     }
   }
 }

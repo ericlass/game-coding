@@ -21,8 +21,9 @@ namespace RougeLike.States
 
     /// <summary>
     /// Is called when the state is entered.
+    /// <param name="gameObject">The owning game object.</param>
     /// </summary>
-    public abstract void Enter();
+    public abstract void Enter(GameObjectBase gameObject);
 
     /// <summary>
     /// Is called every frame as long as the state if currently active.
@@ -34,13 +35,15 @@ namespace RougeLike.States
     /// <summary>
     /// Is called every frame as long as the state is currently active.
     /// Is supposed to render the game object.
+    /// <param name="gameObject">The owning game object.</param>
     /// </summary>
-    public abstract void Render();
+    public abstract void Render(GameObjectBase gameObject);
 
     /// <summary>
     /// Is called when the state is left.
+    /// <param name="gameObject">The owning game object.</param>
     /// </summary>
-    public abstract void Leave();
+    public abstract void Leave(GameObjectBase gameObject);
 
     /// <summary>
     /// Is called when the scene is finalized. Should free all content.
