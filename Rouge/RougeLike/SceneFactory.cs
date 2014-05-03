@@ -4,6 +4,7 @@ using System.IO;
 using OkuBase.Graphics;
 using OkuBase.Geometry;
 using JSONator;
+using RougeLike.Attributes;
 using RougeLike.States;
 
 namespace RougeLike
@@ -48,25 +49,34 @@ namespace RougeLike
       mario.Id = "mario";
       mario.ZIndex = 1;
       mario.Position = new Vector2f(0, 500);
+      mario.SetAttributeValue("direction", new NumberValue(1));
       
       IdleState idle = new IdleState();
       mario.StateMachine.States.Add(idle.Id, idle);
 
-      WalkLeftState left = new WalkLeftState();
-      mario.StateMachine.States.Add(left.Id, left);
-
-      WalkRightState right = new WalkRightState();
-      mario.StateMachine.States.Add(right.Id, right);
+      WalkState walk = new WalkState();
+      mario.StateMachine.States.Add(walk.Id, walk);
 
       mario.StateMachine.InitialState = idle.Id;
 
-      mario.StateMachine.Transitions.Add(new Transition("player_left_start", left.Id, false, null));
-      mario.StateMachine.Transitions.Add(new Transition("player_right_start", right.Id, false, null));
+      Transition leftStart = new Transition("player_left_start", walk.Id, false, null);
+      leftStart.TransitAction = () => mario.SetAttributeValue("direction", new NumberValue(-1));
+      mario.StateMachine.Transitions.Add(leftStart);
 
-      mario.StateMachine.Transitions.Add(new Transition("player_left_end", idle.Id, false, null));
-      mario.StateMachine.Transitions.Add(new Transition("player_right_end", idle.Id, false, null));
+      Transition rightStart = new Transition("player_right_start", walk.Id, false, null);
+      rightStart.TransitAction = () => mario.SetAttributeValue("direction", new NumberValue(1));
+      mario.StateMachine.Transitions.Add(rightStart);
+
+      Transition leftEnd = new Transition("player_left_end", idle.Id, false, null);
+      leftEnd.Conditions.Add(new Condition("currentstate", "==", new TextValue("walk")));
+      leftEnd.Conditions.Add(new Condition("direction", ">", new NumberValue(0)));
+      mario.StateMachine.Transitions.Add(leftEnd);
+
+      Transition rightEnd = new Transition("player_right_end", idle.Id, false, null);
+      rightEnd.Conditions.Add(new Condition("currentstate", "==", new TextValue("walk")));
+      rightEnd.Conditions.Add(new Condition("direction", "<", new NumberValue(0)));
+      mario.StateMachine.Transitions.Add(rightEnd);
       
-
       Scene scene = new Scene();
       scene.GameObjects.Add(tileMap);
       scene.GameObjects.Add(mario);

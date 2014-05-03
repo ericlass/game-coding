@@ -6,9 +6,9 @@ using RougeLike.Attributes;
 
 namespace RougeLike
 {
-  public abstract partial class GameObjectBase
+  public abstract partial class GameObjectBase : IAttributeContainer
   {
-    private AttributeMap _attributes = null;
+    private AttributeMap _attributes = new AttributeMap();
 
     /// <summary>
     /// Can be overriden by implementing classes to publish additional fixed attributes.

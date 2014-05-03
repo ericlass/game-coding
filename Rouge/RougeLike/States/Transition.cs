@@ -14,6 +14,7 @@ namespace RougeLike.States
     private string _eventId = null;
     private bool _forOwningObject = false; //This is a crutch. There should be a better way to define this. Maybe through attributes too?
     private List<Condition> _conditions = null;
+    private Action _transitAction = null;
 
     /// <summary>
     /// Creates a new, empty transition.
@@ -69,8 +70,24 @@ namespace RougeLike.States
     /// </summary>
     public List<Condition> Conditions
     {
-      get { return _conditions; }
+      get
+      {
+        if (_conditions == null)
+          _conditions = new List<Condition>();
+
+        return _conditions;
+      }
       set { _conditions = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets an action that is performed whe the transition is executed.
+    /// It is executed before the target state is applied to the target object.
+    /// </summary>
+    public Action TransitAction
+    {
+      get { return _transitAction; }
+      set { _transitAction = value; }
     }
 
   }

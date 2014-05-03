@@ -10,6 +10,19 @@ namespace RougeLike.States
   /// </summary>
   public class Condition
   {
+    private Func<IAttributeContainer, bool> _compareValues = null;
+
+    public Condition()
+    {
+    }
+
+    public Condition(string attribute, string op, IAttributeValue value)
+    {
+      AttributeName = attribute;
+      Operator = op;
+      Value = value;
+    }
+
     /// <summary>
     /// Gets or sets the name of the attribute to check.
     /// </summary>
@@ -23,19 +36,17 @@ namespace RougeLike.States
     /// <summary>
     /// Gets or sets the target attribute value.
     /// </summary>
-    public IAttributeValue Value { get; set; }
-
-    private Func<GameObjectBase, bool> _compareValues = null;
+    public IAttributeValue Value { get; set; }    
 
     /// <summary>
-    /// Checks if the given game object matches the condition.
+    /// Checks if the given attribute container matches the condition.
     /// </summary>
-    /// <param name="gameObject">The game object to check.</param>
+    /// <param name="container">The attribute container to check.</param>
     /// <returns>True if the condition matches, else false.</returns>
-    public bool Matches(GameObjectBase gameObject)
+    public bool Matches(IAttributeContainer container)
     {
-      if (!gameObject.ContainsAttribute(AttributeName))
-        throw new OkuBase.OkuException("The given game object does not have the attribute '" + AttributeName + "' to check!");
+      if (!container.ContainsAttribute(AttributeName))
+        throw new OkuBase.OkuException("The given attribute container does not have the attribute '" + AttributeName + "' to check!");
 
       if (_compareValues == null)
       {
@@ -52,10 +63,10 @@ namespace RougeLike.States
         else if (Operator == "<=")
           _compareValues = (go) => Value.CompareTo(go.GetAttributeValue(AttributeName)) <= 0;
         else
-          throw new OkuBase.OkuException("Unsupported condition operator '" + Operator + "'!");
+          throw new OkuBase.OkuException("Unsupported conditional operator '" + Operator + "'!");
       }
 
-      return _compareValues(gameObject);
+      return _compareValues(container);
     }
 
     /// <summary>

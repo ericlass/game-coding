@@ -66,6 +66,7 @@
     <Compile Include="Attributes\AttributeValueBase.cs" />
     <Compile Include="Attributes\AttributeValueFactory.cs" />
     <Compile Include="Attributes\BoolValue.cs" />
+    <Compile Include="Attributes\IAttributeContainer.cs" />
     <Compile Include="Attributes\IAttributeValue.cs" />
     <Compile Include="Attributes\NumberValue.cs" />
     <Compile Include="Attributes\TextValue.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="States\Transition.cs" />
     <Compile Include="States\WalkLeftState.cs" />
     <Compile Include="States\WalkRightState.cs" />
+    <Compile Include="States\WalkState.cs" />
     <Compile Include="StringPairMap.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="TileData.cs" />

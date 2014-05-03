@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OkuBase.Graphics;
+using RougeLike.Attributes;
 
 namespace RougeLike.States
 {
@@ -18,7 +19,7 @@ namespace RougeLike.States
       _image = GameUtil.LoadImage("mario_idle.png");
     }
 
-    public override void Enter()
+    public override void Enter(GameObjectBase gameObject)
     {
     }
 
@@ -26,12 +27,17 @@ namespace RougeLike.States
     {
     }
 
-    public override void Render()
+    public override void Render(GameObjectBase gameObject)
     {
-      Oku.Graphics.DrawImage(_image, 0, 0);
+      NumberValue value = gameObject.GetAttributeValue<NumberValue>("direction");
+      float sx = 1;
+      if (value != null)
+        sx = (float)value.Value;
+
+      Oku.Graphics.DrawImage(_image, 0, 0, 0, sx, 1, Color.White);
     }
 
-    public override void Leave()
+    public override void Leave(GameObjectBase gameObject)
     {
     }
 

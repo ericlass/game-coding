@@ -25,6 +25,9 @@ namespace RougeLike
       set { _frames = value; }
     }
 
+    /// <summary>
+    /// Gets or sets the time a frame is shown in milli seconds.
+    /// </summary>
     public int FrameTime
     {
       get { return _frameTime; }

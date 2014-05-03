@@ -62,13 +62,13 @@ namespace RougeLike.States
       set
       {
         if (_currentState != null)
-          _states[_currentState].Leave();
+          _states[_currentState].Leave(_gameObject);
 
         if (!_states.ContainsKey(value))
           throw new OkuBase.OkuException("State '" + value + "' is not available in this state machine!");
 
         _currentState = value;
-        _states[_currentState].Enter();
+        _states[_currentState].Enter(_gameObject);
       }
     }
 
@@ -111,9 +111,21 @@ namespace RougeLike.States
             return;
         }
 
-        _states[_currentState].Leave();
+        if (trans.Conditions != null)
+        {
+          foreach (Condition cond in trans.Conditions)
+          {
+            if (!cond.Matches(_gameObject))
+              return;
+          }
+        }
+
+        if (trans.TransitAction != null)
+          trans.TransitAction();
+
+        _states[_currentState].Leave(_gameObject);
         _currentState = trans.TargetState;
-        _states[_currentState].Enter();
+        _states[_currentState].Enter(_gameObject);
       }
     }
 
