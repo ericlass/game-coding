@@ -45,37 +45,7 @@ namespace RougeLike
       TileMapObject tileMap = new TileMapObject(new TileData(tiles, tileImages, 16, 16));
       tileMap.Id = "tilemap";
 
-      EntityObject mario = new EntityObject();
-      mario.Id = "mario";
-      mario.ZIndex = 1;
-      mario.Position = new Vector2f(0, 500);
-      mario.SetAttributeValue("direction", new NumberValue(1));
-      
-      IdleState idle = new IdleState();
-      mario.StateMachine.States.Add(idle.Id, idle);
-
-      WalkState walk = new WalkState();
-      mario.StateMachine.States.Add(walk.Id, walk);
-
-      mario.StateMachine.InitialState = idle.Id;
-
-      Transition leftStart = new Transition("player_left_start", walk.Id, false, null);
-      leftStart.TransitAction = () => mario.SetAttributeValue("direction", new NumberValue(-1));
-      mario.StateMachine.Transitions.Add(leftStart);
-
-      Transition rightStart = new Transition("player_right_start", walk.Id, false, null);
-      rightStart.TransitAction = () => mario.SetAttributeValue("direction", new NumberValue(1));
-      mario.StateMachine.Transitions.Add(rightStart);
-
-      Transition leftEnd = new Transition("player_left_end", idle.Id, false, null);
-      leftEnd.Conditions.Add(new Condition("currentstate", "==", new TextValue("walk")));
-      leftEnd.Conditions.Add(new Condition("direction", ">", new NumberValue(0)));
-      mario.StateMachine.Transitions.Add(leftEnd);
-
-      Transition rightEnd = new Transition("player_right_end", idle.Id, false, null);
-      rightEnd.Conditions.Add(new Condition("currentstate", "==", new TextValue("walk")));
-      rightEnd.Conditions.Add(new Condition("direction", "<", new NumberValue(0)));
-      mario.StateMachine.Transitions.Add(rightEnd);
+      EntityObject mario = CreatePlayerEntity();
       
       Scene scene = new Scene();
       scene.GameObjects.Add(tileMap);
@@ -85,6 +55,43 @@ namespace RougeLike
       result.Add(scene);
 
       return result;
+    }
+
+    private static EntityObject CreatePlayerEntity()
+    {
+      EntityObject mario = new EntityObject();
+      mario.Id = "mario";
+      mario.ZIndex = 1;
+      mario.Position = new Vector2f(0, 500);
+      mario.SetAttributeValue("direction", new NumberValue(1));
+
+      IdleState idle = new IdleState();
+      mario.StateMachine.States.Add(idle.Id, idle);
+
+      WalkState walk = new WalkState();
+      mario.StateMachine.States.Add(walk.Id, walk);
+
+      mario.StateMachine.InitialState = idle.Id;
+
+      Transition leftStart = new Transition(EventNames.PlayerLeftStart, walk.Id, false, null);
+      leftStart.TransitAction = () => mario.SetAttributeValue("direction", new NumberValue(-1));
+      mario.StateMachine.Transitions.Add(leftStart);
+
+      Transition rightStart = new Transition(EventNames.PlayerRightStart, walk.Id, false, null);
+      rightStart.TransitAction = () => mario.SetAttributeValue("direction", new NumberValue(1));
+      mario.StateMachine.Transitions.Add(rightStart);
+
+      Transition leftEnd = new Transition(EventNames.PlayerLeftEnd, idle.Id, false, null);
+      leftEnd.Conditions.Add(new Condition("currentstate", "==", new TextValue("walk")));
+      leftEnd.Conditions.Add(new Condition("direction", ">", new NumberValue(0)));
+      mario.StateMachine.Transitions.Add(leftEnd);
+
+      Transition rightEnd = new Transition(EventNames.PlayerRightEnd, idle.Id, false, null);
+      rightEnd.Conditions.Add(new Condition("currentstate", "==", new TextValue("walk")));
+      rightEnd.Conditions.Add(new Condition("direction", "<", new NumberValue(0)));
+      mario.StateMachine.Transitions.Add(rightEnd);
+
+      return mario;
     }
 
     public SceneList LoadScene(string fileName)
