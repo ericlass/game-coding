@@ -5,6 +5,7 @@ using OkuBase.Graphics;
 using OkuBase.Geometry;
 using OkuBase.Platform;
 using System.Windows.Forms;
+using RougeLike.States;
 
 namespace RougeLike
 {
@@ -134,17 +135,34 @@ namespace RougeLike
     
     public override void Update(float dt)
     {
+      float speed = 500 * dt;
+      Vector2f center = Oku.Graphics.Viewport.Center;
+
+      if (Oku.Input.Keyboard.KeyIsDown(Keys.Left))
+        center.X -= speed;
+
+      if (Oku.Input.Keyboard.KeyIsDown(Keys.Right))
+        center.X += speed;
+
+      if (Oku.Input.Keyboard.KeyIsDown(Keys.Up))
+        center.Y += speed;
+
+      if (Oku.Input.Keyboard.KeyIsDown(Keys.Down))
+        center.Y -= speed;
+
+      Oku.Graphics.Viewport.Center = center;
+
       if (Oku.Input.Keyboard.KeyPressed(Keys.D))
-        GameData.Instance.EventQueue.QueueEvent("player_right_start", null);
+        GameData.Instance.EventQueue.QueueEvent(EventNames.PlayerRightStart, null);
 
       if (Oku.Input.Keyboard.KeyRaised(Keys.D))
-        GameData.Instance.EventQueue.QueueEvent("player_right_end", null);
+        GameData.Instance.EventQueue.QueueEvent(EventNames.PlayerRightEnd, null);
 
       if (Oku.Input.Keyboard.KeyPressed(Keys.A))
-        GameData.Instance.EventQueue.QueueEvent("player_left_start", null);
+        GameData.Instance.EventQueue.QueueEvent(EventNames.PlayerLeftStart, null);
 
       if (Oku.Input.Keyboard.KeyRaised(Keys.A))
-        GameData.Instance.EventQueue.QueueEvent("player_left_end", null);
+        GameData.Instance.EventQueue.QueueEvent(EventNames.PlayerLeftEnd, null);
 
       GameData.Instance.ActiveScene.Update(dt);
       GameData.Instance.EventQueue.ProcessEvents();

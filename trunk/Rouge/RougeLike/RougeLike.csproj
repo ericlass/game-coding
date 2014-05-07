@@ -77,6 +77,7 @@
     <Compile Include="GameObjectBaseAttributes.cs" />
     <Compile Include="States\Condition.cs" />
     <Compile Include="States\Event.cs" />
+    <Compile Include="States\EventNames.cs" />
     <Compile Include="States\EventQueue.cs" />
     <Compile Include="GameData.cs" />
     <Compile Include="GameObjectBase.cs" />
@@ -100,12 +101,11 @@
     <Compile Include="SpriteBatch.cs" />
     <Compile Include="SquareObject.cs" />
     <Compile Include="States\IdleState.cs" />
+    <Compile Include="States\JumpState.cs" />
     <Compile Include="States\StateBase.cs" />
     <Compile Include="States\StateMachine.cs" />
     <Compile Include="States\StateMap.cs" />
     <Compile Include="States\Transition.cs" />
-    <Compile Include="States\WalkLeftState.cs" />
-    <Compile Include="States\WalkRightState.cs" />
     <Compile Include="States\WalkState.cs" />
     <Compile Include="StringPairMap.cs" />
     <Compile Include="Tile.cs" />
@@ -168,6 +168,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Content\Graphics\mario_right.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Graphics\mario_fall.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Graphics\mario_jump.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="lib\JSONator.dll" />
