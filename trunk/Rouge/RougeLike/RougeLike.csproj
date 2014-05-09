@@ -100,6 +100,7 @@
     <Compile Include="SceneList.cs" />
     <Compile Include="SpriteBatch.cs" />
     <Compile Include="SquareObject.cs" />
+    <Compile Include="States\FallState.cs" />
     <Compile Include="States\IdleState.cs" />
     <Compile Include="States\JumpState.cs" />
     <Compile Include="States\StateBase.cs" />
