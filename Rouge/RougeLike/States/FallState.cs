@@ -6,7 +6,7 @@ using RougeLike.Attributes;
 
 namespace RougeLike.States
 {
-  public class JumpState : StateBase
+  public class FallState : StateBase
   {
     private ImageBase _image = null;
     private float _speed = 0.0f;
@@ -19,29 +19,34 @@ namespace RougeLike.States
 
     public override string Id
     {
-      get { return "jump"; }
+      get { return "fall"; }
     }
 
     public override void Init()
     {
-      _image = GameUtil.LoadImage("mario_jump.png");
+      _image = GameUtil.LoadImage("mario_fall.png");
     }
 
     public override void Enter(GameObjectBase gameObject)
     {
-      _speed = 800;
+      _speed = 0.0f;
     }
 
     public override void Update(float dt, GameObjectBase gameObject)
     {
-      Vector2f pos = gameObject.Position;
-      //TODO: Check for collision
-      pos.Y += _speed * dt;
-      _speed -= 1500 * dt;
-      gameObject.Position = pos;
+      _speed = Math.Max(_speed + (1500 * dt), 100);
 
-      if (_speed <= 0)
-        GameData.Instance.EventQueue.QueueEvent(EventNames.PlayerFallStart, null);
+      Vector2f pos = gameObject.Position;
+      pos.Y -= _speed * dt;
+
+      //TODO: Check for real collision
+      if (pos.Y <= 500)
+      {
+        pos.Y = 500;
+        GameData.Instance.EventQueue.QueueEvent(EventNames.PlayerFallEnd, null);
+      }
+
+      gameObject.Position = pos;
     }
 
     public override void Render(GameObjectBase gameObject)

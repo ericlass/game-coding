@@ -13,5 +13,6 @@ namespace RougeLike.States
     public const string PlayerLeftEnd = "player_left_end";
     public const string PlayerJumpStart = "player_jump_start";
     public const string PlayerFallStart = "player_fall_start";
+    public const string PlayerFallEnd = "player_fall_end";
   }
 }

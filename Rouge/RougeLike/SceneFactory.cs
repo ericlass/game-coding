@@ -71,6 +71,12 @@ namespace RougeLike
       WalkState walk = new WalkState();
       mario.StateMachine.States.Add(walk.Id, walk);
 
+      JumpState jump = new JumpState();
+      mario.StateMachine.States.Add(jump.Id, jump);
+
+      FallState fall = new FallState();
+      mario.StateMachine.States.Add(fall.Id, fall);
+
       mario.StateMachine.InitialState = idle.Id;
 
       Transition leftStart = new Transition(EventNames.PlayerLeftStart, walk.Id, false, null);
@@ -90,6 +96,18 @@ namespace RougeLike
       rightEnd.Conditions.Add(new Condition("currentstate", "==", new TextValue("walk")));
       rightEnd.Conditions.Add(new Condition("direction", "<", new NumberValue(0)));
       mario.StateMachine.Transitions.Add(rightEnd);
+
+      Transition jumpStart = new Transition(EventNames.PlayerJumpStart, jump.Id, false, null);
+      jumpStart.Conditions.Add(new Condition("currentstate", "!=", new TextValue("jump")));
+      mario.StateMachine.Transitions.Add(jumpStart);
+
+      Transition fallStart = new Transition(EventNames.PlayerFallStart, fall.Id, false, null);
+      fallStart.Conditions.Add(new Condition("currentstate", "!=", new TextValue("fall")));
+      mario.StateMachine.Transitions.Add(fallStart);
+
+      Transition fallEnd = new Transition(EventNames.PlayerFallEnd, idle.Id, false, null);
+      fallEnd.Conditions.Add(new Condition("currentstate", "==", new TextValue("fall")));
+      mario.StateMachine.Transitions.Add(fallEnd);
 
       return mario;
     }
