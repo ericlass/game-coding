@@ -44,11 +44,22 @@ namespace RougeLike.States
       float maxSpeed = 400;
 
       float speed = (float)gameObject.GetAttributeValue<NumberValue>("speedx").Value;
-      
-      if (GetDirection(gameObject) > 0)
+
+      bool leftDown = Oku.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.A);
+      bool rightDown = Oku.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.D);
+
+      if (rightDown)
         speed = Math.Min(speed + ((accel * dt)), maxSpeed);
-      else
+
+      if (leftDown)
         speed = Math.Max(speed - ((accel * dt)), -maxSpeed);
+
+      if (!leftDown && !rightDown)
+      {
+        speed *= 0.99f;
+        if (speed > -10 && speed < 10)
+          speed = 0;
+      }
 
       Oku.Graphics.Title = speed.ToString();
       gameObject.GetAttributeValue<NumberValue>("speedx").Value = speed;
@@ -81,7 +92,10 @@ namespace RougeLike.States
 
     public override void Render(GameObjectBase gameObject)
     {
-      Oku.Graphics.DrawImage(_anim.CurrentFrame, 0, 0, 0, GetDirection(gameObject), 1, Color.White);
+      if (gameObject.GetAttributeValue<NumberValue>("speedx").Value == 0.0f)
+        Oku.Graphics.DrawImage(_anim.Frames[0], 0, 0, 0, GetDirection(gameObject), 1, Color.White);
+      else
+        Oku.Graphics.DrawImage(_anim.CurrentFrame, 0, 0, 0, GetDirection(gameObject), 1, Color.White);
     }
 
     public override void Leave(GameObjectBase gameObject)

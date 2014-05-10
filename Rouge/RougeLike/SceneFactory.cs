@@ -67,9 +67,6 @@ namespace RougeLike
       mario.SetAttributeValue("speedx", new NumberValue(0));
       mario.SetAttributeValue("speedy", new NumberValue(0));
 
-      IdleState idle = new IdleState();
-      mario.StateMachine.States.Add(idle.Id, idle);
-
       WalkState walk = new WalkState();
       mario.StateMachine.States.Add(walk.Id, walk);
 
@@ -79,7 +76,7 @@ namespace RougeLike
       FallState fall = new FallState();
       mario.StateMachine.States.Add(fall.Id, fall);
 
-      mario.StateMachine.InitialState = idle.Id;
+      mario.StateMachine.InitialState = walk.Id;
 
       Transition leftStart = new Transition(EventNames.PlayerLeftStart, walk.Id, false, null);
       leftStart.TransitAction = () => mario.SetAttributeValue("direction", new NumberValue(-1));
@@ -89,16 +86,6 @@ namespace RougeLike
       rightStart.TransitAction = () => mario.SetAttributeValue("direction", new NumberValue(1));
       mario.StateMachine.Transitions.Add(rightStart);
 
-      Transition leftEnd = new Transition(EventNames.PlayerLeftEnd, idle.Id, false, null);
-      leftEnd.Conditions.Add(new Condition("currentstate", "==", new TextValue("walk")));
-      leftEnd.Conditions.Add(new Condition("direction", ">", new NumberValue(0)));
-      mario.StateMachine.Transitions.Add(leftEnd);
-
-      Transition rightEnd = new Transition(EventNames.PlayerRightEnd, idle.Id, false, null);
-      rightEnd.Conditions.Add(new Condition("currentstate", "==", new TextValue("walk")));
-      rightEnd.Conditions.Add(new Condition("direction", "<", new NumberValue(0)));
-      mario.StateMachine.Transitions.Add(rightEnd);
-
       Transition jumpStart = new Transition(EventNames.PlayerJumpStart, jump.Id, false, null);
       jumpStart.Conditions.Add(new Condition("currentstate", "!=", new TextValue("jump")));
       mario.StateMachine.Transitions.Add(jumpStart);
@@ -107,7 +94,7 @@ namespace RougeLike
       fallStart.Conditions.Add(new Condition("currentstate", "!=", new TextValue("fall")));
       mario.StateMachine.Transitions.Add(fallStart);
 
-      Transition fallEnd = new Transition(EventNames.PlayerFallEnd, idle.Id, false, null);
+      Transition fallEnd = new Transition(EventNames.PlayerFallEnd, walk.Id, false, null);
       fallEnd.Conditions.Add(new Condition("currentstate", "==", new TextValue("fall")));
       mario.StateMachine.Transitions.Add(fallEnd);
 
