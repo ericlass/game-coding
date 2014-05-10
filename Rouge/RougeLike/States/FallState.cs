@@ -36,16 +36,15 @@ namespace RougeLike.States
     {
       _speed = Math.Max(_speed + (1500 * dt), 100);
 
-      Vector2f pos = gameObject.Position;
-      pos.Y -= _speed * dt;
-
-      //TODO: Check for real collision
-      if (pos.Y <= 500)
-      {
-        pos.Y = 500;
+      Vector2f movement = new Vector2f(0, -_speed * dt);
+      TileMapObject tilemap = GameData.Instance.ActiveScene.GameObjects.GetObjectById("tilemap") as TileMapObject;
+      Vector2f realMovement = Vector2f.Zero;
+      if (tilemap.MoveBox((gameObject as EntityObject).GetTransformedHitBox(), movement, out realMovement))
         GameData.Instance.EventQueue.QueueEvent(EventNames.PlayerFallEnd, null);
-      }
 
+      Vector2f pos = gameObject.Position;
+      pos.Y += realMovement.Y;
+      pos.X += (float)gameObject.GetAttributeValue<NumberValue>("speedx").Value * dt;
       gameObject.Position = pos;
     }
 

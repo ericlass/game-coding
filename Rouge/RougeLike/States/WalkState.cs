@@ -9,7 +9,6 @@ namespace RougeLike.States
   public class WalkState : StateBase
   {
     private Animation _anim = null;
-    private float _speed = 0;
 
     private float GetDirection(GameObjectBase gameObject)
     {
@@ -37,13 +36,46 @@ namespace RougeLike.States
     public override void Enter(GameObjectBase gameObject)
     {
       _anim.Restart();
-      _speed = 0;
     }
 
     public override void Update(float dt, GameObjectBase gameObject)
     {
-      _speed = Math.Min(_speed + (1000 * dt), 200);
-      gameObject.Position = gameObject.Position + new Vector2f((_speed * GetDirection(gameObject)) * dt, 0);
+      float accel = 1500;
+      float maxSpeed = 400;
+
+      float speed = (float)gameObject.GetAttributeValue<NumberValue>("speedx").Value;
+      
+      if (GetDirection(gameObject) > 0)
+        speed = Math.Min(speed + ((accel * dt)), maxSpeed);
+      else
+        speed = Math.Max(speed - ((accel * dt)), -maxSpeed);
+
+      Oku.Graphics.Title = speed.ToString();
+      gameObject.GetAttributeValue<NumberValue>("speedx").Value = speed;
+
+      Rectangle2f hitbox = (gameObject as EntityObject).HitBox;
+      Vector2f pos = gameObject.Position;
+      pos = pos + new Vector2f(speed * dt, 0);
+      float bottom = pos.Y + hitbox.Min.Y;
+
+      Vector2f bottomCenter = new Vector2f(pos.X, bottom);
+
+      TileMapObject tileMap = GameData.Instance.ActiveScene.GameObjects.GetObjectById("tilemap") as TileMapObject;
+      TileType type = tileMap.GetTileBelow(bottomCenter);
+
+      if (type == TileType.Empty)
+      {
+        GameData.Instance.EventQueue.QueueEvent(EventNames.PlayerFallStart, null);
+      }
+      else
+      {
+        Nullable<float> y = tileMap.GetNextLowerY(bottomCenter);
+        if (y != null)
+          pos.Y = y.Value - hitbox.Min.Y;
+      }
+
+      gameObject.Position = pos;
+
       _anim.Update(dt);
     }
 

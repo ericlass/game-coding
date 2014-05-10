@@ -11,12 +11,23 @@ namespace RougeLike
   {
     private const string CurrentStateAttributeName = "currentstate";
 
-    private Rectangle2f _hitBox = new Rectangle2f(-4, -8, 8, 10);
+    private Rectangle2f _hitBox = new Rectangle2f(-4, -9, 8, 12);
     private StateMachine _stateMachine = new StateMachine();
 
     public StateMachine StateMachine
     {
       get { return _stateMachine; }
+    }
+
+    public Rectangle2f HitBox
+    {
+      get { return _hitBox; }
+      set { _hitBox = value; }
+    }
+
+    public Rectangle2f GetTransformedHitBox()
+    {
+      return new Rectangle2f(_hitBox.Min.X + Position.X, _hitBox.Min.Y + Position.Y, _hitBox.Width, _hitBox.Height);
     }
 
     public override void Init()
