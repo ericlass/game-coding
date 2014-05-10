@@ -107,13 +107,15 @@ namespace RougeLike
     /// <param name="box">The box to be moved.</param>
     /// <param name="movement">The movement vector.</param>
     /// <returns>The movement the box can actually move without intersecting the tile map.</returns>
-    public Vector2f MoveBox(Rectangle2f box, Vector2f movement)
+    public bool MoveBox(Rectangle2f box, Vector2f movement, out Vector2f maxMove)
     {
+      maxMove = movement;
+
       Rectangle2f mapRect = GetMapRect();
       if (!IntersectionTests.Rectangles(box.Min, box.Max, mapRect.Min, mapRect.Max))
-        return movement;
+        return false;
 
-      Vector2f result = Vector2f.Zero;
+      bool result = false;
 
       if (movement.X != 0)
       {
@@ -133,11 +135,18 @@ namespace RougeLike
               if (_tileData[i, j].TileType != TileType.Empty)
               {
                 Rectangle2f tileRect = GetTileRect(i, j);
-                disp = Math.Min(disp, (tileRect.Min.X - CollisionOffset) - bound);
+                float test = (tileRect.Min.X - CollisionOffset) - bound;
+                if (test < disp)
+                {
+                  result = false;
+                  disp = test;
+                }
+                //disp = Math.Min(disp, test);
               }
             }
           }
-          result.X = disp;
+          maxMove.X = disp;
+          //result.X = disp;
         }
         else
         {
@@ -155,11 +164,18 @@ namespace RougeLike
               if (_tileData[i, j].TileType != TileType.Empty)
               {
                 Rectangle2f tileRect = GetTileRect(i, j);
-                disp = Math.Max(disp, (tileRect.Max.X + CollisionOffset) - bound);
+                float test = (tileRect.Max.X + CollisionOffset) - bound;
+                if (test > disp)
+                {
+                  result = true;
+                  disp = test;
+                }
+                //disp = Math.Max(disp, test);
               }
             }
           }
-          result.X = disp;
+          maxMove.X = disp;
+          //result.X = disp;
         }
       }
 
@@ -181,11 +197,18 @@ namespace RougeLike
               if (_tileData[i, j].TileType != TileType.Empty)
               {
                 Rectangle2f tileRect = GetTileRect(i, j);
-                disp = Math.Min(disp, (tileRect.Min.Y - CollisionOffset) - bound);
+                float test = (tileRect.Min.Y - CollisionOffset) - bound;
+                if (test < disp)
+                {
+                  result = true;
+                  disp = test;
+                }
+                //disp = Math.Min(disp, test);
               }
             }
           }
-          result.Y = disp;
+          maxMove.Y = disp;
+          //result.Y = disp;
         }
         else
         {
@@ -203,11 +226,18 @@ namespace RougeLike
               if (_tileData[i, j].TileType != TileType.Empty)
               {
                 Rectangle2f tileRect = GetTileRect(i, j);
-                disp = Math.Max(disp, (tileRect.Max.Y + CollisionOffset) - bound);
+                float test = (tileRect.Max.Y + CollisionOffset) - bound;
+                if (test > disp)
+                {
+                  result = true;
+                  disp = test;
+                }
+                //disp = Math.Max(disp, test);
               }
             }
           }
-          result.Y = disp;
+          maxMove.Y = disp;
+          //result.Y = disp;
         }
       }
 
@@ -298,6 +328,46 @@ namespace RougeLike
       }
 
       return result;
+    }
+
+    /// <summary>
+    /// Traces down from the give position to find the next filled tile below it.
+    /// </summary>
+    /// <param name="pos">The position in world space.</param>
+    /// <returns>The value or null if there are no tiles below the given position.</returns>
+    public Nullable<float> GetNextLowerY(Vector2f pos)
+    {
+      Rectangle2f mapRect = GetMapRect();
+      if (pos.X < mapRect.Min.X || pos.X > mapRect.Max.X)
+        return null;
+
+      Vector2f tileVec = WorldToTile(pos);
+      int tx = (int)tileVec.X;
+      for (int y = (int)tileVec.Y; y >= 0; y--)
+      {
+        Tile tile = _tileData[tx, y];
+        if (tile.TileType != TileType.Empty)
+        {
+          Rectangle2f tileRect = GetTileRect(tx, y);
+          if (tile.TileType == TileType.Filled || tile.TileType == TileType.NorthEast || tile.TileType == TileType.NorthWest)
+            return tileRect.Max.Y;
+
+          if (tile.TileType == TileType.SouthWest)
+            return OkuMath.InterpolateLinear(tileRect.Max.Y, tileRect.Min.Y, (pos.X - tileRect.Min.X) / _tileData.TileWidth);
+
+          if (tile.TileType == TileType.SouthEast)
+            return OkuMath.InterpolateLinear(tileRect.Min.Y, tileRect.Max.Y, (pos.X - tileRect.Min.X) / _tileData.TileWidth);
+        }
+      }
+
+      return null;
+    }
+
+    public TileType GetTileBelow(Vector2f pos)
+    {
+      Vector2f tilePos = WorldToTile(pos);
+      Tile tile = _tileData[(int)tilePos.X, (int)tilePos.Y - 1];
+      return tile.TileType;
     }
 
     /// <summary>

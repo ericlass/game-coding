@@ -64,6 +64,8 @@ namespace RougeLike
       mario.ZIndex = 1;
       mario.Position = new Vector2f(0, 500);
       mario.SetAttributeValue("direction", new NumberValue(1));
+      mario.SetAttributeValue("speedx", new NumberValue(0));
+      mario.SetAttributeValue("speedy", new NumberValue(0));
 
       IdleState idle = new IdleState();
       mario.StateMachine.States.Add(idle.Id, idle);
