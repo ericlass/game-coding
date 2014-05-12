@@ -41,7 +41,7 @@ namespace RougeLike.States
     public override void Update(float dt, GameObjectBase gameObject)
     {
       float accel = 1500;
-      float maxSpeed = 400;
+      float maxSpeed = 300;
 
       float speed = (float)gameObject.GetAttributeValue<NumberValue>("speedx").Value;
 

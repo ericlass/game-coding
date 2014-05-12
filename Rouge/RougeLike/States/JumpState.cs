@@ -34,9 +34,12 @@ namespace RougeLike.States
 
     public override void Update(float dt, GameObjectBase gameObject)
     {
+      float speedx = (float)gameObject.GetAttributeValue<NumberValue>("speedx").Value;
+
       Vector2f pos = gameObject.Position;
       //TODO: Check for collision
       pos.Y += _speed * dt;
+      pos.X += speedx * dt;
       _speed -= 1500 * dt;
       gameObject.Position = pos;
 
