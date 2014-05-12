@@ -175,7 +175,8 @@ namespace RougeLike
           {
             for (int i = left; i <= right; i++)
             {
-              if (_tileData[i, j].TileType != TileType.Empty)
+              Tile tile = _tileData[i, j];
+              if (tile.TileType != TileType.Empty)
               {
                 Rectangle2f tileRect = GetTileRect(i, j);
                 float test = (tileRect.Max.X + CollisionOffset) - bound;
@@ -220,7 +221,8 @@ namespace RougeLike
           {
             for (int i = left; i <= right; i++)
             {
-              if (_tileData[i, j].TileType != TileType.Empty)
+              Tile tile = _tileData[i, j];
+              if (tile.TileType != TileType.Empty)
               {
                 Rectangle2f tileRect = GetTileRect(i, j);
                 float test = (tileRect.Min.Y - CollisionOffset) - bound;
@@ -261,7 +263,8 @@ namespace RougeLike
           {
             for (int i = left; i <= right; i++)
             {
-              if (_tileData[i, j].TileType != TileType.Empty)
+              Tile tile = _tileData[i, j];
+              if (tile.TileType != TileType.Empty)
               {
                 Rectangle2f tileRect = GetTileRect(i, j);
                 float test = (tileRect.Max.Y + CollisionOffset) - bound;
