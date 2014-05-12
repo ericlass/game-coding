@@ -104,9 +104,10 @@ namespace RougeLike
     /// <summary>
     /// Checks if the given box can be moved through the tile map as given by the movement vector.
     /// </summary>
-    /// <param name="box">The box to be moved.</param>
+    /// <param name="box">The box to be moved in world space.</param>
     /// <param name="movement">The movement vector.</param>
-    /// <returns>The movement the box can actually move without intersecting the tile map.</returns>
+    /// <param name="maxMove">Returns the movement the box can actually move without intersecting the tile map.</param>
+    /// <returns>True if the box collides with the tile map with the given movement, else false.</returns>
     public bool MoveBox(Rectangle2f box, Vector2f movement, out Vector2f maxMove)
     {
       maxMove = movement;
@@ -132,21 +133,34 @@ namespace RougeLike
           {
             for (int i = left; i <= right; i++)
             {
-              if (_tileData[i, j].TileType != TileType.Empty)
+              Tile tile = _tileData[i, j];
+              if (tile.TileType != TileType.Empty)
               {
                 Rectangle2f tileRect = GetTileRect(i, j);
                 float test = (tileRect.Min.X - CollisionOffset) - bound;
+                
+                //Handle slope tiles
+                if (tile.TileType == TileType.NorthEast)
+                {
+                  if (box.Max.Y < tileRect.Max.Y)
+                    test += tileRect.Max.Y - box.Max.Y;
+                }
+                else if (tile.TileType == TileType.SouthEast)
+                {
+                  if (box.Min.Y > tileRect.Min.Y)
+                    test += box.Min.Y - tileRect.Min.Y;
+                }
+                
                 if (test < disp)
                 {
-                  result = false;
+                  result = true;
                   disp = test;
+                  continue; //Go to next row on first collision in this row
                 }
-                //disp = Math.Min(disp, test);
               }
             }
           }
           maxMove.X = disp;
-          //result.X = disp;
         }
         else
         {
@@ -165,17 +179,29 @@ namespace RougeLike
               {
                 Rectangle2f tileRect = GetTileRect(i, j);
                 float test = (tileRect.Max.X + CollisionOffset) - bound;
+                
+                //Handle slope tiles
+                if (tile.TileType == TileType.NorthWest)
+                {
+                  if (box.Max.Y < tileRect.Max.Y)
+                    test -= tileRect.Max.Y - box.Max.Y;
+                }
+                else if (tile.TileType == TileType.SouthWest)
+                {
+                  if (box.Min.Y > tileRect.Min.Y)
+                    test -= box.Min.Y - tileRect.Min.Y;
+                }
+                
                 if (test > disp)
                 {
                   result = true;
                   disp = test;
+                  continue; //Go to next row on first collision in this row
                 }
-                //disp = Math.Max(disp, test);
               }
             }
           }
           maxMove.X = disp;
-          //result.X = disp;
         }
       }
 
@@ -198,17 +224,29 @@ namespace RougeLike
               {
                 Rectangle2f tileRect = GetTileRect(i, j);
                 float test = (tileRect.Min.Y - CollisionOffset) - bound;
+                
+                //Handle slope tiles
+                if (tile.TileType == TileType.NorthEast)
+                {
+                  if (box.Max.X < tileRect.Max.X)
+                    test += tileRect.Max.X - box.Max.X;
+                }
+                else if (tile.TileType == TileType.NorthWest)
+                {
+                  if (box.Min.X > tileRect.Min.X)
+                    test += box.Min.X - tileRect.Min.X;
+                }
+                
                 if (test < disp)
                 {
                   result = true;
                   disp = test;
+                  continue; //Go to next row on first collision in this row
                 }
-                //disp = Math.Min(disp, test);
               }
             }
           }
           maxMove.Y = disp;
-          //result.Y = disp;
         }
         else
         {
@@ -227,17 +265,29 @@ namespace RougeLike
               {
                 Rectangle2f tileRect = GetTileRect(i, j);
                 float test = (tileRect.Max.Y + CollisionOffset) - bound;
+                
+                //Handle slope tiles
+                if (tile.TileType == TileType.SouthEast)
+                {
+                  if (box.Max.X < tileRect.Max.X)
+                    test -= tileRect.Max.X - box.Max.X;
+                }
+                else if (tile.TileType == TileType.SouthWest)
+                {
+                  if (box.Min.X > tileRect.Min.X)
+                    test -= box.Min.X - tileRect.Min.X;
+                }
+                
                 if (test > disp)
                 {
                   result = true;
                   disp = test;
+                  continue; //Go to next row on first collision in this row
                 }
-                //disp = Math.Max(disp, test);
               }
             }
           }
           maxMove.Y = disp;
-          //result.Y = disp;
         }
       }
 

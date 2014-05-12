@@ -1,4 +1,0 @@
-- Situation: Menus should also be done with entities and behaviors
-  -> A menu does not have a player or map entity
-  -> The behavior components for menus do not need any "damagePlayer" or "addInventory" functions. These are only needed by some behaviors like enemies and chests.
-  -> But an enemy behavior must know the player entity somehow
