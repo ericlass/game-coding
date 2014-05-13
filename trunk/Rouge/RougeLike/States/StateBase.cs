@@ -21,29 +21,30 @@ namespace RougeLike.States
 
     /// <summary>
     /// Is called when the state is entered.
-    /// <param name="gameObject">The owning game object.</param>
+    /// <param name="entity">The owning entity.</param>
     /// </summary>
-    public abstract void Enter(GameObjectBase gameObject);
+    public abstract void Enter(EntityObject entity);
 
     /// <summary>
     /// Is called every frame as long as the state if currently active.
     /// </summary>
     /// <param name="dt">The number if fractional seconds passed since the last frame.</param>
-    /// <param name="gameObject">The game object the state belongs to.</param>
-    public abstract void Update(float dt, GameObjectBase gameObject);
+    /// <param name="entity">The entity the state belongs to.</param>
+    /// <returns>The id of the next state or null if the current state shall not be changed.</returns>
+    public abstract string Update(float dt, EntityObject entity);
 
     /// <summary>
     /// Is called every frame as long as the state is currently active.
     /// Is supposed to render the game object.
-    /// <param name="gameObject">The owning game object.</param>
+    /// <param name="entity">The owning entity.</param>
     /// </summary>
-    public abstract void Render(GameObjectBase gameObject);
+    public abstract void Render(EntityObject entity);
 
     /// <summary>
     /// Is called when the state is left.
-    /// <param name="gameObject">The owning game object.</param>
+    /// <param name="entity">The owning entity.</param>
     /// </summary>
-    public abstract void Leave(GameObjectBase gameObject);
+    public abstract void Leave(EntityObject entity);
 
     /// <summary>
     /// Is called when the scene is finalized. Should free all content.

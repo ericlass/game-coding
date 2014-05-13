@@ -152,22 +152,6 @@ namespace RougeLike
 
       Oku.Graphics.Viewport.Center = center;
 
-
-      if (Oku.Input.Keyboard.KeyPressed(Keys.D))
-        GameData.Instance.EventQueue.QueueEvent(EventNames.PlayerRightStart, null);
-
-      if (Oku.Input.Keyboard.KeyRaised(Keys.D))
-        GameData.Instance.EventQueue.QueueEvent(EventNames.PlayerRightEnd, null);
-
-      if (Oku.Input.Keyboard.KeyPressed(Keys.A))
-        GameData.Instance.EventQueue.QueueEvent(EventNames.PlayerLeftStart, null);
-
-      if (Oku.Input.Keyboard.KeyRaised(Keys.A))
-        GameData.Instance.EventQueue.QueueEvent(EventNames.PlayerLeftEnd, null);
-
-      if (Oku.Input.Keyboard.KeyPressed(Keys.W))
-        GameData.Instance.EventQueue.QueueEvent(EventNames.PlayerJumpStart, null);
-
       GameData.Instance.ActiveScene.Update(dt);
       GameData.Instance.EventQueue.ProcessEvents();
 

@@ -78,30 +78,6 @@ namespace RougeLike
 
       mario.StateMachine.InitialState = walk.Id;
 
-      Transition leftStart = new Transition(EventNames.PlayerLeftStart, walk.Id, false, null);
-      leftStart.Conditions.Add(new Condition("currentstate", "!=", new TextValue(jump.Id)));
-      leftStart.Conditions.Add(new Condition("currentstate", "!=", new TextValue(fall.Id)));
-      leftStart.TransitAction = () => mario.SetAttributeValue("direction", new NumberValue(-1));
-      mario.StateMachine.Transitions.Add(leftStart);
-
-      Transition rightStart = new Transition(EventNames.PlayerRightStart, walk.Id, false, null);
-      rightStart.Conditions.Add(new Condition("currentstate", "!=", new TextValue(jump.Id)));
-      rightStart.Conditions.Add(new Condition("currentstate", "!=", new TextValue(fall.Id)));
-      rightStart.TransitAction = () => mario.SetAttributeValue("direction", new NumberValue(1));
-      mario.StateMachine.Transitions.Add(rightStart);
-
-      Transition jumpStart = new Transition(EventNames.PlayerJumpStart, jump.Id, false, null);
-      jumpStart.Conditions.Add(new Condition("currentstate", "==", new TextValue(walk.Id)));
-      mario.StateMachine.Transitions.Add(jumpStart);
-
-      Transition fallStart = new Transition(EventNames.PlayerFallStart, fall.Id, false, null);
-      fallStart.Conditions.Add(new Condition("currentstate", "!=", new TextValue("fall")));
-      mario.StateMachine.Transitions.Add(fallStart);
-
-      Transition fallEnd = new Transition(EventNames.PlayerFallEnd, walk.Id, false, null);
-      fallEnd.Conditions.Add(new Condition("currentstate", "==", new TextValue("fall")));
-      mario.StateMachine.Transitions.Add(fallEnd);
-
       return mario;
     }
 

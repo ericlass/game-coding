@@ -10,15 +10,17 @@ namespace RougeLike.States
   {
     private Animation _anim = null;
 
-    private float GetDirection(GameObjectBase gameObject)
+    public const string StateId = "walk";
+
+    private float GetDirection(EntityObject entity)
     {
-      NumberValue direction = gameObject.GetAttributeValue<NumberValue>("direction");
+      NumberValue direction = entity.GetAttributeValue<NumberValue>("direction");
       return (float)direction.Value;
     }
 
     public override string Id
     {
-      get { return "walk"; }
+      get { return StateId; }
     }
 
     public override void Init()
@@ -33,26 +35,35 @@ namespace RougeLike.States
       _anim.Loop = true;
     }
 
-    public override void Enter(GameObjectBase gameObject)
+    public override void Enter(EntityObject entity)
     {
       _anim.Restart();
     }
 
-    public override void Update(float dt, GameObjectBase gameObject)
+    public override string Update(float dt, EntityObject entity)
     {
+      if (Oku.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.W))
+        return JumpState.StateId;
+
       float accel = 1500;
       float maxSpeed = 300;
 
-      float speed = (float)gameObject.GetAttributeValue<NumberValue>("speedx").Value;
+      float speed = (float)entity.GetAttributeValue<NumberValue>("speedx").Value;
 
       bool leftDown = Oku.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.A);
       bool rightDown = Oku.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.D);
 
       if (rightDown)
+      {
         speed = Math.Min(speed + ((accel * dt)), maxSpeed);
+        entity.GetAttributeValue<NumberValue>("direction").Value = 1;
+      }
 
       if (leftDown)
+      {
         speed = Math.Max(speed - ((accel * dt)), -maxSpeed);
+        entity.GetAttributeValue<NumberValue>("direction").Value = -1;
+      }
 
       if (!leftDown && !rightDown)
       {
@@ -61,44 +72,52 @@ namespace RougeLike.States
           speed = 0;
       }
 
-      Oku.Graphics.Title = speed.ToString();
-      gameObject.GetAttributeValue<NumberValue>("speedx").Value = speed;
+      entity.GetAttributeValue<NumberValue>("speedx").Value = speed;
 
-      Rectangle2f hitbox = (gameObject as EntityObject).HitBox;
-      Vector2f pos = gameObject.Position;
-      pos = pos + new Vector2f(speed * dt, 0);
+      Rectangle2f hitbox = entity.HitBox;
+      TileMapObject tileMap = GameData.Instance.ActiveScene.GameObjects.GetObjectById("tilemap") as TileMapObject;
+
+      Vector2f pos = entity.Position;
+      Vector2f dv = new Vector2f(speed * dt, 0);
+
       float bottom = pos.Y + hitbox.Min.Y;
-
       Vector2f bottomCenter = new Vector2f(pos.X, bottom);
 
-      TileMapObject tileMap = GameData.Instance.ActiveScene.GameObjects.GetObjectById("tilemap") as TileMapObject;
+      string result = null;
+      
       TileType type = tileMap.GetTileBelow(bottomCenter);
-
       if (type == TileType.Empty)
       {
-        GameData.Instance.EventQueue.QueueEvent(EventNames.PlayerFallStart, null);
+        result = FallState.StateId;
       }
       else
       {
         Nullable<float> y = tileMap.GetNextLowerY(bottomCenter);
         if (y != null)
-          pos.Y = y.Value - hitbox.Min.Y;
+          dv.Y = y.Value - bottom;
       }
 
-      gameObject.Position = pos;
+      Vector2f maxMove = Vector2f.Zero;
+
+      if (tileMap.MoveBox(entity.GetTransformedHitBox(), dv, out maxMove))
+        dv = maxMove;
+
+      entity.Position = pos + dv;
 
       _anim.Update(dt);
+
+      return result;
     }
 
-    public override void Render(GameObjectBase gameObject)
+    public override void Render(EntityObject entity)
     {
-      if (gameObject.GetAttributeValue<NumberValue>("speedx").Value == 0.0f)
-        Oku.Graphics.DrawImage(_anim.Frames[0], 0, 0, 0, GetDirection(gameObject), 1, Color.White);
+      if (entity.GetAttributeValue<NumberValue>("speedx").Value == 0.0f)
+        Oku.Graphics.DrawImage(_anim.Frames[0], 0, 0, 0, GetDirection(entity), 1, Color.White);
       else
-        Oku.Graphics.DrawImage(_anim.CurrentFrame, 0, 0, 0, GetDirection(gameObject), 1, Color.White);
+        Oku.Graphics.DrawImage(_anim.CurrentFrame, 0, 0, 0, GetDirection(entity), 1, Color.White);
     }
 
-    public override void Leave(GameObjectBase gameObject)
+    public override void Leave(EntityObject entity)
     {
     }
 
