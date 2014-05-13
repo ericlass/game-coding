@@ -11,15 +11,17 @@ namespace RougeLike.States
     private ImageBase _image = null;
     private float _speed = 0.0f;
 
-    private float GetDirection(GameObjectBase gameObject)
+    public const string StateId = "jump";
+
+    private float GetDirection(EntityObject entity)
     {
-      NumberValue direction = gameObject.GetAttributeValue<NumberValue>("direction");
+      NumberValue direction = entity.GetAttributeValue<NumberValue>("direction");
       return (float)direction.Value;
     }
 
     public override string Id
     {
-      get { return "jump"; }
+      get { return StateId; }
     }
 
     public override void Init()
@@ -27,32 +29,36 @@ namespace RougeLike.States
       _image = GameUtil.LoadImage("mario_jump.png");
     }
 
-    public override void Enter(GameObjectBase gameObject)
+    public override void Enter(EntityObject entity)
     {
       _speed = 800;
     }
 
-    public override void Update(float dt, GameObjectBase gameObject)
+    public override string Update(float dt, EntityObject entity)
     {
-      float speedx = (float)gameObject.GetAttributeValue<NumberValue>("speedx").Value;
+      float speedx = (float)entity.GetAttributeValue<NumberValue>("speedx").Value;
 
-      Vector2f pos = gameObject.Position;
+      Vector2f pos = entity.Position;
       //TODO: Check for collision
       pos.Y += _speed * dt;
       pos.X += speedx * dt;
       _speed -= 1500 * dt;
-      gameObject.Position = pos;
+      entity.Position = pos;
+
+      string result = null;
 
       if (_speed <= 0)
-        GameData.Instance.EventQueue.QueueEvent(EventNames.PlayerFallStart, null);
+        result = FallState.StateId;
+
+      return result;
     }
 
-    public override void Render(GameObjectBase gameObject)
+    public override void Render(EntityObject entity)
     {
-      Oku.Graphics.DrawImage(_image, 0, 0, 0, GetDirection(gameObject), 1, Color.White);
+      Oku.Graphics.DrawImage(_image, 0, 0, 0, GetDirection(entity), 1, Color.White);
     }
 
-    public override void Leave(GameObjectBase gameObject)
+    public override void Leave(EntityObject entity)
     {
     }
 

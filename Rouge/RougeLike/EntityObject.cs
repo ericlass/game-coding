@@ -38,12 +38,13 @@ namespace RougeLike
 
     public override void Update(float dt)
     {
-      _stateMachine.States[_stateMachine.CurrentState].Update(dt, this);
+      _stateMachine.Update(dt);
     }
 
     public override void Render()
     {
-      _stateMachine.States[_stateMachine.CurrentState].Render(this);
+      _stateMachine.Render();
+
       if (GameData.Instance.DebugDraw)
         Oku.Graphics.DrawRectangle(_hitBox.Min.X, _hitBox.Max.X, _hitBox.Min.Y, _hitBox.Max.Y, new Color(255, 0, 0, 128));
     }
