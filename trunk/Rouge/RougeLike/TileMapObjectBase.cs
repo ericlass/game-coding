@@ -296,6 +296,141 @@ namespace RougeLike
 
       return result;
     }
+    
+    public bool MovePoint(Vector2f point, Vector2f movement, out Vector2f maxMovement)
+    {
+      Rectangle2f mapRect = GetMapRect();
+      maxMovement = movement;
+      
+      if (!mapRect.IsInside(point))
+        return false;
+        
+      bool result = false;
+      
+      if (movement.X != 0)
+      {
+        Vector2f pointTarget = new Vector2f(point.X + movement.X, point.Y);
+        Vector2f startTile = WorldToTile(point);
+        Vector2f endTile = WorldToTile(pointTarget);
+      
+        float disp = movement.X;
+        int y = (int)startTile.Y;
+      
+        if (movement.X > 0)
+        {
+          for (int x = (int)startTile.X; x <= (int)endTile.X; x++)
+          {
+            if (_tileData[x, y].TileType != TileType.Empty)
+            {
+              Rectangle2f tileRect = GetTileRect(x, y);
+              float test = (tileRect.Min.X - CollisionOffset) - point.X;
+              
+              //Handle slope tiles
+              if (tile.TileType == TileType.NorthEast)
+                test += tileRect.Max.Y - point.Y;
+              else if (tile.TileType == TileType.SouthEast)
+                test += point.Y - tileRect.Min.Y;
+              
+              if (test < disp)
+              {
+                result = true;
+                disp = test;
+                continue;
+              }
+            }
+          }
+        }
+        else
+        {
+          for (int x = (int)startTile.X; x >= (int)endTile.X; x**)
+          {
+            if (_tileData[x, y].TileType != TileType.Empty)
+            {
+              Rectangle2f tileRect = GetTileRect(x, y);
+              float test = (tileRect.Max.X + CollisionOffset) - point.X;
+              
+              //Handle slope tiles
+              if (tile.TileType == TileType.NorthWest)
+                test -= tileRect.Max.Y - point.Y;
+              else if (tile.TileType == TileType.SouthWest)
+                test -= point.Y - tileRect.Min.Y;
+              
+              if (test > disp)
+              {
+                result = true;
+                disp = test;
+                continue;
+              }
+            }
+          }
+        }
+        
+        maxMove.X = disp;
+      }
+      
+      if (movement.Y != 0)
+      {
+        Vector2f pointTarget = new Vector2f(point.X, point.Y + movement.Y);
+        Vector2f startTile = WorldToTile(point);
+        Vector2f endTile = WorldToTile(pointTarget);
+      
+        float disp = movement.Y;
+        int x = (int)startTile.X;
+        
+        if (movement.Y > 0)
+        {
+          for (int y = (int)startTile.Y; y <= (int)endTile.Y; y++)
+          {
+            if (_tileData[x, y].TileType != TileType.Empty)
+            {
+              Rectangle2f tileRect = GetTileRect(x, y);
+              float test = (tileRect.Min.Y - CollisionOffset) - point.Y;
+              
+              //Handle slope tiles
+              if (tile.TileType == TileType.NorthEast)
+                test += tileRect.Max.X - point.X;
+              else if (tile.TileType == TileType.NorthWest)
+                test += point.X - tileRect.Min.X;
+              
+              if (test < disp)
+              {
+                result = true;
+                disp = test;
+                continue;
+              }
+            }
+          }
+        }
+        else
+        {
+          for (int y = (int)startTile.Y; y >= (int)endTile.Y; y--)
+          {
+            if (_tileData[x, y].TileType != TileType.Empty)
+            {
+              Rectangle2f tileRect = GetTileRect(x, y);
+              float test = (tileRect.Max.Y - CollisionOffset) - point.Y;
+              
+              //Handle slope tiles
+              if (tile.TileType == TileType.SouthEast)
+                test -= tileRect.Max.X - point.X;
+              else if (tile.TileType == TileType.SouthWest)
+                test -= point.X - tileRect.Min.X;
+              
+              if (test > disp)
+              {
+                result = true;
+                disp = test;
+                continue;
+              }
+            }
+          }
+        }
+        
+        maxMove.Y = disp;
+      }
+      
+      return result;
+    }
 
     /// <summary>
     /// Counts how many tiles a line segment defined by [start, end] touches.
