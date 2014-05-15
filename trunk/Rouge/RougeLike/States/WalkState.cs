@@ -86,12 +86,16 @@ namespace RougeLike.States
       string result = null;
       
       TileType type = tileMap.GetTileBelow(bottomCenter);
+
+      Oku.Graphics.Title = type.ToString();
+
       if (type == TileType.Empty)
       {
         result = FallState.StateId;
       }
       else
       {
+        //This makes sure the player moves one the terrain including the slopes
         Nullable<float> y = tileMap.GetNextLowerY(bottomCenter);
         if (y != null)
           dv.Y = y.Value - bottom;
@@ -99,7 +103,7 @@ namespace RougeLike.States
 
       Vector2f maxMove = Vector2f.Zero;
 
-      if (tileMap.MoveBox(entity.GetTransformedHitBox(), dv, out maxMove))
+      if (tileMap.MovePoint(bottomCenter, dv, out maxMove))
         dv = maxMove;
 
       entity.Position = pos + dv;
