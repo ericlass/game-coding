@@ -38,6 +38,21 @@ namespace RougeLike.States
     {
       float speedx = (float)entity.GetAttributeValue<NumberValue>("speedx").Value;
 
+      if (Oku.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.A))
+        speedx -= 200 * dt;
+
+      if (Oku.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.D))
+        speedx += 200 * dt;
+
+      speedx = GameUtil.Clamp(speedx, -300, 300);
+
+      entity.GetAttributeValue<NumberValue>("speedx").Value = speedx;      
+
+      if (speedx > 0)
+        entity.GetAttributeValue<NumberValue>("direction").Value = 1;
+      else if (speedx < 0)
+        entity.GetAttributeValue<NumberValue>("direction").Value = -1;
+
       Vector2f pos = entity.Position;
       Vector2f dv = new Vector2f(speedx * dt, _speed * dt);
 
@@ -48,7 +63,6 @@ namespace RougeLike.States
       {
         if (maxMove.X != dv.X)
         {
-          speedx = 0;
           dv.X = 0;
           entity.GetAttributeValue<NumberValue>("speedx").Value = 0;
         }
