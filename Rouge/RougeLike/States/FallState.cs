@@ -39,6 +39,17 @@ namespace RougeLike.States
       _speed = Math.Min(_speed + (1500 * dt), 800);
 
       float speedx = (float)entity.GetAttributeValue<NumberValue>("speedx").Value;
+
+      if (Oku.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.A))
+        speedx -= 200 * dt;
+
+      if (Oku.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.D))
+        speedx += 200 * dt;
+
+      speedx = GameUtil.Clamp(speedx, -300, 300);
+
+      entity.GetAttributeValue<NumberValue>("speedx").Value = speedx;
+
       Vector2f movement = new Vector2f(speedx * dt, -_speed * dt);
 
       TileMapObject tilemap = GameData.Instance.ActiveScene.GameObjects.GetObjectById("tilemap") as TileMapObject;

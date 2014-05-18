@@ -150,7 +150,7 @@ namespace RougeLike
       if (Oku.Input.Keyboard.KeyIsDown(Keys.Down))
         center.Y -= speed;
 
-      Oku.Graphics.Viewport.Center = center;
+      Oku.Graphics.Viewport.Center = GameData.Instance.ActiveScene.GameObjects.GetObjectById("mario").Position;
 
       GameData.Instance.ActiveScene.Update(dt);
       GameData.Instance.EventQueue.ProcessEvents();
