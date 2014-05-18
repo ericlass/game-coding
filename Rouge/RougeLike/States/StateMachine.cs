@@ -51,6 +51,8 @@ namespace RougeLike.States
         if (!_states.ContainsKey(value))
           throw new OkuBase.OkuException("State '" + value + "' is not available in this state machine!");
 
+        System.Diagnostics.Debug.WriteLine("State change: " + _currentState + " -> " + value);
+
         _currentState = value;
         _states[_currentState].Enter(_gameObject);
       }

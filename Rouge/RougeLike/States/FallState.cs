@@ -36,20 +36,29 @@ namespace RougeLike.States
 
     public override string Update(float dt, EntityObject entity)
     {
-      _speed = Math.Max(_speed + (1500 * dt), 100);
+      _speed = Math.Min(_speed + (1500 * dt), 800);
 
-      Vector2f movement = new Vector2f(0, -_speed * dt);
+      float speedx = (float)entity.GetAttributeValue<NumberValue>("speedx").Value;
+      Vector2f movement = new Vector2f(speedx * dt, -_speed * dt);
+
       TileMapObject tilemap = GameData.Instance.ActiveScene.GameObjects.GetObjectById("tilemap") as TileMapObject;
       Vector2f realMovement = Vector2f.Zero;
 
       string result = null;
+      
 
-      if (tilemap.MoveBox(entity.GetTransformedHitBox(), movement, out realMovement))
-        result = WalkState.StateId;
+      if (tilemap.CollideMovingBox(entity.GetTransformedHitBox(), movement, out realMovement))
+      {
+        if (movement.X != realMovement.X)
+          entity.GetAttributeValue<NumberValue>("speedx").Value = 0;
+
+        if (movement.Y != realMovement.Y)
+          result = WalkState.StateId;
+      }
 
       Vector2f pos = entity.Position;
-      pos.Y += realMovement.Y;
-      pos.X += (float)entity.GetAttributeValue<NumberValue>("speedx").Value * dt;
+      pos.X += realMovement.X;
+      pos.Y += realMovement.Y;      
       entity.Position = pos;
 
       return result;
