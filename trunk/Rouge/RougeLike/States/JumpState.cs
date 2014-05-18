@@ -39,9 +39,28 @@ namespace RougeLike.States
       float speedx = (float)entity.GetAttributeValue<NumberValue>("speedx").Value;
 
       Vector2f pos = entity.Position;
-      //TODO: Check for collision
-      pos.Y += _speed * dt;
-      pos.X += speedx * dt;
+      Vector2f dv = new Vector2f(speedx * dt, _speed * dt);
+
+      TileMapObject tileMap = GameData.Instance.ActiveScene.GameObjects.GetObjectById("tilemap") as TileMapObject;
+
+      Vector2f maxMove;
+      if (tileMap.CollideMovingBox(entity.GetTransformedHitBox(), dv, out maxMove))
+      {
+        if (maxMove.X != dv.X)
+        {
+          speedx = 0;
+          dv.X = 0;
+          entity.GetAttributeValue<NumberValue>("speedx").Value = 0;
+        }
+
+        if (maxMove.Y != dv.Y)
+        {
+          dv.Y = 0;
+          _speed = 0;
+        }
+      }
+
+      pos += dv;
       _speed -= 1500 * dt;
       entity.Position = pos;
 
