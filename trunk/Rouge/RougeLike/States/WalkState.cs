@@ -92,7 +92,9 @@ namespace RougeLike.States
       if (type1 == TileType.Empty && type2 == TileType.Empty)
         result = FallState.StateId;
 
-      Vector2f maxMove = Vector2f.Zero;
+      dv = WalkPlayer(pos, dv.X);
+
+      /*Vector2f maxMove = Vector2f.Zero;
 
       if (tileMap.CollideMovingBox(entity.GetTransformedHitBox(), dv, out maxMove))
       {
@@ -102,11 +104,72 @@ namespace RougeLike.States
           dv.X = 0;
           entity.GetAttributeValue<NumberValue>("speedx").Value = 0;
         }
-      }
+      }*/
 
       entity.Position = pos + dv;
 
       _anim.Update(dt);
+
+      return result;
+    }
+
+    private Vector2f WalkPlayer(Vector2f pos, float dx)
+    {
+      if (dx == 0)
+        return Vector2f.Zero;
+
+      TileMapObject tileMap = GameData.Instance.ActiveScene.GameObjects.GetObjectById("tilemap") as TileMapObject;
+
+      Vector2f tilePos = tileMap.WorldToTile(pos);
+      int startX = (int)tilePos.X;
+      int y = (int)tilePos.Y;
+
+      Vector2f tileEndPos = tileMap.WorldToTile(new Vector2f(pos.X + dx, pos.Y));
+      int endX = (int)tileEndPos.X;
+
+      Vector2f result = new Vector2f(dx, 0);
+
+      if (dx > 0)
+      {
+        for (int i = startX; i <= endX; i++)
+        {
+          Tile tile = tileMap.TileData[i, y];
+          Rectangle2f tileRect = tileMap.GetTileRect(i, y);
+
+          switch (tile.TileType)
+          {
+            case TileType.Empty:
+              break;
+
+            case TileType.Filled:
+              result.X = Math.Min(result.X, pos.X - tileRect.Min.X);
+              break;
+
+            case TileType.SouthEast:
+              float part = endX - tileRect.Min.X;
+              result.Y += GameUtil.Clamp(part, 0, tileMap.TileData.TileWidth);
+              break;
+
+            case TileType.SouthWest:
+              part = endX - tileRect.Min.X;
+              result.Y -= GameUtil.Clamp(part, 0, tileMap.TileData.TileWidth);
+              break;
+
+            case TileType.NorthEast:
+              throw new NotImplementedException();
+
+            case TileType.NorthWest:
+              throw new NotImplementedException();
+
+            default:
+              throw new OkuBase.OkuException("Unsupported tile type: " + tile.TileType.ToString());
+          }
+        }
+      }
+      else
+      {
+
+      }
 
       return result;
     }

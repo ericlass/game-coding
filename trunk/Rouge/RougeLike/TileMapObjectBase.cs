@@ -26,6 +26,11 @@ namespace RougeLike
     public abstract override string ObjectType { get; }
     public abstract override void Update(float dt);
 
+    public TileData TileData
+    {
+      get { return _tileData; }
+    }
+
     public Rectangle2f GetMapRect()
     {
       float mapWidth = _tileData.Width * _tileData.TileWidth;

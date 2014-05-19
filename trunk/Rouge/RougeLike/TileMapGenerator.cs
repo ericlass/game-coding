@@ -56,7 +56,7 @@ namespace RougeLike
       }
 
       // Create slope tiles
-      /*for (int y = 1; y < height - 1; y++)
+      for (int y = 1; y < height - 1; y++)
       {
         for (int x = 1; x < width - 1; x++)
         {
@@ -92,7 +92,7 @@ namespace RougeLike
 
           }
         }
-      }*/
+      }
 
       return tiles;
     }
