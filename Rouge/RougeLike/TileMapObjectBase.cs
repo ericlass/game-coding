@@ -21,7 +21,7 @@ namespace RougeLike
     protected TileData _tileData = null;
     private VertexBuffer _vbuffer = null;
 
-    private const float CollisionOffset = 0.01f; // Defines a fixed offset for collision detection to handle edge cases
+    private const float CollisionOffset = 0.0f; // Defines a fixed offset for collision detection to handle edge cases
 
     public abstract override string ObjectType { get; }
     public abstract override void Update(float dt);
@@ -143,6 +143,18 @@ namespace RougeLike
               {
                 Rectangle2f tileRect = GetTileRect(i, j);
                 float test = (tileRect.Min.X - CollisionOffset) - bound;
+
+                //Handle slope tiles
+                if (tile.TileType == TileType.NorthEast)
+                {
+                  if (box.Max.Y < tileRect.Max.Y)
+                    test += tileRect.Max.Y - box.Max.Y;
+                }
+                else if (tile.TileType == TileType.SouthEast)
+                {
+                  if (box.Min.Y > tileRect.Min.Y)
+                    test += box.Min.Y - tileRect.Min.Y;
+                }
                 
                 if (test < disp)
                 {
@@ -173,7 +185,19 @@ namespace RougeLike
               {
                 Rectangle2f tileRect = GetTileRect(i, j);
                 float test = (tileRect.Max.X + CollisionOffset) - bound;
-                
+
+                //Handle slope tiles
+                if (tile.TileType == TileType.NorthWest)
+                {
+                  if (box.Max.Y < tileRect.Max.Y)
+                    test -= tileRect.Max.Y - box.Max.Y;
+                }
+                else if (tile.TileType == TileType.SouthWest)
+                {
+                  if (box.Min.Y > tileRect.Min.Y)
+                    test -= box.Min.Y - tileRect.Min.Y;
+                }
+
                 if (test > disp)
                 {
                   result = true;
@@ -207,6 +231,18 @@ namespace RougeLike
               {
                 Rectangle2f tileRect = GetTileRect(i, j);
                 float test = (tileRect.Min.Y - CollisionOffset) - bound;
+
+                //Handle slope tiles
+                if (tile.TileType == TileType.NorthEast)
+                {
+                  if (box.Max.X < tileRect.Max.X)
+                    test += tileRect.Max.X - box.Max.X;
+                }
+                else if (tile.TileType == TileType.NorthWest)
+                {
+                  if (box.Min.X > tileRect.Min.X)
+                    test += box.Min.X - tileRect.Min.X;
+                }
                 
                 if (test < disp)
                 {
@@ -237,6 +273,18 @@ namespace RougeLike
               {
                 Rectangle2f tileRect = GetTileRect(i, j);
                 float test = (tileRect.Max.Y + CollisionOffset) - bound;
+
+                //Handle slope tiles
+                if (tile.TileType == TileType.SouthEast)
+                {
+                  if (box.Max.X < tileRect.Max.X)
+                    test -= tileRect.Max.X - box.Max.X;
+                }
+                else if (tile.TileType == TileType.SouthWest)
+                {
+                  if (box.Min.X > tileRect.Min.X)
+                    test -= box.Min.X - tileRect.Min.X;
+                }
                 
                 if (test > disp)
                 {
@@ -265,31 +313,42 @@ namespace RougeLike
     {
       Rectangle2f mapRect = GetMapRect();
       maxMovement = movement;
-      
+
       if (!mapRect.IsInside(point))
         return false;
-        
+
       bool result = false;
-      
+
       if (movement.X != 0)
       {
         Vector2f pointTarget = new Vector2f(point.X + movement.X, point.Y);
         Vector2f startTile = WorldToTile(point);
         Vector2f endTile = WorldToTile(pointTarget);
-      
+
         float disp = movement.X;
         int y = (int)startTile.Y;
-      
+
         if (movement.X > 0)
         {
+          bool first = true;
           for (int x = (int)startTile.X; x <= (int)endTile.X; x++)
           {
             Tile tile = _tileData[x, y];
             if (tile.TileType != TileType.Empty)
             {
+              //This is for the case that the point is inside a slope tile it cannot collide with because it moves in the opposite direction
+              if (first && (tile.TileType == TileType.NorthWest || tile.TileType == TileType.SouthWest))
+                continue;
+
               Rectangle2f tileRect = GetTileRect(x, y);
               float test = (tileRect.Min.X - CollisionOffset) - point.X;
-              
+
+              //Handle slope tiles
+              if (tile.TileType == TileType.NorthEast)
+                test += tileRect.Max.Y - point.Y;
+              else if (tile.TileType == TileType.SouthEast)
+                test += point.Y - tileRect.Min.Y;
+
               if (test < disp)
               {
                 result = true;
@@ -297,18 +356,30 @@ namespace RougeLike
                 continue;
               }
             }
+            first = false;
           }
         }
         else
         {
+          bool first = true;
           for (int x = (int)startTile.X; x >= (int)endTile.X; x--)
           {
             Tile tile = _tileData[x, y];
             if (tile.TileType != TileType.Empty)
             {
+              //This is for the case that the point is inside a slope tile it cannot collide with because it moves in the opposite direction
+              if (first && (tile.TileType == TileType.NorthEast || tile.TileType == TileType.SouthEast))
+                continue;
+
               Rectangle2f tileRect = GetTileRect(x, y);
               float test = (tileRect.Max.X + CollisionOffset) - point.X;
-              
+
+              //Handle slope tiles
+              if (tile.TileType == TileType.NorthWest)
+                test -= tileRect.Max.Y - point.Y;
+              else if (tile.TileType == TileType.SouthWest)
+                test -= point.Y - tileRect.Min.Y;
+
               if (test > disp)
               {
                 result = true;
@@ -316,31 +387,43 @@ namespace RougeLike
                 continue;
               }
             }
+            first = false;
           }
         }
 
         maxMovement.X = disp;
       }
-      
+
       if (movement.Y != 0)
       {
         Vector2f pointTarget = new Vector2f(point.X, point.Y + movement.Y);
         Vector2f startTile = WorldToTile(point);
         Vector2f endTile = WorldToTile(pointTarget);
-      
+
         float disp = movement.Y;
         int x = (int)startTile.X;
-        
+
         if (movement.Y > 0)
         {
+          bool first = true;
           for (int y = (int)startTile.Y; y <= (int)endTile.Y; y++)
           {
             Tile tile = _tileData[x, y];
             if (tile.TileType != TileType.Empty)
             {
+              //This is for the case that the point is inside a slope tile it cannot collide with because it moves in the opposite direction
+              if (first && (tile.TileType == TileType.SouthEast || tile.TileType == TileType.SouthWest))
+                continue;
+
               Rectangle2f tileRect = GetTileRect(x, y);
               float test = (tileRect.Min.Y - CollisionOffset) - point.Y;
-              
+
+              //Handle slope tiles
+              if (tile.TileType == TileType.NorthEast)
+                test += tileRect.Max.X - point.X;
+              else if (tile.TileType == TileType.NorthWest)
+                test += point.X - tileRect.Min.X;
+
               if (test < disp)
               {
                 result = true;
@@ -348,18 +431,30 @@ namespace RougeLike
                 continue;
               }
             }
+            first = false;
           }
         }
         else
         {
+          bool first = true;
           for (int y = (int)startTile.Y; y >= (int)endTile.Y; y--)
           {
             Tile tile = _tileData[x, y];
             if (tile.TileType != TileType.Empty)
             {
+              //This is for the case that the point is inside a slope tile it cannot collide with because it moves in the opposite direction
+              if (first && (tile.TileType == TileType.NorthEast || tile.TileType == TileType.NorthWest))
+                continue;
+
               Rectangle2f tileRect = GetTileRect(x, y);
-              float test = (tileRect.Max.Y - CollisionOffset) - point.Y;
-              
+              float test = (tileRect.Max.Y + CollisionOffset) - point.Y;
+
+              //Handle slope tiles
+              if (tile.TileType == TileType.SouthEast)
+                test -= tileRect.Max.X - point.X;
+              else if (tile.TileType == TileType.SouthWest)
+                test -= point.X - tileRect.Min.X;
+
               if (test > disp)
               {
                 result = true;
@@ -367,12 +462,13 @@ namespace RougeLike
                 continue;
               }
             }
+            first = false;
           }
         }
 
         maxMovement.Y = disp;
       }
-      
+
       return result;
     }
 

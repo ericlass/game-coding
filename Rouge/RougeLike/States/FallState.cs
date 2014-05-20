@@ -56,9 +56,9 @@ namespace RougeLike.States
       Vector2f realMovement = Vector2f.Zero;
 
       string result = null;
-      
 
-      if (tilemap.CollideMovingBox(entity.GetTransformedHitBox(), movement, out realMovement))
+      Rectangle2f hitbox = entity.GetTransformedHitBox();
+      if (tilemap.CollideMovingPoint(new Vector2f(hitbox.GetCenter().X, hitbox.Min.Y), movement, out realMovement))
       {
         if (movement.X != realMovement.X)
           entity.GetAttributeValue<NumberValue>("speedx").Value = 0;

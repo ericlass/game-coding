@@ -92,83 +92,134 @@ namespace RougeLike.States
       if (type1 == TileType.Empty && type2 == TileType.Empty)
         result = FallState.StateId;
 
-      dv = WalkPlayer(pos, dv.X);
+      Vector2f movement = WalkPlayer(entity.GetTransformedHitBox(), dv.X);
 
-      /*Vector2f maxMove = Vector2f.Zero;
+      if (movement.X != dv.X)
+        entity.GetAttributeValue<NumberValue>("speedx").Value = 0;
 
-      if (tileMap.CollideMovingBox(entity.GetTransformedHitBox(), dv, out maxMove))
-      {
-        dv = maxMove;
-        if (dv.X <= 0.1f && dv.X >= -0.1f)
-        {
-          dv.X = 0;
-          entity.GetAttributeValue<NumberValue>("speedx").Value = 0;
-        }
-      }*/
-
-      entity.Position = pos + dv;
+      entity.Position = pos + movement;
 
       _anim.Update(dt);
 
       return result;
     }
 
-    private Vector2f WalkPlayer(Vector2f pos, float dx)
+    private Vector2f WalkPlayer(Rectangle2f hitbox, float dx)
     {
       if (dx == 0)
         return Vector2f.Zero;
 
+      Vector2f bottomCenter = new Vector2f(hitbox.GetCenter().X, hitbox.Min.Y);
+
       TileMapObject tileMap = GameData.Instance.ActiveScene.GameObjects.GetObjectById("tilemap") as TileMapObject;
 
-      Vector2f tilePos = tileMap.WorldToTile(pos);
-      int startX = (int)tilePos.X;
-      int y = (int)tilePos.Y;
-
-      Vector2f tileEndPos = tileMap.WorldToTile(new Vector2f(pos.X + dx, pos.Y));
-      int endX = (int)tileEndPos.X;
-
-      Vector2f result = new Vector2f(dx, 0);
-
-      if (dx > 0)
+      float possibleX = dx;
+      //Check if movement means collision
+      if (possibleX > 0)
       {
-        for (int i = startX; i <= endX; i++)
+        Vector2f topTile = tileMap.WorldToTile(hitbox.Max);
+        Vector2f leftTile = tileMap.WorldToTile(bottomCenter);
+        Vector2f rightTile = tileMap.WorldToTile(new Vector2f(hitbox.Max.X + dx, bottomCenter.Y));
+        
+        int left = (int)leftTile.X;
+        int right = (int)rightTile.X;
+        int bottom = (int)leftTile.Y;
+        int top = (int)topTile.Y;
+
+        for (int y = bottom; y <= top; y++)
         {
-          Tile tile = tileMap.TileData[i, y];
-          Rectangle2f tileRect = tileMap.GetTileRect(i, y);
-
-          switch (tile.TileType)
+          for (int x = left; x <= right; x++)
           {
-            case TileType.Empty:
-              break;
-
-            case TileType.Filled:
-              result.X = Math.Min(result.X, pos.X - tileRect.Min.X);
-              break;
-
-            case TileType.SouthEast:
-              float part = endX - tileRect.Min.X;
-              result.Y += GameUtil.Clamp(part, 0, tileMap.TileData.TileWidth);
-              break;
-
-            case TileType.SouthWest:
-              part = endX - tileRect.Min.X;
-              result.Y -= GameUtil.Clamp(part, 0, tileMap.TileData.TileWidth);
-              break;
-
-            case TileType.NorthEast:
-              throw new NotImplementedException();
-
-            case TileType.NorthWest:
-              throw new NotImplementedException();
-
-            default:
-              throw new OkuBase.OkuException("Unsupported tile type: " + tile.TileType.ToString());
+            Tile tile = tileMap.TileData[x, y];
+            Tile tileLeft = tileMap.TileData[x - 1, y];
+            if (tile.TileType == TileType.Filled || tile.TileType == TileType.NorthEast || tile.TileType == TileType.NorthWest)
+            {
+              if (tileLeft.TileType != TileType.SouthEast)
+              {
+                Rectangle2f tileRect = tileMap.GetTileRect(x, y);
+                possibleX = tileRect.Min.X - hitbox.Max.X;
+              }
+            }
           }
         }
       }
       else
       {
+        Vector2f topTile = tileMap.WorldToTile(hitbox.Max);
+        Vector2f rightTile = tileMap.WorldToTile(bottomCenter);
+        Vector2f leftTile = tileMap.WorldToTile(new Vector2f(hitbox.Min.X + dx, bottomCenter.Y));
 
+        int left = (int)leftTile.X;
+        int right = (int)rightTile.X;
+        int bottom = (int)leftTile.Y;
+        int top = (int)topTile.Y;
+
+        for (int y = bottom; y <= top; y++)
+        {
+          for (int x = right; x >= left; x--)
+          {
+            Tile tile = tileMap.TileData[x, y];
+            Tile tileRight = tileMap.TileData[x + 1, y];
+            if (tile.TileType == TileType.Filled || tile.TileType == TileType.NorthEast || tile.TileType == TileType.NorthWest)
+            {
+              if (tileRight.TileType != TileType.SouthWest)
+              {
+                Rectangle2f tileRect = tileMap.GetTileRect(x, y);
+                possibleX = (tileRect.Max.X - hitbox.Min.X);
+              }
+            }
+          }
+        }
+      }
+
+      // Move player along terrain
+      Vector2f startTile = tileMap.WorldToTile(bottomCenter);
+      Vector2f endTile = tileMap.WorldToTile(new Vector2f(bottomCenter.X + possibleX, bottomCenter.Y));
+
+      int startX = (int)startTile.X;
+      int endX = (int)endTile.X;
+      int ty = (int)startTile.Y;
+
+      Vector2f result = new Vector2f(possibleX, 0);
+
+      if (startX == endX)
+      {
+        Tile tile = tileMap.TileData[startX, ty];
+        Rectangle2f tileRect = tileMap.GetTileRect(startX, ty);
+
+        switch (tile.TileType)
+        {
+          case TileType.Empty:
+            Tile tileBelow = tileMap.TileData[startX, ty - 1];
+
+            if (tileBelow.TileType == TileType.SouthWest)
+              result.Y = -possibleX;
+            else if (tileBelow.TileType == TileType.SouthEast)
+              result.Y = possibleX;
+
+            break;
+
+          case TileType.Filled:
+          case TileType.NorthEast:
+          case TileType.NorthWest:
+            result.Y = tileRect.Max.Y - bottomCenter.Y;
+            break;
+
+          case TileType.SouthEast:
+            result.Y = possibleX;
+            break;
+
+          case TileType.SouthWest:
+            result.Y = -possibleX;
+            break;
+
+          default:
+            throw new NotSupportedException("Unsupported tile type: " + tile.TileType.ToString());
+        }
+      }
+      else
+      {
+        System.Diagnostics.Debug.WriteLine("NOT IMPLEMENTED!");
       }
 
       return result;
