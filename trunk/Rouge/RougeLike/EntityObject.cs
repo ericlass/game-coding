@@ -38,6 +38,8 @@ namespace RougeLike
 
     public override void Update(float dt)
     {
+      Oku.Graphics.Title = Position.X + " ; " + Position.Y;
+
       _stateMachine.Update(dt);
     }
 
