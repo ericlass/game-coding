@@ -21,7 +21,7 @@ namespace RougeLike
     protected TileData _tileData = null;
     private VertexBuffer _vbuffer = null;
 
-    private const float CollisionOffset = 0.0f; // Defines a fixed offset for collision detection to handle edge cases
+    private const float CollisionOffset = 0.0001f; // Defines a fixed offset for collision detection to handle edge cases
 
     public abstract override string ObjectType { get; }
     public abstract override void Update(float dt);

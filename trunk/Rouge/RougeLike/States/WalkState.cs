@@ -109,7 +109,7 @@ namespace RougeLike.States
       if (dx == 0)
         return Vector2f.Zero;
 
-      Vector2f bottomCenter = new Vector2f(hitbox.GetCenter().X, hitbox.Min.Y);
+      Vector2f bottomCenter = new Vector2f(hitbox.GetCenter().X, hitbox.Min.Y + 0.0001f);
 
       TileMapObject tileMap = GameData.Instance.ActiveScene.GameObjects.GetObjectById("tilemap") as TileMapObject;
 
@@ -137,7 +137,7 @@ namespace RougeLike.States
               if (tileLeft.TileType != TileType.SouthEast)
               {
                 Rectangle2f tileRect = tileMap.GetTileRect(x, y);
-                possibleX = tileRect.Min.X - hitbox.Max.X;
+                possibleX = (tileRect.Min.X - hitbox.Max.X) - 0.0f;
               }
             }
           }
@@ -165,7 +165,7 @@ namespace RougeLike.States
               if (tileRight.TileType != TileType.SouthWest)
               {
                 Rectangle2f tileRect = tileMap.GetTileRect(x, y);
-                possibleX = (tileRect.Max.X - hitbox.Min.X);
+                possibleX = (tileRect.Max.X - hitbox.Min.X) + 0.0f;
               }
             }
           }
@@ -182,20 +182,43 @@ namespace RougeLike.States
 
       Vector2f result = new Vector2f(possibleX, 0);
 
-      if (startX == endX)
+      for (int x = startX; x <= endX; x++)
       {
-        Tile tile = tileMap.TileData[startX, ty];
-        Rectangle2f tileRect = tileMap.GetTileRect(startX, ty);
+        Tile tile = tileMap.TileData[x, ty];
+        Rectangle2f tileRect = tileMap.GetTileRect(x, ty);
+
+        float moveStartX = 0;
+        float moveEndX = 0;
+        //float upBound = 0;
+        //float downBound = 0;
+
+        if (possibleX > 0)
+        {
+          moveStartX = Math.Max(bottomCenter.X, tileRect.Min.X);
+          moveEndX = Math.Min(bottomCenter.X + possibleX, tileRect.Max.X);
+          //upBound = tileRect.Max.Y - bottomCenter.Y;
+          //downBound = bottomCenter.Y - tileRect.Min.Y;
+        }
+        else
+        {
+          moveStartX = Math.Min(bottomCenter.X, tileRect.Max.X);
+          moveEndX = Math.Max(bottomCenter.X + possibleX, tileRect.Min.X);
+          //upBound = bottomCenter.Y - tileRect.Max.Y;
+          //downBound = tileRect.Min.Y - bottomCenter.Y;
+        }
+
+        float moveDX = moveEndX - moveStartX;
 
         switch (tile.TileType)
         {
           case TileType.Empty:
-            Tile tileBelow = tileMap.TileData[startX, ty - 1];
+            Tile tileBelow = tileMap.TileData[x, ty - 1];
+            Rectangle2f tileBelowRect = tileMap.GetTileRect(x, ty - 1);
 
             if (tileBelow.TileType == TileType.SouthWest)
-              result.Y = -possibleX;
+              result.Y -= moveDX > 0 ? Math.Min(moveDX, bottomCenter.Y - tileBelowRect.Min.Y) : Math.Max(moveDX, tileBelowRect.Max.Y - bottomCenter.Y);
             else if (tileBelow.TileType == TileType.SouthEast)
-              result.Y = possibleX;
+              result.Y += moveDX > 0 ? Math.Min(moveDX, tileBelowRect.Max.Y - bottomCenter.Y) : Math.Max(moveDX, tileBelowRect.Min.Y - bottomCenter.Y);
 
             break;
 
@@ -206,21 +229,19 @@ namespace RougeLike.States
             break;
 
           case TileType.SouthEast:
-            result.Y = possibleX;
+            result.Y += moveDX > 0 ? Math.Min(moveDX, tileRect.Max.Y - bottomCenter.Y) : Math.Max(moveDX, tileRect.Min.Y - bottomCenter.Y);
             break;
 
           case TileType.SouthWest:
-            result.Y = -possibleX;
+            result.Y -= moveDX > 0 ? Math.Min(moveDX, bottomCenter.Y - tileRect.Min.Y) : Math.Max(moveDX, bottomCenter.Y - tileRect.Max.Y);
             break;
 
           default:
             throw new NotSupportedException("Unsupported tile type: " + tile.TileType.ToString());
         }
       }
-      else
-      {
-        System.Diagnostics.Debug.WriteLine("NOT IMPLEMENTED!");
-      }
+
+      System.Diagnostics.Debug.WriteLine(result.X + " ; " + result.Y);
 
       return result;
     }
