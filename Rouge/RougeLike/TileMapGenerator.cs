@@ -89,7 +89,7 @@ namespace RougeLike
               tile.TileType = TileType.NorthWest;
               tile.ImageIndex = 4;
             }
-            else if (leftFilled && rightFilled && !upFilled && downFilled)
+            else if (leftFilled && rightFilled && !upFilled && downFilled) // Fills single tile holes
             {
               tile.TileType = TileType.Filled;
             }
