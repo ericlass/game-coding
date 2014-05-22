@@ -99,7 +99,6 @@ namespace RougeLike
     private const int ScreenWidth = 1280;
     private const int ScreenHeight = 720;
 
-    private int _wheelDelta = 0;
     private RenderTarget _renderTarget = null;
 
     public override OkuSettings Configure()
@@ -119,8 +118,6 @@ namespace RougeLike
     
     public override void Initialize()
     {
-      Oku.Input.OnMouseWheel += Input_OnMouseWheel;
-
       _renderTarget = OkuManager.Instance.Graphics.NewRenderTarget(ScreenWidth, ScreenHeight);
 
       //GameData.Instance.Scenes = SceneFactory.Instance.LoadScene("testscene.json");
@@ -128,11 +125,6 @@ namespace RougeLike
       GameData.Instance.ActiveScene = GameData.Instance.Scenes[0];
     }
 
-    private void Input_OnMouseWheel(int delta)
-    {
-      _wheelDelta += delta;
-    }
-    
     public override void Update(float dt)
     {
       float speed = 500 * dt;
@@ -158,17 +150,6 @@ namespace RougeLike
 
       if (Oku.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.F3))
         GameData.Instance.DebugDraw = !GameData.Instance.DebugDraw;
-
-      if (_wheelDelta != 0)
-      {
-        LightObject light = GameData.Instance.ActiveScene.GameObjects.GetObjectById("light02") as LightObject;
-        if (light != null)
-          light.Direction = Vector2f.Rotate(light.Direction, _wheelDelta / 100.0f);
-      }
-
-      _wheelDelta = 0;
-
-      //System.Threading.Thread.Sleep(10);
     }
     
     public override void Render()
