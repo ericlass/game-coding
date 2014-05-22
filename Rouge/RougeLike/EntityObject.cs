@@ -48,7 +48,10 @@ namespace RougeLike
       _stateMachine.Render();
 
       if (GameData.Instance.DebugDraw)
+      {
         Oku.Graphics.DrawRectangle(_hitBox.Min.X, _hitBox.Max.X, _hitBox.Min.Y, _hitBox.Max.Y, new Color(255, 0, 0, 128));
+        Oku.Graphics.DrawPoint(0, 0, 2.0f, Color.Green);
+      }
     }
 
     public override void Finish()

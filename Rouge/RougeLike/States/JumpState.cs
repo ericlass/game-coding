@@ -60,18 +60,20 @@ namespace RougeLike.States
 
       
       Rectangle2f hitbox = entity.GetTransformedHitBox();
-      
-      float xBound = dv > 0 ? hitBox.Max.X : hitBox.Min.X;
+
+      /*float xBound = dv.X > 0 ? hitbox.Max.X : hitbox.Min.X;
       Vector2f[] collisionPoints = new Vector2f[] { new Vector2f(hitbox.GetCenter().X, hitbox.Max.Y), new Vector2f(xBound, hitbox.GetCenter().Y) };
       
       bool collision = false;
       Vector2f maxMove = dv;
-      foreach (Vector2f cp : collisionPoints)
+      foreach (Vector2f cp in collisionPoints)
       {
         Vector2f maxD;
         if (tileMap.CollideMovingPoint(cp, dv, out maxD))
         {
           collision = true;
+          System.Diagnostics.Debug.WriteLine("Jump - Collision - Point: " + cp.X + ";" + cp.Y + " - maxD: " + maxD.X + ";" + maxD.Y + " - maxMove: " + maxMove.X + ";" + maxMove.Y);
+
           maxMove.X = GameUtil.ClosestToZero(maxMove.X, maxD.X);
           maxMove.Y = GameUtil.ClosestToZero(maxMove.Y, maxD.Y);
         }
@@ -90,6 +92,23 @@ namespace RougeLike.States
           dv.Y = 0;
           _speed = 0;
         }
+      }*/
+
+      float xBound = dv.X > 0 ? hitbox.Max.X : hitbox.Min.X;
+      Vector2f topPoint = new Vector2f(hitbox.GetCenter().X, hitbox.Max.Y);
+      Vector2f forwardPoint = new Vector2f(xBound, hitbox.GetCenter().Y);
+
+      Vector2f maxMove;
+      if (tileMap.CollideMovingPoint(topPoint, dv, out maxMove))
+      {
+        dv.Y = maxMove.Y;
+        _speed = 0;
+      }
+
+      if (tileMap.CollideMovingPoint(forwardPoint, dv, out maxMove))
+      {
+        dv.X = maxMove.X;
+        entity.GetAttributeValue<NumberValue>("speedx").Value = 0;
       }
 
       pos += dv;
