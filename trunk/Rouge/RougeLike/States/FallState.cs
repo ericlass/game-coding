@@ -65,13 +65,13 @@ namespace RougeLike.States
       Vector2f realMovement;
       if (tilemap.CollideMovingPoint(bottomPoint, movement, out realMovement))
       {
-        dv.Y = 0;
+        dv.Y = realMovement.Y;
         result = WalkState.StateId;
       }
 
       if (tilemap.CollideMovingPoint(forwardPoint, movement, out realMovement))
       {
-        dv.X = 0;
+        dv.X = realMovement.X;
         entity.GetAttributeValue<NumberValue>("speedx").Value = 0;
       }
 
