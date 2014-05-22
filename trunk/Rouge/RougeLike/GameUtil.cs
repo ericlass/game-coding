@@ -190,6 +190,38 @@ namespace RougeLike
 
       return result;
     }
+    
+    /// <summary>
+    /// Returns the value that is closest to zero. For positive values this is the minimum value.
+    /// For negative values this is the maximum value.
+    /// Only works properly if both values are positive or negative!
+    /// </summary>
+    /// <param name="v1">The first value.</param>
+    /// <param name="v2">The second value.</param>
+    /// <returns>The value that is closest to zero.</returns>
+    public static float ClosestToZero(float v1, float v2)
+    {
+      if (v1 > 0)
+        return Math.Min(v1, v2);
+      else
+        return Math.Max(v1, v2);
+    }
+    
+    /// <summary>
+    /// Returns the value that is farthest from zero. For positive values this is the maximum value.
+    /// For negative values this is the minimum value.
+    /// Only works properly if both values are positive or negative!
+    /// </summary>
+    /// <param name="v1">The first value.</param>
+    /// <param name="v2">The second value.</param>
+    /// <returns>The value that is farthest from zero.</returns>
+    public static float FarthestFromZero(float v1, float v2)
+    {
+      if (v1 > 0)
+        return Math.Max(v1, v2);
+      else
+        return Math.Min(v1, v2);
+    }
 
   }
 }

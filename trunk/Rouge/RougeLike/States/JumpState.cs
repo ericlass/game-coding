@@ -58,9 +58,26 @@ namespace RougeLike.States
 
       TileMapObject tileMap = GameData.Instance.ActiveScene.GameObjects.GetObjectById("tilemap") as TileMapObject;
 
-      Vector2f maxMove;
+      
       Rectangle2f hitbox = entity.GetTransformedHitBox();
-      if (tileMap.CollideMovingPoint(new Vector2f(hitbox.GetCenter().X, hitbox.Max.Y), dv, out maxMove))
+      
+      float xBound = dv > 0 ? hitBox.Max.X : hitBox.Min.X;
+      Vector2f[] collisionPoints = new Vector2f[] { new Vector2f(hitbox.GetCenter().X, hitbox.Max.Y), new Vector2f(xBound, hitbox.GetCenter().Y) };
+      
+      bool collision = false;
+      Vector2f maxMove = dv;
+      foreach (Vector2f cp : collisionPoints)
+      {
+        Vector2f maxD;
+        if (tileMap.CollideMovingPoint(cp, dv, out maxD))
+        {
+          collision = true;
+          maxMove.X = GameUtil.ClosestToZero(maxMove.X, maxD.X);
+          maxMove.Y = GameUtil.ClosestToZero(maxMove.Y, maxD.Y);
+        }
+      }
+      
+      if (collision)
       {
         if (maxMove.X != dv.X)
         {
