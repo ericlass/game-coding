@@ -57,31 +57,6 @@ namespace RougeLike.States
 
       Rectangle2f hitbox = entity.GetTransformedHitBox();
 
-      /*float xBound = movement.X > 0 ? hitbox.Max.X : hitbox.Min.X;
-      Vector2f[] collisionPoints = new Vector2f[] { new Vector2f(hitbox.GetCenter().X, hitbox.Min.Y), new Vector2f(xBound, hitbox.GetCenter().Y) };
-
-      bool collision = false;
-      Vector2f realMovement = movement;
-      foreach (Vector2f cp in collisionPoints)
-      {
-        Vector2f maxD;
-        if (tilemap.CollideMovingPoint(cp, movement, out maxD))
-        {
-          collision = true;
-          realMovement.X = GameUtil.ClosestToZero(realMovement.X, maxD.X);
-          realMovement.Y = GameUtil.ClosestToZero(realMovement.Y, maxD.Y);
-        }
-      }
-
-      if (collision)
-      {
-        if (movement.X != realMovement.X)
-          entity.GetAttributeValue<NumberValue>("speedx").Value = 0;
-
-        if (movement.Y != realMovement.Y)
-          result = WalkState.StateId;
-      }*/
-
       float xBound = movement.X > 0 ? hitbox.Max.X : hitbox.Min.X;
       Vector2f bottomPoint = new Vector2f(hitbox.GetCenter().X, hitbox.Min.Y);
       Vector2f forwardPoint = new Vector2f(xBound, hitbox.GetCenter().Y);

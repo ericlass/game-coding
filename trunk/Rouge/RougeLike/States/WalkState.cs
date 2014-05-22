@@ -67,7 +67,7 @@ namespace RougeLike.States
 
       if (!leftDown && !rightDown)
       {
-        speed *= 0.99f;
+        speed -= (1000 * dt) * Math.Sign(speed);
         if (speed > -10 && speed < 10)
           speed = 0;
       }
