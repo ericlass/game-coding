@@ -89,6 +89,10 @@ namespace RougeLike
               tile.TileType = TileType.NorthWest;
               tile.ImageIndex = 4;
             }
+            else if (leftFilled && rightFilled && !upFilled && downFilled)
+            {
+              tile.TileType = TileType.Filled;
+            }
 
           }
         }
