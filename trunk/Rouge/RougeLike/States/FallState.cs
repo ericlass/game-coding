@@ -53,23 +53,55 @@ namespace RougeLike.States
       Vector2f movement = new Vector2f(speedx * dt, -_speed * dt);
 
       TileMapObject tilemap = GameData.Instance.ActiveScene.GameObjects.GetObjectById("tilemap") as TileMapObject;
-      Vector2f realMovement = Vector2f.Zero;
-
       string result = null;
 
       Rectangle2f hitbox = entity.GetTransformedHitBox();
-      if (tilemap.CollideMovingPoint(new Vector2f(hitbox.GetCenter().X, hitbox.Min.Y), movement, out realMovement))
+
+      /*float xBound = movement.X > 0 ? hitbox.Max.X : hitbox.Min.X;
+      Vector2f[] collisionPoints = new Vector2f[] { new Vector2f(hitbox.GetCenter().X, hitbox.Min.Y), new Vector2f(xBound, hitbox.GetCenter().Y) };
+
+      bool collision = false;
+      Vector2f realMovement = movement;
+      foreach (Vector2f cp in collisionPoints)
+      {
+        Vector2f maxD;
+        if (tilemap.CollideMovingPoint(cp, movement, out maxD))
+        {
+          collision = true;
+          realMovement.X = GameUtil.ClosestToZero(realMovement.X, maxD.X);
+          realMovement.Y = GameUtil.ClosestToZero(realMovement.Y, maxD.Y);
+        }
+      }
+
+      if (collision)
       {
         if (movement.X != realMovement.X)
           entity.GetAttributeValue<NumberValue>("speedx").Value = 0;
 
         if (movement.Y != realMovement.Y)
           result = WalkState.StateId;
+      }*/
+
+      float xBound = movement.X > 0 ? hitbox.Max.X : hitbox.Min.X;
+      Vector2f bottomPoint = new Vector2f(hitbox.GetCenter().X, hitbox.Min.Y);
+      Vector2f forwardPoint = new Vector2f(xBound, hitbox.GetCenter().Y);
+
+      Vector2f dv = movement;
+      Vector2f realMovement;
+      if (tilemap.CollideMovingPoint(bottomPoint, movement, out realMovement))
+      {
+        dv.Y = 0;
+        result = WalkState.StateId;
+      }
+
+      if (tilemap.CollideMovingPoint(forwardPoint, movement, out realMovement))
+      {
+        dv.X = 0;
+        entity.GetAttributeValue<NumberValue>("speedx").Value = 0;
       }
 
       Vector2f pos = entity.Position;
-      pos.X += realMovement.X;
-      pos.Y += realMovement.Y;      
+      pos += dv;
       entity.Position = pos;
 
       return result;
