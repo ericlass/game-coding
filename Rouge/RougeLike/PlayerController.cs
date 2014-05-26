@@ -18,7 +18,7 @@ namespace RougeLike
 
     public bool DoJump(EntityObject entity)
     {
-      return OkuManager.Instance.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.W);
+      return OkuManager.Instance.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.W);
     }
   }
 }

@@ -27,5 +27,6 @@ namespace RougeLike
     /// </summary>
     /// <returns>True if the entity should jump, else false.</returns>
     bool DoJump(EntityObject entity);
+
   }
 }
