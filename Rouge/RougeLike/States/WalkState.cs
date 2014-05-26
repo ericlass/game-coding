@@ -42,7 +42,7 @@ namespace RougeLike.States
 
     public override string Update(float dt, EntityObject entity)
     {
-      if (Oku.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.W))
+      if (entity.Controller.DoJump(entity))
         return JumpState.StateId;
 
       float accel = 1500;
@@ -50,8 +50,8 @@ namespace RougeLike.States
 
       float speed = (float)entity.GetAttributeValue<NumberValue>("speedx").Value;
 
-      bool leftDown = Oku.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.A);
-      bool rightDown = Oku.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.D);
+      bool leftDown = entity.Controller.DoMoveLeft(entity);
+      bool rightDown = entity.Controller.DoMoveRight(entity);
 
       if (rightDown)
       {

@@ -75,6 +75,8 @@
     <Compile Include="DoubleKeyMap.cs" />
     <Compile Include="EntityObject.cs" />
     <Compile Include="GameObjectBaseAttributes.cs" />
+    <Compile Include="IEntityController.cs" />
+    <Compile Include="PlayerController.cs" />
     <Compile Include="States\Event.cs" />
     <Compile Include="States\EventNames.cs" />
     <Compile Include="States\EventQueue.cs" />
