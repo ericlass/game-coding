@@ -66,6 +66,7 @@ namespace RougeLike
       mario.SetAttributeValue("direction", new NumberValue(1));
       mario.SetAttributeValue("speedx", new NumberValue(0));
       mario.SetAttributeValue("speedy", new NumberValue(0));
+      mario.Controller = new PlayerController();
 
       WalkState walk = new WalkState();
       mario.StateMachine.States.Add(walk.Id, walk);

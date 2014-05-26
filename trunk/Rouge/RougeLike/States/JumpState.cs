@@ -38,16 +38,17 @@ namespace RougeLike.States
     {
       float speedx = (float)entity.GetAttributeValue<NumberValue>("speedx").Value;
 
-      if (Oku.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.A))
+      if (entity.Controller.DoMoveLeft(entity))
         speedx -= 200 * dt;
 
-      if (Oku.Input.Keyboard.KeyIsDown(System.Windows.Forms.Keys.D))
+      if (entity.Controller.DoMoveRight(entity))
         speedx += 200 * dt;
 
       speedx = GameUtil.Clamp(speedx, -300, 300);
 
-      entity.GetAttributeValue<NumberValue>("speedx").Value = speedx;      
+      entity.GetAttributeValue<NumberValue>("speedx").Value = speedx;
 
+      //Make sure entity is facing into the correct direction
       if (speedx > 0)
         entity.GetAttributeValue<NumberValue>("direction").Value = 1;
       else if (speedx < 0)
@@ -57,7 +58,6 @@ namespace RougeLike.States
       Vector2f dv = new Vector2f(speedx * dt, _speed * dt);
 
       TileMapObject tileMap = GameData.Instance.ActiveScene.GameObjects.GetObjectById("tilemap") as TileMapObject;
-
       
       Rectangle2f hitbox = entity.GetTransformedHitBox();
 

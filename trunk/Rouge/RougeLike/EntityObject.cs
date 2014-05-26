@@ -13,6 +13,7 @@ namespace RougeLike
 
     private Rectangle2f _hitBox = new Rectangle2f(-4, -9, 8, 12);
     private StateMachine _stateMachine = new StateMachine();
+    private IEntityController _controller = null;
 
     public StateMachine StateMachine
     {
@@ -23,6 +24,12 @@ namespace RougeLike
     {
       get { return _hitBox; }
       set { _hitBox = value; }
+    }
+
+    public IEntityController Controller
+    {
+      get { return _controller; }
+      set { _controller = value; }
     }
 
     public Rectangle2f GetTransformedHitBox()
