@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using RougeLike.States;
+using RougeLike.Attributes;
 
 namespace RougeLike
 {
-  public class GameData
+  public class GameData : IAttributeContainer
   {
     private static GameData _instance = null;
 
@@ -26,6 +27,7 @@ namespace RougeLike
     private SceneList _scenes = new SceneList();
     private Scene _activeScene = null;
     private EventQueue _eventQueue = new EventQueue();
+    private AttributeMap _attributes = new AttributeMap();
 
     public bool DebugDraw
     {
@@ -56,6 +58,41 @@ namespace RougeLike
     {
       get { return _eventQueue; }
       set { _eventQueue = value; }
+    }
+
+    public List<string> GetAttributeNames()
+    {
+      return new List<string>(_attributes.Keys);
+    }
+
+    public bool ContainsAttribute(string attribute)
+    {
+      return _attributes.ContainsKey(attribute);
+    }
+
+    public IAttributeValue GetAttributeValue(string attribute)
+    {
+      if (_attributes.ContainsKey(attribute))
+        return _attributes[attribute];
+
+      return null;
+    }
+
+    public T GetAttributeValue<T>(string attribute) where T : class, IAttributeValue
+    {
+      if (_attributes.ContainsKey(attribute))
+        return _attributes[attribute] as T;
+
+      return null;
+    }
+
+    public bool SetAttributeValue(string attribute, IAttributeValue value)
+    {
+      if (!_attributes.ContainsKey(attribute))
+        return false;
+
+      _attributes[attribute] = value;
+      return true;
     }
 
   }

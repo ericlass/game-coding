@@ -61,6 +61,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AIController.cs" />
     <Compile Include="Animation.cs" />
     <Compile Include="Attributes\AttributeMap.cs" />
     <Compile Include="Attributes\AttributeValueBase.cs" />
@@ -164,9 +165,6 @@
     <None Include="Content\Graphics\mario_idle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Graphics\mario_left.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Content\Graphics\mario_right.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -174,6 +172,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Content\Graphics\mario_jump.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Graphics\gumba_idle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Graphics\gumba_right.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="lib\JSONator.dll" />
