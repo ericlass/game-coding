@@ -24,9 +24,14 @@ namespace RougeLike.States
       get { return StateId; }
     }
 
+    public ImageBase Image
+    {
+      get { return _image; }
+      set { _image = value; }
+    }
+
     public override void Init()
     {
-      _image = GameUtil.LoadImage("mario_fall.png");
     }
 
     public override void Enter(EntityObject entity)
@@ -46,7 +51,8 @@ namespace RougeLike.States
       if (entity.Controller.DoMoveRight(entity))
         speedx += 200 * dt;
 
-      speedx = GameUtil.Clamp(speedx, -300, 300);
+      float maxSpeed = (float)entity.GetAttributeValue<NumberValue>("walkspeed").Value;
+      speedx = GameUtil.Clamp(speedx, -maxSpeed, maxSpeed);
 
       entity.GetAttributeValue<NumberValue>("speedx").Value = speedx;
 
@@ -90,7 +96,8 @@ namespace RougeLike.States
 
     public override void Render(EntityObject entity)
     {
-      Oku.Graphics.DrawImage(_image, 0, 0, 0, GetDirection(entity), 1, Color.White);
+      if (_image != null)
+        Oku.Graphics.DrawImage(_image, 0, 0, 0, GetDirection(entity), 1, Color.White);
     }
 
     public override void Leave(EntityObject entity)
@@ -99,7 +106,8 @@ namespace RougeLike.States
 
     public override void Finish()
     {
-      Oku.Graphics.ReleaseImage(_image as Image);
+      if (_image != null)
+        Oku.Graphics.ReleaseImage(_image as Image);
     }
   }
 }

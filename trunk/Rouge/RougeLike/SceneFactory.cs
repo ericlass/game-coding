@@ -51,6 +51,11 @@ namespace RougeLike
       scene.GameObjects.Add(tileMap);
       scene.GameObjects.Add(mario);
 
+      for (int i = 0; i < 10; i++)
+      {
+        scene.GameObjects.Add(CreateEnemyEntity());
+      }
+
       SceneList result = new SceneList();
       result.Add(scene);
 
@@ -63,23 +68,74 @@ namespace RougeLike
       mario.Id = "mario";
       mario.ZIndex = 1;
       mario.Position = new Vector2f(0, 500);
+      mario.Controller = new PlayerController();
+
       mario.SetAttributeValue("direction", new NumberValue(1));
       mario.SetAttributeValue("speedx", new NumberValue(0));
       mario.SetAttributeValue("speedy", new NumberValue(0));
-      mario.Controller = new PlayerController();
+      mario.SetAttributeValue("walkspeed", new NumberValue(300));
+      
+      Animation anim = new Animation();
+      anim.Frames.Add(GameUtil.LoadImage("mario_idle.png"));
+      anim.Frames.Add(GameUtil.LoadImage("mario_right.png"));
+      anim.FrameTime = 50;
+      anim.Loop = true;
 
       WalkState walk = new WalkState();
+      walk.Animation = anim;
       mario.StateMachine.States.Add(walk.Id, walk);
 
       JumpState jump = new JumpState();
+      jump.Image = GameUtil.LoadImage("mario_jump.png");
       mario.StateMachine.States.Add(jump.Id, jump);
 
       FallState fall = new FallState();
+      fall.Image = GameUtil.LoadImage("mario_fall.png");
       mario.StateMachine.States.Add(fall.Id, fall);
 
       mario.StateMachine.InitialState = walk.Id;
 
       return mario;
+    }
+
+    private static int _enemyCounter = 0;
+    private static Random _rand = new Random();
+
+    private static EntityObject CreateEnemyEntity()
+    {
+      EntityObject enemy = new EntityObject();
+      enemy.Id = "enemy_" + _enemyCounter;
+      enemy.ZIndex = 1;
+      enemy.Position = new Vector2f(_rand.Next(-500, 500), 800);
+      enemy.HitBox = new Rectangle2f(-4, -8, 8, 13);
+      enemy.Controller = new AIController();
+
+      enemy.SetAttributeValue("direction", new NumberValue(1));
+      enemy.SetAttributeValue("speedx", new NumberValue(0));
+      enemy.SetAttributeValue("speedy", new NumberValue(0));
+      enemy.SetAttributeValue("walkspeed", new NumberValue(150));
+
+      Animation anim = new Animation();
+      anim.Frames.Add(GameUtil.LoadImage("gumba_idle.png"));
+      anim.Frames.Add(GameUtil.LoadImage("gumba_right.png"));
+      anim.FrameTime = 100;
+      anim.Loop = true;
+
+      WalkState walk = new WalkState();
+      walk.Animation = anim;
+      enemy.StateMachine.States.Add(walk.Id, walk);
+
+      JumpState jump = new JumpState();
+      jump.Image = GameUtil.LoadImage("gumba_right.png");
+      enemy.StateMachine.States.Add(jump.Id, jump);
+
+      FallState fall = new FallState();
+      fall.Image = GameUtil.LoadImage("gumba_right.png");
+      enemy.StateMachine.States.Add(fall.Id, fall);
+
+      enemy.StateMachine.InitialState = walk.Id;
+
+      return enemy;
     }
 
     public SceneList LoadScene(string fileName)

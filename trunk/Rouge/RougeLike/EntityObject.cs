@@ -11,7 +11,7 @@ namespace RougeLike
   {
     private const string CurrentStateAttributeName = "currentstate";
 
-    private Rectangle2f _hitBox = new Rectangle2f(-4, -9, 8, 12);
+    private Rectangle2f _hitBox = new Rectangle2f(-4, -9, 8, 16);
     private StateMachine _stateMachine = new StateMachine();
     private IEntityController _controller = null;
 
@@ -45,8 +45,6 @@ namespace RougeLike
 
     public override void Update(float dt)
     {
-      Oku.Graphics.Title = Position.X + " ; " + Position.Y;
-
       _stateMachine.Update(dt);
     }
 
@@ -56,7 +54,7 @@ namespace RougeLike
 
       if (GameData.Instance.DebugDraw)
       {
-        Oku.Graphics.DrawRectangle(_hitBox.Min.X, _hitBox.Max.X, _hitBox.Min.Y, _hitBox.Max.Y, new Color(255, 0, 0, 128));
+        Oku.Graphics.DrawRectangle(_hitBox.Min.X, _hitBox.Max.X, _hitBox.Min.Y, _hitBox.Max.Y, new Color(0, 0, 255, 128));
         Oku.Graphics.DrawPoint(0, 0, 2.0f, Color.Green);
       }
     }

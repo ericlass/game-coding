@@ -23,21 +23,20 @@ namespace RougeLike.States
       get { return StateId; }
     }
 
-    public override void Init()
+    public Animation Animation
     {
-      ImageBase frame0Img = GameUtil.LoadImage("mario_idle.png");
-      ImageBase frame1Img = GameUtil.LoadImage("mario_right.png");
+      get { return _anim; }
+      set { _anim = value; }
+    }
 
-      _anim = new Animation();
-      _anim.Frames.Add(frame0Img);
-      _anim.Frames.Add(frame1Img);
-      _anim.FrameTime = 50;
-      _anim.Loop = true;
+    public override void Init()
+    {      
     }
 
     public override void Enter(EntityObject entity)
     {
-      _anim.Restart();
+      if (_anim != null)
+        _anim.Restart();
     }
 
     public override string Update(float dt, EntityObject entity)
@@ -46,7 +45,7 @@ namespace RougeLike.States
         return JumpState.StateId;
 
       float accel = 1500;
-      float maxSpeed = 300;
+      float maxSpeed = (float)entity.GetAttributeValue<NumberValue>("walkspeed").Value;
 
       float speed = (float)entity.GetAttributeValue<NumberValue>("speedx").Value;
 
@@ -99,7 +98,8 @@ namespace RougeLike.States
 
       entity.Position = pos + movement;
 
-      _anim.Update(dt);
+      if (_anim != null)
+        _anim.Update(dt);
 
       return result;
     }
@@ -240,10 +240,13 @@ namespace RougeLike.States
 
     public override void Render(EntityObject entity)
     {
-      if (entity.GetAttributeValue<NumberValue>("speedx").Value == 0.0f)
-        Oku.Graphics.DrawImage(_anim.Frames[0], 0, 0, 0, GetDirection(entity), 1, Color.White);
-      else
-        Oku.Graphics.DrawImage(_anim.CurrentFrame, 0, 0, 0, GetDirection(entity), 1, Color.White);
+      if (_anim != null)
+      {
+        if (entity.GetAttributeValue<NumberValue>("speedx").Value == 0.0f)
+          Oku.Graphics.DrawImage(_anim.Frames[0], 0, 0, 0, GetDirection(entity), 1, Color.White);
+        else
+          Oku.Graphics.DrawImage(_anim.CurrentFrame, 0, 0, 0, GetDirection(entity), 1, Color.White);
+      }
     }
 
     public override void Leave(EntityObject entity)
@@ -252,8 +255,12 @@ namespace RougeLike.States
 
     public override void Finish()
     {
-      foreach (ImageBase img in _anim.Frames)
-        Oku.Graphics.ReleaseImage(img as Image);
+      if (_anim != null)
+      {
+        foreach (ImageBase img in _anim.Frames)
+          Oku.Graphics.ReleaseImage(img as Image);
+      }
     }
+
   }
 }
