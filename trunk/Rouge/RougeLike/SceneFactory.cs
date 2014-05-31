@@ -6,6 +6,9 @@ using OkuBase.Geometry;
 using JSONator;
 using RougeLike.Attributes;
 using RougeLike.States;
+using RougeLike.Tiles;
+using RougeLike.Objects;
+using RougeLike.Controller;
 
 namespace RougeLike
 {
@@ -108,7 +111,7 @@ namespace RougeLike
       enemy.ZIndex = 1;
       enemy.Position = new Vector2f(_rand.Next(-500, 500), 800);
       enemy.HitBox = new Rectangle2f(-4, -8, 8, 13);
-      enemy.Controller = new AIController();
+      enemy.Controller = new SimpleEnemyController();
 
       enemy.SetAttributeValue("direction", new NumberValue(1));
       enemy.SetAttributeValue("speedx", new NumberValue(0));

@@ -4,8 +4,9 @@ using RougeLike.States;
 using RougeLike.Attributes;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
+using RougeLike.Controller;
 
-namespace RougeLike
+namespace RougeLike.Objects
 {
   public class EntityObject : GameObjectBase
   {

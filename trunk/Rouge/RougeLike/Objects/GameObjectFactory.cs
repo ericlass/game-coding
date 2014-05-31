@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace RougeLike
+namespace RougeLike.Objects
 {
   public class GameObjectFactory
   {

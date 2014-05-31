@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using OkuBase;
 using OkuBase.Geometry;
 
-namespace RougeLike
+namespace RougeLike.Objects
 {
   public abstract partial class GameObjectBase
   {

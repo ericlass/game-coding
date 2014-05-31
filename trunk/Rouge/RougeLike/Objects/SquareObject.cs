@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using OkuBase;
 using OkuBase.Graphics;
 
-namespace RougeLike
+namespace RougeLike.Objects
 {
   public class SquareObject : GameObjectBase
   {

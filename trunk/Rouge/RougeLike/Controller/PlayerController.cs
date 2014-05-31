@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using OkuBase;
+using RougeLike.Objects;
 
-namespace RougeLike
+namespace RougeLike.Controller
 {
   public class PlayerController : IEntityController
   {

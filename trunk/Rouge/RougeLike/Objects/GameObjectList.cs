@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace RougeLike
+namespace RougeLike.Objects
 {
   public class GameObjectList : List<GameObjectBase>
   {

@@ -2,6 +2,7 @@
 using OkuBase;
 using OkuBase.Geometry;
 using RougeLike.Attributes;
+using RougeLike.Objects;
 
 namespace RougeLike
 {

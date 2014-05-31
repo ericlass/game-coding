@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
 
-namespace RougeLike
+namespace RougeLike.Tiles
 {
   public class TileData
   {

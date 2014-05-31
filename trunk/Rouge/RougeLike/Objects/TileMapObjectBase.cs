@@ -8,8 +8,9 @@ using OkuBase.Geometry;
 using OkuBase.Utils;
 using JSONator;
 using RougeLike.Attributes;
+using RougeLike.Tiles;
 
-namespace RougeLike
+namespace RougeLike.Objects
 {
   /// <summary>
   /// Defines the base for all tile map objects with rendering and some helper functions.
@@ -595,6 +596,13 @@ namespace RougeLike
     {
       Vector2f tilePos = WorldToTile(pos);
       Tile tile = _tileData[(int)tilePos.X, (int)tilePos.Y - 1];
+      return tile.TileType;
+    }
+
+    public TileType GetTileAt(Vector2f pos)
+    {
+      Vector2f tilePos = WorldToTile(pos);
+      Tile tile = _tileData[(int)tilePos.X, (int)tilePos.Y];
       return tile.TileType;
     }
 

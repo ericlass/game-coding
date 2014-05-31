@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using RougeLike.Attributes;
 
-namespace RougeLike
+namespace RougeLike.Objects
 {
   public abstract partial class GameObjectBase : IAttributeContainer
   {
