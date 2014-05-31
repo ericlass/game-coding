@@ -71,6 +71,7 @@
     <Compile Include="Attributes\IAttributeValue.cs" />
     <Compile Include="Attributes\NumberValue.cs" />
     <Compile Include="Attributes\TextValue.cs" />
+    <Compile Include="States\StateFactory.cs" />
     <Compile Include="Tiles\Biome.cs" />
     <Compile Include="Tiles\BiomeParameters.cs" />
     <Compile Include="DoubleKeyMap.cs" />
@@ -111,6 +112,12 @@
     <Compile Include="Tiles\TileMapGenerator.cs" />
     <Compile Include="Objects\TileMapObject.cs" />
     <Compile Include="Objects\TileMapObjectBase.cs" />
+    <None Include="Content\Animations\player_walk.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Entities\player.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Content\Graphics\square.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
