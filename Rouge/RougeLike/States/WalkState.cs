@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
 using RougeLike.Attributes;
+using RougeLike.Tiles;
+using RougeLike.Objects;
 
 namespace RougeLike.States
 {

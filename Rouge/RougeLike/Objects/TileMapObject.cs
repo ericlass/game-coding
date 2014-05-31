@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using OkuBase.Geometry;
+using RougeLike.Tiles;
 
-namespace RougeLike
+namespace RougeLike.Objects
 {
   public class TileMapObject : TileMapObjectBase
   {

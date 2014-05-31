@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using RougeLike.Objects;
 
-namespace RougeLike
+namespace RougeLike.Controller
 {
   /// <summary>
   /// Defines a controller for entities that controls when an entity is supposed to take some action.

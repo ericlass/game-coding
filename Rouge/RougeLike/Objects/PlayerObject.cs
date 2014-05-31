@@ -5,7 +5,7 @@ using OkuBase;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
 
-namespace RougeLike
+namespace RougeLike.Objects
 {
   public class PlayerObject : GameObjectBase
   {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RougeLike
+namespace RougeLike.Tiles
 {
   public class BiomeParameters
   {

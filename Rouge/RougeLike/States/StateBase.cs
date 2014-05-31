@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OkuBase;
+using RougeLike.Objects;
 
 namespace RougeLike.States
 {
