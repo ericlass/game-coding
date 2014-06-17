@@ -56,9 +56,10 @@ namespace RougeLike
       scene.GameObjects.Add(tileMap);
       scene.GameObjects.Add(mario);
 
-      for (int i = 0; i < 10; i++)
+      for (int i = 0; i < 1; i++)
       {
         scene.GameObjects.Add(CreateEnemyEntity());
+        _enemyCounter++;
       }
 
       SceneList result = new SceneList();
