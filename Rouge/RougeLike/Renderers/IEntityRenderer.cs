@@ -1,16 +1,13 @@
 using System;
 using System.Collections.Generic;
 using RougeLike.Objects;
+using RougeLike.States;
 
 namespace RougeLike.Renderers
 {
-  public interface IEntityRenderer
+  public interface IEntityRenderer : IStateComponent
   {
-    void Init();
-    void Begin(EntityObject entity);
     void Update(float dt, EntityObject entity);
     void Render(EntityObject entity);
-    void End(EntityObject entity);
-    void Finish();
   }
 }

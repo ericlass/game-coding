@@ -5,7 +5,7 @@ namespace RougeLike.Attributes
   /// <summary>
   /// Defines a single number attribute value.
   /// </summary>
-  public class NumberValue : AttributeValueBase<double>
+  public class NumberValue : AttributeValueBase<float>
   {
     /// <summary>
     /// Creates a new number value.
@@ -18,7 +18,7 @@ namespace RougeLike.Attributes
     /// Create a new number value with the given value.
     /// </summary>
     /// <param name="value">The value of the new number value.</param>
-    public NumberValue(double value)
+    public NumberValue(float value)
     {
       _value = value;
     }

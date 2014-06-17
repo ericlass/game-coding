@@ -9,6 +9,8 @@ using RougeLike.States;
 using RougeLike.Tiles;
 using RougeLike.Objects;
 using RougeLike.Controller;
+using RougeLike.Behaviors;
+using RougeLike.Renderers;
 
 namespace RougeLike
 {
@@ -77,23 +79,20 @@ namespace RougeLike
       mario.SetAttributeValue("speedx", new NumberValue(0));
       mario.SetAttributeValue("speedy", new NumberValue(0));
       mario.SetAttributeValue("walkspeed", new NumberValue(300));
-      
-      Animation anim = new Animation();
-      anim.Frames.Add(GameUtil.LoadImage("mario_idle.png"));
-      anim.Frames.Add(GameUtil.LoadImage("mario_right.png"));
-      anim.FrameTime = 50;
-      anim.Loop = true;
 
-      WalkState walk = new WalkState();
-      walk.Animation = anim;
+      State walk = new State(StateIds.Walk);
+      walk.Behavior = new WalkBehavior();
+      walk.Renderer = new PlayerWalkRenderer("player_walk");
       mario.StateMachine.States.Add(walk.Id, walk);
 
-      JumpState jump = new JumpState();
-      jump.Image = GameUtil.LoadImage("mario_jump.png");
+      State jump = new State(StateIds.Jump);
+      jump.Behavior = new JumpBehavior();
+      jump.Renderer = new DirectedImageRenderer("mario_jump");
       mario.StateMachine.States.Add(jump.Id, jump);
 
-      FallState fall = new FallState();
-      fall.Image = GameUtil.LoadImage("mario_fall.png");
+      State fall = new State(StateIds.Fall);
+      fall.Behavior = new FallBehavior();
+      fall.Renderer = new DirectedImageRenderer("mario_fall");
       mario.StateMachine.States.Add(fall.Id, fall);
 
       mario.StateMachine.InitialState = walk.Id;
@@ -118,22 +117,19 @@ namespace RougeLike
       enemy.SetAttributeValue("speedy", new NumberValue(0));
       enemy.SetAttributeValue("walkspeed", new NumberValue(150));
 
-      Animation anim = new Animation();
-      anim.Frames.Add(GameUtil.LoadImage("gumba_idle.png"));
-      anim.Frames.Add(GameUtil.LoadImage("gumba_right.png"));
-      anim.FrameTime = 100;
-      anim.Loop = true;
-
-      WalkState walk = new WalkState();
-      walk.Animation = anim;
+      State walk = new State(StateIds.Walk);
+      walk.Behavior = new WalkBehavior();
+      walk.Renderer = new PlayerWalkRenderer("gumba_walk");
       enemy.StateMachine.States.Add(walk.Id, walk);
 
-      JumpState jump = new JumpState();
-      jump.Image = GameUtil.LoadImage("gumba_right.png");
+      State jump = new State(StateIds.Jump);
+      jump.Behavior = new JumpBehavior();
+      jump.Renderer = new ImageRenderer("gumba_right");
       enemy.StateMachine.States.Add(jump.Id, jump);
 
-      FallState fall = new FallState();
-      fall.Image = GameUtil.LoadImage("gumba_right.png");
+      State fall = new State(StateIds.Fall);
+      fall.Behavior = new FallBehavior();
+      fall.Renderer = new ImageRenderer("gumba_right");
       enemy.StateMachine.States.Add(fall.Id, fall);
 
       enemy.StateMachine.InitialState = walk.Id;

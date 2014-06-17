@@ -8,20 +8,20 @@ using RougeLike.States;
 
 namespace RougeLike.Behaviors
 {
-  public class FallBehaviorPattern : IBehaviorPattern
+  public class FallBehavior : IBehavior
   {
     private float _speed = 0.0f;
 
-    public string Update(float dt, EntityObject entity, IEntityController controller)
+    public string Update(float dt, EntityObject entity)
     {
       _speed = Math.Min(_speed + (1500 * dt), 800);
 
       float speedx = (float)entity.GetAttributeValue<NumberValue>("speedx").Value;
 
-      if (controller.DoMoveLeft(entity))
+      if (entity.Controller.DoMoveLeft(entity))
         speedx -= 200 * dt;
 
-      if (controller.DoMoveRight(entity))
+      if (entity.Controller.DoMoveRight(entity))
         speedx += 200 * dt;
 
       float maxSpeed = (float)entity.GetAttributeValue<NumberValue>("walkspeed").Value;
@@ -51,7 +51,7 @@ namespace RougeLike.Behaviors
       if (tilemap.CollideMovingPoint(bottomPoint, movement, out realMovement))
       {
         dv.Y = realMovement.Y;
-        result = WalkState.StateId;
+        result = StateIds.Walk;
       }
 
       if (tilemap.CollideMovingPoint(forwardPoint, movement, out realMovement))
@@ -73,6 +73,14 @@ namespace RougeLike.Behaviors
     }
 
     public void End(EntityObject entity)
+    {
+    }
+
+    public void Init()
+    {
+    }
+
+    public void Finish()
     {
     }
 
