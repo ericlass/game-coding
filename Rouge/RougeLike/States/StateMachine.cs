@@ -64,7 +64,7 @@ namespace RougeLike.States
 
       _currentState = _initialState;
 
-      foreach (StateBase state in _states.Values)
+      foreach (State state in _states.Values)
         state.Init();
 
       _initialized = true;
@@ -87,7 +87,7 @@ namespace RougeLike.States
       if (!_initialized)
         throw new OkuBase.OkuException("Cannot finish a state machine that has not been initialized!");
 
-      foreach (StateBase state in _states.Values)
+      foreach (State state in _states.Values)
         state.Finish();
 
       _initialized = false;

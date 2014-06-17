@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RougeLike.States
 {
-  public class StateMap : Dictionary<string, StateBase>
+  public class StateMap : Dictionary<string, State>
   {
   }
 }

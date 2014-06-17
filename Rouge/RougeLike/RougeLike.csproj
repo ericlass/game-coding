@@ -117,6 +117,9 @@
     <Compile Include="Tiles\TileMapGenerator.cs" />
     <Compile Include="Objects\TileMapObject.cs" />
     <Compile Include="Objects\TileMapObjectBase.cs" />
+    <Compile Include="States\State.cs" />
+    <Compile Include="Renderers\IEntityRenderer.cs" />
+    <Compile Include="Renderers\ImageRenderer.cs" />
     <None Include="Content\Animations\player_walk.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
