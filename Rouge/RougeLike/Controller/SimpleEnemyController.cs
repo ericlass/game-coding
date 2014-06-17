@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OkuBase.Geometry;
 using RougeLike.Attributes;
 using RougeLike.Tiles;
 using RougeLike.Objects;
@@ -15,15 +16,18 @@ namespace RougeLike.Controller
     };
 
     private EnemyState _state = EnemyState.Idle;
-    private bool _moveLeft = DateTime.Now.Second % 2 == 0;
+    private bool _moveLeft = DateTime.Now.Ticks % 2 == 0;
 
     private void CheckForMovement(EntityObject entity)
     {
+      float direction = entity.GetAttributeValue<NumberValue>("direction").Value;
       TileMapObject tilemap = GameData.Instance.ActiveScene.GameObjects.GetObjectById("tilemap") as TileMapObject;
-      TileType ttb = tilemap.GetTileBelow(entity.Position);
-      TileType tt = tilemap.GetTileAt(entity.Position);
-      if (tt != TileType.Empty || (ttb != TileType.Filled && ttb != TileType.NorthEast && ttb != TileType.NorthWest))
+      Vector2f movement = Vector2f.Zero;
+      if (tilemap.CollideMovingPoint(entity.Position, new Vector2f((entity.HitBox.Width / 2) * direction, 0), out movement))
+      {
         _moveLeft = !_moveLeft;
+        System.Diagnostics.Debug.WriteLine("Move Left: " + direction);
+      }
     }
 
     public bool DoMoveLeft(EntityObject entity)
