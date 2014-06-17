@@ -61,6 +61,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviors\FallBehaviorPattern.cs" />
+    <Compile Include="Behaviors\JumpBehaviorPattern.cs" />
+    <Compile Include="Behaviors\WalkBehaviorPattern.cs" />
     <Compile Include="Controller\SimpleEnemyController.cs" />
     <Compile Include="Animation.cs" />
     <Compile Include="Attributes\AttributeMap.cs" />
@@ -71,6 +74,8 @@
     <Compile Include="Attributes\IAttributeValue.cs" />
     <Compile Include="Attributes\NumberValue.cs" />
     <Compile Include="Attributes\TextValue.cs" />
+    <Compile Include="Behaviors\Behavior.cs" />
+    <Compile Include="Behaviors\IBehaviorPattern.cs" />
     <Compile Include="States\StateFactory.cs" />
     <Compile Include="Tiles\Biome.cs" />
     <Compile Include="Tiles\BiomeParameters.cs" />

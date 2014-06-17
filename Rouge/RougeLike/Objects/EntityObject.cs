@@ -16,6 +16,8 @@ namespace RougeLike.Objects
     private StateMachine _stateMachine = new StateMachine();
     private IEntityController _controller = null;
 
+    private const Color HitBoxColor = new Color(0, 0, 255, 128);
+
     public StateMachine StateMachine
     {
       get { return _stateMachine; }
@@ -55,7 +57,7 @@ namespace RougeLike.Objects
 
       if (GameData.Instance.DebugDraw)
       {
-        Oku.Graphics.DrawRectangle(_hitBox.Min.X, _hitBox.Max.X, _hitBox.Min.Y, _hitBox.Max.Y, new Color(0, 0, 255, 128));
+        Oku.Graphics.DrawRectangle(_hitBox.Min.X, _hitBox.Max.X, _hitBox.Min.Y, _hitBox.Max.Y, HitBoxColor);
         Oku.Graphics.DrawPoint(0, 0, 2.0f, Color.Green);
       }
     }
