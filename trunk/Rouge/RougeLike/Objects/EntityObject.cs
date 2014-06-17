@@ -5,7 +5,7 @@ using RougeLike.Attributes;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
 using RougeLike.Controller;
-using RougeLike.Behavior;
+using RougeLike.Behaviors;
 
 namespace RougeLike.Objects
 {
@@ -17,7 +17,7 @@ namespace RougeLike.Objects
     private StateMachine _stateMachine = new StateMachine();
     private IEntityController _controller = null;
 
-    private const Color HitBoxColor = new Color(0, 0, 255, 128);
+    private Color HitBoxColor = new Color(0, 0, 255, 128);
 
     public StateMachine StateMachine
     {

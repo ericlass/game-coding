@@ -10,28 +10,30 @@ namespace RougeLike
 {
   public static class GameUtil
   {
-    public static Animation LoadAnimation(string baseName)
+    public static Animation LoadAnimation(string animName)
     {
-      // Load files that start with baseName and create animation for them
-      string[] files = Directory.GetFiles(".\\Content\\Graphics", baseName + "*.png");
-      Array.Sort(files);
+      //Add extension if it was not given
+      if (Path.GetExtension(animName) == "")
+        animName += ".json";
+
+      JSONObjectValue root = ParseJsonFile(Path.Combine(".\\Content\\Animations", animName));
 
       Animation result = new Animation();
-      result.FrameTime = 100;
-      result.Loop = true;
+      result.Loop = root.GetBool("loop").Value;
+      result.FrameTime = (int)root.GetNumber("frametime").Value;
 
-      foreach (string file in files)
-      {
-        ImageData data = ImageData.FromFile(file);
-        Image image = OkuManager.Instance.Graphics.NewImage(data);
-        result.Frames.Add(image);
-      }
+      foreach (JSONStringValue frame in root.GetArray("frames"))
+        result.Frames.Add(LoadImage(frame.Value));
 
       return result;
     }
 
-    public static ImageBase LoadImage(string fileName)
+    public static Image LoadImage(string fileName)
     {
+      //Add extension if it was not given
+      if (Path.GetExtension(fileName) == "")
+        fileName += ".png";
+
       string fullPath = Path.Combine(".\\Content\\Graphics", fileName);
       if (!File.Exists(fullPath))
         throw new OkuException("There is no file called " + fileName + " in the content folder!");

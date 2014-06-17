@@ -1,50 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using OkuBase.Geometry;
-using OkuBase.Graphics;
 using RougeLike.Attributes;
-using RougeLike.Tiles;
+using RougeLike.Controller;
 using RougeLike.Objects;
+using RougeLike.States;
+using RougeLike.Tiles;
 
-namespace RougeLike.States
+namespace RougeLike.Behaviors
 {
-  public class WalkState : StateBase
+  public class WalkBehavior : IBehavior
   {
-    private Animation _anim = null;
-
-    public const string StateId = "walk";
-
-    private float GetDirection(EntityObject entity)
+    public void Begin(EntityObject entity)
     {
-      NumberValue direction = entity.GetAttributeValue<NumberValue>("direction");
-      return (float)direction.Value;
     }
 
-    public override string Id
-    {
-      get { return StateId; }
-    }
-
-    public Animation Animation
-    {
-      get { return _anim; }
-      set { _anim = value; }
-    }
-
-    public override void Init()
-    {      
-    }
-
-    public override void Enter(EntityObject entity)
-    {
-      if (_anim != null)
-        _anim.Restart();
-    }
-
-    public override string Update(float dt, EntityObject entity)
+    public string Update(float dt, EntityObject entity)
     {
       if (entity.Controller.DoJump(entity))
-        return JumpState.StateId;
+        return StateIds.Jump;
 
       float accel = 1500;
       float maxSpeed = (float)entity.GetAttributeValue<NumberValue>("walkspeed").Value;
@@ -91,7 +65,7 @@ namespace RougeLike.States
       TileType type2 = tileMap.GetTileBelow(new Vector2f(thb.Max.X, thb.Min.Y + 0.001f));
 
       if (type1 == TileType.Empty && type2 == TileType.Empty)
-        result = FallState.StateId;
+        result = StateIds.Fall;
 
       Vector2f movement = WalkPlayer(entity.GetTransformedHitBox(), dv.X);
 
@@ -99,9 +73,6 @@ namespace RougeLike.States
         entity.GetAttributeValue<NumberValue>("speedx").Value = 0;
 
       entity.Position = pos + movement;
-
-      if (_anim != null)
-        _anim.Update(dt);
 
       return result;
     }
@@ -122,7 +93,7 @@ namespace RougeLike.States
         Vector2f topTile = tileMap.WorldToTile(hitbox.Max);
         Vector2f leftTile = tileMap.WorldToTile(bottomCenter);
         Vector2f rightTile = tileMap.WorldToTile(new Vector2f(hitbox.Max.X + dx, bottomCenter.Y));
-        
+
         int left = (int)leftTile.X;
         int right = (int)rightTile.X;
         int bottom = (int)leftTile.Y;
@@ -240,28 +211,16 @@ namespace RougeLike.States
       return result;
     }
 
-    public override void Render(EntityObject entity)
-    {
-      if (_anim != null)
-      {
-        if (entity.GetAttributeValue<NumberValue>("speedx").Value == 0.0f)
-          Oku.Graphics.DrawImage(_anim.Frames[0], 0, 0, 0, GetDirection(entity), 1, Color.White);
-        else
-          Oku.Graphics.DrawImage(_anim.CurrentFrame, 0, 0, 0, GetDirection(entity), 1, Color.White);
-      }
-    }
-
-    public override void Leave(EntityObject entity)
+    public void End(EntityObject entity)
     {
     }
 
-    public override void Finish()
+    public void Init()
     {
-      if (_anim != null)
-      {
-        foreach (ImageBase img in _anim.Frames)
-          Oku.Graphics.ReleaseImage(img as Image);
-      }
+    }
+
+    public void Finish()
+    {
     }
 
   }

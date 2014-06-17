@@ -8,7 +8,7 @@ using RougeLike.States;
 
 namespace RougeLike.Behaviors
 {
-  public class JumpBehaviorPattern : IBehaviorPattern
+  public class JumpBehavior : IBehavior
   {
     private float _speed = 0.0f;
 
@@ -17,14 +17,14 @@ namespace RougeLike.Behaviors
       _speed = 800;
     }
 
-    public string Update(float dt, EntityObject entity, IEntityController controller)
+    public string Update(float dt, EntityObject entity)
     {
       float speedx = (float)entity.GetAttributeValue<NumberValue>("speedx").Value;
 
-      if (controller.DoMoveLeft(entity))
+      if (entity.Controller.DoMoveLeft(entity))
         speedx -= 200 * dt;
 
-      if (controller.DoMoveRight(entity))
+      if (entity.Controller.DoMoveRight(entity))
         speedx += 200 * dt;
 
       float maxSpeed = (float)entity.GetAttributeValue<NumberValue>("walkspeed").Value;
@@ -69,12 +69,20 @@ namespace RougeLike.Behaviors
       string result = null;
 
       if (_speed <= 0)
-        result = FallState.StateId;
+        result = StateIds.Fall;
 
       return result;
     }
 
     public void End(EntityObject entity)
+    {
+    }
+
+    public void Init()
+    {
+    }
+
+    public void Finish()
     {
     }
 

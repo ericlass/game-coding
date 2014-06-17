@@ -10,7 +10,7 @@ namespace RougeLike.States
   public class State
   {
     private string _id = null;
-    private IBehaviorPattern _behavior = null;
+    private IBehavior _behavior = null;
     private IEntityRenderer _renderer = null;
   
     public State(string id)
@@ -26,7 +26,7 @@ namespace RougeLike.States
       get { return _id; }
     }
     
-    public IBehaviorPattern Behavior
+    public IBehavior Behavior
     {
       get { return _behavior; }
       set { _behavior = value; }
@@ -69,10 +69,14 @@ namespace RougeLike.States
     /// <returns>The id of the next state or null if the current state shall not be changed.</returns>
     public string Update(float dt, EntityObject entity)
     {
+      string result = null;
+
       if (_behavior != null)
-        _behavior.Update(dt, entity, entity.Controller);
+        result = _behavior.Update(dt, entity);
       if (_renderer != null)
         _renderer.Update(dt, entity);
+
+      return result;
     }
 
     /// <summary>

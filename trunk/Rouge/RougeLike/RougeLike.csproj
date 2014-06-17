@@ -61,9 +61,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Behaviors\FallBehaviorPattern.cs" />
-    <Compile Include="Behaviors\JumpBehaviorPattern.cs" />
-    <Compile Include="Behaviors\WalkBehaviorPattern.cs" />
+    <Compile Include="Behaviors\FallBehavior.cs" />
+    <Compile Include="Behaviors\JumpBehavior.cs" />
+    <Compile Include="Behaviors\WalkBehavior.cs" />
     <Compile Include="Controller\SimpleEnemyController.cs" />
     <Compile Include="Animation.cs" />
     <Compile Include="Attributes\AttributeMap.cs" />
@@ -74,9 +74,12 @@
     <Compile Include="Attributes\IAttributeValue.cs" />
     <Compile Include="Attributes\NumberValue.cs" />
     <Compile Include="Attributes\TextValue.cs" />
-    <Compile Include="Behaviors\Behavior.cs" />
-    <Compile Include="Behaviors\IBehaviorPattern.cs" />
-    <Compile Include="States\StateFactory.cs" />
+    <Compile Include="Behaviors\IBehavior.cs" />
+    <Compile Include="Renderers\AnimationRenderer.cs" />
+    <Compile Include="Renderers\DirectedImageRenderer.cs" />
+    <Compile Include="Renderers\PlayerWalkRenderer.cs" />
+    <Compile Include="States\IStateComponent.cs" />
+    <Compile Include="States\StateIds.cs" />
     <Compile Include="Tiles\Biome.cs" />
     <Compile Include="Tiles\BiomeParameters.cs" />
     <Compile Include="DoubleKeyMap.cs" />
@@ -104,12 +107,8 @@
     <Compile Include="SceneList.cs" />
     <Compile Include="SpriteBatch.cs" />
     <Compile Include="Objects\SquareObject.cs" />
-    <Compile Include="States\FallState.cs" />
-    <Compile Include="States\JumpState.cs" />
-    <Compile Include="States\StateBase.cs" />
     <Compile Include="States\StateMachine.cs" />
     <Compile Include="States\StateMap.cs" />
-    <Compile Include="States\WalkState.cs" />
     <Compile Include="StringPairMap.cs" />
     <Compile Include="Tiles\Tile.cs" />
     <Compile Include="Tiles\TileData.cs" />
@@ -120,6 +119,9 @@
     <Compile Include="States\State.cs" />
     <Compile Include="Renderers\IEntityRenderer.cs" />
     <Compile Include="Renderers\ImageRenderer.cs" />
+    <None Include="Content\Animations\gumba_walk.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Content\Animations\player_walk.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
