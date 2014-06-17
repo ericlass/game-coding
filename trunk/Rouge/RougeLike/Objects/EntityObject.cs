@@ -5,6 +5,7 @@ using RougeLike.Attributes;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
 using RougeLike.Controller;
+using RougeLike.Behavior;
 
 namespace RougeLike.Objects
 {

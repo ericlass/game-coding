@@ -7,8 +7,10 @@ namespace RougeLike.Behaviors
 {
   public interface IBehaviorPattern
   {
+    void Init();
     void Begin(EntityObject entity);
     string Update(float dt, EntityObject entity, IEntityController controller);
     void End(EntityObject entity);
+    void Finish();
   }
 }
