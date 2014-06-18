@@ -21,5 +21,9 @@ namespace RougeLike.Controller
     {
       return OkuManager.Instance.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.W);
     }
+
+    public void Update(float dt, EntityObject entity)
+    {
+    }
   }
 }

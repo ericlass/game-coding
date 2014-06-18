@@ -50,6 +50,8 @@ namespace RougeLike.Objects
     public override void Update(float dt)
     {
       _stateMachine.Update(dt);
+      if (_controller != null)
+        _controller.Update(dt, this);
     }
 
     public override void Render()

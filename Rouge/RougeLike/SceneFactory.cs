@@ -116,7 +116,7 @@ namespace RougeLike
       enemy.SetAttributeValue("direction", new NumberValue(1));
       enemy.SetAttributeValue("speedx", new NumberValue(0));
       enemy.SetAttributeValue("speedy", new NumberValue(0));
-      enemy.SetAttributeValue("walkspeed", new NumberValue(150));
+      enemy.SetAttributeValue("walkspeed", new NumberValue(100));
 
       State walk = new State(StateIds.Walk);
       walk.Behavior = new WalkBehavior();
@@ -125,12 +125,12 @@ namespace RougeLike
 
       State jump = new State(StateIds.Jump);
       jump.Behavior = new JumpBehavior();
-      jump.Renderer = new ImageRenderer("gumba_right");
+      jump.Renderer = new DirectedImageRenderer("gumba_right");
       enemy.StateMachine.States.Add(jump.Id, jump);
 
       State fall = new State(StateIds.Fall);
       fall.Behavior = new FallBehavior();
-      fall.Renderer = new ImageRenderer("gumba_right");
+      fall.Renderer = new DirectedImageRenderer("gumba_right");
       enemy.StateMachine.States.Add(fall.Id, fall);
 
       enemy.StateMachine.InitialState = walk.Id;

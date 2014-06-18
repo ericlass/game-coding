@@ -10,6 +10,13 @@ namespace RougeLike
 {
   public static class GameUtil
   {
+    private static Random _random = new Random();
+
+    public static Random Random
+    {
+      get { return _random; }
+    }
+
     public static Animation LoadAnimation(string animName)
     {
       //Add extension if it was not given

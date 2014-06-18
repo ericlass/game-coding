@@ -9,6 +9,8 @@ namespace RougeLike.Controller
   /// </summary>
   public interface IEntityController
   {
+    void Update(float dt, EntityObject entity);
+
     /// <summary>
     /// Checks if the entity is supposed to move to the left.
     /// </summary>
