@@ -27,14 +27,14 @@ namespace RougeLike.Controller
 
     private void SetNewTimer()
     {
-      OkuBase.OkuManager.Instance.Timer.SetInterval(GameUtil.Random.Next(500, 2000), new TimerEventDelegate(OnTimer));
+      OkuBase.OkuManager.Instance.Timer.SetTimer(GameUtil.Random.Next(500, 2000), new TimerEventDelegate(OnTimer));
     }
 
     private void OnTimer(int id, object data)
     {
       _doMove = !_doMove;
       _moveLeft = GameUtil.Random.Next(100) > 50;
-      SetNewTimer();  //TODO: This does not work!
+      SetNewTimer();
     }
 
     private void CheckForMovement(EntityObject entity)
