@@ -21,10 +21,14 @@ namespace OkuBase.Timer
     private Dictionary<int, ITimer> _timers = null;
     private List<int> _clearedIds = null;
 
+    private bool _updating = false;
+    private List<ITimer> _queuedTimers = null;
+
     public override void Initialize(OkuSettings settings)
     {
       _timers = new Dictionary<int, ITimer>();
       _clearedIds = new List<int>();
+      _queuedTimers = new List<ITimer>();
     }
 
     /// <summary>
@@ -48,7 +52,12 @@ namespace OkuBase.Timer
     public int SetInterval(int millis, TimerEventDelegate onTimer, object data)
     {
       int result = KeySequence.NextValue(KeySequence.TimerSequence);
-      _timers.Add(result, new Interval(result, millis, onTimer, data));
+      Interval inter = new Interval(result, millis, onTimer, data);
+      if (_updating)
+        _queuedTimers.Add(inter);
+      else
+        _timers.Add(result, inter);
+
       return result;
     }
 
@@ -71,7 +80,11 @@ namespace OkuBase.Timer
     public void SetTimer(int millis, TimerEventDelegate onTimer, object data)
     {
       int newId = KeySequence.NextValue(KeySequence.TimerSequence);
-      _timers.Add(newId, new Timer(newId, millis, onTimer, data));
+      Timer timer = new Timer(newId, millis, onTimer, data);
+      if (_updating)
+        _queuedTimers.Add(timer);
+      else
+        _timers.Add(newId, timer);
     }
 
     /// <summary>
@@ -96,11 +109,18 @@ namespace OkuBase.Timer
 
       _clearedIds.Clear();
 
+      _updating = true;
       foreach (ITimer timer in _timers.Values)
       {
         if (timer.Update(dt))
           _clearedIds.Add(timer.Id);
       }
+      _updating = false;
+
+      foreach (ITimer timer in _queuedTimers)
+        _timers.Add(timer.Id, timer);
+
+      _queuedTimers.Clear();
     }
 
     public override void Finish()
