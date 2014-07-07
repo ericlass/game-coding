@@ -64,6 +64,17 @@
     <Compile Include="Behaviors\FallBehavior.cs" />
     <Compile Include="Behaviors\JumpBehavior.cs" />
     <Compile Include="Behaviors\WalkBehavior.cs" />
+    <Compile Include="Character\ArmorDefinition.cs" />
+    <Compile Include="Character\CharacterObject.cs" />
+    <Compile Include="Character\CharacterState.cs" />
+    <Compile Include="Character\InventoryItemDefinition.cs" />
+    <Compile Include="Character\InventoryItemType.cs" />
+    <Compile Include="Character\InventoryMap.cs" />
+    <Compile Include="Character\SkillSet.cs" />
+    <Compile Include="Character\StatePropertyMap.cs" />
+    <Compile Include="Character\WeaponDefinition.cs" />
+    <Compile Include="Character\WeaponEffect.cs" />
+    <Compile Include="Character\WeaponType.cs" />
     <Compile Include="Controller\SimpleEnemyController.cs" />
     <Compile Include="Animation.cs" />
     <Compile Include="Attributes\AttributeMap.cs" />

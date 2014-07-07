@@ -91,12 +91,12 @@ namespace RougeLike.Objects
       }
       else if (attribute == "x")
       {
-        _positions.X = (int)((value as NumberValue).Value);
+        _position.X = (int)((value as NumberValue).Value);
         return true;
       }
       else if (attribute == "y")
       {
-        _positions.Y = (int)((value as NumberValue).Value);
+        _position.Y = (int)((value as NumberValue).Value);
         return true;
       }
       else if (attribute == "type")

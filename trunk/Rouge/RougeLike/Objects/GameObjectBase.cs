@@ -7,7 +7,7 @@ namespace RougeLike.Objects
 {
   public abstract partial class GameObjectBase
   {
-    private Vector2f _positions = Vector2f.Zero;
+    private Vector2f _position = Vector2f.Zero;
     
     public GameObjectBase()
     {
@@ -27,8 +27,8 @@ namespace RougeLike.Objects
 
     public Vector2f Position
     {
-      get { return _positions; }
-      set { _positions = value; }
+      get { return _position; }
+      set { _position = value; }
     }
 
     public OkuManager Oku
