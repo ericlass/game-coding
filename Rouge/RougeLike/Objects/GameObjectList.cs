@@ -9,10 +9,7 @@ namespace RougeLike.Objects
     {
       public int Compare(GameObjectBase x, GameObjectBase y)
       {
-        if (x.ZIndex == y.ZIndex)
-          return (int)(x.Position.Y - y.Position.Y) * -1;
-        else
-          return x.ZIndex - y.ZIndex;
+        return x.ZIndex - y.ZIndex;
       }
     }
 
