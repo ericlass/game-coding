@@ -26,7 +26,6 @@ namespace RougeLike
     private bool _debugDraw = false;
     private SceneList _scenes = new SceneList();
     private Scene _activeScene = null;
-    private EventQueue _eventQueue = new EventQueue();
     private AttributeMap _attributes = new AttributeMap();
 
     public bool DebugDraw
@@ -52,12 +51,6 @@ namespace RougeLike
         _activeScene = value;
         _activeScene.Init();
       }
-    }
-
-    public EventQueue EventQueue
-    {
-      get { return _eventQueue; }
-      set { _eventQueue = value; }
     }
 
     public List<string> GetAttributeNames()

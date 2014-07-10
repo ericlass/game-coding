@@ -54,7 +54,7 @@ namespace RougeLike.Objects
         _controller.Update(dt, this);
     }
 
-    public override void Render()
+    public override void PreRender()
     {
       _stateMachine.Render();
 

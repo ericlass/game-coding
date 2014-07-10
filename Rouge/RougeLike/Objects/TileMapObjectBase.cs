@@ -20,7 +20,6 @@ namespace RougeLike.Objects
     private Color DebugTintColor = new Color(0, 0, 0, 64);
 
     protected TileData _tileData = null;
-    private VertexBuffer _vbuffer = null;
 
     private const float CollisionOffset = 0.0001f; // Defines a fixed offset for collision detection to handle edge cases
 
@@ -609,11 +608,11 @@ namespace RougeLike.Objects
     /// <summary>
     /// Renders the tile map.
     /// </summary>
-    public override void Render()
+    public override void PreRender()
     {
       Rectangle2f mapRect = GetMapRect();
 
-      if (_vbuffer == null)
+      if (RenderDescription.VertexBuffer == null)
       {
         //Generate vertex buffer on-the-fly
         List<Vertex> vertices = new List<Vertex>();
@@ -678,25 +677,9 @@ namespace RougeLike.Objects
         buffer.Vertices = vertices.ToArray();
 
         Oku.Graphics.InitVertexBuffer(buffer);
-        _vbuffer = buffer;
-      }
-
-      //Draw vertex buffer
-      Oku.Graphics.DrawVertexBuffer(_vbuffer, PrimitiveType.Quads, _tileData.Images);
-
-      // Debug drawing
-      if (GameData.Instance.DebugDraw)
-      {
-        for (int i = 0; i < _tileData.Width + 1; i++)
-        {
-          float x = mapRect.Min.X + (i * _tileData.TileWidth);
-          Oku.Graphics.DrawLine(x, mapRect.Min.Y, x, mapRect.Max.Y, 1.0f, Color.Green);
-        }
-        for (int i = 0; i < _tileData.Height + 1; i++)
-        {
-          float y = mapRect.Min.Y + (i * _tileData.TileHeight);
-          Oku.Graphics.DrawLine(mapRect.Min.X, y, mapRect.Max.X, y, 1.0f, Color.Green);
-        }
+        RenderDescription.VertexBuffer = buffer;
+        RenderDescription.Image = _tileData.Images;
+        RenderDescription.PrimitiveType = PrimitiveType.Quads;
       }
     }
 
