@@ -64,7 +64,7 @@ namespace RougeLike
       _gameObjects.SortStable();
       foreach (GameObjectBase go in _gameObjects)
       {
-        OkuManager.Instance.Graphics.ApplyAndPushTransform(go.Position, Vector2f.One, 0);
+        OkuManager.Instance.Graphics.ApplyAndPushTransform(go.Position, go.Scale, 0);
         try
         {
           //go.Render();
