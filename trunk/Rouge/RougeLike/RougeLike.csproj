@@ -94,6 +94,7 @@
     <Compile Include="States\StateIds.cs" />
     <Compile Include="Systems\GameSystemList.cs" />
     <Compile Include="Systems\IGameSystem.cs" />
+    <Compile Include="Systems\PlayerControlSystem.cs" />
     <Compile Include="Tiles\Biome.cs" />
     <Compile Include="Tiles\BiomeParameters.cs" />
     <Compile Include="DoubleKeyMap.cs" />
