@@ -106,6 +106,14 @@ namespace RougeLike
       return result;
     }
 
+    public static void ReleaseAnimation(Animation anim)
+    {
+      foreach (ImageBase image in anim.Frames)
+      {
+        OkuManager.Instance.Graphics.ReleaseImage(image as Image);
+      }
+    }
+
     public static StringPairMap JSONObjectToMap(JSONObjectValue jsonObj)
     {
       StringPairMap result = new StringPairMap();
