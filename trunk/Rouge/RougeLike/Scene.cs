@@ -1,8 +1,10 @@
 ﻿using System;
 using OkuBase;
 using OkuBase.Geometry;
+using OkuBase.Graphics;
 using RougeLike.Attributes;
 using RougeLike.Objects;
+using RougeLike.Systems;
 
 namespace RougeLike
 {
@@ -10,6 +12,7 @@ namespace RougeLike
   {
     private string _name = "";
     private GameObjectList _gameObjects = new GameObjectList();
+    private GameSystemList _gameSystems = new GameSystemList();
 
     public GameObjectList GameObjects
     {
@@ -21,6 +24,12 @@ namespace RougeLike
     {
       get { return _name; }
       set { _name = value; }
+    }
+
+    public GameSystemList GameSystems
+    {
+      get { return _gameSystems; }
+      set { _gameSystems = value; }
     }
 
     public IAttributeValue GetObjectAttribute(string objectId, string attributeName)
@@ -36,12 +45,18 @@ namespace RougeLike
     {
       foreach (GameObjectBase go in _gameObjects)
         go.Init();
+
+      foreach (IGameSystem system in _gameSystems)
+        system.Init();
     }
 
     public void Update(float dt)
     {
       foreach (GameObjectBase go in _gameObjects)
         go.Update(dt);
+
+      foreach (IGameSystem system in _gameSystems)
+        system.Update(dt);
     }
 
     public void Render()
@@ -52,8 +67,17 @@ namespace RougeLike
         OkuManager.Instance.Graphics.ApplyAndPushTransform(go.Position, Vector2f.One, 0);
         try
         {
-          go.Render();
-          //OkuBase.OkuManager.Instance.Graphics.DrawPoint(0, 0, 2.0f, OkuBase.Graphics.Color.Red);
+          //go.Render();
+
+          go.PreRender();
+          RenderDescription rd = go.RenderDescription;
+          if (rd.VertexBuffer != null)
+            OkuManager.Instance.Graphics.DrawVertexBuffer(rd.VertexBuffer, rd.PrimitiveType, rd.Image);
+          else if (rd.Image != null)
+            OkuManager.Instance.Graphics.DrawImage(rd.Image, 0, 0);
+
+          if (GameData.Instance.DebugDraw)
+            OkuBase.OkuManager.Instance.Graphics.DrawPoint(0, 0, 2.0f, Color.Red);
         }
         finally
         {
@@ -66,6 +90,9 @@ namespace RougeLike
     {
       foreach (GameObjectBase go in _gameObjects)
         go.Finish();
+
+      foreach (IGameSystem system in _gameSystems)
+        system.Finish();
     }
 
     public void Load(StringPairMap data)

@@ -8,6 +8,7 @@ namespace RougeLike.Objects
   public abstract partial class GameObjectBase
   {
     private Vector2f _position = Vector2f.Zero;
+    private RenderDescription _renderDesc = new RenderDescription();
     
     public GameObjectBase()
     {
@@ -16,7 +17,7 @@ namespace RougeLike.Objects
     public abstract string ObjectType { get; }
     public abstract void Init();
     public abstract void Update(float dt);
-    public abstract void Render();
+    public abstract void PreRender();
     public abstract void Finish();
     protected abstract StringPairMap DoSave();
     protected abstract void DoLoad(StringPairMap data);
@@ -29,6 +30,12 @@ namespace RougeLike.Objects
     {
       get { return _position; }
       set { _position = value; }
+    }
+
+    public RenderDescription RenderDescription
+    {
+      get { return _renderDesc; }
+      set { _renderDesc = value; }
     }
 
     public OkuManager Oku

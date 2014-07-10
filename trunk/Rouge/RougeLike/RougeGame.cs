@@ -146,7 +146,6 @@ namespace RougeLike
       //Oku.Graphics.Viewport.Center = center;
 
       GameData.Instance.ActiveScene.Update(dt);
-      GameData.Instance.EventQueue.ProcessEvents();
 
       if (Oku.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.F3))
         GameData.Instance.DebugDraw = !GameData.Instance.DebugDraw;
