@@ -85,6 +85,7 @@ namespace RougeLike.Systems
           break;
 
         case CharacterState.Frozen:
+          HandleFrozen(dt);
           break;
 
         default:
