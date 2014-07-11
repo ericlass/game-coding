@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using RougeLike.Objects;
+using OkuBase.Geometry;
 
 namespace RougeLike.Character
 {
-  public abstract class CharacterObject : GameObjectBase
+  public delegate void OnCharacterStateChange(CharacterState oldState, CharacterState newState);
+
+  public class CharacterObject : GameObjectBase
   {
     public override string ObjectType
     {
@@ -17,23 +20,30 @@ namespace RougeLike.Character
     public SkillSet Skills { get; set; }
     public InventoryMap Inventory { get; set; }
     public StatePropertyMap StateAnimations { get; set; }
+    public Rectangle2f HitBox { get; set; }
 
     private Dictionary<string, Animation> _animations = new Dictionary<string, Animation>();
     private CharacterState _currentState = CharacterState.Idle;
+
+    public event OnCharacterStateChange OnStateChange;
 
     public CharacterState CurrentState
     {
       get { return _currentState; }
       set
       {
-        OnSwitchState(value, _currentState);
+        OnSwitchState(_currentState, value);
+        if (OnStateChange != null)
+          OnStateChange(_currentState, value);
+
         _currentState = value;
       }
     }
 
     private void OnSwitchState(CharacterState oldState, CharacterState newState)
     {
-      _animations[StateAnimations[newState]].Restart();
+      if (StateAnimations.ContainsKey(newState))
+        _animations[StateAnimations[newState]].Restart();
     }
 
     public override void Init()
@@ -51,7 +61,9 @@ namespace RougeLike.Character
 
     public override void Update(float dt)
     {
-      _animations[StateAnimations[_currentState]].Update(dt);
+      if (StateAnimations.ContainsKey(_currentState))
+        _animations[StateAnimations[_currentState]].Update(dt);
+
       RenderDescription.Image = _animations[StateAnimations[_currentState]].CurrentFrame;
     }
 

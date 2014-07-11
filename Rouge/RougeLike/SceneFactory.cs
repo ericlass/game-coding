@@ -9,8 +9,10 @@ using RougeLike.States;
 using RougeLike.Tiles;
 using RougeLike.Objects;
 using RougeLike.Controller;
+using RougeLike.Character;
 using RougeLike.Behaviors;
 using RougeLike.Renderers;
+using RougeLike.Systems;
 
 namespace RougeLike
 {
@@ -50,17 +52,19 @@ namespace RougeLike
       TileMapObject tileMap = new TileMapObject(new TileData(tiles, tileImages, 16, 16));
       tileMap.Id = "tilemap";
 
-      EntityObject mario = CreatePlayerEntity();
+      GameObjectBase mario = CreatePlayerEntity();
       
       Scene scene = new Scene();
       scene.GameObjects.Add(tileMap);
       scene.GameObjects.Add(mario);
 
-      for (int i = 0; i < 1; i++)
+      /*for (int i = 0; i < 1; i++)
       {
         scene.GameObjects.Add(CreateEnemyEntity());
         _enemyCounter++;
-      }
+      }*/
+
+      scene.GameSystems.Add(new PlayerControlSystem(mario.Id));
 
       SceneList result = new SceneList();
       result.Add(scene);
@@ -68,9 +72,29 @@ namespace RougeLike
       return result;
     }
 
-    private static EntityObject CreatePlayerEntity()
+    private static GameObjectBase CreatePlayerEntity()
     {
-      EntityObject mario = new EntityObject();
+      CharacterObject mario = new CharacterObject();
+      mario.Id = "mario";
+      mario.ZIndex = 1;
+      mario.Position = new Vector2f(0, 500);
+      mario.HitBox = new Rectangle2f(-4, -9, 8, 16);
+
+      mario.SetAttributeValue("direction", new NumberValue(1));
+      mario.SetAttributeValue("speedx", new NumberValue(0));
+      mario.SetAttributeValue("speedy", new NumberValue(0));
+      mario.SetAttributeValue("walkspeed", new NumberValue(300));
+
+      StatePropertyMap animMap = new StatePropertyMap();
+      animMap.Add(CharacterState.Idle, "player_idle");
+      animMap.Add(CharacterState.Walking, "player_walk");
+      animMap.Add(CharacterState.Jumping, "player_jump");
+      animMap.Add(CharacterState.Falling, "player_fall");
+      mario.StateAnimations = animMap;
+
+      return mario;
+
+      /*EntityObject mario = new EntityObject();
       mario.Id = "mario";
       mario.ZIndex = 1;
       mario.Position = new Vector2f(0, 500);
@@ -98,13 +122,13 @@ namespace RougeLike
 
       mario.StateMachine.InitialState = walk.Id;
 
-      return mario;
+      return mario;*/
     }
 
     private static int _enemyCounter = 0;
     private static Random _rand = new Random();
 
-    private static EntityObject CreateEnemyEntity()
+    private static GameObjectBase CreateEnemyEntity()
     {
       EntityObject enemy = new EntityObject();
       enemy.Id = "enemy_" + _enemyCounter;

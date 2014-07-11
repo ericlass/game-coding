@@ -134,6 +134,15 @@
     <None Include="Content\Animations\gumba_walk.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Content\Animations\player_fall.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Animations\player_idle.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Animations\player_jump.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Content\Animations\player_walk.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
