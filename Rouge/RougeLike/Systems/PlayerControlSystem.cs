@@ -148,7 +148,7 @@ namespace RougeLike.Systems
       if (OkuManager.Instance.Input.Keyboard.KeyPressed(Keys.W))
       {
         _playerObject.CurrentState = CharacterState.Jumping;
-        //break;
+        return;
       }
 
       float accel = 1500;
