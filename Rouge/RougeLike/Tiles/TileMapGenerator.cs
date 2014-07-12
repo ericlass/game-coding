@@ -44,27 +44,6 @@ namespace RougeLike.Tiles
         }
       }
 
-      // Generate terrain from noise as described in GPU Gems 3
-      /*for (int y = 0; y < height; y++)
-      {
-        for (int x = 0; x < width; x++)
-        {
-          float density = -(y - (height / 2.0f));
-
-          //density += noise.Noise(x, y, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude;
-
-          density += noise.Noise(x * 1.96f, y * 1.96f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude * 0.51f;
-          density += noise.Noise(x * 1.01f, y * 1.01f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude;
-
-          Tile tile = tiles[x, y]
-          tile.ImageIndex = 0;
-
-          if (density > 0.0f)
-            tile.TileType = TileType.Filled;
-        }
-      }*/
-
-
       Random rand = new Random(parameters.Seed);
       int pos = 0;
       float lastHeight = 0;
@@ -90,6 +69,26 @@ namespace RougeLike.Tiles
         pos = right;
         lastHeight = platformHeight;
       }
+
+      // Generate terrain from noise as described in GPU Gems 3
+      /*for (int y = 0; y < height; y++)
+      {
+        for (int x = 0; x < width; x++)
+        {
+          float density = -(y - (height / 2.0f));
+
+          //density += noise.Noise(x, y, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude;
+
+          density += noise.Noise(x * 1.96f, y * 1.96f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude * 0.51f;
+          density += noise.Noise(x * 1.01f, y * 1.01f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude;
+
+          Tile tile = tiles[x, y]
+          tile.ImageIndex = 0;
+
+          if (density > 0.0f)
+            tile.TileType = TileType.Filled;
+        }
+      }*/     
 
       // Create slope tiles
       /*for (int y = 1; y < height - 1; y++)

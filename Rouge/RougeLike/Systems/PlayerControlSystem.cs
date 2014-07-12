@@ -17,6 +17,10 @@ namespace RougeLike.Systems
 
     private float _fallSpeed = 0;
     private float _freezeTime = 0;
+    private Vector2f _speed = Vector2f.Zero;
+    private float _direction = 1;
+
+    private const float MaxWalkSpeed = 300;
 
     public PlayerControlSystem(string playerId)
     {
@@ -91,8 +95,21 @@ namespace RougeLike.Systems
         default:
           break;
       }
+
+      Vector2f scale = _playerObject.Scale;
+      scale.X = _direction;
+      _playerObject.Scale = scale;
     }
 
+    public void Finish()
+    {
+      _playerObject = null;
+    }
+
+    /// <summary>
+    /// Handles the idle state.
+    /// </summary>
+    /// <param name="dt">The time past since the last frame.</param>
     private void HandleIdle(float dt)
     {
       Rectangle2f hitbox = _playerObject.HitBox;
@@ -122,11 +139,10 @@ namespace RougeLike.Systems
       }
     }
 
-    public void Finish()
-    {
-      _playerObject = null;
-    }
-
+    /// <summary>
+    /// Handles the walking state.
+    /// </summary>
+    /// <param name="dt">The time past since the last frame.</param>
     private void HandleWalking(float dt)
     {
       if (OkuManager.Instance.Input.Keyboard.KeyPressed(Keys.W))
@@ -136,23 +152,22 @@ namespace RougeLike.Systems
       }
 
       float accel = 1500;
-      float maxSpeed = (float)_playerObject.GetAttributeValue<NumberValue>("walkspeed").Value;
 
-      float speed = (float)_playerObject.GetAttributeValue<NumberValue>("speedx").Value;
+      float speed = _speed.X;
 
       bool leftDown = OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.A);
       bool rightDown = OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.D);
 
       if (rightDown)
       {
-        speed = Math.Min(speed + ((accel * dt)), maxSpeed);
-        _playerObject.GetAttributeValue<NumberValue>("direction").Value = 1;
+        speed = Math.Min(speed + ((accel * dt)), MaxWalkSpeed);
+        _direction = 1;
       }
 
       if (leftDown)
       {
-        speed = Math.Max(speed - ((accel * dt)), -maxSpeed);
-        _playerObject.GetAttributeValue<NumberValue>("direction").Value = -1;
+        speed = Math.Max(speed - ((accel * dt)), -MaxWalkSpeed);
+        _direction = -1;
       }
 
       if (!leftDown && !rightDown)
@@ -162,7 +177,7 @@ namespace RougeLike.Systems
           speed = 0;
       }
 
-      _playerObject.GetAttributeValue<NumberValue>("speedx").Value = speed;
+      _speed.X = speed;
 
       if (Math.Abs(speed) < 0.1f)
       {
@@ -189,14 +204,18 @@ namespace RougeLike.Systems
       Vector2f movement = WalkPlayer(thb, dv.X);
 
       if (movement.X != dv.X)
-        _playerObject.GetAttributeValue<NumberValue>("speedx").Value = 0;
+        _speed.X = 0;
 
       _playerObject.Position = pos + movement;
     }
 
+    /// <summary>
+    /// Handles the jumping state.
+    /// </summary>
+    /// <param name="dt">The time past since the last frame.</param>
     private void HandleJumping(float dt)
     {
-      float speedx = (float)_playerObject.GetAttributeValue<NumberValue>("speedx").Value;
+      float speedx = _speed.X;
 
       if (OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.A))
         speedx -= 200 * dt;
@@ -204,16 +223,15 @@ namespace RougeLike.Systems
       if (OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.D))
         speedx += 200 * dt;
 
-      float maxSpeed = (float)_playerObject.GetAttributeValue<NumberValue>("walkspeed").Value;
-      speedx = GameUtil.Clamp(speedx, -maxSpeed, maxSpeed);
+      speedx = GameUtil.Clamp(speedx, -MaxWalkSpeed, MaxWalkSpeed);
 
-      _playerObject.GetAttributeValue<NumberValue>("speedx").Value = speedx;
+      _speed.X = speedx;
 
       //Make sure entity is facing into the correct direction
       if (speedx > 0)
-        _playerObject.GetAttributeValue<NumberValue>("direction").Value = 1;
+        _direction = 1;
       else if (speedx < 0)
-        _playerObject.GetAttributeValue<NumberValue>("direction").Value = -1;
+        _direction = -1;
 
       Vector2f pos = _playerObject.Position;
       Vector2f dv = new Vector2f(speedx * dt, _fallSpeed * dt);
@@ -236,7 +254,7 @@ namespace RougeLike.Systems
       if (tileMap.CollideMovingPoint(forwardPoint, dv, out maxMove))
       {
         dv.X = maxMove.X;
-        _playerObject.GetAttributeValue<NumberValue>("speedx").Value = 0;
+        _speed.X = 0;
       }
 
       pos += dv;
@@ -247,11 +265,15 @@ namespace RougeLike.Systems
         _playerObject.CurrentState = CharacterState.Falling;
     }
 
+    /// <summary>
+    /// Handles the falling state.
+    /// </summary>
+    /// <param name="dt">The time past since the last frame.</param>
     private void HandleFalling(float dt)
     {
       _fallSpeed = Math.Min(_fallSpeed + (1500 * dt), 800);
 
-      float speedx = (float)_playerObject.GetAttributeValue<NumberValue>("speedx").Value;
+      float speedx = _speed.X;
 
       if (OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.A))
         speedx -= 200 * dt;
@@ -259,16 +281,15 @@ namespace RougeLike.Systems
       if (OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.D))
         speedx += 200 * dt;
 
-      float maxSpeed = (float)_playerObject.GetAttributeValue<NumberValue>("walkspeed").Value;
-      speedx = GameUtil.Clamp(speedx, -maxSpeed, maxSpeed);
+      speedx = GameUtil.Clamp(speedx, -MaxWalkSpeed, MaxWalkSpeed);
 
-      _playerObject.GetAttributeValue<NumberValue>("speedx").Value = speedx;
+      _speed.X = speedx;
 
       //Make sure entity is facing into the correct direction
       if (speedx > 0)
-        _playerObject.GetAttributeValue<NumberValue>("direction").Value = 1;
+        _direction = 1;
       else if (speedx < 0)
-        _playerObject.GetAttributeValue<NumberValue>("direction").Value = -1;
+        _direction = -1;
 
       Vector2f movement = new Vector2f(speedx * dt, -_fallSpeed * dt);
 
@@ -292,7 +313,7 @@ namespace RougeLike.Systems
       if (tilemap.CollideMovingPoint(forwardPoint, movement, out realMovement))
       {
         dv.X = realMovement.X;
-        _playerObject.GetAttributeValue<NumberValue>("speedx").Value = 0;
+        _speed.X = 0;
       }
 
       pos = _playerObject.Position;
@@ -300,6 +321,10 @@ namespace RougeLike.Systems
       _playerObject.Position = pos;
     }
 
+    /// <summary>
+    /// Handles the frozen state.
+    /// </summary>
+    /// <param name="dt">The time past since the last frame.</param>
     private void HandleFrozen(float dt)
     {
       _freezeTime -= dt;
