@@ -80,11 +80,6 @@ namespace RougeLike
       mario.Position = new Vector2f(0, 500);
       mario.HitBox = new Rectangle2f(-4, -9, 8, 16);
 
-      mario.SetAttributeValue("direction", new NumberValue(1));
-      mario.SetAttributeValue("speedx", new NumberValue(0));
-      mario.SetAttributeValue("speedy", new NumberValue(0));
-      mario.SetAttributeValue("walkspeed", new NumberValue(300));
-
       StatePropertyMap animMap = new StatePropertyMap();
       animMap.Add(CharacterState.Idle, "player_idle");
       animMap.Add(CharacterState.Walking, "player_walk");
@@ -93,36 +88,6 @@ namespace RougeLike
       mario.StateAnimations = animMap;
 
       return mario;
-
-      /*EntityObject mario = new EntityObject();
-      mario.Id = "mario";
-      mario.ZIndex = 1;
-      mario.Position = new Vector2f(0, 500);
-      mario.Controller = new PlayerController();
-
-      mario.SetAttributeValue("direction", new NumberValue(1));
-      mario.SetAttributeValue("speedx", new NumberValue(0));
-      mario.SetAttributeValue("speedy", new NumberValue(0));
-      mario.SetAttributeValue("walkspeed", new NumberValue(300));
-
-      State walk = new State(StateIds.Walk);
-      walk.Behavior = new WalkBehavior();
-      walk.Renderer = new PlayerWalkRenderer("player_walk");
-      mario.StateMachine.States.Add(walk.Id, walk);
-
-      State jump = new State(StateIds.Jump);
-      jump.Behavior = new JumpBehavior();
-      jump.Renderer = new DirectedImageRenderer("mario_jump");
-      mario.StateMachine.States.Add(jump.Id, jump);
-
-      State fall = new State(StateIds.Fall);
-      fall.Behavior = new FallBehavior();
-      fall.Renderer = new DirectedImageRenderer("mario_fall");
-      mario.StateMachine.States.Add(fall.Id, fall);
-
-      mario.StateMachine.InitialState = walk.Id;
-
-      return mario;*/
     }
 
     private static int _enemyCounter = 0;
