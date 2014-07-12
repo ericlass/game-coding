@@ -156,7 +156,7 @@ namespace RougeLike
       Vector2f center = Oku.Graphics.Viewport.Center;
 
       OkuManager.Instance.Graphics.SetRenderTarget(_renderTarget);
-      
+
       GameData.Instance.ActiveScene.Render();
 
       OkuManager.Instance.Graphics.SetRenderTarget(null);
