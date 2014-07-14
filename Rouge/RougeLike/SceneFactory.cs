@@ -10,8 +10,6 @@ using RougeLike.Tiles;
 using RougeLike.Objects;
 using RougeLike.Controller;
 using RougeLike.Character;
-using RougeLike.Behaviors;
-using RougeLike.Renderers;
 using RougeLike.Systems;
 
 namespace RougeLike
@@ -64,7 +62,7 @@ namespace RougeLike
         _enemyCounter++;
       }*/
 
-      scene.GameSystems.Add(new PlayerControlSystem(mario.Id));
+      scene.GameSystems.Add(new WalkingCharacterControlSystem(mario.Id, new PlayerController()));
 
       SceneList result = new SceneList();
       result.Add(scene);
@@ -90,12 +88,12 @@ namespace RougeLike
       return mario;
     }
 
-    private static int _enemyCounter = 0;
+    //private static int _enemyCounter = 0;
     private static Random _rand = new Random();
 
     private static GameObjectBase CreateEnemyEntity()
     {
-      EntityObject enemy = new EntityObject();
+      /*EntityObject enemy = new EntityObject();
       enemy.Id = "enemy_" + _enemyCounter;
       enemy.ZIndex = 1;
       enemy.Position = new Vector2f(_rand.Next(-500, 500), 800);
@@ -124,7 +122,9 @@ namespace RougeLike
 
       enemy.StateMachine.InitialState = walk.Id;
 
-      return enemy;
+      return enemy;*/
+
+      return null;
     }
 
     public SceneList LoadScene(string fileName)

@@ -5,10 +5,11 @@ using OkuBase.Timer;
 using RougeLike.Attributes;
 using RougeLike.Tiles;
 using RougeLike.Objects;
+using RougeLike.Character;
 
 namespace RougeLike.Controller
 {
-  public class SimpleEnemyController : IEntityController
+  public class SimpleEnemyController : ICharacterController
   {
     private enum EnemyState 
     {
@@ -37,24 +38,24 @@ namespace RougeLike.Controller
       SetNewTimer();
     }
 
-    private void CheckForMovement(EntityObject entity)
+    private void CheckForMovement(CharacterObject character)
     {
-      float direction = entity.GetAttributeValue<NumberValue>("direction").Value;
+      float direction = character.GetAttributeValue<NumberValue>("direction").Value;
       TileMapObject tilemap = GameData.Instance.ActiveScene.GameObjects.GetObjectById("tilemap") as TileMapObject;
       Vector2f movement = Vector2f.Zero;
-      if (tilemap.CollideMovingPoint(entity.Position, new Vector2f(((entity.HitBox.Width / 2) * direction) + direction, 0), out movement))
+      if (tilemap.CollideMovingPoint(character.Position, new Vector2f(((character.HitBox.Width / 2) * direction) + direction, 0), out movement))
       {
         _moveLeft = !_moveLeft;
         System.Diagnostics.Debug.WriteLine("Move Left: " + direction);
       }
     }
 
-    public void Update(float dt, EntityObject entity)
+    public void Update(float dt, CharacterObject character)
     {
       switch (_state)
       {
         case EnemyState.Idle:
-          CheckForMovement(entity);
+          CheckForMovement(character);
           break;
 
         case EnemyState.Attack:
@@ -63,9 +64,9 @@ namespace RougeLike.Controller
         default:
           throw new OkuBase.OkuException("Unknown enemy state: " + _state.ToString());
       }      
-    }   
+    }
 
-    public bool DoMoveLeft(EntityObject entity)
+    public bool DoMoveLeft(CharacterObject character)
     {
       switch (_state)
       {
@@ -82,7 +83,7 @@ namespace RougeLike.Controller
       return false;
     }
 
-    public bool DoMoveRight(EntityObject entity)
+    public bool DoMoveRight(CharacterObject character)
     {
       switch (_state)
       {
@@ -99,7 +100,7 @@ namespace RougeLike.Controller
       return false;
     }
 
-    public bool DoJump(EntityObject entity)
+    public bool DoJump(CharacterObject character)
     {
       return false;
     }

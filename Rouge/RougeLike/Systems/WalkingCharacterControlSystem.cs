@@ -7,14 +7,16 @@ using RougeLike.Attributes;
 using RougeLike.Objects;
 using RougeLike.Character;
 using RougeLike.Tiles;
+using RougeLike.Controller;
 
 namespace RougeLike.Systems
 {
-  public class PlayerControlSystem : IGameSystem
+  public class WalkingCharacterControlSystem : IGameSystem
   {
     private string _playerId = null; //ID of player object
-    private CharacterObject _playerObject = null;
+    private ICharacterController _controller = null;
 
+    private CharacterObject _playerObject = null;
     private float _fallSpeed = 0;
     private float _freezeTime = 0;
     private Vector2f _speed = Vector2f.Zero;
@@ -22,9 +24,10 @@ namespace RougeLike.Systems
 
     private const float MaxWalkSpeed = 300;
 
-    public PlayerControlSystem(string playerId)
+    public WalkingCharacterControlSystem(string playerId, ICharacterController controller)
     {
       _playerId = playerId;
+      _controller = controller;
     }
 
     public string PlayerId
@@ -41,7 +44,7 @@ namespace RougeLike.Systems
 
     private void player_OnStateChange(CharacterState oldState, CharacterState newState)
     {
-      System.Diagnostics.Debug.WriteLine(DateTime.Now.ToLongTimeString() + " - Player state change: '" + oldState + "' -> '" + newState + "'");
+      System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString("hh:mm:ss.fff") + " - '" + _playerId + "' state change: '" + oldState + "' -> '" + newState + "'");
 
       switch (newState)
       {
@@ -126,13 +129,13 @@ namespace RougeLike.Systems
         return;
       }
 
-      if (OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.A) || OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.D))
+      if (_controller.DoMoveLeft(_playerObject) || _controller.DoMoveRight(_playerObject))
       {
         _playerObject.CurrentState = CharacterState.Walking;
         return;
       }
 
-      if (OkuManager.Instance.Input.Keyboard.KeyPressed(Keys.W))
+      if (_controller.DoJump(_playerObject))
       {
         _playerObject.CurrentState = CharacterState.Jumping;
         return;
@@ -145,7 +148,7 @@ namespace RougeLike.Systems
     /// <param name="dt">The time past since the last frame.</param>
     private void HandleWalking(float dt)
     {
-      if (OkuManager.Instance.Input.Keyboard.KeyPressed(Keys.W))
+      if (_controller.DoJump(_playerObject))
       {
         _playerObject.CurrentState = CharacterState.Jumping;
         return;
@@ -155,8 +158,8 @@ namespace RougeLike.Systems
 
       float speed = _speed.X;
 
-      bool leftDown = OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.A);
-      bool rightDown = OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.D);
+      bool leftDown = _controller.DoMoveLeft(_playerObject);
+      bool rightDown = _controller.DoMoveRight(_playerObject);
 
       if (rightDown)
       {
@@ -217,10 +220,10 @@ namespace RougeLike.Systems
     {
       float speedx = _speed.X;
 
-      if (OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.A))
+      if (_controller.DoMoveLeft(_playerObject))
         speedx -= 200 * dt;
 
-      if (OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.D))
+      if (_controller.DoMoveRight(_playerObject))
         speedx += 200 * dt;
 
       speedx = GameUtil.Clamp(speedx, -MaxWalkSpeed, MaxWalkSpeed);
@@ -275,10 +278,10 @@ namespace RougeLike.Systems
 
       float speedx = _speed.X;
 
-      if (OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.A))
+      if (_controller.DoMoveLeft(_playerObject))
         speedx -= 200 * dt;
 
-      if (OkuManager.Instance.Input.Keyboard.KeyIsDown(Keys.D))
+      if (_controller.DoMoveRight(_playerObject))
         speedx += 200 * dt;
 
       speedx = GameUtil.Clamp(speedx, -MaxWalkSpeed, MaxWalkSpeed);

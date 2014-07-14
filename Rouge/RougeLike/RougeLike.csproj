@@ -61,9 +61,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Behaviors\FallBehavior.cs" />
-    <Compile Include="Behaviors\JumpBehavior.cs" />
-    <Compile Include="Behaviors\WalkBehavior.cs" />
     <Compile Include="Character\ArmorDefinition.cs" />
     <Compile Include="Character\CharacterObject.cs" />
     <Compile Include="Character\CharacterState.cs" />
@@ -85,32 +82,22 @@
     <Compile Include="Attributes\IAttributeValue.cs" />
     <Compile Include="Attributes\NumberValue.cs" />
     <Compile Include="Attributes\TextValue.cs" />
-    <Compile Include="Behaviors\IBehavior.cs" />
     <Compile Include="Objects\RenderDescription.cs" />
-    <Compile Include="Renderers\AnimationRenderer.cs" />
-    <Compile Include="Renderers\DirectedImageRenderer.cs" />
-    <Compile Include="Renderers\PlayerWalkRenderer.cs" />
-    <Compile Include="States\IStateComponent.cs" />
     <Compile Include="States\StateIds.cs" />
     <Compile Include="Systems\GameSystemList.cs" />
     <Compile Include="Systems\IGameSystem.cs" />
-    <Compile Include="Systems\PlayerControlSystem.cs" />
+    <Compile Include="Systems\WalkingCharacterControlSystem.cs" />
     <Compile Include="Tiles\Biome.cs" />
     <Compile Include="Tiles\BiomeParameters.cs" />
     <Compile Include="DoubleKeyMap.cs" />
-    <Compile Include="Objects\EntityObject.cs" />
     <Compile Include="Objects\GameObjectBaseAttributes.cs" />
-    <Compile Include="Controller\IEntityController.cs" />
+    <Compile Include="Controller\ICharacterController.cs" />
     <Compile Include="Controller\PlayerController.cs" />
-    <Compile Include="States\Event.cs" />
-    <Compile Include="States\EventNames.cs" />
-    <Compile Include="States\EventQueue.cs" />
     <Compile Include="GameData.cs" />
     <Compile Include="Objects\GameObjectBase.cs" />
     <Compile Include="Objects\GameObjectFactory.cs" />
     <Compile Include="Objects\GameObjectList.cs" />
     <Compile Include="GameUtil.cs" />
-    <Compile Include="Orientation.cs" />
     <Compile Include="PerlinNoise.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -119,8 +106,6 @@
     <Compile Include="SceneFactory.cs" />
     <Compile Include="SceneList.cs" />
     <Compile Include="SpriteBatch.cs" />
-    <Compile Include="States\StateMachine.cs" />
-    <Compile Include="States\StateMap.cs" />
     <Compile Include="StringPairMap.cs" />
     <Compile Include="Tiles\Tile.cs" />
     <Compile Include="Tiles\TileData.cs" />
@@ -128,9 +113,6 @@
     <Compile Include="Tiles\TileMapGenerator.cs" />
     <Compile Include="Objects\TileMapObject.cs" />
     <Compile Include="Objects\TileMapObjectBase.cs" />
-    <Compile Include="States\State.cs" />
-    <Compile Include="Renderers\IEntityRenderer.cs" />
-    <Compile Include="Renderers\ImageRenderer.cs" />
     <None Include="Content\Animations\gumba_walk.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

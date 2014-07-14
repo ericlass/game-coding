@@ -1,33 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
-using RougeLike.Objects;
+using RougeLike.Character;
 
 namespace RougeLike.Controller
 {
   /// <summary>
   /// Defines a controller for entities that controls when an entity is supposed to take some action.
   /// </summary>
-  public interface IEntityController
+  public interface ICharacterController
   {
-    void Update(float dt, EntityObject entity);
+    void Update(float dt, CharacterObject character);
 
     /// <summary>
     /// Checks if the entity is supposed to move to the left.
     /// </summary>
+    /// <param name="character">The character object to be controlled.</param>
     /// <returns>True if the entity should move, else false.</returns>
-    bool DoMoveLeft(EntityObject entity);
+    bool DoMoveLeft(CharacterObject character);
 
     /// <summary>
     /// Checks if the entity is supposed to move to the right.
     /// </summary>
+    /// <param name="character">The character object to be controlled.</param>
     /// <returns>True if the entity should move, else false.</returns>
-    bool DoMoveRight(EntityObject entity);
+    bool DoMoveRight(CharacterObject character);
 
     /// <summary>
     /// Checks if the entity is supposed to jump.
     /// </summary>
+    /// <param name="character">The character object to be controlled.</param>
     /// <returns>True if the entity should jump, else false.</returns>
-    bool DoJump(EntityObject entity);
+    bool DoJump(CharacterObject character);
 
   }
 }
