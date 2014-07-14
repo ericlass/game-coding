@@ -1,5 +1,0 @@
-using System;using System.Collections.Generic;using RougeLike.Objects;using OkuBase.Graphics;namespace RougeLike.Renderers{  public class ImageRenderer : IEntityRenderer  {    private string _imageName = null;    private Image _image = null;        public ImageRenderer(string imageName)    {      _imageName = imageName;    }    public string ImageName
-    {
-      get { return _imageName; }
-      set { _imageName = value; }
-    }      public void Init()    {      _image = GameUtil.LoadImage(_imageName);    }        public void Begin(EntityObject entity)    {    }        public void Update(float dt, EntityObject entity)    {    }        public void Render(EntityObject entity)    {      OkuBase.OkuManager.Instance.Graphics.DrawImage(_image, 0, 0);    }        public void End(EntityObject entity)    {    }        public void Finish()    {      OkuBase.OkuManager.Instance.Graphics.ReleaseImage(_image);    }      }}
