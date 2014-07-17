@@ -56,13 +56,21 @@ namespace RougeLike
       scene.GameObjects.Add(tileMap);
       scene.GameObjects.Add(mario);
 
-      /*for (int i = 0; i < 1; i++)
-      {
-        scene.GameObjects.Add(CreateEnemyEntity());
-        _enemyCounter++;
-      }*/
+      WalkingCharacterControlSystem system = null;
 
-      scene.GameSystems.Add(new WalkingCharacterControlSystem(mario.Id, new PlayerController()));
+      for (int i = 0; i < 1; i++)
+      {
+        GameObjectBase enemy = CreateEnemyEntity("enemy_" + i);
+        scene.GameObjects.Add(enemy);
+
+        system = new WalkingCharacterControlSystem(enemy.Id, new SimpleAIController());
+        system.MaxWalkSpeed = 100;
+        scene.GameSystems.Add(system);
+      }
+
+      system = new WalkingCharacterControlSystem(mario.Id, new PlayerController());
+      system.MaxWalkSpeed = 300;
+      scene.GameSystems.Add(system);
 
       SceneList result = new SceneList();
       result.Add(scene);
@@ -88,43 +96,24 @@ namespace RougeLike
       return mario;
     }
 
-    //private static int _enemyCounter = 0;
     private static Random _rand = new Random();
 
-    private static GameObjectBase CreateEnemyEntity()
+    private static GameObjectBase CreateEnemyEntity(string id)
     {
-      /*EntityObject enemy = new EntityObject();
-      enemy.Id = "enemy_" + _enemyCounter;
+      CharacterObject enemy = new CharacterObject();
+      enemy.Id = id;
       enemy.ZIndex = 1;
       enemy.Position = new Vector2f(_rand.Next(-500, 500), 800);
       enemy.HitBox = new Rectangle2f(-4, -8, 8, 13);
-      enemy.Controller = new SimpleEnemyController();
 
-      enemy.SetAttributeValue("direction", new NumberValue(1));
-      enemy.SetAttributeValue("speedx", new NumberValue(0));
-      enemy.SetAttributeValue("speedy", new NumberValue(0));
-      enemy.SetAttributeValue("walkspeed", new NumberValue(100));
+      StatePropertyMap animMap = new StatePropertyMap();
+      animMap.Add(CharacterState.Idle, "enemy_idle");
+      animMap.Add(CharacterState.Walking, "enemy_walk");
+      animMap.Add(CharacterState.Jumping, "enemy_jump");
+      animMap.Add(CharacterState.Falling, "enemy_fall");
+      enemy.StateAnimations = animMap;
 
-      State walk = new State(StateIds.Walk);
-      walk.Behavior = new WalkBehavior();
-      walk.Renderer = new PlayerWalkRenderer("gumba_walk");
-      enemy.StateMachine.States.Add(walk.Id, walk);
-
-      State jump = new State(StateIds.Jump);
-      jump.Behavior = new JumpBehavior();
-      jump.Renderer = new DirectedImageRenderer("gumba_right");
-      enemy.StateMachine.States.Add(jump.Id, jump);
-
-      State fall = new State(StateIds.Fall);
-      fall.Behavior = new FallBehavior();
-      fall.Renderer = new DirectedImageRenderer("gumba_right");
-      enemy.StateMachine.States.Add(fall.Id, fall);
-
-      enemy.StateMachine.InitialState = walk.Id;
-
-      return enemy;*/
-
-      return null;
+      return enemy;
     }
 
     public SceneList LoadScene(string fileName)

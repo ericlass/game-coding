@@ -9,7 +9,7 @@ using RougeLike.Character;
 
 namespace RougeLike.Controller
 {
-  public class SimpleEnemyController : ICharacterController
+  public class SimpleAIController : ICharacterController
   {
     private enum EnemyState 
     {
@@ -21,7 +21,7 @@ namespace RougeLike.Controller
     private bool _doMove = false;
     private bool _moveLeft = DateTime.Now.Ticks % 2 == 0;
 
-    public SimpleEnemyController()
+    public SimpleAIController()
     {
       SetNewTimer();
     }
