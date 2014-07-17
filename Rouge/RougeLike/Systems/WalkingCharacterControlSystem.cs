@@ -22,12 +22,18 @@ namespace RougeLike.Systems
     private Vector2f _speed = Vector2f.Zero;
     private float _direction = 1;
 
-    private const float MaxWalkSpeed = 300;
+    private float _maxWalkSpeed = 300;
 
     public WalkingCharacterControlSystem(string playerId, ICharacterController controller)
     {
       _playerId = playerId;
       _controller = controller;
+    }
+
+    public float MaxWalkSpeed
+    {
+      get { return _maxWalkSpeed; }
+      set { _maxWalkSpeed = value; }
     }
 
     public string PlayerId

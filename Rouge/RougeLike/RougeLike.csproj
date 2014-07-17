@@ -72,7 +72,7 @@
     <Compile Include="Character\WeaponDefinition.cs" />
     <Compile Include="Character\WeaponEffect.cs" />
     <Compile Include="Character\WeaponType.cs" />
-    <Compile Include="Controller\SimpleEnemyController.cs" />
+    <Compile Include="Controller\SimpleAIController.cs" />
     <Compile Include="Animation.cs" />
     <Compile Include="Attributes\AttributeMap.cs" />
     <Compile Include="Attributes\AttributeValueBase.cs" />
@@ -113,7 +113,16 @@
     <Compile Include="Tiles\TileMapGenerator.cs" />
     <Compile Include="Objects\TileMapObject.cs" />
     <Compile Include="Objects\TileMapObjectBase.cs" />
-    <None Include="Content\Animations\gumba_walk.json">
+    <None Include="Content\Animations\enemy_fall.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Animations\enemy_idle.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Animations\enemy_jump.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Animations\enemy_walk.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Content\Animations\player_fall.json">

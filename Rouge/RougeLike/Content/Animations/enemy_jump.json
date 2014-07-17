@@ -1,0 +1,5 @@
+﻿{
+  "loop" : true,
+  "frametime" : 100,
+  "frames" : ["gumba_right.png"]
+}
