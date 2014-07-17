@@ -56,5 +56,16 @@ namespace RougeLike.Objects
       return result;
     }
 
+    public List<GameObjectBase> GetObjectsOfGroup(int groupIndex)
+    {
+      List<GameObjectBase> result = new List<GameObjectBase>();
+      foreach (GameObjectBase obj in this)
+      {
+        if (obj.GroupIndex == groupIndex)
+          result.Add(obj);
+      }
+      return result;
+    }
+
   }
 }

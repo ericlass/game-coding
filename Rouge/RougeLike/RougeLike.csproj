@@ -82,10 +82,12 @@
     <Compile Include="Attributes\IAttributeValue.cs" />
     <Compile Include="Attributes\NumberValue.cs" />
     <Compile Include="Attributes\TextValue.cs" />
+    <Compile Include="Objects\ProjectileObject.cs" />
     <Compile Include="Objects\RenderDescription.cs" />
     <Compile Include="States\StateIds.cs" />
     <Compile Include="Systems\GameSystemList.cs" />
     <Compile Include="Systems\IGameSystem.cs" />
+    <Compile Include="Systems\ProjectileSystem.cs" />
     <Compile Include="Systems\WalkingCharacterControlSystem.cs" />
     <Compile Include="Tiles\Biome.cs" />
     <Compile Include="Tiles\BiomeParameters.cs" />
@@ -112,7 +114,6 @@
     <Compile Include="Tiles\TileGeneratorParameters.cs" />
     <Compile Include="Tiles\TileMapGenerator.cs" />
     <Compile Include="Objects\TileMapObject.cs" />
-    <Compile Include="Objects\TileMapObjectBase.cs" />
     <None Include="Content\Animations\enemy_fall.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
