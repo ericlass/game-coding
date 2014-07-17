@@ -67,9 +67,6 @@ namespace RougeLike
         OkuManager.Instance.Graphics.ApplyAndPushTransform(go.Position, go.Scale, 0);
         try
         {
-          //go.Render();
-
-          go.PreRender();
           RenderDescription rd = go.RenderDescription;
           if (rd.VertexBuffer != null)
             OkuManager.Instance.Graphics.DrawVertexBuffer(rd.VertexBuffer, rd.PrimitiveType, rd.Image);

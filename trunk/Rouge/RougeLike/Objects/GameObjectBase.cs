@@ -18,7 +18,6 @@ namespace RougeLike.Objects
     public abstract string ObjectType { get; }
     public abstract void Init();
     public abstract void Update(float dt);
-    public abstract void PreRender();  //TODO: Remove method!
     public abstract void Finish();
     protected abstract StringPairMap DoSave();
     protected abstract void DoLoad(StringPairMap data);

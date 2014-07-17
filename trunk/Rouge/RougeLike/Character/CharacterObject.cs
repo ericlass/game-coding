@@ -67,10 +67,6 @@ namespace RougeLike.Character
       RenderDescription.Image = _animations[StateAnimations[_currentState]].CurrentFrame;
     }
 
-    public override void PreRender()
-    {      
-    }
-
     protected override StringPairMap DoSave()
     {
       return null;

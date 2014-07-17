@@ -482,7 +482,7 @@ namespace OkuBase.Graphics
     /// Release the memory assigned to a vertex buffer.
     /// </summary>
     /// <param name="vbuffer">The buffer to be released.</param>
-    void ReleaseVertexBuffer(VertexBuffer vbuffer)
+    public void ReleaseVertexBuffer(VertexBuffer vbuffer)
     {
       _driver.ReleaseVertexBuffer(vbuffer);
     }
