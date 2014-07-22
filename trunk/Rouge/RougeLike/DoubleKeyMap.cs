@@ -3,6 +3,29 @@ using System.Collections.Generic;
 
 namespace RougeLike
 {
+  public class KeyPair<K1, K2>
+  {
+    private K1 _key1 = default(K1);
+    private K2 _key2 = default(K2);
+    
+    public KeyPair(K1 key1, K2 key2)
+    {
+      _key1 = key1;
+      _key2 = key2;
+    }
+    
+    public K1 Key1
+    {
+      get { return _key1; }
+    }
+    
+    public K2 Key2
+    {
+      get { return _key2; }
+    }
+    
+  }
+
   public class DoubleKeyMap<K1, K2, V>
   {
     private Dictionary<K1, Dictionary<K2, V>> _map = new Dictionary<K1, Dictionary<K2, V>>();
@@ -85,6 +108,19 @@ namespace RougeLike
     public void Clear()
     {
       _map.Clear();
+    }
+    
+    public List<KeyPair<K1, K2>> GetKeys()
+    {
+      List<KeyPair<K1, K2>> result = new List<KeyPair<K1, K2>>();
+      foreach (K1 k1 in _map.Keys)
+      {
+        foreach (K2 k2 in _map[k1].Keys)
+        {
+          result.Add(new KeyPair<K1, K2>(k1, k2))M
+        }
+      }
+      return result;
     }
     
   }
