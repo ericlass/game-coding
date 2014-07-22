@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using OkuBase.Geometry;
+using RougeLike.Objects;
+using RougeLike.Character;
 
 namespace RougeLike.Systems
 {
@@ -20,15 +23,14 @@ namespace RougeLike.Systems
 
     public void Update(float dt)
     {
-      //TODO: Implement
       // Get projectiles
-      List<GameObjectBase> projectilesObjects = GameData.Instance.ActiveScene.GameObjects.GetObjectsOfGroup(_projectileGroup);
-      if (projectilesObjects.Count = 0)
+      List<GameObjectBase> projectileObjects = GameData.Instance.ActiveScene.GameObjects.GetObjectsOfGroup(_projectileGroup);
+      if (projectileObjects.Count == 0)
         return;
         
       // Cast to projectiles
       List<ProjectileObject> projectiles = new List<ProjectileObject>();
-      foreach (GameObjectBase obj in projectilesObjects)
+      foreach (GameObjectBase obj in projectileObjects)
         projectiles.Add(obj as ProjectileObject);
         
       //Move projectiles
@@ -37,7 +39,7 @@ namespace RougeLike.Systems
             
       // Get targets
       List<GameObjectBase> characterObjects = GameData.Instance.ActiveScene.GameObjects.GetObjectsOfGroup(_hitGroup);
-      if (characterObjects.Count = 0)
+      if (characterObjects.Count == 0)
         return;
         
       // Cast to characters
@@ -52,14 +54,14 @@ namespace RougeLike.Systems
       DoubleKeyMap<int, int, List<ProjectileObject>> projectileMap = new DoubleKeyMap<int, int, List<ProjectileObject>>();
       foreach (ProjectileObject proj in projectiles)
       {
-        int left = (proj.Position.X - projectileSize) / gridSize;
-        int right = (proj.Position.X + projectileSize) / gridSize;
-        int bottom = (proj.Position.Y - projectileSize) / gridSize;
-        int top = (proj.Position.Y + projectileSize) / gridSize;
+        int left = (int)(proj.Position.X - projectileSize) / gridSize;
+        int right = (int)(proj.Position.X + projectileSize) / gridSize;
+        int bottom = (int)(proj.Position.Y - projectileSize) / gridSize;
+        int top = (int)(proj.Position.Y + projectileSize) / gridSize;
         
         for (int x = left; x <= right; x++)
         {
-          for (int = bottom; y <= top; y++)
+          for (int y = bottom; y <= top; y++)
           {
             if (!projectileMap.Contains(x, y))
               projectileMap.Add(x, y, new List<ProjectileObject>());
@@ -76,19 +78,19 @@ namespace RougeLike.Systems
         float halfWidth = character.HitBox.Width / 2.0f;
         float halfHeight = character.HitBox.Height / 2.0f;
         
-        int left = (character.Position.X - halfWidth) / gridSize;
-        int right = (character.Position.X + halfWidth) / gridSize;
-        int bottom = (character.Position.Y - halfHeight) / gridSize;
-        int top = (character.Position.Y + halfHeight) / gridSize;
+        int left = (int)(character.Position.X - halfWidth) / gridSize;
+        int right = (int)(character.Position.X + halfWidth) / gridSize;
+        int bottom = (int)(character.Position.Y - halfHeight) / gridSize;
+        int top = (int)(character.Position.Y + halfHeight) / gridSize;
         
         for (int x = left; x <= right; x++)
         {
-          for (int = bottom; y <= top; y++)
+          for (int y = bottom; y <= top; y++)
           {
             if (!characterMap.Contains(x, y))
               characterMap.Add(x, y, new List<CharacterObject>());
-            
-            characterMap[x, y].Add(proj);
+
+            characterMap[x, y].Add(character);
           }
         }
       }
@@ -98,14 +100,14 @@ namespace RougeLike.Systems
       foreach (KeyPair<int, int> key in cells)
       {
         List<ProjectileObject> projs = projectileMap[key.Key1, key.Key2];
-        if (projs.Count = 0)
+        if (projs.Count == 0)
           continue;
           
         if (!characterMap.Contains(key.Key1, key.Key2))
           continue;
           
-        List<CharacterObject> chars = characterMap[key.Key1, keyKey2];
-        if (chars.Count = 0)
+        List<CharacterObject> chars = characterMap[key.Key1, key.Key2];
+        if (chars.Count == 0)
           continue;
           
         //Finally, check for collisions
@@ -113,12 +115,16 @@ namespace RougeLike.Systems
         {
           foreach (CharacterObject chara in chars)
           {
-            //TODO: Calculate collision
+            Rectangle2f projRect = new Rectangle2f(proj.Position.X - projectileSize, proj.Position.Y - projectileSize, projectileSize * 2, projectileSize * 2);
+            Rectangle2f charRect = chara.HitBox;
+
+            if (IntersectionTests.Rectangles(projRect.Min, projRect.Max, charRect.Min, charRect.Max))
+            {
+
+            }
           }
         }
       }
-      
-      // if collission, apply damage
     }
 
     public void Finish()

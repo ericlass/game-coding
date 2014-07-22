@@ -117,7 +117,7 @@ namespace RougeLike
       {
         foreach (K2 k2 in _map[k1].Keys)
         {
-          result.Add(new KeyPair<K1, K2>(k1, k2))M
+          result.Add(new KeyPair<K1, K2>(k1, k2));
         }
       }
       return result;

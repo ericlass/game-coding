@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using JSONator;
 using RougeLike.States;
 using RougeLike.Attributes;
+using RougeLike.Character;
 
 namespace RougeLike
 {
@@ -27,6 +30,7 @@ namespace RougeLike
     private SceneList _scenes = new SceneList();
     private Scene _activeScene = null;
     private AttributeMap _attributes = new AttributeMap();
+    private Dictionary<string, InventoryItemDefinition> _inventoryItems = null;
 
     public bool DebugDraw
     {
@@ -52,6 +56,35 @@ namespace RougeLike
         _activeScene.Init();
       }
     }
+
+    public Dictionary<string, InventoryItemDefinition> InventoryItems
+    {
+      get
+      {
+        if (_inventoryItems == null)
+          LoadInventoryItems();
+        return _inventoryItems;
+      }
+      set { _inventoryItems = value; }
+    }
+
+    private void LoadInventoryItems()
+    {
+      _inventoryItems = new Dictionary<string, InventoryItemDefinition>();
+
+      string inventoryPath = ".\\InventoryItems";
+      string[] files = Directory.GetFiles(inventoryPath, "*.json");
+      foreach (string file in files)
+      {
+        JSONObjectValue json = GameUtil.ParseJsonFile(Path.Combine(inventoryPath, file));
+        StringPairMap values = GameUtil.JSONObjectToMap(json);
+
+        InventoryItemType itemType = OkuBase.Utils.Converter.ParseEnum<InventoryItemType>(values["itemtype"]);
+        //TODO
+      }
+    }
+
+    #region Attribute Stuff
 
     public List<string> GetAttributeNames()
     {
@@ -87,6 +120,8 @@ namespace RougeLike
       _attributes[attribute] = value;
       return true;
     }
+
+    #endregion
 
   }
 }

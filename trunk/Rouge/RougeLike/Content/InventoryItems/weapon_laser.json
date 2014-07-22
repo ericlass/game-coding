@@ -1,0 +1,21 @@
+﻿{
+  "id" : "weapon_laser",
+  "name" : "Laser",
+  "description" : "Standard laser weapon.",
+  "itemtype" : "weapon",
+  "image" : "weapon_laser",
+  "weight" : 10,
+  "droppable" : false,
+  "weapontype" : "beam",
+  "rateoffire" : 2,
+  "damage" : 5,
+  "projectilespeed" : 400,
+  "projectilesize" : 3,
+  "continuous" : true,
+  "effect" : "none",
+  "muzzleanim" : "weapon_laser_muzzle",
+  "projectileanim" : "weapon_laser_projectile",
+  "hitanim" : "weapon_laser_hit",
+  "trailanim" : null,
+  "sound" : "weapon_laser_fire"
+}
