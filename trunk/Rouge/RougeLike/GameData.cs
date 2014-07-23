@@ -24,6 +24,7 @@ namespace RougeLike
 
     private GameData()
     {
+      LoadInventoryItems();
     }
 
     private bool _debugDraw = false;
@@ -72,15 +73,13 @@ namespace RougeLike
     {
       _inventoryItems = new Dictionary<string, InventoryItemDefinition>();
 
-      string inventoryPath = ".\\InventoryItems";
+      string inventoryPath = ".\\Content\\InventoryItems";
       string[] files = Directory.GetFiles(inventoryPath, "*.json");
       foreach (string file in files)
       {
-        JSONObjectValue json = GameUtil.ParseJsonFile(Path.Combine(inventoryPath, file));
-        StringPairMap values = GameUtil.JSONObjectToMap(json);
-
-        InventoryItemType itemType = OkuBase.Utils.Converter.ParseEnum<InventoryItemType>(values["itemtype"]);
-        //TODO
+        JSONObjectValue json = GameUtil.ParseJsonFile(file);
+        InventoryItemDefinition item = InventoryItemFactory.Instance.CreateInventoryItem(json);
+        _inventoryItems.Add(item.Id, item);
       }
     }
 

@@ -4,7 +4,7 @@
   "description" : "Standard laser weapon.",
   "itemtype" : "weapon",
   "image" : "weapon_laser",
-  "weight" : 10,
+  "weight" : 2,
   "droppable" : false,
   "weapontype" : "beam",
   "rateoffire" : 2,
@@ -16,6 +16,6 @@
   "muzzleanim" : "weapon_laser_muzzle",
   "projectileanim" : "weapon_laser_projectile",
   "hitanim" : "weapon_laser_hit",
-  "trailanim" : null,
+  "trailanim" : "",
   "sound" : "weapon_laser_fire"
 }

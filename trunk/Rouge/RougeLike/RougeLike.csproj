@@ -65,6 +65,7 @@
     <Compile Include="Character\CharacterObject.cs" />
     <Compile Include="Character\CharacterState.cs" />
     <Compile Include="Character\InventoryItemDefinition.cs" />
+    <Compile Include="Character\InventoryItemFactory.cs" />
     <Compile Include="Character\InventoryItemType.cs" />
     <Compile Include="Character\InventoryMap.cs" />
     <Compile Include="Character\SkillSet.cs" />
@@ -141,7 +142,12 @@
     <None Include="Content\Graphics\square.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Content\InventoryItems\weapon_laser.json" />
+    <None Include="Content\InventoryItems\armor_default.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\InventoryItems\weapon_laser.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="lib\OkuBase.dll" />
     <None Include="lib\OkuDrivers.dll">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
