@@ -1,0 +1,21 @@
+﻿{
+  "id" : "armor_default",
+  "name" : "Standard Armor",
+  "description" : "Standard armor.",
+  "itemtype" : "armor",
+  "image" : "armor_default",
+  "weight" : 10,
+  "droppable" : false,
+  "beamrating" : 1,
+  "projectilerating" : 1,
+  "buffs" :
+  {
+    "run" : 1,
+    "jump" : 1,
+    "beamweapons" : 1,
+    "projectileweapons" : 1,
+    "strength" : 1,
+    "armor" : 1
+  },
+  "immunities" : []
+}

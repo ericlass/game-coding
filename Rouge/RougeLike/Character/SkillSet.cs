@@ -7,11 +7,11 @@ namespace RougeLike.Character
 {
   public class SkillSet
   {
-    public int Run { get; set; }
-    public int Jump { get; set; }
-    public int BeamWeapons { get; set; }
-    public int ProjectileWeapons { get; set; }
-    public int Strength { get; set; }
-    public int Armor { get; set; }
+    public float Run { get; set; }
+    public float Jump { get; set; }
+    public float BeamWeapons { get; set; }
+    public float ProjectileWeapons { get; set; }
+    public float Strength { get; set; }
+    public float Armor { get; set; }
   }
 }

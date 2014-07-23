@@ -17,9 +17,10 @@ namespace OkuBase.Utils
     /// <returns>The string represenation of the given float value.</returns>
     public static string FloatToString(float value)
     {
-      int num = (int)value;
+      return Convert.ToString(value, CultureInfo.InvariantCulture);
+      /*int num = (int)value;
       int frac = (int)Math.Abs((value - num) * 1000000000.0f);
-      return num + "." + frac;
+      return num + "." + frac;*/
     }
     
     /// <summary>
@@ -29,6 +30,9 @@ namespace OkuBase.Utils
     /// <returns>The converted float value.</returns>
     public static float StrToFloat(string str)
     {
+      return Convert.ToSingle(str, CultureInfo.InvariantCulture);
+
+      /*
       string[] parts = str.Split('.');
       
       float result = float.Parse(parts[0]);
@@ -46,6 +50,7 @@ namespace OkuBase.Utils
         result *= -1;
 
       return result;
+      */
     }
 
     /// <summary>
