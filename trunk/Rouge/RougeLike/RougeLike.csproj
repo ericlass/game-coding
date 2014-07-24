@@ -204,6 +204,9 @@
     <None Include="Content\Graphics\gumba_right.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Content\Graphics\simple_shot.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="lib\JSONator.dll" />
   </ItemGroup>
   <ItemGroup />

@@ -104,6 +104,11 @@ namespace RougeLike.Controller
     {
       return false;
     }
-    
+
+    public bool DoShoot(CharacterObject character)
+    {
+      return false;
+    }
+
   }
 }

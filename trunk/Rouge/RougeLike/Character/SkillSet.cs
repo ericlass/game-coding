@@ -13,5 +13,19 @@ namespace RougeLike.Character
     public float ProjectileWeapons { get; set; }
     public float Strength { get; set; }
     public float Armor { get; set; }
+
+    public float GetWeaponRating(WeaponType weaponType)
+    {
+      switch (weaponType)
+      {
+        case WeaponType.Beam:
+          return BeamWeapons;
+        case WeaponType.Projectile:
+          return ProjectileWeapons;
+        default:
+          throw new OkuBase.OkuException("Unknown weapon type: " + weaponType.ToString());
+      }
+    }
+
   }
 }

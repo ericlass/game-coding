@@ -25,5 +25,11 @@ namespace RougeLike.Controller
     public void Update(float dt, CharacterObject character)
     {
     }
+    
+    public bool DoShoot(CharacterObject character)
+    {
+      return OkuManager.Instance.Input.Mouse.ButtonPressed(OkuBase.Input.MouseButton.Left);
+    }
+
   }
 }
