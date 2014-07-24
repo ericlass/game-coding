@@ -72,6 +72,9 @@ namespace RougeLike
       system.MaxWalkSpeed = 300;
       scene.GameSystems.Add(system);
 
+      ProjectileSystem projSystem = new ProjectileSystem(10, 20);
+      scene.GameSystems.Add(projSystem);
+
       SceneList result = new SceneList();
       result.Add(scene);
 
@@ -85,6 +88,10 @@ namespace RougeLike
       mario.ZIndex = 1;
       mario.Position = new Vector2f(0, 500);
       mario.HitBox = new Rectangle2f(-4, -9, 8, 16);
+      mario.EquipedWeapon = "weapon_laser";
+      mario.Skills.BeamWeapons = 1;
+      mario.Skills.ProjectileWeapons = 1;
+      mario.Health = 100;
 
       StatePropertyMap animMap = new StatePropertyMap();
       animMap.Add(CharacterState.Idle, "player_idle");
@@ -105,6 +112,8 @@ namespace RougeLike
       enemy.ZIndex = 1;
       enemy.Position = new Vector2f(_rand.Next(-500, 500), 800);
       enemy.HitBox = new Rectangle2f(-4, -8, 8, 13);
+      enemy.GroupIndex = 20;
+      enemy.Health = 5;
 
       StatePropertyMap animMap = new StatePropertyMap();
       animMap.Add(CharacterState.Idle, "enemy_idle");

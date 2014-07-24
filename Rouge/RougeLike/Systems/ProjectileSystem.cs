@@ -35,7 +35,10 @@ namespace RougeLike.Systems
         
       //Move projectiles
       foreach (ProjectileObject proj in projectiles)
-        proj.Position = proj.Position + (proj.Direction * dt);
+      {
+        WeaponDefinition weapon = GameData.Instance.InventoryItems[proj.WeaponId] as WeaponDefinition;
+        proj.Position = proj.Position + (proj.Direction * weapon.ProjectileSpeed * dt);
+      }
             
       // Get targets
       List<GameObjectBase> characterObjects = GameData.Instance.ActiveScene.GameObjects.GetObjectsOfGroup(_hitGroup);
@@ -48,12 +51,14 @@ namespace RougeLike.Systems
         characters.Add(obj as CharacterObject);
       
       int gridSize = 64;
-      int projectileSize = 3; // TODO: Get this from weapon
       
       // calculate spatial hashes of projectiles
       DoubleKeyMap<int, int, List<ProjectileObject>> projectileMap = new DoubleKeyMap<int, int, List<ProjectileObject>>();
       foreach (ProjectileObject proj in projectiles)
       {
+        WeaponDefinition weapon = GameData.Instance.InventoryItems[proj.WeaponId] as WeaponDefinition;
+        float projectileSize = weapon.ProjectileSize;
+
         int left = (int)(proj.Position.X - projectileSize) / gridSize;
         int right = (int)(proj.Position.X + projectileSize) / gridSize;
         int bottom = (int)(proj.Position.Y - projectileSize) / gridSize;
@@ -113,14 +118,33 @@ namespace RougeLike.Systems
         //Finally, check for collisions
         foreach (ProjectileObject proj in projs)
         {
+          WeaponDefinition weapon = GameData.Instance.InventoryItems[proj.WeaponId] as WeaponDefinition;
+          float projectileSize = weapon.ProjectileSize;
           foreach (CharacterObject chara in chars)
           {
             Rectangle2f projRect = new Rectangle2f(proj.Position.X - projectileSize, proj.Position.Y - projectileSize, projectileSize * 2, projectileSize * 2);
-            Rectangle2f charRect = chara.HitBox;
 
+            float halfWidth = chara.HitBox.Width / 2.0f;
+            float halfHeight = chara.HitBox.Height / 2.0f;
+            Rectangle2f charRect = new Rectangle2f(chara.Position.X - halfWidth, chara.Position.Y - halfHeight, chara.HitBox.Width, chara.HitBox.Height);
+            
             if (IntersectionTests.Rectangles(projRect.Min, projRect.Max, charRect.Min, charRect.Max))
             {
+              float armorRating = 1.0f;
 
+              if (chara.EquipedArmor != null)
+              {
+                ArmorDefinition armor = GameData.Instance.InventoryItems[chara.EquipedArmor] as ArmorDefinition;
+                armorRating = armor.GetWeaponRating(weapon.WeaponType);
+              }
+
+              float finalDamage = weapon.Damage * proj.DamageRatio * armorRating;
+
+              chara.Health -= finalDamage;
+
+              OkuBase.OkuManager.Instance.Graphics.Title = chara.Health.ToString();
+
+              GameData.Instance.ActiveScene.GameObjects.Remove(proj);
             }
           }
         }

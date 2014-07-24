@@ -32,5 +32,12 @@ namespace RougeLike.Controller
     /// <returns>True if the entity should jump, else false.</returns>
     bool DoJump(CharacterObject character);
 
+    /// <summary>
+    /// Checks if the character is supposed to shoot.
+    /// </summary>
+    /// <param name="character">The character to check.</param>
+    /// <returns>True if a shot should be fired, else false.</returns>
+    bool DoShoot(CharacterObject character);
+
   }
 }

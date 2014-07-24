@@ -105,6 +105,34 @@ namespace RougeLike.Systems
           break;
       }
 
+      if (_playerObject.CurrentState != CharacterState.Frozen)
+      {
+        if (_playerObject.EquipedWeapon != null && _controller.DoShoot(_playerObject))
+        {
+          WeaponDefinition weapon = GameData.Instance.InventoryItems[_playerObject.EquipedWeapon] as WeaponDefinition;
+
+          float armorRating = 1.0f;
+          if (_playerObject.EquipedArmor != null)
+          {
+            ArmorDefinition armor = GameData.Instance.InventoryItems[_playerObject.EquipedArmor] as ArmorDefinition;
+            armorRating = armor.Buffs.GetWeaponRating(weapon.WeaponType);
+          }
+
+          ProjectileObject proj = new ProjectileObject();
+          proj.Direction = new Vector2f(_playerObject.Scale.X, 0); // TODO: This is a quick and dirty implementation
+          proj.Position = _playerObject.Position;
+          proj.WeaponId = _playerObject.EquipedWeapon;
+          proj.DamageRatio = _playerObject.Skills.GetWeaponRating(weapon.WeaponType) * armorRating;
+          proj.GroupIndex = 10;
+          proj.Id = "projectile_" + System.Environment.TickCount;
+          proj.ZIndex = _playerObject.ZIndex;
+          proj.RenderDescription = new RenderDescription();
+          proj.RenderDescription.Image = GameUtil.LoadImage("simple_shot");
+
+          GameData.Instance.ActiveScene.GameObjects.Add(proj);
+        }
+      }
+
       Vector2f scale = _playerObject.Scale;
       scale.X = _direction;
       _playerObject.Scale = scale;

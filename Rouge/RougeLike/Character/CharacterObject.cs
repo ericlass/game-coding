@@ -9,6 +9,8 @@ namespace RougeLike.Character
 
   public class CharacterObject : GameObjectBase
   {
+    private SkillSet _skills = new SkillSet();
+
     public override string ObjectType
     {
       get { return "character"; }
@@ -16,11 +18,20 @@ namespace RougeLike.Character
 
     public int Experience { get; set; }
     public int Level { get; set; }
-    public int Health { get; set; }
-    public SkillSet Skills { get; set; }
+    public float Health { get; set; }
+
+    public SkillSet Skills 
+    {
+      get { return _skills; }
+      set { _skills = value; }
+    }
+
     public InventoryMap Inventory { get; set; }
     public StatePropertyMap StateAnimations { get; set; }
     public Rectangle2f HitBox { get; set; }
+
+    public string EquipedWeapon { get; set; }
+    public string EquipedArmor { get; set; }
 
     private Dictionary<string, Animation> _animations = new Dictionary<string, Animation>();
     private CharacterState _currentState = CharacterState.Idle;

@@ -9,7 +9,7 @@
   "weapontype" : "beam",
   "rateoffire" : 2,
   "damage" : 5,
-  "projectilespeed" : 400,
+  "projectilespeed" : 600,
   "projectilesize" : 3,
   "continuous" : true,
   "effect" : "none",
