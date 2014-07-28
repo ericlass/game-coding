@@ -19,6 +19,7 @@ namespace RougeLike.Character
     public int Experience { get; set; }
     public int Level { get; set; }
     public float Health { get; set; }
+    public float XP { get; set; } // The experience points that are given to characters that kill this character
 
     public SkillSet Skills 
     {
@@ -85,6 +86,28 @@ namespace RougeLike.Character
 
     protected override void DoLoad(StringPairMap data)
     {
+    }
+    
+    public void Damage(ProjectileObject projectile)
+    {
+      WeaponDefinition weapon = GameData.Instance.InventoryItems[projectile.WeaponId] as WeaponDefinition;
+    
+      float armorRating = 1.0f;
+      if (EquipedArmor != null)
+      {
+        ArmorDefinition armor = GameData.Instance.InventoryItems[EquipedArmor] as ArmorDefinition;
+        armorRating = armor.GetWeaponRating(weapon.WeaponType);
+      }
+
+      float finalDamage = projectile.Damage * armorRating;
+      
+      Health -= finalDamage;
+      
+      if (Health <= 0)
+      {
+        ; // TODO: Switch to DEAD state
+        ; // TODO: Give XP to shooter
+      }
     }
 
   }

@@ -130,20 +130,7 @@ namespace RougeLike.Systems
             
             if (IntersectionTests.Rectangles(projRect.Min, projRect.Max, charRect.Min, charRect.Max))
             {
-              float armorRating = 1.0f;
-
-              if (chara.EquipedArmor != null)
-              {
-                ArmorDefinition armor = GameData.Instance.InventoryItems[chara.EquipedArmor] as ArmorDefinition;
-                armorRating = armor.GetWeaponRating(weapon.WeaponType);
-              }
-
-              float finalDamage = weapon.Damage * proj.DamageRatio * armorRating;
-
-              chara.Health -= finalDamage;
-
-              OkuBase.OkuManager.Instance.Graphics.Title = chara.Health.ToString();
-
+              chara.Damage(proj);
               GameData.Instance.ActiveScene.GameObjects.Remove(proj);
             }
           }
