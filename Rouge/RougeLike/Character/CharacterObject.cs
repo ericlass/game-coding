@@ -88,8 +88,9 @@ namespace RougeLike.Character
     {
     }
     
-    public void Damage(ProjectileObject projectile)
+    public void Hit(ProjectileObject projectile)
     {
+      CharacterObject shooter = GameData.Instance.ActiveScene.GameObjects.GetObjectById(projectile.SourceId) as CharacterObject;
       WeaponDefinition weapon = GameData.Instance.InventoryItems[projectile.WeaponId] as WeaponDefinition;
     
       float armorRating = 1.0f;
@@ -99,7 +100,14 @@ namespace RougeLike.Character
         armorRating = armor.GetWeaponRating(weapon.WeaponType);
       }
 
-      float finalDamage = projectile.Damage * armorRating;
+      float armorBuff = 1.0f;
+      if (shooter.EquipedArmor != null)
+      {
+        ArmorDefinition armor = GameData.Instance.InventoryItems[shooter.EquipedArmor] as ArmorDefinition;
+        armorBuff = armor.Buffs.GetWeaponRating(weapon.WeaponType);
+      }
+
+      float finalDamage = weapon.Damage * shooter.Skills.GetWeaponRating(weapon.WeaponType) * armorBuff * armorRating;
       
       Health -= finalDamage;
       
