@@ -122,7 +122,7 @@ namespace RougeLike.Systems
           proj.Direction = new Vector2f(_playerObject.Scale.X, 0); // TODO: This is a quick and dirty implementation
           proj.Position = _playerObject.Position;
           proj.WeaponId = _playerObject.EquipedWeapon;
-          proj.Damage = weapon.Damage * _playerObject.Skills.GetWeaponRating(weapon.WeaponType) * armorBuff;
+          proj.SourceId = _playerId;
           proj.GroupIndex = 10;
           proj.Id = "projectile_" + System.Environment.TickCount;
           proj.ZIndex = _playerObject.ZIndex;

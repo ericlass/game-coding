@@ -130,7 +130,7 @@ namespace RougeLike.Systems
             
             if (IntersectionTests.Rectangles(projRect.Min, projRect.Max, charRect.Min, charRect.Max))
             {
-              chara.Damage(proj);
+              chara.Hit(proj);
               GameData.Instance.ActiveScene.GameObjects.Remove(proj);
             }
           }

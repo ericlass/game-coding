@@ -6,9 +6,8 @@ namespace RougeLike.Objects
 {
   public class ProjectileObject : GameObjectBase
   {
-    private float _damage = 1.0f;
-    private string _weaponId = null; // The item id of the weapon that fired the projectile
-    private string sourceId = null; // The object id of the character who shot the projectile
+    private string _weaponId = null;
+    private string _sourceId = null;
     private Vector2f _direction = Vector2f.Zero;
 
     public override string ObjectType
@@ -16,18 +15,27 @@ namespace RougeLike.Objects
       get { return "projectile"; }
     }
 
-    public float Damage
+    /// <summary>
+    /// Gets or sets the id of the character object that fired the shot.
+    /// </summary>
+    public string SourceId
     {
-      get { return _damage; }
-      set { _damage = value; }
+      get { return _sourceId; }
+      set { _sourceId = value; }
     }
 
+    /// <summary>
+    /// Gets or sets the item id of the weapon that was used.
+    /// </summary>
     public string WeaponId
     {
       get { return _weaponId; }
       set { _weaponId = value; }
     }
 
+    /// <summary>
+    /// Gets or sets the direction in which the projectile is supposed to travel. Should be normalized.
+    /// </summary>
     public Vector2f Direction
     {
       get { return _direction; }
