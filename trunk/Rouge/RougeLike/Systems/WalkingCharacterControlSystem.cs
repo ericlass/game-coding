@@ -21,6 +21,7 @@ namespace RougeLike.Systems
     private float _freezeTime = 0;
     private Vector2f _speed = Vector2f.Zero;
     private float _direction = 1;
+    private float _deadTime = 0;
 
     private float _maxWalkSpeed = 300;
 
@@ -69,7 +70,11 @@ namespace RougeLike.Systems
           break;
 
         case CharacterState.Frozen:
-          _freezeTime = 2000;
+          _freezeTime = 2;
+          break;
+
+        case CharacterState.Dead:
+          _deadTime = 3;
           break;
 
         default:
@@ -101,6 +106,10 @@ namespace RougeLike.Systems
           HandleFrozen(dt);
           break;
 
+        case CharacterState.Dead:
+          HandleDead(dt);
+          break;
+
         default:
           break;
       }
@@ -126,8 +135,7 @@ namespace RougeLike.Systems
           proj.GroupIndex = 10;
           proj.Id = "projectile_" + System.Environment.TickCount;
           proj.ZIndex = _playerObject.ZIndex;
-          proj.RenderDescription = new RenderDescription();
-          proj.RenderDescription.Image = GameUtil.LoadImage("simple_shot"); //TODO: Get from weapon definition. And what about animation?
+          proj.Animation = GameUtil.LoadAnimation(weapon.ProjectileAnim);
 
           GameData.Instance.ActiveScene.GameObjects.Add(proj);
         }
@@ -189,7 +197,6 @@ namespace RougeLike.Systems
       }
 
       float accel = 1500;
-
       float speed = _speed.X;
 
       bool leftDown = _controller.DoMoveLeft(_playerObject);
@@ -367,6 +374,13 @@ namespace RougeLike.Systems
       _freezeTime -= dt;
       if (_freezeTime <= 0)
         _playerObject.CurrentState = CharacterState.Falling;
+    }
+
+    private void HandleDead(float dt)
+    {
+      _deadTime -= dt;
+      if (_deadTime <= 0)
+        GameData.Instance.ActiveScene.GameObjects.Remove(_playerObject);
     }
 
     private Vector2f WalkPlayer(Rectangle2f hitbox, float dx)

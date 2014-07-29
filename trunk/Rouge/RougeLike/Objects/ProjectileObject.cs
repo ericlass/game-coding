@@ -9,6 +9,8 @@ namespace RougeLike.Objects
     private string _weaponId = null;
     private string _sourceId = null;
     private Vector2f _direction = Vector2f.Zero;
+    private Animation _animation = null;
+    private bool _hit = false;
 
     public override string ObjectType
     {
@@ -42,12 +44,37 @@ namespace RougeLike.Objects
       set { _direction = value; }
     }
 
+    /// <summary>
+    /// Gets or set the animation for this projectile.
+    /// </summary>
+    public Animation Animation
+    {
+      get { return _animation; }
+      set { _animation = value; }
+    }
+
+    /// <summary>
+    /// Gets or set if the projectile has hit something yet.
+    /// </summary>
+    public bool Hit
+    {
+      get { return _hit; }
+      set { _hit = value; }
+    }
+
     public override void Init()
     {
     }
 
     public override void Update(float dt)
     {
+      if (_animation != null)
+      {
+        _animation.Update(dt);
+        RenderDescription.Image = _animation.CurrentFrame;
+      }
+      else
+        RenderDescription.Image = null;
     }
 
     public override void Finish()

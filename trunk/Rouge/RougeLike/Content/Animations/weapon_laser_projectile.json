@@ -1,0 +1,5 @@
+﻿{
+  "loop" : true,
+  "frametime" : 100,
+  "frames" : ["weapon_laser_projectile.png"]
+}

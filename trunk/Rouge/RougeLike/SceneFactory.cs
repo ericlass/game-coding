@@ -113,13 +113,14 @@ namespace RougeLike
       enemy.Position = new Vector2f(_rand.Next(-500, 500), 800);
       enemy.HitBox = new Rectangle2f(-4, -8, 8, 13);
       enemy.GroupIndex = 20;
-      enemy.Health = 5;
+      enemy.Health = 50;
 
       StatePropertyMap animMap = new StatePropertyMap();
       animMap.Add(CharacterState.Idle, "enemy_idle");
       animMap.Add(CharacterState.Walking, "enemy_walk");
       animMap.Add(CharacterState.Jumping, "enemy_jump");
       animMap.Add(CharacterState.Falling, "enemy_fall");
+      animMap.Add(CharacterState.Dead, "enemy_dead");
       enemy.StateAnimations = animMap;
 
       return enemy;
