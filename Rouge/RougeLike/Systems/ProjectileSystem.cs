@@ -25,30 +25,52 @@ namespace RougeLike.Systems
     {
       // Get projectiles
       List<GameObjectBase> projectileObjects = GameData.Instance.ActiveScene.GameObjects.GetObjectsOfGroup(_projectileGroup);
-      if (projectileObjects.Count == 0)
+      if (projectileObjects == null || projectileObjects.Count == 0)
         return;
         
-      // Cast to projectiles
+      // Cast to projectiles and update position
       List<ProjectileObject> projectiles = new List<ProjectileObject>();
-      foreach (GameObjectBase obj in projectileObjects)
-        projectiles.Add(obj as ProjectileObject);
-        
-      //Move projectiles
-      foreach (ProjectileObject proj in projectiles)
+      for (int i = projectileObjects.Count - 1; i >= 0; i--)
       {
+        ProjectileObject proj = projectileObjects[i] as ProjectileObject;
+
+        if (proj.Hit)
+        {
+          if (proj.Animation.Finished)
+            GameData.Instance.ActiveScene.GameObjects.Remove(proj);
+          continue;
+        }
+
         WeaponDefinition weapon = GameData.Instance.InventoryItems[proj.WeaponId] as WeaponDefinition;
-        proj.Position = proj.Position + (proj.Direction * weapon.ProjectileSpeed * dt);
+        Vector2f movement = proj.Direction * weapon.ProjectileSpeed * dt;
+
+        TileMapObject tileMap = GameData.Instance.ActiveScene.GameObjects.GetObjectById("tilemap") as TileMapObject;
+        Vector2f maxMove = Vector2f.Zero;
+        if (tileMap.CollideMovingPoint(proj.Position, movement, out maxMove))
+        {
+          proj.Animation = GameUtil.LoadAnimation(weapon.HitAnim);
+          proj.Hit = true;
+        }
+        else 
+        {
+          proj.Position = proj.Position + (movement);
+          projectiles.Add(proj);
+        }
       }
-            
+        
       // Get targets
       List<GameObjectBase> characterObjects = GameData.Instance.ActiveScene.GameObjects.GetObjectsOfGroup(_hitGroup);
-      if (characterObjects.Count == 0)
+      if (characterObjects == null || characterObjects.Count == 0)
         return;
         
-      // Cast to characters
+      // Cast to characters and filter out the dead ones early
       List<CharacterObject> characters = new List<CharacterObject>();
       foreach (GameObjectBase obj in characterObjects)
-        characters.Add(obj as CharacterObject);
+      {
+        CharacterObject c = obj as CharacterObject;
+        if (c.CurrentState != CharacterState.Dead)
+          characters.Add(c);
+      }
       
       int gridSize = 64;
       
@@ -131,7 +153,9 @@ namespace RougeLike.Systems
             if (IntersectionTests.Rectangles(projRect.Min, projRect.Max, charRect.Min, charRect.Max))
             {
               chara.Hit(proj);
-              GameData.Instance.ActiveScene.GameObjects.Remove(proj);
+              //GameData.Instance.ActiveScene.GameObjects.Remove(proj);
+              proj.Animation = GameUtil.LoadAnimation(weapon.HitAnim);
+              proj.Hit = true;
             }
           }
         }

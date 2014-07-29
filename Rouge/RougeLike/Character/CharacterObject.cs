@@ -9,23 +9,13 @@ namespace RougeLike.Character
 
   public class CharacterObject : GameObjectBase
   {
+    public event OnCharacterStateChange OnStateChange;
+
     private SkillSet _skills = new SkillSet();
+    private float _health = 0.0f;
 
-    public override string ObjectType
-    {
-      get { return "character"; }
-    }
-
-    public int Experience { get; set; }
-    public int Level { get; set; }
-    public float Health { get; set; }
-    public float XP { get; set; } // The experience points that are given to characters that kill this character
-
-    public SkillSet Skills 
-    {
-      get { return _skills; }
-      set { _skills = value; }
-    }
+    private Dictionary<string, Animation> _animations = new Dictionary<string, Animation>();
+    private CharacterState _currentState = CharacterState.Idle;
 
     public InventoryMap Inventory { get; set; }
     public StatePropertyMap StateAnimations { get; set; }
@@ -34,10 +24,20 @@ namespace RougeLike.Character
     public string EquipedWeapon { get; set; }
     public string EquipedArmor { get; set; }
 
-    private Dictionary<string, Animation> _animations = new Dictionary<string, Animation>();
-    private CharacterState _currentState = CharacterState.Idle;
+    public int Experience { get; set; }
+    public int Level { get; set; }
+    public float XP { get; set; } // The experience points that are given to characters that kill this character
 
-    public event OnCharacterStateChange OnStateChange;
+    public SkillSet Skills
+    {
+      get { return _skills; }
+      set { _skills = value; }
+    }
+
+    public override string ObjectType
+    {
+      get { return "character"; }
+    }
 
     public CharacterState CurrentState
     {
@@ -50,6 +50,12 @@ namespace RougeLike.Character
 
         _currentState = value;
       }
+    }
+
+    public float Health 
+    {
+      get { return _health; }
+      set { _health = value; }
     }
 
     private void OnSwitchState(CharacterState oldState, CharacterState newState)
@@ -113,7 +119,7 @@ namespace RougeLike.Character
       
       if (Health <= 0)
       {
-        ; // TODO: Switch to DEAD state
+        CurrentState = CharacterState.Dead;
         ; // TODO: Give XP to shooter
       }
     }
