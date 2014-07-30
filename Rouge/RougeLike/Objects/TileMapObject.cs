@@ -333,6 +333,9 @@ namespace RougeLike.Objects
       if (!mapRect.IsInside(point))
         return false;
 
+      if (!mapRect.IsInside(point + movement))
+        return false;
+
       bool result = false;
 
       if (movement.X != 0)

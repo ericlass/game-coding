@@ -73,6 +73,7 @@
     <Compile Include="Character\WeaponDefinition.cs" />
     <Compile Include="Character\WeaponEffect.cs" />
     <Compile Include="Character\WeaponType.cs" />
+    <Compile Include="ContentCache.cs" />
     <Compile Include="Controller\SimpleAIController.cs" />
     <Compile Include="Animation.cs" />
     <Compile Include="Attributes\AttributeMap.cs" />

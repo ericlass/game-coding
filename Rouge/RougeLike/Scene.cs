@@ -55,8 +55,8 @@ namespace RougeLike
       foreach (GameObjectBase go in _gameObjects)
         go.Update(dt);
 
-      foreach (IGameSystem system in _gameSystems)
-        system.Update(dt);
+      for (int i = _gameSystems.Count - 1; i >= 0; i--)
+        _gameSystems[i].Update(dt);
     }
 
     public void Render()

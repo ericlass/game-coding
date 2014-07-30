@@ -114,6 +114,25 @@ namespace RougeLike.Systems
           break;
       }
 
+      HandleShooting();
+
+      Vector2f scale = _playerObject.Scale;
+      scale.X = _direction;
+      _playerObject.Scale = scale;
+    }
+
+
+    public void Finish()
+    {
+      _playerObject = null;
+    }
+
+    /// <summary>
+    /// Handles shooting of projectile through weapons.
+    /// </summary>
+    private void HandleShooting()
+    {
+      //Can only shoot if not frozen
       if (_playerObject.CurrentState != CharacterState.Frozen)
       {
         if (_playerObject.EquipedWeapon != null && _controller.DoShoot(_playerObject))
@@ -140,15 +159,6 @@ namespace RougeLike.Systems
           GameData.Instance.ActiveScene.GameObjects.Add(proj);
         }
       }
-
-      Vector2f scale = _playerObject.Scale;
-      scale.X = _direction;
-      _playerObject.Scale = scale;
-    }
-
-    public void Finish()
-    {
-      _playerObject = null;
     }
 
     /// <summary>
@@ -380,7 +390,10 @@ namespace RougeLike.Systems
     {
       _deadTime -= dt;
       if (_deadTime <= 0)
+      {
         GameData.Instance.ActiveScene.GameObjects.Remove(_playerObject);
+        GameData.Instance.ActiveScene.GameSystems.Remove(this);
+      }
     }
 
     private Vector2f WalkPlayer(Rectangle2f hitbox, float dx)

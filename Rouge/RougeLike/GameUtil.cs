@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using OkuBase;
 using OkuBase.Graphics;
+using OkuBase.Audio;
 using JSONator;
 
 namespace RougeLike
@@ -49,6 +50,14 @@ namespace RougeLike
       Image image = OkuManager.Instance.Graphics.NewImage(data);
 
       return image;
+    }
+
+    public static Source LoadSound(string filename)
+    {
+      if (Path.GetExtension(filename) == "")
+        filename += ".wav";
+
+      return null;
     }
 
     public static List<ImageBase> LoadSpriteSheet(string fileName, int spriteWidth, int spriteHeight)
