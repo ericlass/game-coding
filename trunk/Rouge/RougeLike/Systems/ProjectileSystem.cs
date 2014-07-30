@@ -33,11 +33,22 @@ namespace RougeLike.Systems
       for (int i = projectileObjects.Count - 1; i >= 0; i--)
       {
         ProjectileObject proj = projectileObjects[i] as ProjectileObject;
+        proj.Life -= dt;
+
+        if (proj.Life <= 0)
+        {
+          GameData.Instance.ActiveScene.GameObjects.Remove(proj);
+          proj.Finish();
+          continue;
+        }
 
         if (proj.Hit)
         {
           if (proj.Animation.Finished)
+          {
             GameData.Instance.ActiveScene.GameObjects.Remove(proj);
+            proj.Finish();
+          }
           continue;
         }
 
@@ -48,6 +59,8 @@ namespace RougeLike.Systems
         Vector2f maxMove = Vector2f.Zero;
         if (tileMap.CollideMovingPoint(proj.Position, movement, out maxMove))
         {
+          GameUtil.ReleaseAnimation(proj.Animation);
+
           proj.Animation = GameUtil.LoadAnimation(weapon.HitAnim);
           proj.Hit = true;
         }

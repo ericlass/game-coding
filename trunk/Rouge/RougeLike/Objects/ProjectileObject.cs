@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OkuBase.Geometry;
+using OkuBase.Graphics;
 
 namespace RougeLike.Objects
 {
@@ -11,6 +12,7 @@ namespace RougeLike.Objects
     private Vector2f _direction = Vector2f.Zero;
     private Animation _animation = null;
     private bool _hit = false;
+    private float _life = 1.5f;
 
     public override string ObjectType
     {
@@ -62,6 +64,16 @@ namespace RougeLike.Objects
       set { _hit = value; }
     }
 
+    /// <summary>
+    /// Gets or sets the rest of life time the projectile has.
+    /// This is used to kill projectiles that hit nothing and would travel forever.
+    /// </summary>
+    public float Life
+    {
+      get { return _life; }
+      set { _life = value; }
+    }
+
     public override void Init()
     {
     }
@@ -79,6 +91,8 @@ namespace RougeLike.Objects
 
     public override void Finish()
     {
+      if (_animation != null)
+        GameUtil.ReleaseAnimation(_animation);
     }
 
     protected override StringPairMap DoSave()
