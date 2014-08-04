@@ -15,7 +15,9 @@ namespace RougeLike
   {
     private Dictionary<string, Animation> _animations = new Dictionary<string, Animation>();
     private Dictionary<string, Image> _images = new Dictionary<string, Image>();
-    private Dictionary<string, Source> _sources = new Dictionary<string, Source>();
+
+    private Dictionary<string, Sound> _sounds = new Dictionary<string, Sound>();
+    private Dictionary<string, List<Source>> _sources = new Dictionary<string, List<Source>>();
 
     public ContentCache()
     {
@@ -36,10 +38,17 @@ namespace RougeLike
       _images.Clear();
 
       //Release sounds
-      foreach (Source source in _sources.Values)
-        OkuManager.Instance.Audio.ReleaseSound(source);
-
+      foreach (List<Source> sources in _sources.Values)
+      {
+        foreach (Source source in sources)
+        {
+          OkuManager.Instance.Audio.ReleaseSound(source);
+        }
+      }
       _sources.Clear();
+
+      //Sounds do not have to be released
+      _sounds.Clear();
     }
 
     /// <summary>
@@ -54,20 +63,30 @@ namespace RougeLike
         animName += ".json";
 
       if (_animations.ContainsKey(animName))
-        return _animations[animName];
+      {
+        Animation source = _animations[animName];
+        Animation result = new Animation();
+        result.Frames = new List<ImageBase>(source.Frames);
+        result.FrameTime = source.FrameTime;
+        result.Loop = source.Loop;
+        return result;
+      }
+      else
+      {
 
-      JSONObjectValue root = GameUtil.ParseJsonFile(Path.Combine(".\\Content\\Animations", animName));
+        JSONObjectValue root = GameUtil.ParseJsonFile(Path.Combine(".\\Content\\Animations", animName));
 
-      Animation result = new Animation();
-      result.Loop = root.GetBool("loop").Value;
-      result.FrameTime = (int)root.GetNumber("frametime").Value;
+        Animation result = new Animation();
+        result.Loop = root.GetBool("loop").Value;
+        result.FrameTime = (int)root.GetNumber("frametime").Value;
 
-      foreach (JSONStringValue frame in root.GetArray("frames"))
-        result.Frames.Add(GetImage(frame.Value));
+        foreach (JSONStringValue frame in root.GetArray("frames"))
+          result.Frames.Add(GetImage(frame.Value));
 
-      _animations.Add(animName, result);
+        _animations.Add(animName, result);
 
-      return result;
+        return result;
+      }
     }
 
     /// <summary>
@@ -96,12 +115,28 @@ namespace RougeLike
       return image;
     }
 
+    /// <summary>
+    /// Gets a new sound source for the sound with the given name.
+    /// </summary>
+    /// <param name="filename">The name of the sound, either with or without the ".wav" extension.</param>
+    /// <returns>A new source for the sound with given name.</returns>
     public Source GetSound(string filename)
     {
       if (Path.GetExtension(filename) == "")
         filename += ".wav";
 
-      return null;
+      Sound sound = null;
+      if (_sounds.ContainsKey(filename))
+        sound = _sounds[filename];
+      else
+        sound = Sound.FromFile(Path.Combine(".\\Content\\Sounds", filename));
+
+      Source result = OkuManager.Instance.Audio.NewSource(sound);
+      if (!_sources.ContainsKey(filename))
+        _sources.Add(filename, new List<Source>());
+      _sources[filename].Add(result);
+
+      return result;
     }
 
   }

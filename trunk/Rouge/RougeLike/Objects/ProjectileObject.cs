@@ -91,8 +91,6 @@ namespace RougeLike.Objects
 
     public override void Finish()
     {
-      if (_animation != null)
-        GameUtil.ReleaseAnimation(_animation);
     }
 
     protected override StringPairMap DoSave()

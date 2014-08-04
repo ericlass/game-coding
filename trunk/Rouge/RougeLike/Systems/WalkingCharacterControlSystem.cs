@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using OkuBase;
 using OkuBase.Geometry;
+using OkuBase.Audio;
 using RougeLike.Attributes;
 using RougeLike.Objects;
 using RougeLike.Character;
@@ -74,7 +75,7 @@ namespace RougeLike.Systems
           break;
 
         case CharacterState.Dead:
-          _deadTime = 3;
+          _deadTime = 30;
           break;
 
         default:
@@ -147,16 +148,19 @@ namespace RougeLike.Systems
           }
 
           ProjectileObject proj = new ProjectileObject();
-          proj.Direction = new Vector2f(_playerObject.Scale.X, 0); // TODO: This is a quick and dirty implementation
+          proj.Direction = new Vector2f(_playerObject.Scale.X, 0);
           proj.Position = _playerObject.Position;
           proj.WeaponId = _playerObject.EquipedWeapon;
           proj.SourceId = _playerId;
           proj.GroupIndex = 10;
           proj.Id = "projectile_" + System.Environment.TickCount;
           proj.ZIndex = _playerObject.ZIndex;
-          proj.Animation = GameUtil.LoadAnimation(weapon.ProjectileAnim);
+          proj.Animation = GameData.Instance.ActiveScene.Content.GetAnimation(weapon.ProjectileAnim);
 
           GameData.Instance.ActiveScene.GameObjects.Add(proj);
+
+          Source source = GameData.Instance.ActiveScene.Content.GetSound(weapon.Sound);
+          OkuManager.Instance.Audio.Play(source);
         }
       }
     }

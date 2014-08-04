@@ -18,7 +18,7 @@ namespace RougeLike
       get { return _random; }
     }
 
-    public static Animation LoadAnimation(string animName)
+    private static Animation LoadAnimation(string animName)
     {
       //Add extension if it was not given
       if (Path.GetExtension(animName) == "")
@@ -36,7 +36,7 @@ namespace RougeLike
       return result;
     }
 
-    public static Image LoadImage(string fileName)
+    private static Image LoadImage(string fileName)
     {
       //Add extension if it was not given
       if (Path.GetExtension(fileName) == "")
@@ -115,7 +115,7 @@ namespace RougeLike
       return result;
     }
 
-    public static void ReleaseAnimation(Animation anim)
+    private static void ReleaseAnimation(Animation anim)
     {
       foreach (ImageBase image in anim.Frames)
       {

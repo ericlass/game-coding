@@ -67,13 +67,11 @@ namespace RougeLike.Character
     public override void Init()
     {
       foreach (string animName in StateAnimations.Values)
-        _animations.Add(animName, GameUtil.LoadAnimation(animName));
+        _animations.Add(animName, GameData.Instance.ActiveScene.Content.GetAnimation(animName));
     }
 
     public override void Finish()
     {
-      foreach (Animation anim in _animations.Values)
-        GameUtil.ReleaseAnimation(anim);
     }
 
 

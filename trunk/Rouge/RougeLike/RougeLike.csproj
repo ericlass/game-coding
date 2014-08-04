@@ -235,6 +235,9 @@
     <Content Include="Content\Graphics\weapon_laser_projectile.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Sounds\weapon_laser_shoot.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="lib\JSONator.dll" />
   </ItemGroup>
   <ItemGroup />
