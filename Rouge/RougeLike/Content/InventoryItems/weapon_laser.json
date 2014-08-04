@@ -17,5 +17,5 @@
   "projectileanim" : "weapon_laser_projectile",
   "hitanim" : "weapon_laser_hit",
   "trailanim" : "",
-  "sound" : "weapon_laser_fire"
+  "sound" : "weapon_laser_shoot"
 }

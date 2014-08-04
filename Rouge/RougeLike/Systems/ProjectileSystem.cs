@@ -59,9 +59,7 @@ namespace RougeLike.Systems
         Vector2f maxMove = Vector2f.Zero;
         if (tileMap.CollideMovingPoint(proj.Position, movement, out maxMove))
         {
-          GameUtil.ReleaseAnimation(proj.Animation);
-
-          proj.Animation = GameUtil.LoadAnimation(weapon.HitAnim);
+          proj.Animation = GameData.Instance.ActiveScene.Content.GetAnimation(weapon.HitAnim);
           proj.Hit = true;
         }
         else 
@@ -166,8 +164,7 @@ namespace RougeLike.Systems
             if (IntersectionTests.Rectangles(projRect.Min, projRect.Max, charRect.Min, charRect.Max))
             {
               chara.Hit(proj);
-              //GameData.Instance.ActiveScene.GameObjects.Remove(proj);
-              proj.Animation = GameUtil.LoadAnimation(weapon.HitAnim);
+              proj.Animation = GameData.Instance.ActiveScene.Content.GetAnimation(weapon.HitAnim);
               proj.Hit = true;
             }
           }

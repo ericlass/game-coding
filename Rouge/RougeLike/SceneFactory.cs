@@ -37,6 +37,8 @@ namespace RougeLike
       int width = 2000;
       int height = 112;
 
+      Scene scene = new Scene();
+
       Biome biome = BiomeParameters.Instance["mountain"];
 
       if (biome == null)
@@ -45,14 +47,13 @@ namespace RougeLike
       TileGeneratorParameters parameters = biome.GeneratorParameters;
 
       Tile[,] tiles = TileMapGenerator.Instance.GenerateTiles(parameters, width, height);
-      ImageBase tileImages = GameUtil.LoadImage(biome.Tileset);
+      ImageBase tileImages = scene.Content.GetImage(biome.Tileset);
 
       TileMapObject tileMap = new TileMapObject(new TileData(tiles, tileImages, 16, 16));
       tileMap.Id = "tilemap";
 
       GameObjectBase mario = CreatePlayerEntity();
       
-      Scene scene = new Scene();
       scene.GameObjects.Add(tileMap);
       scene.GameObjects.Add(mario);
 

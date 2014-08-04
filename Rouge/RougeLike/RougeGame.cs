@@ -111,7 +111,7 @@ namespace RougeLike
       settings.Graphics.BackgroundColor = new Color(111, 161, 231);
       //settings.Graphics.BackgroundColor = Color.Magenta;
 
-      settings.Audio.DriverName = "null";
+      settings.Audio.DriverName = "openal";
 
       return settings;
     }

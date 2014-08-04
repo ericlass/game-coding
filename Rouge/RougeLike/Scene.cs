@@ -13,6 +13,7 @@ namespace RougeLike
     private string _name = "";
     private GameObjectList _gameObjects = new GameObjectList();
     private GameSystemList _gameSystems = new GameSystemList();
+    private ContentCache _content = new ContentCache();
 
     public GameObjectList GameObjects
     {
@@ -30,6 +31,11 @@ namespace RougeLike
     {
       get { return _gameSystems; }
       set { _gameSystems = value; }
+    }
+
+    public ContentCache Content
+    {
+      get { return _content; }
     }
 
     public IAttributeValue GetObjectAttribute(string objectId, string attributeName)
@@ -90,6 +96,8 @@ namespace RougeLike
 
       foreach (IGameSystem system in _gameSystems)
         system.Finish();
+
+      _content.Clear();
     }
 
     public void Load(StringPairMap data)
