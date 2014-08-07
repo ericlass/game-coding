@@ -149,9 +149,6 @@
     <None Include="Content\Animations\weapon_laser_projectile.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Graphics\square.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Content\InventoryItems\armor_default.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -170,11 +167,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\Graphics\tiletest.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Content\Graphics\walls_bigger.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -182,9 +174,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Content\Graphics\walls_simple.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Content\Graphics\simple_tiles.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Content\Graphics\grass_tile.png">
@@ -215,9 +204,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="Content\Graphics\gumba_dead.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Graphics\simple_shot.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\weapon_laser_hit_01.png">
