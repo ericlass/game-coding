@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OkuBase.Utils;
 
 namespace RougeLike.Tiles
 {
@@ -44,7 +45,8 @@ namespace RougeLike.Tiles
         }
       }
 
-      Random rand = new Random(parameters.Seed);
+      //Generate platforms (ugly, but better to walk)
+      /*Random rand = new Random(parameters.Seed);
       int pos = 0;
       float lastHeight = 0;
       while (pos < width - 1)
@@ -68,27 +70,50 @@ namespace RougeLike.Tiles
 
         pos = right;
         lastHeight = platformHeight;
-      }
+      }*/
 
       // Generate terrain from noise as described in GPU Gems 3
-      /*for (int y = 0; y < height; y++)
+      const int sampleSize = 8;
+      for (int y = 0; y < height; y++)
       {
         for (int x = 0; x < width; x++)
         {
-          float density = -(y - (height / 2.0f));
-
-          //density += noise.Noise(x, y, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude;
-
+          //Default noise, similar to GPU Gems
+          /*float density = -(y - (height / 2.0f));
           density += noise.Noise(x * 1.96f, y * 1.96f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude * 0.51f;
-          density += noise.Noise(x * 1.01f, y * 1.01f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude;
+          density += noise.Noise(x * 1.01f, y * 1.01f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude;*/
 
-          Tile tile = tiles[x, y]
+          int left = x / sampleSize;
+          int right = x + sampleSize;
+          int bottom = y / sampleSize;
+          int top = y + sampleSize;
+
+          float densityLeftBottom = -(y - (height / 2.0f));
+          densityLeftBottom += noise.Noise(left * 1.96f, y * 1.96f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude * 0.51f;
+          densityLeftBottom += noise.Noise(left * 1.01f, y * 1.01f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude;
+
+          float densityLeftTop = -(y - (height / 2.0f));
+          densityLeftTop += noise.Noise(right * 1.96f, y * 1.96f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude * 0.51f;
+          densityLeftTop += noise.Noise(right * 1.01f, y * 1.01f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude;
+
+          float densityRightTop = -(bottom - (height / 2.0f));
+          densityRightTop += noise.Noise(x * 1.96f, bottom * 1.96f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude * 0.51f;
+          densityRightTop += noise.Noise(x * 1.01f, bottom * 1.01f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude;
+
+          float densityRightBottom = -(top - (height / 2.0f));
+          densityRightBottom += noise.Noise(x * 1.96f, top * 1.96f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude * 0.51f;
+          densityRightBottom += noise.Noise(x * 1.01f, top * 1.01f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude;
+
+          float ratioX = (x - left) / (float)sampleSize;
+          float density = OkuMath.InterpolateLinear(OkuMath.InterpolateLinear(densityLeftTop, densityRightTop, ratioX), OkuMath.InterpolateLinear(densityLeftBottom, densityRightBottom, ratioX), (y - bottom) / (float)sampleSize);
+
+          Tile tile = tiles[x, y];
           tile.ImageIndex = 0;
 
           if (density > 0.0f)
             tile.TileType = TileType.Filled;
         }
-      }*/     
+      }
 
       // Create slope tiles
       /*for (int y = 1; y < height - 1; y++)
@@ -124,14 +149,37 @@ namespace RougeLike.Tiles
               tile.TileType = TileType.NorthWest;
               tile.ImageIndex = 4;
             }
-            else if (leftFilled && rightFilled && !upFilled && downFilled) // Fills single tile holes
-            {
-              tile.TileType = TileType.Filled;
-            }
 
           }
         }
       }*/
+
+      // Fills single tile holes
+      for (int y = 1; y < height - 1; y++)
+      {
+        for (int x = 1; x < width - 1; x++)
+        {
+          Tile tile = tiles[x, y];
+
+          bool upFilled = tiles[x, y + 1].TileType == TileType.Filled;
+          bool downFilled = tiles[x, y - 1].TileType == TileType.Filled;
+          bool leftFilled = tiles[x - 1, y].TileType == TileType.Filled;
+          bool rightFilled = tiles[x + 1, y].TileType == TileType.Filled;
+
+          if (tile.TileType == TileType.Empty)
+          {
+            if (leftFilled && rightFilled && !upFilled && downFilled) 
+              tile.TileType = TileType.Filled;
+          }
+
+          if (tile.TileType == TileType.Filled)
+          {
+            if (!leftFilled && !rightFilled && !upFilled && downFilled)
+              tile.TileType = TileType.Empty;
+          }
+
+        }
+      }
 
       return tiles;
     }
