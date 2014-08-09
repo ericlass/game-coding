@@ -34,7 +34,7 @@ namespace RougeLike
 
     public SceneList GenerateScene()
     {
-      int width = 2000;
+      int width = 1008;
       int height = 112;
 
       Scene scene = new Scene();
@@ -51,6 +51,7 @@ namespace RougeLike
 
       TileMapObject tileMap = new TileMapObject(new TileData(tiles, tileImages, 16, 16));
       tileMap.Id = "tilemap";
+      //tileMap.Scale = new Vector2f(0.0625f, 0.0625f);
 
       GameObjectBase mario = CreatePlayerEntity();
       
@@ -59,7 +60,7 @@ namespace RougeLike
 
       WalkingCharacterControlSystem system = null;
 
-      for (int i = 0; i < 1; i++)
+      for (int i = 0; i < 10; i++)
       {
         GameObjectBase enemy = CreateEnemyEntity("enemy_" + i);
         scene.GameObjects.Add(enemy);
@@ -114,7 +115,7 @@ namespace RougeLike
       enemy.Position = new Vector2f(_rand.Next(-500, 500), 800);
       enemy.HitBox = new Rectangle2f(-4, -8, 8, 13);
       enemy.GroupIndex = 20;
-      enemy.Health = 50;
+      enemy.Health = 10;
 
       StatePropertyMap animMap = new StatePropertyMap();
       animMap.Add(CharacterState.Idle, "enemy_idle");

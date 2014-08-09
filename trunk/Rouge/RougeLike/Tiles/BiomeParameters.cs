@@ -31,9 +31,9 @@ namespace RougeLike.Tiles
         GeneratorParameters = new TileGeneratorParameters()
         {
           Amplitude = 40,
-          DetailLevel = 6,
+          DetailLevel = 4,
           DetailSize = 200,
-          Seed = 922745886
+          Seed = 622745886
         }
       };
       _biomes.Add(MountainBiome.Id, MountainBiome);

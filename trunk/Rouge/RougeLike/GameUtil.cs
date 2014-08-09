@@ -155,6 +155,11 @@ namespace RougeLike
       return Math.Min(max, Math.Max(min, value));
     }
 
+    public static int Clamp(int value, int min, int max)
+    {
+      return Math.Min(max, Math.Max(min, value));
+    }
+
     /// <summary>
     /// Gets all types from the given assembly that implement the given interface type and are not abtract.
     /// </summary>
