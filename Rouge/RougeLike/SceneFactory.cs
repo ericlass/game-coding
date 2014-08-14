@@ -45,6 +45,7 @@ namespace RougeLike
         throw new OkuBase.OkuException("There is no biome with the id \"\"!");
 
       TileGeneratorParameters parameters = biome.GeneratorParameters;
+      parameters.Seed = GameData.Instance.WorldSeed;
 
       Tile[,] tiles = TileMapGenerator.Instance.GenerateTiles(parameters, width, height);
       ImageBase tileImages = scene.Content.GetImage(biome.Tileset);
@@ -71,7 +72,7 @@ namespace RougeLike
       }
 
       system = new WalkingCharacterControlSystem(mario.Id, new PlayerController());
-      system.MaxWalkSpeed = 300;
+      system.MaxWalkSpeed = 250;
       scene.GameSystems.Add(system);
 
       ProjectileSystem projSystem = new ProjectileSystem(10, 20);

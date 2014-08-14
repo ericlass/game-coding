@@ -63,7 +63,7 @@ namespace RougeLike.Tiles
         }
       }
 
-      // Fills single tile holes
+      // Post processing
       for (int y = 1; y < height - 1; y++)
       {
         for (int x = 1; x < width - 1; x++)
@@ -75,18 +75,21 @@ namespace RougeLike.Tiles
           bool leftFilled = tiles[x - 1, y].TileType == TileType.Filled;
           bool rightFilled = tiles[x + 1, y].TileType == TileType.Filled;
 
+          // Fill single tile holes
           if (tile.TileType == TileType.Empty)
           {
             if (leftFilled && rightFilled && !upFilled && downFilled)
               tile.TileType = TileType.Filled;
           }
 
+          // Remove single tile pins
           if (tile.TileType == TileType.Filled)
           {
             if (!leftFilled && !rightFilled && !upFilled && downFilled)
               tile.TileType = TileType.Empty;
           }
 
+          // Set floor tiles
           if (tile.TileType == TileType.Filled)
           {
             if (!upFilled)
