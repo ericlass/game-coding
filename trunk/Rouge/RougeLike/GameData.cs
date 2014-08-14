@@ -33,6 +33,14 @@ namespace RougeLike
     private AttributeMap _attributes = new AttributeMap();
     private Dictionary<string, InventoryItemDefinition> _inventoryItems = null;
 
+    private int _worldSeed = 19238476;
+
+    public int WorldSeed
+    {
+      get { return _worldSeed; }
+      set { _worldSeed = value; }
+    }
+
     public bool DebugDraw
     {
       get { return _debugDraw; }

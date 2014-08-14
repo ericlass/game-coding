@@ -63,7 +63,7 @@ namespace RougeLike.Systems
           break;
 
         case CharacterState.Jumping:
-          _fallSpeed = 800;
+          _fallSpeed = 600;
           break;
 
         case CharacterState.Falling:
