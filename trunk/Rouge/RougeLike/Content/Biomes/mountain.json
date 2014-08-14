@@ -1,0 +1,7 @@
+﻿{
+  "id" : "mountain",
+  "tileset" : "mountain_tile.png",
+  "amplitude" : 40,
+  "detaillevel" : 4,
+  "detailsize" : 200
+}

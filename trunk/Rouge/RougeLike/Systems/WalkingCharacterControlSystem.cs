@@ -316,6 +316,7 @@ namespace RougeLike.Systems
       }
 
       pos += dv;
+
       _fallSpeed -= 1500 * dt;
       _playerObject.Position = pos;
 
