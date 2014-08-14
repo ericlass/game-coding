@@ -1,0 +1,7 @@
+﻿{
+  "id" : "ice",
+  "tileset" : "ice_tile.png",
+  "amplitude" : 20,
+  "detaillevel" : 3,
+  "detailsize" : 250
+}

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
+using JSONator;
 
 namespace RougeLike.Tiles
 {
@@ -14,7 +14,10 @@ namespace RougeLike.Tiles
       get
       {
         if (_instance == null)
+        {
           _instance = new BiomeParameters();
+          _instance.Init();
+        }
 
         return _instance;
       }
@@ -23,48 +26,25 @@ namespace RougeLike.Tiles
     private Dictionary<string, Biome> _biomes = new Dictionary<string, Biome>();
 
     private BiomeParameters()
+    {      
+    }
+
+    private void Init()
     {
-      Biome MountainBiome = new Biome()
+      string[] files = Directory.GetFiles(".\\Content\\Biomes", "*.json");
+      foreach (string fileName in files)
       {
-        Id = "mountain",
-        Tileset = "mountain_tile.png",
-        GeneratorParameters = new TileGeneratorParameters()
-        {
-          Amplitude = 40,
-          DetailLevel = 4,
-          DetailSize = 200,
-          Seed = 622745886
-        }
-      };
-      _biomes.Add(MountainBiome.Id, MountainBiome);
+        JSONObjectValue json = GameUtil.ParseJsonFile(fileName);
+        Biome biome = new Biome();
+        biome.Id = json.GetString("id").Value;
+        biome.Tileset = json.GetString("tileset").Value;
+        biome.GeneratorParameters = new TileGeneratorParameters();
+        biome.GeneratorParameters.Amplitude = (int)json.GetNumber("amplitude").Value;
+        biome.GeneratorParameters.DetailLevel = (int)json.GetNumber("detaillevel").Value;
+        biome.GeneratorParameters.DetailSize = (int)json.GetNumber("detailsize").Value;
 
-      Biome GrassLandBiome = new Biome()
-      {
-        Id = "grassland",
-        Tileset = "grass_tile.png",
-        GeneratorParameters = new TileGeneratorParameters()
-        {
-          Amplitude = 15,
-          DetailLevel = 3,
-          DetailSize = 200,
-          Seed = 6846532
-        }
-      };
-      _biomes.Add(GrassLandBiome.Id, GrassLandBiome);
-
-      Biome DesertBiome = new Biome()
-      {
-        Id = "desert",
-        Tileset = "desert_tile.png",
-        GeneratorParameters = new TileGeneratorParameters()
-        {
-          Amplitude = 20,
-          DetailLevel = 2,
-          DetailSize = 250,
-          Seed = 265549
-        }
-      };
-      _biomes.Add(DesertBiome.Id, DesertBiome);
+        _biomes.Add(biome.Id, biome);
+      }
     }
 
     public Biome this[string id]

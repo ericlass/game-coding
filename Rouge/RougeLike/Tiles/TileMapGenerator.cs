@@ -45,7 +45,6 @@ namespace RougeLike.Tiles
         }
       }
 
-      //Generate platforms (ugly, but better to walk)
       // Generate terrain from noise as described in GPU Gems 3
       for (int y = 0; y < height; y++)
       {
@@ -88,6 +87,12 @@ namespace RougeLike.Tiles
               tile.TileType = TileType.Empty;
           }
 
+          if (tile.TileType == TileType.Filled)
+          {
+            if (!upFilled)
+              tile.ImageIndex = 1;
+          }
+
         }
       }
 
@@ -108,22 +113,22 @@ namespace RougeLike.Tiles
             if (rightFilled && downFilled && !leftFilled && !upFilled)
             {
               tile.TileType = TileType.SouthEast;
-              tile.ImageIndex = 1;
+              tile.ImageIndex = 2;
             }
             else if (!rightFilled && downFilled && leftFilled && !upFilled)
             {
               tile.TileType = TileType.SouthWest;
-              tile.ImageIndex = 2;
+              tile.ImageIndex = 3;
             }
             else if (rightFilled && !downFilled && !leftFilled && upFilled)
             {
               tile.TileType = TileType.NorthEast;
-              tile.ImageIndex = 3;
+              tile.ImageIndex = 4;
             }
             else if (!rightFilled && !downFilled && leftFilled && upFilled)
             {
               tile.TileType = TileType.NorthWest;
-              tile.ImageIndex = 4;
+              tile.ImageIndex = 5;
             }
 
           }
