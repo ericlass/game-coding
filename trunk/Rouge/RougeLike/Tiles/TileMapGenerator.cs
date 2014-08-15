@@ -134,6 +134,7 @@ namespace RougeLike.Tiles
         }
       }
 
+      #region Smooth base plate sides
       // Smooth left side of base plate
       int height = 0;
       for (int y = 0; y < tiles.GetLength(1); y++)
@@ -235,7 +236,42 @@ namespace RougeLike.Tiles
           colHeight += increment;
         }
       }
+      #endregion
 
+      if (buildingType == BuildingType.Tower)
+      {
+        int firstFloorHeight = 20;
+        DrawRectangle(tiles, left, right, averageHeight , averageHeight + firstFloorHeight, TileType.Filled, 0);
+
+        int neckWidth = (baseWidth / 4) * 2;
+        int neckHeight = 100;
+        DrawRectangle(tiles, center - (neckWidth / 2), center + (neckWidth / 2), averageHeight + firstFloorHeight, averageHeight + firstFloorHeight + neckHeight, TileType.Filled, 0);
+      }
+    }
+
+    public static void DrawRectangle(Tile[,] tiles, int left, int right, int bottom, int top, TileType type, int image)
+    {
+      for (int x = left; x <= right; x++)
+      {
+        Tile tile = tiles[x, bottom];
+        tile.TileType = type;
+        tile.ImageIndex = image;
+
+        tile = tiles[x, top];
+        tile.TileType = type;
+        tile.ImageIndex = image;
+      }
+
+      for (int y = bottom; y <= top; y++)
+      {
+        Tile tile = tiles[left, y];
+        tile.TileType = type;
+        tile.ImageIndex = image;
+
+        tile = tiles[right, y];
+        tile.TileType = type;
+        tile.ImageIndex = image;
+      }
     }
 
     /// <summary>

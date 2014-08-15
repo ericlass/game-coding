@@ -34,8 +34,8 @@ namespace RougeLike
 
     public SceneList GenerateScene()
     {
-      int width = 1008;
-      int height = 112;
+      int width = 1024;
+      int height = 512;
 
       Scene scene = new Scene();
 
@@ -52,7 +52,7 @@ namespace RougeLike
 
       TileMapObject tileMap = new TileMapObject(new TileData(tiles, tileImages, 16, 16));
       tileMap.Id = "tilemap";
-      //tileMap.Scale = new Vector2f(0.0625f, 0.0625f);
+      tileMap.Scale = new Vector2f(0.0625f, 0.0625f);
 
       GameObjectBase mario = CreatePlayerEntity();
       
