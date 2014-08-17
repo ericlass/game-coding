@@ -238,18 +238,63 @@ namespace RougeLike.Tiles
       }
       #endregion
 
+      baseWidth = baseWidth - 16;
+      left += 8;
+      right -= 8;
+
+      int doorHeight = 3;
+
       if (buildingType == BuildingType.Tower)
       {
+        // Base room
         int firstFloorHeight = 20;
         DrawRectangle(tiles, left, right, averageHeight , averageHeight + firstFloorHeight, TileType.Filled, 0);
+        // Doors
+        DrawLine(left, averageHeight + 1, left, averageHeight + doorHeight + 1, tiles, TileType.Empty, 0);
+        DrawLine(right, averageHeight + 1, right, averageHeight + doorHeight + 1, tiles, TileType.Empty, 0);
 
-        int neckWidth = (baseWidth / 4) * 2;
+        // Neck
+        int neckWidth = (baseWidth / 6) * 2;
         int neckHeight = 100;
-        DrawRectangle(tiles, center - (neckWidth / 2), center + (neckWidth / 2), averageHeight + firstFloorHeight, averageHeight + firstFloorHeight + neckHeight, TileType.Filled, 0);
+        int neckLeft = center - (neckWidth / 2);
+        int neckRight = center + (neckWidth / 2);
+        int neckBottom = averageHeight + 1;
+        int neckTop = neckBottom + neckHeight;
+
+        // Body
+        DrawLine(neckLeft, neckTop, neckLeft, neckBottom + doorHeight, tiles, TileType.Filled, 0);
+        DrawLine(neckRight, neckTop, neckRight, neckBottom + doorHeight, tiles, TileType.Filled, 0);
+        DrawLine(neckLeft + 1, averageHeight + firstFloorHeight, neckRight - 1, averageHeight + firstFloorHeight, tiles, TileType.Empty, 0);
+
+        // "Stairs"
+        int stairHeight = 8;
+        int stairWidth = 12;
+        int numStairs = neckHeight / stairHeight;
+        int sy = neckBottom + doorHeight + 1;
+        for (int i = 0; i < numStairs; i++)
+        {
+          int sl, sr;
+
+          if (i % 2 == 0)
+          {
+            sl = neckRight - stairWidth;
+            sr = neckRight - 1;
+          }
+          else
+          {
+            sl = neckLeft + 1;
+            sr = neckLeft + stairWidth;
+          }
+
+          DrawLine(sl, sy, sr, sy, tiles, TileType.Filled, 0);
+          sy += stairHeight;
+        }
+
+        // Top
       }
     }
 
-    public static void DrawRectangle(Tile[,] tiles, int left, int right, int bottom, int top, TileType type, int image)
+    private static void DrawRectangle(Tile[,] tiles, int left, int right, int bottom, int top, TileType type, int image)
     {
       for (int x = left; x <= right; x++)
       {
@@ -271,6 +316,36 @@ namespace RougeLike.Tiles
         tile = tiles[right, y];
         tile.TileType = type;
         tile.ImageIndex = image;
+      }
+    }
+
+    private static void DrawLine(int x0, int y0, int x1, int y1, Tile[,] tiles, TileType type, int image)
+    {
+      int dx = Math.Abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+      int dy = -Math.Abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+      int err = dx + dy, e2;
+
+      while (true)
+      {
+        Tile tile = tiles[x0, y0];
+        tile.TileType = type;
+        tile.ImageIndex = image;
+
+        if (x0 == x1 && y0 == y1)
+          break;
+
+        e2 = 2 * err;
+        if (e2 > dy)
+        {
+          err += dy;
+          x0 += sx; 
+        }
+
+        if (e2 < dx)
+        {
+          err += dx;
+          y0 += sy;
+        }
       }
     }
 
