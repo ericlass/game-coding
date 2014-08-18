@@ -633,7 +633,7 @@ namespace RougeLike.Objects
         for (int x = 0; x < _tileData.Width; x++)
         {
           Tile tile = _tileData[x, y];
-          if (tile.TileType != TileType.Empty)
+          if (tile.ImageIndex >= 0)
           {
             Rectangle2f tileRect = GetTileRect(x, y);
             Rectangle2f texCoord = _tileData.GetTileTexCoords(x, y);
