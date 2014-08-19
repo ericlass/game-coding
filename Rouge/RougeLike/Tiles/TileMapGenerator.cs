@@ -25,12 +25,16 @@ namespace RougeLike.Tiles
     {
     }
 
-    public Tile[,] GenerateTiles(TileGeneratorParameters parameters, int width, int height)
+    public TileGeneratorResult GenerateTiles(TileGeneratorParameters parameters, int width, int height)
     {
       if (width % 16 != 0 || height % 16 != 0)
         throw new OkuBase.OkuException("Tilemap width and height must be a multiple of 16!");
 
       Tile[,] tiles = new Tile[width, height];
+
+      TileGeneratorResult result = new TileGeneratorResult();
+      result.Tiles = tiles;
+      result.Doors = new List<Vector2i>();
 
       //Fill tile map with empty tiles first
       for (int y = 0; y < height; y++)
@@ -51,7 +55,7 @@ namespace RougeLike.Tiles
         for (int x = 0; x < width; x++)
         {
           //Default noise, similar to GPU Gems
-          float density = -(y - (height / 2.0f));
+          float density = -(y - (height / 4.0f));
           density += noise.Noise(x * 1.96f, y * 1.96f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude * 0.51f;
           density += noise.Noise(x * 1.01f, y * 1.01f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude;
 
@@ -64,15 +68,17 @@ namespace RougeLike.Tiles
         }
       }
 
-      CreateBuilding(tiles, parameters.Seed);
+      CreateBuilding(result, parameters.Seed);
       //CreateSlopTiles(tiles);
       PostProcess(tiles);      
 
-      return tiles;
+      return result;
     }
 
-    private static void CreateBuilding(Tile[,] tiles, int seed)
+    private static void CreateBuilding(TileGeneratorResult results, int seed)
     {
+      Tile[,] tiles = results.Tiles;
+
       Random rand = new Random(seed);
       int type = (rand.Next(1000) % 3) + 1;
       BuildingType buildingType = (BuildingType)type;
@@ -271,6 +277,8 @@ namespace RougeLike.Tiles
         // Doors
         DrawLine(left, averageHeight + 1, left, averageHeight + doorHeight, tiles, TileType.Empty, bgWallImage);
         DrawLine(right, averageHeight + 1, right, averageHeight + doorHeight, tiles, TileType.Empty, bgWallImage);
+        results.Doors.Add(new Vector2i(left, averageHeight + 1));
+        results.Doors.Add(new Vector2i(right, averageHeight + 1));
 
         // Neck
         int neckWidth = (baseWidth / 6) * 2;
@@ -285,10 +293,13 @@ namespace RougeLike.Tiles
         DrawLine(neckLeft, neckTop, neckLeft, neckBottom + doorHeight, tiles, TileType.Filled, wallImage);
         DrawLine(neckRight, neckTop, neckRight, neckBottom + doorHeight, tiles, TileType.Filled, wallImage);
         DrawLine(neckLeft + 1, averageHeight + firstFloorHeight, neckRight - 1, averageHeight + firstFloorHeight, tiles, TileType.Empty, bgWallImage);
+        //Doors
+        results.Doors.Add(new Vector2i(neckLeft, averageHeight + 1));
+        results.Doors.Add(new Vector2i(neckRight, averageHeight + 1));
 
         // "Stairs"
         int stairHeight = 8;
-        int stairWidth = (neckWidth / 2);
+        int stairWidth = (neckWidth / 3);
         int numStairs = neckHeight / stairHeight;
         int sy = neckBottom + doorHeight + 1;
         for (int i = 0; i < numStairs; i++)
@@ -414,14 +425,20 @@ namespace RougeLike.Tiles
           if (tile.TileType == TileType.Empty)
           {
             if (leftFilled && rightFilled && !upFilled && downFilled)
+            {
               tile.TileType = TileType.Filled;
+              tile.ImageIndex = 0;
+            }
           }
 
           // Remove single tile pins
           if (tile.TileType == TileType.Filled)
           {
             if (!leftFilled && !rightFilled && !upFilled && downFilled)
+            {
               tile.TileType = TileType.Empty;
+              tile.ImageIndex = -1;
+            }
           }
 
           // Set floor tiles

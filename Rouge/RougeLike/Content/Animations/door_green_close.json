@@ -1,0 +1,5 @@
+﻿{
+  "loop" : false,
+  "frametime" : 50,
+  "frames" : ["door_open_04","door_open_03","door_open_02","door_open_01"]
+}
