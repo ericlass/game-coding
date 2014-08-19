@@ -47,13 +47,38 @@ namespace RougeLike
       TileGeneratorParameters parameters = biome.GeneratorParameters;
       parameters.Seed = GameData.Instance.WorldSeed;
 
-      Tile[,] tiles = TileMapGenerator.Instance.GenerateTiles(parameters, width, height);
+      TileGeneratorResult genResult = TileMapGenerator.Instance.GenerateTiles(parameters, width, height);
+      Tile[,] tiles = genResult.Tiles;
+
       ImageBase tileImages = scene.Content.GetImage(biome.Tileset);
 
       TileMapObject tileMap = new TileMapObject(new TileData(tiles, tileImages, 16, 16));
       tileMap.Id = "tilemap";
       //tileMap.Scale = new Vector2f(0.0625f, 0.0625f);
 
+      int doorNum = 0;
+      foreach (Vector2i doorPos in genResult.Doors)
+      {
+        DoorObject door = new DoorObject();
+        door.Id = "door_" + doorNum;
+        door.OpenAnimationName = "door_green_open";
+        door.OpenedImageName = "door_open_04";
+        door.CloseAnimationName = "door_green_close";
+        door.ClosedImageName = "door_open_01";
+        door.ZIndex = 1;
+        door.GroupIndex = 21;
+
+        Rectangle2f tileRect = tileMap.GetTileRect(doorPos.X, doorPos.Y);
+        door.Position = new Vector2f(tileRect.Min.X + 8, tileRect.Min.Y + 24);
+
+        scene.GameObjects.Add(door);
+
+        doorNum++;
+      }
+
+      DoorSystem doorSystem = new DoorSystem(21);
+      scene.GameSystems.Add(doorSystem);
+      
       GameObjectBase mario = CreatePlayerEntity();
       
       scene.GameObjects.Add(tileMap);
