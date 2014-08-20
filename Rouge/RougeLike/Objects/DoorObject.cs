@@ -18,6 +18,7 @@ namespace RougeLike.Objects
     private string _closeAnimName = null;
     private string _openImageName = null;
     private string _closedImageName = null;
+    private Vector2i _baseTile = new Vector2i();
 
     private Animation _openAnim = null;
     private Animation _closeAnim = null;
@@ -50,6 +51,12 @@ namespace RougeLike.Objects
       set { _closedImageName = value; }
     }
 
+    public Vector2i BaseTile
+    {
+      get { return _baseTile; }
+      set { _baseTile = value; }
+    }
+
     public DoorState CurrentState
     {
       get { return _state; }
@@ -61,6 +68,12 @@ namespace RougeLike.Objects
       _currentAnim = _openAnim;
       _currentAnim.Restart();
       _state = DoorState.Opening;
+
+      TileMapObject tilemap = GameData.Instance.ActiveScene.GameObjects.GetObjectById("tilemap") as TileMapObject;
+      for (int i = 0; i < 3; i++)
+      {
+        tilemap.TileData.Tiles[_baseTile.X, _baseTile.Y + i].TileType = Tiles.TileType.Empty;
+      }
     }
 
     public void Close()
@@ -68,6 +81,12 @@ namespace RougeLike.Objects
       _currentAnim = _closeAnim;
       _currentAnim.Restart();
       _state = DoorState.Closing;
+
+      TileMapObject tilemap = GameData.Instance.ActiveScene.GameObjects.GetObjectById("tilemap") as TileMapObject;
+      for (int i = 0; i < 3; i++)
+      {
+        tilemap.TileData.Tiles[_baseTile.X, _baseTile.Y + i].TileType = Tiles.TileType.Filled;
+      }
     }
 
     public override string ObjectType

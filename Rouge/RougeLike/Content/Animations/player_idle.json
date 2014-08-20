@@ -1,5 +1,5 @@
 ﻿{
   "loop" : false,
   "frametime" : 50,
-  "frames" : ["mario_idle.png"]
+  "frames" : ["player_idle.png"]
 }

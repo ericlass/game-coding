@@ -275,8 +275,8 @@ namespace RougeLike.Tiles
         FillRectangle(tiles, left, right, averageHeight, averageHeight + firstFloorHeight, TileType.Empty, bgWallImage);
         DrawRectangle(tiles, left, right, averageHeight, averageHeight + firstFloorHeight, TileType.Filled, wallImage);        
         // Doors
-        DrawLine(left, averageHeight + 1, left, averageHeight + doorHeight, tiles, TileType.Empty, bgWallImage);
-        DrawLine(right, averageHeight + 1, right, averageHeight + doorHeight, tiles, TileType.Empty, bgWallImage);
+        DrawLine(left, averageHeight + 1, left, averageHeight + doorHeight, tiles, TileType.Filled, bgWallImage);
+        DrawLine(right, averageHeight + 1, right, averageHeight + doorHeight, tiles, TileType.Filled, bgWallImage);
         results.Doors.Add(new Vector2i(left, averageHeight + 1));
         results.Doors.Add(new Vector2i(right, averageHeight + 1));
 
@@ -294,6 +294,8 @@ namespace RougeLike.Tiles
         DrawLine(neckRight, neckTop, neckRight, neckBottom + doorHeight, tiles, TileType.Filled, wallImage);
         DrawLine(neckLeft + 1, averageHeight + firstFloorHeight, neckRight - 1, averageHeight + firstFloorHeight, tiles, TileType.Empty, bgWallImage);
         //Doors
+        DrawLine(neckLeft, averageHeight + 1, neckLeft, averageHeight + doorHeight, tiles, TileType.Filled, bgWallImage);
+        DrawLine(neckRight, averageHeight + 1, neckRight, averageHeight + doorHeight, tiles, TileType.Filled, bgWallImage);
         results.Doors.Add(new Vector2i(neckLeft, averageHeight + 1));
         results.Doors.Add(new Vector2i(neckRight, averageHeight + 1));
 
