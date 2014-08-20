@@ -16,6 +16,8 @@ namespace RougeLike
 {
   public class SceneFactory
   {
+    public const int DoorGroupIndex = 21;
+
     private static SceneFactory _instance = null;
 
     public static SceneFactory Instance
@@ -65,8 +67,9 @@ namespace RougeLike
         door.OpenedImageName = "door_open_04";
         door.CloseAnimationName = "door_green_close";
         door.ClosedImageName = "door_open_01";
-        door.ZIndex = 1;
-        door.GroupIndex = 21;
+        door.ZIndex = 2;
+        door.GroupIndex = DoorGroupIndex;
+        door.BaseTile = doorPos;
 
         Rectangle2f tileRect = tileMap.GetTileRect(doorPos.X, doorPos.Y);
         door.Position = new Vector2f(tileRect.Min.X + 8, tileRect.Min.Y + 24);
@@ -76,13 +79,13 @@ namespace RougeLike
         doorNum++;
       }
 
-      DoorSystem doorSystem = new DoorSystem(21);
+      DoorSystem doorSystem = new DoorSystem(DoorGroupIndex);
       scene.GameSystems.Add(doorSystem);
       
-      GameObjectBase mario = CreatePlayerEntity();
+      GameObjectBase player = CreatePlayerEntity();
       
       scene.GameObjects.Add(tileMap);
-      scene.GameObjects.Add(mario);
+      scene.GameObjects.Add(player);
 
       WalkingCharacterControlSystem system = null;
 
@@ -96,7 +99,7 @@ namespace RougeLike
         scene.GameSystems.Add(system);
       }
 
-      system = new WalkingCharacterControlSystem(mario.Id, new PlayerController());
+      system = new WalkingCharacterControlSystem(player.Id, new PlayerController());
       system.MaxWalkSpeed = 250;
       scene.GameSystems.Add(system);
 
@@ -111,24 +114,24 @@ namespace RougeLike
 
     private static GameObjectBase CreatePlayerEntity()
     {
-      CharacterObject mario = new CharacterObject();
-      mario.Id = "mario";
-      mario.ZIndex = 1;
-      mario.Position = new Vector2f(0, 500);
-      mario.HitBox = new Rectangle2f(-4, -9, 8, 16);
-      mario.EquipedWeapon = "weapon_laser";
-      mario.Skills.BeamWeapons = 1;
-      mario.Skills.ProjectileWeapons = 1;
-      mario.Health = 100;
+      CharacterObject player = new CharacterObject();
+      player.Id = "mario";
+      player.ZIndex = 1;
+      player.Position = new Vector2f(0, 500);
+      player.HitBox = new Rectangle2f(-4, -9, 8, 16);
+      player.EquipedWeapon = "weapon_laser";
+      player.Skills.BeamWeapons = 1;
+      player.Skills.ProjectileWeapons = 1;
+      player.Health = 100;
 
       StatePropertyMap animMap = new StatePropertyMap();
       animMap.Add(CharacterState.Idle, "player_idle");
       animMap.Add(CharacterState.Walking, "player_walk");
       animMap.Add(CharacterState.Jumping, "player_jump");
       animMap.Add(CharacterState.Falling, "player_fall");
-      mario.StateAnimations = animMap;
+      player.StateAnimations = animMap;
 
-      return mario;
+      return player;
     }
 
     private static Random _rand = new Random();
