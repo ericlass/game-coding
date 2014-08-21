@@ -7,6 +7,14 @@ namespace RougeLike.Objects
 {
   public class RenderDescription
   {
+    private Color _tint = Color.White;
+
+    public Color Tint
+    {
+      get { return _tint; }
+      set { _tint = value; }
+    }
+
     public ImageBase Image { get; set; }
 
     public VertexBuffer VertexBuffer { get; set; }
