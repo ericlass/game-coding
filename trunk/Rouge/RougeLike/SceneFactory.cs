@@ -79,9 +79,6 @@ namespace RougeLike
         doorNum++;
       }
 
-      DoorSystem doorSystem = new DoorSystem(DoorGroupIndex);
-      scene.GameSystems.Add(doorSystem);
-      
       GameObjectBase player = CreatePlayerEntity();
       
       scene.GameObjects.Add(tileMap);
@@ -106,6 +103,9 @@ namespace RougeLike
       ProjectileSystem projSystem = new ProjectileSystem(10, 20);
       scene.GameSystems.Add(projSystem);
 
+      DoorSystem doorSystem = new DoorSystem(DoorGroupIndex, player.Id);
+      scene.GameSystems.Add(doorSystem);
+
       SceneList result = new SceneList();
       result.Add(scene);
 
@@ -117,7 +117,7 @@ namespace RougeLike
       CharacterObject player = new CharacterObject();
       player.Id = "mario";
       player.ZIndex = 1;
-      player.Position = new Vector2f(0, 500);
+      player.Position = new Vector2f(0, -800);
       player.HitBox = new Rectangle2f(-4, -9, 8, 16);
       player.EquipedWeapon = "weapon_laser";
       player.Skills.BeamWeapons = 1;

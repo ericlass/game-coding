@@ -74,10 +74,11 @@ namespace RougeLike
         try
         {
           RenderDescription rd = go.RenderDescription;
+
           if (rd.VertexBuffer != null)
             OkuManager.Instance.Graphics.DrawVertexBuffer(rd.VertexBuffer, rd.PrimitiveType, rd.Image);
           else if (rd.Image != null)
-            OkuManager.Instance.Graphics.DrawImage(rd.Image, 0, 0);
+            OkuManager.Instance.Graphics.DrawImage(rd.Image, 0, 0, rd.Tint);
 
           if (GameData.Instance.DebugDraw)
             OkuBase.OkuManager.Instance.Graphics.DrawPoint(0, 0, 2.0f, Color.Red);
