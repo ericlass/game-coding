@@ -418,10 +418,10 @@ namespace RougeLike.Systems
         Vector2f leftTile = tileMap.WorldToTile(bottomCenter);
         Vector2f rightTile = tileMap.WorldToTile(new Vector2f(hitbox.Max.X + dx, bottomCenter.Y));
 
-        int left = (int)leftTile.X;
-        int right = (int)rightTile.X;
-        int bottom = (int)leftTile.Y;
-        int top = (int)topTile.Y;
+        int left = GameUtil.Clamp((int)leftTile.X, 0, tileMap.TileData.Width - 1);
+        int right = GameUtil.Clamp((int)rightTile.X, 0, tileMap.TileData.Width - 1);
+        int bottom = GameUtil.Clamp((int)leftTile.Y, 0, tileMap.TileData.Height - 1);
+        int top = GameUtil.Clamp((int)topTile.Y, 0, tileMap.TileData.Height - 1);
 
         for (int y = bottom; y <= top; y++)
         {
@@ -446,10 +446,10 @@ namespace RougeLike.Systems
         Vector2f rightTile = tileMap.WorldToTile(bottomCenter);
         Vector2f leftTile = tileMap.WorldToTile(new Vector2f(hitbox.Min.X + dx, bottomCenter.Y));
 
-        int left = (int)leftTile.X;
-        int right = (int)rightTile.X;
-        int bottom = (int)leftTile.Y;
-        int top = (int)topTile.Y;
+        int left = GameUtil.Clamp((int)leftTile.X, 0, tileMap.TileData.Width - 1);
+        int right = GameUtil.Clamp((int)rightTile.X, 0, tileMap.TileData.Width - 1);
+        int bottom = GameUtil.Clamp((int)leftTile.Y, 0, tileMap.TileData.Height - 1);
+        int top = GameUtil.Clamp((int)topTile.Y, 0, tileMap.TileData.Height - 1);
 
         for (int y = bottom; y <= top; y++)
         {
@@ -473,9 +473,9 @@ namespace RougeLike.Systems
       Vector2f startTile = tileMap.WorldToTile(bottomCenter);
       Vector2f endTile = tileMap.WorldToTile(new Vector2f(bottomCenter.X + possibleX, bottomCenter.Y));
 
-      int startX = (int)startTile.X;
-      int endX = (int)endTile.X;
-      int ty = (int)startTile.Y;
+      int startX = GameUtil.Clamp((int)startTile.X, 0, tileMap.TileData.Width - 1);
+      int endX = GameUtil.Clamp((int)endTile.X, 0, tileMap.TileData.Width - 1);
+      int ty = GameUtil.Clamp((int)startTile.Y, 0, tileMap.TileData.Height - 1);
 
       Vector2f result = new Vector2f(possibleX, 0);
 
