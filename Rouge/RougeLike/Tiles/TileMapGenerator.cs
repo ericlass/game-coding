@@ -59,6 +59,17 @@ namespace RougeLike.Tiles
           density += noise.Noise(x * 1.96f, y * 1.96f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude * 0.51f;
           density += noise.Noise(x * 1.01f, y * 1.01f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude;
 
+          //Caves
+          if (x > 5 && x < width - 5 && y > 5)
+          {
+            if (Math.Abs(noise.Noise(x, y, 3, 80)) <= 0.08)
+              density = 0;
+          }
+
+          //Floor
+          //if (y < 5)
+            //density = 1;
+
           Tile tile = tiles[x, y];
           if (density > 0.0f)
           {
@@ -112,6 +123,7 @@ namespace RougeLike.Tiles
       int right = center + halfWidth;
 
       // Calculate average height in the base area
+      //TODO: Check height from above now there are caves!
       int averageHeight = 0;
       for (int x = left; x <= right; x++)
       {

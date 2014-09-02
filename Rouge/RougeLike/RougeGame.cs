@@ -143,7 +143,7 @@ namespace RougeLike
         center.Y -= speed;
 
       Oku.Graphics.Viewport.Center = GameData.Instance.ActiveScene.GameObjects.GetObjectById("mario").Position;
-      //Oku.Graphics.Viewport.Center = center;
+      Oku.Graphics.Viewport.Center = center;
 
       GameData.Instance.ActiveScene.Update(dt);
 
