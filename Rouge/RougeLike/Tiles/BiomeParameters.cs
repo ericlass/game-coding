@@ -42,6 +42,8 @@ namespace RougeLike.Tiles
         biome.GeneratorParameters.Amplitude = (int)json.GetNumber("amplitude").Value;
         biome.GeneratorParameters.DetailLevel = (int)json.GetNumber("detaillevel").Value;
         biome.GeneratorParameters.DetailSize = (int)json.GetNumber("detailsize").Value;
+        biome.GeneratorParameters.Absolute = json.GetBool("absolute").Value;
+        biome.GeneratorParameters.Caves = json.GetBool("caves").Value;
 
         _biomes.Add(biome.Id, biome);
       }

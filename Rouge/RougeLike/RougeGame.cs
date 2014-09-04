@@ -108,8 +108,7 @@ namespace RougeLike
       settings.Graphics.Width = ScreenWidth;
       settings.Graphics.Height = ScreenHeight;
       settings.Graphics.TextureFilter = TextureFilter.NearestNeighbor;
-      settings.Graphics.BackgroundColor = new Color(111, 161, 231);
-      //settings.Graphics.BackgroundColor = Color.Magenta;
+      settings.Graphics.BackgroundColor = Color.Magenta;
 
       settings.Audio.DriverName = "openal";
 
@@ -120,14 +119,13 @@ namespace RougeLike
     {
       _renderTarget = OkuManager.Instance.Graphics.NewRenderTarget(ScreenWidth, ScreenHeight);
 
-      //GameData.Instance.Scenes = SceneFactory.Instance.LoadScene("testscene.json");
       GameData.Instance.Scenes = SceneFactory.Instance.GenerateScene();
       GameData.Instance.ActiveScene = GameData.Instance.Scenes[0];
     }
 
     public override void Update(float dt)
     {
-      float speed = 500 * dt;
+      float speed = 1500 * dt;
       Vector2f center = Oku.Graphics.Viewport.Center;
 
       if (Oku.Input.Keyboard.KeyIsDown(Keys.Left))
@@ -143,7 +141,7 @@ namespace RougeLike
         center.Y -= speed;
 
       Oku.Graphics.Viewport.Center = GameData.Instance.ActiveScene.GameObjects.GetObjectById("mario").Position;
-      Oku.Graphics.Viewport.Center = center;
+      //Oku.Graphics.Viewport.Center = center;
 
       GameData.Instance.ActiveScene.Update(dt);
 
@@ -156,9 +154,11 @@ namespace RougeLike
       Vector2f center = Oku.Graphics.Viewport.Center;
 
       OkuManager.Instance.Graphics.SetRenderTarget(_renderTarget);
+      //OkuManager.Instance.Graphics.ApplyAndPushTransform(Vector2f.Zero, new Vector2f(4f, 4f), 0);
 
       GameData.Instance.ActiveScene.Render();
 
+      //OkuManager.Instance.Graphics.PopTransform();
       OkuManager.Instance.Graphics.SetRenderTarget(null);
       OkuManager.Instance.Graphics.DrawScreenAlignedQuad(_renderTarget);
     }

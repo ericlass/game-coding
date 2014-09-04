@@ -56,19 +56,23 @@ namespace RougeLike.Tiles
         {
           //Default noise, similar to GPU Gems
           float density = -(y - (height / 4.0f));
-          density += noise.Noise(x * 1.96f, y * 1.96f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude * 0.51f;
-          density += noise.Noise(x * 1.01f, y * 1.01f, parameters.DetailLevel, parameters.DetailSize) * parameters.Amplitude;
+
+          float noiseValue = noise.Noise(x * 1.96f, y * 1.96f, parameters.DetailLevel, parameters.DetailSize);
+          if (parameters.Absolute)
+            noiseValue = -Math.Abs(noiseValue) * 2;
+          density += noiseValue * parameters.Amplitude * 0.51f;
+
+          noiseValue = noise.Noise(x * 1.01f, y * 1.01f, parameters.DetailLevel, parameters.DetailSize);
+          if (parameters.Absolute)
+            noiseValue = -Math.Abs(noiseValue) * 2;
+          density += noiseValue * parameters.Amplitude;
 
           //Caves
-          if (x > 5 && x < width - 5 && y > 5)
+          if (parameters.Caves && x > 5 && x < width - 5 && y > 5)
           {
             if (Math.Abs(noise.Noise(x, y, 3, 80)) <= 0.08)
               density = 0;
           }
-
-          //Floor
-          //if (y < 5)
-            //density = 1;
 
           Tile tile = tiles[x, y];
           if (density > 0.0f)
@@ -455,9 +459,23 @@ namespace RougeLike.Tiles
             }
           }
 
+        }
+      }
+
+      for (int y = 1; y < tiles.GetLength(1) - 1; y++)
+      {
+        for (int x = 1; x < tiles.GetLength(0) - 1; x++)
+        {
+          Tile tile = tiles[x, y];
+          
           // Set floor tiles
           if (tile.TileType == TileType.Filled)
           {
+            bool upFilled = tiles[x, y + 1].TileType == TileType.Filled;
+            bool downFilled = tiles[x, y - 1].TileType == TileType.Filled;
+            bool leftFilled = tiles[x - 1, y].TileType == TileType.Filled;
+            bool rightFilled = tiles[x + 1, y].TileType == TileType.Filled;
+
             if (!upFilled && tile.ImageIndex == 0)
               tile.ImageIndex = 1;
           }

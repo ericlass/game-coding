@@ -3,5 +3,7 @@
   "tileset" : "grass_tile.png",
   "amplitude" : 15,
   "detaillevel" : 3,
-  "detailsize" : 200
+  "detailsize" : 200,
+  "absolute" : true,
+  "caves" : false
 }

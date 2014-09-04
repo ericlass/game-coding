@@ -3,5 +3,7 @@
   "tileset" : "mountain_tile.png",
   "amplitude" : 40,
   "detaillevel" : 4,
-  "detailsize" : 200
+  "detailsize" : 200,
+  "absolute" : false,
+  "caves" : false
 }
