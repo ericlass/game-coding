@@ -84,6 +84,7 @@
     <Compile Include="Attributes\IAttributeValue.cs" />
     <Compile Include="Attributes\NumberValue.cs" />
     <Compile Include="Attributes\TextValue.cs" />
+    <Compile Include="Objects\BackgroundObject.cs" />
     <Compile Include="Objects\DoorObject.cs" />
     <Compile Include="Objects\ProjectileObject.cs" />
     <Compile Include="Objects\RenderDescription.cs" />
@@ -250,6 +251,9 @@
     <Content Include="Content\Graphics\player_right.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Content\Graphics\sky_early_morning.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Content\Graphics\snow_tile.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -3,5 +3,7 @@
   "tileset" : "desert_tile.png",
   "amplitude" : 20,
   "detaillevel" : 2,
-  "detailsize" : 250
+  "detailsize" : 250,
+  "absolute" : true,
+  "caves" : false
 }

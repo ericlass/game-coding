@@ -61,14 +61,14 @@ namespace RougeLike.Tiles
     {
       int imageIndex = _tiles[x, y].ImageIndex;
 
-      float fwidth = (float)_tileImages.Width;
+      float fwidth = _tileImages.Width;
       float left = (imageIndex * _tileWidth) / fwidth;
-      float right = left + (_tileWidth / fwidth);
-
+      float right = ((imageIndex * _tileWidth) + _tileWidth) / fwidth;
+      
       float top = 1.0f;
       float bottom = 0.0f;
 
-      return new Rectangle2f(left, bottom, right - left, top - bottom);
+      return new Rectangle2f(left, bottom, _tileWidth / fwidth , (top - bottom));
     }
 
   }

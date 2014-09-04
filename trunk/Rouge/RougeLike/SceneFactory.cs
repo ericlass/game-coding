@@ -56,7 +56,7 @@ namespace RougeLike
 
       TileMapObject tileMap = new TileMapObject(new TileData(tiles, tileImages, 16, 16));
       tileMap.Id = "tilemap";
-      tileMap.Scale = new Vector2f(0.0625f, 0.0625f);
+      //tileMap.Scale = new Vector2f(0.0625f, 0.0625f);
 
       int doorNum = 0;
       foreach (Vector2i doorPos in genResult.Doors)
@@ -95,6 +95,12 @@ namespace RougeLike
         system.MaxWalkSpeed = 100;
         scene.GameSystems.Add(system);
       }
+
+      BackgroundObject bg = new BackgroundObject();
+      bg.Id = "mainbg";
+      bg.ImageName = "sky_early_morning";
+      bg.ZIndex = -3;
+      scene.GameObjects.Add(bg);
 
       system = new WalkingCharacterControlSystem(player.Id, new PlayerController());
       system.MaxWalkSpeed = 250;

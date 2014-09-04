@@ -11,5 +11,7 @@ namespace RougeLike.Tiles
     public int DetailLevel { get; set; }
     public int DetailSize { get; set; }
     public int Seed { get; set; }
+    public bool Absolute { get; set; }
+    public bool Caves { get; set; }
   }
 }
