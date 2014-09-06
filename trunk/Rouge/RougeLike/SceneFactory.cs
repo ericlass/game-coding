@@ -121,7 +121,7 @@ namespace RougeLike
     private static GameObjectBase CreatePlayerEntity()
     {
       CharacterObject player = new CharacterObject();
-      player.Id = "mario";
+      player.Id = "player";
       player.ZIndex = 1;
       player.Position = new Vector2f(0, -800);
       player.HitBox = new Rectangle2f(-4, -9, 8, 16);

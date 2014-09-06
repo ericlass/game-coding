@@ -80,7 +80,7 @@ namespace RougeLike
           else if (rd.Image != null)
             OkuManager.Instance.Graphics.DrawImage(rd.Image, 0, 0, rd.Tint);
 
-          if (GameData.Instance.DebugDraw)
+          if (GameData.Instance.DebugMode)
             OkuBase.OkuManager.Instance.Graphics.DrawPoint(0, 0, 2.0f, Color.Red);
         }
         finally
