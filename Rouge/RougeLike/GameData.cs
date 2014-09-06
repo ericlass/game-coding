@@ -27,7 +27,7 @@ namespace RougeLike
       LoadInventoryItems();
     }
 
-    private bool _debugDraw = false;
+    private bool _debugMode = false;
     private SceneList _scenes = new SceneList();
     private Scene _activeScene = null;
     private AttributeMap _attributes = new AttributeMap();
@@ -41,10 +41,10 @@ namespace RougeLike
       set { _worldSeed = value; }
     }
 
-    public bool DebugDraw
+    public bool DebugMode
     {
-      get { return _debugDraw; }
-      set { _debugDraw = value; }
+      get { return _debugMode; }
+      set { _debugMode = value; }
     }
 
     public SceneList Scenes

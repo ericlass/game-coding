@@ -5,12 +5,20 @@ using OkuBase.Graphics;
 using OkuBase.Geometry;
 using OkuBase.Platform;
 using System.Windows.Forms;
+using RougeLike.Objects;
 using RougeLike.States;
 
 namespace RougeLike
 {
   public class RougeGame : OkuGame
   {
+    //TODO: I think this should go into GameData
+    private enum GameState
+    {
+      None,
+      Playing
+    }
+
     #region Shaders
 
     private const string VertexShaderSource =
@@ -100,6 +108,8 @@ namespace RougeLike
     private const int ScreenHeight = 720;
 
     private RenderTarget _renderTarget = null;
+    private GameState _currentStatet = GameState.None;
+    private float _zoom = 1.0f;
 
     public override OkuSettings Configure()
     {
@@ -121,46 +131,88 @@ namespace RougeLike
 
       GameData.Instance.Scenes = SceneFactory.Instance.GenerateScene();
       GameData.Instance.ActiveScene = GameData.Instance.Scenes[0];
+
+      _currentStatet = GameState.Playing;
     }
 
     public override void Update(float dt)
     {
-      float speed = 1500 * dt;
-      Vector2f center = Oku.Graphics.Viewport.Center;
+      if (_currentStatet == GameState.Playing)
+      {
+        if (GameData.Instance.DebugMode)
+        {
+          float speed = 500 * _zoom;
+          if (Oku.Input.Keyboard.KeyIsDown(Keys.ControlKey))
+            speed = 1500 * _zoom;
 
-      if (Oku.Input.Keyboard.KeyIsDown(Keys.Left))
-        center.X -= speed;
+          speed *= dt;
+          Vector2f center = Oku.Graphics.Viewport.Center;
 
-      if (Oku.Input.Keyboard.KeyIsDown(Keys.Right))
-        center.X += speed;
+          if (Oku.Input.Keyboard.KeyIsDown(Keys.Left))
+            center.X -= speed;
 
-      if (Oku.Input.Keyboard.KeyIsDown(Keys.Up))
-        center.Y += speed;
+          if (Oku.Input.Keyboard.KeyIsDown(Keys.Right))
+            center.X += speed;
 
-      if (Oku.Input.Keyboard.KeyIsDown(Keys.Down))
-        center.Y -= speed;
+          if (Oku.Input.Keyboard.KeyIsDown(Keys.Up))
+            center.Y += speed;
 
-      Oku.Graphics.Viewport.Center = GameData.Instance.ActiveScene.GameObjects.GetObjectById("mario").Position;
-      //Oku.Graphics.Viewport.Center = center;
+          if (Oku.Input.Keyboard.KeyIsDown(Keys.Down))
+            center.Y -= speed;
 
-      GameData.Instance.ActiveScene.Update(dt);
+          Oku.Graphics.Viewport.Center = center;
 
-      if (Oku.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.F3))
-        GameData.Instance.DebugDraw = !GameData.Instance.DebugDraw;
+          if (Oku.Input.Keyboard.KeyPressed(Keys.Add))
+            _zoom *= 2;
+          if (Oku.Input.Keyboard.KeyPressed(Keys.Subtract))
+            _zoom /= 2;
+        }        
+        else
+        {
+          Oku.Graphics.Viewport.Center = GameData.Instance.ActiveScene.GameObjects.GetObjectById("player").Position;
+          TileMapObject tilemap = GameData.Instance.ActiveScene.GameObjects.GetObjectById("tilemap") as TileMapObject;
+
+          Rectangle2f mapRect = tilemap.GetMapRect();
+          if (Oku.Graphics.Viewport.Left < mapRect.Min.X)
+            Oku.Graphics.Viewport.Left = mapRect.Min.X;
+          if (Oku.Graphics.Viewport.Right > mapRect.Max.X)
+            Oku.Graphics.Viewport.Right = mapRect.Max.X;
+          if (Oku.Graphics.Viewport.Bottom < mapRect.Min.Y)
+            Oku.Graphics.Viewport.Bottom = mapRect.Min.Y;
+          if (Oku.Graphics.Viewport.Top > mapRect.Max.Y)
+            Oku.Graphics.Viewport.Top = mapRect.Max.Y;
+        }
+
+        GameData.Instance.ActiveScene.Update(dt);
+
+        if (Oku.Input.Keyboard.KeyPressed(System.Windows.Forms.Keys.F3))
+        {
+          GameData.Instance.DebugMode = !GameData.Instance.DebugMode;
+          if (GameData.Instance.DebugMode)
+            _zoom = 1.0f;
+        }
+      }      
     }
     
     public override void Render()
     {
-      Vector2f center = Oku.Graphics.Viewport.Center;
+      if (_currentStatet == GameState.Playing)
+      {
+        Vector2f center = Oku.Graphics.Viewport.Center;
 
-      OkuManager.Instance.Graphics.SetRenderTarget(_renderTarget);
-      //OkuManager.Instance.Graphics.ApplyAndPushTransform(Vector2f.Zero, new Vector2f(4f, 4f), 0);
+        OkuManager.Instance.Graphics.SetRenderTarget(_renderTarget);
+        
+        if (GameData.Instance.DebugMode)
+          OkuManager.Instance.Graphics.ApplyAndPushTransform(Vector2f.Zero, new Vector2f(_zoom, _zoom), 0);
 
-      GameData.Instance.ActiveScene.Render();
+        GameData.Instance.ActiveScene.Render();
 
-      //OkuManager.Instance.Graphics.PopTransform();
-      OkuManager.Instance.Graphics.SetRenderTarget(null);
-      OkuManager.Instance.Graphics.DrawScreenAlignedQuad(_renderTarget);
+        if (GameData.Instance.DebugMode)
+          OkuManager.Instance.Graphics.PopTransform();
+
+        OkuManager.Instance.Graphics.SetRenderTarget(null);
+        OkuManager.Instance.Graphics.DrawScreenAlignedQuad(_renderTarget);
+      }      
     }
     
   }
