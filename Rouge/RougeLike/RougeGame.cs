@@ -163,9 +163,15 @@ namespace RougeLike
           Oku.Graphics.Viewport.Center = center;
 
           if (Oku.Input.Keyboard.KeyPressed(Keys.Add))
+          {
             _zoom *= 2;
+            Oku.Graphics.Viewport.Center = Oku.Graphics.Viewport.Center * 2;
+          }
           if (Oku.Input.Keyboard.KeyPressed(Keys.Subtract))
+          {
             _zoom /= 2;
+            Oku.Graphics.Viewport.Center = Oku.Graphics.Viewport.Center / 2;
+          }
         }        
         else
         {
