@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using OkuBase.Utils;
 
 namespace RougeLike.Tiles
@@ -37,7 +38,7 @@ namespace RougeLike.Tiles
       result.Doors = new List<Vector2i>();
 
       //Fill tile map with empty tiles first
-      for (int y = 0; y < height; y++)
+      Parallel.For(0, height, delegate(int y) 
       {
         for (int x = 0; x < width; x++)
         {
@@ -46,11 +47,12 @@ namespace RougeLike.Tiles
           tile.ImageIndex = -1;
           tiles[x, y] = tile;
         }
-      }
+      });
 
       // Generate terrain from noise as described in GPU Gems 3
       PerlinNoise noise = new PerlinNoise(parameters.Seed);
-      for (int y = 0; y < height; y++)
+
+      Parallel.For(0, height, delegate(int y)
       {
         for (int x = 0; x < width; x++)
         {
@@ -81,7 +83,7 @@ namespace RougeLike.Tiles
             tile.ImageIndex = 0;
           }
         }
-      }
+      });
 
       CreateBuilding(result, parameters.Seed);
       //CreateSlopTiles(tiles);
@@ -428,7 +430,8 @@ namespace RougeLike.Tiles
     /// <param name="tiles">The tiles to be processed.</param>
     private static void PostProcess(Tile[,] tiles)
     {
-      for (int y = 1; y < tiles.GetLength(1) - 1; y++)
+      //for (int y = 1; y < tiles.GetLength(1) - 1; y++)
+      Parallel.For(1, tiles.GetLength(1) - 1, delegate(int y)
       {
         for (int x = 1; x < tiles.GetLength(0) - 1; x++)
         {
@@ -460,14 +463,15 @@ namespace RougeLike.Tiles
           }
 
         }
-      }
+      });
 
-      for (int y = 1; y < tiles.GetLength(1) - 1; y++)
+      //for (int y = 1; y < tiles.GetLength(1) - 1; y++)
+      Parallel.For(1, tiles.GetLength(1) - 1, delegate(int y)
       {
         for (int x = 1; x < tiles.GetLength(0) - 1; x++)
         {
           Tile tile = tiles[x, y];
-          
+
           // Set floor tiles
           if (tile.TileType == TileType.Filled)
           {
@@ -479,9 +483,9 @@ namespace RougeLike.Tiles
             if (!upFilled && tile.ImageIndex == 0)
               tile.ImageIndex = 1;
           }
-
         }
-      }
+      });
+
     }
 
     /// <summary>
