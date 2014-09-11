@@ -47,14 +47,12 @@ namespace RougeLike
         throw new OkuBase.OkuException("There is no biome with the id \"\"!");
 
       TileGeneratorParameters parameters = biome.GeneratorParameters;
-      parameters.Seed = GameData.Instance.WorldSeed;
+      parameters.Seed = GameData.Instance.WorldSeed + GameData.Instance.CurrentSection;
 
       TileGeneratorResult genResult = TileMapGenerator.Instance.GenerateTiles(parameters, width, height);
       Tile[,] tiles = genResult.Tiles;
 
-      ImageBase tileImages = scene.Content.GetImage(biome.Tileset);
-
-      TileMapObject tileMap = new TileMapObject(new TileData(tiles, tileImages, 16, 16));
+      TileMapObject tileMap = new TileMapObject(new TileData(tiles, biome.Tileset, 16, 16));
       tileMap.Id = "tilemap";
       //tileMap.Scale = new Vector2f(0.0625f, 0.0625f);
 

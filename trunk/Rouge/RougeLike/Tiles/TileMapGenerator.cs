@@ -39,6 +39,7 @@ namespace RougeLike.Tiles
 
       //Fill tile map with empty tiles first
       Parallel.For(0, height, delegate(int y) 
+      //for (int y = 0; y < height; y++)
       {
         for (int x = 0; x < width; x++)
         {
@@ -53,6 +54,7 @@ namespace RougeLike.Tiles
       PerlinNoise noise = new PerlinNoise(parameters.Seed);
 
       Parallel.For(0, height, delegate(int y)
+      //for (int y = 0; y < height; y++)
       {
         for (int x = 0; x < width; x++)
         {
@@ -100,8 +102,6 @@ namespace RougeLike.Tiles
       int type = (rand.Next(1000) % 3) + 1;
       BuildingType buildingType = (BuildingType)type;
       //buildingType = BuildingType.Hall;
-
-      OkuBase.OkuManager.Instance.Graphics.Title = buildingType.ToString();
 
       int baseWidth = 0;
       switch (buildingType)
@@ -430,8 +430,8 @@ namespace RougeLike.Tiles
     /// <param name="tiles">The tiles to be processed.</param>
     private static void PostProcess(Tile[,] tiles)
     {
-      //for (int y = 1; y < tiles.GetLength(1) - 1; y++)
       Parallel.For(1, tiles.GetLength(1) - 1, delegate(int y)
+      //for (int y = 1; y < tiles.GetLength(1) - 1; y++)
       {
         for (int x = 1; x < tiles.GetLength(0) - 1; x++)
         {
@@ -465,8 +465,8 @@ namespace RougeLike.Tiles
         }
       });
 
-      //for (int y = 1; y < tiles.GetLength(1) - 1; y++)
       Parallel.For(1, tiles.GetLength(1) - 1, delegate(int y)
+      //for (int y = 1; y < tiles.GetLength(1) - 1; y++)
       {
         for (int x = 1; x < tiles.GetLength(0) - 1; x++)
         {
@@ -494,7 +494,8 @@ namespace RougeLike.Tiles
     /// <param name="tiles">The tiles to process.</param>
     private static void CreateSlopTiles(Tile[,] tiles)
     {
-      for (int y = 1; y < tiles.GetLength(1) - 1; y++)
+      Parallel.For(1, tiles.GetLength(1) - 1, delegate(int y)
+      //for (int y = 1; y < tiles.GetLength(1) - 1; y++)
       {
         for (int x = 1; x < tiles.GetLength(0) - 1; x++)
         {
@@ -530,7 +531,7 @@ namespace RougeLike.Tiles
 
           }
         }
-      }
+      });
     }
 
   }

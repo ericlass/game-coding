@@ -626,6 +626,35 @@ namespace RougeLike.Objects
 
     public override void Init()
     {
+      Image tileImage = GameData.Instance.ActiveScene.Content.GetImage(_tileData.TileImageName);
+
+      //Pre-calculate texture coordinates of tile images
+      Rectangle2f[] texCoords = new Rectangle2f[10];
+      for (int i = 0; i < texCoords.Length; i++)
+      {
+        float fwidth = tileImage.Width;
+        float left = (i * _tileData.TileWidth) / fwidth;
+        float right = ((i * _tileData.TileWidth) + _tileData.TileWidth) / fwidth;
+      
+        float top = 1.0f;
+        float bottom = 0.0f;
+
+        texCoords[i] = new Rectangle2f(left, bottom, _tileData.TileWidth / fwidth, (top - bottom));
+      }
+
+      /*
+       * int imageIndex = _tiles[x, y].ImageIndex;
+
+      float fwidth = _tileImages.Width;
+      float left = (imageIndex * _tileWidth) / fwidth;
+      float right = ((imageIndex * _tileWidth) + _tileWidth) / fwidth;
+      
+      float top = 1.0f;
+      float bottom = 0.0f;
+
+      return new Rectangle2f(left, bottom, _tileWidth / fwidth , (top - bottom));
+       */
+
       //Generate vertex buffer
       List<Vertex> vertices = new List<Vertex>();
       for (int y = 0; y < _tileData.Height; y++)
@@ -636,7 +665,7 @@ namespace RougeLike.Objects
           if (tile.ImageIndex >= 0)
           {
             Rectangle2f tileRect = GetTileRect(x, y);
-            Rectangle2f texCoord = _tileData.GetTileTexCoords(x, y);
+            Rectangle2f texCoord = texCoords[tile.ImageIndex];
 
             Vertex v = new Vertex();
             v.VX = tileRect.Min.X;
@@ -690,13 +719,12 @@ namespace RougeLike.Objects
 
       Oku.Graphics.InitVertexBuffer(buffer);
       RenderDescription.VertexBuffer = buffer;
-      RenderDescription.Image = _tileData.Images;
+      RenderDescription.Image = tileImage;
       RenderDescription.PrimitiveType = PrimitiveType.Quads;
     }
 
     public override void Finish()
     {
-      Oku.Graphics.ReleaseImage(_tileData.Images as Image);
       Oku.Graphics.ReleaseVertexBuffer(RenderDescription.VertexBuffer);
     }
 

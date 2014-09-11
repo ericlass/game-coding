@@ -239,6 +239,9 @@
     <Content Include="Content\Graphics\ice_tile.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Content\Graphics\loading.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Content\Graphics\player_fall.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
