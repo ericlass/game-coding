@@ -8,14 +8,14 @@ namespace RougeLike.Tiles
   public class TileData
   {
     private Tile[,] _tiles = null;
-    private ImageBase _tileImages = null;
+    private string _tileImageName = null;
     private int _tileWidth = 0;
     private int _tileHeight = 0;
 
-    public TileData(Tile[,] tiles, ImageBase images, int tileWidth, int tileHeight)
+    public TileData(Tile[,] tiles, string imageName, int tileWidth, int tileHeight)
     {
       _tiles = tiles;
-      _tileImages = images;
+      _tileImageName = imageName;
       _tileWidth = tileWidth;
       _tileHeight = tileHeight;
     }
@@ -31,10 +31,10 @@ namespace RougeLike.Tiles
       set { _tiles = value; }
     }
 
-    public ImageBase Images
+    public string TileImageName
     {
-      get { return _tileImages; }
-      set { _tileImages = value; }
+      get { return _tileImageName; }
+      set { _tileImageName = value; }
     }
 
     public int Width
@@ -55,20 +55,6 @@ namespace RougeLike.Tiles
     public int TileHeight
     {
       get { return _tileHeight; }
-    }
-
-    public Rectangle2f GetTileTexCoords(int x, int y)
-    {
-      int imageIndex = _tiles[x, y].ImageIndex;
-
-      float fwidth = _tileImages.Width;
-      float left = (imageIndex * _tileWidth) / fwidth;
-      float right = ((imageIndex * _tileWidth) + _tileWidth) / fwidth;
-      
-      float top = 1.0f;
-      float bottom = 0.0f;
-
-      return new Rectangle2f(left, bottom, _tileWidth / fwidth , (top - bottom));
     }
 
   }

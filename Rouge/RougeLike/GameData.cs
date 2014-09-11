@@ -8,6 +8,13 @@ using RougeLike.Character;
 
 namespace RougeLike
 {
+  public enum GameState
+  {
+    None,
+    Loading,
+    Playing
+  }
+
   public class GameData : IAttributeContainer
   {
     private static GameData _instance = null;
@@ -34,11 +41,25 @@ namespace RougeLike
     private Dictionary<string, InventoryItemDefinition> _inventoryItems = null;
 
     private int _worldSeed = 19238477;
+    private GameState _currentGameState = GameState.None;
+    private int _currentSection = 0;
 
     public int WorldSeed
     {
       get { return _worldSeed; }
       set { _worldSeed = value; }
+    }
+
+    public GameState CurrentGameState
+    {
+      get { return _currentGameState; }
+      set { _currentGameState = value; }
+    }
+
+    public int CurrentSection
+    {
+      get { return _currentSection; }
+      set { _currentSection = value; }
     }
 
     public bool DebugMode

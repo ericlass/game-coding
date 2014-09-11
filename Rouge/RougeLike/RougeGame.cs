@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Windows.Forms;
 using OkuBase;
 using OkuBase.Settings;
 using OkuBase.Graphics;
 using OkuBase.Geometry;
 using OkuBase.Platform;
-using System.Windows.Forms;
 using RougeLike.Objects;
 using RougeLike.States;
 
@@ -12,13 +14,6 @@ namespace RougeLike
 {
   public class RougeGame : OkuGame
   {
-    //TODO: I think this should go into GameData
-    private enum GameState
-    {
-      None,
-      Playing
-    }
-
     #region Shaders
 
     private const string VertexShaderSource =
@@ -108,8 +103,10 @@ namespace RougeLike
     private const int ScreenHeight = 720;
 
     private RenderTarget _renderTarget = null;
-    private GameState _currentStatet = GameState.None;
     private float _zoom = 1.0f;
+
+    private Thread _loaderThread = null;
+    private Image _loadingImage = null;
 
     public override OkuSettings Configure()
     {
@@ -118,7 +115,7 @@ namespace RougeLike
       settings.Graphics.Width = ScreenWidth;
       settings.Graphics.Height = ScreenHeight;
       settings.Graphics.TextureFilter = TextureFilter.NearestNeighbor;
-      settings.Graphics.BackgroundColor = Color.Magenta;
+      settings.Graphics.BackgroundColor = Color.Black;
 
       settings.Audio.DriverName = "openal";
 
@@ -129,21 +126,50 @@ namespace RougeLike
     {
       _renderTarget = OkuManager.Instance.Graphics.NewRenderTarget(ScreenWidth, ScreenHeight);
 
-      GameData.Instance.Scenes = SceneFactory.Instance.GenerateScene();
-      GameData.Instance.ActiveScene = GameData.Instance.Scenes[0];
+      ImageData data = ImageData.FromFile(".\\Content\\Graphics\\loading.png");
+      _loadingImage = Oku.Graphics.NewImage(data);
 
-      _currentStatet = GameState.Playing;
+      GameData.Instance.CurrentSection = 1;
+      GameData.Instance.CurrentGameState = GameState.Loading;
+    }
+
+    private SceneList _generatedScenes = null;
+
+    private void LoadScene()
+    {
+      _generatedScenes = SceneFactory.Instance.GenerateScene();
     }
 
     public override void Update(float dt)
     {
-      if (_currentStatet == GameState.Playing)
+      if (GameData.Instance.CurrentGameState == GameState.Loading)
       {
+        if (_loaderThread == null)
+        {
+          _loaderThread = new Thread(new ThreadStart(LoadScene));
+          _loaderThread.Start();
+        }
+        else if (!_loaderThread.IsAlive)
+        {
+          GameData.Instance.Scenes = _generatedScenes;
+          GameData.Instance.ActiveScene = GameData.Instance.Scenes[0];
+          GameData.Instance.CurrentGameState = GameState.Playing;
+
+          _loaderThread = null;
+          _generatedScenes = null;
+        }
+      }
+      else if (GameData.Instance.CurrentGameState == GameState.Playing)
+      {
+        GameObjectBase player = GameData.Instance.ActiveScene.GameObjects.GetObjectById("player");
+        TileMapObject tilemap = GameData.Instance.ActiveScene.GameObjects.GetObjectById("tilemap") as TileMapObject;
+        Rectangle2f mapRect = tilemap.GetMapRect();
+
         if (GameData.Instance.DebugMode)
         {
-          float speed = 500 * _zoom;
+          float speed = 500;
           if (Oku.Input.Keyboard.KeyIsDown(Keys.ControlKey))
-            speed = 1500 * _zoom;
+            speed = 1500;
 
           speed *= dt;
           Vector2f center = Oku.Graphics.Viewport.Center;
@@ -175,10 +201,8 @@ namespace RougeLike
         }        
         else
         {
-          Oku.Graphics.Viewport.Center = GameData.Instance.ActiveScene.GameObjects.GetObjectById("player").Position;
-          TileMapObject tilemap = GameData.Instance.ActiveScene.GameObjects.GetObjectById("tilemap") as TileMapObject;
-
-          Rectangle2f mapRect = tilemap.GetMapRect();
+          Oku.Graphics.Viewport.Center = player.Position;          
+          
           if (Oku.Graphics.Viewport.Left < mapRect.Min.X)
             Oku.Graphics.Viewport.Left = mapRect.Min.X;
           if (Oku.Graphics.Viewport.Right > mapRect.Max.X)
@@ -197,12 +221,29 @@ namespace RougeLike
           if (GameData.Instance.DebugMode)
             _zoom = 1.0f;
         }
-      }      
+
+        if (player.Position.X <= mapRect.Min.X)
+        {
+          GameData.Instance.CurrentSection -= 1;
+          GameData.Instance.CurrentGameState = GameState.Loading;
+        }
+
+        if (player.Position.X >= mapRect.Max.X)
+        {
+          GameData.Instance.CurrentSection += 1;
+          GameData.Instance.CurrentGameState = GameState.Loading;
+        }
+      }
     }
     
     public override void Render()
     {
-      if (_currentStatet == GameState.Playing)
+      if (GameData.Instance.CurrentGameState == GameState.Loading)
+      {
+        Oku.Graphics.Viewport.Center = Vector2f.Zero;
+        Oku.Graphics.DrawImage(_loadingImage, 0, 0);
+      }
+      else if (GameData.Instance.CurrentGameState == GameState.Playing)
       {
         Vector2f center = Oku.Graphics.Viewport.Center;
 
