@@ -9,7 +9,7 @@ namespace OkuBase.Particles
   /// Base class for particle emitters. Do not use directly. Use a descendent of it.
   /// Override the Emit method in descendents to create different emitter behavior.
   /// </summary>
-  public class ParticleEmitter
+  public abstract class ParticleEmitter
   {
     private float _angle = 0.0f;
     private float _angleVariation = 0.0f;
@@ -25,7 +25,7 @@ namespace OkuBase.Particles
 
     private Color _color = Color.White;
 
-    protected Random _rand = new Random();
+    private Random _rand = new Random();
     private float _pi = (float)Math.PI;
     private float _emitTimer = 0.0f; // Used to keep track of fractional particles per frame
 
@@ -34,10 +34,7 @@ namespace OkuBase.Particles
     /// </summary>
     /// <param name="particles">The list to emit new particles to.</param>
     /// <param name="dt">The time that has passed since the last frame.</param>
-    public virtual void Emit(List<Particle> particles, float dt)
-    {
-      throw new NotImplementedException();
-    }
+    public abstract void Emit(List<Particle> particles, float dt);
 
     /// <summary>
     /// Calculates a random angle value taking into account the current configuration.
