@@ -3346,6 +3346,79 @@
             Gets the oku library.
             </summary>
         </member>
+        <member name="T:OkuBase.Particles.DefaultParticleController">
+            <summary>
+            Defines a simple particle controller that moves the particle according to its velocity
+            and updates the energy accordingly.
+            </summary>
+        </member>
+        <member name="M:OkuBase.Particles.DefaultParticleController.Update(OkuBase.Particles.Particle,System.Single)">
+            <summary>
+            Updates the given particle.
+            </summary>
+            <param name="particle">The particle to be updated.</param>
+            <param name="dt">The amount of time that passed since the last update.</param>
+        </member>
+        <member name="T:OkuBase.Particles.ForceEffector">
+            <summary>
+            Defines a simple effector that applies a static, linear force to the particles.
+            </summary>
+        </member>
+        <member name="T:OkuBase.Particles.IParticleEffector">
+            <summary>
+            Particle effectors are used to change the properties of particles.
+            </summary>
+        </member>
+        <member name="M:OkuBase.Particles.IParticleEffector.Effect(OkuBase.Particles.Particle,System.Single)">
+            <summary>
+            Finally effects the given particle. This may change any property of the particle.
+            </summary>
+            <param name="particle">The particle to be effected.</param>
+            <param name="dt">The time past since the last update.</param>
+        </member>
+        <member name="P:OkuBase.Particles.IParticleEffector.Enabled">
+            <summary>
+            Gets or sets if the effector is enabled or not.
+            </summary>
+        </member>
+        <member name="M:OkuBase.Particles.ForceEffector.#ctor">
+            <summary>
+            Creates a new force effector.
+            </summary>
+        </member>
+        <member name="M:OkuBase.Particles.ForceEffector.#ctor(OkuBase.Geometry.Rectangle2f)">
+            <summary>
+            Creates a new force effector using the given area.
+            </summary>
+            <param name="area">The area of the effector.</param>
+        </member>
+        <member name="M:OkuBase.Particles.ForceEffector.Effect(OkuBase.Particles.Particle,System.Single)">
+            <summary>
+            Effects the given particle.
+            </summary>
+            <param name="particle">The particle to be effected.</param>
+            <param name="dt">The time past since the last update.</param>
+        </member>
+        <member name="P:OkuBase.Particles.ForceEffector.Enabled">
+            <summary>
+            Gets os set if the effector is enabled or not.
+            </summary>
+        </member>
+        <member name="P:OkuBase.Particles.ForceEffector.Force">
+            <summary>
+            Gets or sets the force the effector applies to the particles.
+            </summary>
+        </member>
+        <member name="P:OkuBase.Particles.ForceEffector.Area">
+            <summary>
+            Gets or sets the area in which particles are affected.
+            </summary>
+        </member>
+        <member name="T:OkuBase.Particles.LineEmitter">
+            <summary>
+            Defines an emitter in a line shape. Particles are emitted on that line.
+            </summary>
+        </member>
         <member name="T:OkuBase.Particles.ParticleEmitter">
             <summary>
             Base class for particle emitters. Do not use directly. Use a descendent of it.
@@ -3457,6 +3530,18 @@
             Gets or sets the color of newly created particles.
             </summary>
         </member>
+        <member name="M:OkuBase.Particles.LineEmitter.#ctor">
+            <summary>
+            Creates a new line emitter.
+            </summary>
+        </member>
+        <member name="M:OkuBase.Particles.LineEmitter.#ctor(OkuBase.Geometry.Vector2f,OkuBase.Geometry.Vector2f)">
+            <summary>
+            Creates a new line emitter with the line defined by [start,end].
+            </summary>
+            <param name="start">The start of the line.</param>
+            <param name="end">The end of the line.</param>
+        </member>
         <member name="M:OkuBase.Particles.LineEmitter.GetRandomVelocity">
             <summary>
             Calculates a random velocity vector for a new particle taking into account the
@@ -3488,6 +3573,11 @@
             direction of the particles or the separate angle proeprties.
             </summary>
         </member>
+        <member name="T:OkuBase.Particles.Particle">
+            <summary>
+            Defines a single particle with its properties.
+            </summary>
+        </member>
         <member name="P:OkuBase.Particles.Particle.LifetimeRatio">
             <summary>
             Gets the ratio of the lifetime. This value ranges from 0.0 (start of life) - 1.0 (end of life). 
@@ -3497,6 +3587,41 @@
         <member name="P:OkuBase.Particles.Particle.IsDead">
             <summary>
             Gets if the life of this particle has ended or not.
+            </summary>
+        </member>
+        <member name="P:OkuBase.Particles.Particle.Position">
+            <summary>
+            Gets or set the position of the particle.
+            </summary>
+        </member>
+        <member name="P:OkuBase.Particles.Particle.OldPosition">
+            <summary>
+            Gets or set the position of the particle in the previous step.
+            </summary>
+        </member>
+        <member name="P:OkuBase.Particles.Particle.Velocity">
+            <summary>
+            Gets or set the velocity of the particle.
+            </summary>
+        </member>
+        <member name="P:OkuBase.Particles.Particle.Color">
+            <summary>
+            Gets or set the color of the particle.
+            </summary>
+        </member>
+        <member name="P:OkuBase.Particles.Particle.Scale">
+            <summary>
+            Gets or sets the scale of the particle.
+            </summary>
+        </member>
+        <member name="P:OkuBase.Particles.Particle.Energy">
+            <summary>
+            Gets or sets the energy of the particle. This is actually the number of seconds the particle still has to live.
+            </summary>
+        </member>
+        <member name="P:OkuBase.Particles.Particle.LifeTime">
+            <summary>
+            Gets or set the total life time of the particle. This is how long the particle exists in seconds.
             </summary>
         </member>
         <member name="T:OkuBase.Platform.User32">

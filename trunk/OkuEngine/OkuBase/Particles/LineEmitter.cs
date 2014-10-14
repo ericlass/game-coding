@@ -5,6 +5,9 @@ using OkuBase.Utils;
 
 namespace OkuBase.Particles
 {
+  /// <summary>
+  /// Defines an emitter in a line shape. Particles are emitted on that line.
+  /// </summary>
   public class LineEmitter : ParticleEmitter
   {
     private Vector2f _start = Vector2f.Zero;
@@ -12,10 +15,20 @@ namespace OkuBase.Particles
     private bool _normalDirection = true;
     private Vector2f _normal = Vector2f.Zero;
 
+    private Random _rand = new Random();
+
+    /// <summary>
+    /// Creates a new line emitter.
+    /// </summary>
     public LineEmitter()
     {
     }
 
+    /// <summary>
+    /// Creates a new line emitter with the line defined by [start,end].
+    /// </summary>
+    /// <param name="start">The start of the line.</param>
+    /// <param name="end">The end of the line.</param>
     public LineEmitter(Vector2f start, Vector2f end)
     {
       _start = start;
