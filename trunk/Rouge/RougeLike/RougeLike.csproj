@@ -89,9 +89,12 @@
     <Compile Include="Objects\ProjectileObject.cs" />
     <Compile Include="Objects\RenderDescription.cs" />
     <Compile Include="States\StateIds.cs" />
+    <Compile Include="Systems\CollidingParticleController.cs" />
     <Compile Include="Systems\DoorSystem.cs" />
     <Compile Include="Systems\GameSystemList.cs" />
     <Compile Include="Systems\IGameSystem.cs" />
+    <Compile Include="Systems\ImageParticleRenderer.cs" />
+    <Compile Include="Systems\ParticleGameSystem.cs" />
     <Compile Include="Systems\ProjectileSystem.cs" />
     <Compile Include="Systems\WalkingCharacterControlSystem.cs" />
     <Compile Include="Tiles\Biome.cs" />
