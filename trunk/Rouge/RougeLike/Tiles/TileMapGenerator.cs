@@ -7,8 +7,15 @@ using OkuBase.Utils;
 
 namespace RougeLike.Tiles
 {
-    public class TileMapGenerator
+  public class TileMapGenerator
   {
+    private const int TagNothing = -1;
+    private const int TagTerrain = 0;
+    private const int TagWall = 1;
+    private const int TagBackgroundWall = 2;
+    private const int TagPlatform = 3;
+    private const int TagGlass = 4;
+
     private static TileMapGenerator _instance = null;
 
     public static TileMapGenerator Instance
@@ -39,13 +46,12 @@ namespace RougeLike.Tiles
 
       //Fill tile map with empty tiles first
       Parallel.For(0, height, delegate(int y) 
-      //for (int y = 0; y < height; y++)
       {
         for (int x = 0; x < width; x++)
         {
           Tile tile = new Tile();
           tile.TileType = TileType.Empty;
-          tile.ImageIndex = -1;
+          tile.Tag = TagNothing;
           tiles[x, y] = tile;
         }
       });
@@ -82,7 +88,7 @@ namespace RougeLike.Tiles
           if (density > 0.0f)
           {
             tile.TileType = TileType.Filled;
-            tile.ImageIndex = 0;
+            tile.Tag = TagTerrain;
           }
         }
       });
@@ -153,12 +159,12 @@ namespace RougeLike.Tiles
           if (y <= averageHeight)
           {
             tile.TileType = TileType.Filled;
-            tile.ImageIndex = 0;
+            tile.Tag = TagTerrain;
           }
           else
           {
             tile.TileType = TileType.Empty;
-            tile.ImageIndex = -1;
+            tile.Tag = TagNothing;
           }          
         }
       }
@@ -204,12 +210,12 @@ namespace RougeLike.Tiles
               if (y <= colHeight)
               {
                 tile.TileType = TileType.Filled;
-                tile.ImageIndex = 0;
+                tile.Tag = TagTerrain;
               }
               else
               {
                 tile.TileType = TileType.Empty;
-                tile.ImageIndex = -1;
+                tile.Tag = TagNothing;
               }
               
             }
@@ -261,12 +267,12 @@ namespace RougeLike.Tiles
               if (y <= colHeight)
               {
                 tile.TileType = TileType.Filled;
-                tile.ImageIndex = 0;
+                tile.Tag = TagTerrain;
               }
               else
               {
                 tile.TileType = TileType.Empty;
-                tile.ImageIndex = -1;
+                tile.Tag = TagNothing;
               }
               
             }
@@ -284,17 +290,15 @@ namespace RougeLike.Tiles
       right -= 8;
 
       int doorHeight = 3;
-      int wallImage = 6;
-      int bgWallImage = 7;
       if (buildingType == BuildingType.Tower)
       {
         // Base room
         int firstFloorHeight = 25;
-        FillRectangle(tiles, left, right, averageHeight, averageHeight + firstFloorHeight, TileType.Empty, bgWallImage);
-        DrawRectangle(tiles, left, right, averageHeight, averageHeight + firstFloorHeight, TileType.Filled, wallImage);        
+        FillRectangle(tiles, left, right, averageHeight, averageHeight + firstFloorHeight, TileType.Empty, TagBackgroundWall);
+        DrawRectangle(tiles, left, right, averageHeight, averageHeight + firstFloorHeight, TileType.Filled, TagWall);        
         // Doors
-        DrawLine(left, averageHeight + 1, left, averageHeight + doorHeight, tiles, TileType.Filled, bgWallImage);
-        DrawLine(right, averageHeight + 1, right, averageHeight + doorHeight, tiles, TileType.Filled, bgWallImage);
+        DrawLine(left, averageHeight + 1, left, averageHeight + doorHeight, tiles, TileType.Filled, TagBackgroundWall);
+        DrawLine(right, averageHeight + 1, right, averageHeight + doorHeight, tiles, TileType.Filled, TagBackgroundWall);
         results.Doors.Add(new Vector2i(left, averageHeight + 1));
         results.Doors.Add(new Vector2i(right, averageHeight + 1));
 
@@ -307,13 +311,13 @@ namespace RougeLike.Tiles
         int neckTop = neckBottom + neckHeight;
 
         // Body
-        FillRectangle(tiles, neckLeft, neckRight, neckBottom, neckTop, TileType.Empty, bgWallImage);
-        DrawLine(neckLeft, neckTop, neckLeft, neckBottom + doorHeight, tiles, TileType.Filled, wallImage);
-        DrawLine(neckRight, neckTop, neckRight, neckBottom + doorHeight, tiles, TileType.Filled, wallImage);
-        DrawLine(neckLeft + 1, averageHeight + firstFloorHeight, neckRight - 1, averageHeight + firstFloorHeight, tiles, TileType.Empty, bgWallImage);
+        FillRectangle(tiles, neckLeft, neckRight, neckBottom, neckTop, TileType.Empty, TagBackgroundWall);
+        DrawLine(neckLeft, neckTop, neckLeft, neckBottom + doorHeight, tiles, TileType.Filled, TagWall);
+        DrawLine(neckRight, neckTop, neckRight, neckBottom + doorHeight, tiles, TileType.Filled, TagWall);
+        DrawLine(neckLeft + 1, averageHeight + firstFloorHeight, neckRight - 1, averageHeight + firstFloorHeight, tiles, TileType.Empty, TagBackgroundWall);
         //Doors
-        DrawLine(neckLeft, averageHeight + 1, neckLeft, averageHeight + doorHeight, tiles, TileType.Filled, bgWallImage);
-        DrawLine(neckRight, averageHeight + 1, neckRight, averageHeight + doorHeight, tiles, TileType.Filled, bgWallImage);
+        DrawLine(neckLeft, averageHeight + 1, neckLeft, averageHeight + doorHeight, tiles, TileType.Filled, TagBackgroundWall);
+        DrawLine(neckRight, averageHeight + 1, neckRight, averageHeight + doorHeight, tiles, TileType.Filled, TagBackgroundWall);
         results.Doors.Add(new Vector2i(neckLeft, averageHeight + 1));
         results.Doors.Add(new Vector2i(neckRight, averageHeight + 1));
 
@@ -337,7 +341,7 @@ namespace RougeLike.Tiles
             sr = neckLeft + stairWidth;
           }
 
-          DrawLine(sl, sy, sr, sy, tiles, TileType.Filled, wallImage);
+          DrawLine(sl, sy, sr, sy, tiles, TileType.Filled, TagPlatform);
           sy += stairHeight;
         }
 
@@ -350,38 +354,38 @@ namespace RougeLike.Tiles
         int topTop = neckTop + topHeight;
 
         int notchWidth = neckWidth / 3;
-        FillRectangle(tiles, topLeft, topRight, neckTop, topTop, TileType.Empty, bgWallImage);
-        DrawRectangle(tiles, topLeft, topRight, neckTop, topTop, TileType.Filled, wallImage);
-        DrawLine(neckLeft + notchWidth, neckTop, neckRight - notchWidth, neckTop, tiles, TileType.Empty, bgWallImage);
+        FillRectangle(tiles, topLeft, topRight, neckTop, topTop, TileType.Empty, TagBackgroundWall);
+        DrawRectangle(tiles, topLeft, topRight, neckTop, topTop, TileType.Filled, TagWall);
+        DrawLine(neckLeft + notchWidth, neckTop, neckRight - notchWidth, neckTop, tiles, TileType.Empty, TagBackgroundWall);
       }
     }
 
-    private static void DrawRectangle(Tile[,] tiles, int left, int right, int bottom, int top, TileType type, int image)
+    private static void DrawRectangle(Tile[,] tiles, int left, int right, int bottom, int top, TileType type, int tag)
     {
       for (int x = left; x <= right; x++)
       {
         Tile tile = tiles[x, bottom];
         tile.TileType = type;
-        tile.ImageIndex = image;
+        tile.Tag = tag;
 
         tile = tiles[x, top];
         tile.TileType = type;
-        tile.ImageIndex = image;
+        tile.Tag = tag;
       }
 
       for (int y = bottom; y <= top; y++)
       {
         Tile tile = tiles[left, y];
         tile.TileType = type;
-        tile.ImageIndex = image;
+        tile.Tag = tag;
 
         tile = tiles[right, y];
         tile.TileType = type;
-        tile.ImageIndex = image;
+        tile.Tag = tag;
       }
     }
 
-    private static void FillRectangle(Tile[,] tiles, int left, int right, int bottom, int top, TileType type, int image)
+    private static void FillRectangle(Tile[,] tiles, int left, int right, int bottom, int top, TileType type, int tag)
     {
       for (int y = bottom; y <= top; y++)
       {
@@ -389,12 +393,12 @@ namespace RougeLike.Tiles
         {
           Tile tile = tiles[x, y];
           tile.TileType = type;
-          tile.ImageIndex = image;
+          tile.Tag = tag;
         }
       }
     }
 
-    private static void DrawLine(int x0, int y0, int x1, int y1, Tile[,] tiles, TileType type, int image)
+    private static void DrawLine(int x0, int y0, int x1, int y1, Tile[,] tiles, TileType type, int tag)
     {
       int dx = Math.Abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
       int dy = -Math.Abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
@@ -404,7 +408,7 @@ namespace RougeLike.Tiles
       {
         Tile tile = tiles[x0, y0];
         tile.TileType = type;
-        tile.ImageIndex = image;
+        tile.Tag = tag;
 
         if (x0 == x1 && y0 == y1)
           break;
@@ -430,6 +434,7 @@ namespace RougeLike.Tiles
     /// <param name="tiles">The tiles to be processed.</param>
     private static void PostProcess(Tile[,] tiles)
     {
+      // Terrain shape
       Parallel.For(1, tiles.GetLength(1) - 1, delegate(int y)
       //for (int y = 1; y < tiles.GetLength(1) - 1; y++)
       {
@@ -465,14 +470,13 @@ namespace RougeLike.Tiles
         }
       });
 
-      Parallel.For(1, tiles.GetLength(1) - 1, delegate(int y)
-      //for (int y = 1; y < tiles.GetLength(1) - 1; y++)
+      // Image indexes
+      //Parallel.For(1, tiles.GetLength(1) - 1, delegate(int y)
+      for (int y = 1; y < tiles.GetLength(1) - 1; y++)
       {
         for (int x = 1; x < tiles.GetLength(0) - 1; x++)
         {
           Tile tile = tiles[x, y];
-
-          // Set floor tiles
           if (tile.TileType == TileType.Filled)
           {
             bool upFilled = tiles[x, y + 1].TileType == TileType.Filled;
@@ -480,11 +484,65 @@ namespace RougeLike.Tiles
             bool leftFilled = tiles[x - 1, y].TileType == TileType.Filled;
             bool rightFilled = tiles[x + 1, y].TileType == TileType.Filled;
 
-            if (!upFilled && tile.ImageIndex == 0)
-              tile.ImageIndex = 1;
+            int upTag = tiles[x, y + 1].Tag;
+            int downTag = tiles[x, y - 1].Tag;
+            int leftTag = tiles[x - 1, y].Tag;
+            int rightTag = tiles[x + 1, y].Tag;
+
+            int imageIndex = -1;
+            switch (tile.Tag)
+            {
+              case TagTerrain:
+                if (!upFilled)
+                  imageIndex = 1;
+                else
+                  imageIndex = 0;
+                break;
+
+              case TagWall:
+                if (upTag == TagWall && downTag == TagWall)
+                  imageIndex = 13;
+                else if (rightTag == TagWall && leftTag == TagWall)
+                  imageIndex = 14;
+                else if (rightTag == TagWall && downTag == TagWall)
+                  imageIndex = 15;
+                else if (leftTag == TagWall && downTag == TagWall)
+                  imageIndex = 16;
+                else if (leftTag == TagWall && (upTag == TagWall || upTag == TagBackgroundWall))
+                  imageIndex = 17;
+                else if (rightTag == TagWall && (upTag == TagWall || upTag == TagBackgroundWall))
+                  imageIndex = 18;
+                break;
+
+              case TagPlatform:
+                if (leftTag == TagPlatform && rightTag == TagPlatform)
+                  imageIndex = 20;
+                else if (leftTag == TagPlatform && rightTag != TagPlatform)
+                  imageIndex = 21;
+                else if (leftTag != TagPlatform && rightTag == TagPlatform)
+                  imageIndex = 19;
+                break;
+
+              case TagGlass:
+                imageIndex = 14;
+                break;
+
+              default:
+                break;
+            }
+
+            tile.ImageIndex = imageIndex;
           }
+          else
+          {
+            if (tile.Tag == TagNothing)
+              tile.ImageIndex = -1;
+            else if (tile.Tag == TagBackgroundWall)
+              tile.ImageIndex = -1;
+          }
+
         }
-      });
+      }//);
 
     }
 

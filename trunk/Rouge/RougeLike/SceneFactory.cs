@@ -101,7 +101,7 @@ namespace RougeLike
       scene.GameObjects.Add(bg);
 
       system = new WalkingCharacterControlSystem(player.Id, new PlayerController());
-      system.MaxWalkSpeed = 250;
+      system.MaxWalkSpeed = 150;
       scene.GameSystems.Add(system);
 
       ProjectileSystem projSystem = new ProjectileSystem(10, 20);
@@ -122,7 +122,7 @@ namespace RougeLike
       player.Id = "player";
       player.ZIndex = 1;
       player.Position = new Vector2f(0, -800);
-      player.HitBox = new Rectangle2f(-4, -9, 8, 16);
+      player.HitBox = new Rectangle2f(-3, -8, 6, 15);
       player.EquipedWeapon = "weapon_laser";
       player.Skills.BeamWeapons = 1;
       player.Skills.ProjectileWeapons = 1;

@@ -1,6 +1,6 @@
 ﻿{
   "id" : "mountain",
-  "tileset" : "mountain_tile.png",
+  "tileset" : "tiles_mono",
   "amplitude" : 40,
   "detaillevel" : 4,
   "detailsize" : 200,
