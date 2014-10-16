@@ -629,7 +629,7 @@ namespace RougeLike.Objects
       Image tileImage = GameData.Instance.ActiveScene.Content.GetImage(_tileData.TileImageName);
 
       //Pre-calculate texture coordinates of tile images
-      Rectangle2f[] texCoords = new Rectangle2f[10];
+      Rectangle2f[] texCoords = new Rectangle2f[30];
       for (int i = 0; i < texCoords.Length; i++)
       {
         float fwidth = tileImage.Width;

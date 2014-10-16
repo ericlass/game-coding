@@ -260,9 +260,18 @@
     <None Include="Content\Graphics\sky_early_morning.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Content\Graphics\player_run01.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Graphics\player_run02.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Content\Graphics\snow_tile.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Content\Graphics\tiles_mono.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Content\Graphics\weapon_laser_hit_01.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
