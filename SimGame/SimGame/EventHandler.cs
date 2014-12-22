@@ -22,5 +22,29 @@ namespace SimGame
       Parameters = parameters;
     }
 
+    public override string ToString()
+    {
+      StringBuilder builder = new StringBuilder();
+      builder.Append("[");
+
+      if (Parameters != null && Parameters.Length > 0)
+      {
+        builder.Append("\"");
+        builder.Append(Parameters[0]);
+        builder.Append("\"");
+        for (int i = 1; i < Parameters.Length; i++)
+        {
+          builder.Append(",");
+          builder.Append("\"");
+          builder.Append(Parameters[i]);
+          builder.Append("\"");
+        }
+      }
+
+      builder.Append("]");
+
+      return ActionId + " " + builder;
+    }
+
   }
 }

@@ -39,11 +39,13 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionConstructors.cs" />
     <Compile Include="ActionFactory.cs" />
     <Compile Include="EventHandler.cs" />
     <Compile Include="EventManager.cs" />
     <Compile Include="IAction.cs" />
     <Compile Include="ILogger.cs" />
+    <Compile Include="IStateMachine.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -53,6 +55,7 @@
     <Compile Include="ObjectFactory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SwitchStateAction.cs" />
     <Compile Include="TextBoxLogger.cs" />
     <Compile Include="TimerAction.cs" />
     <EmbeddedResource Include="MainForm.resx">

@@ -73,9 +73,16 @@ namespace SimGame
 
     public void QueueEvent(string eventId)
     {
+      if (!_eventHandlers.ContainsKey(eventId))
+      {
+        if (_logger != null)
+          _logger.Log("Ignored : " + eventId);
+        return;
+      }
+
       _events.Enqueue(eventId);
       if (_logger != null)
-        _logger.Log(eventId);
+        _logger.Log("Enqueued: " + eventId);
     }
 
     public void Update(float dt)
@@ -87,7 +94,11 @@ namespace SimGame
         if (_eventHandlers.ContainsKey(ev))
         {
           foreach (EventHandler handler in _eventHandlers[ev])
+          {
             _runningActions.Add(_factory.Create(handler.ActionId, handler.Parameters));
+            if (_logger != null)
+              _logger.Log("Started : " + handler);
+          }
         }
       }
 
