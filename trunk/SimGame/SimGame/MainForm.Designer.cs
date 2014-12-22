@@ -41,13 +41,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
       this.txtEvent.Location = new System.Drawing.Point(12, 12);
       this.txtEvent.Name = "txtEvent";
-      this.txtEvent.Size = new System.Drawing.Size(946, 31);
+      this.txtEvent.Size = new System.Drawing.Size(1504, 31);
       this.txtEvent.TabIndex = 0;
       // 
       // btnTrigger
       // 
       this.btnTrigger.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.btnTrigger.Location = new System.Drawing.Point(964, 12);
+      this.btnTrigger.Location = new System.Drawing.Point(1522, 12);
       this.btnTrigger.Name = "btnTrigger";
       this.btnTrigger.Size = new System.Drawing.Size(125, 42);
       this.btnTrigger.TabIndex = 1;
@@ -60,12 +60,13 @@
       this.txtLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+      this.txtLog.Font = new System.Drawing.Font("Consolas", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.txtLog.Location = new System.Drawing.Point(12, 60);
       this.txtLog.Multiline = true;
       this.txtLog.Name = "txtLog";
       this.txtLog.ReadOnly = true;
       this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-      this.txtLog.Size = new System.Drawing.Size(1077, 606);
+      this.txtLog.Size = new System.Drawing.Size(1635, 606);
       this.txtLog.TabIndex = 2;
       // 
       // timer1
@@ -78,12 +79,12 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(192F, 192F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-      this.ClientSize = new System.Drawing.Size(1101, 678);
+      this.ClientSize = new System.Drawing.Size(1659, 678);
       this.Controls.Add(this.txtLog);
       this.Controls.Add(this.btnTrigger);
       this.Controls.Add(this.txtEvent);
       this.Name = "MainForm";
-      this.Text = "Form1";
+      this.Text = "SimGame Test";
       this.ResumeLayout(false);
       this.PerformLayout();
 

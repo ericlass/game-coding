@@ -15,7 +15,7 @@ namespace SimGame
 
     public void Log(string text)
     {
-      _textBox.Text += text + Environment.NewLine;
+      _textBox.Text += DateTime.Now.ToString() + " - " + text + Environment.NewLine;
     }
   }
 }

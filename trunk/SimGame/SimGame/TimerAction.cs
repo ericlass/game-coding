@@ -8,16 +8,19 @@ namespace SimGame
   {
     private float _time = 0;
     private string _eventToFire = null;
-
-    public TimerAction(float time)
-    {
-      _time = time;
-    }
+    private string _cancelEvent = null;
 
     public TimerAction(float time, string eventToFire)
     {
       _time = time;
       _eventToFire = eventToFire;
+    }
+
+    public TimerAction(float time, string eventToFire, string cancelEvent)
+    {
+      _time = time;
+      _eventToFire = eventToFire;
+      _cancelEvent = cancelEvent;
     }
 
     public bool Update(float dt, EventManager manager)
@@ -32,5 +35,10 @@ namespace SimGame
       return false;
     }
 
+    public void Cancel(EventManager manager)
+    {
+      if (_cancelEvent != null)
+        manager.QueueEvent(_cancelEvent);
+    }
   }
 }

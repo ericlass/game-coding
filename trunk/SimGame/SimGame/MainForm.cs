@@ -8,9 +8,10 @@ using System.Windows.Forms;
 
 namespace SimGame
 {
-  public partial class MainForm : Form
+  public partial class MainForm : Form, IStateMachine
   {
     private EventManager _manager = null;
+    private string _currentState = null;
 
     public MainForm()
     {
@@ -20,30 +21,21 @@ namespace SimGame
       _manager = new EventManager(factory);
       _manager.Logger = new TextBoxLogger(txtLog);
 
-      _manager.RegisterHandler("start", new EventHandler("timer", 5.0f, "stop"));
+      _manager.RegisterHandler("game.start", new EventHandler("timer", 5.0f, "timer1.finished"));
+      _manager.RegisterHandler("timer1.finished", new EventHandler("switch_state", "first_state", this));
+      _manager.RegisterHandler("timer1.finished", new EventHandler("timer", 5.0f, "timer2.finished"));
+      _manager.RegisterHandler("timer2.finished", new EventHandler("switch_state", "second_state", this));
     }
 
     private ActionFactory CreateObjectFactory()
     {
       var result = new ActionFactory();
 
-      result.RegisterConstructor("timer", CreateTimerAction);
+      result.RegisterConstructor("timer", ActionConstructors.CreateTimerAction);
+      result.RegisterConstructor("switch_state", ActionConstructors.CreateSwitchStateAction);
 
       return result;
-    }
-
-    private TimerAction CreateTimerAction(object[] parameters)
-    {
-      TimerAction action;
-      if (parameters.Length == 1)
-        action = new TimerAction((float)parameters[0]);
-      else if (parameters.Length == 2)
-        action = new TimerAction((float)parameters[0], (string)parameters[1]);
-      else
-        throw new ArgumentException("Invalid number of parameters for TimerAcion!");
-
-      return action;
-    }
+    }    
 
     private void timer1_Tick(object sender, EventArgs e)
     {
@@ -54,6 +46,17 @@ namespace SimGame
     {
       _manager.QueueEvent(txtEvent.Text.Trim());
     }
-
+    public string CurrentState
+    {
+      get
+      {
+        return _currentState;
+      }
+      set
+      {
+        _manager.Logger.Log("NewState: " + value);
+        _currentState = value;
+      }
+    }
   }
 }
