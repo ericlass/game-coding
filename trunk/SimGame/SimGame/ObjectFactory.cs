@@ -23,5 +23,11 @@ namespace SimGame
     {
       return _constructors[typeId](parameters);
     }
+
+    public bool ContainsType(string typeId)
+    {
+      return _constructors.ContainsKey(typeId);
+    }
+
   }
 }

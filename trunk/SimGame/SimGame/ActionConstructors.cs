@@ -11,25 +11,26 @@ namespace SimGame
     public static TimerAction CreateTimerAction(object[] parameters)
     {
       if (parameters == null)
-        throw new ArgumentException("Timer action cannot be created with no parameters!");
+        throw new ArgumentException("TimerAction cannot be created with no parameters!");
 
       TimerAction action;
-      if (parameters.Length == 2)
-        action = new TimerAction((float)parameters[0], (string)parameters[1]);
-      else if (parameters.Length == 3)
-        action = new TimerAction((float)parameters[0], (string)parameters[1], (string)parameters[2]);
+      if (parameters.Length == 3)
+        action = new TimerAction((IGameDataProvider)parameters[0], (float)parameters[1], (string)parameters[2]);
+      else if (parameters.Length == 4)
+        action = new TimerAction((IGameDataProvider)parameters[0], (float)parameters[1], (string)parameters[2], (string)parameters[3]);
       else
-        throw new ArgumentException("Invalid number of parameters for TimerAction! Two parameters are required: Time(float); Event(string)");
+        throw new ArgumentException("Invalid number of parameters for TimerAction! 3 or 4 required, " + parameters.Length + " received!");
 
       return action;
     }
 
-    public static SwitchStateAction CreateSwitchStateAction(object[] parameters)
+    public static SetGameStateAction CreateSetGameStateAction(object[] parameters)
     {
-      if (parameters == null || parameters.Length != 2)
-        throw new ArgumentException("SwitchState action cannot be created with no parameters! Two parameters are required: TargetState(string); StateMachine(IStateMachine)");
+      if (parameters == null)
+        throw new ArgumentException("SetGameStateAction cannot be created with no parameters!");
 
-      return new SwitchStateAction((string)parameters[0], (IStateMachine)parameters[1]);
+      return new SetGameStateAction(parameters[0] as IGameDataProvider, parameters[1] as string);
     }
+
   }
 }

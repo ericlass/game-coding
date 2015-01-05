@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OkuDrivers</name>
+    </assembly>
+    <members>
+        <member name="M:OkuDrivers.OpenGLGraphicsDriver.OnFormResize(System.Object,System.EventArgs)">
+            <summary>
+            Handles resizing of the form. The OpenGL viewport is reset to fit the new size of the form.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The event arguments.</param>
+        </member>
+        <member name="M:OkuDrivers.OpenGLGraphicsDriver.GetGLTexFilter">
+            <summary>
+            Converts the currently set texture filter method
+            to an int to be used for OpenGL.
+            </summary>
+            <returns>The value of the OpenGL texture filter constant.</returns>
+        </member>
+        <member name="M:OkuDrivers.OpenGLGraphicsDriver.VertexIntToGLPrimitive(OkuBase.Graphics.LineMode)">
+            <summary>
+            Converts a VertexInterpretation to an OpenGL primitive type that can be used during rendering with glBegin().
+            </summary>
+            <param name="interpretation">The interpretation to be converted.</param>
+            <returns>The OpenGL primitive type for the given VertexInterpretation.</returns>
+        </member>
+        <member name="M:OkuDrivers.OpenGLGraphicsDriver.PrimitiveToGLPrimitive(OkuBase.Graphics.PrimitiveType)">
+            <summary>
+            Converts the given draw mode to an OpenGL primitive.
+            </summary>
+            <param name="mode">The draw mode to convert.</param>
+            <returns>The primitive for the given draw mode or 0 for None or unknown draw mode.</returns>
+        </member>
+        <member name="M:OkuDrivers.OpenGLGraphicsDriver.SetPointers(OkuBase.Geometry.Vector2f[],OkuBase.Geometry.Vector2f[],OkuBase.Graphics.Color[])">
+            <summary>
+            Set array pointers for vertices, texture coordinates and vertex colors.
+            If a non-null value is given for an array, the corresponding client state
+            array is enabled. If null is given, it is disabled.
+            </summary>
+            <param name="vertices">The vertex array.</param>
+            <param name="texCoords">The texture coordinate array.</param>
+            <param name="colors">The vertex color array.</param>
+        </member>
+    </members>
+</doc>
