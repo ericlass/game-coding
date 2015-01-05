@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using OkuBase;
 
 namespace SimGame
 {
@@ -16,7 +15,9 @@ namespace SimGame
     {
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
-      Application.Run(new MainForm());
+
+      OkuGame game = new SimGameMain();
+      game.Run();
     }
   }
 }

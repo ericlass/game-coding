@@ -106,7 +106,7 @@ namespace SimGame
       for (int i = _runningActions.Count - 1; i >= 0; i--)
       {
         IAction action = _runningActions[i];
-        if (action.Update(dt, this))
+        if (action.Update(dt))
           _runningActions.RemoveAt(i);
       }
     }  

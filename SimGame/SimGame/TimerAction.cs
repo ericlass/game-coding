@@ -9,36 +9,39 @@ namespace SimGame
     private float _time = 0;
     private string _eventToFire = null;
     private string _cancelEvent = null;
+    private IGameDataProvider _data = null;
 
-    public TimerAction(float time, string eventToFire)
+    public TimerAction(IGameDataProvider data, float time, string eventToFire)
     {
       _time = time;
       _eventToFire = eventToFire;
+      _data = data;
     }
 
-    public TimerAction(float time, string eventToFire, string cancelEvent)
+    public TimerAction(IGameDataProvider data, float time, string eventToFire, string cancelEvent)
     {
       _time = time;
       _eventToFire = eventToFire;
+      _data = data;
       _cancelEvent = cancelEvent;
     }
 
-    public bool Update(float dt, EventManager manager)
+    public bool Update(float dt)
     {
       _time -= dt;
       if (_time <= 0)
       {
-        manager.QueueEvent(_eventToFire);
+        _data.EventQueue.QueueEvent(_eventToFire);
         return true;
       }
 
       return false;
     }
 
-    public void Cancel(EventManager manager)
+    public void Cancel()
     {
       if (_cancelEvent != null)
-        manager.QueueEvent(_cancelEvent);
+        _data.EventQueue.QueueEvent(_cancelEvent);
     }
   }
 }
