@@ -27,7 +27,7 @@ namespace SimGame
     {
       //Create and set up event queue
       _eventQueue = new EventManager(CreateActionFactory());
-      _eventQueue.RegisterHandler(EventIds.GameStart, new EventHandler("setgamestate", this, "dummy"));
+      _eventQueue.RegisterHandler(EventIds.GameStart, new EventHandler("setgamestate", "dummy", null));
 
       //Create and set up state factory
       _stateFactory = new GameStateFactory();
@@ -63,23 +63,21 @@ namespace SimGame
       get { return _eventQueue; }
     }
 
-    public string GameState
+    public string CurrentState
     {
-      get
-      {
-        return _currentState == null ? "null" : _currentState.Id;
-      }
-      set
-      {
-        if (_currentState != null)
-          _currentState.Leave(this);
+      get { return _currentState == null ? "null" : _currentState.Id; }
+    }
 
-        if (_stateFactory.ContainsType(value))
-        {
-          _currentState = _stateFactory.Create(value, null); //TODO: Need parameters!
-          _currentState.Enter(this);
-          _eventQueue.QueueEvent(EventIds.GameStateChanged);
-        }
+    public void SetCurrentState(string stateId, params object[] parameters)
+    {
+      if (_currentState != null)
+        _currentState.Leave(this);
+
+      if (_stateFactory.ContainsType(stateId))
+      {
+        _currentState = _stateFactory.Create(stateId, parameters);
+        _currentState.Enter(this);
+        _eventQueue.QueueEvent(EventIds.GameStateChanged);
       }
     }
 
