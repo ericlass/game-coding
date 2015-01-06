@@ -25,29 +25,37 @@ namespace SimGame
 
     public override void Initialize()
     {
-      ActionFactory factory = new ActionFactory();
-
-      factory.RegisterConstructor("timer", ActionConstructors.CreateTimerAction);
-      factory.RegisterConstructor("setgamestate", ActionConstructors.CreateSetGameStateAction);
-
-      _eventQueue = new EventManager(factory);
+      //Create and set up event queue
+      _eventQueue = new EventManager(CreateActionFactory());
       _eventQueue.RegisterHandler(EventIds.GameStart, new EventHandler("setgamestate", this, "dummy"));
 
+      //Create and set up state factory
       _stateFactory = new GameStateFactory();
-      _stateFactory.RegisterConstructor("dummy", GameStateConstructors.CreateDummyState);
+      _stateFactory.RegisterConstructor("dummy", (parameters) => new DummyState());
 
+      //Queue start of game
       _eventQueue.QueueEvent(EventIds.GameStart);
+    }
+    
+    private ActionFactory CreateActionFactory()
+    {
+      ActionFactory factory = new ActionFactory();
+      factory.RegisterConstructor("timer", (parameters) => new TimerAction(this, parameters));
+      factory.RegisterConstructor("setgamestate", (parameters) => new SetGameStateAction(this, parameters));
+      return factory;
     }
 
     public override void Update(float dt)
     {
       _eventQueue.Update(dt);
-      _currentState.Update(this, dt);
+      if (_currentState != null)
+        _currentState.Update(this, dt);
     }
 
     public override void Render()
     {
-      _currentState.Render(this);
+      if (_currentState != null)
+        _currentState.Render(this);
     }
     
     public EventManager EventQueue
@@ -59,7 +67,7 @@ namespace SimGame
     {
       get
       {
-        return _currentState == null ? "none" : _currentState.Id;
+        return _currentState == null ? "null" : _currentState.Id;
       }
       set
       {
