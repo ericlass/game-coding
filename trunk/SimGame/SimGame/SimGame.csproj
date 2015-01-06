@@ -47,24 +47,25 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionFactory.cs" />
-    <Compile Include="DummyState.cs" />
-    <Compile Include="EventHandler.cs" />
-    <Compile Include="EventIds.cs" />
-    <Compile Include="EventManager.cs" />
-    <Compile Include="GameStateFactory.cs" />
-    <Compile Include="IAction.cs" />
-    <Compile Include="IEventQueueContainer.cs" />
+    <Compile Include="Actions\ActionFactory.cs" />
+    <Compile Include="IEntity.cs" />
+    <Compile Include="States\DummyState.cs" />
+    <Compile Include="Events\EventHandler.cs" />
+    <Compile Include="Events\EventIds.cs" />
+    <Compile Include="Events\EventManager.cs" />
+    <Compile Include="States\GameStateFactory.cs" />
+    <Compile Include="Actions\IAction.cs" />
+    <Compile Include="Events\IEventQueueContainer.cs" />
     <Compile Include="IGameDataProvider.cs" />
-    <Compile Include="IGameState.cs" />
+    <Compile Include="States\IGameState.cs" />
     <Compile Include="ILogger.cs" />
-    <Compile Include="IStateMachine.cs" />
+    <Compile Include="States\IStateMachine.cs" />
     <Compile Include="ObjectFactory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SetGameStateAction.cs" />
+    <Compile Include="Actions\SetGameStateAction.cs" />
     <Compile Include="SimGameMain.cs" />
-    <Compile Include="TimerAction.cs" />
+    <Compile Include="Actions\TimerAction.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -7,6 +7,13 @@ namespace SimGame
 {
   public class DummyState : IGameState
   {
+    private Color _color = Color.Black;
+
+    public DummyState(object[] parameters)
+    {
+      _color = (Color)parameters[0];
+    }
+
     public string Id
     {
       get { return "dummy"; }
@@ -14,7 +21,7 @@ namespace SimGame
 
     public void Enter(IGameDataProvider data)
     {
-      OkuManager.Instance.Graphics.BackgroundColor = Color.Yellow;
+      OkuManager.Instance.Graphics.BackgroundColor = _color;
     }
 
     public void Update(IGameDataProvider data, float dt)

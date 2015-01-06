@@ -27,11 +27,11 @@ namespace SimGame
     {
       //Create and set up event queue
       _eventQueue = new EventManager(CreateActionFactory());
-      _eventQueue.RegisterHandler(EventIds.GameStart, new EventHandler("setgamestate", "dummy", null));
+      _eventQueue.RegisterHandler(EventIds.GameStart, new EventHandler("setgamestate", "dummy", new object[] { Color.Silver }));
 
       //Create and set up state factory
       _stateFactory = new GameStateFactory();
-      _stateFactory.RegisterConstructor("dummy", (parameters) => new DummyState());
+      _stateFactory.RegisterConstructor("dummy", (parameters) => new DummyState(parameters));
 
       //Queue start of game
       _eventQueue.QueueEvent(EventIds.GameStart);
