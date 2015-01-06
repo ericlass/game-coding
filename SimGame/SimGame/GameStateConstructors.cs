@@ -8,9 +8,11 @@ namespace SimGame
 {
   public static class GameStateConstructors
   {
+    /*
     public static IGameState CreateDummyState(object[] parameters)
     {
       return new DummyState();
     }
+    */
   }
 }

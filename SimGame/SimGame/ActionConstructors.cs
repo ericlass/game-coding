@@ -8,6 +8,7 @@ namespace SimGame
 {
   public static class ActionConstructors
   {
+    /*
     public static TimerAction CreateTimerAction(object[] parameters)
     {
       if (parameters == null)
@@ -31,6 +32,7 @@ namespace SimGame
 
       return new SetGameStateAction(parameters[0] as IGameDataProvider, parameters[1] as string);
     }
+    */
 
   }
 }

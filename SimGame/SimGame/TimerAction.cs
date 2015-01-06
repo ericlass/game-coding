@@ -11,19 +11,18 @@ namespace SimGame
     private string _cancelEvent = null;
     private IGameDataProvider _data = null;
 
-    public TimerAction(IGameDataProvider data, float time, string eventToFire)
+    public TimerAction(IGameDataProvider data, params object[] parameters)
     {
-      _time = time;
-      _eventToFire = eventToFire;
+      if (parameters.Length < 2)
+        throw new ArgumentException("TimerAction needs at least two parameters!");
+    
       _data = data;
-    }
-
-    public TimerAction(IGameDataProvider data, float time, string eventToFire, string cancelEvent)
-    {
-      _time = time;
-      _eventToFire = eventToFire;
-      _data = data;
-      _cancelEvent = cancelEvent;
+      
+      _time = parameters[0] as float;
+      _eventToFire = parameters[1] as string;
+      
+      if (parameters.Length >= 3)
+        _cancelEvent = parameters[2] as string;
     }
 
     public bool Update(float dt)
