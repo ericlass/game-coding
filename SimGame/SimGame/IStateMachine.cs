@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace SimGame
 {
-  public interface IGameDataProvider : IStateMachine, IEventQueueContainer
+  public interface IStateMachine
   {
+    string CurrentState { get; }
+    void SetCurrentState(string stateId, params object[] parameters);
   }
 }

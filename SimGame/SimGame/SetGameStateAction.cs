@@ -5,21 +5,23 @@ namespace SimGame
 {
   public class SetGameStateAction : IAction
   {
-    private IGameDataProvider _data = null;
+    private IStateMachine _stateMachine = null;
     private string _targetState = null;
+    private object[] _parameters = null;
 
-    public SetGameStateAction(IGameDataProvider data, params object[] parameters)
+    public SetGameStateAction(IStateMachine stateMachine, params object[] parameters)
     {
       if (parameters.Length < 1)
         throw new ArgumentException("SetGameStateAction needs one parameter, the target state id!");
-    
-      _data = data;
+
+      _stateMachine = stateMachine;
       _targetState = parameters[0] as string;
+      _parameters = parameters[1] as object[];
     }
 
     public bool Update(float dt)
     {
-      _data.GameState = _targetState;
+      _stateMachine.SetCurrentState(_targetState, _parameters);
       return true;
     }
 

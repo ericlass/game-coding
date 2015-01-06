@@ -9,16 +9,16 @@ namespace SimGame
     private float _time = 0;
     private string _eventToFire = null;
     private string _cancelEvent = null;
-    private IGameDataProvider _data = null;
+    private IEventQueueContainer _eventQueue = null;
 
-    public TimerAction(IGameDataProvider data, params object[] parameters)
+    public TimerAction(IEventQueueContainer eventQueue, params object[] parameters)
     {
       if (parameters.Length < 2)
         throw new ArgumentException("TimerAction needs at least two parameters!");
-    
-      _data = data;
+
+      _eventQueue = eventQueue;
       
-      _time = parameters[0] as float;
+      _time = (float)parameters[0];
       _eventToFire = parameters[1] as string;
       
       if (parameters.Length >= 3)
@@ -30,7 +30,7 @@ namespace SimGame
       _time -= dt;
       if (_time <= 0)
       {
-        _data.EventQueue.QueueEvent(_eventToFire);
+        _eventQueue.EventQueue.QueueEvent(_eventToFire);
         return true;
       }
 
@@ -40,7 +40,7 @@ namespace SimGame
     public void Cancel()
     {
       if (_cancelEvent != null)
-        _data.EventQueue.QueueEvent(_cancelEvent);
+        _eventQueue.EventQueue.QueueEvent(_cancelEvent);
     }
   }
 }
