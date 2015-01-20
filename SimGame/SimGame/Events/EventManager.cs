@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using SimGame.Objects;
 
-namespace SimGame
+namespace SimGame.Events
 {
   public class EventManager
   {
-    //Used to create new instances of actions
-    private ActionFactory _factory = new ActionFactory();
+    private ActionDispatcher _dispatcher = null;
     //Defines event handlers
     private Dictionary<string, HashSet<EventHandler>> _eventHandlers = new Dictionary<string, HashSet<EventHandler>>();
     //Simple logger
@@ -15,17 +15,10 @@ namespace SimGame
     //Contains the queued events
     private Queue<string> _events = new Queue<string>();
     //Contains the currently running actions
-    private List<IAction> _runningActions = new List<IAction>();
 
-    public EventManager(ActionFactory factory)
+    public EventManager(GameObjectManager objectManager)
     {
-      _factory = factory;
-    }
-
-    public ActionFactory ActionFactory
-    {
-      get { return _factory; }
-      set { _factory = value; }
+      _dispatcher = new ActionDispatcher(objectManager);
     }
 
     public ILogger Logger
@@ -73,13 +66,13 @@ namespace SimGame
       if (!_eventHandlers.ContainsKey(eventId))
       {
         if (_logger != null)
-          _logger.Log("Ignored : " + eventId);
+          _logger.Log("Ignored  : " + eventId);
         return;
       }
 
       _events.Enqueue(eventId);
       if (_logger != null)
-        _logger.Log("Enqueued: " + eventId);
+        _logger.Log("Enqueued : " + eventId);
     }
 
     public void Update(float dt)
@@ -92,20 +85,13 @@ namespace SimGame
         {
           foreach (EventHandler handler in _eventHandlers[ev])
           {
-            _runningActions.Add(_factory.Create(handler.ActionId, handler.Parameters));
+            _dispatcher.Dispatch(handler.ActionId, handler.Parameters);
             if (_logger != null)
-              _logger.Log("Started : " + handler);
+              _logger.Log("Triggered: " + handler);
           }
         }
       }
-
-      //Update running actions and remove them when they are finished
-      for (int i = _runningActions.Count - 1; i >= 0; i--)
-      {
-        IAction action = _runningActions[i];
-        if (action.Update(dt))
-          _runningActions.RemoveAt(i);
-      }
     }  
+
   }
 }

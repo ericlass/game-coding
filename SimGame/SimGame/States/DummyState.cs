@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using OkuBase;
 using OkuBase.Graphics;
 
-namespace SimGame
+namespace SimGame.States
 {
   public class DummyState : IGameState
   {
     private Color _color = Color.Black;
 
-    public DummyState(object[] parameters)
+    public DummyState(Color color)
     {
-      _color = (Color)parameters[0];
+      _color = color;
     }
 
     public string Id

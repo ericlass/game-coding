@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace SimGame
+namespace SimGame.States
 {
   public interface IStateMachine
   {
     string CurrentState { get; }
-    void SetCurrentState(string stateId, params object[] parameters);
+    void SetCurrentState(string stateId);
   }
 }
