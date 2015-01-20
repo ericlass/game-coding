@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using OkuBase;
 using OkuBase.Graphics;
 using OkuBase.Settings;
+using SimGame.Events;
+using SimGame.States;
+using SimGame.Objects;
 
 namespace SimGame
 {
-  public class SimGameMain : OkuGame, IGameDataProvider
+  public class SimGameMain : OkuGame, IGameDataProvider, IGameObject
   {
     private EventManager _eventQueue = null;
     private IGameState _currentState = null;
-    private GameStateFactory _stateFactory = null;
+    private GameObjectManager _objectManager = null;
+    private Dictionary<string, IGameState> _states = null;
 
     public override OkuSettings Configure()
     {
@@ -25,28 +29,28 @@ namespace SimGame
 
     public override void Initialize()
     {
-      //Create and set up event queue
-      _eventQueue = new EventManager(CreateActionFactory());
-      _eventQueue.RegisterHandler(EventIds.GameStart, new EventHandler("setgamestate", "dummy", new object[] { Color.Silver }));
+      _objectManager = new GameObjectManager();
 
-      //Create and set up state factory
-      _stateFactory = new GameStateFactory();
-      _stateFactory.RegisterConstructor("dummy", (parameters) => new DummyState(parameters));
+      //Create and set up event queue
+      _eventQueue = new EventManager(_objectManager);
+      _eventQueue.RegisterHandler(EventIds.GameStart, new SimGame.Events.EventHandler("game.setstate", new object[] { "dummy" }));
 
       //Queue start of game
       _eventQueue.QueueEvent(EventIds.GameStart);
-    }
-    
-    private ActionFactory CreateActionFactory()
-    {
-      ActionFactory factory = new ActionFactory();
-      factory.RegisterConstructor("timer", (parameters) => new TimerAction(this, parameters));
-      factory.RegisterConstructor("setgamestate", (parameters) => new SetGameStateAction(this, parameters));
-      return factory;
+
+      _objectManager.Register(new GameObjectWrapper("game", this, _eventQueue));
+      CreateStates();
     }
 
+    private void CreateStates()
+    {
+      _states = new Dictionary<string, IGameState>();
+      _states.Add("dummy", new DummyState(Color.Silver));
+    }
+    
     public override void Update(float dt)
     {
+      _objectManager.Update(dt);
       _eventQueue.Update(dt);
       if (_currentState != null)
         _currentState.Update(this, dt);
@@ -68,16 +72,38 @@ namespace SimGame
       get { return _currentState == null ? "null" : _currentState.Id; }
     }
 
-    public void SetCurrentState(string stateId, params object[] parameters)
+    public void SetCurrentState(string stateId)
     {
       if (_currentState != null)
         _currentState.Leave(this);
 
-      if (_stateFactory.ContainsType(stateId))
+      if (_states.ContainsKey(stateId))
       {
-        _currentState = _stateFactory.Create(stateId, parameters);
+        _currentState = _states[stateId];
         _currentState.Enter(this);
         _eventQueue.QueueEvent(EventIds.GameStateChanged);
+      }
+    }
+
+    #region Unused GameObject methods
+    public void Init(GameObjectWrapper wrapper)
+    {      
+    }
+
+    public void Update(float dt, GameObjectWrapper wrapper)
+    {
+    }
+
+    public void Finish(GameObjectWrapper wrapper)
+    {
+    }
+    #endregion
+
+    public void TriggerAction(string actionId, object[] parameters)
+    {
+      if (actionId == "setstate")
+      {
+        SetCurrentState(parameters[0] as string);
       }
     }
 

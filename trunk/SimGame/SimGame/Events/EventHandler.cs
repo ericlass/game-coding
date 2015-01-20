@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimGame
+namespace SimGame.Events
 {
   public class EventHandler
   {
@@ -25,6 +25,9 @@ namespace SimGame
     public override string ToString()
     {
       StringBuilder builder = new StringBuilder();
+      builder.Append(ActionId);
+      builder.Append(" ");
+
       builder.Append("[");
 
       if (Parameters != null && Parameters.Length > 0)
@@ -43,7 +46,7 @@ namespace SimGame
 
       builder.Append("]");
 
-      return ActionId + " " + builder;
+      return builder.ToString();
     }
 
   }

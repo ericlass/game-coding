@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SimGame
+namespace SimGame.Events
 {
   public static class EventIds
   {

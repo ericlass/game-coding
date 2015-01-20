@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SimGame
+namespace SimGame.Events
 {
   public interface IEventQueueContainer
   {

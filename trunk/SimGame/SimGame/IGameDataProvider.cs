@@ -1,4 +1,6 @@
 ﻿using System;
+using SimGame.Events;
+using SimGame.States;
 
 namespace SimGame
 {
