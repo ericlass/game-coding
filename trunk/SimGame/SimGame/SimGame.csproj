@@ -47,7 +47,9 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Content\ContentCache.cs" />
     <Compile Include="Events\ActionDispatcher.cs" />
+    <Compile Include="Content\IContent.cs" />
     <Compile Include="Objects\GameObjectManager.cs" />
     <Compile Include="Objects\GameObjectWrapper.cs" />
     <Compile Include="Objects\IGameObject.cs" />
