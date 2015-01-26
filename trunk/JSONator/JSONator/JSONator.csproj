@@ -43,12 +43,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JSONArrayValue.cs" />
-    <Compile Include="JSONBoolValue.cs" />
-    <Compile Include="JSONNullValue.cs" />
-    <Compile Include="JSONNumberValue.cs" />
-    <Compile Include="JSONObjectValue.cs" />
-    <Compile Include="JSONStringValue.cs" />
+    <Compile Include="JSONArray.cs" />
+    <Compile Include="JSONBool.cs" />
+    <Compile Include="JSONNull.cs" />
+    <Compile Include="JSONNumber.cs" />
+    <Compile Include="JSONObject.cs" />
+    <Compile Include="JSONString.cs" />
     <Compile Include="JSONValue.cs" />
     <Compile Include="JSONValueType.cs" />
     <Compile Include="JSONParser.cs" />

@@ -6,5 +6,6 @@ namespace SimGame
 {
   public interface IGameDataProvider : IStateMachine, IEventQueueContainer
   {
+    string GetContentPath();
   }
 }

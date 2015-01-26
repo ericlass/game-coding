@@ -5,13 +5,13 @@ namespace JSONator
   /// <summary>
   /// Defines a JSON boolean value.
   /// </summary>
-  public class JSONBoolValue : JSONValue
+  public class JSONBool : JSONValue
   {
     /// <summary>
     /// Creates a new JSON boolean value with the given boolean.
     /// </summary>
     /// <param name="value"></param>
-    public JSONBoolValue(bool value)
+    public JSONBool(bool value)
     {
       Value = value;
     }

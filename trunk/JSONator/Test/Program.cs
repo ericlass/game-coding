@@ -118,7 +118,7 @@ namespace Test
         "    \"taglib-location\": \"/WEB-INF/tlds/cofax.tld\"}}}";*/
 
       JSONParser parser = new JSONParser();
-      JSONObjectValue obj = parser.Parse(json);
+      JSONObject obj = parser.Parse(json);
 
       JSONWriter writer = new JSONWriter(true);
       string str = writer.WriteJson(obj);

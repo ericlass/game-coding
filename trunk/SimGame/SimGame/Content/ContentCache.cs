@@ -2,43 +2,80 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using OkuBase;
+using OkuBase.Graphics;
+using JSONator;
 
 namespace SimGame.Content
 {
+  /// <summary>
+  /// General content cache for the game. You provide a base folder
+  /// and then load the different content using the corresponding methods.
+  /// </summary>
   public class ContentCache
   {
     private string _baseFolder = null;
-    private Dictionary<Type, string> _typeFolders = null;
-    private Dictionary<Type, Dictionary<string, object>> _cache = null;
+    private Dictionary<string, Dictionary<string, object>> _cache = null; //Maps content types to map of content ids to actual content
 
+    /// <summary>
+    /// Creates a new content cache with the given base folder.
+    /// </summary>
+    /// <param name="baseFolder"></param>
     public ContentCache(string baseFolder)
     {
       _baseFolder = baseFolder;
-      _typeFolders = new Dictionary<Type, string>();
-      _cache = new Dictionary<Type, Dictionary<string, object>>();
+      _cache = new Dictionary<string, Dictionary<string, object>>();
     }
 
-    public void RegisterType(Type t, string folder)
+    public void Clear()
     {
-      if (_typeFolders.ContainsKey(t))
-        throw new ArgumentException("Content Type " + t + " already registered!");
-
-      _typeFolders.Add(t, folder);
+      _cache.Clear();
+      //TODO: Somehow clean up resource like OpenGL Images!
     }
 
-    public T Get<T>(string id) where T : IContent, new()
+    private T GetContent<T>(string id, string folder, Func<string, T> loader)
     {
-      Type t = typeof(T);
-      if (!_typeFolders.ContainsKey(t))
-        throw new ArgumentException("Content type " + t + " has not been registered!");
+      if (!_cache.ContainsKey(folder))
+        _cache.Add(folder, new Dictionary<string, object>());
 
-      string path = Path.Combine(_baseFolder, _typeFolders[t], id);
-      //TODO: Load JSON file
+      if (_cache[folder].ContainsKey(id))
+        return (T)(_cache[folder][id]);
 
-      T result = Activator.CreateInstance<T>();
-      result.Load(); //TODO: Pass JSON content
+      string path = Path.Combine(_baseFolder, folder, id);
+      if (!File.Exists(path))
+        throw new FileNotFoundException("Content file not found: " + path);
+
+      T result = loader(path);
+
+      _cache[folder].Add(id, result);
 
       return result;
+    }
+
+    public Image GetImage(string id)
+    {
+      return GetContent<Image>(id, "images",
+        delegate(string path)
+        {
+          ImageData data = ImageData.FromFile(path);
+          return OkuManager.Instance.Graphics.NewImage(data);
+        }
+      );
+    }
+
+    private JSONObject GetJson(string folder, string id)
+    {
+      return GetContent<JSONObject>(id, folder,
+        delegate(string path)
+        {
+          StreamReader reader = new StreamReader(path);
+          string jsonStr = reader.ReadToEnd();
+          reader.Close();
+
+          JSONParser parser = new JSONParser();
+          return parser.Parse(jsonStr);
+        }
+      );
     }
 
   }
