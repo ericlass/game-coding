@@ -1,34 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using OkuBase;
-using OkuBase.Graphics;
+using System.IO;
+using SimGame.Content;
 
 namespace SimGame.States
 {
-  public class DummyState : IGameState
+  public class PlayingState : IGameState
   {
-    private Color _color = Color.Black;
-
-    public DummyState(Color color)
-    {
-      _color = color;
-    }
+    ContentCache _content = null;
 
     public void Enter(IGameDataProvider data)
     {
-      OkuManager.Instance.Graphics.BackgroundColor = _color;
+      _content = new ContentCache(data.GetContentPath());
     }
 
     public void Update(IGameDataProvider data, float dt)
     {
+      throw new NotImplementedException();
     }
 
     public void Render(IGameDataProvider data)
     {
+      throw new NotImplementedException();
     }
 
     public void Leave(IGameDataProvider data)
     {
+      throw new NotImplementedException();
     }
   }
 }

@@ -6,7 +6,7 @@ namespace JSONator
   /// <summary>
   /// Defines a JSON object value which is a collection of named JSON values.
   /// </summary>
-  public class JSONObjectValue : JSONValue
+  public class JSONObject : JSONValue
   {
     private Dictionary<string, JSONValue> _members = new Dictionary<string, JSONValue>();
 
@@ -104,9 +104,9 @@ namespace JSONator
     /// </summary>
     /// <param name="name">The name of the member.</param>
     /// <returns>The member as a JSON array value.</returns>
-    public JSONArrayValue GetArray(string name)
+    public JSONArray GetArray(string name)
     {
-      return (this[name] as JSONArrayValue);
+      return (this[name] as JSONArray);
     }
 
     /// <summary>
@@ -114,9 +114,9 @@ namespace JSONator
     /// </summary>
     /// <param name="name">The name of the member.</param>
     /// <returns>The member as a JSON bool value.</returns>
-    public JSONBoolValue GetBool(string name)
+    public JSONBool GetBool(string name)
     {
-      return (this[name] as JSONBoolValue);
+      return (this[name] as JSONBool);
     }
 
     /// <summary>
@@ -124,9 +124,9 @@ namespace JSONator
     /// </summary>
     /// <param name="name">The name of the member.</param>
     /// <returns>The member as a JSON null value.</returns>
-    public JSONNullValue GetNull(string name)
+    public JSONNull GetNull(string name)
     {
-      return (this[name] as JSONNullValue);
+      return (this[name] as JSONNull);
     }
 
     /// <summary>
@@ -134,9 +134,9 @@ namespace JSONator
     /// </summary>
     /// <param name="name">The name of the member.</param>
     /// <returns>The member as a JSON number value.</returns>
-    public JSONNumberValue GetNumber(string name)
+    public JSONNumber GetNumber(string name)
     {
-      return (this[name] as JSONNumberValue);
+      return (this[name] as JSONNumber);
     }
 
     /// <summary>
@@ -144,9 +144,9 @@ namespace JSONator
     /// </summary>
     /// <param name="name">The name of the member.</param>
     /// <returns>The member as a JSON object value.</returns>
-    public JSONObjectValue GetObject(string name)
+    public JSONObject GetObject(string name)
     {
-      return (this[name] as JSONObjectValue);
+      return (this[name] as JSONObject);
     }
 
     /// <summary>
@@ -154,9 +154,9 @@ namespace JSONator
     /// </summary>
     /// <param name="name">The name of the member.</param>
     /// <returns>The member as a JSON string value.</returns>
-    public JSONStringValue GetString(string name)
+    public JSONString GetString(string name)
     {
-      return (this[name] as JSONStringValue);
+      return (this[name] as JSONString);
     }
 
   }

@@ -5,13 +5,13 @@ namespace JSONator
   /// <summary>
   /// Defines a JSON string value.
   /// </summary>
-  public class JSONStringValue : JSONValue
+  public class JSONString : JSONValue
   {
     /// <summary>
     /// Creates a new value with the given string.
     /// </summary>
     /// <param name="value">The string value.</param>
-    public JSONStringValue(string value)
+    public JSONString(string value)
     {
       Value = value;
     }

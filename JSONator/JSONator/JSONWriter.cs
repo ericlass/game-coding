@@ -52,7 +52,7 @@ namespace JSONator
     /// </summary>
     /// <param name="root">The root object of the JSON.</param>
     /// <returns>A string represenation of the JSON object and all its members.</returns>
-    public string WriteJson(JSONObjectValue root)
+    public string WriteJson(JSONObject root)
     {
       StringBuilder builder = new StringBuilder();
 
@@ -74,19 +74,19 @@ namespace JSONator
           WriteNull(builder);
           break;
         case JSONValueType.Bool:
-          WriteBool(value as JSONBoolValue, builder);
+          WriteBool(value as JSONBool, builder);
           break;
         case JSONValueType.Number:
-          WriteNumber(value as JSONNumberValue, builder);
+          WriteNumber(value as JSONNumber, builder);
           break;
         case JSONValueType.String:
-          WriteString(value as JSONStringValue, builder);
+          WriteString(value as JSONString, builder);
           break;
         case JSONValueType.Object:
-          WriteObject(value as JSONObjectValue, builder);
+          WriteObject(value as JSONObject, builder);
           break;
         case JSONValueType.Array:
-          WriteArray(value as JSONArrayValue, builder);
+          WriteArray(value as JSONArray, builder);
           break;
         default:
           throw new FormatException("Onknown JSON value type: '" + value.ValueType + "'!");
@@ -107,7 +107,7 @@ namespace JSONator
     /// </summary>
     /// <param name="value">The bool value to be written.</param>
     /// <param name="builder">The builder to write to.</param>
-    private void WriteBool(JSONBoolValue value, StringBuilder builder)
+    private void WriteBool(JSONBool value, StringBuilder builder)
     {
       builder.Append(value.ToString());
     }
@@ -117,7 +117,7 @@ namespace JSONator
     /// </summary>
     /// <param name="value">The number value to be written.</param>
     /// <param name="builder">The builder to write to.</param>
-    private void WriteNumber(JSONNumberValue value, StringBuilder builder)
+    private void WriteNumber(JSONNumber value, StringBuilder builder)
     {
       builder.Append(value.Value.ToString().Replace(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator, "."));
     }
@@ -127,7 +127,7 @@ namespace JSONator
     /// </summary>
     /// <param name="value">The string value to be written.</param>
     /// <param name="builder">The builder to write to.</param>
-    private void WriteString(JSONStringValue value, StringBuilder builder)
+    private void WriteString(JSONString value, StringBuilder builder)
     {
       builder.Append('"');
       builder.Append(value.Value);
@@ -139,7 +139,7 @@ namespace JSONator
     /// </summary>
     /// <param name="value">The array value to be written.</param>
     /// <param name="builder">The builder to write to.</param>
-    private void WriteArray(JSONArrayValue value, StringBuilder builder)
+    private void WriteArray(JSONArray value, StringBuilder builder)
     {
       if (value.Count == 0)
       {
@@ -178,7 +178,7 @@ namespace JSONator
     /// </summary>
     /// <param name="value">The object value to be written.</param>
     /// <param name="builder">The builder to write to.</param>
-    private void WriteObject(JSONObjectValue value, StringBuilder builder)
+    private void WriteObject(JSONObject value, StringBuilder builder)
     {
       if (_readable)
         builder.Append('\n');

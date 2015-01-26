@@ -6,7 +6,7 @@ namespace JSONator
   /// <summary>
   /// Defines a JSON array value.
   /// </summary>
-  public class JSONArrayValue : JSONValue, IList<JSONValue>
+  public class JSONArray : JSONValue, IList<JSONValue>
   {
     private List<JSONValue> _items = new List<JSONValue>();
 
@@ -23,9 +23,9 @@ namespace JSONator
     /// </summary>
     /// <param name="index">The index of the value.</param>
     /// <returns>The value at the given index as an array.</returns>
-    public JSONArrayValue GetArray(int index)
+    public JSONArray GetArray(int index)
     {
-      return this[index] as JSONArrayValue;
+      return this[index] as JSONArray;
     }
 
     /// <summary>
@@ -33,9 +33,9 @@ namespace JSONator
     /// </summary>
     /// <param name="index">The index of the value.</param>
     /// <returns>The value at the given index as a boolean.</returns>
-    public JSONBoolValue GetBool(int index)
+    public JSONBool GetBool(int index)
     {
-      return this[index] as JSONBoolValue;
+      return this[index] as JSONBool;
     }
 
     /// <summary>
@@ -43,9 +43,9 @@ namespace JSONator
     /// </summary>
     /// <param name="index">The index of the value.</param>
     /// <returns>The value at the given index as null.</returns>
-    public JSONNullValue GetNull(int index)
+    public JSONNull GetNull(int index)
     {
-      return this[index] as JSONNullValue;
+      return this[index] as JSONNull;
     }
 
     /// <summary>
@@ -53,9 +53,9 @@ namespace JSONator
     /// </summary>
     /// <param name="index">The index of the value.</param>
     /// <returns>The value at the given index as a number.</returns>
-    public JSONNumberValue GetNumber(int index)
+    public JSONNumber GetNumber(int index)
     {
-      return this[index] as JSONNumberValue;
+      return this[index] as JSONNumber;
     }
 
     /// <summary>
@@ -63,9 +63,9 @@ namespace JSONator
     /// </summary>
     /// <param name="index">The index of the value.</param>
     /// <returns>The value at the given index as an object.</returns>
-    public JSONObjectValue GetObject(int index)
+    public JSONObject GetObject(int index)
     {
-      return this[index] as JSONObjectValue;
+      return this[index] as JSONObject;
     }
 
     /// <summary>
@@ -73,9 +73,9 @@ namespace JSONator
     /// </summary>
     /// <param name="index">The index of the value.</param>
     /// <returns>The value at the given index as a string.</returns>
-    public JSONStringValue GetString(int index)
+    public JSONString GetString(int index)
     {
-      return this[index] as JSONStringValue;
+      return this[index] as JSONString;
     }
 
     #region IList<JSONValue> Member

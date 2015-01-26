@@ -5,13 +5,13 @@ namespace JSONator
   /// <summary>
   /// Defines a JSON number value.
   /// </summary>
-  public class JSONNumberValue : JSONValue
+  public class JSONNumber : JSONValue
   {
     /// <summary>
     /// Creates a new number value with the given double value.
     /// </summary>
     /// <param name="value">The double value.</param>
-    public JSONNumberValue(double value)
+    public JSONNumber(double value)
     {
       Value = value;
     }

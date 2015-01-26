@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using OkuBase;
 using OkuBase.Graphics;
 using OkuBase.Settings;
@@ -12,9 +14,11 @@ namespace SimGame
   public class SimGameMain : OkuGame, IGameDataProvider, IGameObject
   {
     private EventManager _eventQueue = null;
-    private IGameState _currentState = null;
     private GameObjectManager _objectManager = null;
     private Dictionary<string, IGameState> _states = null;
+
+    private string _currentStateName = null;
+    private IGameState _currentState = null;
 
     public override OkuSettings Configure()
     {
@@ -23,6 +27,9 @@ namespace SimGame
       settings.Graphics.Width = 1024;
       settings.Graphics.Height = 768;
       settings.Graphics.BackgroundColor = Color.Black;
+      settings.Graphics.TextureFilter = TextureFilter.NearestNeighbor;
+
+      settings.Audio.DriverName = "null";
 
       return settings;
     }
@@ -69,7 +76,7 @@ namespace SimGame
 
     public string CurrentState
     {
-      get { return _currentState == null ? "null" : _currentState.Id; }
+      get { return _currentStateName; }
     }
 
     public void SetCurrentState(string stateId)
@@ -79,10 +86,13 @@ namespace SimGame
 
       if (_states.ContainsKey(stateId))
       {
-        _currentState = _states[stateId];
+        _currentStateName = stateId;
+        _currentState = _states[_currentStateName];
         _currentState.Enter(this);
         _eventQueue.QueueEvent(EventIds.GameStateChanged);
       }
+      else
+        throw new ArgumentException("Unknown game state: " + stateId);
     }
 
     #region Unused GameObject methods
@@ -106,6 +116,10 @@ namespace SimGame
         SetCurrentState(parameters[0] as string);
       }
     }
-
+    
+    public string GetContentPath()
+    {
+      return Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Content");
+    }
   }
 }

@@ -5,7 +5,7 @@ namespace JSONator
   /// <summary>
   /// Defines a JSON null value.
   /// </summary>
-  public class JSONNullValue : JSONValue
+  public class JSONNull : JSONValue
   {
     /// <summary>
     /// Gets the type of the value.

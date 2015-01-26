@@ -120,7 +120,7 @@ namespace JSONator
     /// </summary>
     /// <param name="json">The JSON string to be parsed.</param>
     /// <returns>The parsed root JSON object.</returns>
-    public JSONObjectValue Parse(string json)
+    public JSONObject Parse(string json)
     {
       _json = json.ToCharArray();
       _currentPos = 0;
@@ -286,13 +286,13 @@ namespace JSONator
     /// Reads an object value including all members that it contains.
     /// </summary>
     /// <returns>The parsed JSON object value.</returns>
-    private JSONObjectValue ReadObject()
+    private JSONObject ReadObject()
     {
       _currentPos++;
 
       SkipWhiteSpaces();
 
-      JSONObjectValue result = new JSONObjectValue();
+      JSONObject result = new JSONObject();
 
       if (CurrentChar == '}')
         return result;      
@@ -341,10 +341,10 @@ namespace JSONator
     /// Reads an array value including all items.
     /// </summary>
     /// <returns>The parsed JSON array value.</returns>
-    private JSONArrayValue ReadArray()
+    private JSONArray ReadArray()
     {
       _currentPos++;
-      JSONArrayValue result = new JSONArrayValue();
+      JSONArray result = new JSONArray();
       while (CurrentChar != ']')
       {
         SkipWhiteSpaces();
@@ -369,18 +369,18 @@ namespace JSONator
     /// Reads a boolean value.
     /// </summary>
     /// <returns>The parsed JSON boolean value.</returns>
-    private JSONBoolValue ReadBool()
+    private JSONBool ReadBool()
     {
-      JSONBoolValue result = null;
+      JSONBool result = null;
 
       if (CurrentChar == 'f' || CurrentChar == 'F')
       {
-        result = new JSONBoolValue(false);
+        result = new JSONBool(false);
         _currentPos += 5; // Skip "false"
       }
       else if (CurrentChar == 't' || CurrentChar == 'T')
       {
-        result = new JSONBoolValue(true);
+        result = new JSONBool(true);
         _currentPos += 4; // Skip "true"
       }
       else
@@ -396,7 +396,7 @@ namespace JSONator
     /// Reads a null value.
     /// </summary>
     /// <returns>The parsed JSON null value.</returns>
-    private JSONNullValue ReadNull()
+    private JSONNull ReadNull()
     {
       StringBuilder builder = new StringBuilder();
       for (int i = 0; i < 4; i++)
@@ -414,14 +414,14 @@ namespace JSONator
       if (EOF)
         EndOfFileError();
 
-      return new JSONNullValue();
+      return new JSONNull();
     }
 
     /// <summary>
     /// Reads a number value.
     /// </summary>
     /// <returns>The parsed JSON number value.</returns>
-    private JSONNumberValue ReadNumber()
+    private JSONNumber ReadNumber()
     {
       StringBuilder builder = new StringBuilder();
       while (_numberChars.Contains(CurrentChar) && !EOF)
@@ -439,14 +439,14 @@ namespace JSONator
       if (!double.TryParse(str, out value))
         GeneralError("Invalid numer valid!");
 
-      return new JSONNumberValue(value);
+      return new JSONNumber(value);
     }
 
     /// <summary>
     /// Reads a string value.
     /// </summary>
     /// <returns>The parsed JSON string value.</returns>
-    private JSONStringValue ReadStringValue()
+    private JSONString ReadStringValue()
     {
       string value = ReadString();
 
@@ -455,7 +455,7 @@ namespace JSONator
       if (value == null)
         value = "";
 
-      return new JSONStringValue(value);
+      return new JSONString(value);
     }
 
   }
