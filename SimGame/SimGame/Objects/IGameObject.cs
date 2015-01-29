@@ -12,5 +12,9 @@ namespace SimGame.Objects
 
     //Something has triggered an action for this object
     void TriggerAction(string actionId, object[] parameters);
+    
+    //These may later be used when there is a graphical editor which list actions and events
+    //List<string> GetActions();
+    //List<string> GetEvents();
   }
 }
