@@ -1593,6 +1593,12 @@
             Clear the scissor rectangle so that thw whole screen is redrawn again.
             </summary>
         </member>
+        <member name="M:OkuBase.Graphics.GraphicsManager.GetDpiScale">
+            <summary>
+            Gets the factor by which the DPI setting of the system is higher than usual (96 dpi).
+            </summary>
+            <returns>The DPI factor.</returns>
+        </member>
         <member name="M:OkuBase.Graphics.GraphicsManager.Clear">
             <summary>
             Clears the screen or current render target with the current background color.
@@ -3622,6 +3628,52 @@
         <member name="P:OkuBase.Particles.Particle.LifeTime">
             <summary>
             Gets or set the total life time of the particle. This is how long the particle exists in seconds.
+            </summary>
+        </member>
+        <member name="T:OkuBase.Settings.GraphicsSettings">
+            <summary>
+            Defines settings for the graphics driver.
+            </summary>
+        </member>
+        <member name="P:OkuBase.Settings.GraphicsSettings.DriverName">
+            <summary>
+            Gets or sets the name of the driver to be used. "null" is always available if you do not want graphics.
+            </summary>
+        </member>
+        <member name="P:OkuBase.Settings.GraphicsSettings.BackgroundColor">
+            <summary>
+            Gets or sets the color that is used to clear the screen and therefore is the background color.
+            </summary>
+        </member>
+        <member name="P:OkuBase.Settings.GraphicsSettings.Fullscreen">
+            <summary>
+            Gets or sets if the window should be fullscreen or not.
+            </summary>
+        </member>
+        <member name="P:OkuBase.Settings.GraphicsSettings.TextureFilter">
+            <summary>
+            Gets or sets the filter that is used for scaling textures.
+            </summary>
+        </member>
+        <member name="P:OkuBase.Settings.GraphicsSettings.Width">
+            <summary>
+            Gets or sets the width of the game window in pixels, excluding the window borders.
+            </summary>
+        </member>
+        <member name="P:OkuBase.Settings.GraphicsSettings.Height">
+            <summary>
+            Gets or sets the height of the game window in pixels, excluding the window borders.
+            </summary>
+        </member>
+        <member name="P:OkuBase.Settings.GraphicsSettings.EnableDepthTest">
+            <summary>
+            Gets or sets if the depth test should be enabled or not.
+            </summary>
+        </member>
+        <member name="P:OkuBase.Settings.GraphicsSettings.DpiAware">
+            <summary>
+            Gets or sets if the window is automatically scalled on high DPI displays (false, the default)
+            or the game itself is aware of that and scales accordingly (true).
             </summary>
         </member>
         <member name="T:OkuBase.Platform.User32">
