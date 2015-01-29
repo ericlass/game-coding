@@ -40,13 +40,14 @@ namespace SimGame
 
       //Create and set up event queue
       _eventQueue = new EventManager(_objectManager);
-      _eventQueue.RegisterHandler(EventIds.GameStart, new SimGame.Events.EventHandler("game.setstate", new object[] { "dummy" }));
+      _eventQueue.RegisterHandler(EventIds.GameStart, new SimGame.Events.EventHandler("game", "setstate", new object[] { "dummy" }));
 
-      //Queue start of game
-      _eventQueue.QueueEvent(EventIds.GameStart);
-
+      // Register virtual "game" object
       _objectManager.Register(new GameObjectWrapper("game", this, _eventQueue));
       CreateStates();
+      
+      //Queue start of game
+      _eventQueue.QueueEvent(EventIds.GameStart);
     }
 
     private void CreateStates()
