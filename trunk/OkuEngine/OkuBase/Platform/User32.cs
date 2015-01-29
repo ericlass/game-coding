@@ -75,5 +75,8 @@ namespace OkuBase.Platform
     [DllImport("user32.dll")]
     public static extern bool ReleaseDC(IntPtr hWnd, IntPtr hDC);
 
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern bool SetProcessDPIAware();
+
   }
 }
