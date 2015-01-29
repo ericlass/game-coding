@@ -75,6 +75,9 @@ namespace OkuBase.Graphics
 
     public override void Initialize(OkuSettings settings)
     {
+      if (settings.Graphics.DpiAware)
+        Platform.User32.SetProcessDPIAware();
+
       _driver = OkuManager.Instance.Drivers.GraphicsDriver;
       _driver.Initialize(settings.Graphics);
       _settings = settings.Graphics;
@@ -143,6 +146,22 @@ namespace OkuBase.Graphics
     public void ClearScissorRectangle()
     {
       _driver.ClearScissorRectangle();
+    }
+
+    /// <summary>
+    /// Gets the factor by which the DPI setting of the system is higher than usual (96 dpi).
+    /// </summary>
+    /// <returns>The DPI factor.</returns>
+    public float GetDpiScale()
+    {
+      System.Drawing.Graphics g = System.Drawing.Graphics.FromHwnd(IntPtr.Zero);
+      float result = g.DpiX / 96.0f;
+      return result;
+    }
+
+    public void SetDisplaySize(int width, int height)
+    {
+      _driver.Display.Size = new Size(width, height);
     }
 
     #region Images

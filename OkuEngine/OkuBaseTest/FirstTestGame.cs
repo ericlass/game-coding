@@ -63,6 +63,7 @@ namespace OkuBaseTest
 
       result.Graphics.BackgroundColor = Color.Black;
       result.Graphics.TextureFilter = TextureFilter.NearestNeighbor;
+      result.Graphics.DpiAware = true;
 
       result.Audio.DriverName = "openal";
 
@@ -71,6 +72,10 @@ namespace OkuBaseTest
 
     public override void Initialize()
     {
+      float dpiScale = Oku.Graphics.GetDpiScale();
+      if (dpiScale != 1.0f)
+        Oku.Graphics.SetDisplaySize((int)(Oku.Graphics.DisplayWidth * dpiScale), (int)(Oku.Graphics.DisplayHeight * dpiScale));
+
       ImageData data = ImageData.FromFile("pilz.png");
       _image = Oku.Graphics.NewImage(data);
 
@@ -80,7 +85,7 @@ namespace OkuBaseTest
       Sound sound = Sound.FromFile("sinus.wav");
       _source = Oku.Audio.NewSource(sound);
 
-      _target = Oku.Graphics.NewRenderTarget(512, 384);
+      _target = Oku.Graphics.NewRenderTarget(Oku.Graphics.DisplayWidth, Oku.Graphics.DisplayHeight);
 
       _vs = new Shader(_vertexShader, ShaderType.VertexShader);
       _ps = new Shader(_pixelShader, ShaderType.PixelShader);
