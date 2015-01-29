@@ -85,7 +85,7 @@ namespace SimGame.Events
         {
           foreach (EventHandler handler in _eventHandlers[ev])
           {
-            _dispatcher.Dispatch(handler.ActionId, handler.Parameters);
+            _dispatcher.Dispatch(handler);
             if (_logger != null)
               _logger.Log("Triggered: " + handler);
           }

@@ -8,38 +8,61 @@ namespace SimGame.Events
 {
   public class EventHandler
   {
-    public string ActionId { get; set; }
-    public object[] Parameters { get; set; }
+    private string _objectId = null;
+    private string _actionId = null;
+    private object[] _parameters = null;
 
-    public EventHandler(string actionId)
+    public EventHandler(string objectId, string actionId)
     {
-      ActionId = actionId;
+      _objectId = objectId;
+      _actionId = actionId;
     }
 
-    public EventHandler(string actionId, params object[] parameters)
+    public EventHandler(string objectId, string actionId, params object[] parameters)
     {
-      ActionId = actionId;
-      Parameters = parameters;
+      _objectId = objectId;
+      _actionId = actionId;
+      _parameters = parameters;
+    }
+    
+    public string ObjectId
+    {
+      get { return _objectId; }
+      set { _objectId = value; }
+    }
+    
+    public string ActionId
+    {
+      get { return _actionId; }
+      set { _actionId = value; }
+    }
+    
+    public object[] Parameters
+    {
+      get { return _parameters; }
+      set { _parameters = value; }
     }
 
     public override string ToString()
     {
       StringBuilder builder = new StringBuilder();
-      builder.Append(ActionId);
+      builder.Append(_objectId);
+      builder.Append(".");
+      builder.Append(_actionId);
       builder.Append(" ");
 
       builder.Append("[");
 
-      if (Parameters != null && Parameters.Length > 0)
+      if (_parameters != null && _parameters.Length > 0)
       {
         builder.Append("\"");
-        builder.Append(Parameters[0]);
+        builder.Append(_parameters[0]);
         builder.Append("\"");
-        for (int i = 1; i < Parameters.Length; i++)
+        for (int i = 1; i < _parameters.Length; i++)
         {
           builder.Append(",");
           builder.Append("\"");
-          builder.Append(Parameters[i]);
+          builder.Append(_parameters[i]);
           builder.Append("\"");
         }
       }
