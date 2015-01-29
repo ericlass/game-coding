@@ -8,6 +8,7 @@ using OkuBase.Settings;
 using SimGame.Events;
 using SimGame.States;
 using SimGame.Objects;
+using SimGame.Game;
 
 namespace SimGame
 {
@@ -24,8 +25,9 @@ namespace SimGame
     {
       OkuSettings settings = base.Configure();
 
-      settings.Graphics.Width = 1024;
-      settings.Graphics.Height = 768;
+      settings.Graphics.DpiAware = true;
+      settings.Graphics.Width = 1920;
+      settings.Graphics.Height = 1080;
       settings.Graphics.BackgroundColor = Color.Black;
       settings.Graphics.TextureFilter = TextureFilter.NearestNeighbor;
 
@@ -40,7 +42,7 @@ namespace SimGame
 
       //Create and set up event queue
       _eventQueue = new EventManager(_objectManager);
-      _eventQueue.RegisterHandler(EventIds.GameStart, new SimGame.Events.EventHandler("game", "setstate", new object[] { "dummy" }));
+      _eventQueue.RegisterHandler(EventIds.GameStart, new SimGame.Events.EventHandler("game", "setstate", new object[] { "playing" }));
 
       // Register virtual "game" object
       _objectManager.Register(new GameObjectWrapper("game", this, _eventQueue));
@@ -54,6 +56,7 @@ namespace SimGame
     {
       _states = new Dictionary<string, IGameState>();
       _states.Add("dummy", new DummyState(Color.Silver));
+      _states.Add("playing", new PlayingState());
     }
     
     public override void Update(float dt)

@@ -54,6 +54,9 @@ namespace SimGame.Content
 
     public Image GetImage(string id)
     {
+      if (!id.EndsWith(".png"))
+        id += ".png";
+
       return GetContent<Image>(id, "images",
         delegate(string path)
         {

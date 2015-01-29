@@ -53,6 +53,10 @@
   <ItemGroup>
     <Compile Include="Content\ContentCache.cs" />
     <Compile Include="Events\ActionDispatcher.cs" />
+    <Compile Include="Game\Room.cs" />
+    <Compile Include="Game\RoomDefinition.cs" />
+    <Compile Include="Game\RoomDefinitions.cs" />
+    <Compile Include="Game\RoomType.cs" />
     <Compile Include="Objects\GameObjectManager.cs" />
     <Compile Include="Objects\GameObjectWrapper.cs" />
     <Compile Include="Objects\IGameObject.cs" />
@@ -101,8 +105,12 @@
     <None Include="lib\Tao.OpenGl.dll" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\Images\background.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="lib\JSONator.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
