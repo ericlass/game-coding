@@ -105,7 +105,7 @@
     <None Include="lib\Tao.OpenGl.dll" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\Images\background.png">
+    <None Include="Content\Images\surface.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="lib\JSONator.dll" />
