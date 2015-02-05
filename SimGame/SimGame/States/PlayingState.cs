@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows.Forms;
 using OkuBase;
 using OkuBase.Graphics;
 using OkuBase.Geometry;
@@ -17,21 +18,9 @@ namespace SimGame.States
     private const int FloorWidth = 13;
     private const int RoomSize = 64;
 
-    private Dictionary<RoomType, Color> _roomColors = new Dictionary<RoomType, Color>() 
-    {
-      { RoomType.Administration, Color.Silver },
-      { RoomType.Empty, new Color(128, 128, 128) },
-      { RoomType.Entrance, Color.Green },
-      { RoomType.Facility, Color.Yellow },
-      { RoomType.Laboratory, Color.Blue },
-      { RoomType.Security, Color.Red },
-      { RoomType.Stairway, Color.Cyan },
-      { RoomType.Storage, Color.Magenta }
-    };
-
     private ContentCache _content = null;
 
-    private Image _backgroundImage = null;
+    private Image _surfaceImage = null;
     private Color _backgroundColor = new Color(0, 101, 189);
 
     private List<List<Room>> _rooms = null;
@@ -57,9 +46,9 @@ namespace SimGame.States
     public void Enter(IGameDataProvider data)
     {
       _content = new ContentCache(data.GetContentPath());
-      _backgroundImage = _content.GetImage("background");
+      _surfaceImage = _content.GetImage("surface");
       
-      Oku.Graphics.Viewport.SetValues(0, ViewPortWidth, 0, ViewPortHeight);
+      Oku.Graphics.Viewport.SetValues(0, ViewPortWidth, -32, ViewPortHeight - 32);
       Oku.Graphics.BackgroundColor = _backgroundColor;
 
       _rooms = new List<List<Room>>();
@@ -116,15 +105,20 @@ namespace SimGame.States
     {
       _hoveredRoom = RoomUnderMouse();
       if (Oku.Input.Mouse.ButtonPressed(MouseButton.Left))
-      {
         _selectedRoom = _hoveredRoom;
-      }
+
+      if (Oku.Input.Keyboard.KeyIsDown(Keys.Up))
+        Oku.Graphics.Viewport.Bottom = Math.Min(_rooms.Count * 64 - 32, Oku.Graphics.Viewport.Bottom + (128 * dt));
+      if (Oku.Input.Keyboard.KeyIsDown(Keys.Down))
+        Oku.Graphics.Viewport.Bottom = Math.Max(-32, Oku.Graphics.Viewport.Bottom - (128 * dt));
     }
 
     public void Render(IGameDataProvider data)
     {
-      Oku.Graphics.DrawImage(_backgroundImage, ViewPortWidth / 2, ViewPortHeight / 2);
+      //Surface
+      Oku.Graphics.DrawImage(_surfaceImage, ViewPortWidth / 2, _surfaceImage.Height / 2);
 
+      //Rooms
       float y = 32.0f;
       foreach (var floor in _rooms)
       {
@@ -140,7 +134,7 @@ namespace SimGame.States
           float top = y + RoomSize;
           float bottom = y;
 
-          Oku.Graphics.DrawRectangle(left, right, bottom, top, _roomColors[room.Definition.BaseType]);
+          Oku.Graphics.DrawRectangle(left, right, bottom, top, room.Definition.BaseColor);
           Oku.Graphics.DrawLine(left, bottom, left, top, 1.0f, Color.Black);
           Oku.Graphics.DrawLine(left, bottom, right, bottom, 1.0f, Color.Black);
 
@@ -170,7 +164,12 @@ namespace SimGame.States
         y += RoomSize;
       }
 
+      //Roof
       Oku.Graphics.DrawRectangle(32, 928, y, y + 16, Color.Silver);
+
+      //GUI
+      Oku.Graphics.DrawRectangle(Oku.Graphics.Viewport.Left, Oku.Graphics.Viewport.Right, Oku.Graphics.Viewport.Bottom, Oku.Graphics.Viewport.Bottom + 32, new Color(128, 128, 128));
+      Oku.Graphics.DrawRectangle(Oku.Graphics.Viewport.Left, Oku.Graphics.Viewport.Right, Oku.Graphics.Viewport.Top - 32, Oku.Graphics.Viewport.Top, new Color(128, 128, 128));
     }
 
     public void Leave(IGameDataProvider data)

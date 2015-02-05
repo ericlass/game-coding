@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OkuBase.Graphics;
 
 namespace SimGame.Game
 {
@@ -29,5 +30,7 @@ namespace SimGame.Game
     /// Gets or sets the number of spaces this type of room uses.
     /// </summary>
     public int NumberOfSpaces { get; set; }
+
+    public Color BaseColor { get; set; }
   }
 }
