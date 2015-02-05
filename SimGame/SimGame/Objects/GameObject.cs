@@ -13,11 +13,11 @@ namespace SimGame.Objects
   public class GameObject
   {
     //Make actions do nothing by default
-    private Action<GameObject> _initializeHandler = (a) => { };
-    private Action<GameObject, float> _updateHandler = (a, b) => { };
-    private Action<GameObject> _renderHandler = (a) => { };
-    private Action<GameObject> _finishHandler = (a) => { };
-    private Action<GameObject, string, object[]> _triggerActionHandler = (a, b, c) => { };
+    private Action<GameObject> _initializeHandler = null;
+    private Action<GameObject, float> _updateHandler = null;
+    private Action<GameObject> _renderHandler = null;
+    private Action<GameObject> _finishHandler = null;
+    private Action<GameObject, string, object[]> _triggerActionHandler = null;
 
     public GameObject(string id)
     {
@@ -44,13 +44,7 @@ namespace SimGame.Objects
     /// </summary>
     public Action<GameObject> InitializeHandler
     {
-      set
-      {
-        if (value != null)
-          _initializeHandler = value;
-        else
-          _initializeHandler = (a) => { };
-      }
+      set { _initializeHandler = value; }
     }
 
     /// <summary>
@@ -58,13 +52,7 @@ namespace SimGame.Objects
     /// </summary>
     public Action<GameObject, float> UpdateHandler
     {
-      set
-      {
-        if (value != null)
-          _updateHandler = value;
-        else
-          _updateHandler = (a, b) => { };
-      }
+      set { _updateHandler = value; }
     }
 
     /// <summary>
@@ -72,13 +60,15 @@ namespace SimGame.Objects
     /// </summary>
     public Action<GameObject> RenderHandler
     {
-      set
-      {
-        if (value != null)
-          _renderHandler = value;
-        else
-          _renderHandler = (a) => { };
-      }
+      set { _renderHandler = value; }
+    }
+
+    /// <summary>
+    /// Gets if the object can be rendered (= has a render handler).
+    /// </summary>
+    public bool CanRender
+    {
+      get { return _renderHandler != null; }
     }
 
     /// <summary>
@@ -86,13 +76,7 @@ namespace SimGame.Objects
     /// </summary>
     public Action<GameObject> FinishHandler
     {
-      set
-      {
-        if (value != null)
-          _finishHandler = value;
-        else
-          _finishHandler = (a) => { };
-      }
+      set { _finishHandler = value; }
     }
 
     /// <summary>
@@ -100,56 +84,55 @@ namespace SimGame.Objects
     /// </summary>
     public Action<GameObject, string, object[]> TriggerActionHandler
     {
-      set
-      {
-        if (value != null)
-          _triggerActionHandler = value;
-        else
-          _triggerActionHandler = (a, b, c) => { };
-      }
+      set { _triggerActionHandler = value; }
     }
 
     /// <summary>
-    /// Executes the initialization handler.
+    /// Executes the initialization handler, if it is not null.
     /// </summary>
     public void Initialize()
     {
-      _initializeHandler(this);
+      if (_initializeHandler != null)
+        _initializeHandler(this);
     }
 
     /// <summary>
-    /// Executes the update handler.
+    /// Executes the update handler, if it is not null.
     /// </summary>
     /// <param name="dt">The time since the last frame in seconds.</param>
     public void Update(float dt)
     {
-      _updateHandler(this, dt);
+      if (_updateHandler != null)
+        _updateHandler(this, dt);
     }
 
     /// <summary>
-    /// Executes the render handler.
+    /// Executes the render handler, if it is not null.
     /// </summary>
     public void Render()
     {
-      _renderHandler(this);
+      if (_renderHandler != null)
+        _renderHandler(this);
     }
 
     /// <summary>
-    /// Executes the finalization handler.
+    /// Executes the finalization handler, if it is not null.
     /// </summary>
     public void Finish()
     {
-      _finishHandler(this);
+      if (_finishHandler != null)
+        _finishHandler(this);
     }
 
     /// <summary>
-    /// Executes the trigger action handler.
+    /// Executes the trigger action handler, if it is not null.
     /// </summary>
     /// <param name="actionId">The id of the action to be triggered.</param>
     /// <param name="parameters">The parameters for the action.</param>
     public void TriggerAction(string actionId, object[] parameters)
     {
-      _triggerActionHandler(this, actionId, parameters);
+      if (_triggerActionHandler != null)
+        _triggerActionHandler(this, actionId, parameters);
     }
 
   }

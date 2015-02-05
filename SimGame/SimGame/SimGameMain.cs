@@ -69,6 +69,7 @@ namespace SimGame
 
     public override void Render()
     {
+      _objectManager.Render();
       if (_currentState != null)
         _currentState.Render(this);
     }
