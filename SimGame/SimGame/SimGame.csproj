@@ -57,6 +57,7 @@
     <Compile Include="Game\RoomDefinition.cs" />
     <Compile Include="Game\RoomDefinitions.cs" />
     <Compile Include="Game\RoomType.cs" />
+    <Compile Include="Interpolators\Interpolator.cs" />
     <Compile Include="Objects\GameObjectManager.cs" />
     <Compile Include="Objects\GameObjectWrapper.cs" />
     <Compile Include="Objects\IGameObject.cs" />
