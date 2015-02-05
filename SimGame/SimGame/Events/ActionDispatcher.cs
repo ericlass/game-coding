@@ -16,7 +16,7 @@ namespace SimGame.Events
     //Is called by the event manager when an event is triggered
     public void Dispatch(EventHandler handler)
     {
-      GameObjectWrapper obj = _objectManager[handler.ObjectId];
+      GameObject obj = _objectManager[handler.ObjectId];
       if (obj == null)
         throw new ArgumentException("Unknown object id: " + handler.ObjectId);
 

@@ -5,15 +5,15 @@ namespace SimGame.Objects
 {
   public class GameObjectManager
   {
-    private Dictionary<string, GameObjectWrapper> _objects = new Dictionary<string, GameObjectWrapper>();
+    private Dictionary<string, GameObject> _objects = new Dictionary<string, GameObject>();
 
     public GameObjectManager()
     {
     }
 
-    public GameObjectWrapper this[string id]
+    public GameObject this[string id]
     {
-      get 
+      get
       {
         if (_objects.ContainsKey(id))
           return _objects[id];
@@ -22,7 +22,7 @@ namespace SimGame.Objects
       }
     }
 
-    public void Register(GameObjectWrapper obj)
+    public void Register(GameObject obj)
     {
       if (_objects.ContainsKey(obj.Id))
         throw new ArgumentException("Object with id '" + obj.Id + "' is already registered! Ids must be unique.");
@@ -30,18 +30,33 @@ namespace SimGame.Objects
       _objects.Add(obj.Id, obj);
     }
 
-    public bool Unregister(GameObjectWrapper obj)
+    public bool Unregister(GameObject obj)
     {
       return _objects.Remove(obj.Id);
     }
 
-    public void Update(float dt)
+    public void Initialize()
     {
-      foreach (GameObjectWrapper obj in _objects.Values)
-      {
-        obj.Update(dt);
-      }
+      foreach (GameObject obj in _objects.Values)
+        obj.Initialize();
     }
 
+    public void Update(float dt)
+    {
+      foreach (GameObject obj in _objects.Values)
+        obj.Update(dt);
+    }
+
+    public void Render()
+    {
+      foreach (GameObject obj in _objects.Values)
+        obj.Render();
+    }
+
+    public void Finish()
+    {
+      foreach (GameObject obj in _objects.Values)
+        obj.Finish();
+    }
   }
 }

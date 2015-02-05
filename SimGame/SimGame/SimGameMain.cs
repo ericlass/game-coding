@@ -12,7 +12,7 @@ using SimGame.Game;
 
 namespace SimGame
 {
-  public class SimGameMain : OkuGame, IGameDataProvider, IGameObject
+  public class SimGameMain : OkuGame, IGameDataProvider
   {
     private EventManager _eventQueue = null;
     private GameObjectManager _objectManager = null;
@@ -45,7 +45,7 @@ namespace SimGame
       _eventQueue.RegisterHandler(EventIds.GameStart, new SimGame.Events.EventHandler("game", "setstate", new object[] { "playing" }));
 
       // Register virtual "game" object
-      _objectManager.Register(new GameObjectWrapper("game", this, _eventQueue));
+      _objectManager.Register(new GameObject("game") { TriggerActionHandler = TriggerAction });
       CreateStates();
       
       //Queue start of game
@@ -99,21 +99,7 @@ namespace SimGame
         throw new ArgumentException("Unknown game state: " + stateId);
     }
 
-    #region Unused GameObject methods
-    public void Init(GameObjectWrapper wrapper)
-    {      
-    }
-
-    public void Update(float dt, GameObjectWrapper wrapper)
-    {
-    }
-
-    public void Finish(GameObjectWrapper wrapper)
-    {
-    }
-    #endregion
-
-    public void TriggerAction(string actionId, object[] parameters)
+    public void TriggerAction(GameObject obj, string actionId, object[] parameters)
     {
       if (actionId == "setstate")
       {
