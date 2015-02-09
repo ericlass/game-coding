@@ -88,7 +88,8 @@ namespace SimGame.Objects
       {
         if (obj.CanRender)
         {
-          OkuBase.OkuManager.Instance.Graphics.ApplyAndPushTransform(obj.Transform.Translation, obj.Transform.Scale, obj.Transform.Rotation);
+          if (obj.Transform != null)
+            OkuBase.OkuManager.Instance.Graphics.ApplyAndPushTransform(obj.Transform.Translation, obj.Transform.Scale, obj.Transform.Rotation);
           try
           {
             obj.Render();

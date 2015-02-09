@@ -8,7 +8,8 @@ namespace SimGame.Objects
 {
   /// <summary>
   /// Defines the base structure for a game object.
-  /// 
+  /// The handlers are called accordingly by the object manager.
+  /// Each handler is optional and can be null.
   /// </summary>
   public class GameObject
   {
