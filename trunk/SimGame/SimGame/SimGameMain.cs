@@ -112,5 +112,11 @@ namespace SimGame
     {
       return Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Content");
     }
+
+    public GameObjectManager ObjectManager
+    {
+      get { return _objectManager; }
+    }
+
   }
 }
