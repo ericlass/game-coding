@@ -16,7 +16,7 @@ namespace SimGame.States
   {
     private ContentCache _content = null;
     private Image _surfaceImage = null;
-    private BuildingObject _building = null;
+    private GameObject _building = null;
 
     private OkuManager Oku
     {
@@ -25,17 +25,24 @@ namespace SimGame.States
 
     public void Enter(IGameDataProvider data)
     {
-      _content = new ContentCache(data.GetContentPath());
-      _surfaceImage = _content.GetImage("surface");
-
-      Oku.Graphics.Viewport.SetValues(0, GameConstants.ViewPortWidth, 0, GameConstants.ViewPortHeight - 32);
+      Oku.Graphics.Viewport.SetValues(0, GameConstants.ViewPortWidth, 0, GameConstants.ViewPortHeight);
       Oku.Graphics.BackgroundColor = GameConstants.ColorBackground;
+    
+      if (_content == null)
+        _content = new ContentCache(data.GetContentPath());
+        
+      if (_surfaceImage == null)
+        _surfaceImage = _content.GetImage("surface");
 
-      _building = new BuildingObject();
-      data.ObjectManager.Register(_building.CreateGameObject("building"));
-
-      //TODO: THIS IS SHIT!!! When are the states objects initialized and by whom?
-      data.ObjectManager.Initialize();
+      //This has to be done for every object that is in the state
+      if (_building == null)
+      {
+        BuildingObject obj = new BuildingObject();
+        _building = obj.CreateGameObject("building");
+        _building.Initialize();
+      }
+      
+      data.ObjectManager.Register(_building);
     }
 
     public void Update(IGameDataProvider data, float dt)
@@ -60,7 +67,7 @@ namespace SimGame.States
 
     public void Leave(IGameDataProvider data)
     {
-      _content.Clear();
+      data.ObjectManager.Unregister(_building);
     }
   }
 }
