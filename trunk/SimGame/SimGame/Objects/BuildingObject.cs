@@ -107,12 +107,12 @@ namespace SimGame.Objects
       }
     }
 
-    public void Update(GameObject obj, float dt)
+    public void Update(float dt)
     {
       _mouse.Update();
     }
 
-    public void Render(GameObject obj)
+    public void Render()
     {
       float floorWidth = GameConstants.RoomsPerFloor * GameConstants.RoomWidth;
       float y = 0;

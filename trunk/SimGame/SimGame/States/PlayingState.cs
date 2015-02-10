@@ -14,7 +14,6 @@ namespace SimGame.States
 {
   public class PlayingState : IGameState
   {
-    private ContentCache _content = null;
     private Image _surfaceImage = null;
     private GameObject _building = null;
 
@@ -23,16 +22,13 @@ namespace SimGame.States
       get { return OkuManager.Instance; }
     }
 
-    public void Enter(IGameDataProvider data)
+    public void Enter()
     {
       Oku.Graphics.Viewport.SetValues(0, GameConstants.ViewPortWidth, 0, GameConstants.ViewPortHeight);
       Oku.Graphics.BackgroundColor = GameConstants.ColorBackground;
     
-      if (_content == null)
-        _content = new ContentCache(data.GetContentPath());
-        
       if (_surfaceImage == null)
-        _surfaceImage = _content.GetImage("surface");
+        _surfaceImage = Global.Content.GetImage("surface");
 
       //This has to be done for every object that is in the state
       if (_building == null)
@@ -42,10 +38,10 @@ namespace SimGame.States
         _building.Initialize();
       }
       
-      data.ObjectManager.Register(_building);
+      Global.Objects.Register(_building);
     }
 
-    public void Update(IGameDataProvider data, float dt)
+    public void Update(float dt)
     {
       float speed = 128 * dt;
       if (Oku.Input.Keyboard.KeyIsDown(Keys.Up))
@@ -59,15 +55,16 @@ namespace SimGame.States
         Oku.Graphics.Viewport.Bottom = Math.Max(0, Oku.Graphics.Viewport.Bottom - speed);
     }
 
-    public void Render(IGameDataProvider data)
+    public void Render()
     {
       //Surface
       Oku.Graphics.DrawImage(_surfaceImage, GameConstants.ViewPortWidth / 2, _surfaceImage.Height / 2);
     }
 
-    public void Leave(IGameDataProvider data)
+    public void Leave()
     {
-      data.ObjectManager.Unregister(_building);
+      Global.Objects.Unregister(_building);
     }
+
   }
 }

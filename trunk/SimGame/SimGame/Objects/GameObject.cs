@@ -15,10 +15,10 @@ namespace SimGame.Objects
   {
     //Make actions do nothing by default
     private Action<GameObject> _initializeHandler = null;
-    private Action<GameObject, float> _updateHandler = null;
-    private Action<GameObject> _renderHandler = null;
-    private Action<GameObject> _finishHandler = null;
-    private Action<GameObject, string, object[]> _triggerActionHandler = null;
+    private Action<float> _updateHandler = null;
+    private Action _renderHandler = null;
+    private Action _finishHandler = null;
+    private Action<string, object[]> _triggerActionHandler = null;
 
     public GameObject(string id)
     {
@@ -51,7 +51,7 @@ namespace SimGame.Objects
     /// <summary>
     /// Sets the update handler.
     /// </summary>
-    public Action<GameObject, float> UpdateHandler
+    public Action<float> UpdateHandler
     {
       set { _updateHandler = value; }
     }
@@ -59,7 +59,7 @@ namespace SimGame.Objects
     /// <summary>
     /// Sets the render handler.
     /// </summary>
-    public Action<GameObject> RenderHandler
+    public Action RenderHandler
     {
       set { _renderHandler = value; }
     }
@@ -75,7 +75,7 @@ namespace SimGame.Objects
     /// <summary>
     /// Sets the finilization handler.
     /// </summary>
-    public Action<GameObject> FinishHandler
+    public Action FinishHandler
     {
       set { _finishHandler = value; }
     }
@@ -83,7 +83,7 @@ namespace SimGame.Objects
     /// <summary>
     /// Sets the trigger action handler.
     /// </summary>
-    public Action<GameObject, string, object[]> TriggerActionHandler
+    public Action<string, object[]> TriggerActionHandler
     {
       set { _triggerActionHandler = value; }
     }
@@ -104,7 +104,7 @@ namespace SimGame.Objects
     public void Update(float dt)
     {
       if (_updateHandler != null)
-        _updateHandler(this, dt);
+        _updateHandler(dt);
     }
 
     /// <summary>
@@ -113,7 +113,7 @@ namespace SimGame.Objects
     public void Render()
     {
       if (_renderHandler != null)
-        _renderHandler(this);
+        _renderHandler();
     }
 
     /// <summary>
@@ -122,7 +122,7 @@ namespace SimGame.Objects
     public void Finish()
     {
       if (_finishHandler != null)
-        _finishHandler(this);
+        _finishHandler();
     }
 
     /// <summary>
@@ -133,7 +133,7 @@ namespace SimGame.Objects
     public void TriggerAction(string actionId, object[] parameters)
     {
       if (_triggerActionHandler != null)
-        _triggerActionHandler(this, actionId, parameters);
+        _triggerActionHandler(actionId, parameters);
     }
 
   }
