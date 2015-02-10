@@ -14,20 +14,20 @@ namespace SimGame.States
       _color = color;
     }
 
-    public void Enter(IGameDataProvider data)
+    public void Enter()
     {
       OkuManager.Instance.Graphics.BackgroundColor = _color;
     }
 
-    public void Update(IGameDataProvider data, float dt)
+    public void Update(float dt)
     {
     }
 
-    public void Render(IGameDataProvider data)
+    public void Render()
     {
     }
 
-    public void Leave(IGameDataProvider data)
+    public void Leave()
     {
     }
   }

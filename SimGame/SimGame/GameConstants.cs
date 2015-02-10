@@ -1,11 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using OkuBase.Graphics;
+
 
 namespace SimGame
 {
+  /// <summary>
+  /// Contains several constants for the game which are used in different places.
+  /// </summary>
   public static class GameConstants
   {
+    public static string ContentPath
+    {
+      get { return Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Content"); }
+    }
+
     public const int ViewPortWidth = 960;
     public const int ViewPortHeight = 540;
 

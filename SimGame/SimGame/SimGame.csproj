@@ -58,6 +58,7 @@
     <Compile Include="Game\RoomDefinition.cs" />
     <Compile Include="Game\RoomDefinitions.cs" />
     <Compile Include="Game\RoomType.cs" />
+    <Compile Include="Global.cs" />
     <Compile Include="Interpolators\Interpolator.cs" />
     <Compile Include="Mouse\MouseEvent.cs" />
     <Compile Include="Mouse\MouseProcessor.cs" />
@@ -69,11 +70,8 @@
     <Compile Include="Events\EventHandler.cs" />
     <Compile Include="Events\EventIds.cs" />
     <Compile Include="Events\EventManager.cs" />
-    <Compile Include="Events\IEventQueueContainer.cs" />
-    <Compile Include="IGameDataProvider.cs" />
     <Compile Include="States\IGameState.cs" />
     <Compile Include="ILogger.cs" />
-    <Compile Include="States\IStateMachine.cs" />
     <Compile Include="ObjectFactory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

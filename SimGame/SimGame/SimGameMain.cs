@@ -12,10 +12,8 @@ using SimGame.Game;
 
 namespace SimGame
 {
-  public class SimGameMain : OkuGame, IGameDataProvider
+  public class SimGameMain : OkuGame
   {
-    private EventManager _eventQueue = null;
-    private GameObjectManager _objectManager = null;
     private Dictionary<string, IGameState> _states = null;
 
     private string _currentStateName = null;
@@ -38,18 +36,19 @@ namespace SimGame
 
     public override void Initialize()
     {
-      _objectManager = new GameObjectManager();
+      Global.Objects = new GameObjectManager();
+      Global.Content = new Content.ContentCache(GameConstants.ContentPath);
 
       //Create and set up event queue
-      _eventQueue = new EventManager(_objectManager);
-      _eventQueue.RegisterHandler(EventIds.GameStart, new SimGame.Events.EventHandler("game", "setstate", new object[] { "playing" }));
+      Global.EventQueue = new EventManager(Global.Objects);
+      Global.EventQueue.RegisterHandler(EventIds.GameStart, new SimGame.Events.EventHandler("game", "setstate", new object[] { "playing" }));
 
       // Register virtual "game" object
-      _objectManager.Register(new GameObject("game") { TriggerActionHandler = TriggerAction });
+      Global.Objects.Register(new GameObject("game") { TriggerActionHandler = TriggerAction });
       CreateStates();
       
       //Queue start of game
-      _eventQueue.QueueEvent(EventIds.GameStart);
+      Global.EventQueue.QueueEvent(EventIds.GameStart);
     }
 
     private void CreateStates()
@@ -61,22 +60,22 @@ namespace SimGame
     
     public override void Update(float dt)
     {
-      _objectManager.Update(dt);
-      _eventQueue.Update(dt);
+      Global.Objects.Update(dt);
+      Global.EventQueue.Update(dt);
       if (_currentState != null)
-        _currentState.Update(this, dt);
+        _currentState.Update(dt);
     }
 
     public override void Render()
     {
-      _objectManager.Render();
+      Global.Objects.Render();
       if (_currentState != null)
-        _currentState.Render(this);
+        _currentState.Render();
     }
     
     public EventManager EventQueue
     {
-      get { return _eventQueue; }
+      get { return Global.EventQueue; }
     }
 
     public string CurrentState
@@ -87,20 +86,20 @@ namespace SimGame
     public void SetCurrentState(string stateId)
     {
       if (_currentState != null)
-        _currentState.Leave(this);
+        _currentState.Leave();
 
       if (_states.ContainsKey(stateId))
       {
         _currentStateName = stateId;
         _currentState = _states[_currentStateName];
-        _currentState.Enter(this);
-        _eventQueue.QueueEvent(EventIds.GameStateChanged);
+        _currentState.Enter();
+        Global.EventQueue.QueueEvent(EventIds.GameStateChanged);
       }
       else
         throw new ArgumentException("Unknown game state: " + stateId);
     }
 
-    public void TriggerAction(GameObject obj, string actionId, object[] parameters)
+    public void TriggerAction(string actionId, object[] parameters)
     {
       if (actionId == "setstate")
       {
@@ -108,15 +107,5 @@ namespace SimGame
       }
     }
     
-    public string GetContentPath()
-    {
-      return Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Content");
-    }
-
-    public GameObjectManager ObjectManager
-    {
-      get { return _objectManager; }
-    }
-
   }
 }
