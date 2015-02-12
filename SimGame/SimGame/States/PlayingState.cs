@@ -47,7 +47,7 @@ namespace SimGame.States
       if (Oku.Input.Keyboard.KeyIsDown(Keys.Up))
       {
         Oku.Graphics.Viewport.Bottom = Math.Min(
-          GameConstants.ViewPortHeight, //TODO: Limit to building
+          _building.Bounds.Max.Y - GameConstants.RoomHeight / 2,
           Oku.Graphics.Viewport.Bottom + speed);
       }
 

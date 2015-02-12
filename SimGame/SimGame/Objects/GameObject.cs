@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OkuBase.Geometry;
 
 namespace SimGame.Objects
 {
@@ -48,6 +46,18 @@ namespace SimGame.Objects
     {
       get { return _transform; }
       set { _transform = value; }
+    }
+
+    /// <summary>
+    /// Gets the boundaries of this object as an AABB.
+    /// </summary>
+    public Rectangle2f Bounds
+    {
+      get 
+      { 
+        Rectangle2f implBounds = _impl.GetBounds();
+        return new Rectangle2f(_transform.Translation + implBounds.Min, _transform.Translation + implBounds.Max); 
+      }
     }
 
     /// <summary>
@@ -100,6 +110,21 @@ namespace SimGame.Objects
     public void QueueEvent(string eventName)
     {
       Global.EventQueue.QueueEvent(_id + "." + eventName);
+    }
+
+    /// <summary>
+    /// Gets an attribute value from the object.
+    /// </summary>
+    /// <typeparam name="T">The type of the attribute.</typeparam>
+    /// <param name="attribute">The name of the attribute.</param>
+    /// <returns>The attributes values or null if the objects no attribute with the given name.</returns>
+    public T GetAttributeValue<T>(string attribute)
+    {
+      object value = _impl.GetAttributeValue(attribute);
+      if (!(value is T))
+        throw new ArgumentException("Attribute '" + attribute + "' is not of type '" + typeof(T).FullName + "' but '" + value.GetType().FullName + "'!");
+
+      return (T)value;
     }
 
   }

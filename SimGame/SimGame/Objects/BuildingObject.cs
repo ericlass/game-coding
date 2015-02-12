@@ -28,6 +28,22 @@ namespace SimGame.Objects
       get { return OkuManager.Instance; }
     }
 
+    public override Rectangle2f GetBounds()
+    {
+      return new Rectangle2f(
+        0, 0, 
+        GameConstants.RoomWidth * GameConstants.RoomsPerFloor + (2 * GameConstants.BuildingWallWidth),
+        _rooms.Count * GameConstants.RoomHeight + GameConstants.BuildingRoofHeight);
+    }
+
+    public override object GetAttributeValue(string attribute)
+    {
+      if (attribute == "selected_room")
+        return _selectedRoom;
+
+      return null;
+    }
+
     private List<Room> NewEmptyFloor()
     {
       var result = new List<Room>();
@@ -84,6 +100,8 @@ namespace SimGame.Objects
       UpdateRoomRegions(obj);
     }
 
+    private GameObject _obj = null;
+
     private void OnMouseEvent(string region, MouseEvent mevent, MouseButton button)
     {
       if (!_roomMap.ContainsKey(region))
@@ -100,7 +118,11 @@ namespace SimGame.Objects
           _hoveredRoom = null;
           break;
         case MouseEvent.ButtonDown:
-          _selectedRoom = room;
+          if (_selectedRoom != room)
+          {
+            _selectedRoom = room;
+            _obj.QueueEvent(Events.EventIds.SelectionChanged);            
+          }
           break;
         default:
           break;
@@ -109,6 +131,7 @@ namespace SimGame.Objects
 
     public override void Update(GameObject obj, float dt)
     {
+      _obj = obj;
       _mouse.Update();
     }
 
@@ -148,6 +171,8 @@ namespace SimGame.Objects
           float bottom = y;
 
           Oku.Graphics.DrawRectangle(left, right, bottom, top, room.Definition.BaseColor);
+
+          //Debug grid lines
           Oku.Graphics.DrawLine(left, bottom, left, top, 1.0f, Color.Black);
           Oku.Graphics.DrawLine(left, bottom, right, bottom, 1.0f, Color.Black);
 

@@ -93,7 +93,7 @@ namespace SimGame
         _currentStateName = stateId;
         _currentState = _states[_currentStateName];
         _currentState.Enter();
-        Global.EventQueue.QueueEvent(EventIds.GameStateChanged);
+        Global.EventQueue.QueueEvent(EventIds.StateChanged);
       }
       else
         throw new ArgumentException("Unknown game state: " + stateId);

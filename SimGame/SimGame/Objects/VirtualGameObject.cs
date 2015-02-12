@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SimGame.Events;
 
 namespace SimGame.Objects
 {
@@ -20,6 +18,7 @@ namespace SimGame.Objects
       if (actionId == "setstate")
       {
         _main.SetCurrentState(parameters[0] as string);
+        obj.QueueEvent(EventIds.StateChanged);
       }
     }
   }
