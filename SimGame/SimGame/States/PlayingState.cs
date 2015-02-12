@@ -33,8 +33,8 @@ namespace SimGame.States
       //This has to be done for every object that is in the state
       if (_building == null)
       {
-        BuildingObject obj = new BuildingObject();
-        _building = obj.CreateGameObject("building");
+        _building = new GameObject("building", new BuildingObject());
+        _building.Transform.Translation = new Vector2f(GameConstants.BuildingClearance, GameConstants.TerrainHeight);
         _building.Initialize();
       }
       

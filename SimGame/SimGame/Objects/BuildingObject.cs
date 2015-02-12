@@ -9,7 +9,7 @@ using SimGame.Mouse;
 
 namespace SimGame.Objects
 {
-  public class BuildingObject
+  public class BuildingObject : GameObjectBase
   {
     private List<List<Room>> _rooms = null;
     private MouseProcessor _mouse = null;
@@ -63,7 +63,7 @@ namespace SimGame.Objects
       }
     }
 
-    public void Initialize(GameObject obj)
+    public override void Initialize(GameObject obj)
     {
       _rooms = new List<List<Room>>();
 
@@ -107,12 +107,12 @@ namespace SimGame.Objects
       }
     }
 
-    public void Update(float dt)
+    public override void Update(GameObject obj, float dt)
     {
       _mouse.Update();
     }
 
-    public void Render()
+    public override void Render(GameObject obj)
     {
       float floorWidth = GameConstants.RoomsPerFloor * GameConstants.RoomWidth;
       float y = 0;
@@ -183,17 +183,6 @@ namespace SimGame.Objects
         (2 * GameConstants.BuildingWallWidth) + floorWidth,
         y,
         y + GameConstants.BuildingRoofHeight, GameConstants.ColorBuildingWall);
-    }
-
-    public GameObject CreateGameObject(string id)
-    {
-      return new GameObject("building")
-        {
-          UpdateHandler = this.Update,
-          RenderHandler = this.Render,
-          InitializeHandler = this.Initialize,
-          Transform = new Transform() { Translation = new Vector2f(GameConstants.BuildingClearance, GameConstants.TerrainHeight) }
-        };
     }
 
   }
