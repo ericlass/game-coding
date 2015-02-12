@@ -44,7 +44,7 @@ namespace SimGame
       Global.EventQueue.RegisterHandler(EventIds.GameStart, new SimGame.Events.EventHandler("game", "setstate", new object[] { "playing" }));
 
       // Register virtual "game" object
-      Global.Objects.Register(new GameObject("game") { TriggerActionHandler = TriggerAction });
+      Global.Objects.Register(new GameObject("game", new VirtualGameObject(this)));
       CreateStates();
       
       //Queue start of game
@@ -97,14 +97,6 @@ namespace SimGame
       }
       else
         throw new ArgumentException("Unknown game state: " + stateId);
-    }
-
-    public void TriggerAction(string actionId, object[] parameters)
-    {
-      if (actionId == "setstate")
-      {
-        SetCurrentState(parameters[0] as string);
-      }
     }
     
   }

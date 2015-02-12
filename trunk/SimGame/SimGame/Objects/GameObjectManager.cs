@@ -86,18 +86,15 @@ namespace SimGame.Objects
     {
       foreach (GameObject obj in _objectList)
       {
-        if (obj.CanRender)
+        OkuBase.OkuManager.Instance.Graphics.ApplyAndPushTransform(obj.Transform.Translation, obj.Transform.Scale, obj.Transform.Rotation);
+
+        try
         {
-          if (obj.Transform != null)
-            OkuBase.OkuManager.Instance.Graphics.ApplyAndPushTransform(obj.Transform.Translation, obj.Transform.Scale, obj.Transform.Rotation);
-          try
-          {
-            obj.Render();
-          }
-          finally
-          {
-            OkuBase.OkuManager.Instance.Graphics.PopTransform();
-          }
+          obj.Render();
+        }
+        finally
+        {
+          OkuBase.OkuManager.Instance.Graphics.PopTransform();
         }
       }
     }

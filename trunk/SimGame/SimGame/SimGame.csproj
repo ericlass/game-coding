@@ -64,9 +64,10 @@
     <Compile Include="Mouse\MouseProcessor.cs" />
     <Compile Include="Objects\BuildingObject.cs" />
     <Compile Include="Objects\GameObject.cs" />
-    <Compile Include="Objects\GameObjectImpl.cs" />
+    <Compile Include="Objects\GameObjectBase.cs" />
     <Compile Include="Objects\GameObjectManager.cs" />
     <Compile Include="Objects\Transform.cs" />
+    <Compile Include="Objects\VirtualGameObject.cs" />
     <Compile Include="States\DummyState.cs" />
     <Compile Include="Events\EventHandler.cs" />
     <Compile Include="Events\EventIds.cs" />
