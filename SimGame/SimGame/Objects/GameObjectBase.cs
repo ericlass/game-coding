@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using OkuBase;
 using OkuBase.Geometry;
 
 namespace SimGame.Objects
 {
   public class GameObjectBase
   {
+    protected OkuManager Oku
+    {
+      get { return OkuManager.Instance; }
+    }
+
     public virtual Rectangle2f GetBounds() { return new Rectangle2f(); }
     public virtual object GetAttributeValue(string attribute) { return null; }
 

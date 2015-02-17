@@ -8,14 +8,17 @@ namespace SimGame.Mouse
   public class MouseProcessor
   {
     private Action<string, MouseEvent, MouseButton> _handler = null;
+    private InputContext _input = null;
     private SortedList<string, Rectangle2f> _regions = null;
-
+    
     private string _activeRegion = null;
 
-    public MouseProcessor(Action<string, MouseEvent, MouseButton> handler)
+    public MouseProcessor(Action<string, MouseEvent, MouseButton> handler, InputContext inputContext)
     {
       if (handler == null)
         throw new ArgumentException("Handler cannot be null!");
+
+      _input = inputContext == null ? new InputContext() : inputContext;
 
       _regions = new SortedList<string, Rectangle2f>();
       _handler = handler;
@@ -51,7 +54,7 @@ namespace SimGame.Mouse
 
     public void Update()
     {
-      Vector2f pos = Oku.Graphics.ScreenToWorld(Oku.Input.Mouse.X, Oku.Input.Mouse.Y);
+      Vector2f pos = Oku.Graphics.ScreenToWorld(_input.MouseX, _input.MouseY);
       int x = (int)pos.X;
       int y = (int)pos.Y;
 
@@ -77,11 +80,11 @@ namespace SimGame.Mouse
 
       if (_activeRegion != null)
       {
-        List<MouseButton> pressed = Oku.Input.Mouse.GetPressedButtons();
+        List<MouseButton> pressed = _input.GetPressedButtons();
         foreach (var button in pressed)
           _handler(_activeRegion, MouseEvent.ButtonDown, button);
 
-        List<MouseButton> raised = Oku.Input.Mouse.GetRaisedButtons();
+        List<MouseButton> raised = _input.GetRaisedButtons();
         foreach (var button in raised)
           _handler(_activeRegion, MouseEvent.ButtonUp, button);
       }
