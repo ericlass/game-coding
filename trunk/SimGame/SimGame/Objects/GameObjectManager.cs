@@ -18,6 +18,24 @@ namespace SimGame.Objects
     }
 
     /// <summary>
+    /// Sorts the object list in a stable way.
+    /// </summary>
+    private void SortStable()
+    {
+      for (int i = 1; i < _objectList.Count; i++)
+      {
+        GameObject x = _objectList[i];
+        int j = i;
+        while (j > 0 && CompareObjectsByZIndex(_objectList[j - 1], x) > 0)
+        {
+          _objectList[j] = _objectList[j - 1];
+          j--;
+        }
+        _objectList[j] = x;
+      }
+    }
+
+    /// <summary>
     /// Gets the object with the given id.
     /// </summary>
     /// <param name="id">The id of the object.</param>
@@ -43,7 +61,7 @@ namespace SimGame.Objects
         throw new ArgumentException("Object with id '" + obj.Id + "' is already registered! Ids must be unique.");
 
       _objectList.Add(obj);
-      _objectList.Sort(CompareObjectsByZIndex);
+      SortStable();
 
       _objects.Add(obj.Id, obj);
     }
@@ -56,7 +74,7 @@ namespace SimGame.Objects
     public bool Unregister(GameObject obj)
     {
       _objectList.Remove(obj);
-      _objectList.Sort(CompareObjectsByZIndex);
+      SortStable();
       return _objects.Remove(obj.Id);
     }
 

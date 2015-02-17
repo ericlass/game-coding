@@ -18,14 +18,9 @@ namespace SimGame.Objects
     private Room _hoveredRoom = null;
     private Room _selectedRoom = null;
 
-    public BuildingObject()
+    public BuildingObject(InputContext input)
     {
-      _mouse = new MouseProcessor(OnMouseEvent);
-    }
-
-    private OkuManager Oku
-    {
-      get { return OkuManager.Instance; }
+      _mouse = new MouseProcessor(OnMouseEvent, input);
     }
 
     public override Rectangle2f GetBounds()

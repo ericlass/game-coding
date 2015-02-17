@@ -59,6 +59,7 @@
     <Compile Include="Game\RoomDefinitions.cs" />
     <Compile Include="Game\RoomType.cs" />
     <Compile Include="Global.cs" />
+    <Compile Include="InputContext.cs" />
     <Compile Include="Interpolators\Interpolator.cs" />
     <Compile Include="Mouse\MouseEvent.cs" />
     <Compile Include="Mouse\MouseProcessor.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Objects\GameObject.cs" />
     <Compile Include="Objects\GameObjectBase.cs" />
     <Compile Include="Objects\GameObjectManager.cs" />
+    <Compile Include="Objects\ImageObject.cs" />
     <Compile Include="Objects\Transform.cs" />
     <Compile Include="Objects\VirtualGameObject.cs" />
     <Compile Include="States\DummyState.cs" />
