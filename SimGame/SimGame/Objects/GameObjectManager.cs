@@ -12,6 +12,7 @@ namespace SimGame.Objects
     private List<GameObject> _objectList = new List<GameObject>();
 
     private Comparison<GameObject> CompareObjectsByZIndex = (a, b) => { return a.ZIndex - b.ZIndex; };
+    private bool _updating = false;
 
     public GameObjectManager()
     {
@@ -61,9 +62,36 @@ namespace SimGame.Objects
         throw new ArgumentException("Object with id '" + obj.Id + "' is already registered! Ids must be unique.");
 
       _objectList.Add(obj);
-      SortStable();
+      if (!_updating)
+        SortStable();
 
       _objects.Add(obj.Id, obj);
+    }
+
+    /// <summary>
+    /// Registers all of the given game objects with the object manager.
+    /// </summary>
+    /// <param name="objects">The objects to be registered.</param>
+    public void RegisterAll(params GameObject[] objects)
+    {
+      _updating = true;
+      foreach (var obj in objects)
+        Register(obj);
+      _updating = false;
+      SortStable();
+    }
+
+    /// <summary>
+    /// Registers all of the given game objects with the object manager.
+    /// </summary>
+    /// <param name="objects">The objects to be registered.</param>
+    public void RegisterAll(List<GameObject> objects)
+    {
+      _updating = true;
+      foreach (var obj in objects)
+        Register(obj);
+      _updating = false;
+      SortStable();
     }
 
     /// <summary>
@@ -74,8 +102,47 @@ namespace SimGame.Objects
     public bool Unregister(GameObject obj)
     {
       _objectList.Remove(obj);
-      SortStable();
+      if (!_updating)
+        SortStable();
       return _objects.Remove(obj.Id);
+    }
+
+    /// <summary>
+    /// Unregisters all given objects from the object manager.
+    /// </summary>
+    /// <param name="objects">The objects to unregister.</param>
+    public void UnregisterAll(params GameObject[] objects)
+    {
+      _updating = true;
+      try
+      {
+        foreach (var obj in objects)
+          Unregister(obj);
+      }
+      finally
+      {
+        _updating = false;
+        SortStable();
+      }
+    }
+
+    /// <summary>
+    /// Unregisters all given objects from the object manager.
+    /// </summary>
+    /// <param name="objects">The objects to unregister.</param>
+    public void UnregisterAll(List<GameObject> objects)
+    {
+      _updating = true;
+      try
+      {
+        foreach (var obj in objects)
+          Unregister(obj);
+      }
+      finally
+      {
+        _updating = false;
+        SortStable();
+      }
     }
 
     /// <summary>
@@ -104,15 +171,18 @@ namespace SimGame.Objects
     {
       foreach (GameObject obj in _objectList)
       {
-        OkuBase.OkuManager.Instance.Graphics.ApplyAndPushTransform(obj.Transform.Translation, obj.Transform.Scale, obj.Transform.Rotation);
+        if (obj.Visible)
+        {
+          OkuBase.OkuManager.Instance.Graphics.ApplyAndPushTransform(obj.Transform.Translation, obj.Transform.Scale, obj.Transform.Rotation);
 
-        try
-        {
-          obj.Render();
-        }
-        finally
-        {
-          OkuBase.OkuManager.Instance.Graphics.PopTransform();
+          try
+          {
+            obj.Render();
+          }
+          finally
+          {
+            OkuBase.OkuManager.Instance.Graphics.PopTransform();
+          }
         }
       }
     }

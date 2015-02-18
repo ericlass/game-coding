@@ -18,6 +18,8 @@ namespace SimGame.Objects
     private Room _hoveredRoom = null;
     private Room _selectedRoom = null;
 
+    public event Action<Room> OnRoomSelect;
+
     public BuildingObject(InputContext input)
     {
       _mouse = new MouseProcessor(OnMouseEvent, input);
@@ -116,7 +118,9 @@ namespace SimGame.Objects
           if (_selectedRoom != room)
           {
             _selectedRoom = room;
-            _obj.QueueEvent(Events.EventIds.SelectionChanged);            
+            _obj.QueueEvent(Events.EventIds.SelectionChanged);
+            if (OnRoomSelect != null)
+              OnRoomSelect(_selectedRoom);
           }
           break;
         default:

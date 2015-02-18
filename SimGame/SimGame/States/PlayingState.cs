@@ -14,10 +14,18 @@ namespace SimGame.States
 {
   public class PlayingState : IGameState
   {
+    private enum InternalState
+    {
+      Building,
+      NewRoom
+    }
+
     private GameObject _surfaceImage = null;
     private GameObject _building = null;
 
     private InputContext _mainContext = new InputContext();
+    private InputContext _menuContext = new InputContext();
+    private InternalState _state = InternalState.Building;
 
     private OkuManager Oku
     {
@@ -38,13 +46,25 @@ namespace SimGame.States
       //This has to be done for every object that is in the state
       if (_building == null)
       {
-        _building = new GameObject("building", new BuildingObject(_mainContext));
+        BuildingObject build = new BuildingObject(_mainContext);
+        build.OnRoomSelect += build_OnRoomSelect;
+
+        _building = new GameObject("building", build);
         _building.Transform.Translation = new Vector2f(GameConstants.BuildingClearance, GameConstants.TerrainHeight);
         _building.Initialize();
       }
 
-      Global.Objects.Register(_surfaceImage);
-      Global.Objects.Register(_building);
+      Global.Objects.RegisterAll(_surfaceImage, _building);
+    }
+
+    private void build_OnRoomSelect(Room room)
+    {
+      if (room.Definition.BaseType == RoomType.Empty)
+      {
+        _state = InternalState.NewRoom;
+        _mainContext.Enabled = false;
+        _menuContext.Enabled = true;
+      }
     }
 
     public void Update(float dt)
@@ -67,8 +87,7 @@ namespace SimGame.States
 
     public void Leave()
     {
-      Global.Objects.Unregister(_building);
-      Global.Objects.Unregister(_surfaceImage);
+      Global.Objects.UnregisterAll(_building, _surfaceImage);
     }
 
   }
