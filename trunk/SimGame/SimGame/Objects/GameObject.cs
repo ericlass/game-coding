@@ -12,6 +12,7 @@ namespace SimGame.Objects
     private string _id = null;
     private int _zIndex = 0;
     private Transform _transform = new Transform();
+    private bool _visible = true;
 
     private GameObjectBase _impl = null;
     
@@ -46,6 +47,15 @@ namespace SimGame.Objects
     {
       get { return _transform; }
       set { _transform = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets if the object is currently visible.
+    /// </summary>
+    public bool Visible
+    {
+      get { return _visible; }
+      set { _visible = value; }
     }
 
     /// <summary>
