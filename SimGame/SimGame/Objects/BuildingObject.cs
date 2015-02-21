@@ -22,7 +22,7 @@ namespace SimGame.Objects
 
     public BuildingObject(InputContext input)
     {
-      _mouse = new MouseProcessor(OnMouseEvent, input);
+      _mouse = new MouseProcessor(input);
     }
 
     public override Rectangle2f GetBounds()
@@ -68,7 +68,7 @@ namespace SimGame.Objects
           _roomMap.Add(id, room);
 
           Rectangle2f area = new Rectangle2f(left, bottom, GameConstants.RoomWidth * room.Definition.NumberOfSpaces, GameConstants.RoomHeight);
-          _mouse.AddRegion(id, area);
+          _mouse.AddRegion(id, area, 0, OnMouseEvent);
 
           left += GameConstants.RoomWidth * room.Definition.NumberOfSpaces;
         }

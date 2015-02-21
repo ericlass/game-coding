@@ -59,6 +59,10 @@
     <Compile Include="Game\RoomDefinitions.cs" />
     <Compile Include="Game\RoomType.cs" />
     <Compile Include="Global.cs" />
+    <Compile Include="Gui\Container.cs" />
+    <Compile Include="Gui\Dialog.cs" />
+    <Compile Include="Gui\Panel.cs" />
+    <Compile Include="Gui\Widget.cs" />
     <Compile Include="InputContext.cs" />
     <Compile Include="Interpolators\Interpolator.cs" />
     <Compile Include="Mouse\MouseEvent.cs" />
