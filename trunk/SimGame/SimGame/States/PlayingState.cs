@@ -14,18 +14,11 @@ namespace SimGame.States
 {
   public class PlayingState : IGameState
   {
-    private enum InternalState
-    {
-      Building,
-      NewRoom
-    }
-
     private GameObject _surfaceImage = null;
     private GameObject _building = null;
 
     private InputContext _mainContext = new InputContext();
     private InputContext _menuContext = new InputContext();
-    private InternalState _state = InternalState.Building;
 
     private OkuManager Oku
     {
@@ -61,7 +54,6 @@ namespace SimGame.States
     {
       if (room.Definition.BaseType == RoomType.Empty)
       {
-        _state = InternalState.NewRoom;
         _mainContext.Enabled = false;
         _menuContext.Enabled = true;
       }
