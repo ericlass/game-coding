@@ -37,6 +37,9 @@ namespace SimGame.Mouse
 
     private Region _activeRegion = null;
 
+    private int lastX = 0;
+    private int lastY = 0;
+
     /// <summary>
     /// Creates a new mouse processor with the given input context and event handler.
     /// </summary>
@@ -67,6 +70,32 @@ namespace SimGame.Mouse
         i++;
 
       _regions.Insert(i, new Region(id, area, zIndex, handler));
+    }
+
+    /// <summary>
+    /// Updates the area of the region with the given id.
+    /// </summary>
+    /// <param name="id">The id of the region.</param>
+    /// <param name="area">The new area of the region.</param>
+    public void UpdateRegion (string id, Rectangle2f area)
+    {
+      if (!_usedIds.Contains(id))
+        throw new ArgumentException("There is no region with the id '" + id + "' registered!");
+
+      Region region = null;
+      foreach (Region reg in _regions)
+      {
+        if (reg.Id == id)
+        {
+          region = reg;
+          break;
+        }
+      }
+
+      if (region == null)
+        throw new Exception("Region '" + id + "' was not found although the usedIds list contains it!");
+
+      region.Area = area;
     }
 
     /// <summary>
@@ -105,10 +134,12 @@ namespace SimGame.Mouse
     /// </summary>
     public void Update()
     {
+      //Calculate mouse position in world space
       Vector2f pos = OkuBase.OkuManager.Instance.Graphics.ScreenToWorld(_input.MouseX, _input.MouseY);
       int x = (int)pos.X;
       int y = (int)pos.Y;
 
+      //Find region currently under mouse cursor
       Region currentRegion = null;
       foreach (var region in _regions)
       {
@@ -119,6 +150,7 @@ namespace SimGame.Mouse
         }
       }
 
+      //If region has changed, fire leave/enter events accordingly
       if (currentRegion != _activeRegion)
       {
         if (_activeRegion != null)
@@ -127,8 +159,18 @@ namespace SimGame.Mouse
           currentRegion.Handler(currentRegion.Id, MouseEvent.Enter, MouseButton.Left);
       }
 
+      //Check for mouse movement and fire event accordingly
+      if (_activeRegion != null && _activeRegion == currentRegion)
+      {
+        int dx = x - lastX;
+        int dy = y - lastY;
+        if (dx > 0 || dy > 0)
+          _activeRegion.Handler(_activeRegion.Id, MouseEvent.Move, MouseButton.Left);
+      }
+
       _activeRegion = currentRegion;
 
+      //Check for button clicks
       if (_activeRegion != null)
       {
         List<MouseButton> pressed = _input.GetPressedButtons();
@@ -139,6 +181,9 @@ namespace SimGame.Mouse
         foreach (var button in raised)
           _activeRegion.Handler(_activeRegion.Id, MouseEvent.ButtonUp, button);
       }
+
+      lastX = x;
+      lastY = y;
     }
 
   }

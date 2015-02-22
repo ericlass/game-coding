@@ -7,6 +7,11 @@ namespace SimGame.Gui
 {
   public class Panel : Container
   {
+    public Panel(string id)
+    {
+      Id = id;
+    }
+
     public override void Render()
     {
       OkuManager.Instance.Graphics.DrawRectangle(0, Width, 0, Height, BackgroundColor);

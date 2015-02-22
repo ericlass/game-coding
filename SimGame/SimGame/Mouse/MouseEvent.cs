@@ -11,6 +11,7 @@ namespace SimGame.Mouse
     Enter,
     Leave,
     ButtonDown,
-    ButtonUp
+    ButtonUp,
+    Move
   }
 }
