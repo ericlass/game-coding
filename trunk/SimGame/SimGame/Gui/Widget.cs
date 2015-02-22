@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
+using OkuBase.Input;
 
 namespace SimGame.Gui
 {
@@ -19,8 +18,15 @@ namespace SimGame.Gui
 
     public abstract void Render();
 
-    public virtual void OnResize()
-    {
-    }
+    public virtual void OnResize() { }
+
+    public virtual void OnMouseDown(int x, int y, MouseButton button) { }
+    public virtual void OnMouseUp(int x, int y, MouseButton button) { }
+    public virtual void OnMouseEnter(int x, int y) { }
+    public virtual void OnMouseLeave(int x, int y) { }
+    public virtual void OnMouseMove(int x, int y) { }
+
+    public virtual void OnKeyDown(Keys key) { }
+    public virtual void OnKeyUp(Keys key) { }
   }
 }

@@ -12,8 +12,9 @@ namespace SimGame.Objects
   public class BuildingObject : GameObjectBase
   {
     private List<List<Room>> _rooms = null;
-    private MouseProcessor _mouse = null;
     private SortedList<string, Room> _roomMap = new SortedList<string, Room>();
+
+    private InputContext _input = null;
 
     private Room _hoveredRoom = null;
     private Room _selectedRoom = null;
@@ -22,7 +23,7 @@ namespace SimGame.Objects
 
     public BuildingObject(InputContext input)
     {
-      _mouse = new MouseProcessor(input);
+      _input = input;
     }
 
     public override Rectangle2f GetBounds()
@@ -53,7 +54,7 @@ namespace SimGame.Objects
 
     private void UpdateRoomRegions(GameObject obj)
     {
-      _mouse.ClearRegions();
+      _input.Mouse.ClearRegions();
       _roomMap.Clear();
 
       int bottom = (int)obj.Transform.Translation.Y;
@@ -68,7 +69,7 @@ namespace SimGame.Objects
           _roomMap.Add(id, room);
 
           Rectangle2f area = new Rectangle2f(left, bottom, GameConstants.RoomWidth * room.Definition.NumberOfSpaces, GameConstants.RoomHeight);
-          _mouse.AddRegion(id, area, 0, OnMouseEvent);
+          _input.Mouse.AddRegion(id, area, 0, OnMouseEvent);
 
           left += GameConstants.RoomWidth * room.Definition.NumberOfSpaces;
         }
@@ -131,7 +132,6 @@ namespace SimGame.Objects
     public override void Update(GameObject obj, float dt)
     {
       _obj = obj;
-      _mouse.Update();
     }
 
     public override void Render(GameObject obj)

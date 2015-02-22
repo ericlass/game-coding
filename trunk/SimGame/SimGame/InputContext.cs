@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using OkuBase;
 using OkuBase.Input;
+using SimGame.Mouse;
 
 namespace SimGame
 {
@@ -15,6 +16,7 @@ namespace SimGame
   public class InputContext
   {
     private List<MouseButton> EmptyButtons = new List<MouseButton>();
+    private MouseProcessor _mouse = null;
 
     private bool _enabled = true;
 
@@ -43,12 +45,32 @@ namespace SimGame
     }
 
     /// <summary>
+    /// Gets the mouse processor of this input context.
+    /// </summary>
+    public MouseProcessor Mouse
+    {
+      get
+      {
+        if (_mouse == null)
+          _mouse = new MouseProcessor(this);
+
+        return _mouse;
+      }
+    }
+
+    /// <summary>
     /// Gets or sets if the context is enabled or not.
     /// </summary>
     public bool Enabled
     {
       get { return _enabled; }
       set { _enabled = value; }
+    }
+
+    public void Update()
+    {
+      if (_mouse != null)
+        _mouse.Update();
     }
 
     /// <summary>
@@ -97,7 +119,7 @@ namespace SimGame
 
     /// <summary>
     /// Gets the current X position of the mouse in screen space.
-    /// If the context is disabled, -1 is always returned.
+    /// If the context is disabled, int.MinValue is always returned.
     /// </summary>
     public int MouseX
     {
@@ -106,7 +128,7 @@ namespace SimGame
 
     /// <summary>
     /// Gets the current Y position of the mouse in screen space.
-    /// If the context is disabled, -1 is always returned.
+    /// If the context is disabled, int.MinValue is always returned.
     /// </summary>
     public int MouseY
     {

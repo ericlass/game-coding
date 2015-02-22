@@ -9,6 +9,7 @@ using OkuBase.Input;
 using SimGame.Content;
 using SimGame.Game;
 using SimGame.Objects;
+using SimGame.Gui;
 
 namespace SimGame.States
 {
@@ -16,9 +17,9 @@ namespace SimGame.States
   {
     private GameObject _surfaceImage = null;
     private GameObject _building = null;
+    private GameObject _dialog = null;
 
     private InputContext _mainContext = new InputContext();
-    private InputContext _menuContext = new InputContext();
 
     private OkuManager Oku
     {
@@ -47,20 +48,46 @@ namespace SimGame.States
         _building.Initialize();
       }
 
-      Global.Objects.RegisterAll(_surfaceImage, _building);
+      if (_dialog == null)
+      {
+        SimGame.Gui.Panel subPanel = new Gui.Panel("sub");
+        subPanel.BackgroundColor = Color.Red;
+        subPanel.Left = 5;
+        subPanel.Bottom = 5;
+        subPanel.Width = 40;
+        subPanel.Height = 20;
+
+        SimGame.Gui.Panel contentPanel = new Gui.Panel("content");
+        contentPanel.BackgroundColor = Color.Silver;
+        contentPanel.Add(subPanel);
+
+        Dialog dialog = new Dialog(contentPanel, _mainContext);
+        dialog.Width = 200;
+        dialog.Height = 150;
+        dialog.BorderColor = Color.Blue;
+        dialog.DrawBorder = true;
+
+        _dialog = new GameObject("dialog", dialog);
+        _dialog.ZIndex = 2;
+        _dialog.Transform.Translation = new Vector2f(200.0f, 120.0f);
+        _dialog.Initialize();
+      }
+
+      Global.Objects.RegisterAll(_surfaceImage, _building, _dialog);
     }
 
     private void build_OnRoomSelect(Room room)
     {
       if (room.Definition.BaseType == RoomType.Empty)
       {
-        _mainContext.Enabled = false;
-        _menuContext.Enabled = true;
+        //TODO: Show new room dialog
       }
     }
 
     public void Update(float dt)
     {
+      _mainContext.Update();
+
       float speed = 128 * dt;
       if (_mainContext.KeyIsDown(Keys.Up))
       {
@@ -79,7 +106,7 @@ namespace SimGame.States
 
     public void Leave()
     {
-      Global.Objects.UnregisterAll(_building, _surfaceImage);
+      Global.Objects.UnregisterAll(_building, _surfaceImage, _dialog);
     }
 
   }
