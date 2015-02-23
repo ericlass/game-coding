@@ -70,6 +70,15 @@ namespace SimGame.Mouse
         i++;
 
       _regions.Insert(i, new Region(id, area, zIndex, handler));
+      _usedIds.Add(id);
+    }
+
+    public Rectangle2f GetRegionArea(string id)
+    {
+      if (!_usedIds.Contains(id))
+        throw new ArgumentException("There is no region with the id '" + id + "' registered!");
+
+      return GetRegionById(id).Area;
     }
 
     /// <summary>
@@ -77,25 +86,31 @@ namespace SimGame.Mouse
     /// </summary>
     /// <param name="id">The id of the region.</param>
     /// <param name="area">The new area of the region.</param>
-    public void UpdateRegion (string id, Rectangle2f area)
+    public void UpdateRegion(string id, Rectangle2f area)
     {
       if (!_usedIds.Contains(id))
         throw new ArgumentException("There is no region with the id '" + id + "' registered!");
 
-      Region region = null;
-      foreach (Region reg in _regions)
-      {
-        if (reg.Id == id)
-        {
-          region = reg;
-          break;
-        }
-      }
+      Region region = GetRegionById(id);
 
       if (region == null)
         throw new Exception("Region '" + id + "' was not found although the usedIds list contains it!");
 
       region.Area = area;
+    }
+
+    private Region GetRegionById(string id)
+    {
+      Region result = null;
+      foreach (Region reg in _regions)
+      {
+        if (reg.Id == id)
+        {
+          result = reg;
+          break;
+        }
+      }
+      return result;
     }
 
     /// <summary>
@@ -164,7 +179,7 @@ namespace SimGame.Mouse
       {
         int dx = x - lastX;
         int dy = y - lastY;
-        if (dx > 0 || dy > 0)
+        if (dx != 0 || dy != 0)
           _activeRegion.Handler(_activeRegion.Id, MouseEvent.Move, MouseButton.Left);
       }
 

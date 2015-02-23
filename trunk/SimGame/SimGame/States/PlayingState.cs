@@ -50,21 +50,13 @@ namespace SimGame.States
 
       if (_dialog == null)
       {
-        SimGame.Gui.Panel subPanel = new Gui.Panel("sub");
-        subPanel.BackgroundColor = Color.Red;
-        subPanel.Left = 5;
-        subPanel.Bottom = 5;
-        subPanel.Width = 40;
-        subPanel.Height = 20;
-
         SimGame.Gui.Panel contentPanel = new Gui.Panel("content");
         contentPanel.BackgroundColor = Color.Silver;
-        contentPanel.Add(subPanel);
 
         Dialog dialog = new Dialog(contentPanel, _mainContext);
         dialog.Width = 200;
         dialog.Height = 150;
-        dialog.BorderColor = Color.Blue;
+        dialog.BorderColor = new Color(99, 180, 251);
         dialog.DrawBorder = true;
 
         _dialog = new GameObject("dialog", dialog);
