@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using OkuBase;
 using OkuBase.Input;
-using SimGame.Mouse;
+using SimGame.Input;
 
 namespace SimGame
 {
@@ -16,7 +16,8 @@ namespace SimGame
   public class InputContext
   {
     private List<MouseButton> EmptyButtons = new List<MouseButton>();
-    private MouseProcessor _mouse = null;
+    private List<Keys> EmptyKeys = new List<Keys>();
+    private InputProcessor _processor = null;
 
     private bool _enabled = true;
 
@@ -45,16 +46,16 @@ namespace SimGame
     }
 
     /// <summary>
-    /// Gets the mouse processor of this input context.
+    /// Gets the input processor of this input context.
     /// </summary>
-    public MouseProcessor Mouse
+    public InputProcessor Processor
     {
       get
       {
-        if (_mouse == null)
-          _mouse = new MouseProcessor(this);
+        if (_processor == null)
+          _processor = new InputProcessor(this);
 
-        return _mouse;
+        return _processor;
       }
     }
 
@@ -69,8 +70,8 @@ namespace SimGame
 
     public void Update()
     {
-      if (_mouse != null)
-        _mouse.Update();
+      if (_processor != null)
+        _processor.Update();
     }
 
     /// <summary>
@@ -115,6 +116,30 @@ namespace SimGame
     public bool KeyRaised(Keys key)
     {
       return CheckKey(key, Oku.Input.Keyboard.KeyRaised);
+    }
+
+    /// <summary>
+    /// Gets the keyboard keys that have been pressed down since th last frame.
+    /// </summary>
+    /// <returns>A list of all pressed keys.</returns>
+    public List<Keys> GetPressedKeys()
+    {
+      if (_enabled)
+        return Oku.Input.Keyboard.GetPressedButtons();
+
+      return EmptyKeys;
+    }
+
+    /// <summary>
+    /// Gets the keyboard keys that have been raised since th last frame.
+    /// </summary>
+    /// <returns>A list of all raised keys.</returns>
+    public List<Keys> GetRaisedKeys()
+    {
+      if (_enabled)
+        return Oku.Input.Keyboard.GetRaisedButtons();
+
+      return EmptyKeys;
     }
 
     /// <summary>

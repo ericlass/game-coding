@@ -10,6 +10,7 @@ using SimGame.Content;
 using SimGame.Game;
 using SimGame.Objects;
 using SimGame.Gui;
+using SimGame.Input;
 
 namespace SimGame.States
 {
@@ -50,8 +51,16 @@ namespace SimGame.States
 
       if (_dialog == null)
       {
+        SimGame.Gui.Panel subPanel = new Gui.Panel("sub");
+        subPanel.BackgroundColor = Color.Red;
+        subPanel.Left = 5;
+        subPanel.Bottom = 5;
+        subPanel.Width = 50;
+        subPanel.Height = 25;
+
         SimGame.Gui.Panel contentPanel = new Gui.Panel("content");
         contentPanel.BackgroundColor = Color.Silver;
+        contentPanel.Add(subPanel);
 
         Dialog dialog = new Dialog(contentPanel, _mainContext);
         dialog.Width = 200;
@@ -94,6 +103,15 @@ namespace SimGame.States
 
     public void Render()
     {
+      /*
+      List<Region> regions = _mainContext.Processor.Regions;
+      Random rand = new Random(2);
+      for (int i = regions.Count - 1; i >= 0; i--)
+      {
+        Region region = regions[i];
+        Oku.Graphics.DrawRectangle(region.Area.Min.X, region.Area.Max.X, region.Area.Min.Y, region.Area.Max.Y, Color.RandomColor(rand));
+      }
+       */
     }
 
     public void Leave()

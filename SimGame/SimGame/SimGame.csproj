@@ -64,9 +64,11 @@
     <Compile Include="Gui\Panel.cs" />
     <Compile Include="Gui\Widget.cs" />
     <Compile Include="InputContext.cs" />
+    <Compile Include="Input\KeyboardEvent.cs" />
+    <Compile Include="Input\Region.cs" />
     <Compile Include="Interpolators\Interpolator.cs" />
-    <Compile Include="Mouse\MouseEvent.cs" />
-    <Compile Include="Mouse\MouseProcessor.cs" />
+    <Compile Include="Input\MouseEvent.cs" />
+    <Compile Include="Input\InputProcessor.cs" />
     <Compile Include="Objects\BuildingObject.cs" />
     <Compile Include="Objects\GameObject.cs" />
     <Compile Include="Objects\GameObjectBase.cs" />
