@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimGame.Mouse
+namespace SimGame.Input
 {
   public enum MouseEvent
   {

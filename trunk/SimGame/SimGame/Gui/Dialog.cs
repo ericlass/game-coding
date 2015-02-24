@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using OkuBase;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
 using OkuBase.Input;
 using SimGame.Objects;
-using SimGame.Mouse;
+using SimGame.Input;
 
 namespace SimGame.Gui
 {
@@ -116,7 +117,7 @@ namespace SimGame.Gui
               _parentObject.Transform.Translation += delta;
               _dragStartPos = currentPos;              
 
-              UpdateMouseRegions();
+              UpdateRegions();
             }
             break;
 
@@ -157,16 +158,67 @@ namespace SimGame.Gui
       }
     }
 
-    private void UpdateMouseRegions()
+    private void OnKeyboardEvent(string id, KeyboardEvent kevent, Keys key)
     {
-      //TODO: Remove current widget regions
+      Widget widget = _content.GetWidget(id);
+      if (widget != null)
+      {
+        switch (kevent)
+        {
+          case KeyboardEvent.KeyPressed:
+            widget.OnKeyDown(key);
+            break;
 
-      _input.Mouse.RemoveRegion(HeaderRegionName);
-      Rectangle2f headerRegion = new Rectangle2f(_parentObject.Transform.Translation.X, _parentObject.Transform.Translation.Y + BorderBottom + _content.Height, Width, BorderTop);
-      _input.Mouse.AddRegion(HeaderRegionName, headerRegion, _parentObject.ZIndex, OnMouseEvent);
+          case KeyboardEvent.KeyRaised:
+            widget.OnKeyUp(key);
+            break;
 
-      //TODO: Create mouse regions for each widget
+          default:
+            break;
+        }
+      }
+    }
+
+    private void UpdateRegions()
+    {
+      Rectangle2f headerArea = new Rectangle2f(_parentObject.Transform.Translation.X, _parentObject.Transform.Translation.Y + BorderBottom + _content.Height, Width, BorderTop);
+      Region headerRegion = _input.Processor[HeaderRegionName];
+      if (headerRegion == null)
+      {
+        headerRegion = new Region(HeaderRegionName, headerArea, _parentObject.ZIndex, OnMouseEvent, null);
+        _input.Processor.AddRegion(headerRegion);
+      }
+      else     
+        headerRegion.Area = headerArea;
+
+      Vector2f pos = new Vector2f(_parentObject.Transform.Translation.X + BorderLeft, _parentObject.Transform.Translation.Y + BorderBottom);
+      CreateOrUpdateWidgetRegion(_content, pos, _parentObject.ZIndex);
+      UpdateWidgetRegions(_content, pos, _parentObject.ZIndex + 1);
+
       updateRequired = false;
+    }
+
+    public void UpdateWidgetRegions(Container parent, Vector2f pos, int zIndex)
+    {
+      foreach (var widget in parent)
+      {
+        CreateOrUpdateWidgetRegion(widget, pos, zIndex);
+        if (widget is Container)
+          UpdateWidgetRegions(widget as Container, pos + new Vector2f(widget.Left, widget.Bottom), zIndex + 1);
+      }
+    }
+
+    private void CreateOrUpdateWidgetRegion(Widget widget, Vector2f pos, int zIndex)
+    {
+      Rectangle2f area = new Rectangle2f(pos.X + widget.Left, pos.Y + widget.Bottom, widget.Width, widget.Height);
+      Region region = _input.Processor[widget.Id];
+      if (region == null)
+      {
+        region = new Region(widget.Id, area, zIndex, OnMouseEvent, OnKeyboardEvent);
+        _input.Processor.AddRegion(region);
+      }
+      else
+        region.Area = area;
     }
 
     private Vector2f MouseInClientSpace(Widget widget)
@@ -191,13 +243,13 @@ namespace SimGame.Gui
     public override void Initialize(GameObject obj)
     {
       _parentObject = obj;
-      UpdateMouseRegions();
+      UpdateRegions();
     }
 
     public override void Update(GameObject obj, float dt)
     {
       if (updateRequired)
-        UpdateMouseRegions();
+        UpdateRegions();
     }
 
     public override void Render(GameObject obj)

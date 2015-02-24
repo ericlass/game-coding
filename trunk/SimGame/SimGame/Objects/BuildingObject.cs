@@ -5,7 +5,7 @@ using OkuBase.Geometry;
 using OkuBase.Graphics;
 using OkuBase.Input;
 using SimGame.Game;
-using SimGame.Mouse;
+using SimGame.Input;
 
 namespace SimGame.Objects
 {
@@ -54,7 +54,7 @@ namespace SimGame.Objects
 
     private void UpdateRoomRegions(GameObject obj)
     {
-      _input.Mouse.ClearRegions();
+      _input.Processor.ClearRegions();
       _roomMap.Clear();
 
       int bottom = (int)obj.Transform.Translation.Y;
@@ -69,7 +69,8 @@ namespace SimGame.Objects
           _roomMap.Add(id, room);
 
           Rectangle2f area = new Rectangle2f(left, bottom, GameConstants.RoomWidth * room.Definition.NumberOfSpaces, GameConstants.RoomHeight);
-          _input.Mouse.AddRegion(id, area, 0, OnMouseEvent);
+          Region region = new Region(id, area, 0, OnMouseEvent, null);
+          _input.Processor.AddRegion(region);
 
           left += GameConstants.RoomWidth * room.Definition.NumberOfSpaces;
         }
