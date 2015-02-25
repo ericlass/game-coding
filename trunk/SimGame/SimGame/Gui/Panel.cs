@@ -30,20 +30,5 @@ namespace SimGame.Gui
       }
     }
 
-    public override void OnMouseEnter(int x, int y)
-    {
-      System.Diagnostics.Debug.WriteLine(Id + ": Mouse entered at " + x + ";" + y);
-    }
-
-    public override void OnMouseLeave(int x, int y)
-    {
-      System.Diagnostics.Debug.WriteLine(Id + ": Mouse left at " + x + ";" + y);
-    }
-
-    public override void OnMouseMove(int x, int y)
-    {
-      System.Diagnostics.Debug.WriteLine(Id + ": Mouse moved at " + x + ";" + y);
-    }
-
   }
 }
