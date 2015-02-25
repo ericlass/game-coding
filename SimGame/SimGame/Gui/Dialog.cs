@@ -129,6 +129,9 @@ namespace SimGame.Gui
       {
         //Forward events to widgets
         Widget widget = _content.GetWidget(region);
+        if (widget == null && _content.Id == region)
+          widget = _content;
+
         if (widget != null)
         {
           Vector2f mouse = MouseInClientSpace(widget);
