@@ -23,10 +23,10 @@ namespace SimGame.Gui
     private InputContext _input = null;
 
     private GameObject _parentObject = null;
-    private bool updateRequired = false;
+    private bool _updateRequired = false;
 
     private Vector2f _dragStartPos = Vector2f.Zero;
-    private bool dragging = false;
+    private bool _dragging = false;
 
     /// <summary>
     /// Creates a new dialog.
@@ -54,7 +54,7 @@ namespace SimGame.Gui
       set 
       {
         _content.Width = value - BorderLeft - BorderRight;
-        updateRequired = true;
+        _updateRequired = true;
       }
     }
 
@@ -67,7 +67,7 @@ namespace SimGame.Gui
       set
       {
         _content.Height = value - BorderBottom - BorderTop;
-        updateRequired = true;
+        _updateRequired = true;
       }
     }
 
@@ -99,18 +99,18 @@ namespace SimGame.Gui
           case MouseEvent.ButtonDown:
             if (button == MouseButton.Left)
             {
-              dragging = true;
+              _dragging = true;
               _dragStartPos = Oku.Graphics.ScreenToWorld(_input.MouseX, _input.MouseY);
             }
             break;
 
           case MouseEvent.ButtonUp:
             if (button == MouseButton.Left)
-              dragging = false;
+              _dragging = false;
             break;
 
           case MouseEvent.Move:
-            if (dragging)
+            if (_dragging)
             {
               Vector2f currentPos = Oku.Graphics.ScreenToWorld(_input.MouseX, _input.MouseY);
               Vector2f delta = currentPos - _dragStartPos;
@@ -198,7 +198,7 @@ namespace SimGame.Gui
       CreateOrUpdateWidgetRegion(_content, pos, _parentObject.ZIndex);
       UpdateWidgetRegions(_content, pos, _parentObject.ZIndex + 1);
 
-      updateRequired = false;
+      _updateRequired = false;
     }
 
     public void UpdateWidgetRegions(Container parent, Vector2f pos, int zIndex)
@@ -251,7 +251,7 @@ namespace SimGame.Gui
 
     public override void Update(GameObject obj, float dt)
     {
-      if (updateRequired)
+      if (_updateRequired)
         UpdateRegions();
     }
 
