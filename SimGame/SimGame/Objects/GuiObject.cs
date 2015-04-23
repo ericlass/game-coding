@@ -14,7 +14,6 @@ namespace SimGame.Objects
     private InputContext _input = null;
 
     private GameObject _parentObject = null;
-    private Widget _focusedWidget = null;
 
     public GuiObject(Container content, InputContext input)
     {
@@ -46,38 +45,25 @@ namespace SimGame.Objects
       Vector2f mouse = new Vector2f(_input.MouseX - _parentObject.Transform.Translation.X, _input.MouseY - _parentObject.Transform.Translation.Y);
       int x = (int)mouse.X;
       int y = (int)mouse.Y;
-      
-      Widget widget = _content.GetWidgetAt(mouse);
-      
-      if (widget != null)
+      switch (mevent)
       {
-        switch (mevent)
-        {
-          case MouseEvent.Enter:
-            widget.OnMouseEnter(x, y);
-            break;
-            
-          case MouseEvent.Leave:
-            widget.OnMouseLeave(x, y);
-            break;
-            
-          case MouseEvent.ButtonDown:
-            widget.OnMouseDown(x, y, button);
-            if (button == MouseButton.Left)
-              _focusedWidget = widget;
-            break;
-            
-          case MouseEvent.ButtonUp:
-            widget.OnMouseUp(x, y, button);
-            break;
-            
-          case MouseEvent.Move:
-            widget.OnMouseMove(x, y);
-            break;
-            
-          default:
-            throw new ArgumentException("Unknown mouse event: " + mevent.ToString());
-        }
+        case MouseEvent.Enter:
+          _content.OnMouseEnter(x, y);
+          break;
+        case MouseEvent.Leave:
+          _content.OnMouseLeave(x, y);
+          break;
+        case MouseEvent.ButtonDown:
+          _content.OnMouseDown(x, y, button);
+          break;
+        case MouseEvent.ButtonUp:
+          _content.OnMouseUp(x, y, button);
+          break;
+        case MouseEvent.Move:
+          _content.OnMouseMove(x, y);
+          break;
+        default:
+          throw new ArgumentException("Unknown mouse event: " + mevent.ToString());
       }
     }
 
@@ -86,17 +72,14 @@ namespace SimGame.Objects
       if (id != _content.Id)
         throw new ArgumentException("Region of received keyboard event differs from content!");
 
-      if (_focusedWidget == null)
-        return;
-      
       switch (kevent)
       {
         case KeyboardEvent.KeyPressed:
-          _focusedWidget.OnKeyDown(key);
+          _content.OnKeyDown(key);
           break;
 
         case KeyboardEvent.KeyRaised:
-          _focusedWidget.OnKeyUp(key);
+          _content.OnKeyUp(key);
           break;
 
         default:
@@ -104,7 +87,7 @@ namespace SimGame.Objects
       }
     }
 
-    private void UpdateRegion()
+    private void UpdateRegions()
     {
       Rectangle2f contentArea = new Rectangle2f(_parentObject.Transform.Translation.X, _parentObject.Transform.Translation.Y, _content.Width, _content.Height);
       Region contentRegion = _input.Processor[_content.Id];
@@ -120,13 +103,13 @@ namespace SimGame.Objects
     public override void Initialize(GameObject obj)
     {
       _parentObject = obj;
-      UpdateRegion();
+      UpdateRegions();
     }
 
     public override void Update(GameObject obj, float dt)
     {
       if (_updateRequired)
-        UpdateRegion();
+        UpdateRegions();
     }
 
     public override void Render(GameObject obj)

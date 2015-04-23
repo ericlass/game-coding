@@ -59,41 +59,6 @@ namespace SimGame.Gui
 
       return null;
     }
-    
-    /// <summary>
-    /// Gets the widget at the given point. The point has to be given in container space!
-    /// Sub-containers are searched recursivly.
-    /// </summary>
-    /// <param name="p">The point to check.</param>
-    /// <returns>The widget at the given point (might be this container!) or null if the point is outside of the containers area.</returns>
-    public Widget GetWidgetAt(Vector2f p)
-    {
-      //Check if point is actually inside container
-      if (p.X < 0 || p.X > Width || p.Y < 0 || p.Y > Height)
-        return null;
-        
-      //Check children
-      foreach (var item in _children)
-      {
-        Rectangle2f area = item.Value.GetArea();
-        if (area.IsInside(p))
-        {
-          if (item.Value is Container)
-          {
-            Vector2f pWidget = p - new Vector2f(item.Value.Left, item.Value.Bottom);
-            Container cont = item.Value as Container;
-            Widget result = cont.GetWidgetAt(pWidget);
-            if (result != null) //Actually, result should never be null as I check that the point is inside of the container above
-              return result;
-          }
-          else
-            return item.Value;
-        }
-      }
-      
-      //If no children as at this point, then the container itself is there
-      return this;
-    }
 
     public IEnumerator<Widget> GetEnumerator()
     {

@@ -16,11 +16,6 @@ namespace SimGame.Gui
 
     public Container Parent { get; set; }
 
-    public Rectangle2f GetArea()
-    {
-      return new Rectangle2f(Left, Bottom, Width, Height);
-    }
-    
     public abstract void Render();
 
     public virtual void OnResize() { }
