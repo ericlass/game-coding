@@ -1,10 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace OkuMath
 {
+  /// <summary>
+  /// Defines vector math functions.
+  /// </summary>
   public static class VectorMath
   {
+    /// <summary>
+    /// Defines one degree in radians.
+    /// </summary>
     public const float OneDegreeInRadians = (float)(Math.PI / 180.0);
 
     /// <summary>

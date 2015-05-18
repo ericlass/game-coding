@@ -37,6 +37,10 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AABBMath.cs" />
+    <Compile Include="BasicMath.cs" />
+    <Compile Include="ClosestPoint.cs" />
+    <Compile Include="LineMath.cs" />
     <Compile Include="Matrix3d.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TriangleMath.cs" />

@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OkuMath
 {
+  /// <summary>
+  /// Defines functions to work with triangles.
+  /// </summary>
   public static class TriangleMath
   {
     /// <summary>
@@ -20,21 +19,22 @@ namespace OkuMath
     /// <param name="w">The third barycentric coordinate is returned here.</param>
     public static void BarycentricCoordinates(Vector2f a, Vector2f b, Vector2f c, Vector2f p, out float u, out float v, out float w)
     {
-      Vector2f v0 = b - a;
-      Vector2f v1 = c - a;
-      Vector2f v2 = p - a;
+      float A, B, C, D, E, F, AE, BD;
 
-      float d00 = VectorMath.DotProduct(v0, v0);
-      float d01 = VectorMath.DotProduct(v0, v1);
-      float d11 = VectorMath.DotProduct(v1, v1);
-      float d20 = VectorMath.DotProduct(v2, v0);
-      float d21 = VectorMath.DotProduct(v2, v1);
+      A = a.X - c.X;
+      B = b.X - c.X;
+      C = c.X - p.X;
 
-      float denom = d00 * d11 - d01 * d01;
+      D = a.Y - c.Y;
+      E = b.Y - c.Y;
+      F = c.Y - p.Y;
 
-      v = (d11 * d20 - d01 * d21) / denom;
-      w = (d00 * d21 - d01 * d20) / denom;
-      u = 1.0f - v - w;
+      AE = A * E;
+      BD = B * D;
+
+      u = (B * F - C * E) / (AE - BD);
+      v = (A * F - C * D) / (BD - AE);
+      w = 1.0f - u - v;
     }
 
   }
