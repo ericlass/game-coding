@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="AABBMath.cs" />
     <Compile Include="BasicMath.cs" />
+    <Compile Include="CapsuleMath.cs" />
     <Compile Include="ClosestPoint.cs" />
     <Compile Include="LineMath.cs" />
     <Compile Include="Matrix3d.cs" />

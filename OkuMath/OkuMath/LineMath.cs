@@ -20,6 +20,19 @@ namespace OkuMath
     }
 
     /// <summary>
+    /// Project the point p to the vector that the line given by [a,b] forms.
+    /// </summary>
+    /// <param name="a">The start point of the line.</param>
+    /// <param name="b">The end point of the line.</param>
+    /// <param name="p">The point to project.</param>
+    /// <returns>The control value where the point is projected on the line.</returns>
+    public static float ProjectPointOnLine(Vector2f a, Vector2f b, Vector2f p)
+    {
+      Vector2f ab = b - a;
+      return VectorMath.DotProduct(p - a, ab) / ab.SquaredMagnitude;
+    }
+
+    /// <summary>
     /// Calculates the squared distance of point p to the line segment defined by [a,b].
     /// </summary>
     /// <param name="a">The first point of the line segment.</param>

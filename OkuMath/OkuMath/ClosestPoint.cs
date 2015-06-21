@@ -18,8 +18,7 @@ namespace OkuMath
     /// <param name="c">The closest point is returned here.</param>
     public static void OnLineSegmentToPoint(Vector2f a, Vector2f b, Vector2f p, out float t, out Vector2f c)
     {
-      Vector2f ab = b - a;
-      t = VectorMath.DotProduct(p - a, ab) / ab.SquaredMagnitude;
+      t = LineMath.ProjectPointOnLine(a, b, p);
       
       if (t < 0.0f)
       {
@@ -33,7 +32,7 @@ namespace OkuMath
       }
       else
       {
-        c = a + (ab * t);
+        c = a + ((b - a) * t);
       }      
     }
 
@@ -42,14 +41,14 @@ namespace OkuMath
     /// which is closest to the point p. The returned control value is guaranteed to be >= 0.
     /// </summary>
     /// <param name="a">The start of ray.</param>
-    /// <param name="b">The direction of th ray.</param>
+    /// <param name="b">The direction of the ray.</param>
     /// <param name="p">The point.</param>
     /// <param name="t">The control value for the point closest to p is returned here. (c = a + b * t)</param>
     /// <param name="c">The closest point is returned here.</param>
     public static void OnRayToPoint(Vector2f a, Vector2f b, Vector2f p, out float t, out Vector2f c)
     {
-      Vector2f ab = b - a;
-      t = VectorMath.DotProduct(p - a, ab) / ab.SquaredMagnitude;
+      //TODO: Handle b as direction, not point!
+      t = LineMath.ProjectPointOnLine(a, b, p);
 
       if (t < 0.0f)
       {
@@ -58,7 +57,7 @@ namespace OkuMath
       }
       else
       {
-        c = a + (ab * t);
+        c = LineMath.PointOnLine(a, b, t);
       }
     }
 
@@ -73,9 +72,8 @@ namespace OkuMath
     /// <param name="c">The closest point is returned here.</param>
     public static void OnLineToPoint(Vector2f a, Vector2f b, Vector2f p, out float t, out Vector2f c)
     {
-      Vector2f ab = b - a;
-      t = VectorMath.DotProduct(p - a, ab) / ab.SquaredMagnitude;
-      c = a + (ab * t);
+      t = LineMath.ProjectPointOnLine(a, b, p);
+      c = LineMath.PointOnLine(a, b, t);
     }
 
     /// <summary>
@@ -89,6 +87,26 @@ namespace OkuMath
     public static void OnAABBToPoint(Vector2f min, Vector2f max, Vector2f p, out Vector2f c)
     {
       c = new Vector2f(BasicMath.Clamp(p.X, min.X, max.X), BasicMath.Clamp(p.Y, min.Y, max.Y));
+    }
+
+    /// <summary>
+    /// Calculates the point on the capsule defined by [a,b] and radius which is
+    /// closest to the given point p.
+    /// </summary>
+    /// <param name="a">The start of the capsules line segment.</param>
+    /// <param name="b">The end of the capsules line segment.</param>
+    /// <param name="radius">The radius of the capsule.</param>
+    /// <param name="p">The point.</param>
+    /// <param name="c">The closest point is returned here.</param>
+    public static void OnCapsuleToPoint(Vector2f a, Vector2f b, float radius, Vector2f p, out Vector2f c)
+    {
+      Vector2f cl;
+      float t;
+      ClosestPoint.OnLineSegmentToPoint(a, b, p, out t, out cl);
+
+      Vector2f pc = cl - p;
+      float rInT = (radius * radius) / cl.SquaredMagnitude;
+      c = LineMath.PointOnLine(p, cl, 1.0f - rInT);
     }
 
   }
