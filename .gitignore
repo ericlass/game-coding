@@ -1,0 +1,6 @@
+*.pdb
+*.exe
+OkuMath/OkuMath/bin/
+OkuMath/OkuMath/obj/
+OkuMath/OkuMathTests/bin/
+OkuMath/OkuMathTests/obj/
