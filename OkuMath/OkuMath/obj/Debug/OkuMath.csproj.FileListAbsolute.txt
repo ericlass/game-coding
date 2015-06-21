@@ -1,5 +1,0 @@
-D:\C#-Projekte\_GIT\game-coding\OkuMath\OkuMath\bin\Debug\OkuMath.dll
-D:\C#-Projekte\_GIT\game-coding\OkuMath\OkuMath\bin\Debug\OkuMath.pdb
-D:\C#-Projekte\_GIT\game-coding\OkuMath\OkuMath\obj\Debug\OkuMath.dll
-D:\C#-Projekte\_GIT\game-coding\OkuMath\OkuMath\obj\Debug\OkuMath.pdb
-D:\C#-Projekte\_GIT\game-coding\OkuMath\OkuMath\obj\Debug\OkuMath.csprojResolveAssemblyReference.cache
