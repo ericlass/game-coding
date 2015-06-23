@@ -58,5 +58,17 @@ namespace OkuMath
       return ap.SquaredMagnitude - e * e / f;
     }
 
+    /// <summary>
+    /// Calculates a point on the ray defined by the origin o and the direction d, controlled by t.
+    /// </summary>
+    /// <param name="o">The origin of the ray.</param>
+    /// <param name="d">The direction of the ray.</param>
+    /// <param name="t">The control parameter.</param>
+    /// <returns>The point on the ray at the given control value.</returns>
+    public static Vector2f PointOnRay(Vector2f o, Vector2f d, float t)
+    {
+      return o + d * t;
+    }
+
   }
 }

@@ -37,27 +37,26 @@ namespace OkuMath
     }
 
     /// <summary>
-    /// Calculates the point on the ray starting in a and going into direction defined by b
+    /// Calculates the point on the ray starting in o and going into direction defined by d
     /// which is closest to the point p. The returned control value is guaranteed to be >= 0.
     /// </summary>
-    /// <param name="a">The start of ray.</param>
-    /// <param name="b">The direction of the ray.</param>
+    /// <param name="o">The origin of ray.</param>
+    /// <param name="d">The direction of the ray.</param>
     /// <param name="p">The point.</param>
-    /// <param name="t">The control value for the point closest to p is returned here. (c = a + b * t)</param>
+    /// <param name="t">The control value for the point closest to p is returned here. (c = o + d * t)</param>
     /// <param name="c">The closest point is returned here.</param>
-    public static void OnRayToPoint(Vector2f a, Vector2f b, Vector2f p, out float t, out Vector2f c)
+    public static void OnRayToPoint(Vector2f o, Vector2f d, Vector2f p, out float t, out Vector2f c)
     {
-      //TODO: Handle b as direction, not point!
-      t = LineMath.ProjectPointOnLine(a, b, p);
+      t = LineMath.ProjectPointOnLine(o, o + d, p); //OPT: o+d is actually reverted in the function again. Function could be inlined and adapted to this knowledge.
 
       if (t < 0.0f)
       {
         t = 0.0f;
-        c = a;
+        c = o;
       }
       else
       {
-        c = LineMath.PointOnLine(a, b, t);
+        c = LineMath.PointOnRay(o, d, t);
       }
     }
 
@@ -105,7 +104,7 @@ namespace OkuMath
       ClosestPoint.OnLineSegmentToPoint(a, b, p, out t, out cl);
 
       Vector2f pc = cl - p;
-      float rInT = (radius * radius) / cl.SquaredMagnitude;
+      float rInT = radius / pc.Magnitude;
       c = LineMath.PointOnLine(p, cl, 1.0f - rInT);
     }
 
