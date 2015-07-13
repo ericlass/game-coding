@@ -12,7 +12,7 @@ namespace OkuMathTest
     {
       Vector2f vec = new Vector2f(0.0f, 7.0f);
 
-      Assert.AreEqual<float>(49.0f, vec.SquaredMagnitude);
+      Assert.AreEqual(49.0f, vec.SquaredMagnitude);
     }
 
     [TestMethod]
@@ -20,7 +20,7 @@ namespace OkuMathTest
     {
       Vector2f vec = new Vector2f(0.0f, 7.0f);
 
-      Assert.AreEqual<float>(7.0f, vec.Magnitude);
+      Assert.AreEqual(7.0f, vec.Magnitude);
     }
 
     [TestMethod]
@@ -39,8 +39,8 @@ namespace OkuMathTest
       Vector2f vec2 = new Vector2f(2.2f, 7.1f);
       Vector2f result = vec1 + vec2;
 
-      Assert.AreEqual<float>(7.3f, result.X);
-      Assert.AreEqual<float>(10.3f, result.Y);
+      Assert.AreEqual(7.3f, result.X);
+      Assert.AreEqual(10.3f, result.Y);
     }
 
     [TestMethod]
@@ -50,8 +50,8 @@ namespace OkuMathTest
       Vector2f vec2 = new Vector2f(3.0f, 2.0f);
       Vector2f result = vec1 - vec2;
 
-      Assert.AreEqual<float>(2.0f, result.X);
-      Assert.AreEqual<float>(5.0f, result.Y);
+      Assert.AreEqual(2.0f, result.X);
+      Assert.AreEqual(5.0f, result.Y);
     }
 
   }
