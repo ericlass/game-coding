@@ -8,7 +8,7 @@ namespace OkuMathTest
   public class VectorTests
   {
     [TestMethod]
-    public void Test_SquaredMagnitude()
+    public void Test_Vector_SquaredMagnitude()
     {
       Vector2f vec = new Vector2f(0.0f, 7.0f);
 
@@ -16,7 +16,7 @@ namespace OkuMathTest
     }
 
     [TestMethod]
-    public void Test_Magnitude()
+    public void Test_Vector_Magnitude()
     {
       Vector2f vec = new Vector2f(0.0f, 7.0f);
 
@@ -24,7 +24,7 @@ namespace OkuMathTest
     }
 
     [TestMethod]
-    public void Test_EqualsOperator()
+    public void Test_Vector_EqualsOperator()
     {
       Vector2f vec1 = new Vector2f(5.3f, 1.8f);
       Vector2f vec2 = new Vector2f(5.3f, 1.8f);
@@ -33,7 +33,7 @@ namespace OkuMathTest
     }
 
     [TestMethod]
-    public void Test_PlusOperator()
+    public void Test_Vector_PlusOperator()
     {
       Vector2f vec1 = new Vector2f(5.1f, 3.2f);
       Vector2f vec2 = new Vector2f(2.2f, 7.1f);
@@ -44,7 +44,7 @@ namespace OkuMathTest
     }
 
     [TestMethod]
-    public void Test_MinusOperator()
+    public void Test_Vector_MinusOperator()
     {
       Vector2f vec1 = new Vector2f(5.0f, 7.0f);
       Vector2f vec2 = new Vector2f(3.0f, 2.0f);

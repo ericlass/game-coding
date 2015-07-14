@@ -7,6 +7,11 @@ namespace OkuMath
   /// </summary>
   public static class TriangleMath
   {
+    public static float SignedTriangleArea(Vector2f a, Vector2f b, Vector2f c)
+    {
+      return (a.X - c.X) * (b.Y - c.Y) - (a.Y - c.Y) * (b.X - c.X);
+    }
+
     /// <summary>
     /// Calclucates the barycentric coordinates of the point p in the triangle defined by [a, b, c].
     /// </summary>

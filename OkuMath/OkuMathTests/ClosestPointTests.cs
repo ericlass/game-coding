@@ -12,7 +12,7 @@ namespace OkuMathTest
     /// In this case, the result is expected to be the center of the line segment (t = 0.5).
     /// </summary>
     [TestMethod]
-    public void Test_OnLineSegmentToPoint_Center()
+    public void Test_CP_OnLineSegmentToPoint_Center()
     {
       Vector2f a = new Vector2f(-1.0f, 2.0f);
       Vector2f b = new Vector2f(1.0f, 2.0f);
@@ -31,7 +31,7 @@ namespace OkuMathTest
     /// In this case, the result is expected to be the start point of the line segment.
     /// </summary>
     [TestMethod]
-    public void Test_OnLineSegmentToPoint_Min()
+    public void Test_CP_OnLineSegmentToPoint_Min()
     {
       Vector2f a = new Vector2f(-1.0f, 2.0f);
       Vector2f b = new Vector2f(1.0f, 2.0f);
@@ -50,7 +50,7 @@ namespace OkuMathTest
     /// In this case, the result is expected to be the end point of the line segment.
     /// </summary>
     [TestMethod]
-    public void Test_OnLineSegmentToPoint_Max()
+    public void Test_CP_OnLineSegmentToPoint_Max()
     {
       Vector2f a = new Vector2f(-1.0f, 2.0f);
       Vector2f b = new Vector2f(1.0f, 2.0f);
@@ -69,7 +69,7 @@ namespace OkuMathTest
     /// has a positive control value.
     /// </summary>
     [TestMethod]
-    public void Test_OnRayToPoint_Positive()
+    public void Test_CP_OnRayToPoint_Positive()
     {
       Vector2f o = new Vector2f(-1.0f, 2.0f);
       Vector2f d = new Vector2f(2.0f, 0.0f);
@@ -89,7 +89,7 @@ namespace OkuMathTest
     /// be the orgin of the ray.
     /// </summary>
     [TestMethod]
-    public void Test_OnRayToPoint_Negative()
+    public void Test_CP_OnRayToPoint_Negative()
     {
       Vector2f o = new Vector2f(-1.0f, 2.0f);
       Vector2f d = new Vector2f(2.0f, 0.0f);
@@ -104,11 +104,11 @@ namespace OkuMathTest
     }
 
     /// <summary>
-    /// Tests the case when the point is projected to a point on the ray that
-    /// has a positive control value.
+    /// Tests the case when the point is in the area directly left or right
+    /// of the capsules line segment.
     /// </summary>
     [TestMethod]
-    public void Test_OnCapsuleToPoint_Center()
+    public void Test_CP_OnCapsuleToPoint_Center()
     {
       Vector2f a = new Vector2f(1, 1);
       Vector2f b = new Vector2f(1, 3);
@@ -125,7 +125,7 @@ namespace OkuMathTest
     /// Tests the case when the point is projected onto the hypothenuse of the triangle.
     /// </summary>
     [TestMethod]
-    public void Test_OnTriangleToPoint()
+    public void Test_CP_OnTriangleToPoint()
     {
       Vector2f a = new Vector2f(1, 1);
       Vector2f b = new Vector2f(3, 3);
@@ -143,7 +143,7 @@ namespace OkuMathTest
     /// Tests the case when the point is projected onto the hypothenuse of the triangle.
     /// </summary>
     [TestMethod]
-    public void Test_OnTriangleToPointV()
+    public void Test_CP_OnTriangleToPointV()
     {
       Vector2f a = new Vector2f(1, 1);
       Vector2f b = new Vector2f(3, 3);
@@ -166,7 +166,7 @@ namespace OkuMathTest
     /// Tests the performance of the OnTriangleToPoint method by running is several times.
     /// </summary>
     [TestMethod]
-    public void Test_Perf_OnTriangleToPoint()
+    public void Test_CP_Perf_OnTriangleToPoint()
     {
       Vector2f a = new Vector2f(1, 1);
       Vector2f b = new Vector2f(3, 3);
@@ -188,7 +188,7 @@ namespace OkuMathTest
     /// Tests the performance of the OnTriangleToPointV method by running is several times.
     /// </summary>
     [TestMethod]
-    public void Test_Perf_OnTriangleToPointV()
+    public void Test_CP_Perf_OnTriangleToPointV()
     {
       Vector2f a = new Vector2f(1, 1);
       Vector2f b = new Vector2f(3, 3);

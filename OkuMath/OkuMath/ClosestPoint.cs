@@ -121,9 +121,25 @@ namespace OkuMath
     public static Vector2f OnCapsuleToPoint(Vector2f a, Vector2f b, float radius, Vector2f p)
     {
       Vector2f cl = ClosestPoint.OnLineSegmentToPointV(a, b, p);
-      Vector2f pc = cl - p;
-      float rInT = radius / pc.Magnitude;
-      return LineMath.PointOnLine(p, cl, 1.0f - rInT);
+      return OnCircleToPoint(cl, radius, p);
+      /*Vector2f cp = p - cl;
+      float t = radius / cp.Magnitude;
+      return LineMath.PointOnRay(cl, cp, t); //Using ray instead of line because line would do p - c again!*/
+    }
+
+    /// <summary>
+    /// Calculates the point on a circle defined by center c and radius which is
+    /// closest to the given point p. 
+    /// </summary>
+    /// <param name="c">The center of the circle.</param>
+    /// <param name="radius">The radius of the circle.</param>
+    /// <param name="p">The point.</param>
+    /// <returns>The closest point on the capsule.</returns>
+    public static Vector2f OnCircleToPoint(Vector2f c, float radius, Vector2f p)
+    {
+      Vector2f cp = p - c;
+      float t = radius / cp.Magnitude;
+      return LineMath.PointOnRay(c, cp, t); //Using ray instead of line because line would do p - c again!
     }
 
     /// <summary>
