@@ -8,6 +8,9 @@ using OkuBase.Settings;
 
 namespace OkuBase.Driver
 {
+  /// <summary>
+  /// Defines the interface for a graphics driver.
+  /// </summary>
   public interface IGraphicsDriver
   {
     /// <summary>
