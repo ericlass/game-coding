@@ -11,20 +11,27 @@ namespace InitGLWindow
   /// </summary>
   public partial class OpenGLWindow
   {
-    private static string ClassName = "MyGlWindow";
+    public delegate void RenderDelegate();
+    public delegate void UpdateDelegate();
 
+    private string _wndClassName = null;
     private IntPtr _hInstance = IntPtr.Zero;
     private IntPtr _hwnd = IntPtr.Zero;
     private WndProc _wndProc = null;
     private IntPtr _rc = IntPtr.Zero;
+    private bool _running = false;
 
-    private HashSet<string> _extensions = null;    
+    private HashSet<string> _extensions = null;
+
+    public event RenderDelegate OnRender;
+    public event UpdateDelegate OnUpdate;
 
     /// <summary>
     /// Private constructor with simple initializations.
     /// </summary>
-    private OpenGLWindow()
+    private OpenGLWindow(string wndClassName)
     {
+      _wndClassName = wndClassName;
       _hInstance = Process.GetCurrentProcess().Handle;
       _wndProc = new WndProc(WndProc);
     }
@@ -34,6 +41,7 @@ namespace InitGLWindow
     /// </summary>
     private void Initialize()
     {
+      //Fill WndClassEx struct
       WndClassEx wcex = WndClassEx.Build();
       wcex.style = (int)(ClassStyles.HorizontalRedraw | ClassStyles.VerticalRedraw | ClassStyles.OwnDC);
       wcex.lpfnWndProc = Marshal.GetFunctionPointerForDelegate(_wndProc);
@@ -43,19 +51,20 @@ namespace InitGLWindow
       wcex.hIcon = WinApi.LoadIcon(_hInstance, WinApi.IDI_APPLICATION);
       wcex.hCursor = WinApi.LoadCursor(IntPtr.Zero, WinApi.IDC_ARROW);
       wcex.hbrBackground = IntPtr.Zero;
-      wcex.lpszClassName = ClassName;
+      wcex.lpszClassName = _wndClassName;
       wcex.lpszMenuName = null;
-
       wcex.hIconSm = WinApi.LoadIcon(_hInstance, WinApi.IDI_APPLICATION);
 
+      //Register window class
       short result = WinApi.RegisterClassEx(ref wcex);
       if (result == 0)
         throw new Exception("RegisterCallEx failed: " + Marshal.GetLastWin32Error());
 
+      //Create window
       _hwnd = WinApi.CreateWindowEx(
         WindowStylesEx.WS_EX_NONE,
-        ClassName,
-        "My GL Window",
+        _wndClassName,
+        "OpenGLWindow",
         WindowStyles.WS_OVERLAPPEDWINDOW,
         0,
         0,
@@ -67,6 +76,7 @@ namespace InitGLWindow
         IntPtr.Zero
         );
 
+      //Check if window creation was successful
       if (_hwnd == null || _hwnd == IntPtr.Zero)
         throw new Exception("CreateWindowEx failed: " + Marshal.GetLastWin32Error());
     }
@@ -138,10 +148,29 @@ namespace InitGLWindow
       CreateGlContext();
 
       Msg msg = new Msg();
-      while (WinApi.GetMessage(out msg, IntPtr.Zero, 0, 0))
+      _running = true;
+      while (_running)
       {
-        WinApi.TranslateMessage(ref msg);
-        WinApi.DispatchMessage(ref msg);
+        //Process window messages first
+        if (WinApi.PeekMessage(out msg, _hwnd, 0, 0, 1))
+        {
+          switch (msg.message)
+          {
+            default:
+              WinApi.TranslateMessage(ref msg);
+              WinApi.DispatchMessage(ref msg);
+              break;
+          }
+        }
+        else
+        {
+          //If no window message need to be processed, do update and render
+          if (OnUpdate != null)
+            OnUpdate();
+
+          if (OnRender != null)
+            OnRender();
+        }
       }
 
       return (int)msg.wParam;
@@ -152,8 +181,7 @@ namespace InitGLWindow
     /// </summary>
     private void CreateGlContext()
     {
-      Gl.GetString(0);
-
+      // Find matching pixel format
       PixelFormatDescriptor pfd = PixelFormatDescriptor.Build();
       pfd.nVersion = 1;
       pfd.dwFlags = WinApi.PFD_DOUBLEBUFFER | WinApi.PFD_SUPPORT_OPENGL | WinApi.PFD_DRAW_TO_WINDOW;
@@ -169,33 +197,41 @@ namespace InitGLWindow
       if (pixelFormat == 0)
         throw new Exception("ChoosePixelFormat failed: " + Marshal.GetLastWin32Error());
 
+      //Set the new pixel format
       if (!WinApi.SetPixelFormat(dc, pixelFormat, ref pfd))
         throw new Exception("SetPixelFormat failed: " + Marshal.GetLastWin32Error());
 
+      //Create temporary GL context
       IntPtr tempRc = Wgl.CreateContext(dc);
       if (tempRc == IntPtr.Zero)
         throw new Exception("CreateContext failed: " + Marshal.GetLastWin32Error());
 
       Wgl.MakeCurrent(dc, tempRc);
 
+      //Get Gl version the old way first
       string versionStr = Gl.GetString(StringName.Version);
       System.Diagnostics.Debug.WriteLine(versionStr);
+
       int major = int.Parse(versionStr.Substring(0, 1));
       int minor = -1;
       if (major < 3)
       {
+        //For verions before 3, we have to stick to the version string
         minor = int.Parse(versionStr.Substring(2, 1));
       }
       else
       {
+        //For verions 3+, we can use the new functions to get major and minor version
         Gl.Get(Gl.MAJOR_VERSION, out major);
         Gl.Get(Gl.MINOR_VERSION, out minor);
       }
 
+      // Now is the time to load extensions
       loadExtensions(major, minor);
 
       if (isExtSupported("WGL_ARB_create_context"))
       {
+        //If the new context creation scheme is available, use it to create a new context with a specific version
         int[] attribs = new int[]
         {
         Wgl.CONTEXT_MAJOR_VERSION_ARB, 4,
@@ -210,7 +246,32 @@ namespace InitGLWindow
         Wgl.MakeCurrent(dc, _rc);
       }
       else
+        //If new context creation is not supported, simply use the existing context
         _rc = tempRc;
+    }
+
+    /// <summary>
+    /// This is the absolute default window proc function. You should call it whenever you do not handle a message yourself.
+    /// </summary>
+    /// <param name="hWnd">The handle of the window.</param>
+    /// <param name="msg">The message.</param>
+    /// <param name="wParam">The wParam.</param>
+    /// <param name="lParam">The lParam.</param>
+    /// <returns>A value depending on how the message was processed.</returns>
+    private IntPtr InstanceWndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam)
+    {
+      switch (msg)
+      {
+        case WinMessages.DESTROY:
+          _running = false;
+          WinApi.PostQuitMessage(0);
+          break;
+
+        default:
+          return WinApi.DefWindowProc(hWnd, msg, wParam, lParam);
+      }
+
+      return IntPtr.Zero;
     }
 
   }

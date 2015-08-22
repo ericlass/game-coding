@@ -9,45 +9,20 @@ namespace InitGLWindow
   /// </summary>
   public partial class OpenGLWindow
   {
-    public delegate IntPtr OpenGLWndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
-
-    private static Dictionary<IntPtr, OpenGLWndProc> _wndProcs = new Dictionary<IntPtr, OpenGLWndProc>();
+    private static string ClassNameBase = "OpenGLWindow";
+    private static Dictionary<IntPtr, OpenGLWindow> _glWindows = new Dictionary<IntPtr, OpenGLWindow>();
 
     /// <summary>
     /// Factory function that creates and initializes a new OpenGLWindow.
     /// </summary>
-    /// <param name="wndProc">The WndProc method to be used.</param>
     /// <returns>A new instance of the OpenGLWindow.</returns>
-    public static OpenGLWindow Build(OpenGLWndProc wndProc)
+    public static OpenGLWindow Build()
     {
-      OpenGLWindow result = new OpenGLWindow();
+      OpenGLWindow result = new OpenGLWindow(ClassNameBase + _glWindows.Count);
       result.Initialize();
-      _wndProcs.Add(result._hwnd, wndProc);
+      _glWindows.Add(result._hwnd, result);
       return result;
-    }
-
-    /// <summary>
-    /// This is the absolute default window proc function. You should call it whenever you do not handle a message yourself.
-    /// </summary>
-    /// <param name="hWnd">The handle of the window.</param>
-    /// <param name="msg">The message.</param>
-    /// <param name="wParam">The wParam.</param>
-    /// <param name="lParam">The lParam.</param>
-    /// <returns>A value depending on how the message was processed.</returns>
-    public static IntPtr DefaultWndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam)
-    {
-      switch (msg)
-      {
-        case WinMessages.DESTROY:
-          WinApi.PostQuitMessage(0);
-          break;
-
-        default:
-          return WinApi.DefWindowProc(hWnd, msg, wParam, lParam);
-      }
-
-      return IntPtr.Zero;
-    }
+    }    
 
     /// <summary>
     /// This is the internal WndProc that forwards all messages to the instances.
@@ -59,10 +34,11 @@ namespace InitGLWindow
     /// <returns>A value depending on how the message was processed.</returns>
     private static IntPtr WndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam)
     {
-      if (_wndProcs.ContainsKey(hWnd))
-        return _wndProcs[hWnd](hWnd, msg, wParam, lParam);
+      //During window creation it is possible that _glWindows does not contain the window yet, so use the DefWindowProc.
+      if (_glWindows.ContainsKey(hWnd))
+        return _glWindows[hWnd].InstanceWndProc(hWnd, msg, wParam, lParam);
       else
-        return DefaultWndProc(hWnd, msg, wParam, lParam);
+        return WinApi.DefWindowProc(hWnd, msg, wParam, lParam);
     }
 
   }

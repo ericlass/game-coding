@@ -14,13 +14,8 @@ namespace InitGLWindow
 
     public void Run()
     {
-      OpenGLWindow window = OpenGLWindow.Build(MyWndProc);
+      OpenGLWindow window = OpenGLWindow.Build();
       window.Run();
-    }
-
-    public IntPtr MyWndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam)
-    {
-      return OpenGLWindow.DefaultWndProc(hWnd, msg, wParam, lParam);
     }
   }
 }

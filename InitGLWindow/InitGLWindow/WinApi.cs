@@ -116,6 +116,9 @@ namespace InitGLWindow
     public static extern bool GetMessage(out Msg lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
 
     [DllImport("user32.dll")]
+    public static extern bool PeekMessage(out Msg lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax, uint wRemoveMsg);
+
+    [DllImport("user32.dll")]
     public static extern bool TranslateMessage([In] ref Msg lpMsg);
 
     [DllImport("user32.dll")]
