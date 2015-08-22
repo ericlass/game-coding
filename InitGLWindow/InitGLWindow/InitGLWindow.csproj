@@ -40,8 +40,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassStyles.cs" />
+    <Compile Include="GLApplication.cs" />
     <Compile Include="OpenGLWindow.cs" />
     <Compile Include="Msg.cs" />
+    <Compile Include="OpenGLWindowStatic.cs" />
     <Compile Include="PixelFormatDescriptor.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Program.cs" />

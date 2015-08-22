@@ -10,7 +10,8 @@ namespace InitGLWindow
     //[STAThread]
     static void Main()
     {
-      OpenGLWindow.Instance.Run();
+      GLApplication app = new GLApplication();
+      app.Run();
     }
   }
 }

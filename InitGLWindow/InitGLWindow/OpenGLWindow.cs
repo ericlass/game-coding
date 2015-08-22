@@ -6,7 +6,10 @@ using OpenGL;
 
 namespace InitGLWindow
 {
-  public class OpenGLWindow
+  /// <summary>
+  /// Defines a simple window that is targeted at using OpenGL.
+  /// </summary>
+  public partial class OpenGLWindow
   {
     private static string ClassName = "MyGlWindow";
 
@@ -16,27 +19,19 @@ namespace InitGLWindow
     private IntPtr _rc = IntPtr.Zero;
 
     private HashSet<string> _extensions = null;    
-    private static OpenGLWindow _instance = null;
 
-    public static OpenGLWindow Instance
-    {
-      get
-      {
-        if (_instance == null)
-        {
-          _instance = new OpenGLWindow();
-          _instance.Initialize();
-        }
-        return _instance;
-      }
-    }
-
+    /// <summary>
+    /// Private constructor with simple initializations.
+    /// </summary>
     private OpenGLWindow()
     {
       _hInstance = Process.GetCurrentProcess().Handle;
       _wndProc = new WndProc(WndProc);
     }
 
+    /// <summary>
+    /// Creates and initializes the window.
+    /// </summary>
     private void Initialize()
     {
       WndClassEx wcex = WndClassEx.Build();
@@ -76,6 +71,11 @@ namespace InitGLWindow
         throw new Exception("CreateWindowEx failed: " + Marshal.GetLastWin32Error());
     }
 
+    /// <summary>
+    /// Loads available OpenGL extensions.
+    /// </summary>
+    /// <param name="major">The major version number of the current OpenGL implementation.</param>
+    /// <param name="minor">The minor version number of the current OpenGL implementation.</param>
     private void loadExtensions(int major, int minor)
     {
       _extensions = new HashSet<string>();
@@ -103,19 +103,39 @@ namespace InitGLWindow
       ParseExtensionString(wglExtStr);
     }
 
-    private void ParseExtensionString(string wglExtStr)
+    /// <summary>
+    /// Checks if the extensions with the given name is implemented.
+    /// </summary>
+    /// <param name="extName">The name of the extension.</param>
+    /// <returns>True if the extension is supported, else false.</returns>
+    public bool isExtSupported(string extName)
     {
-      foreach (string ext in wglExtStr.Split(' '))
+      return _extensions.Contains(extName);
+    }
+
+    /// <summary>
+    /// Parses a string of extensions. The extensions are expected to be separated by spaces.
+    /// </summary>
+    /// <param name="glExtStr">The full extension string that returned from OpenGL.</param>
+    private void ParseExtensionString(string glExtStr)
+    {
+      foreach (string ext in glExtStr.Split(' '))
       {
         _extensions.Add(ext.Trim());
         System.Diagnostics.Debug.WriteLine(ext);
       }
     }
 
+    /// <summary>
+    /// Initializes OpenGL and starts the window message loop.
+    /// </summary>
+    /// <returns>The wParam value of the last message.</returns>
     public int Run()
     {
       WinApi.ShowWindow(_hwnd, ShowFlags.SW_SHOW);
       WinApi.UpdateWindow(_hwnd);
+
+      CreateGlContext();
 
       Msg msg = new Msg();
       while (WinApi.GetMessage(out msg, IntPtr.Zero, 0, 0))
@@ -127,11 +147,9 @@ namespace InitGLWindow
       return (int)msg.wParam;
     }
 
-    public bool isExtSupported(string extName)
-    {
-      return _extensions.Contains(extName);
-    }
-
+    /// <summary>
+    /// Creates the OpenGL context. This is done differently depending on the OpenGL version.
+    /// </summary>
     private void CreateGlContext()
     {
       Gl.GetString(0);
@@ -193,25 +211,6 @@ namespace InitGLWindow
       }
       else
         _rc = tempRc;
-    }
-
-    private static IntPtr WndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam)
-    {
-      switch (msg)
-      {
-        case WinMessages.SHOWWINDOW:
-          Instance.CreateGlContext();
-          break;
-
-        case WinMessages.DESTROY:
-          WinApi.PostQuitMessage(0);
-          break;
-
-        default:
-          return WinApi.DefWindowProc(hWnd, msg, wParam, lParam);
-      }
-
-      return IntPtr.Zero;
     }
 
   }
