@@ -11,8 +11,9 @@ namespace InitGLWindow
   /// </summary>
   public partial class OpenGLWindow
   {
+    public delegate void UpdateDelegate(float dt);
     public delegate void RenderDelegate();
-    public delegate void UpdateDelegate();
+    
 
     private string _wndClassName = null;
     private IntPtr _hInstance = IntPtr.Zero;
@@ -20,6 +21,9 @@ namespace InitGLWindow
     private WndProc _wndProc = null;
     private IntPtr _rc = IntPtr.Zero;
     private bool _running = false;
+
+    private long _tickFrequency = 0;
+    private long _lastTick = 0;
 
     private HashSet<string> _extensions = null;
 
@@ -147,6 +151,11 @@ namespace InitGLWindow
 
       CreateGlContext();
 
+      WinApi.QueryPerformanceFrequency(out _tickFrequency);
+      WinApi.QueryPerformanceCounter(out _lastTick);
+
+      IntPtr dc = WinApi.GetDC(_hwnd);
+
       Msg msg = new Msg();
       _running = true;
       while (_running)
@@ -165,11 +174,19 @@ namespace InitGLWindow
         else
         {
           //If no window message need to be processed, do update and render
+          long tick;
+          WinApi.QueryPerformanceCounter(out tick);
+          float time = (tick - _lastTick) / (float)_tickFrequency;
+          _lastTick = tick;
+
           if (OnUpdate != null)
-            OnUpdate();
+            OnUpdate(time);
 
           if (OnRender != null)
+          {
             OnRender();
+            WinApi.SwapBuffers(dc);
+          }
         }
       }
 
@@ -237,6 +254,7 @@ namespace InitGLWindow
         Wgl.CONTEXT_MAJOR_VERSION_ARB, 4,
         Wgl.CONTEXT_MINOR_VERSION_ARB, 5,
         Wgl.CONTEXT_FLAGS_ARB, 0,
+        Wgl.CONTEXT_PROFILE_MASK_ARB, (int)Wgl.CONTEXT_CORE_PROFILE_BIT_ARB,
         0
         };
 
