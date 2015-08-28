@@ -154,5 +154,11 @@ namespace InitGLWindow
     [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
     public static extern IntPtr GetModuleHandle(string lpModuleName);
 
+    [DllImport("Kernel32.dll")]
+    public static extern bool QueryPerformanceCounter(out long lpPerformanceCount);
+
+    [DllImport("Kernel32.dll")]
+    public static extern bool QueryPerformanceFrequency(out long lpFrequency);
+
   }
 }

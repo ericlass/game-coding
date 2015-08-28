@@ -4,9 +4,8 @@ using System.Runtime.InteropServices;
 namespace OkuMath
 {
   /// <summary>
-  /// Vector defines a two dimensional Vector with all standard vector math routines.
-  /// The + and - operators have been overloaded to add / subtract two vectors. The
-  /// * operator is overloaded to scale a vector by a float value.
+  /// Vector2f defines a two dimensional Vector with all standard vector math routines.
+  /// Most operators have been overloaded.
   /// </summary>
   [StructLayout(LayoutKind.Sequential, Pack = 1)]
   public struct Vector2f
@@ -22,17 +21,17 @@ namespace OkuMath
     public float Y;
 
     /// <summary>
-    /// A vector with X and Y set to 0.
+    /// A vector with all components set to 0.
     /// </summary>
     public static Vector2f Zero = new Vector2f(0, 0);
 
     /// <summary>
-    /// A vector with X and Y set to 1.
+    /// A vector with all components set to 1.
     /// </summary>
     public static Vector2f One = new Vector2f(1, 1);
 
     /// <summary>
-    /// Creates a new Vector and initializes X and Y with the given values.
+    /// Creates a new vector and initializes its components with the given values.
     /// </summary>
     /// <param name="x">The x component.</param>
     /// <param name="y">The y component.</param>
@@ -40,6 +39,84 @@ namespace OkuMath
     {
       X = x;
       Y = y;
+    }
+
+    /// <summary>
+    /// Synonym for the X component.
+    /// </summary>
+    public float R
+    {
+      get { return X; }
+      set { X = value; }
+    }
+
+    /// <summary>
+    /// Synonym for the Y component.
+    /// </summary>
+    public float G
+    {
+      get { return Y; }
+      set { Y = value; }
+    }
+
+    /// <summary>
+    /// Synonym for the X component.
+    /// </summary>
+    public float S
+    {
+      get { return X; }
+      set { X = value; }
+    }
+
+    /// <summary>
+    /// Synonym for the Y component.
+    /// </summary>
+    public float T
+    {
+      get { return Y; }
+      set { Y = value; }
+    }
+
+    // <summary>
+    /// Defines the number of components the vector has.
+    /// </summary>
+    public const int ComponentCount = 2;
+
+    /// <summary>
+    /// Indexer to be able to access the components by index.
+    /// 0 = X, 1 = Y.
+    /// </summary>
+    /// <param name="index">The index. Either 0 or 1.</param>
+    /// <returns>The values at the given index.</returns>
+    public float this[int index]
+    {
+      get
+      {
+        switch (index)
+        {
+          case 0:
+            return X;
+          case 1:
+            return Y;
+
+          default:
+            throw new ArgumentException(nameof(Vector2f) + " can only have indexes 0 and 1!");
+        }
+      }
+      set
+      {
+        switch (index)
+        {
+          case 0:
+            X = value;
+            break;
+          case 1:
+            Y = value;
+            break;
+          default:
+            throw new ArgumentException(nameof(Vector2f) + " can only have indexes 0 and 1!");
+        }
+      }
     }
 
     /// <summary>
@@ -57,6 +134,37 @@ namespace OkuMath
     public float SquaredMagnitude
     {
       get { return X * X + Y * Y; }
+    }
+
+    #region Operators
+    /// <summary>
+    /// Inverts the components of the given vector.
+    /// </summary>
+    /// <param name="vec">The vector to be inverted.</param>
+    /// <returns>The inverted vector.</returns>
+    public static Vector2f operator -(Vector2f vec)
+    {
+      return new Vector2f(-vec.X, -vec.Y);
+    }
+
+    /// <summary>
+    /// Increments all components of the vectors by 1.
+    /// </summary>
+    /// <param name="vec">The vector to increment.</param>
+    /// <returns>The incremented vector.</returns>
+    public static Vector2f operator ++(Vector2f vec)
+    {
+      return new Vector2f(vec.X + 1, vec.Y + 1);
+    }
+
+    /// <summary>
+    /// Decrements all components of the vectors by 1.
+    /// </summary>
+    /// <param name="vec">The vector to decrement.</param>
+    /// <returns>The decremented vector.</returns>
+    public static Vector2f operator --(Vector2f vec)
+    {
+      return new Vector2f(vec.X - 1, vec.Y - 1);
     }
 
     /// <summary>
@@ -82,16 +190,6 @@ namespace OkuMath
     }
 
     /// <summary>
-    /// Inverts the components of the given vector.
-    /// </summary>
-    /// <param name="vec">The vector to be inverted.</param>
-    /// <returns>The inverted vector.</returns>
-    public static Vector2f operator -(Vector2f vec)
-    {
-      return new Vector2f(-vec.X, -vec.Y);
-    }
-
-    /// <summary>
     /// Scales the given vectors components by the given multiplier.
     /// </summary>
     /// <param name="vec">The vector to be multiplied.</param>
@@ -103,7 +201,7 @@ namespace OkuMath
     }
 
     /// <summary>
-    /// Multiplies the two given vectors component-wise (X1 * X2 and Y1 * Y2).
+    /// Multiplies the two given vectors component-wise.
     /// </summary>
     /// <param name="vec1">The first vector.</param>
     /// <param name="vec2">The second vector.</param>
@@ -111,17 +209,6 @@ namespace OkuMath
     public static Vector2f operator *(Vector2f vec1, Vector2f vec2)
     {
       return new Vector2f(vec1.X * vec2.X, vec1.Y * vec2.Y);
-    }
-
-    /// <summary>
-    /// Divides the two given vectors component-wise (X1 / X2 and Y1 / Y2).
-    /// </summary>
-    /// <param name="vec1">The first vector.</param>
-    /// <param name="vec2">The second vector.</param>
-    /// <returns>The result of the division as a new vector.</returns>
-    public static Vector2f operator /(Vector2f vec1, Vector2f vec2)
-    {
-      return new Vector2f(vec1.X / vec2.X, vec1.Y / vec2.Y);
     }
 
     /// <summary>
@@ -133,6 +220,28 @@ namespace OkuMath
     public static Vector2f operator /(Vector2f vec, float value)
     {
       return new Vector2f(vec.X / value, vec.Y / value);
+    }
+
+    /// <summary>
+    /// Divides the two given vectors component-wise.
+    /// </summary>
+    /// <param name="vec1">The first vector.</param>
+    /// <param name="vec2">The second vector.</param>
+    /// <returns>The result of the division as a new vector.</returns>
+    public static Vector2f operator /(Vector2f vec1, Vector2f vec2)
+    {
+      return new Vector2f(vec1.X / vec2.X, vec1.Y / vec2.Y);
+    }
+
+    /// <summary>
+    /// Calculates the modulo of the components of the two vectors.
+    /// </summary>
+    /// <param name="vec1">The first vector.</param>
+    /// <param name="vec2">The second vector.</param>
+    /// <returns>A vector containing the modulo of the components.</returns>
+    public static Vector2f operator %(Vector2f vec1, Vector2f vec2)
+    {
+      return new Vector2f(vec1.X % vec2.X, vec1.Y % vec2.Y);
     }
 
     /// <summary>
@@ -156,6 +265,7 @@ namespace OkuMath
     {
       return (vec1.X != vec2.X) || (vec1.Y != vec2.Y);
     }
+    #endregion
 
     /// <summary>
     /// Creates a string representation of the vector in the format "X;Y".
@@ -167,7 +277,7 @@ namespace OkuMath
     }
 
     /// <summary>
-    /// Compares the vector to another vector by comparing the X and Y values.
+    /// Compares the vector to another vector by comparing the single components.
     /// </summary>
     /// <param name="other">The vector to compare to.</param>
     /// <returns>True if the vectors are equal, else False.</returns>
@@ -177,7 +287,7 @@ namespace OkuMath
     }
 
     /// <summary>
-    /// Checks if the vector has a length of zero (= both components are zero).
+    /// Checks if the vector has a length of zero (= all components are zero).
     /// </summary>
     /// <returns>True if the vector is zero length, else false.</returns>
     public bool IsZero()
@@ -187,7 +297,7 @@ namespace OkuMath
 
     /// <summary>
     /// Parses the given string into a vector.
-    /// The string is expected to be in the format "X,Y"
+    /// The string is expected to be in the format "X;Y"
     /// like it is created by the ToString method. 
     /// </summary>
     /// <param name="str">The string to be parsed.</param>
@@ -196,14 +306,14 @@ namespace OkuMath
     {
       Vector2f result = Vector2f.Zero;
       if (!TryParse(str, ref result))
-        throw new FormatException("String '" + str + "' is not a valid vector string in the format '#.#'!");
+        throw new FormatException("String '" + str + "' is not a valid vector string in the format '#;#'!");
 
       return result;
     }
 
     /// <summary>
     /// Tries to parse the given string into a vector.
-    /// The string is expected to be in the format "X,Y"
+    /// The string is expected to be in the format "X;Y"
     /// like it is created by the ToString method.
     /// </summary>
     /// <param name="str">The string to be parsed.</param>
