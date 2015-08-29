@@ -41,6 +41,8 @@ namespace OkuMath
       Y = y;
     }
 
+    #region Swizzles
+
     /// <summary>
     /// Synonym for the X component.
     /// </summary>
@@ -76,6 +78,8 @@ namespace OkuMath
       get { return Y; }
       set { Y = value; }
     }
+
+    #endregion
 
     // <summary>
     /// Defines the number of components the vector has.
@@ -137,6 +141,7 @@ namespace OkuMath
     }
 
     #region Operators
+
     /// <summary>
     /// Inverts the components of the given vector.
     /// </summary>

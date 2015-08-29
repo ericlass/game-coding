@@ -75,6 +75,8 @@ namespace OkuMath
       Z = v.Y;
     }
 
+    #region Swizzles
+
     /// <summary>
     /// Gets or set the XY part of the vector.
     /// </summary>
@@ -191,6 +193,8 @@ namespace OkuMath
       set { YZ = value; }
     }
 
+    #endregion
+
     // <summary>
     /// Defines the number of components the vector has.
     /// </summary>
@@ -257,6 +261,7 @@ namespace OkuMath
     }
 
     #region Operators
+
     /// <summary>
     /// Inverts the components of the given vector.
     /// </summary>
