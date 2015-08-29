@@ -201,6 +201,17 @@ namespace OkuMath
     }
 
     /// <summary>
+    /// Scales the given vectors components by the given multiplier.
+    /// </summary>
+    /// <param name="mul">The multiplier.</param>
+    /// <param name="vec">The vector to be multiplied.</param>
+    /// <returns>The scaled vector.</returns>
+    public static Vector2f operator *(float mul, Vector2f vec)
+    {
+      return new Vector2f(vec.X * mul, vec.Y * mul);
+    }
+
+    /// <summary>
     /// Multiplies the two given vectors component-wise.
     /// </summary>
     /// <param name="vec1">The first vector.</param>
@@ -220,6 +231,17 @@ namespace OkuMath
     public static Vector2f operator /(Vector2f vec, float value)
     {
       return new Vector2f(vec.X / value, vec.Y / value);
+    }
+
+    /// <summary>
+    /// Returns a new vector with the components set to (value / component).
+    /// </summary>
+    /// <param name="value">The dividend.</param>
+    /// <param name="vec">The vector.</param>
+    /// <returns>The result of the division as a new vector.</returns>
+    public static Vector2f operator /(float value, Vector2f vec)
+    {
+      return new Vector2f(value / vec.X, value / vec.Y);
     }
 
     /// <summary>
@@ -265,6 +287,25 @@ namespace OkuMath
     {
       return (vec1.X != vec2.X) || (vec1.Y != vec2.Y);
     }
+
+    /// <summary>
+    /// Extract the X and Y part of the given vector.
+    /// </summary>
+    /// <param name="vec">The source vector.</param>
+    public static explicit operator Vector2f(Vector3f vec)
+    {
+      return vec.XY;
+    }
+
+    /// <summary>
+    /// Extract the X and Y part of the given vector.
+    /// </summary>
+    /// <param name="vec">The source vector.</param>
+    public static explicit operator Vector2f(Vector4f vec)
+    {
+      return vec.XY;
+    }
+
     #endregion
 
     /// <summary>

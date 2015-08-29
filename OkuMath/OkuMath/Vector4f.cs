@@ -71,6 +71,21 @@ namespace OkuMath
     }
 
     /// <summary>
+    /// Creates a new vector. The Y and Z components are set to the values of the given vector.
+    /// The X and W components are set to the given values. This is like calling new Vector4f(x, v.X, v.Y, w).
+    /// </summary>
+    /// <param name="x">The X component.</param>
+    /// <param name="v">The vector with the Y and Z values.</param>
+    /// <param name="w">The w component.</param>
+    public Vector4f(float x, Vector2f v, float w)
+    {
+      X = x;
+      Y = v.X;
+      Z = v.Y;
+      W = w;
+    }
+
+    /// <summary>
     /// Creates a new vector. The X and Y components are set to the given values.
     /// The Z and W components are set to the values of the given vector.
     /// This is like calling new Vector4f(x, y, v.X, v.Y).
@@ -83,6 +98,118 @@ namespace OkuMath
       Y = y;
       Z = v.X;
       W = v.Y;
+    }
+
+    /// <summary>
+    /// Creates a new vector. The X and Y components are set to the values of v1.
+    /// The Z and W components are set to the values of v2.
+    /// This is like calling new Vector4f(v1.X, v1.Y, v2.X, v2.Y).
+    /// </summary>
+    /// <param name="v1">The first vector.</param>
+    /// <param name="v2">The second vector.</param>
+    public Vector4f(Vector2f v1, Vector2f v2)
+    {
+      X = v1.X;
+      Y = v1.Y;
+      Z = v2.X;
+      W = v2.Y;
+    }
+
+    /// <summary>
+    /// Creates a new vector. The W component is set to the given value.
+    /// The X, Y and Z components are set to the values of the given vector.
+    /// This is like calling new Vector4f(v.X, v.Y, v.Z, w).
+    /// </summary>
+    /// <param name="v">The vector for the first components.</param>
+    /// <param name="w">The W value.</param>
+    public Vector4f(Vector3f v, float w)
+    {
+      X = v.X;
+      Y = v.Y;
+      Z = v.Z;
+      W = w;
+    }
+
+    /// <summary>
+    /// Creates a new vector. The X component is set to the given value.
+    /// The Y, Z and W components are set to the values of the given vector.
+    /// This is like calling new Vector4f(x, v.X, v.Y, v.Z).
+    /// </summary>
+    /// <param name="x">The X value.</param>
+    /// <param name="v">The vector for the last components.</param>
+    public Vector4f(float x, Vector3f v)
+    {
+      X = x;
+      Y = v.X;
+      Z = v.Y;
+      W = v.Z;
+    }
+
+    /// <summary>
+    /// Gets or set the XY part of the vector.
+    /// </summary>
+    public Vector2f XY
+    {
+      get { return new Vector2f(X, Y); }
+      set
+      {
+        X = value.X;
+        Y = value.Y;
+      }
+    }
+
+    /// <summary>
+    /// Gets or sets the YZ part of the vector.
+    /// </summary>
+    public Vector2f YZ
+    {
+      get { return new Vector2f(Y, Z); }
+      set
+      {
+        Y = value.X;
+        Z = value.Y;
+      }
+    }
+
+    /// <summary>
+    /// Gets or sets the ZW part of the vector.
+    /// </summary>
+    public Vector2f ZW
+    {
+      get { return new Vector2f(Z, W); }
+      set
+      {
+        Z = value.X;
+        W = value.Y;
+      }
+    }
+
+    /// <summary>
+    /// Gets or sets the XYZ part of the vector.
+    /// </summary>
+    public Vector3f XYZ
+    {
+      get { return new Vector3f(X, Y, Z); }
+      set
+      {
+        X = value.X;
+        Y = value.Y;
+        Z = value.Z;
+      }
+    }
+
+    /// <summary>
+    /// Gets or sets the YZW part of the vector.
+    /// </summary>
+    public Vector3f YZW
+    {
+      get { return new Vector3f(Y, Z, W); }
+      set
+      {
+        Y = value.X;
+        Z = value.Y;
+        W = value.Z;
+      }
     }
 
     /// <summary>
@@ -122,6 +249,51 @@ namespace OkuMath
     }
 
     /// <summary>
+    /// Gets or sets the RG part of the vector.
+    /// </summary>
+    public Vector2f RG
+    {
+      get { return XY; }
+      set { XY = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the GB part of the vector.
+    /// </summary>
+    public Vector2f GB
+    {
+      get { return YZ; }
+      set { YZ = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the BA part of the vector.
+    /// </summary>
+    public Vector2f BA
+    {
+      get { return ZW; }
+      set { ZW = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the RGB part of the vector.
+    /// </summary>
+    public Vector3f RGB
+    {
+      get { return XYZ; }
+      set { XYZ = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the GBA part of the vector.
+    /// </summary>
+    public Vector3f GBA
+    {
+      get { return YZW; }
+      set { YZW = value; }
+    }
+
+    /// <summary>
     /// Synonym for the X component.
     /// </summary>
     public float S
@@ -155,6 +327,51 @@ namespace OkuMath
     {
       get { return W; }
       set { W = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the ST part of the vector.
+    /// </summary>
+    public Vector2f ST
+    {
+      get { return XY; }
+      set { XY = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the TP part of the vector.
+    /// </summary>
+    public Vector2f TP
+    {
+      get { return YZ; }
+      set { YZ = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the PQ part of the vector.
+    /// </summary>
+    public Vector2f PQ
+    {
+      get { return ZW; }
+      set { ZW = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the STP part of the vector.
+    /// </summary>
+    public Vector3f STP
+    {
+      get { return XYZ; }
+      set { XYZ = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the TPQ part of the vector.
+    /// </summary>
+    public Vector3f TPQ
+    {
+      get { return YZW; }
+      set { YZW = value; }
     }
 
     /// <summary>
@@ -292,6 +509,17 @@ namespace OkuMath
     }
 
     /// <summary>
+    /// Scales the given vectors components by the given multiplier.
+    /// </summary>
+    /// <param name="mul">The multiplier.</param>
+    /// <param name="vec">The vector to be multiplied.</param>
+    /// <returns>The scaled vector.</returns>
+    public static Vector4f operator *(float mul, Vector4f vec)
+    {
+      return new Vector4f(vec.X * mul, vec.Y * mul, vec.Z * mul, vec.W * mul);
+    }
+
+    /// <summary>
     /// Multiplies the two given vectors component-wise.
     /// </summary>
     /// <param name="vec1">The first vector.</param>
@@ -311,6 +539,17 @@ namespace OkuMath
     public static Vector4f operator /(Vector4f vec, float value)
     {
       return new Vector4f(vec.X / value, vec.Y / value, vec.Z / value, vec.W / value);
+    }
+
+    /// <summary>
+    /// Returns a new vector with the components set to (value / component).
+    /// </summary>
+    /// <param name="value">The dividend.</param>
+    /// <param name="vec">The vector.</param>
+    /// <returns>The result of the division as a new vector.</returns>
+    public static Vector4f operator /(float value, Vector4f vec)
+    {
+      return new Vector4f(value / vec.X, value / vec.Y, value / vec.Z, value / vec.W);
     }
 
     /// <summary>
