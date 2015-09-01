@@ -4,43 +4,44 @@ using System.Runtime.InteropServices;
 namespace OkuMath
 {
   /// <summary>
-  /// Defines a 3x3 matrix. The matrix is defined by an array of vectors where the vectors form the columns.
+  /// Defines a 4x4 matrix. The matrix is defined by an array of vectors where the vectors form the columns.
   /// That means that the indexes are defined as [column,row].
   /// Most operators are overloaded. The * operator is overloaded and follows the matrix multiplication rules.
   /// </summary>
   [StructLayout(LayoutKind.Sequential, Pack = 1)]
-  public struct Matrix3x3f
+  public struct Matrix4x4f
   {
     /// <summary>
     /// Gets an identity matrix.
     /// </summary>
-    public static Matrix3x3f Identity = new Matrix3x3f(
-      1, 0, 0,
-      0, 1, 0,
-      0, 0, 1);
+    public static Matrix4x4f Identity = new Matrix4x4f(
+      1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1);
 
     /// <summary>
     /// Gets the number of columns in this matrix.
     /// </summary>
-    public const int ColumnCount = 3;
+    public const int ColumnCount = 4;
 
     /// <summary>
     /// Gets the number of rows in this matrix.
     /// </summary>
-    public const int RowCount = 3;
+    public const int RowCount = 4;
 
     /// <summary>
     /// Internal field for the values.
     /// </summary>
-    private Vector3f[] _values;
+    private Vector4f[] _values;
 
     /// <summary>
     /// Creates a new matrix settings the diagonals to the given value and all other to 0.
     /// </summary>
     /// <param name="s">The value for the diagonals.</param>
-    public Matrix3x3f(float s)
+    public Matrix4x4f(float s)
     {
-      _values = new Vector3f[] { new Vector3f(s, 0, 0), new Vector3f(0, s, 0), new Vector3f(0, 0, s) };
+      _values = new Vector4f[] { new Vector4f(s, 0, 0, 0), new Vector4f(0, s, 0, 0), new Vector4f(0, 0, s, 0), new Vector4f(0, 0, 0, s) };
     }
 
     /// <summary>
@@ -48,19 +49,31 @@ namespace OkuMath
     /// </summary>
     /// <param name="v00">The value for [0,0].</param>
     /// <param name="v01">The value for [0,1].</param>
-    /// <param name="v02">The value for [0,2]</param>
+    /// <param name="v02">The value for [0,2].</param>
+    /// <param name="v03">The value for [0,3].</param>
     /// <param name="v10">The value for [1,0].</param>
     /// <param name="v11">The value for [1,1].</param>
     /// <param name="v12">The value for [1,2].</param>
+    /// <param name="v13">The value for [1,3].</param>
     /// <param name="v20">The value for [2,0].</param>
     /// <param name="v21">The value for [2,1].</param>
     /// <param name="v22">The value for [2,2].</param>
-    public Matrix3x3f(float v00, float v01, float v02, float v10, float v11, float v12, float v20, float v21, float v22)
+    /// <param name="v23">The value for [2,3].</param>
+    /// <param name="v30">The value for [3,0].</param>
+    /// <param name="v31">The value for [3,1].</param>
+    /// <param name="v32">The value for [3,2].</param>
+    /// <param name="v33">The value for [3,3].</param>
+    public Matrix4x4f(
+      float v00, float v01, float v02, float v03,
+      float v10, float v11, float v12, float v13,
+      float v20, float v21, float v22, float v23,
+      float v30, float v31, float v32, float v33)
     {
-      _values = new Vector3f[] {
-        new Vector3f(v00, v01, v02),
-        new Vector3f(v10, v11, v12),
-        new Vector3f(v20, v21, v22)
+      _values = new Vector4f[] {
+        new Vector4f(v00, v01, v02, v03),
+        new Vector4f(v10, v11, v12, v13),
+        new Vector4f(v20, v21, v22, v23),
+        new Vector4f(v30, v31, v32, v33)
       };
     }
 
@@ -70,15 +83,16 @@ namespace OkuMath
     /// <param name="vec1">The value for the first column.</param>
     /// <param name="vec2">The value for the second column.</param>
     /// <param name="vec3">The value for the third column.</param>
-    public Matrix3x3f(Vector3f vec1, Vector3f vec2, Vector3f vec3)
+    /// <param name="vec4">The value for the fourth column.</param>
+    public Matrix4x4f(Vector4f vec1, Vector4f vec2, Vector4f vec3, Vector4f vec4)
     {
-      _values = new Vector3f[] { vec1, vec2, vec3 };
+      _values = new Vector4f[] { vec1, vec2, vec3, vec4 };
     }
 
     /// <summary>
     /// Gets the values of the columns.
     /// </summary>
-    public Vector3f[] Values
+    public Vector4f[] Values
     {
       get
       {
@@ -94,7 +108,7 @@ namespace OkuMath
     /// </summary>
     /// <param name="index">The index of the column.</param>
     /// <returns>The value at the given column.</returns>
-    public Vector3f this[int index]
+    public Vector4f this[int index]
     {
       get { return Values[index]; }
       set { Values[index] = value; }
@@ -105,10 +119,11 @@ namespace OkuMath
     /// </summary>
     public void LoadIdentity()
     {
-      _values = new Vector3f[] {
-        new Vector3f(1, 0, 0),
-        new Vector3f(0, 1, 0),
-        new Vector3f(0, 0, 1)
+      _values = new Vector4f[] {
+        new Vector4f(1, 0, 0, 0),
+        new Vector4f(0, 1, 0, 0),
+        new Vector4f(0, 0, 1, 0),
+        new Vector4f(0, 0, 0, 1)
       };
     }
 
@@ -119,9 +134,9 @@ namespace OkuMath
     /// </summary>
     /// <param name="mat">The matrix.</param>
     /// <returns>A new matrix with all values inverted.</returns>
-    public static Matrix3x3f operator -(Matrix3x3f mat)
+    public static Matrix4x4f operator -(Matrix4x4f mat)
     {
-      return new Matrix3x3f(-mat[0], -mat[1], -mat[2]);
+      return new Matrix4x4f(-mat[0], -mat[1], -mat[2], -mat[3]);
     }
 
     /// <summary>
@@ -130,9 +145,9 @@ namespace OkuMath
     /// <param name="mat1">The first matrix.</param>
     /// <param name="mat2">The second matrix.</param>
     /// <returns>A new matrix with results of the addition.</returns>
-    public static Matrix3x3f operator +(Matrix3x3f mat1, Matrix3x3f mat2)
+    public static Matrix4x4f operator +(Matrix4x4f mat1, Matrix4x4f mat2)
     {
-      return new Matrix3x3f(mat1[0] + mat2[0], mat1[1] + mat2[1], mat1[2] + mat2[2]);
+      return new Matrix4x4f(mat1[0] + mat2[0], mat1[1] + mat2[1], mat1[2] + mat2[2], mat1[3] + mat2[3]);
     }
 
     /// <summary>
@@ -141,9 +156,9 @@ namespace OkuMath
     /// <param name="mat1">The first matrix.</param>
     /// <param name="mat2">The second matrix.</param>
     /// <returns>The result of the substraction.</returns>
-    public static Matrix3x3f operator -(Matrix3x3f mat1, Matrix3x3f mat2)
+    public static Matrix4x4f operator -(Matrix4x4f mat1, Matrix4x4f mat2)
     {
-      return new Matrix3x3f(mat1[0] - mat2[0], mat1[1] - mat2[1], mat1[2] - mat2[2]);
+      return new Matrix4x4f(mat1[0] - mat2[0], mat1[1] - mat2[1], mat1[2] - mat2[2], mat1[3] - mat2[3]);
     }
 
     /// <summary>
@@ -152,9 +167,9 @@ namespace OkuMath
     /// <param name="mat">The matrix.</param>
     /// <param name="value">The multiplier.</param>
     /// <returns>A new matrix with the components multiplied by value.</returns>
-    public static Matrix3x3f operator *(Matrix3x3f mat, float value)
+    public static Matrix4x4f operator *(Matrix4x4f mat, float value)
     {
-      return new Matrix3x3f(mat[0] * value, mat[1] * value, mat[2] * value);
+      return new Matrix4x4f(mat[0] * value, mat[1] * value, mat[2] * value, mat[3] * value);
     }
 
     /// <summary>
@@ -164,17 +179,19 @@ namespace OkuMath
     /// <param name="mat">The matrix.</param>
     /// <param name="vec">The vector.</param>
     /// <returns>The result of the multiplication.</returns>
-    public static Vector3f operator *(Matrix3x3f mat, Vector3f vec)
+    public static Vector4f operator *(Matrix4x4f mat, Vector4f vec)
     {
       // This uses standard matrix multiplication rules.
-      //     mat        vec    result
-      // | #, #, # |   | # |   | # |
-      // | #, #, # | * | # | = | # |
-      // | #, #, # |   | # |   | # |
-      return new Vector3f(
-          mat[0].X * vec.X + mat[1].X * vec.Y + mat[2].X * vec.Z,
-          mat[0].Y * vec.X + mat[1].Y * vec.Y + mat[2].Y * vec.Z,
-          mat[0].Z * vec.X + mat[1].Z * vec.Y + mat[2].Z * vec.Z
+      //      mat          vec    result
+      // | #, #, #, # |   | # |   | # |
+      // | #, #, #, # | * | # | = | # |
+      // | #, #, #, # |   | # |   | # |
+      // | #, #, #, # |   | # |   | # |
+      return new Vector4f(
+          mat[0].X * vec.X + mat[1].X * vec.Y + mat[2].X * vec.Z + mat[3].X * vec.W,
+          mat[0].Y * vec.X + mat[1].Y * vec.Y + mat[2].Y * vec.Z + mat[3].Y * vec.W,
+          mat[0].Z * vec.X + mat[1].Z * vec.Y + mat[2].Z * vec.Z + mat[3].Z * vec.W,
+          mat[0].W * vec.X + mat[1].W * vec.Y + mat[2].W * vec.Z + mat[3].W * vec.W
         );
     }
 
@@ -185,17 +202,19 @@ namespace OkuMath
     /// <param name="vec">The vector.</param>
     /// <param name="mat">The matrix.</param>
     /// <returns>The result of the multiplication.</returns>
-    public static Vector3f operator *(Vector3f vec, Matrix3x3f mat)
+    public static Vector4f operator *(Vector4f vec, Matrix4x4f mat)
     {
       // This uses standard matrix multiplication rules.
-      //     vec           mat         result
-      //               | #, #, # |
-      // | #, #, # | * | #, #, # | = | #, #, # |
-      //               | #, #, # |
-      return new Vector3f(
-          vec.X * mat[0].X + vec.Y * mat[0].Y + vec.Z * mat[0].Z,
-          vec.X * mat[1].X + vec.Y * mat[1].Y + vec.Z * mat[1].Z,
-          vec.X * mat[2].X + vec.Y * mat[2].Y + vec.Z * mat[2].Z
+      //      vec              mat             result
+      //                  | #, #, #, # |
+      // | #, #, #, # | * | #, #, #, # | = | #, #, #, # |
+      //                  | #, #, #, # |
+      //                  | #, #, #, # |
+      return new Vector4f(
+          vec.X * mat[0].X + vec.Y * mat[0].Y + vec.Z * mat[0].Z + vec.W * mat[0].W,
+          vec.X * mat[1].X + vec.Y * mat[1].Y + vec.Z * mat[1].Z + vec.W * mat[1].W,
+          vec.X * mat[2].X + vec.Y * mat[2].Y + vec.Z * mat[2].Z + vec.W * mat[2].W,
+          vec.X * mat[3].X + vec.Y * mat[3].Y + vec.Z * mat[3].Z + vec.W * mat[3].W
         );
     }
 
@@ -207,23 +226,33 @@ namespace OkuMath
     /// <param name="mat1">The first matrix.</param>
     /// <param name="mat2">The second matrix.</param>
     /// <returns>The matrix result of the multiplication.</returns>
-    public static Matrix3x3f operator *(Matrix3x3f mat1, Matrix3x3f mat2)
+    public static Matrix4x4f operator *(Matrix4x4f mat1, Matrix4x4f mat2)
     {
-      // | #, #, # |   | #, #, # |   | #, #, # |
-      // | #, #, # | * | #, #, # | = | #, #, # |
-      // | #, #, # |   | #, #, # |   | #, #, # |
-      return new Matrix3x3f(
-          mat1[0].X * mat2[0].X + mat1[1].X * mat2[0].Y + mat1[2].X * mat2[0].Z,
-          mat1[0].X * mat2[1].X + mat1[1].X * mat2[1].Y + mat1[2].X * mat2[1].Z,
-          mat1[0].X * mat2[2].X + mat1[1].X * mat2[2].Y + mat1[2].X * mat2[2].Z,
+      // This uses standard matrix multiplication rules.
+      // | #, #, #, # |   | #, #, #, # |   | #, #, #, # |
+      // | #, #, #, # | * | #, #, #, # | = | #, #, #, # |
+      // | #, #, #, # |   | #, #, #, # |   | #, #, #, # |
+      // | #, #, #, # |   | #, #, #, # |   | #, #, #, # |
+      return new Matrix4x4f(
+          mat1[0].X * mat2[0].X + mat1[1].X * mat2[0].Y + mat1[2].X * mat2[0].Z + mat1[3].X * mat2[0].W,
+          mat1[0].X * mat2[1].X + mat1[1].X * mat2[1].Y + mat1[2].X * mat2[1].Z + mat1[3].X * mat2[1].W,
+          mat1[0].X * mat2[2].X + mat1[1].X * mat2[2].Y + mat1[2].X * mat2[2].Z + mat1[3].X * mat2[2].W,
+          mat1[0].X * mat2[3].X + mat1[1].X * mat2[3].Y + mat1[2].X * mat2[3].Z + mat1[3].X * mat2[3].W,
 
-          mat1[0].Y * mat2[0].X + mat1[1].Y * mat2[0].Y + mat1[2].Y * mat2[0].Z,
-          mat1[0].Y * mat2[1].X + mat1[1].Y * mat2[1].Y + mat1[2].Y * mat2[1].Z,
-          mat1[0].Y * mat2[2].X + mat1[1].Y * mat2[2].Y + mat1[2].Y * mat2[2].Z,
+          mat1[0].Y * mat2[0].X + mat1[1].Y * mat2[0].Y + mat1[2].Y * mat2[0].Z + mat1[3].Y * mat2[0].W,
+          mat1[0].Y * mat2[1].X + mat1[1].Y * mat2[1].Y + mat1[2].Y * mat2[1].Z + mat1[3].Y * mat2[1].W,
+          mat1[0].Y * mat2[2].X + mat1[1].Y * mat2[2].Y + mat1[2].Y * mat2[2].Z + mat1[3].Y * mat2[2].W,
+          mat1[0].Y * mat2[3].X + mat1[1].Y * mat2[3].Y + mat1[2].Y * mat2[3].Z + mat1[3].Y * mat2[3].W,
 
-          mat1[0].Z * mat2[0].X + mat1[1].Z * mat2[0].Y + mat1[2].Z * mat2[0].Z,
-          mat1[0].Z * mat2[1].X + mat1[1].Z * mat2[1].Y + mat1[2].Z * mat2[1].Z,
-          mat1[0].Z * mat2[2].X + mat1[1].Z * mat2[2].Y + mat1[2].Z * mat2[2].Z
+          mat1[0].Z * mat2[0].X + mat1[1].Z * mat2[0].Y + mat1[2].Z * mat2[0].Z + mat1[3].Z * mat2[0].W,
+          mat1[0].Z * mat2[1].X + mat1[1].Z * mat2[1].Y + mat1[2].Z * mat2[1].Z + mat1[3].Z * mat2[1].W,
+          mat1[0].Z * mat2[2].X + mat1[1].Z * mat2[2].Y + mat1[2].Z * mat2[2].Z + mat1[3].Z * mat2[2].W,
+          mat1[0].Z * mat2[3].X + mat1[1].Z * mat2[3].Y + mat1[2].Z * mat2[3].Z + mat1[3].Z * mat2[3].W,
+
+          mat1[0].W * mat2[0].X + mat1[1].W * mat2[0].Y + mat1[2].W * mat2[0].Z + mat1[3].W * mat2[0].W,
+          mat1[0].W * mat2[1].X + mat1[1].W * mat2[1].Y + mat1[2].W * mat2[1].Z + mat1[3].W * mat2[1].W,
+          mat1[0].W * mat2[2].X + mat1[1].W * mat2[2].Y + mat1[2].W * mat2[2].Z + mat1[3].W * mat2[2].W,
+          mat1[0].W * mat2[3].X + mat1[1].W * mat2[3].Y + mat1[2].W * mat2[3].Z + mat1[3].W * mat2[3].W
         );
     }
 
@@ -233,12 +262,13 @@ namespace OkuMath
     /// <param name="mat">The matrix.</param>
     /// <param name="value">The value.</param>
     /// <returns>The result of the division.</returns>
-    public static Matrix3x3f operator /(Matrix3x3f mat, float value)
+    public static Matrix4x4f operator /(Matrix4x4f mat, float value)
     {
-      return new Matrix3x3f(
+      return new Matrix4x4f(
           mat[0] / value,
           mat[1] / value,
-          mat[2] / value
+          mat[2] / value,
+          mat[3] / value
         );
     }
 
@@ -249,12 +279,13 @@ namespace OkuMath
     /// <param name="value">The value.</param>
     /// <param name="mat">The matrix.</param>
     /// <returns>The result of the division.</returns>
-    public static Matrix3x3f operator /(float value, Matrix3x3f mat)
+    public static Matrix4x4f operator /(float value, Matrix4x4f mat)
     {
-      return new Matrix3x3f(
+      return new Matrix4x4f(
           value / mat[0],
           value / mat[1],
-          value / mat[2]
+          value / mat[2],
+          value / mat[3]
         );
     }
 
@@ -265,7 +296,7 @@ namespace OkuMath
     /// <param name="mat">The matrix.</param>
     /// <param name="vec">The vector.</param>
     /// <returns>The result of the division.</returns>
-    public static Vector3f operator /(Matrix3x3f mat, Vector3f vec)
+    public static Vector4f operator /(Matrix4x4f mat, Vector4f vec)
     {
       return MatrixMath.Invert(mat) * vec;
     }
@@ -277,7 +308,7 @@ namespace OkuMath
     /// <param name="vec">The vector.</param>
     /// <param name="mat">The matrix.</param>
     /// <returns>The result of the division.</returns>
-    public static Vector3f operator /(Vector3f vec, Matrix3x3f mat)
+    public static Vector4f operator /(Vector4f vec, Matrix4x4f mat)
     {
       return vec * MatrixMath.Invert(mat);
     }
@@ -289,7 +320,7 @@ namespace OkuMath
     /// <param name="mat1">The first matrix.</param>
     /// <param name="mat2">The second matrix.</param>
     /// <returns>The result of the division.</returns>
-    public static Matrix3x3f operator /(Matrix3x3f mat1, Matrix3x3f mat2)
+    public static Matrix4x4f operator /(Matrix4x4f mat1, Matrix4x4f mat2)
     {
       return mat1 * MatrixMath.Invert(mat2);
     }
@@ -300,9 +331,9 @@ namespace OkuMath
     /// <param name="mat1">The first matrix.</param>
     /// <param name="mat2">The second matrix.</param>
     /// <returns>True if all components are equal, else false.</returns>
-    public static bool operator ==(Matrix3x3f mat1, Matrix3x3f mat2)
+    public static bool operator ==(Matrix4x4f mat1, Matrix4x4f mat2)
     {
-      return mat1[0] == mat2[0] && mat1[1] == mat2[1] && mat1[2] == mat2[2];
+      return mat1[0] == mat2[0] && mat1[1] == mat2[1] && mat1[2] == mat2[2] && mat1[3] == mat2[3];
     }
 
     /// <summary>
@@ -311,9 +342,9 @@ namespace OkuMath
     /// <param name="mat1">The first matrix.</param>
     /// <param name="mat2">The second matrix.</param>
     /// <returns>True if any of the components are not equal, else false.</returns>
-    public static bool operator !=(Matrix3x3f mat1, Matrix3x3f mat2)
+    public static bool operator !=(Matrix4x4f mat1, Matrix4x4f mat2)
     {
-      return mat1[0] != mat2[0] || mat1[1] != mat2[1] || mat1[2] != mat2[2];
+      return mat1[0] != mat2[0] || mat1[1] != mat2[1] || mat1[2] != mat2[2] || mat1[3] != mat2[3];
     }
 
     #endregion
@@ -324,10 +355,11 @@ namespace OkuMath
     /// <returns></returns>
     public override string ToString()
     {
-      return 
+      return
         Values[0].ToString() + Environment.NewLine +
         Values[1].ToString() + Environment.NewLine +
-        Values[2].ToString();
+        Values[2].ToString() + Environment.NewLine +
+        Values[3].ToString();
     }
 
     /// <summary>
@@ -337,8 +369,8 @@ namespace OkuMath
     /// <returns>True if the matrices are equal, else false.</returns>
     public override bool Equals(object obj)
     {
-      if (obj is Matrix3x3f)
-        return this == (Matrix3x3f)obj;
+      if (obj is Matrix4x4f)
+        return this == (Matrix4x4f)obj;
       return base.Equals(obj);
     }
 
