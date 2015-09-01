@@ -84,6 +84,22 @@ namespace OkuMath
     }
 
     /// <summary>
+    /// Multiply matrix mat1 by matrix mat2 component-wise, i.e., result[i][j] is the scalar product of mat1[i][j] and mat2[i][j].
+    /// Note: To get linear algebraic matrix multiplication, use the multiply operator (*).
+    /// </summary>
+    /// <param name="mat1">The first matrix.</param>
+    /// <param name="mat2">The second matrix.</param>
+    /// <returns>The result of the multiplication.</returns>
+    public static Matrix3x3f MultiplyComponents(Matrix3x3f mat1, Matrix3x3f mat2)
+    {
+      return new Matrix3x3f(
+          mat1[0] * mat2[0],
+          mat1[1] * mat2[1],
+          mat1[2] * mat2[2]
+        );
+    }
+
+    /// <summary>
     /// Computes the outer product of the two given vectors, which is a matrix.
     /// </summary>
     /// <param name="vec1">The first vector.</param>
@@ -100,6 +116,27 @@ namespace OkuMath
     }
 
     /// <summary>
+    /// Computes the outer product of the two given vectors, which is a matrix.
+    /// </summary>
+    /// <param name="vec1">The first vector.</param>
+    /// <param name="vec2">The second vector.</param>
+    /// <returns>The outer product matrix.</returns>
+    public static Matrix3x3f OuterProduct(Vector3f vec1, Vector3f vec2)
+    {
+      return new Matrix3x3f(
+          vec1.X * vec2.X,
+          vec1.X * vec2.Y,
+          vec1.X * vec2.Z,
+          vec1.Y * vec2.X,
+          vec1.Y * vec2.Y,
+          vec1.Y * vec2.Z,
+          vec1.Z * vec2.X,
+          vec1.Z * vec2.Y,
+          vec1.Z * vec2.Z
+        );
+    }
+
+    /// <summary>
     /// Comptes the transpose of the given matrix.
     /// </summary>
     /// <param name="mat">The matrix.</param>
@@ -111,6 +148,26 @@ namespace OkuMath
           mat[1].X,
           mat[0].Y,
           mat[1].Y
+        );
+    }
+
+    /// <summary>
+    /// Comptes the transpose of the given matrix.
+    /// </summary>
+    /// <param name="mat">The matrix.</param>
+    /// <returns>The transpose of the matrix.</returns>
+    public static Matrix3x3f Transpose(Matrix3x3f mat)
+    {
+      return new Matrix3x3f(
+          mat[0].X,
+          mat[1].X,
+          mat[2].X,
+          mat[0].Y,
+          mat[1].Y,
+          mat[2].Y,
+          mat[0].Z,
+          mat[1].Z,
+          mat[2].Z
         );
     }
 

@@ -43,13 +43,13 @@ namespace OkuMath
     /// <summary>
     /// Creates a new matrix with the given values.
     /// </summary>
-    /// <param name="x0">The value for [0,0].</param>
-    /// <param name="y0">The value for [0,1].</param>
-    /// <param name="x1">The value for [1,0].</param>
-    /// <param name="y1">The value for [1,1].</param>
-    public Matrix2x2f(float x0, float y0, float x1, float y1)
+    /// <param name="v00">The value for [0,0].</param>
+    /// <param name="v01">The value for [0,1].</param>
+    /// <param name="v10">The value for [1,0].</param>
+    /// <param name="v11">The value for [1,1].</param>
+    public Matrix2x2f(float v00, float v01, float v10, float v11)
     {
-      _values = new Vector2f[] { new Vector2f(x0, y0), new Vector2f(x1, y1) };
+      _values = new Vector2f[] { new Vector2f(v00, v01), new Vector2f(v10, v11) };
     }
 
     /// <summary>

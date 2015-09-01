@@ -43,21 +43,21 @@ namespace OkuMath
     /// <summary>
     /// Creates a new matrix with the given values.
     /// </summary>
-    /// <param name="x0">The value for [0,0].</param>
-    /// <param name="y0">The value for [0,1].</param>
-    /// <param name="z0">The value for [0,2]</param>
-    /// <param name="x1">The value for [1,0].</param>
-    /// <param name="y1">The value for [1,1].</param>
-    /// <param name="z1">The value for [1,2].</param>
-    /// <param name="x2">The value for [2,0].</param>
-    /// <param name="y2">The value for [2,1].</param>
-    /// <param name="z2">The value for [2,2].</param>
-    public Matrix3x3f(float x0, float y0, float z0, float x1, float y1, float z1, float x2, float y2, float z2)
+    /// <param name="v00">The value for [0,0].</param>
+    /// <param name="v01">The value for [0,1].</param>
+    /// <param name="v02">The value for [0,2]</param>
+    /// <param name="v10">The value for [1,0].</param>
+    /// <param name="v11">The value for [1,1].</param>
+    /// <param name="v12">The value for [1,2].</param>
+    /// <param name="v20">The value for [2,0].</param>
+    /// <param name="v21">The value for [2,1].</param>
+    /// <param name="v22">The value for [2,2].</param>
+    public Matrix3x3f(float v00, float v01, float v02, float v10, float v11, float v12, float v20, float v21, float v22)
     {
       _values = new Vector3f[] {
-        new Vector3f(x0, y0, z0),
-        new Vector3f(x1, y1, z1),
-        new Vector3f(x2, y2, z2)
+        new Vector3f(v00, v01, v02),
+        new Vector3f(v10, v11, v12),
+        new Vector3f(v20, v21, v22)
       };
     }
 
