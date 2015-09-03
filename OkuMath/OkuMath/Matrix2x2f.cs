@@ -283,6 +283,67 @@ namespace OkuMath
       return mat1[0] != mat2[0] || mat1[1] != mat2[1];
     }
 
+    /// <summary>
+    /// Extractes the upper left 2x2 parts of the given 3x3 matrix.
+    /// </summary>
+    /// <param name="mat">The source matrix.</param>
+    public static explicit operator Matrix2x2f(Matrix3x3f mat)
+    {
+      return new Matrix2x2f(
+          mat[0].XY,
+          mat[1].XY
+        );
+    }
+
+    /// <summary>
+    /// Extractes the upper left 2x2 parts of the given 4x4 matrix.
+    /// </summary>
+    /// <param name="mat">The source matrix.</param>
+    public static explicit operator Matrix2x2f(Matrix4x4f mat)
+    {
+      return new Matrix2x2f(
+          mat[0].XY,
+          mat[1].XY
+        );
+    }
+
+    #endregion
+
+    #region Transform Constructors
+
+    /// <summary>
+    /// Creates a 2D rotation matrix for the given angle.
+    /// </summary>
+    /// <param name="angle">The angle in degrees.</param>
+    /// <returns>A matrix that rotates by the given angle.</returns>
+    public static Matrix2x2f Rotation(float angle)
+    {
+      float rad = BasicMath.DegreesToRadians(angle);
+      float sin = (float)Math.Sin(rad);
+      float cos = (float)Math.Cos(rad);
+
+      Matrix2x2f result = new Matrix2x2f(
+          new Vector2f(cos, sin),
+          new Vector2f(-sin, cos)
+        );
+
+      return result;
+    }
+
+    /// <summary>
+    /// Creates a 2D scaling matrix.
+    /// </summary>
+    /// <param name="sx">The scale factor on the X axis.</param>
+    /// <param name="sy">The scale factor on the Y axis.</param>
+    /// <returns>A matrix that scales by the given values</returns>
+    public static Matrix2x2f Scale(float sx, float sy)
+    {
+      return new Matrix2x2f(
+          new Vector2f(sx, 0),
+          new Vector2f(0, sy)
+        );
+    }
+
     #endregion
 
     /// <summary>

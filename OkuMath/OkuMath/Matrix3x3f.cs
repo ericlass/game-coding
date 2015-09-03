@@ -316,6 +316,71 @@ namespace OkuMath
       return mat1[0] != mat2[0] || mat1[1] != mat2[1] || mat1[2] != mat2[2];
     }
 
+    /// <summary>
+    /// Extractes the upper left 3x3 parts of the given 4x4 matrix.
+    /// </summary>
+    /// <param name="mat"></param>
+    public static explicit operator Matrix3x3f(Matrix4x4f mat)
+    {
+      return new Matrix3x3f(
+          mat[0].XYZ,
+          mat[1].XYZ,
+          mat[2].XYZ
+        );
+    }
+
+    #endregion
+
+    #region Transform Constructors
+
+    /// <summary>
+    /// Creates a 2D translation matrix.
+    /// </summary>
+    /// <param name="x">The translation on the X axis.</param>
+    /// <param name="y">The translation on the Y axis.</param>
+    /// <returns>A matrix that translates by the given values.</returns>
+    public static Matrix3x3f Translate(float x, float y)
+    {
+      return new Matrix3x3f(
+          new Vector3f(1, 0, x),
+          new Vector3f(0, 1, y),
+          new Vector3f(0, 0, 1)
+        );
+    }
+
+    /// <summary>
+    /// Creates a 2D rotation matrix for the given angle.
+    /// </summary>
+    /// <param name="angle">The angle in degrees.</param>
+    /// <returns>A matrix that rotates by the given angle.</returns>
+    public static Matrix3x3f Rotation(float angle)
+    {
+      float rad = BasicMath.DegreesToRadians(angle);
+      float sin = (float)Math.Sin(rad);
+      float cos = (float)Math.Cos(rad);
+
+      return new Matrix3x3f(
+          new Vector3f(cos, sin, 0),
+          new Vector3f(-sin, cos, 0),
+          new Vector3f(0, 0, 1)
+        );
+    }
+
+    /// <summary>
+    /// Creates a 2D scaling matrix.
+    /// </summary>
+    /// <param name="sx">The scale factor on the X axis.</param>
+    /// <param name="sy">The scale factor on the Y axis.</param>
+    /// <returns>A matrix that scales by the given values</returns>
+    public static Matrix3x3f Scale(float sx, float sy)
+    {
+      return new Matrix3x3f(
+          new Vector3f(sx, 0, 0),
+          new Vector3f(0, sy, 0),
+          new Vector3f(0, 0, 1)
+        );
+    }
+
     #endregion
 
     /// <summary>

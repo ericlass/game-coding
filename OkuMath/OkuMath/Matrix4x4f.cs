@@ -349,6 +349,215 @@ namespace OkuMath
 
     #endregion
 
+    #region Transform Constructors
+
+    /// <summary>
+    /// Creates a 3D translation matrix.
+    /// </summary>
+    /// <param name="x">The translation on the X axis.</param>
+    /// <param name="y">The translation on the Y axis.</param>
+    /// <param name="z">The translation on the Z axis.</param>
+    /// <returns>A matrix that translates by the given values.</returns>
+    public static Matrix4x4f Translate(float x, float y, float z)
+    {
+      return new Matrix4x4f(
+          new Vector4f(1, 0, 0, x),
+          new Vector4f(0, 1, 0, y),
+          new Vector4f(0, 0, 1, z),
+          new Vector4f(0, 0, 0, 1)
+        );
+    }
+
+    /// <summary>
+    /// Creates a 3D rotation matrix for the given angle around the X axis.
+    /// </summary>
+    /// <param name="angle">The angle in degrees.</param>
+    /// <returns>A matrix that rotates by the given angle.</returns>
+    public static Matrix4x4f RotationX(float angle)
+    {
+      float rad = BasicMath.DegreesToRadians(angle);
+      float sin = (float)Math.Sin(rad);
+      float cos = (float)Math.Cos(rad);
+
+      return new Matrix4x4f(
+          new Vector4f(1, 0, 0, 0),
+          new Vector4f(0, cos, -sin, 0),
+          new Vector4f(0, sin, cos, 0),
+          new Vector4f(0, 0, 0, 1)
+        );
+    }
+
+    /// <summary>
+    /// Creates a 3D rotation matrix for the given angle around the Y axis.
+    /// </summary>
+    /// <param name="angle">The angle in degrees.</param>
+    /// <returns>A matrix that rotates by the given angle.</returns>
+    public static Matrix4x4f RotationY(float angle)
+    {
+      float rad = BasicMath.DegreesToRadians(angle);
+      float sin = (float)Math.Sin(rad);
+      float cos = (float)Math.Cos(rad);
+
+      return new Matrix4x4f(
+          new Vector4f(cos, 0, sin, 0),
+          new Vector4f(0, 1, 0, 0),
+          new Vector4f(-sin, 0, cos, 0),
+          new Vector4f(0, 0, 0, 1)
+        );
+    }
+
+    /// <summary>
+    /// Creates a 3D rotation matrix for the given angle around the Y axis.
+    /// </summary>
+    /// <param name="angle">The angle in degrees.</param>
+    /// <returns>A matrix that rotates by the given angle.</returns>
+    public static Matrix4x4f RotationZ(float angle)
+    {
+      float rad = BasicMath.DegreesToRadians(angle);
+      float sin = (float)Math.Sin(rad);
+      float cos = (float)Math.Cos(rad);
+
+      return new Matrix4x4f(
+          new Vector4f(cos, -sin, 0, 0),
+          new Vector4f(sin, cos, 0, 0),
+          new Vector4f(0, 0, 1, 0),
+          new Vector4f(0, 0, 0, 1)
+        );
+    }
+
+    /// <summary>
+    /// Creates a 3D scaling matrix.
+    /// </summary>
+    /// <param name="sx">The scale factor on the X axis.</param>
+    /// <param name="sy">The scale factor on the Y axis.</param>
+    /// <param name="sz">The scale factor on the Z axis.</param>
+    /// <returns>A matrix that scales by the given values</returns>
+    public static Matrix4x4f Scale(float sx, float sy, float sz)
+    {
+      return new Matrix4x4f(
+          new Vector4f(sx, 0, 0, 0),
+          new Vector4f(0, sy, 0, 0),
+          new Vector4f(0, 0, sz, 0),
+          new Vector4f(0, 0, 0, 1)
+        );
+    }
+
+    /// <summary>
+    /// Creates a left handed, look-at view matrix.
+    /// </summary>
+    /// <param name="eye">The position of the eye (or camera).</param>
+    /// <param name="at">The point the eye looks at.</param>
+    /// <param name="up">The up vector.</param>
+    /// <returns>A view matrix for the given parameters.</returns>
+    public static Matrix4x4f LookAtLH(Vector3f eye, Vector3f at, Vector3f up)
+    {
+      Vector3f zaxis = VectorMath.Normalize(at - eye);
+      Vector3f xaxis = VectorMath.Normalize(VectorMath.CrossProduct(up, zaxis));
+      Vector3f yaxis = VectorMath.CrossProduct(zaxis, xaxis);
+
+      return new Matrix4x4f(
+          new Vector4f(xaxis, -VectorMath.DotProduct(xaxis, eye)),
+          new Vector4f(yaxis, -VectorMath.DotProduct(yaxis, eye)),
+          new Vector4f(zaxis, -VectorMath.DotProduct(zaxis, eye)),
+          new Vector4f(0, 0, 0, 1)
+        );
+    }
+
+    /// <summary>
+    /// Creates a right handed, look-at view matrix.
+    /// </summary>
+    /// <param name="eye">The position of the eye (or camera).</param>
+    /// <param name="at">The point the eye looks at.</param>
+    /// <param name="up">The up vector.</param>
+    /// <returns>A view matrix for the given parameters.</returns>
+    public static Matrix4x4f LookAtRH(Vector3f eye, Vector3f at, Vector3f up)
+    {
+      Vector3f zaxis = VectorMath.Normalize(at - eye);
+      Vector3f xaxis = VectorMath.Normalize(VectorMath.CrossProduct(up, zaxis));
+      Vector3f yaxis = VectorMath.CrossProduct(zaxis, xaxis);
+
+      return new Matrix4x4f(
+          new Vector4f(xaxis, VectorMath.DotProduct(xaxis, eye)),
+          new Vector4f(yaxis, VectorMath.DotProduct(yaxis, eye)),
+          new Vector4f(zaxis, VectorMath.DotProduct(zaxis, eye)),
+          new Vector4f(0, 0, 0, 1)
+        );
+    }
+
+    /// <summary>
+    /// Creates a left-handed, orthgraphic projection matrix.
+    /// </summary>
+    /// <param name="width">The width of the view volume.</param>
+    /// <param name="height">The height of the view volume.</param>
+    /// <param name="zNear">The minimum z-value of the view volume./param>
+    /// <param name="zFar">The maximum z-value of the view volume.</param>
+    /// <returns>An orthographic projection matrix.</returns>
+    public static Matrix4x4f ProjectionOrthographicLH(float width, float height, float zNear, float zFar)
+    {
+      return new Matrix4x4f(
+          new Vector4f(2 / width, 0, 0, 0),
+          new Vector4f(0, 2 / height, 0, 0),
+          new Vector4f(0, 0, 1 / (zFar - zNear), -zNear / (zFar - zNear)),
+          new Vector4f(0, 0, 0, 1)
+        );
+    }
+
+    /// <summary>
+    /// Creates a right-handed, orthgraphic projection matrix.
+    /// </summary>
+    /// <param name="width">The width of the view volume.</param>
+    /// <param name="height">The height of the view volume.</param>
+    /// <param name="zNear">The minimum z-value of the view volume./param>
+    /// <param name="zFar">The maximum z-value of the view volume.</param>
+    /// <returns>An orthographic projection matrix.</returns>
+    public static Matrix4x4f ProjectionOrthographicRH(float width, float height, float zNear, float zFar)
+    {
+      return new Matrix4x4f(
+          new Vector4f(2 / width, 0, 0, 0),
+          new Vector4f(0, 2 / height, 0, 0),
+          new Vector4f(0, 0, 1 / (zNear - zFar), zNear / (zNear - zFar)),
+          new Vector4f(0, 0, 0, 1)
+        );
+    }
+
+    /// <summary>
+    /// Creates a left-handed perspective projection matrix.
+    /// </summary>
+    /// <param name="width">The width of the view volume at the near view-plane.</param>
+    /// <param name="height">The height of the view volume at the near view-plane.</param>
+    /// <param name="zNear">The Z-value of the near view-plane.</param>
+    /// <param name="zFar">The Z-value of the far view-plane.</param>
+    /// <returns>A perspective projection matrix.</returns>
+    public static Matrix4x4f ProjectionPerspectiveLH(float width, float height, float zNear, float zFar)
+    {
+      return new Matrix4x4f(
+          new Vector4f(2 * zNear / width, 0, 0, 0),
+          new Vector4f(0, 2 * zNear / height, 0, 0),
+          new Vector4f(0, 0, zFar / (zFar - zNear), zNear * zFar / (zNear - zFar)),
+          new Vector4f(0, 0, 1, 0)
+        );
+    }
+
+    /// <summary>
+    /// Creates a right-handed perspective projection matrix.
+    /// </summary>
+    /// <param name="width">The width of the view volume at the near view-plane.</param>
+    /// <param name="height">The height of the view volume at the near view-plane.</param>
+    /// <param name="zNear">The Z-value of the near view-plane.</param>
+    /// <param name="zFar">The Z-value of the far view-plane.</param>
+    /// <returns>A perspective projection matrix.</returns>
+    public static Matrix4x4f ProjectionPerspectiveRH(float width, float height, float zNear, float zFar)
+    {
+      return new Matrix4x4f(
+          new Vector4f(2 * zNear / width, 0, 0, 0),
+          new Vector4f(0, 2 * zNear / height, 0, 0),
+          new Vector4f(0, 0, zFar / (zNear - zFar), zNear * zFar / (zNear - zFar)),
+          new Vector4f(0, 0, -1, 0)
+        );
+    }
+
+    #endregion
+
     /// <summary>
     /// Creates a string representation of the matrix.
     /// </summary>
