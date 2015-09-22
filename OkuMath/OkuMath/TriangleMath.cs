@@ -19,10 +19,8 @@ namespace OkuMath
     /// <param name="b">The second point of the triangle.</param>
     /// <param name="c">The third point of the triangle.</param>
     /// <param name="p">The point.</param>
-    /// <param name="u">The first barycentric coordinate is returned here.</param>
-    /// <param name="v">The second barycentric coordinate is returned here.</param>
-    /// <param name="w">The third barycentric coordinate is returned here.</param>
-    public static void BarycentricCoordinates(Vector2f a, Vector2f b, Vector2f c, Vector2f p, out float u, out float v, out float w)
+    /// <returns>A vector containing the barycentric coordinates.</returns>
+    public static Vector3f BarycentricCoordinates(Vector2f a, Vector2f b, Vector2f c, Vector2f p)
     {
       float A, B, C, D, E, F, AE, BD;
 
@@ -37,9 +35,11 @@ namespace OkuMath
       AE = A * E;
       BD = B * D;
 
-      u = (B * F - C * E) / (AE - BD);
-      v = (A * F - C * D) / (BD - AE);
-      w = 1.0f - u - v;
+      float u = (B * F - C * E) / (AE - BD);
+      float v = (A * F - C * D) / (BD - AE);
+      float w = 1.0f - u - v;
+
+      return new Vector3f(u, v, w);
     }
 
   }

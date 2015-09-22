@@ -311,6 +311,24 @@ namespace OkuMath
       return vec.XY;
     }
 
+    /// <summary>
+    /// Converts the floating point vector to an integer vector of the same size.
+    /// </summary>
+    /// <param name="vec">The source vector.</param>
+    public static explicit operator Vector2f(Vector2i vec)
+    {
+      return new Vector2f(vec.X, vec.Y);
+    }
+
+    /// <summary>
+    /// Extract the X and Y part of the given vector.
+    /// </summary>
+    /// <param name="vec">The source vector.</param>
+    public static explicit operator Vector2f(Vector3i vec)
+    {
+      return new Vector2f(vec.X, vec.Y);
+    }
+
     #endregion
 
     /// <summary>

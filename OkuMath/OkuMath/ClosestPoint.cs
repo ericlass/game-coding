@@ -122,9 +122,6 @@ namespace OkuMath
     {
       Vector2f cl = ClosestPoint.OnLineSegmentToPointV(a, b, p);
       return OnCircleToPoint(cl, radius, p);
-      /*Vector2f cp = p - cl;
-      float t = radius / cp.Magnitude;
-      return LineMath.PointOnRay(cl, cp, t); //Using ray instead of line because line would do p - c again!*/
     }
 
     /// <summary>

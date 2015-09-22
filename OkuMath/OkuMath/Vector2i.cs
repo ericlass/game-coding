@@ -4,109 +4,49 @@ using System.Runtime.InteropServices;
 namespace OkuMath
 {
   /// <summary>
-  /// Vector3f defines a three dimensional Vector with all standard vector math routines.
+  /// Vector2i defines a two dimensional Vector with all standard vector math routines.
   /// Most operators have been overloaded.
   /// </summary>
   [StructLayout(LayoutKind.Sequential, Pack = 1)]
-  public struct Vector3f
+  public struct Vector2i
   {
     /// <summary>
     /// The X component of the vector.
     /// </summary>
-    public float X;
+    public int X;
 
     /// <summary>
     /// The Y component of the vector.
     /// </summary>
-    public float Y;
-
-    /// <summary>
-    /// The Z component of the vector.
-    /// </summary>
-    public float Z;
+    public int Y;
 
     /// <summary>
     /// A vector with all components set to 0.
     /// </summary>
-    public static Vector3f Zero = new Vector3f(0, 0, 0);
+    public static Vector2i Zero = new Vector2i(0, 0);
 
     /// <summary>
     /// A vector with all components set to 1.
     /// </summary>
-    public static Vector3f One = new Vector3f(1, 1, 1);
+    public static Vector2i One = new Vector2i(1, 1);
 
     /// <summary>
-    /// Creates a new vector and initialzes its components with the given values.
+    /// Creates a new vector and initializes its components with the given values.
     /// </summary>
-    /// <param name="x">The X component.</param>
-    /// <param name="y">The Y component.</param>
-    /// <param name="z">The Z component.</param>
-    public Vector3f(float x, float y, float z)
+    /// <param name="x">The x component.</param>
+    /// <param name="y">The y component.</param>
+    public Vector2i(int x, int y)
     {
       X = x;
       Y = y;
-      Z = z;
-    }
-
-    /// <summary>
-    /// Creates a new vector. The X and Y components are set to the values of the given vector.
-    /// The Z component is se to the given value. This is like calling new Vector3f(v.X, v.Y, z).
-    /// </summary>
-    /// <param name="v">The vector with the X and Y values.</param>
-    /// <param name="z">The Z value.</param>
-    public Vector3f(Vector2f v, float z)
-    {
-      X = v.X;
-      Y = v.Y;
-      Z = z;
-    }
-
-    /// <summary>
-    /// Creates a new vector. The X component is se to the given value.
-    /// The Y and Z components are set to the values of the given vector.
-    /// This is like calling new Vector3f(x, v.X, v.Y).
-    /// </summary>
-    /// <param name="x">The X value.</param>
-    /// <param name="v">The vector with the Y and Z values.</param>
-    public Vector3f(float x, Vector2f v)
-    {
-      X = x;
-      Y = v.X;
-      Z = v.Y;
     }
 
     #region Swizzles
 
     /// <summary>
-    /// Gets or set the XY part of the vector.
-    /// </summary>
-    public Vector2f XY
-    {
-      get { return new Vector2f(X, Y); }
-      set
-      {
-        X = value.X;
-        Y = value.Y;
-      }
-    }
-
-    /// <summary>
-    /// Gets or sets the YZ part of the vector.
-    /// </summary>
-    public Vector2f YZ
-    {
-      get { return new Vector2f(Y, Z); }
-      set
-      {
-        Y = value.X;
-        Z = value.Y;
-      }
-    }
-
-    /// <summary>
     /// Synonym for the X component.
     /// </summary>
-    public float R
+    public int R
     {
       get { return X; }
       set { X = value; }
@@ -115,43 +55,16 @@ namespace OkuMath
     /// <summary>
     /// Synonym for the Y component.
     /// </summary>
-    public float G
+    public int G
     {
       get { return Y; }
       set { Y = value; }
     }
 
     /// <summary>
-    /// Synonym for the Z component.
-    /// </summary>
-    public float B
-    {
-      get { return Z; }
-      set { Z = value; }
-    }
-
-    /// <summary>
-    /// Gets or set the RG part of the vector.
-    /// </summary>
-    public Vector2f RG
-    {
-      get { return XY; }
-      set { XY = value; }       
-    }
-
-    /// <summary>
-    /// Gets or sets the GB part of the vector.
-    /// </summary>
-    public Vector2f GB
-    {
-      get { return YZ; }
-      set { YZ = value; }
-    }
-
-    /// <summary>
     /// Synonym for the X component.
     /// </summary>
-    public float S
+    public int S
     {
       get { return X; }
       set { X = value; }
@@ -160,37 +73,10 @@ namespace OkuMath
     /// <summary>
     /// Synonym for the Y component.
     /// </summary>
-    public float T
+    public int T
     {
       get { return Y; }
       set { Y = value; }
-    }
-
-    /// <summary>
-    /// Synonym for the Z component.
-    /// </summary>
-    public float P
-    {
-      get { return Z; }
-      set { Z = value; }
-    }
-
-    /// <summary>
-    /// Gets or set the RG part of the vector.
-    /// </summary>
-    public Vector2f ST
-    {
-      get { return XY; }
-      set { XY = value; }
-    }
-
-    /// <summary>
-    /// Gets or sets the GB part of the vector.
-    /// </summary>
-    public Vector2f TP
-    {
-      get { return YZ; }
-      set { YZ = value; }
     }
 
     #endregion
@@ -198,15 +84,15 @@ namespace OkuMath
     // <summary>
     /// Defines the number of components the vector has.
     /// </summary>
-    public const int ComponentCount = 3;
+    public const int ComponentCount = 2;
 
     /// <summary>
     /// Indexer to be able to access the components by index.
-    /// 0 = X, 1 = Y, 2 = Z.
+    /// 0 = X, 1 = Y.
     /// </summary>
-    /// <param name="index">The index. Either 0, 1 or 2.</param>
+    /// <param name="index">The index. Either 0 or 1.</param>
     /// <returns>The values at the given index.</returns>
-    public float this[int index]
+    public int this[int index]
     {
       get
       {
@@ -216,11 +102,9 @@ namespace OkuMath
             return X;
           case 1:
             return Y;
-          case 2:
-            return Z;
 
           default:
-            throw new ArgumentException(nameof(Vector3f) + " can only have indexes 0, 1 and 2!");
+            throw new ArgumentException(nameof(Vector2i) + " can only have indexes 0 and 1!");
         }
       }
       set
@@ -233,12 +117,8 @@ namespace OkuMath
           case 1:
             Y = value;
             break;
-          case 2:
-            Z = value;
-            break;
-
           default:
-            throw new ArgumentException(nameof(Vector3f) + " can only have indexes 0, 1 and 2!");
+            throw new ArgumentException(nameof(Vector2i) + " can only have indexes 0 and 1!");
         }
       }
     }
@@ -246,18 +126,18 @@ namespace OkuMath
     /// <summary>
     /// Gets the magnitude (length) of the vector by using the pythogarean theorem.
     /// </summary>
-    public float Magnitude
+    public int Magnitude
     {
-      get { return (float)Math.Sqrt(X * X + Y * Y + Z * Z); }
+      get { return (int)Math.Sqrt(X * X + Y * Y); }
     }
 
     /// <summary>
     /// Gets the squared length of the vector. This is not the real length but can be used for comparison
     /// as it is faster to calculate.
     /// </summary>
-    public float SquaredMagnitude
+    public int SquaredMagnitude
     {
-      get { return X * X + Y * Y + Z * Z; }
+      get { return X * X + Y * Y; }
     }
 
     #region Operators
@@ -267,9 +147,9 @@ namespace OkuMath
     /// </summary>
     /// <param name="vec">The vector to be inverted.</param>
     /// <returns>The inverted vector.</returns>
-    public static Vector3f operator -(Vector3f vec)
+    public static Vector2i operator -(Vector2i vec)
     {
-      return new Vector3f(-vec.X, -vec.Y, -vec.Z);
+      return new Vector2i(-vec.X, -vec.Y);
     }
 
     /// <summary>
@@ -277,9 +157,9 @@ namespace OkuMath
     /// </summary>
     /// <param name="vec">The vector to increment.</param>
     /// <returns>The incremented vector.</returns>
-    public static Vector3f operator ++(Vector3f vec)
+    public static Vector2i operator ++(Vector2i vec)
     {
-      return new Vector3f(vec.X + 1, vec.Y + 1, vec.Z + 1);
+      return new Vector2i(vec.X + 1, vec.Y + 1);
     }
 
     /// <summary>
@@ -287,9 +167,9 @@ namespace OkuMath
     /// </summary>
     /// <param name="vec">The vector to decrement.</param>
     /// <returns>The decremented vector.</returns>
-    public static Vector3f operator --(Vector3f vec)
+    public static Vector2i operator --(Vector2i vec)
     {
-      return new Vector3f(vec.X - 1, vec.Y - 1, vec.Z - 1);
+      return new Vector2i(vec.X - 1, vec.Y - 1);
     }
 
     /// <summary>
@@ -298,9 +178,9 @@ namespace OkuMath
     /// <param name="vec1">The first vector.</param>
     /// <param name="vec2">The second vector.</param>
     /// <returns>A new vector with the result of the addition.</returns>
-    public static Vector3f operator +(Vector3f vec1, Vector3f vec2)
+    public static Vector2i operator +(Vector2i vec1, Vector2i vec2)
     {
-      return new Vector3f(vec1.X + vec2.X, vec1.Y + vec2.Y, vec1.Z + vec2.Z);
+      return new Vector2i(vec1.X + vec2.X, vec1.Y + vec2.Y);
     }
 
     /// <summary>
@@ -309,9 +189,9 @@ namespace OkuMath
     /// <param name="vec1">The first vector.</param>
     /// <param name="vec2">The second vector.</param>
     /// <returns>A new vector with the result of the subtraction.</returns>
-    public static Vector3f operator -(Vector3f vec1, Vector3f vec2)
+    public static Vector2i operator -(Vector2i vec1, Vector2i vec2)
     {
-      return new Vector3f(vec1.X - vec2.X, vec1.Y - vec2.Y, vec1.Z - vec2.Z);
+      return new Vector2i(vec1.X - vec2.X, vec1.Y - vec2.Y);
     }
 
     /// <summary>
@@ -320,9 +200,9 @@ namespace OkuMath
     /// <param name="vec">The vector to be multiplied.</param>
     /// <param name="mul">The multiplier.</param>
     /// <returns>The scaled vector.</returns>
-    public static Vector3f operator *(Vector3f vec, float mul)
+    public static Vector2i operator *(Vector2i vec, int mul)
     {
-      return new Vector3f(vec.X * mul, vec.Y * mul, vec.Z * mul);
+      return new Vector2i(vec.X * mul, vec.Y * mul);
     }
 
     /// <summary>
@@ -331,9 +211,9 @@ namespace OkuMath
     /// <param name="mul">The multiplier.</param>
     /// <param name="vec">The vector to be multiplied.</param>
     /// <returns>The scaled vector.</returns>
-    public static Vector3f operator *(float mul, Vector3f vec)
+    public static Vector2i operator *(int mul, Vector2i vec)
     {
-      return new Vector3f(vec.X * mul, vec.Y * mul, vec.Z * mul);
+      return new Vector2i(vec.X * mul, vec.Y * mul);
     }
 
     /// <summary>
@@ -342,9 +222,9 @@ namespace OkuMath
     /// <param name="vec1">The first vector.</param>
     /// <param name="vec2">The second vector.</param>
     /// <returns>The result of the multiplication as a new vector.</returns>
-    public static Vector3f operator *(Vector3f vec1, Vector3f vec2)
+    public static Vector2i operator *(Vector2i vec1, Vector2i vec2)
     {
-      return new Vector3f(vec1.X * vec2.X, vec1.Y * vec2.Y, vec1.Z * vec2.Z);
+      return new Vector2i(vec1.X * vec2.X, vec1.Y * vec2.Y);
     }
 
     /// <summary>
@@ -353,9 +233,9 @@ namespace OkuMath
     /// <param name="vec">The vector.</param>
     /// <param name="value">The dividend.</param>
     /// <returns>The result of the division as a new vector.</returns>
-    public static Vector3f operator /(Vector3f vec, float value)
+    public static Vector2i operator /(Vector2i vec, int value)
     {
-      return new Vector3f(vec.X / value, vec.Y / value, vec.Z / value);
+      return new Vector2i(vec.X / value, vec.Y / value);
     }
 
     /// <summary>
@@ -364,9 +244,9 @@ namespace OkuMath
     /// <param name="value">The dividend.</param>
     /// <param name="vec">The vector.</param>
     /// <returns>The result of the division as a new vector.</returns>
-    public static Vector3f operator /(float value, Vector3f vec)
+    public static Vector2i operator /(int value, Vector2i vec)
     {
-      return new Vector3f(value / vec.X, value / vec.Y, value / vec.Z);
+      return new Vector2i(value / vec.X, value / vec.Y);
     }
 
     /// <summary>
@@ -375,10 +255,10 @@ namespace OkuMath
     /// <param name="vec1">The first vector.</param>
     /// <param name="vec2">The second vector.</param>
     /// <returns>The result of the division as a new vector.</returns>
-    public static Vector3f operator /(Vector3f vec1, Vector3f vec2)
+    public static Vector2i operator /(Vector2i vec1, Vector2i vec2)
     {
-      return new Vector3f(vec1.X / vec2.X, vec1.Y / vec2.Y, vec1.Z / vec2.Z);
-    }    
+      return new Vector2i(vec1.X / vec2.X, vec1.Y / vec2.Y);
+    }
 
     /// <summary>
     /// Calculates the modulo of the components of the two vectors.
@@ -386,9 +266,9 @@ namespace OkuMath
     /// <param name="vec1">The first vector.</param>
     /// <param name="vec2">The second vector.</param>
     /// <returns>A vector containing the modulo of the components.</returns>
-    public static Vector3f operator %(Vector3f vec1, Vector3f vec2)
+    public static Vector2i operator %(Vector2i vec1, Vector2i vec2)
     {
-      return new Vector3f(vec1.X % vec2.X, vec1.Y % vec2.Y, vec1.Z % vec2.Z);
+      return new Vector2i(vec1.X % vec2.X, vec1.Y % vec2.Y);
     }
 
     /// <summary>
@@ -397,9 +277,9 @@ namespace OkuMath
     /// <param name="vec1">The first vector.</param>
     /// <param name="vec2">The second vector.</param>
     /// <returns>True if the vectors are equal, else false.</returns>
-    public static bool operator ==(Vector3f vec1, Vector3f vec2)
+    public static bool operator ==(Vector2i vec1, Vector2i vec2)
     {
-      return (vec1.X == vec2.X) && (vec1.Y == vec2.Y) && (vec1.Z == vec2.Z);
+      return (vec1.X == vec2.X) && (vec1.Y == vec2.Y);
     }
 
     /// <summary>
@@ -408,38 +288,29 @@ namespace OkuMath
     /// <param name="vec1">The first vector.</param>
     /// <param name="vec2">The second vector.</param>
     /// <returns>True if the vectors are not equal, else false.</returns>
-    public static bool operator !=(Vector3f vec1, Vector3f vec2)
+    public static bool operator !=(Vector2i vec1, Vector2i vec2)
     {
-      return (vec1.X != vec2.X) || (vec1.Y != vec2.Y) || (vec1.Z != vec2.Z);
+      return (vec1.X != vec2.X) || (vec1.Y != vec2.Y);
     }
 
     /// <summary>
-    /// Extract the X, Y and Z part of the given vector.
+    /// Extract the X and Y part of the given vector.
     /// </summary>
     /// <param name="vec">The source vector.</param>
-    public static explicit operator Vector3f(Vector4f vec)
+    public static explicit operator Vector2i(Vector3i vec)
     {
-      return vec.XYZ;
-    }
-
-    /// <summary>
-    /// Converts the floating point vector to an integer vector of the same size.
-    /// </summary>
-    /// <param name="vec">The source vector.</param>
-    public static explicit operator Vector3f(Vector3i vec)
-    {
-      return new Vector3f(vec.X, vec.Y, vec.Z);
+      return vec.XY;
     }
 
     #endregion
 
     /// <summary>
-    /// Creates a string representation of the vector in the format "X;Y;Z".
+    /// Creates a string representation of the vector in the format "X;Y".
     /// </summary>
     /// <returns>A string representation of the vector.</returns>
     public override string ToString()
     {
-      return X + ";" + Y + ";" + Z;
+      return X + ";" + Y;
     }
 
     /// <summary>
@@ -447,9 +318,9 @@ namespace OkuMath
     /// </summary>
     /// <param name="other">The vector to compare to.</param>
     /// <returns>True if the vectors are equal, else False.</returns>
-    public bool Equals(Vector3f other)
+    public bool Equals(Vector2i other)
     {
-      return X == other.X && Y == other.Y && Z == other.Z;
+      return X == other.X && Y == other.Y;
     }
 
     /// <summary>
@@ -458,44 +329,43 @@ namespace OkuMath
     /// <returns>True if the vector is zero length, else false.</returns>
     public bool IsZero()
     {
-      return (X == 0.0f) && (Y == 0.0f) && (Z == 0.0f);
+      return (X == 0.0f) && (Y == 0.0f);
     }
 
     /// <summary>
     /// Parses the given string into a vector.
-    /// The string is expected to be in the format "X;Y;Z"
+    /// The string is expected to be in the format "X;Y"
     /// like it is created by the ToString method. 
     /// </summary>
     /// <param name="str">The string to be parsed.</param>
     /// <returns>The parsed vector.</returns>
-    public static Vector3f Parse(string str)
+    public static Vector2i Parse(string str)
     {
-      Vector3f result = Vector3f.Zero;
+      Vector2i result = Vector2i.Zero;
       if (!TryParse(str, ref result))
-        throw new FormatException("String '" + str + "' is not a valid vector string in the format '#;#;#'!");
+        throw new FormatException("String '" + str + "' is not a valid vector string in the format '#;#'!");
 
       return result;
     }
 
     /// <summary>
     /// Tries to parse the given string into a vector.
-    /// The string is expected to be in the format "X;Y;Z"
+    /// The string is expected to be in the format "X;Y"
     /// like it is created by the ToString method.
     /// </summary>
     /// <param name="str">The string to be parsed.</param>
     /// <param name="vec">The parsed vector is returned here.</param>
     /// <returns>True if the str was parsed successfully, False if the 
     /// given string is null or has a wrong format.</returns>
-    public static bool TryParse(string str, ref Vector3f vec)
+    public static bool TryParse(string str, ref Vector2i vec)
     {
       if (str != null)
       {
         string[] parts = str.Split(';');
-        if (parts.Length == 3)
+        if (parts.Length == 2)
         {
-          vec.X = float.Parse(parts[0].Trim());
-          vec.Y = float.Parse(parts[1].Trim());
-          vec.Y = float.Parse(parts[2].Trim());
+          vec.X = int.Parse(parts[0].Trim());
+          vec.Y = int.Parse(parts[1].Trim());
           return true;
         }
       }
@@ -509,9 +379,9 @@ namespace OkuMath
     /// <returns>True if the vectors are equal.</returns>
     public override bool Equals(object obj)
     {
-      if (obj is Vector3f)
+      if (obj is Vector2i)
       {
-        return Equals((Vector3f)obj);
+        return Equals((Vector2i)obj);
       }
       return base.Equals(obj);
     }

@@ -122,5 +122,18 @@ namespace OkuMath
       return t * t * (3.0f - 2.0f * t);
     }
 
+    /// <summary>
+    /// Calculates the sine of the given angle (in degrees) using the
+    /// Bhaskara I's sine approximation formula. CAUTION: This only work
+    /// for angle between 0 and 180 degrees! The formula is remarkably
+    /// accurate in this range.
+    /// </summary>
+    /// <param name="angle">The angle in degrees.</param>
+    /// <returns>The approximate sine of the angle.</returns>
+    public static float SineApproximation(float angle)
+    {
+      return (4 * angle * (180 - angle)) / (40500 - angle * (180 - angle));
+    }
+
   }
 }
