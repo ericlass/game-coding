@@ -41,7 +41,9 @@
     <Compile Include="AABBMath.cs" />
     <Compile Include="BasicMath.cs" />
     <Compile Include="CapsuleMath.cs" />
+    <Compile Include="CircleMath.cs" />
     <Compile Include="ClosestPoint.cs" />
+    <Compile Include="GridMath.cs" />
     <Compile Include="Intersections.cs" />
     <Compile Include="LineMath.cs" />
     <Compile Include="Matrix2x2f.cs" />

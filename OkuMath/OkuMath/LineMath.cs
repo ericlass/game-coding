@@ -16,7 +16,12 @@ namespace OkuMath
     /// <returns>The point on the line at the given control value.</returns>
     public static Vector2f PointOnLine(Vector2f a, Vector2f b, float t)
     {
-      return a + (b - a) * t;
+      if (t == 0.0f)
+        return a;
+      else if (t == 1.0f)
+        return b;
+      else
+        return a + (b - a) * t;
     }
 
     /// <summary>
@@ -67,7 +72,10 @@ namespace OkuMath
     /// <returns>The point on the ray at the given control value.</returns>
     public static Vector2f PointOnRay(Vector2f o, Vector2f d, float t)
     {
-      return o + d * t;
+      if (t == 0.0f)
+        return o;
+      else
+        return o + d * t;
     }
 
   }
