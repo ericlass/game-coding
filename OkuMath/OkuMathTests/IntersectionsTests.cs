@@ -329,5 +329,24 @@ namespace UnitTestProject1
       Assert.IsNull(r);
     }
 
+    [TestMethod]
+    public void Test_Intersect_RayAABB()
+    {
+      Vector2f o = new Vector2f(0.0f, 1.0f);
+      Vector2f d = new Vector2f(1.0f, 1.0f);
+
+      Vector2f min = new Vector2f(1.0f, 1.0f);
+      Vector2f max = new Vector2f(3.0f, 3.0f);
+
+      Vector2f[] r = Intersections.RayAABB(o, d, min, max);
+
+      Assert.IsNotNull(r);
+      Assert.AreEqual(2, r.Length);
+      Assert.AreEqual(1.0f, r[0].X);
+      Assert.AreEqual(2.0f, r[0].Y);
+      Assert.AreEqual(2.0f, r[1].X);
+      Assert.AreEqual(3.0f, r[1].Y);
+    }
+
   }
 }

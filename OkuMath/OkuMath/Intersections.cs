@@ -116,9 +116,9 @@ namespace OkuMath
       f = (float)Math.Sqrt(f);
       g = (float)Math.Sqrt(g);
 
-      float length = ab.Magnitude;
-      float tMin = (g - f) / length;
-      float tMax = (g + f) / length;
+      float length = 1.0f / ab.Magnitude;
+      float tMin = (g - f) * length;
+      float tMax = (g + f) * length;
 
       if (tMin == tMax)
         return new Vector2f[] { LineMath.PointOnRay(a, ab, tMax) };
@@ -126,7 +126,7 @@ namespace OkuMath
       return new Vector2f[]
       {
         LineMath.PointOnRay(a, ab, tMin),
-        LineMath.PointOnRay(a, ab, tMax),
+        LineMath.PointOnRay(a, ab, tMax)
       };
     }
 
@@ -159,9 +159,9 @@ namespace OkuMath
       f = (float)Math.Sqrt(f);
       g = (float)Math.Sqrt(g);
 
-      float length = d.Magnitude;
-      float tMin = (g - f) / length;
-      float tMax = (g + f) / length;
+      float length = 1.0f / d.Magnitude;
+      float tMin = (g - f) * length;
+      float tMax = (g + f) * length;
 
       if (tMin < 0 || tMin == tMax)
         return new Vector2f[] { LineMath.PointOnRay(o, d, tMax) };
@@ -169,7 +169,7 @@ namespace OkuMath
       return new Vector2f[]
       {
         LineMath.PointOnRay(o, d, tMin),
-        LineMath.PointOnRay(o, d, tMax),
+        LineMath.PointOnRay(o, d, tMax)
       };
     }
 
@@ -203,9 +203,9 @@ namespace OkuMath
       f = (float)Math.Sqrt(f);
       g = (float)Math.Sqrt(g);
 
-      float length = ab.Magnitude;
-      float tMin = (g - f) / length;
-      float tMax = (g + f) / length;
+      float length = 1.0f / ab.Magnitude;
+      float tMin = (g - f) * length;
+      float tMax = (g + f) * length;
 
       if (tMin < 0.0f)
       {
@@ -226,10 +226,178 @@ namespace OkuMath
             return new Vector2f[] //Both start and end are outside
             {
               LineMath.PointOnRay(a, ab, tMin),
-              LineMath.PointOnRay(a, ab, tMax),
+              LineMath.PointOnRay(a, ab, tMax)
             };
         }
       }
+    }
+
+    /// <summary>
+    /// Calculates the point(s) where the infitinite line that goes through a and b
+    /// intersects the axis aligned box defined by min and max.
+    /// </summary>
+    /// <param name="a">The start of the line.</param>
+    /// <param name="b">The end of the line.</param>
+    /// <param name="min">The minimum point of the AABB.</param>
+    /// <param name="max">The maximum point of the AABB.</param>
+    /// <returns>
+    /// Null if the line does not intersect the AABB.
+    /// One point if the line perfectly hits a corner of the AABB.
+    /// Two points if the line crosses the AABB.
+    /// </returns>
+    public static Vector2f[] LineAABB(Vector2f a, Vector2f b, Vector2f min, Vector2f max)
+    {
+      Vector2f ab = b - a;
+      Vector2f? t = LinearAABBScalar(a, ab, min, max);
+
+      if (t == null)
+        return null;
+
+      float tMin = t.Value.X;
+      float tMax = t.Value.Y;
+
+      if (tMin == tMax)
+        return new Vector2f[] { LineMath.PointOnRay(a, ab, tMax) };
+
+      return new Vector2f[]
+      {
+        LineMath.PointOnRay(a, ab, tMin),
+        LineMath.PointOnRay(a, ab, tMax)
+      };
+    }
+
+    /// <summary>
+    /// Calculates if the ray defined by the origin o and the direction d 
+    /// hits the AABB defined by min and max.
+    /// </summary>
+    /// <param name="o">The origin of the ray.</param>
+    /// <param name="d">The direction of the ray.</param>
+    /// <param name="min">The minimum point of the AABB.</param>
+    /// <param name="max">The maximum point of the AABB.</param>
+    /// <returns>
+    /// Null if the ray does not hit the AABB.
+    /// One point if the ray origin is inside the AABB.
+    /// Two point if the ray origin is outside of the AABB and crosses it.
+    /// </returns>
+    public static Vector2f[] RayAABB(Vector2f o, Vector2f d, Vector2f min, Vector2f max)
+    {
+      Vector2f? t = LinearAABBScalar(o, d, min, max);
+
+      if (t == null)
+        return null;
+
+      float tMin = t.Value.X;
+      float tMax = t.Value.Y;
+
+      if (tMin < 0 || tMin == tMax)
+        return new Vector2f[] { LineMath.PointOnRay(o, d, tMax) };
+
+      return new Vector2f[]
+      {
+        LineMath.PointOnRay(o, d, tMin),
+        LineMath.PointOnRay(o, d, tMax)
+      };
+    }
+
+    /// <summary>
+    /// Calculates the point(s) where the infitinite line that goes through a and b
+    /// intersects the axis aligned box defined by min and max.
+    /// </summary>
+    /// <param name="a">The start of the line.</param>
+    /// <param name="b">The end of the line.</param>
+    /// <param name="min">The minimum point of the AABB.</param>
+    /// <param name="max">The maximum point of the AABB.</param>
+    /// <returns>
+    /// Null if the line does not intersect the AABB.
+    /// One point if the line perfectly hits a corner of the AABB.
+    /// Two points if the line crosses the AABB.
+    /// </returns>
+    public static Vector2f[] LineSegmentAABB(Vector2f a, Vector2f b, Vector2f min, Vector2f max)
+    {
+      Vector2f ab = b - a;
+      Vector2f? t = LinearAABBScalar(a, ab, min, max);
+
+      if (t == null)
+        return null;
+
+      float tMin = t.Value.X;
+      float tMax = t.Value.Y;
+
+      if (tMin < 0.0f)
+      {
+        if (tMax > 1.0f)
+          return null; //Both start and end are inside of the circle
+        else
+          return new Vector2f[] { LineMath.PointOnRay(a, ab, tMax) }; //Start is inside, end is outside
+      }
+      else
+      {
+        if (tMax > 1.0f)
+          return new Vector2f[] { LineMath.PointOnRay(a, ab, tMin) }; //Start is outside, end is inside
+        else
+        {
+          if (tMin == tMax)
+            return new Vector2f[] { LineMath.PointOnRay(a, ab, tMin) }; // If points are the same (tangent), only return one
+          else
+            return new Vector2f[] //Both start and end are outside
+            {
+              LineMath.PointOnRay(a, ab, tMin),
+              LineMath.PointOnRay(a, ab, tMax)
+            };
+        }
+      }
+    }
+
+    /// <summary>
+    /// Calculates if the linear (ray,line,segment) defined
+    /// by the origin o and the direction d hits the AABB defined by min and max.
+    /// </summary>
+    /// <param name="o">The origin of the linear.</param>
+    /// <param name="d">The direction of the linear.</param>
+    /// <param name="min">The minimum point of the AABB.</param>
+    /// <param name="max">The maximum point of the AABB.</param>
+    /// <returns>
+    /// Null if the linear does not hit the AABB.
+    /// One point if the linear origin is inside the AABB.
+    /// Two point if the linear origin is outside of the AABB and crosses it.
+    /// </returns>
+    private static Vector2f? LinearAABBScalar(Vector2f o, Vector2f d, Vector2f min, Vector2f max)
+    {
+      float tMin = float.MinValue;
+      float tMax = float.MaxValue;
+
+      for (int i = 0; i < Vector2f.ComponentCount; i++)
+      {
+        if (Math.Abs(d[i]) < 0.000001f)
+        {
+          // Linear is parallel to slab and does not hit AABB if origin is not with slab
+          if (o[i] < min[i] || o[i] > max[i])
+            return null;
+        }
+        else
+        {
+          float ood = 1.0f / d[i];
+          float t1 = (min[i] - o[i]) * ood;
+          float t2 = (max[i] - o[i]) * ood;
+
+          //Depending on direction of Linear, values may need to be swapped
+          if (t1 > t2)
+          {
+            float tmp = t1;
+            t1 = t2;
+            t2 = tmp;
+          }
+
+          tMin = Math.Max(tMin, t1);
+          tMax = Math.Min(tMax, t2);
+
+          //No intersection possible
+          if (tMin > tMax)
+            return null;
+        }
+      }
+
+      return new Vector2f(tMin, tMax);
     }
 
   }
