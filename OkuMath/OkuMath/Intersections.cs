@@ -102,72 +102,31 @@ namespace OkuMath
     /// </returns>
     public static Vector2f[] LineCircle(Vector2f a, Vector2f b, Vector2f c, float r)
     {
-      float tp = ClosestPoint.OnLineToPointF(a, b, c);
-      Vector2f p = LineMath.PointOnLine(a, b, tp);
-      float dist = VectorMath.Distance(c, p);
+      Vector2f ab = b - a;
+      Vector2f ac = c - a;
 
-      //Line does not intersect the circle at all (Passante)
-      if (dist > r)
+      float g = VectorMath.Project(ac, ab).SquaredMagnitude;
+      float e = ac.SquaredMagnitude;
+      float f = r * r - e + g;
+
+      //Ray does not hit circle
+      if (f < 0)
         return null;
 
-      //Line perfectly hits the circles perimeter (Tangente)
-      if (dist == r)
-        return new Vector2f[] { p };
+      f = (float)Math.Sqrt(f);
+      g = (float)Math.Sqrt(g);
 
-      //Line crosses the circle (Sekante)
-      float w = CircleMath.HalfWidthOfCircle(dist / r) * r;
-      float wt = w / VectorMath.Distance(a, b);
+      float length = ab.Magnitude;
+      float tMin = (g - f) / length;
+      float tMax = (g + f) / length;
+
+      if (tMin == tMax)
+        return new Vector2f[] { LineMath.PointOnRay(a, ab, tMax) };
 
       return new Vector2f[]
       {
-        LineMath.PointOnLine(a, b, tp - wt),
-        LineMath.PointOnLine(a, b, tp + wt),
-      };
-    }
-
-    /// <summary>
-    /// Calculates the point(s) where the infinite ray, defined by the origin o and the direction d,
-    /// intersects the circle defined by the center c and radius r.
-    /// </summary>
-    /// <param name="o">The origin of the ray.</param>
-    /// <param name="d">The direction of the ray.</param>
-    /// <param name="c">The center of the circle.</param>
-    /// <param name="r">The radius of the circle.</param>
-    /// <returns>
-    /// Null if the ray does not intersect the circle.
-    /// A single point when the ray perfectly hits the perimeter of the circle, which means it is a tangent.
-    /// One or two points when the ray crosses the circle, which means it is a secant,
-    /// depnding on if the rays origin is inside the circle or not.
-    /// </returns>
-    private static Vector2f[] RayCircleNaive(Vector2f o, Vector2f d, Vector2f c, float r)
-    {
-      float tp = ClosestPoint.OnRayToPointF(o, d, c);
-      Vector2f p = LineMath.PointOnRay(o, d, tp);
-      float dist = VectorMath.Distance(c, p);
-
-      //Ray does not intersect the circle at all (Passante)
-      if (dist > r)
-        return null;
-
-      //Ray perfectly hits the circles perimeter (Tangente)
-      if (dist == r)
-        return new Vector2f[] { p };
-
-      //Ray crosses the circle (Sekante)
-      float w = CircleMath.HalfWidthOfCircle(dist / r) * r;
-      float wt = w / d.Magnitude;
-
-      float tMin = tp - wt;
-
-      //If first point is before ray origin, do not return it.
-      //The ray origin is inside the circle and there is only one intersection in this case.
-      if (tMin < 0.0f)
-        return new Vector2f[] { LineMath.PointOnRay(o, d, tp + wt) };
-
-      return new Vector2f[]
-      {
-        LineMath.PointOnRay(o, d, tMin),
-        LineMath.PointOnRay(o, d, tp + wt),
+        LineMath.PointOnRay(a, ab, tMin),
+        LineMath.PointOnRay(a, ab, tMax),
       };
     }
 
@@ -189,20 +148,20 @@ namespace OkuMath
     {
       Vector2f oc = c - o;
 
-      float a = VectorMath.Project(oc, d).SquaredMagnitude;
+      float g = VectorMath.Project(oc, d).SquaredMagnitude;
       float e = oc.SquaredMagnitude;
-      float f = r * r - e + a;
+      float f = r * r - e + g;
 
       //Ray does not hit circle
       if (f < 0)
         return null;
 
       f = (float)Math.Sqrt(f);
-      a = (float)Math.Sqrt(a);
+      g = (float)Math.Sqrt(g);
 
       float length = d.Magnitude;
-      float tMin = (a - f) / length;
-      float tMax = (a + f) / length;
+      float tMin = (g - f) / length;
+      float tMax = (g + f) / length;
 
       if (tMin < 0 || tMin == tMax)
         return new Vector2f[] { LineMath.PointOnRay(o, d, tMax) };
@@ -230,43 +189,47 @@ namespace OkuMath
     /// </returns>
     public static Vector2f[] LineSegmentCircle(Vector2f a, Vector2f b, Vector2f c, float r)
     {
-      float tp = ClosestPoint.OnLineSegmentToPointF(a, b, c);
-      Vector2f p = LineMath.PointOnLine(a, b, tp);
-      float dist = VectorMath.Distance(c, p);
+      Vector2f ab = b - a;
+      Vector2f ac = c - a;
 
-      //Line does not intersect the circle at all (Passante)
-      if (dist > r)
+      float g = VectorMath.Project(ac, ab).SquaredMagnitude;
+      float e = ac.SquaredMagnitude;
+      float f = r * r - e + g;
+
+      //Ray does not hit circle
+      if (f < 0)
         return null;
 
-      //Line perfectly hits the circles perimeter (Tangente)
-      if (dist == r)
-        return new Vector2f[] { p };
+      f = (float)Math.Sqrt(f);
+      g = (float)Math.Sqrt(g);
 
-      //Line crosses the circle (Sekante)
-      float w = CircleMath.HalfWidthOfCircle(dist / r) * r;
-      float wt = w / VectorMath.Distance(a, b);
-
-      float tMin = tp - wt;
-      float tMax = tp + wt;
+      float length = ab.Magnitude;
+      float tMin = (g - f) / length;
+      float tMax = (g + f) / length;
 
       if (tMin < 0.0f)
       {
         if (tMax > 1.0f)
           return null; //Both start and end are inside of the circle
         else
-          return new Vector2f[] { LineMath.PointOnLine(a, b, tMax) }; //Start is inside, end is outside
+          return new Vector2f[] { LineMath.PointOnRay(a, ab, tMax) }; //Start is inside, end is outside
       }
       else
       {
         if (tMax > 1.0f)
-          return new Vector2f[] { LineMath.PointOnLine(a, b, tMin) }; //Start is outside, end is inside
+          return new Vector2f[] { LineMath.PointOnRay(a, ab, tMin) }; //Start is outside, end is inside
         else
-          return new Vector2f[] //Both start and end are outside
-          {
-            LineMath.PointOnLine(a, b, tMin),
-            LineMath.PointOnLine(a, b, tMax),
-          };
-      }      
+        {
+          if (tMin == tMax)
+            return new Vector2f[] { LineMath.PointOnRay(a, ab, tMin) }; // If points are the same (tangent), only return one
+          else
+            return new Vector2f[] //Both start and end are outside
+            {
+              LineMath.PointOnRay(a, ab, tMin),
+              LineMath.PointOnRay(a, ab, tMax),
+            };
+        }
+      }
     }
 
   }
