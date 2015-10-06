@@ -139,7 +139,7 @@ namespace OkuMath
     /// One or two points when the ray crosses the circle, which means it is a secant,
     /// depnding on if the rays origin is inside the circle or not.
     /// </returns>
-    public static Vector2f[] RayCircle(Vector2f o, Vector2f d, Vector2f c, float r)
+    private static Vector2f[] RayCircleNaive(Vector2f o, Vector2f d, Vector2f c, float r)
     {
       float tp = ClosestPoint.OnRayToPointF(o, d, c);
       Vector2f p = LineMath.PointOnRay(o, d, tp);
@@ -168,6 +168,49 @@ namespace OkuMath
       {
         LineMath.PointOnRay(o, d, tMin),
         LineMath.PointOnRay(o, d, tp + wt),
+      };
+    }
+
+    /// <summary>
+    /// Calculates the point(s) where the infinite ray, defined by the origin o and the direction d,
+    /// intersects the circle defined by the center c and radius r.
+    /// </summary>
+    /// <param name="o">The origin of the ray.</param>
+    /// <param name="d">The direction of the ray.</param>
+    /// <param name="c">The center of the circle.</param>
+    /// <param name="r">The radius of the circle.</param>
+    /// <returns>
+    /// Null if the ray does not intersect the circle.
+    /// A single point when the ray perfectly hits the perimeter of the circle, which means it is a tangent.
+    /// One or two points when the ray crosses the circle, which means it is a secant,
+    /// depnding on if the rays origin is inside the circle or not.
+    /// </returns>
+    public static Vector2f[] RayCircle(Vector2f o, Vector2f d, Vector2f c, float r)
+    {
+      Vector2f oc = c - o;
+
+      float a = VectorMath.Project(oc, d).SquaredMagnitude;
+      float e = oc.SquaredMagnitude;
+      float f = r * r - e + a;
+
+      //Ray does not hit circle
+      if (f < 0)
+        return null;
+
+      f = (float)Math.Sqrt(f);
+      a = (float)Math.Sqrt(a);
+
+      float length = d.Magnitude;
+      float tMin = (a - f) / length;
+      float tMax = (a + f) / length;
+
+      if (tMin < 0 || tMin == tMax)
+        return new Vector2f[] { LineMath.PointOnRay(o, d, tMax) };
+
+      return new Vector2f[]
+      {
+        LineMath.PointOnRay(o, d, tMin),
+        LineMath.PointOnRay(o, d, tMax),
       };
     }
 

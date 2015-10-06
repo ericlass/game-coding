@@ -34,7 +34,7 @@ namespace OkuMath
     public static float ProjectPointOnLine(Vector2f a, Vector2f b, Vector2f p)
     {
       Vector2f ab = b - a;
-      return VectorMath.DotProduct(p - a, ab) / ab.SquaredMagnitude;
+      return VectorMath.ProjectScalar(p - a, b - a); // VectorMath.DotProduct(p - a, ab) / ab.SquaredMagnitude;
     }
 
     /// <summary>

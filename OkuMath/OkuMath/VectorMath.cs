@@ -183,72 +183,72 @@ namespace OkuMath
     }
 
     /// <summary>
-    /// Project the given vec2 onto vec1.
+    /// Project the given vec1 onto vec2.
     /// </summary>
     /// <param name="vec1">The vector to project onto.</param>
     /// <param name="vec2">The vector to be projected.</param>
     /// <returns>The projected vector.</returns>
     public static Vector2f Project(Vector2f vec1, Vector2f vec2)
     {
-      float dp = DotProduct(vec1, vec2) / (vec1.SquaredMagnitude);
-      return vec1 * dp;
+      float dp = DotProduct(vec1, vec2) / (vec2.SquaredMagnitude);
+      return vec2 * dp;
     }
 
     /// <summary>
-    /// Project the given vec2 onto vec1.
+    /// Project the given vec1 onto vec2.
     /// </summary>
     /// <param name="vec1">The vector to project onto.</param>
     /// <param name="vec2">The vector to be projected.</param>
     /// <returns>The projected vector.</returns>
     public static Vector3f Project(Vector3f vec1, Vector3f vec2)
     {
-      float dp = DotProduct(vec1, vec2) / (vec1.SquaredMagnitude);
-      return vec1 * dp;
+      float dp = DotProduct(vec1, vec2) / (vec2.SquaredMagnitude);
+      return vec2 * dp;
     }
 
     /// <summary>
-    /// Project the given vec2 onto vec1.
+    /// Project the given vec1 onto vec2.
     /// </summary>
     /// <param name="vec1">The vector to project onto.</param>
     /// <param name="vec2">The vector to be projected.</param>
     /// <returns>The projected vector.</returns>
     public static Vector4f Project(Vector4f vec1, Vector4f vec2)
     {
-      float dp = DotProduct(vec1, vec2) / (vec1.SquaredMagnitude);
-      return vec1 * dp;
+      float dp = DotProduct(vec1, vec2) / (vec2.SquaredMagnitude);
+      return vec2 * dp;
     }
 
     /// <summary>
-    /// Project the given vec2 onto vec1.
+    /// Project the given vec1 onto vec2.
     /// </summary>
     /// <param name="vec1">The vector to project onto.</param>
     /// <param name="vec2">The vector to be projected.</param>
     /// <returns>The 1d scalar projected value.</returns>
     public static float ProjectScalar(Vector2f vec1, Vector2f vec2)
     {
-      return DotProduct(vec1, vec2) / (vec1.SquaredMagnitude);
+      return DotProduct(vec1, vec2) / (vec2.SquaredMagnitude);
     }
 
     /// <summary>
-    /// Project the given vec2 onto vec1.
+    /// Project the given vec1 onto vec2.
     /// </summary>
     /// <param name="vec1">The vector to project onto.</param>
     /// <param name="vec2">The vector to be projected.</param>
     /// <returns>The 1d scalar projected value.</returns>
     public static float ProjectScalar(Vector3f vec1, Vector3f vec2)
     {
-      return DotProduct(vec1, vec2) / (vec1.SquaredMagnitude);
+      return DotProduct(vec1, vec2) / (vec2.SquaredMagnitude);
     }
 
     /// <summary>
-    /// Project the given vec2 onto vec1.
+    /// Project the given vec1 onto vec2.
     /// </summary>
     /// <param name="vec1">The vector to project onto.</param>
     /// <param name="vec2">The vector to be projected.</param>
     /// <returns>The 1d scalar projected value.</returns>
     public static float ProjectScalar(Vector4f vec1, Vector4f vec2)
     {
-      return DotProduct(vec1, vec2) / (vec1.SquaredMagnitude);
+      return DotProduct(vec1, vec2) / (vec2.SquaredMagnitude);
     }
 
     /// <summary>
