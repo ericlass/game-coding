@@ -78,5 +78,16 @@ namespace OkuMath
         return o + d * t;
     }
 
+    /// <summary>
+    /// Calculates the left hand normal of the line segment defined by [a,b].
+    /// </summary>
+    /// <param name="a">The first point of the line segment.</param>
+    /// <param name="b">The second point of the line segment.</param>
+    /// <returns>The normalized left hand normal.</returns>
+    public static Vector2f GetNormal(Vector2f a, Vector2f b)
+    {
+      return VectorMath.Normalize(new Vector2f(b.Y - a.Y, -(b.X - a.X)));      
+    }
+
   }
 }

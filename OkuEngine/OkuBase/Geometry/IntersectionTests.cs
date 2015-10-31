@@ -8,6 +8,7 @@ namespace OkuBase.Geometry
 {
   /// <summary>
   /// Provides a series of intersection tests for various primitives.
+  /// MIGRATED TO OkuMath!!!
   /// </summary>
   public static class IntersectionTests
   {
@@ -247,10 +248,9 @@ namespace OkuBase.Geometry
     {
       min = float.MaxValue;
       max = float.MinValue;
-      for (int i = 0; i < poly.Length; i++)
-      //foreach (Vector vec in poly)
+      foreach (Vector2f vec in poly)
       {
-        float projected = axis.ProjectScalar(poly[i]);
+        float projected = axis.ProjectScalar(vec);
         min = Math.Min(min, projected);
         max = Math.Max(max, projected);
       }

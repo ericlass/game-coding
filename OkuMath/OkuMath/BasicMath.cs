@@ -4,11 +4,12 @@ namespace OkuMath
 {
   /// <summary>
   /// Defines some basic mathematical functions.
+  /// MIGRATED TO OkuMath!!!
   /// </summary>
   public static class BasicMath
   {
-    private const float PiDiv180 = (float)(Math.PI / 180.0);
-    private const float C180DivPi = (float)(180.0 / Math.PI);
+    private const float OneDegreeInRadians = (float)(Math.PI / 180.0);
+    private const float OneRadianInDegrees = (float)(180.0 / Math.PI);
 
     /// <summary>
     /// Converts angle degrees to radians.
@@ -17,7 +18,7 @@ namespace OkuMath
     /// <returns>The angle in radians.</returns>
     public static float DegreesToRadians(float degrees)
     {
-      return PiDiv180 * degrees;
+      return OneDegreeInRadians * degrees;
     }
 
     /// <summary>
@@ -28,7 +29,7 @@ namespace OkuMath
     public static float RadiansToDegrees(float radians)
     {
       
-      return C180DivPi * radians;
+      return OneRadianInDegrees * radians;
     }
 
     /// <summary>
@@ -39,6 +40,18 @@ namespace OkuMath
     /// <param name="t">The control parameter.</param>
     /// <returns>The interpolated value.</returns>
     public static float Lerp(float a, float b, float t)
+    {
+      return a + (b - a) * t;
+    }
+
+    /// <summary>
+    /// Linearly interpolates the two given values.
+    /// </summary>
+    /// <param name="a">The first value.</param>
+    /// <param name="b">The secons value.</param>
+    /// <param name="t">The control parameter.</param>
+    /// <returns>The interpolated value.</returns>
+    public static double Lerp(double a, double b, double t)
     {
       return a + (b - a) * t;
     }
@@ -80,6 +93,41 @@ namespace OkuMath
     }
 
     /// <summary>
+    /// Interpolates between a and b using cosine interpolation. m controls the amount of interpolation.
+    /// </summary>
+    /// <param name="a">The first value.</param>
+    /// <param name="b">The second value.</param>
+    /// <param name="m">The control paramters.</param>
+    /// <returns>The interpolated value.</returns>
+    public static float InterpolateCosine(float a, float b, float m)
+    {
+      float f = (1.0f - (float)Math.Cos(m * 3.1415927f)) * 0.5f;
+      return a * (1.0f - f) + b * f;
+    }
+
+    /// <summary>
+    /// Interpolates a value between y1 and y2 taking into account y0 and y3.
+    /// </summary>
+    /// <param name="y0">The first value.</param>
+    /// <param name="y1">The second value.</param>
+    /// <param name="y2">The third value.</param>
+    /// <param name="y3">The fourth value.</param>
+    /// <param name="m">The control paramter.</param>
+    /// <returns>The interpolated value.</returns>
+    public static float InterpolateCubic(float y0, float y1, float y2, float y3, float m)
+    {
+      float a0, a1, a2, a3, m2;
+
+      m2 = m * m;
+      a0 = y3 - y2 - y0 + y1;
+      a1 = y0 - y1 - a0;
+      a2 = y2 - y0;
+      a3 = y1;
+
+      return (a0 * m * m2 + a1 * m2 + a2 * m + a3);
+    }
+
+    /// <summary>
     /// Clamps the given float a between min and max.
     /// </summary>
     /// <param name="a">The value to be clamped.</param>
@@ -87,6 +135,38 @@ namespace OkuMath
     /// <param name="max">The maximum value.</param>
     /// <returns>The clamped value.</returns>
     public static float Clamp(float a, float min, float max)
+    {
+      if (a < min)
+        return min;
+      if (a > max)
+        return max;
+      return a;
+    }
+
+    /// <summary>
+    /// Clamps the given value a between min and max.
+    /// </summary>
+    /// <param name="a">The value to be clamped.</param>
+    /// <param name="min">The minimum value.</param>
+    /// <param name="max">The maximum value.</param>
+    /// <returns>The clamped value.</returns>
+    public static double Clamp(double a, double min, double max)
+    {
+      if (a < min)
+        return min;
+      if (a > max)
+        return max;
+      return a;
+    }
+
+    /// <summary>
+    /// Clamps the given value a between min and max.
+    /// </summary>
+    /// <param name="a">The value to be clamped.</param>
+    /// <param name="min">The minimum value.</param>
+    /// <param name="max">The maximum value.</param>
+    /// <returns>The clamped value.</returns>
+    public static int Clamp(int a, int min, int max)
     {
       if (a < min)
         return min;
@@ -133,6 +213,38 @@ namespace OkuMath
     public static float SineApproximation(float angle)
     {
       return (4 * angle * (180 - angle)) / (40500 - angle * (180 - angle));
+    }
+
+    /// <summary>
+    /// Signed ceiling function. If the value is positive, it
+    /// acts just like the normal ceiling. If the value is negative,
+    /// the next smaller value is returned, so -1.5 returns -2 instead
+    /// of -1.
+    /// </summary>
+    /// <param name="value">The value to process.</param>
+    /// <returns>The ceiling of the given value.</returns>
+    public static int SignedCeiling(float value)
+    {
+      if (value >= 0)
+        return (int)Math.Ceiling(value);
+      else
+        return (int)Math.Floor(value);
+    }
+
+    /// <summary>
+    /// Signed floor function. If the value is positive, it
+    /// acts just like the normal floor. If the value is negative,
+    /// the next bigger value is returned, so -1.5 returns -1 instead
+    /// of -2.
+    /// </summary>
+    /// <param name="value">The value to process.</param>
+    /// <returns>The ceiling of the given value.</returns>
+    public static float SignedFloor(float value)
+    {
+      if (value >= 0)
+        return (int)Math.Floor(value);
+      else
+        return (int)Math.Ceiling(value);
     }
 
   }
