@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using OkuBase.Collections;
-using OkuBase.Geometry;
 using OkuBase.Graphics;
+using OkuMath;
 
 namespace OkuBase.Particles
 {

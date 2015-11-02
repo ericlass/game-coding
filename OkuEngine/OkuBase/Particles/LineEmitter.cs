@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using OkuBase.Geometry;
-using OkuBase.Utils;
+using OkuMath;
 
 namespace OkuBase.Particles
 {
@@ -84,7 +83,7 @@ namespace OkuBase.Particles
       if (_normalDirection)
       {
         if (_normal == Vector2f.Zero)
-          _normal = OkuMath.GetNormal(_start, _end);
+          _normal = VectorMath.GetNormal(_end - _start);
         result = _normal * GetRandomSpeed();
       }
       return result;
@@ -97,7 +96,7 @@ namespace OkuBase.Particles
     private Vector2f GetRandomPosition()
     {
       float t = (float)_rand.NextDouble();
-      return OkuMath.InterpolateLinear(_start, _end, t);
+      return BasicMath.Lerp(_start, _end, t);
     }
 
     public override void Emit(List<Particle> particles, float dt)

@@ -10,6 +10,7 @@ using OkuBase.Graphics;
 using OkuBase.Settings;
 using OkuBase.Platform;
 using Tao.OpenGl;
+using OkuMath;
 
 namespace OkuDrivers
 {
@@ -494,7 +495,7 @@ namespace OkuDrivers
       } 
     }
 
-    public void DrawLines(OkuBase.Geometry.Vector2f[] vertices, Color[] colors, int count, float width, LineMode interpretation)
+    public void DrawLines(Vector2f[] vertices, Color[] colors, int count, float width, LineMode interpretation)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
       try
@@ -533,7 +534,7 @@ namespace OkuDrivers
       }
     }
 
-    public void DrawPoints(OkuBase.Geometry.Vector2f[] points, Color[] colors, int count, float size)
+    public void DrawPoints(Vector2f[] points, Color[] colors, int count, float size)
     {
       Gl.glDisable(Gl.GL_TEXTURE_2D);
       try
@@ -549,7 +550,7 @@ namespace OkuDrivers
       }
     }
 
-    public void DrawMesh(OkuBase.Geometry.Vector2f[] points, OkuBase.Geometry.Vector2f[] texCoords, Color[] colors, int count, PrimitiveType type, ImageBase texture)
+    public void DrawMesh(Vector2f[] points, Vector2f[] texCoords, Color[] colors, int count, PrimitiveType type, ImageBase texture)
     {
       if (texture != null)
       {
@@ -599,7 +600,7 @@ namespace OkuDrivers
       Gl.glDisable(Gl.GL_SCISSOR_TEST);
     }
 
-    public void ApplyAndPushTransform(OkuBase.Geometry.Vector2f translation, OkuBase.Geometry.Vector2f scale, float angle)
+    public void ApplyAndPushTransform(Vector2f translation, Vector2f scale, float angle)
     {
       Gl.glMatrixMode(Gl.GL_MODELVIEW);
       Gl.glPushMatrix();

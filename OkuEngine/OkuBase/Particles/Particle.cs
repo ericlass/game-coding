@@ -1,6 +1,6 @@
 ﻿using System;
-using OkuBase.Geometry;
 using OkuBase.Graphics;
+using OkuMath;
 
 namespace OkuBase.Particles
 {

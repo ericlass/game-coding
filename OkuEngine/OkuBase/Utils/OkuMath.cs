@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using OkuBase.Geometry;
+using OkuMath;
 
 namespace OkuBase.Utils
 {
@@ -24,24 +22,7 @@ namespace OkuBase.Utils
     /// <returns>The normalized left hand normal.</returns>
     public static Vector2f GetNormal(Vector2f start, Vector2f end)
     {
-      Vector2f result = new Vector2f(end.Y - start.Y, -(end.X - start.X));
-      result.Normalize();
-      return result;
-    }
-
-    /// <summary>
-    /// Calculates the left hand normal of a line segment defined by the given coordinates.
-    /// </summary>
-    /// <param name="x1">The x coordinate of the start point.</param>
-    /// <param name="y1">The y coordinate of the start point.</param>
-    /// <param name="x2">The x coordinate of the end point.</param>
-    /// <param name="y2">The y coordinate of the end point.</param>
-    /// <returns>The normalized left hand normal.</returns>
-    public static Vector2f GetNormal(float x1, float y1, float x2, float y2)
-    {
-      Vector2f result = new Vector2f(y2 - y1, -(x2 - x1));
-      result.Normalize();
-      return result;
+      return VectorMath.GetNormal(end - start);
     }
 
     /// <summary>
@@ -304,7 +285,7 @@ namespace OkuBase.Utils
     public static Vector2f ClosestPointOnRect(Vector2f min, Vector2f max, Vector2f p)
     {
       Vector2f result = Vector2f.Zero;
-      if (IntersectionTests.PointInRectangle(p, min, max))
+      if (Overlaps.PointAABB(p, min, max))
       {
         Vector2f center = GetRectCenter(min, max);
 

@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using OkuBase.Geometry;
 using OkuBase.Input;
+using OkuMath;
 
 namespace OkuBase.GUI
 {

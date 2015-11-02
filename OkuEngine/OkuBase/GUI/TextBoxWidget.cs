@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
+using OkuMath;
 
 namespace OkuBase.GUI
 {

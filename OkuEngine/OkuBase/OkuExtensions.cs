@@ -7,6 +7,7 @@ using System.Reflection;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
 using OkuBase.Utils;
+using OkuMath;
 
 namespace OkuBase
 {

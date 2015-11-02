@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Text;
 using OkuBase.Graphics;
 using OkuBase.Settings;
+using OkuMath;
 
 namespace OkuBase.Driver
 {
@@ -83,7 +84,7 @@ namespace OkuBase.Driver
     {
     }
 
-    public void DrawLines(OkuBase.Geometry.Vector2f[] vertices, Color[] colors, int count, float width, LineMode interpretation)
+    public void DrawLines(Vector2f[] vertices, Color[] colors, int count, float width, LineMode interpretation)
     {
     }
 
@@ -91,11 +92,11 @@ namespace OkuBase.Driver
     {
     }
 
-    public void DrawPoints(OkuBase.Geometry.Vector2f[] points, Color[] colors, int count, float size)
+    public void DrawPoints(Vector2f[] points, Color[] colors, int count, float size)
     {
     }
 
-    public void DrawMesh(OkuBase.Geometry.Vector2f[] points, OkuBase.Geometry.Vector2f[] texCoords, Color[] colors, int count, PrimitiveType type, ImageBase texture)
+    public void DrawMesh(Vector2f[] points, Vector2f[] texCoords, Color[] colors, int count, PrimitiveType type, ImageBase texture)
     {
     }
 
@@ -119,7 +120,7 @@ namespace OkuBase.Driver
     {
     }
 
-    public void ApplyAndPushTransform(OkuBase.Geometry.Vector2f translation, OkuBase.Geometry.Vector2f scale, float angle)
+    public void ApplyAndPushTransform(Vector2f translation, Vector2f scale, float angle)
     {
     }
 

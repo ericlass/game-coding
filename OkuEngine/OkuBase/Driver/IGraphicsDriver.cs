@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
-using OkuBase.Geometry;
 using OkuBase.Graphics;
 using OkuBase.Settings;
+using OkuBase.Geometry;
+using OkuMath;
 
 namespace OkuBase.Driver
 {

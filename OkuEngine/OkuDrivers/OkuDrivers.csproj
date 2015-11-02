@@ -40,10 +40,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OkuBase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Rouge\RougeLike\lib\OkuBase.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -61,6 +57,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="lib\oalinst.zip" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\OkuMath\OkuMath\OkuMath.csproj">
+      <Project>{187ade96-b4c1-4e74-8f53-da480a6eff5c}</Project>
+      <Name>OkuMath</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OkuBase\OkuBase.csproj">
+      <Project>{80362428-9a21-4449-a234-9cb8d2f52009}</Project>
+      <Name>OkuBase</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

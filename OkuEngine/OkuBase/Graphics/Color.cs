@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using OkuBase.Utils;
+using OkuMath;
 
 namespace OkuBase.Graphics
 {
@@ -66,12 +66,12 @@ namespace OkuBase.Graphics
 
     public static Color operator *(Color color, float mul)
     {
-      return new Color((byte)OkuMath.Clamp(color.R * mul, 0, 255), (byte)OkuMath.Clamp(color.G * mul, 0, 255), (byte)OkuMath.Clamp(color.B * mul, 0, 255), color.A);
+      return new Color((byte)BasicMath.Clamp(color.R * mul, 0, 255), (byte)BasicMath.Clamp(color.G * mul, 0, 255), (byte)BasicMath.Clamp(color.B * mul, 0, 255), color.A);
     }
 
     public static Color operator +(Color col1, Color col2)
     {
-      return new Color((byte)OkuMath.Clamp(col1.R + col2.R, 0, 255), (byte)OkuMath.Clamp(col1.G + col2.G, 0, 255), (byte)OkuMath.Clamp(col1.B + col2.B, 0, 255));
+      return new Color((byte)BasicMath.Clamp(col1.R + col2.R, 0, 255), (byte)BasicMath.Clamp(col1.G + col2.G, 0, 255), (byte)BasicMath.Clamp(col1.B + col2.B, 0, 255));
     }
 
     /// <summary>

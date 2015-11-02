@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using OkuBase.Graphics;
 using OkuBase.Geometry;
 using OkuBase.Input;
+using OkuMath;
 
 namespace OkuBase.GUI
 {
@@ -169,7 +170,7 @@ namespace OkuBase.GUI
         {
           widget.Update(dt);
           
-          if (newHot == null && widget.Area.IsInside(mousePos))
+          if (newHot == null && Overlaps.PointAABB(mousePos, widget.Area.Min, widget.Area.Max))
           {
             newHot = widget;
           }

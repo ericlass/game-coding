@@ -65,12 +65,10 @@
     <Compile Include="Driver\NullGraphicsDriver.cs" />
     <Compile Include="Geometry\Mesh.cs" />
     <Compile Include="Geometry\PolygonFactory.cs" />
-    <Compile Include="Geometry\Spline.cs" />
     <Compile Include="Geometry\Rectangle2f.cs" />
     <Compile Include="Geometry\Vertex.cs" />
     <Compile Include="Geometry\VertexBuffer.cs" />
     <Compile Include="Geometry\Vertices.cs" />
-    <Compile Include="Geometry\Vector2f.cs" />
     <Compile Include="Graphics\Color.cs" />
     <Compile Include="Graphics\Display.cs" />
     <Compile Include="Graphics\DisplayMode.cs" />
@@ -105,7 +103,6 @@
     <Compile Include="Input\KeyAction.cs" />
     <Compile Include="Input\KeyboardInput.cs" />
     <Compile Include="Input\MouseInput.cs" />
-    <Compile Include="Geometry\IntersectionTests.cs" />
     <Compile Include="KeySequence.cs" />
     <Compile Include="Logging\DebugConsoleLogWriter.cs" />
     <Compile Include="Logging\ILogWriter.cs" />
@@ -144,6 +141,12 @@
     <Compile Include="Utils\Converter.cs" />
     <Compile Include="OkuExtensions.cs" />
     <Compile Include="Utils\OkuMath.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\OkuMath\OkuMath\OkuMath.csproj">
+      <Project>{187ade96-b4c1-4e74-8f53-da480a6eff5c}</Project>
+      <Name>OkuMath</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

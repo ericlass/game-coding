@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml;
 using OkuBase.Graphics;
-using OkuBase.Geometry;
+using OkuMath;
 
 namespace OkuBase.Geometry
 {

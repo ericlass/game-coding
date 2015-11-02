@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 using OkuBase.Collections;
 using OkuBase.Driver;
 using OkuBase.Settings;
 using OkuBase.Geometry;
-using OkuBase.Utils;
+using OkuMath;
 
 namespace OkuBase.Graphics
 {
@@ -119,8 +117,8 @@ namespace OkuBase.Graphics
     {
       Vector2f pDist = ScreenToDisplay(x, y);
 
-      float wx = OkuMath.InterpolateLinear(_viewport.Left, _viewport.Right, pDist.X / _driver.Display.ClientSize.Width);
-      float wy = OkuMath.InterpolateLinear(_viewport.Bottom, _viewport.Top, pDist.Y / _driver.Display.ClientSize.Height);
+      float wx = BasicMath.Lerp(_viewport.Left, _viewport.Right, pDist.X / _driver.Display.ClientSize.Width);
+      float wy = BasicMath.Lerp(_viewport.Bottom, _viewport.Top, pDist.Y / _driver.Display.ClientSize.Height);
 
       return new Vector2f(wx, wy);
     }

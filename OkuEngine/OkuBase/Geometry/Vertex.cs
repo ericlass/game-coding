@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using OkuBase.Graphics;
+using OkuMath;
 
 namespace OkuBase.Geometry
 {

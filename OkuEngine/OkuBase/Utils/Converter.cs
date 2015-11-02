@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
-using OkuBase.Platform;
+using OkuMath;
 
 namespace OkuBase.Utils
 {

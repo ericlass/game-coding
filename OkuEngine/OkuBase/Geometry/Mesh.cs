@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using OkuBase.Graphics;
+using OkuMath;
 
 namespace OkuBase.Geometry
 {

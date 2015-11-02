@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OkuBase.Geometry;
+using OkuMath;
 
 namespace OkuBase.Geometry
 {
@@ -85,16 +86,6 @@ namespace OkuBase.Geometry
     public Vector2f GetCenter()
     {
       return (Min + Max) * 0.5f;
-    }
-
-    /// <summary>
-    /// Checks if the given point is inside of the AABB.
-    /// </summary>
-    /// <param name="point">The point to check.</param>
-    /// <returns>True if the point is inside the AABB, else false.</returns>
-    public bool IsInside(Vector2f point)
-    {
-      return IntersectionTests.PointInRectangle(point, Min, Max);
     }
 
     /// <summary>

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Drawing.Text;
 using OkuBase.Geometry;
+using OkuMath;
 
 namespace OkuBase.Graphics
 {

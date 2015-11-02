@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Text;
 using OkuBase.Graphics;
 using OkuBase.Geometry;
-using OkuBase.Utils;
 using OkuBase.Input;
+using OkuMath;
 
 namespace OkuBase.GUI
 {
@@ -133,7 +130,18 @@ namespace OkuBase.GUI
         Vector2f center = new Vector2f((Area.Width / 2.0f) - 1.0f, Area.Height / 2.0f);
 
         if (hasText)
-          OkuMath.CenterAt(_textMesh.Vertices.Positions, new Vector2f(center.X + (totalWidth / 2.0f) - (textWidth / 2.0f), center.Y));
+        {
+          //Vector2f currentCenter = GetCenter(polygon);
+          //Vector2f offset = center - currentCenter;
+          //for (int i = 0; i < polygon.Length; i++)
+          //polygon[i] += offset;
+
+          Tuple<Vector2f, Vector2f> minMax = AABBMath.FromPoints(_textMesh.Vertices.Positions);
+          Vector2f currentCenter = AABBMath.Center(minMax.Item1, minMax.Item2);
+          Vector2f offset = center - currentCenter;
+          for (int i = 0; i < _textMesh.Vertices.Positions.Length; i++)
+            _textMesh.Vertices.Positions[i] += offset;
+        }
 
         if (hasGlyph)
         {

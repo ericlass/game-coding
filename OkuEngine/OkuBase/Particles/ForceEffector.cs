@@ -1,5 +1,6 @@
 ﻿using System;
 using OkuBase.Geometry;
+using OkuMath;
 
 namespace OkuBase.Particles
 {
@@ -63,7 +64,7 @@ namespace OkuBase.Particles
     /// <param name="dt">The time past since the last update.</param>
     public void Effect(Particle particle, float dt)
     {
-      if (_area.IsInside(particle.Position))
+      if (Overlaps.PointAABB(particle.Position, _area.Min, _area.Max))
         particle.Velocity += _force * dt;
     }
 

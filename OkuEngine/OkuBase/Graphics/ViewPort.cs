@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using OkuBase.Geometry;
+using OkuMath;
 
 namespace OkuBase.Graphics
 {

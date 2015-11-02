@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using OkuBase.Geometry;
 using OkuBase.Graphics;
-using OkuBase.Utils;
+using OkuMath;
 
 namespace OkuBase.GUI
 {
@@ -29,8 +25,11 @@ namespace OkuBase.GUI
     {
       base.AreaChange();
 
-      Vector2f min = new Vector2f(), max = new Vector2f();
-      OkuMath.BoundingBox(GetTextMesh().Vertices.Positions, out min, out max);
+      Tuple<Vector2f, Vector2f> minMax = AABBMath.FromPoints(GetTextMesh().Vertices.Positions);
+
+      Vector2f min = minMax.Item1;
+      Vector2f max = minMax.Item2;
+
       const float border = 4;
       min.X -= border;
       min.Y -= border;

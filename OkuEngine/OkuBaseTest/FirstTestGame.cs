@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
 using OkuBase;
-using OkuBase.Collections;
 using OkuBase.Audio;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
 using OkuBase.Settings;
 using OkuBase.Timer;
 using OkuBase.Input;
+using OkuMath;
 
 namespace OkuBaseTest
 {
