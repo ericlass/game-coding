@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OkuMath;
 
 namespace OkuEngine
 {
@@ -34,8 +35,8 @@ namespace OkuEngine
       //Calculate factor to speed up further processing
       _factor = 1.0f / cellSize;
       
-      int _width = OkuMath.Ceiling((right - left + 1) * _factor);
-      int height = OkuMath.Ceiling((top - bottom + 1) * _factor);
+      int _width = (int)Math.Ceiling(Math.Ceiling((right - left + 1) * _factor));
+      int height = (int)Math.Ceiling((top - bottom + 1) * _factor);
       
       _left = (int)(left * _factor) * cellSize;
       _right = _left + (_width * cellSize) - 1;
@@ -57,32 +58,8 @@ namespace OkuEngine
     /// <returns>The hash value for the coordinate.</returns>
     public int GetHash(int x, int y)
     {
-      return OkuMath.Floor((x - _left) * _factor) + OkuMath.Floor((y - _bottom) * _factor) * _width;
+      return (int)(Math.Floor((x - _left) * _factor) + Math.Floor((y - _bottom) * _factor) * _width);
     }
-    
-    /* LUA test code
-    min = -2
-    max = 6
-    cellsize = 3
-    factor = 1 / cellsize
-    width = math.ceil((max - min + 1) / cellsize)
-    print('width: ' .. width)
-
-    realmin = math.floor(min / cellsize) * cellsize
-    realmax = realmin + (width * cellsize) - 1
-
-    print('realmin: ' .. realmin)
-    print('realmax: ' .. realmax)
-
-    for y = realmax, realmin, -1 do
-      out = '';
-      for x = realmin, realmax, 1 do
-        hash = math.floor((x - realmin) * factor) + (math.floor((y - realmin) * factor) * width)
-        out = out .. '(' .. hash .. ')'
-      end
-      print(out)
-    end
-    */
     
   }
 }

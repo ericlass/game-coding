@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Xml;
-using System.Text;
 using OkuBase.Graphics;
-using Newtonsoft.Json;
 
 namespace OkuEngine
 {
   /// <summary>
   /// Defines a frame based animation with dynamic frame times and frame rate independent perfect timing.
   /// </summary>
-  public class Animation : StoreableEntity
+  public class Animation
   {
     private List<AnimationFrame> _frames = null;
     private bool _loop = false;
@@ -37,7 +34,6 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets if the animation is looped.
     /// </summary>
-    [JsonPropertyAttribute]
     public bool Loop
     {
       get { return _loop; }
@@ -48,7 +44,6 @@ namespace OkuEngine
     /// Gets or sets the frames of this animation.
     /// Setting the frames resets the animation to start from the beginning.
     /// </summary>
-    [JsonPropertyAttribute]
     public List<AnimationFrame> Frames
     {
       get { return _frames; }
@@ -112,16 +107,6 @@ namespace OkuEngine
           return _currentFrame >= _frames.Count - 1;
         return false;
       }
-    }
-
-    public override bool AfterLoad()
-    {
-      foreach (AnimationFrame frame in _frames)
-      {
-        if (!frame.AfterLoad())
-          return false;
-      }
-      return true;
     }
 
   }

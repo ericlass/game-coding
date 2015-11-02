@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 using OkuBase.Geometry;
-using Newtonsoft.Json;
+using OkuMath;
 
 namespace OkuEngine
 {
   /// <summary>
   /// Determines a full transformation with translation, orientation and scale.
   /// </summary>
-  [JsonObjectAttribute(MemberSerialization.OptIn)]
-  public class Transformation : IStoreable
+  public class Transformation
   {
     public delegate void OnChangeDelegate(Transformation transform);
 
@@ -25,9 +24,6 @@ namespace OkuEngine
     private Vector2f _translation = Vector2f.Zero;
     private Vector2f _scale = Vector2f.One;
     private float _orientation = 0.0f;
-
-    private bool _matrixValid = false;
-    private Matrix3 _matrix = Matrix3.Identity;
 
     /// <summary>
     /// Creates a new transformation with translation (0,0), scale (1,1) and orientation (0).
@@ -49,24 +45,15 @@ namespace OkuEngine
       _orientation = orientation;
     }
 
-    public void DoChange()
-    {
-      _matrixValid = false;
-      if (OnChange != null)
-        OnChange(this);
-    }
-
     /// <summary>
     /// Gets or sets the translation vector.
     /// </summary>
-    [JsonPropertyAttribute]
     public Vector2f Translation
     {
       get { return _translation; }
       set
       {
         _translation = value;
-        DoChange();
       }
     }
 
@@ -77,7 +64,6 @@ namespace OkuEngine
     internal void SetX(float x)
     {
       _translation.X = x;
-      DoChange();
     }
 
     /// <summary>
@@ -87,50 +73,30 @@ namespace OkuEngine
     internal void SetY(float y)
     {
       _translation.Y = y;
-      DoChange();
     }
 
     /// <summary>
     /// Gets or sets the orientation angle in degrees.
     /// </summary>
-    [JsonPropertyAttribute]
     public float Orientation 
     {
       get { return _orientation; }
       set 
       {
         _orientation = value;
-        DoChange();
       }
     }
 
     /// <summary>
     /// Gets or sets the scale factor.
     /// </summary>
-    [JsonPropertyAttribute]
     public Vector2f Scale
     {
       get { return _scale; }
       set
       {
         _scale = value;
-        DoChange();
       }
-    }
-
-    /// <summary>
-    /// Gets the transformation as a matrix that can be used to combine transformations.
-    /// </summary>
-    /// <returns>The current transformation as a transformation matrix.</returns>
-    public Matrix3 AsMatrix()
-    {
-      if (!_matrixValid)
-      {
-        _matrix = Matrix3.Identity;
-        _matrix.ApplyTransform(this);
-        _matrixValid = true;
-      }
-      return _matrix;
     }
 
     /// <summary>
@@ -154,7 +120,6 @@ namespace OkuEngine
       _translation = transform.Translation;
       _scale = transform.Scale;
       _orientation = transform.Orientation;
-      DoChange();
     }
 
     /// <summary>
@@ -165,12 +130,6 @@ namespace OkuEngine
     public bool IsIdentity()
     {
       return (_translation == Vector2f.Zero) && (_scale == Vector2f.One) && _orientation == 0.0f;
-    }
-
-    public bool AfterLoad()
-    {
-      _matrixValid = false;
-      return true;
     }
 
     /// <summary>
@@ -185,9 +144,9 @@ namespace OkuEngine
     public static void Lerp(Transformation t1, Transformation t2, float t, ref Transformation target)
     {
       float negT = 1 - t;
-      target.Translation = OkuMath.InterpolateLinear(t1.Translation, t2.Translation, t);
-      target.Scale = OkuMath.InterpolateLinear(t1.Scale, t2.Scale, t);
-      target.Orientation = OkuMath.InterpolateLinear(t1.Orientation, t2.Orientation, t);
+      target.Translation = BasicMath.Lerp(t1.Translation, t2.Translation, t);
+      target.Scale = BasicMath.Lerp(t1.Scale, t2.Scale, t);
+      target.Orientation = BasicMath.Lerp(t1.Orientation, t2.Orientation, t);
     }
 
   }

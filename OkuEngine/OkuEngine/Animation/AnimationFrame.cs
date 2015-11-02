@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
-using Newtonsoft.Json;
 
 namespace OkuEngine
 {
   /// <summary>
   /// Defines one image of an animation with it's image and duration.
   /// </summary>
-  [JsonObjectAttribute(MemberSerialization.OptIn)]
-  public class AnimationFrame : IStoreable
+  public class AnimationFrame
   {
     private int _imageId = 0;
     private float _duration = 0.0f;
@@ -36,7 +34,6 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets the id of the image of this frame.
     /// </summary>
-    [JsonPropertyAttribute]
     public int ImageId
     {
       get { return _imageId; }
@@ -46,7 +43,6 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets the duration this frame is displayed in milliseconds.
     /// </summary>
-    [JsonPropertyAttribute]
     public float Duration
     {
       get { return _duration; }

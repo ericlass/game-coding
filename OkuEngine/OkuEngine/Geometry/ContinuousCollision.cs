@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using OkuBase.Geometry;
+using OkuMath;
 
 namespace OkuEngine
 {
@@ -19,7 +16,7 @@ namespace OkuEngine
     /// <param name="translation">The translation of the first polygon.</param>
     /// <param name="mtd">The minimum translation distance to move the two polygons apart if they collide.</param>
     /// <returns>True if the polygons collide, else false.</returns>
-    public static bool PolygonPolygon(Vector2f[] poly1, Vector2f[] poly2, Vector2f translation, out float mtd)
+    /*public static bool PolygonPolygon(Vector2f[] poly1, Vector2f[] poly2, Vector2f translation, out float mtd)
     {
       mtd = float.MaxValue;
 
@@ -63,7 +60,7 @@ namespace OkuEngine
       }
 
       return result;
-    }
+    }*/
 
   }
 }
