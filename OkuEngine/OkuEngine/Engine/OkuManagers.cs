@@ -21,7 +21,7 @@ namespace OkuEngine
       }
     }
 
-    private IEventManager _eventManager = null;
+    private EventManager _eventManager = null;
     private InputManager _inputManager = null;
 
     private OkuManagers()
@@ -33,7 +33,7 @@ namespace OkuEngine
     /// <summary>
     /// Gets or sets the event manager that is used.
     /// </summary>
-    public IEventManager EventManager
+    public EventManager EventManager
     {
       get { return _eventManager; }
       set { _eventManager = value; }

@@ -10,13 +10,17 @@ namespace OkuEngine.Events
   /// <summary>
   /// Defines a manager for an event queue.
   /// </summary>
-  public class EventManager : IEventManager
+  public class EventManager
   {
-    private const int NumQueues = 2;
+    private class Event
+    {
+      public string Name { get; set; }
+      public object Data { get; set; }
+    }
 
-    private Dictionary<int, HashSet<EventListenerDelegate>> _listeners = new Dictionary<int, HashSet<EventListenerDelegate>>();
-    private List<Event>[] _queues = new List<Event>[NumQueues];
-    private int _activeQueue = 0;
+    private Dictionary<string, HashSet<EventListenerDelegate>> _listeners = new Dictionary<string, HashSet<EventListenerDelegate>>();
+    private List<Event> _backQueue = new List<Event>();
+    private List<Event> _activeQueue = new List<Event>();
     private List<Event> _unusedEvents = new List<Event>();
 
     private string _name = null;
@@ -28,11 +32,6 @@ namespace OkuEngine.Events
     public EventManager(string name)
     {
       _name = name;
-
-      for (int i = 0; i < NumQueues; i++)
-      {
-        _queues[i] = new List<Event>();
-      }
     }
 
     /// <summary>
@@ -44,51 +43,41 @@ namespace OkuEngine.Events
     }
 
     /// <summary>
-    /// Gets the current active queue.
-    /// </summary>
-    private List<Event> ActiveQueue
-    {
-      get { return _queues[_activeQueue]; }
-    }
-
-    /// <summary>
     /// Adds a new listener for the given event type to the event manager.
     /// </summary>
-    /// <param name="eventType">The type of event to listen to.</param>
+    /// <param name="eventName">The type of event to listen to.</param>
     /// <param name="eventDelegate">The delegate to call if the event happens.</param>
     /// <returns>True if the listener was added, false if the listener is already registered for the event.</returns>
-    public bool AddListener(int eventType, EventListenerDelegate eventDelegate)
+    public bool AddListener(string eventName, EventListenerDelegate eventDelegate)
     {
-      if (!_listeners.ContainsKey(eventType))
-      {
-        _listeners.Add(eventType, new HashSet<EventListenerDelegate>());
-      }
+      if (!_listeners.ContainsKey(eventName))
+        _listeners.Add(eventName, new HashSet<EventListenerDelegate>());
 
-      if (_listeners[eventType].Contains(eventDelegate))
+      if (_listeners[eventName].Contains(eventDelegate))
       {
-        OkuBase.OkuManager.Instance.Logging.LogError("Trying to register '" + eventDelegate.ToString() + "' twice for event '" + eventType + "'!");
+        OkuBase.OkuManager.Instance.Logging.LogError("Trying to register '" + eventDelegate.ToString() + "' twice for event '" + eventName + "'!");
         return false;
       }
 
-      _listeners[eventType].Add(eventDelegate);
+      _listeners[eventName].Add(eventDelegate);
       return true;
     }
 
     /// <summary>
     /// Removes the given listener for the given event type.
     /// </summary>
-    /// <param name="eventType">The event type.</param>
+    /// <param name="eventName">The event type.</param>
     /// <param name="eventDelegate">The event listener delegate.</param>
     /// <returns>True if the listener was removed, false if the listener was not registered for the event type.</returns>
-    public bool RemoveListener(int eventType, EventListenerDelegate eventDelegate)
+    public bool RemoveListener(string eventName, EventListenerDelegate eventDelegate)
     {
-      if (eventDelegate != null && _listeners.ContainsKey(eventType) && _listeners[eventType].Contains(eventDelegate))
+      if (eventDelegate != null && _listeners.ContainsKey(eventName) && _listeners[eventName].Contains(eventDelegate))
       {
-        _listeners[eventType].Remove(eventDelegate);
+        _listeners[eventName].Remove(eventDelegate);
         //If there are no more listeners for an event, remove it from the map
-        if (_listeners[eventType].Count == 0)
+        if (_listeners[eventName].Count == 0)
         {
-          _listeners.Remove(eventType);
+          _listeners.Remove(eventName);
         }
         return true;
       }
@@ -101,16 +90,16 @@ namespace OkuEngine.Events
     /// the listeners are informed immediatelly, not in the next
     /// run of event processing. Use with caution!
     /// </summary>
-    /// <param name="eventType">The type of event to trigger.</param>
+    /// <param name="eventName">The type of event to trigger.</param>
     /// <param name="eventData">The data of the event.</param>
     /// <returns>True if any listeners where triggered, false if there are no listeners for the event.</returns>
-    public bool TriggerEvent(int eventType, params object[] eventData)
+    public bool TriggerEvent(string eventName, params object[] eventData)
     {
-      if (_listeners.ContainsKey(eventType))
+      if (_listeners.ContainsKey(eventName))
       {
-        foreach (EventListenerDelegate listener in _listeners[eventType])
+        foreach (EventListenerDelegate listener in _listeners[eventName])
         {
-          listener(eventType, eventData);
+          listener(eventName, eventData);
         }
         return true;
       }
@@ -123,24 +112,25 @@ namespace OkuEngine.Events
     /// The listeners will be informed on the next
     /// run of event processing.
     /// </summary>
-    /// <param name="eventType">The type of the event.</param>
+    /// <param name="eventName">The type of the event.</param>
     /// <param name="eventData">The data of the event.</param>
     /// <returns>True if the event was enqueued, false if there are no listeners for the event.</returns>
-    public bool QueueEvent(int eventType, params object[] eventData)
+    public bool QueueEvent(string eventName, params object[] eventData)
     {
-      if (_listeners.ContainsKey(eventType))
+      if (_listeners.ContainsKey(eventName))
       {
         Event ev;
 
         if (_unusedEvents.Count > 0)
         {
           ev = _unusedEvents.PopLast();
-          ev.Set(eventType, eventData);
+          ev.Name = eventName;
+          ev.Data = eventData;
         }
         else
-          ev = new Event(eventType, eventData);
+          ev = new Event() { Name = eventName, Data = eventData };
 
-        ActiveQueue.Add(ev);
+        _activeQueue.Add(ev);
         return true;
       }
 
@@ -148,23 +138,22 @@ namespace OkuEngine.Events
     }
 
     /// <summary>
-    /// Removes the one or all event of the given type from the queue.
+    /// Removes one or all events of the given type from the queue.
     /// </summary>
-    /// <param name="eventType">The type of event to remove.</param>
+    /// <param name="eventName">The type of event to remove.</param>
     /// <param name="allOfType">Remove only the last event (false) or all of the given type (true).</param>
     /// <returns>True if any events where removed, else false.</returns>
-    public bool AbortEvent(int eventType, bool allOfType)
+    public bool AbortEvent(string eventName, bool allOfType)
     {
       bool result = false;
-      if (_listeners.ContainsKey(eventType))
+      if (_listeners.ContainsKey(eventName))
       {
-        List<Event> active = ActiveQueue;
-        for (int i = active.Count - 1; i >= 0; i--)
+        for (int i = _activeQueue.Count - 1; i >= 0; i--)
         {
-          if (active[i].EventType == eventType)
+          if (_activeQueue[i].Name == eventName)
           {
-            _unusedEvents.Add(active[i]);
-            active.RemoveAt(i);
+            _unusedEvents.Add(_activeQueue[i]);
+            _activeQueue.RemoveAt(i);
             if (!allOfType)
               break;
             result = true;
@@ -185,36 +174,37 @@ namespace OkuEngine.Events
       Kernel32.QueryPerformanceFrequency(out freq);
       Kernel32.QueryPerformanceCounter(out startTick);
 
-      List<Event> queueToProcess = ActiveQueue;
-      _activeQueue = (_activeQueue + 1) % NumQueues;
-      ActiveQueue.Clear();
+      _backQueue.Clear();
+      //Swap queues
+      List<Event> queueToProcess = _activeQueue;      
+      _activeQueue = _backQueue;
+      _backQueue = queueToProcess;
 
+      //Process events
       for (int i = 0; i < queueToProcess.Count; i++)
       {
         Event current = queueToProcess.PopFirst();
-        int eventType = current.EventType;
-        if (_listeners.ContainsKey(eventType))
+        string eventName = current.Name;
+        if (_listeners.ContainsKey(eventName))
         {
-          foreach (EventListenerDelegate listener in _listeners[eventType])
-          {
-            listener(current.EventType, current.EventData);
-          }
+          foreach (EventListenerDelegate listener in _listeners[eventName])
+            listener(current.Name, current.Data);
         }
         _unusedEvents.Add(current);
 
         Kernel32.QueryPerformanceCounter(out endTick);
         if (((endTick - startTick) / (float)freq) >= maxTime)
         {
-          System.Diagnostics.Debug.WriteLine("EVENT LOOP: Time ran out!");
+          OkuManager.Instance.Logging.LogWarning("EVENT LOOP: Time ran out!");
           break;
         }
       }
 
+      //If events are left, copy them into active queue
       bool flushed = queueToProcess.Count == 0;
       if (!flushed)
-      {
-        ActiveQueue.InsertRange(0, queueToProcess);
-      }
+        _activeQueue.InsertRange(0, queueToProcess);
+
       return flushed;
     }
 

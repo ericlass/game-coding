@@ -10,21 +10,21 @@ namespace OkuEngine.Input
   /// </summary>
   public class InputManager
   {
-    private Dictionary<KeyAction, Dictionary<Keys, int>> _stateBindings = new Dictionary<KeyAction, Dictionary<Keys, int>>();
-    private Dictionary<KeyAction, Dictionary<Keys, int>> _stateChangeBindings = new Dictionary<KeyAction, Dictionary<Keys, int>>();
+    private Dictionary<KeyAction, Dictionary<Keys, string>> _stateBindings = new Dictionary<KeyAction, Dictionary<Keys, string>>();
+    private Dictionary<KeyAction, Dictionary<Keys, string>> _stateChangeBindings = new Dictionary<KeyAction, Dictionary<Keys, string>>();
     private Dictionary<Keys, KeyAction> _keyStates = new Dictionary<Keys, KeyAction>();
-    private Dictionary<Keys, int> _stateEvents = new Dictionary<Keys, int>();
+    private Dictionary<Keys, string> _stateEvents = new Dictionary<Keys, string>();
 
     /// <summary>
     /// Creates a new input mananger.
     /// </summary>
     public InputManager()
     {
-      _stateChangeBindings.Add(KeyAction.Down, new Dictionary<Keys, int>());
-      _stateChangeBindings.Add(KeyAction.Up, new Dictionary<Keys, int>());
+      _stateChangeBindings.Add(KeyAction.Down, new Dictionary<Keys, string>());
+      _stateChangeBindings.Add(KeyAction.Up, new Dictionary<Keys, string>());
 
-      _stateBindings.Add(KeyAction.Down, new Dictionary<Keys, int>());
-      _stateBindings.Add(KeyAction.Up, new Dictionary<Keys, int>());
+      _stateBindings.Add(KeyAction.Down, new Dictionary<Keys, string>());
+      _stateBindings.Add(KeyAction.Up, new Dictionary<Keys, string>());
     }
 
     /// <summary>
@@ -66,16 +66,16 @@ namespace OkuEngine.Input
     /// </summary>
     /// <param name="key">The key to handle.</param>
     /// <param name="action">The action to look for.</param>
-    /// <param name="eventId">The event to enqueue when the key action happens.</param>
+    /// <param name="eventName">The event to enqueue when the key action happens.</param>
     /// <param name="state">True if the event should be enqueued as long as the key is in the state, false if the event should be enqueued when the state changes.</param>
     /// <returns>True if the binding was added, false if there already is a binding for the same event for that key action.</returns>
-    public bool AddBinding(Keys key, KeyAction action, int eventId, bool state)
+    public bool AddBinding(Keys key, KeyAction action, string eventName, bool state)
     {
-      Dictionary<KeyAction, Dictionary<Keys, int>> bindings = state ? _stateBindings : _stateChangeBindings;
+      Dictionary<KeyAction, Dictionary<Keys, string>> bindings = state ? _stateBindings : _stateChangeBindings;
 
       if (!bindings[action].ContainsKey(key))
       {
-        bindings[action].Add(key, eventId);
+        bindings[action].Add(key, eventName);
         return true;
       }
       return false;
@@ -97,20 +97,10 @@ namespace OkuEngine.Input
     /// </summary>
     public void Update()
     {
-      foreach (int eventId in _stateEvents.Values)
+      foreach (string eventName in _stateEvents.Values)
       {
-        OkuManagers.Instance.EventManager.QueueEvent(eventId);
+        OkuManagers.Instance.EventManager.QueueEvent(eventName);
       }
-    }
-
-    public bool AfterLoad()
-    {
-      foreach (KeyBinding binding in OkuData.Instance.KeyBindings)
-      {
-        if (!AddBinding(binding.Key, binding.Action, binding.Event, binding.State))
-          OkuBase.OkuManager.Instance.Logging.LogError("Trying to bind the same key to the same action twice!" + binding.Key + ", " + binding.Action);
-      }
-      return true;
     }
 
   }

@@ -2,5 +2,5 @@
 
 namespace OkuEngine.Events
 {
-  public delegate void EventListenerDelegate(int eventType, params object[] eventData);
+  public delegate void EventListenerDelegate(string eventType, params object[] eventData);
 }

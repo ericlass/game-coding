@@ -247,5 +247,33 @@ namespace OkuMath
         return (int)Math.Ceiling(value);
     }
 
+    /// <summary>
+    /// Calculates easing in or out.
+    /// Positive strength creates easing in, negative easing out.
+    /// </summary>
+    /// <param name="strength">Controls how much the curve is eased.</param>
+    /// <param name="t">The "time" parameter. Ranges from 0.0 to 1.0.</param>
+    /// <returns>The eased value at the given time. Ranges from 0.0 to 1.0.</returns>
+    public static float Easing(int strength, float t)
+    {
+      if (strength == 0)
+        return t;
+
+      float result = t;
+
+      if (strength < 0)
+        result = 1 - result;
+
+      int max = strength < 0 ? strength * -1 : strength;
+      for (int i = 0; i < max; i++)
+      {
+        result *= result;
+      }
+      if (strength < 0)
+        result = 1 - result;
+
+      return result;
+    }
+
   }
 }

@@ -52,16 +52,11 @@
   <ItemGroup>
     <Compile Include="Animation\Animation.cs" />
     <Compile Include="Animation\AnimationFrame.cs" />
-    <Compile Include="Animation\Easing.cs" />
-    <Compile Include="Animation\EasingController.cs" />
-    <Compile Include="Animation\InertialMovement.cs" />
     <Compile Include="Collections\PairList.cs" />
-    <Compile Include="Events\Event.cs" />
     <Compile Include="Events\EventListenerDelegate.cs" />
     <Compile Include="Events\EventManager.cs" />
-    <Compile Include="Events\EventTypes.cs" />
-    <Compile Include="Events\IEventManager.cs" />
     <Compile Include="Collections\InheritingDictionary.cs" />
+    <Compile Include="Events\SystemEvents.cs" />
     <Compile Include="Input\KeyBinding.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Geometry\EarClipper.cs" />
