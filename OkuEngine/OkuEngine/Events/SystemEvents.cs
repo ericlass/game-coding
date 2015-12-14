@@ -8,6 +8,6 @@ namespace OkuEngine.Events
 {
   public static class SystemEvents
   {
-    public static string 
+    public const string GENERIC_EVENT = "generic";
   }
 }
