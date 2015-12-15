@@ -63,6 +63,7 @@
     <Compile Include="Behavior\Selector.cs" />
     <Compile Include="Behavior\Sequence.cs" />
     <Compile Include="Behavior\Succeeder.cs" />
+    <Compile Include="Collections\BlackBoard.cs" />
     <Compile Include="Collections\PairList.cs" />
     <Compile Include="Events\EventListenerDelegate.cs" />
     <Compile Include="Events\EventManager.cs" />
@@ -77,6 +78,8 @@
     <Compile Include="Engine\OkuManagers.cs" />
     <Compile Include="Geometry\Transformation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="States\StateMachine.cs" />
+    <Compile Include="States\Transition.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OkuMath\OkuMath\OkuMath.csproj">

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OkuBaseTest", "OkuBaseTest\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OkuMath", "..\OkuMath\OkuMath\OkuMath.csproj", "{187ADE96-B4C1-4E74-8F53-DA480A6EFF5C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OkuEngineUnitTests", "OkuEngineUnitTests\OkuEngineUnitTests.csproj", "{BEC7EBB5-31F7-4245-8C62-99C10B8EF2D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{187ADE96-B4C1-4E74-8F53-DA480A6EFF5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{187ADE96-B4C1-4E74-8F53-DA480A6EFF5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{187ADE96-B4C1-4E74-8F53-DA480A6EFF5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEC7EBB5-31F7-4245-8C62-99C10B8EF2D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEC7EBB5-31F7-4245-8C62-99C10B8EF2D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEC7EBB5-31F7-4245-8C62-99C10B8EF2D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEC7EBB5-31F7-4245-8C62-99C10B8EF2D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
