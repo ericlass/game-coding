@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace OkuEngine.Behavior
 {
+  /// <summary>
+  /// Base class for all behavior tree nodes.
+  /// Manages entering/leaving of the node.
+  /// </summary>
   public abstract class BehaviorTreeNode
   {
     private bool _active = false;
@@ -29,10 +33,16 @@ namespace OkuEngine.Behavior
       return result;
     }
 
+    /// <summary>
+    /// Can be overriden to do processing when the node gets activated. This happens before the first update.
+    /// </summary>
     public virtual void OnEnter()
     {
     }
 
+    /// <summary>
+    /// Can be overriden to do processing when the node gets deactivated after it succeeded or failed.
+    /// </summary>
     public virtual void OnLeave()
     {
     }

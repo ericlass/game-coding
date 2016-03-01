@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace OkuEngine.Behavior
 {
+  /// <summary>
+  /// Decorator that inverts the result of the child node.
+  /// Fail becomes Success, Success becomes fail while None stays None.
+  /// </summary>
   public class Inverter : Decorator
   {
     public override BehaviorResult Decorate(BehaviorResult result)

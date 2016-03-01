@@ -1,6 +1,5 @@
 D:\C#-Projekte\_GIT\game-coding\OkuEngine\OkuEngineUnitTests\bin\Debug\OkuEngineUnitTests.dll
 D:\C#-Projekte\_GIT\game-coding\OkuEngine\OkuEngineUnitTests\bin\Debug\OkuEngineUnitTests.pdb
-D:\C#-Projekte\_GIT\game-coding\OkuEngine\OkuEngineUnitTests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
 D:\C#-Projekte\_GIT\game-coding\OkuEngine\OkuEngineUnitTests\bin\Debug\OkuEngine.dll
 D:\C#-Projekte\_GIT\game-coding\OkuEngine\OkuEngineUnitTests\bin\Debug\OkuBase.dll
 D:\C#-Projekte\_GIT\game-coding\OkuEngine\OkuEngineUnitTests\bin\Debug\OkuMath.dll

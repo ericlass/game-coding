@@ -56,8 +56,10 @@
     <Compile Include="Behavior\BehaviorTreeNode.cs" />
     <Compile Include="Behavior\Composite.cs" />
     <Compile Include="Behavior\Decorator.cs" />
+    <Compile Include="Behavior\Delay.cs" />
     <Compile Include="Behavior\Failer.cs" />
     <Compile Include="Behavior\Inverter.cs" />
+    <Compile Include="Behavior\LogText.cs" />
     <Compile Include="Behavior\Repeater.cs" />
     <Compile Include="Behavior\RepeatUntilFail.cs" />
     <Compile Include="Behavior\Selector.cs" />

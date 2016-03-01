@@ -2,21 +2,30 @@
 
 namespace OkuEngine.Behavior
 {
+  /// <summary>
+  /// Decorator that repeats the child node for the given amount of times.
+  /// This works by changing the result of the child to None until it was
+  /// executed a given amount of times.
+  /// </summary>
   public class Repeater : Decorator
   {
-    public int numRuns = 0;
+    private int _repititions = 0;
+    private int _numRuns = 0;
 
-    public int Repititions { get; set; }
+    public Repeater(int repititions)
+    {
+      _repititions = repititions;
+    }
 
     public override void OnEnter()
     {
-      numRuns = 0;
+      _numRuns = 0;
     }
 
     public override BehaviorResult Decorate(BehaviorResult result)
     {
-      numRuns++;
-      if (numRuns < Repititions)
+      _numRuns++;
+      if (_numRuns < _repititions)
         return BehaviorResult.None;
       else
         return result;

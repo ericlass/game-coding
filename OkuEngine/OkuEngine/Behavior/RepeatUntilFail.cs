@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace OkuEngine.Behavior
 {
+  /// <summary>
+  /// Decorator that repeats the child node until it fails.
+  /// </summary>
   public class RepeatUntilFail : Decorator
   {
     public override BehaviorResult Decorate(BehaviorResult result)
