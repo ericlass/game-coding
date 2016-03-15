@@ -84,7 +84,7 @@ namespace OkuEngine
     /// </summary>
     public ImageBase CurrentImage
     {
-      get { return OkuData.Instance.Images[_frames[_currentFrame].ImageId]; }
+      get { return _frames[_currentFrame].Image; }
     }
 
     /// <summary>

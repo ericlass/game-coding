@@ -17,9 +17,6 @@ namespace OkuBase.Utils
     public static string FloatToString(float value)
     {
       return Convert.ToString(value, CultureInfo.InvariantCulture);
-      /*int num = (int)value;
-      int frac = (int)Math.Abs((value - num) * 1000000000.0f);
-      return num + "." + frac;*/
     }
     
     /// <summary>
@@ -30,26 +27,6 @@ namespace OkuBase.Utils
     public static float StrToFloat(string str)
     {
       return Convert.ToSingle(str, CultureInfo.InvariantCulture);
-
-      /*
-      string[] parts = str.Split('.');
-      
-      float result = float.Parse(parts[0]);
-
-      float fraction = 0.0f;
-      if (parts.Length > 1)
-        fraction = float.Parse(parts[1]);
-
-      while (fraction >= 1.0f)
-        fraction /= 10.0f;
-
-      result += fraction;
-
-      if (result > 0 && str.StartsWith("-"))
-        result *= -1;
-
-      return result;
-      */
     }
 
     /// <summary>
@@ -85,14 +62,14 @@ namespace OkuBase.Utils
     /// <summary>
     /// Converts the given string to a vector array.
     /// The string is expected to be in the format that
-    /// is created by VectorsToStr.
+    /// is created by VectorsToStr (x1;y1|x2;y2|...|xn;yn).
     /// </summary>
     /// <param name="str">The string with the vectors.</param>
     /// <returns>A vector array with all vectors.</returns>
     public static Vector2f[] ParseVectors(string str)
     {
       List<Vector2f> result = new List<Vector2f>();
-      string[] vectors = str.Split(';');
+      string[] vectors = str.Split('|');
       for (int i = 0; i < vectors.Length; i++)
       {
         Vector2f vec = new Vector2f();
@@ -206,6 +183,12 @@ namespace OkuBase.Utils
       return value ? "yes" : "no";
     }
 
+    /// <summary>
+    /// Tries to parse the given string to an AABB. The string is expected to be in the format "x1;y1|x2;y2".
+    /// </summary>
+    /// <param name="str">The string to be parsed.</param>
+    /// <param name="result">The parsed AABB is returned here.</param>
+    /// <returns>True if the string could be parsed, else false.</returns>
     public static bool TryParseAABB(string str, out Rectangle2f result)
     {
       result = new Rectangle2f();
@@ -217,10 +200,6 @@ namespace OkuBase.Utils
           result.Min = minMax[0];
           result.Max = minMax[1];
           return true;
-        }
-        else
-        {
-          //OkuBase.OkuManager.Instance.Logging.LogError("AABB '" + str + "' has wrong format!");
         }
       }
       return false;

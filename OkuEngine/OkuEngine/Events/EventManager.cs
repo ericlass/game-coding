@@ -54,10 +54,7 @@ namespace OkuEngine.Events
         _listeners.Add(eventName, new HashSet<EventListenerDelegate>());
 
       if (_listeners[eventName].Contains(eventDelegate))
-      {
-        OkuBase.OkuManager.Instance.Logging.LogError("Trying to register '" + eventDelegate.ToString() + "' twice for event '" + eventName + "'!");
         return false;
-      }
 
       _listeners[eventName].Add(eventDelegate);
       return true;
@@ -194,10 +191,7 @@ namespace OkuEngine.Events
 
         Kernel32.QueryPerformanceCounter(out endTick);
         if (((endTick - startTick) / (float)freq) >= maxTime)
-        {
-          OkuManager.Instance.Logging.LogWarning("EVENT LOOP: Time ran out!");
           break;
-        }
       }
 
       //If events are left, copy them into active queue

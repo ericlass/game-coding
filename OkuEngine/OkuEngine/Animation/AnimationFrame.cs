@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Text;
+using OkuBase.Graphics;
 
 namespace OkuEngine
 {
@@ -10,7 +11,7 @@ namespace OkuEngine
   /// </summary>
   public class AnimationFrame
   {
-    private int _imageId = 0;
+    private ImageBase _image = null;
     private float _duration = 0.0f;
 
     /// <summary>
@@ -25,19 +26,19 @@ namespace OkuEngine
     /// </summary>
     /// <param name="imageId">The frames image id.</param>
     /// <param name="duration">The duration in milliseconds.</param>
-    public AnimationFrame(int imageId, float duration)
+    public AnimationFrame(ImageBase image, float duration)
     {
-      _imageId = imageId;
+      _image = image;
       _duration = duration;
     }
 
     /// <summary>
     /// Gets or sets the id of the image of this frame.
     /// </summary>
-    public int ImageId
+    public ImageBase Image
     {
-      get { return _imageId; }
-      set { _imageId = value; }
+      get { return _image; }
+      set { _image = value; }
     }
 
     /// <summary>
