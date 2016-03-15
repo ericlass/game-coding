@@ -14,3 +14,5 @@ OkuEngine/OkuEngine/bin/
 OkuEngine/OkuEngine/obj/
 InitGLWindow/InitGLWindow/bin/
 InitGLWindow/InitGLWindow/obj/
+OkuEngine/OkuEngineUnitTests/bin/Debug/OkuEngine.dll
+OkuEngine/OkuEngineUnitTests/bin/Debug/OkuEngineUnitTests.dll

@@ -66,6 +66,9 @@
     <Compile Include="Behavior\Sequence.cs" />
     <Compile Include="Behavior\Succeeder.cs" />
     <Compile Include="Collections\BlackBoard.cs" />
+    <Compile Include="Components\IComponent.cs" />
+    <Compile Include="Components\TransformComponent.cs" />
+    <Compile Include="Entity.cs" />
     <Compile Include="Events\EventListenerDelegate.cs" />
     <Compile Include="Events\EventManager.cs" />
     <Compile Include="Events\SystemEvents.cs" />
