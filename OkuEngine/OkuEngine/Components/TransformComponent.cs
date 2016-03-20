@@ -13,6 +13,7 @@ namespace OkuEngine.Components
     private Vector2f _translation = Vector2f.Zero;
     private float _rotation = 0.0f;
     private Vector2f _scale = Vector2f.One;
+    private bool _screenSpace = false;
 
     public bool IsMultiAssignable
     {
@@ -43,12 +44,32 @@ namespace OkuEngine.Components
     }
 
     /// <summary>
-    /// Gets or sets the rotation of the transform.
+    /// Gets or sets the rotation of the transform in degrees.
     /// </summary>
     public float Rotation
     {
       get { return _rotation; }
       set { _rotation = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets if the transformation is given in world or screen space coordinates.
+    /// </summary>
+    public bool ScreenSpace
+    {
+      get { return _screenSpace; }
+      set { _screenSpace = value; }
+    }
+
+    /// <summary>
+    /// Gets the transformation as a 3x3 matrix. The transformation are applied in the order T * R * S.
+    /// </summary>
+    public Matrix3x3f AsMatrix
+    {
+      get
+      {
+        return Matrix3x3f.Translate(_translation.X, _translation.Y) * Matrix3x3f.Rotation(_rotation) * Matrix3x3f.Scale(_scale.X, _scale.Y);
+      }
     }
 
   }

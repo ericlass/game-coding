@@ -10,8 +10,7 @@ namespace OkuEngine
   public sealed class Entity
   {
     private string _name = null;
-    private Dictionary<string, int> _existingComponents = null;
-    private List<IComponent> _components = null;
+    private List<IComponent> _components = new List<IComponent>();
 
     /// <summary>
     /// Creates a new entity with the given name.
@@ -32,40 +31,28 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Lazily creates the internal list and map. Should be called before accessing them.
-    /// </summary>
-    private void CheckLists()
-    {
-      if (_existingComponents == null)
-        _existingComponents = new Dictionary<string, int>();
-
-      if (_components == null)
-        _components = new List<IComponent>();
-    }
-
-    /// <summary>
     /// Adds the given component to the entity.
     /// </summary>
     /// <param name="component">The component to be adeed.</param>
     /// <returns>The entity itself. This allows to chain multiple Add calls.</returns>
     public Entity Add(IComponent component)
     {
-      CheckLists();
+      if (!component.IsMultiAssignable && this.ContainsComponent(component.Name))
+        throw new InvalidOperationException("Trying to add a '" + component.Name + "' component twice to entity '" + _name + "' although it is not multi-assignable!");
 
-      if (_existingComponents.ContainsKey(component.Name))
-      {
-        if (!component.IsMultiAssignable)
-          throw new InvalidOperationException("Trying to add a '" + component.Name + "' component twice to entity '" + _name + "' although it is not multi-assignable!");
-      }
-      else
-      {
-        _existingComponents.Add(component.Name, 0);
-      }
-
-      _existingComponents[component.Name] += 1;
       _components.Add(component);
-
+      //TODO: Queue event
       return this;
+    }
+
+    /// <summary>
+    /// Checks if the entity contains a component with the given name.
+    /// </summary>
+    /// <param name="componentName">The name of the component.</param>
+    /// <returns>True if the entity contains at least one of the components, else false.</returns>
+    public bool ContainsComponent(string componentName)
+    {
+      return _components.Exists(comp => comp.Name == componentName);
     }
 
     /// <summary>
@@ -75,7 +62,6 @@ namespace OkuEngine
     /// <returns>The first component with the name, or null if there is no such component.</returns>
     public IComponent GetComponent(string componentName)
     {
-      CheckLists();
       return _components.Find(comp => comp.Name == componentName);
     }
 
@@ -86,7 +72,6 @@ namespace OkuEngine
     /// <returns>A list of all components with the given name. Can be empty, but never null.</returns>
     public List<IComponent> GetComponents(string componentName)
     {
-      CheckLists();
       return _components.FindAll(comp => comp.Name == componentName);
     }
 
@@ -94,22 +79,11 @@ namespace OkuEngine
     /// Reomve the given component from the entity.
     /// </summary>
     /// <param name="component">The component to be removed.</param>
-    /// <returns>The entity itself. This allows chaining multiple Remove calls.</returns>
-    public Entity Remove(IComponent component)
+    /// <returns>True if the component was removed. False if the entity did not contain the component.</returns>
+    public bool Remove(IComponent component)
     {
-      CheckLists();
-      _components.Remove(component);
-      if (_existingComponents.ContainsKey(component.Name))
-      {
-        int count = _existingComponents[component.Name];
-        count -= 1;
-
-        if (count <= 0)
-          _existingComponents.Remove(component.Name);
-        else
-          _existingComponents[component.Name] = count;
-      }
-      return this;
+      //TODO: Queue event
+      return _components.Remove(component);
     }
 
     /// <summary>
@@ -117,7 +91,7 @@ namespace OkuEngine
     /// </summary>
     public void Clear()
     {
-      _existingComponents.Clear();
+      //TODO: Queue event
       _components.Clear();
     }
 

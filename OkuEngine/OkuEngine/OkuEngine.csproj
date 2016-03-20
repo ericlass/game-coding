@@ -67,11 +67,15 @@
     <Compile Include="Behavior\Succeeder.cs" />
     <Compile Include="Collections\BlackBoard.cs" />
     <Compile Include="Components\IComponent.cs" />
+    <Compile Include="Components\ImageComponent.cs" />
     <Compile Include="Components\TransformComponent.cs" />
+    <Compile Include="Engine.cs" />
     <Compile Include="Entity.cs" />
-    <Compile Include="Events\EventListenerDelegate.cs" />
-    <Compile Include="Events\EventManager.cs" />
-    <Compile Include="Events\SystemEvents.cs" />
+    <Compile Include="Events\Event.cs" />
+    <Compile Include="Events\EventListener.cs" />
+    <Compile Include="Events\EventQueue.cs" />
+    <Compile Include="Levels\Level.cs" />
+    <Compile Include="OkuEngineStart.cs" />
     <Compile Include="Particles\DefaultParticleController.cs" />
     <Compile Include="Particles\ForceEffector.cs" />
     <Compile Include="Particles\IParticleController.cs" />
@@ -87,6 +91,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="States\StateMachine.cs" />
     <Compile Include="States\Transition.cs" />
+    <Compile Include="Systems\ISystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OkuMath\OkuMath\OkuMath.csproj">
