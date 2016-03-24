@@ -11,6 +11,8 @@ namespace OkuEngine.Levels
     private List<EventListener> _listeners = new List<EventListener>();
     private Engine _engine = null;
 
+    private bool _initialized = false;
+
     public Level()
     {
     }
@@ -31,6 +33,18 @@ namespace OkuEngine.Levels
     {
       get { return _engine; }
       set { _engine = value; }
+    }
+
+    /// <summary>
+    /// Initializes the level, but only if it was not initialized already.
+    /// </summary>
+    public void DoInit()
+    {
+      if (!_initialized)
+      {
+        Init();
+        _initialized = true;
+      }
     }
 
     /// <summary>

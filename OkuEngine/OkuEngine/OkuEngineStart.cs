@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using OkuBase;
 using OkuEngine.Levels;
 using OkuEngine.Events;
@@ -15,27 +14,33 @@ namespace OkuEngine
 
     private Engine _engine = null;
 
+    private EngineSystem renderSystem = new RenderSystem();
+
     public OkuEngineStart(Level startLevel)
     {
       _engine = new Engine();
       _startLevel = startLevel;
+      renderSystem.Engine = _engine;
     }
 
     private void SetCurrentLevel(Level level)
     {
+      //Finalizes current level
       if (_currentLevel != null)
         _currentLevel.Finish();
 
       _currentLevel = level;
 
+      //Intialize new level
       if (_currentLevel != null)
       {
-        //TODO: Set fields
         _currentLevel.Engine = _engine;
-        
-        //Init level
-        _currentLevel.Init();
+        _currentLevel.DoInit();
       }
+
+      renderSystem.CurrentLevel = _currentLevel;
+
+      //TODO: Queue level change event
     }
 
     public override void Initialize()
@@ -45,12 +50,14 @@ namespace OkuEngine
 
     public override void Update(float dt)
     {
+      _engine.DeltaTime = dt;
       //TODO: Update systems
     }
 
     public override void Render()
     {
-      //TODO: Call render system
+      //Call render system
+      renderSystem.Execute();
     }
 
   }

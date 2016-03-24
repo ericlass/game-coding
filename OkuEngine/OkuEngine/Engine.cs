@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using OkuBase;
 using OkuEngine.Events;
+
 
 namespace OkuEngine
 {
@@ -15,9 +17,19 @@ namespace OkuEngine
     {
       _eventQueue = new EventQueue("okuengine_main");
 
-      TriggerEvent = _eventQueue.TriggerEvent;
       QueueEvent = _eventQueue.QueueEvent;
-    }   
+      TriggerEvent = _eventQueue.TriggerEvent;      
+    }
+
+    /// <summary>
+    /// Gets or sets the time delta since the last frame.
+    /// </summary>
+    public float DeltaTime { get; internal set; }
+
+    public OkuManager OkuBase
+    {
+      get { return OkuManager.Instance; }
+    }
 
   }
 }
