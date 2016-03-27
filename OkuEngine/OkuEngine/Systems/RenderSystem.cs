@@ -14,9 +14,9 @@ namespace OkuEngine.Systems
 
     public override void Execute()
     {
-      GraphicsManager graphics = Engine.OkuBase.Graphics;
+      GraphicsManager graphics = Engine.Instance.Oku.Graphics;
 
-      foreach (var entity in CurrentLevel.Entities)
+      foreach (var entity in Engine.Instance.CurrentLevel.Entities)
       {
         bool hasTransform = entity.ContainsComponent(TransformComponent.ComponentName);
         if (hasTransform)

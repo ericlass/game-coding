@@ -70,10 +70,13 @@
     <Compile Include="Components\ImageComponent.cs" />
     <Compile Include="Components\TransformComponent.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="EngineFunctions.cs" />
+    <Compile Include="EngineVariables.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\EventListener.cs" />
     <Compile Include="Events\EventQueue.cs" />
+    <Compile Include="LevelEngineLocator.cs" />
     <Compile Include="Levels\Level.cs" />
     <Compile Include="OkuEngineStart.cs" />
     <Compile Include="Particles\DefaultParticleController.cs" />

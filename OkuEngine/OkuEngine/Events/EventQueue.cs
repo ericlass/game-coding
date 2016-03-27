@@ -12,7 +12,7 @@ namespace OkuEngine.Events
   /// </summary>
   public class EventQueue
   {
-    private Dictionary<string, HashSet<Action<Event, Engine>>> _listeners = new Dictionary<string, HashSet<Action<Event, Engine>>>();
+    private Dictionary<string, HashSet<Action<Event>>> _listeners = new Dictionary<string, HashSet<Action<Event>>>();
     private List<Event> _backQueue = new List<Event>();
     private List<Event> _activeQueue = new List<Event>();
     private List<Event> _unusedEvents = new List<Event>();
@@ -42,10 +42,10 @@ namespace OkuEngine.Events
     /// <param name="eventName">The type of event to listen to.</param>
     /// <param name="eventDelegate">The delegate to call if the event happens.</param>
     /// <returns>True if the listener was added, false if the listener is already registered for the event.</returns>
-    public bool AddListener(string eventName, Action<Event, Engine> eventDelegate)
+    public bool AddListener(string eventName, Action<Event> eventDelegate)
     {
       if (!_listeners.ContainsKey(eventName))
-        _listeners.Add(eventName, new HashSet<Action<Event, Engine>>());
+        _listeners.Add(eventName, new HashSet<Action<Event>>());
 
       if (_listeners[eventName].Contains(eventDelegate))
         return false;
@@ -60,7 +60,7 @@ namespace OkuEngine.Events
     /// <param name="eventName">The event type.</param>
     /// <param name="eventDelegate">The event listener delegate.</param>
     /// <returns>True if the listener was removed, false if the listener was not registered for the event type.</returns>
-    public bool RemoveListener(string eventName, Action<Event, Engine> eventDelegate)
+    public bool RemoveListener(string eventName, Action<Event> eventDelegate)
     {
       if (eventDelegate != null && _listeners.ContainsKey(eventName) && _listeners[eventName].Contains(eventDelegate))
       {
@@ -88,9 +88,10 @@ namespace OkuEngine.Events
     {
       if (_listeners.ContainsKey(eventName))
       {
-        foreach (Action<string, object[]> listener in _listeners[eventName])
+        Event ev = new Event(eventName, eventData);
+        foreach (Action<Event> listener in _listeners[eventName])
         {
-          listener(eventName, eventData);
+          listener(ev);
         }
         return true;
       }
@@ -119,7 +120,7 @@ namespace OkuEngine.Events
           ev.Data = eventData;
         }
         else
-          ev = new Event() { Name = eventName, Data = eventData };
+          ev = new Event(eventName, eventData);
 
         _activeQueue.Add(ev);
         return true;
@@ -178,8 +179,8 @@ namespace OkuEngine.Events
         string eventName = current.Name;
         if (_listeners.ContainsKey(eventName))
         {
-          foreach (Action<string, object[]> listener in _listeners[eventName])
-            listener(current.Name, current.Data);
+          foreach (Action<Event> listener in _listeners[eventName])
+            listener(current);
         }
         _unusedEvents.Add(current);
 

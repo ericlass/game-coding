@@ -9,7 +9,7 @@ namespace OkuEngine.Levels
   {
     private List<Entity> _entities = new List<Entity>();
     private List<EventListener> _listeners = new List<EventListener>();
-    private Engine _engine = null;
+    private LevelEngineLocator _engine = new LevelEngineLocator();
 
     private bool _initialized = false;
 
@@ -29,10 +29,10 @@ namespace OkuEngine.Levels
       get { return _listeners; }
     }
 
-    public Engine Engine
+    //TODO: Replace this with component locator
+    public LevelEngineLocator Engine
     {
       get { return _engine; }
-      set { _engine = value; }
     }
 
     /// <summary>
