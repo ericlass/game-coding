@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using OkuBase.Graphics;
 using OkuEngine;
+using OkuEngine.Events;
 using OkuEngine.Components;
 using OkuEngine.Levels;
 
@@ -9,17 +9,24 @@ namespace OkuTestApp
 {
   public class StartLevel : Level
   {
-    public override void Init()
+    protected override void Init()
     {
       Entity entity = new Entity("first");
-      entity.Add(new ImageComponent(Engine.Functions.LoadImage("D:\\Temp\\Icons\\iconex_ap\\128x128\\plain\\bullet_ball_glass_blue.png")));
+      entity.AddComponent(new ImageComponent(API.LoadImage("D:\\Temp\\Icons\\iconex_ap\\128x128\\plain\\bullet_ball_glass_blue.png")));
 
-      Entities.Add(entity);
+      TransformComponent trans = new TransformComponent();
+      entity.AddComponent(trans);
+      
+
+      API.AddEntity(entity);
+
+      EventListener listener = new EventListener(EventNames.EngineTick, ev => trans.Rotation += 360.0f * (float)ev.Data[0]);
+      API.AddEventListener(listener);
     }
 
-    public override void Finish()
+    protected override void Finish()
     {
     }
-    
+
   }
 }

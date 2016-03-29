@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OkuEngine.Components;
+using OkuEngine.Events;
 
 namespace OkuEngine
 {
@@ -11,6 +12,10 @@ namespace OkuEngine
   {
     private string _name = null;
     private List<IComponent> _components = new List<IComponent>();
+
+    public event Action<Entity, IComponent> OnAddComponent;
+    public event Action<Entity, IComponent> OnRemoveComponent;
+    public event Action<Entity> OnClearComponents;
 
     /// <summary>
     /// Creates a new entity with the given name.
@@ -35,13 +40,16 @@ namespace OkuEngine
     /// </summary>
     /// <param name="component">The component to be adeed.</param>
     /// <returns>The entity itself. This allows to chain multiple Add calls.</returns>
-    public Entity Add(IComponent component)
+    public Entity AddComponent(IComponent component)
     {
       if (!component.IsMultiAssignable && this.ContainsComponent(component.Name))
         throw new InvalidOperationException("Trying to add a '" + component.Name + "' component twice to entity '" + _name + "' although it is not multi-assignable!");
 
       _components.Add(component);
-      //TODO: Queue event
+
+      if (OnAddComponent != null)
+        OnAddComponent(this, component);
+
       return this;
     }
 
@@ -80,19 +88,25 @@ namespace OkuEngine
     /// </summary>
     /// <param name="component">The component to be removed.</param>
     /// <returns>True if the component was removed. False if the entity did not contain the component.</returns>
-    public bool Remove(IComponent component)
+    public bool RemoveComponent(IComponent component)
     {
-      //TODO: Queue event
-      return _components.Remove(component);
+      bool result = _components.Remove(component);
+
+      if (OnRemoveComponent != null)
+        OnRemoveComponent(this, component);
+
+      return result;
     }
 
     /// <summary>
     /// Removes all components from the entity.
     /// </summary>
-    public void Clear()
+    public void ClearComponents()
     {
-      //TODO: Queue event
       _components.Clear();
+
+      if (OnClearComponents != null)
+        OnClearComponents(this);
     }
 
   }

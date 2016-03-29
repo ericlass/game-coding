@@ -1,22 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using OkuEngine.Components;
+using OkuBase;
 using OkuBase.Graphics;
+using OkuEngine.Components;
+using OkuEngine.Levels;
 
 namespace OkuEngine.Systems
 {
   public class RenderSystem : EngineSystem
   {
-    public override string Name
+    public override void Init(Level currentLevel)
     {
-      get { return "render"; }
+      //TODO: Init required?
     }
 
-    public override void Execute()
+    public override void Execute(Level currentLevel)
     {
-      GraphicsManager graphics = Engine.Instance.Oku.Graphics;
+      GraphicsManager graphics = OkuManager.Instance.Graphics;
 
-      foreach (var entity in Engine.Instance.CurrentLevel.Entities)
+      foreach (var entity in currentLevel.Entities)
       {
         bool hasTransform = entity.ContainsComponent(TransformComponent.ComponentName);
         if (hasTransform)
@@ -38,14 +40,10 @@ namespace OkuEngine.Systems
       }
     }
 
-    public override void Finish()
+    public override void Finish(Level currentLevel)
     {
       //TODO: Finish required?
     }
 
-    public override void Init()
-    {
-      //TODO: Init required?
-    }
   }
 }

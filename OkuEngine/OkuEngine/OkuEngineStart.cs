@@ -10,6 +10,7 @@ namespace OkuEngine
   public class OkuEngineStart : OkuGame
   {
     private Level _startLevel = null;
+    private Level _currentLevel = null;
 
     private EngineSystem renderSystem = new RenderSystem();
 
@@ -21,16 +22,17 @@ namespace OkuEngine
     private void SetCurrentLevel(Level level)
     {
       //Finalizes current level
-      if (Engine.Instance.CurrentLevel != null)
-        Engine.Instance.CurrentLevel.Finish();
+      if (_currentLevel != null)
+        _currentLevel.DoFinish();
 
-      Engine.Instance.CurrentLevel = level;
+      _currentLevel = level;
 
       //Intialize new level
-      if (Engine.Instance.CurrentLevel != null)
-        Engine.Instance.CurrentLevel.DoInit();
+      if (_currentLevel != null)
+        _currentLevel.DoInit();
 
-      //TODO: Queue level change event
+      //Queue level change event
+      _currentLevel.API.QueueEvent(EventNames.LevelChanged);
     }
 
     public override void Initialize()
@@ -40,14 +42,16 @@ namespace OkuEngine
 
     public override void Update(float dt)
     {
-      Engine.Instance.Variables.DeltaTime = dt;
+      _currentLevel.Variables[VariableNames.DeltaTime] = dt;
+      _currentLevel.API.QueueEvent(EventNames.EngineTick, dt);
       //TODO: Update systems
+      _currentLevel.EventQueue.Update(float.MaxValue);
     }
 
     public override void Render()
     {
       //Call render system
-      renderSystem.Execute();
+      renderSystem.Execute(_currentLevel);
     }
 
   }

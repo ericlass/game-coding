@@ -69,14 +69,12 @@
     <Compile Include="Components\IComponent.cs" />
     <Compile Include="Components\ImageComponent.cs" />
     <Compile Include="Components\TransformComponent.cs" />
-    <Compile Include="Engine.cs" />
-    <Compile Include="EngineFunctions.cs" />
-    <Compile Include="EngineVariables.cs" />
+    <Compile Include="EngineAPI.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\EventListener.cs" />
+    <Compile Include="Events\EventNames.cs" />
     <Compile Include="Events\EventQueue.cs" />
-    <Compile Include="LevelEngineLocator.cs" />
     <Compile Include="Levels\Level.cs" />
     <Compile Include="OkuEngineStart.cs" />
     <Compile Include="Particles\DefaultParticleController.cs" />
@@ -96,6 +94,7 @@
     <Compile Include="States\Transition.cs" />
     <Compile Include="Systems\RenderSystem.cs" />
     <Compile Include="Systems\EngineSystem.cs" />
+    <Compile Include="VariableNames.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OkuMath\OkuMath\OkuMath.csproj">

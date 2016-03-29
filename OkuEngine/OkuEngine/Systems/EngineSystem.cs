@@ -6,9 +6,8 @@ namespace OkuEngine.Systems
 {
   public abstract class EngineSystem
   {
-    public abstract string Name { get; }
-    public abstract void Init();
-    public abstract void Execute();
-    public abstract void Finish();
+    public abstract void Init(Level currentLevel);
+    public abstract void Execute(Level currentLevel);
+    public abstract void Finish(Level currentLevel);
   }
 }
