@@ -75,6 +75,10 @@
     <Compile Include="Events\EventListener.cs" />
     <Compile Include="Events\EventNames.cs" />
     <Compile Include="Events\EventQueue.cs" />
+    <Compile Include="Input\InputAction.cs" />
+    <Compile Include="Input\InputContext.cs" />
+    <Compile Include="Input\InputKey.cs" />
+    <Compile Include="Input\InputKeyAction.cs" />
     <Compile Include="Levels\Level.cs" />
     <Compile Include="OkuEngineStart.cs" />
     <Compile Include="Particles\DefaultParticleController.cs" />
@@ -106,6 +110,7 @@
       <Name>OkuBase</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

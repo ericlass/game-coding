@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using OkuBase;
+using OkuBase.Input;
 using OkuBase.Graphics;
 using OkuEngine.Events;
 using OkuEngine.Components;
@@ -103,7 +105,10 @@ namespace OkuEngine
     public void RemoveEventListener(EventListener eventListener)
     {
       bool result = _level.EventListeners.Remove(eventListener);
-      //TODO: Remove listener from event queue
+
+      foreach (var eventName in eventListener.EventNames)
+        _level.EventQueue.RemoveListener(eventName, eventListener.Handler);
+
       if (result)
         QueueEvent(EventNames.LevelEventListenerRemoved, eventListener);
     }

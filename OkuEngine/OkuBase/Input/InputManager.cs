@@ -85,7 +85,7 @@ namespace OkuBase.Input
     }
 
     /// <summary>
-    /// Enqueues any currently active state events,
+    /// Updates subsequent inputs.
     /// </summary>
     public override void Update(float dt)
     {
