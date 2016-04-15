@@ -7,7 +7,19 @@ namespace OkuEngine.Input
 {
   public class InputContext
   {
-    private Dictionary<InputAction, string> _actionMappings = new Dictionary<InputAction, string>();
+    private List<InputActionMapping> _actionMappings = new List<InputActionMapping>();
+
+    //TODO: State Mappings
+    //TODO: Axis Mappings
+
+    public InputContext()
+    {      
+    }
+
+    public List<InputActionMapping> ActionMappings
+    {
+      get { return _actionMappings; }
+    }
 
   }
 }

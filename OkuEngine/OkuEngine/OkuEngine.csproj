@@ -75,10 +75,12 @@
     <Compile Include="Events\EventListener.cs" />
     <Compile Include="Events\EventNames.cs" />
     <Compile Include="Events\EventQueue.cs" />
+    <Compile Include="Input\InputActionMapping.cs" />
+    <Compile Include="Input\InputDevice.cs" />
+    <Compile Include="Input\InputKeyAction.cs" />
     <Compile Include="Input\InputAction.cs" />
     <Compile Include="Input\InputContext.cs" />
     <Compile Include="Input\InputKey.cs" />
-    <Compile Include="Input\InputKeyAction.cs" />
     <Compile Include="Levels\Level.cs" />
     <Compile Include="OkuEngineStart.cs" />
     <Compile Include="Particles\DefaultParticleController.cs" />
