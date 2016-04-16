@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using OkuBase;
-using OkuBase.Input;
 using OkuBase.Graphics;
 using OkuEngine.Events;
 using OkuEngine.Components;
+using OkuEngine.Input;
 using OkuEngine.Levels;
 
 namespace OkuEngine
@@ -38,6 +37,11 @@ namespace OkuEngine
 
     #endregion
 
+    /// <summary>
+    /// Loads an image from the given file.
+    /// </summary>
+    /// <param name="filename">The full path to the file containing the image.</param>
+    /// <returns>The loaded image.</returns>
     public Image LoadImage(string filename)
     {
       ImageData data = ImageData.FromFile(filename);
@@ -45,6 +49,14 @@ namespace OkuEngine
       return result;
     }
 
+    #region Event Queue
+
+    /// <summary>
+    /// Queues a new event to the levels event queue.
+    /// When queueing an event, the listeners are called the next time the event queue is processed, which happens once each frame.
+    /// </summary>
+    /// <param name="eventName">The name of the event.</param>
+    /// <param name="eventData">The event's data.</param>
     public void QueueEvent(string eventName, params object[] eventData)
     {
       //We don't care about events that occur before and during level initialization
@@ -52,6 +64,13 @@ namespace OkuEngine
         _level.EventQueue.QueueEvent(eventName, eventData);
     }
 
+    /// <summary>
+    /// Triggers an event immediately.
+    /// When triggering an event, it is not queued and the listeners are called immediately.
+    /// Only use when really required and you know what you do!
+    /// </summary>
+    /// <param name="eventName">The name of the event.</param>
+    /// <param name="eventData">The event's data.</param>
     public void TriggerEvent(string eventName, params object[] eventData)
     {
       //We don't care about events that occur before and during level initialization
@@ -59,6 +78,14 @@ namespace OkuEngine
         _level.EventQueue.TriggerEvent(eventName, eventData);
     }
 
+    #endregion
+
+    #region Entities
+
+    /// <summary>
+    /// Adds a new entity to the level.
+    /// </summary>
+    /// <param name="entity">The entity to be added.</param>
     public void AddEntity(Entity entity)
     {
       _level.Entities.Add(entity);
@@ -69,6 +96,10 @@ namespace OkuEngine
       entity.OnClearComponents += Entity_OnClearComponents;
     }
 
+    /// <summary>
+    /// Removes the given entity from the level.
+    /// </summary>
+    /// <param name="entity">The entity to be removed.</param>
     public void RemoveEntity(Entity entity)
     {
       bool result = _level.Entities.Remove(entity);
@@ -78,8 +109,11 @@ namespace OkuEngine
       entity.OnAddComponent -= Entity_OnAddComponent;
       entity.OnRemoveComponent -= Entity_OnRemoveComponent;
       entity.OnClearComponents -= Entity_OnClearComponents;
-    }    
+    }
 
+    /// <summary>
+    /// Removes all entities from the level.
+    /// </summary>
     public void ClearEntities()
     {
       foreach (Entity entity in _level.Entities)
@@ -92,6 +126,14 @@ namespace OkuEngine
       _level.Entities.Clear();
     }
 
+    #endregion
+
+    #region Event Listener
+
+    /// <summary>
+    /// Adds a new event listener.
+    /// </summary>
+    /// <param name="eventListener">The event listener to be added.</param>
     public void AddEventListener(EventListener eventListener)
     {
       _level.EventListeners.Add(eventListener);
@@ -102,6 +144,10 @@ namespace OkuEngine
       QueueEvent(EventNames.LevelEventListenerAdded, eventListener);
     }
 
+    /// <summary>
+    /// Removes the given event listener.
+    /// </summary>
+    /// <param name="eventListener">The event listener to be removed.</param>
     public void RemoveEventListener(EventListener eventListener)
     {
       bool result = _level.EventListeners.Remove(eventListener);
@@ -113,11 +159,85 @@ namespace OkuEngine
         QueueEvent(EventNames.LevelEventListenerRemoved, eventListener);
     }
 
+    /// <summary>
+    /// Removes all event listeners.
+    /// </summary>
     public void ClearEventListeners()
     {
       _level.EventListeners.Clear();
       QueueEvent(EventNames.LevelEventListenersCleared);
     }
+
+    #endregion
+
+    #region Input Contexts
+
+    //Input contexts are sorted by priority (0 = highest). The engine processes
+    //the contexts from highest to lowest priority.
+
+    /// <summary>
+    /// Sets the input context with the given priority.
+    /// If there already was an input context with the same priority, it is overwritten.
+    /// </summary>
+    /// <param name="priority">The priority.</param>
+    /// <param name="context">The input context.</param>
+    public void SetInputContext(int priority, InputContext context)
+    {
+      List<InputContext> contexts = _level.InputContexts;
+
+      if (priority >= contexts.Count)
+      {
+        for (int i = contexts.Count; i <= priority; i++)
+          contexts.Add(null);
+      }
+
+      contexts[priority] = context;
+    }
+
+    /// <summary>
+    /// Gets the input context with the given priority.
+    /// </summary>
+    /// <param name="priority">The priority.</param>
+    /// <returns>The input context with the given priority. Maybe null if there is no input context with the given priority.</returns>
+    public InputContext GetInputContext(int priority)
+    {
+      if (priority < _level.InputContexts.Count)
+        return _level.InputContexts[priority];
+
+      return null;
+    }
+
+    /// <summary>
+    /// Gets the number of existing input context priority slots.
+    /// This must not be the number of existing input contexts.
+    /// Some priorities might not have an input context associated.
+    /// </summary>
+    /// <returns>The number of input context priority slots.</returns>
+    public int GetInputContextCount()
+    {
+      return _level.InputContexts.Count;
+    }
+
+    /// <summary>
+    /// Removes the input context with the given priority.
+    /// Actually just sets the context for this priority to null.
+    /// </summary>
+    /// <param name="priority">The priority.</param>
+    public void RemoveInputContext(int priority)
+    {
+      if (priority < _level.InputContexts.Count)
+        _level.InputContexts[priority] = null;
+    }
+
+    /// <summary>
+    /// Removes all input contexts.
+    /// </summary>
+    public void ClearInputContexts()
+    {
+      _level.InputContexts.Clear();
+    }
+
+    #endregion
 
   }
 }

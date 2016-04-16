@@ -8,9 +8,9 @@ namespace OkuEngine.Input
   public class InputContext
   {
     private List<InputActionMapping> _actionMappings = new List<InputActionMapping>();
+    private List<InputAxisMapping> _axisMappings = new List<InputAxisMapping>();
 
     //TODO: State Mappings
-    //TODO: Axis Mappings
 
     public InputContext()
     {      
@@ -19,6 +19,11 @@ namespace OkuEngine.Input
     public List<InputActionMapping> ActionMappings
     {
       get { return _actionMappings; }
+    }
+
+    public List<InputAxisMapping> AxisMappings
+    {
+      get { return _axisMappings; }
     }
 
   }

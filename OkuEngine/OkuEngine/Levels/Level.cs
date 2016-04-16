@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using OkuEngine.Collections;
 using OkuEngine.Events;
+using OkuEngine.Input;
 
 namespace OkuEngine.Levels
 {
@@ -10,10 +11,11 @@ namespace OkuEngine.Levels
   /// </summary>
   public abstract class Level
   {
-    private List<Entity> _entities = new List<Entity>();
-    private List<EventListener> _listeners = new List<EventListener>();
+    private List<Entity> _entities = new List<Entity>(100);
+    private List<EventListener> _listeners = new List<EventListener>(50);
     private EventQueue _eventQueue = new EventQueue("level");
     private BlackBoard _variables = new BlackBoard();
+    private List<InputContext> _inputContexts = new List<InputContext>(10);
 
     private EngineAPI _api = null;
     private bool _initialized = false;
@@ -56,6 +58,14 @@ namespace OkuEngine.Levels
     internal bool Initialized
     {
       get { return _initialized; }
+    }
+
+    /// <summary>
+    /// Gets the list of input contexts.
+    /// </summary>
+    internal List<InputContext> InputContexts
+    {
+      get { return _inputContexts; }
     }
 
     /// <summary>

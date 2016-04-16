@@ -7,7 +7,7 @@ using OkuEngine.Levels;
 
 namespace OkuEngine.Systems
 {
-  public class RenderSystem : EngineSystem
+  public class RenderSystem : GameSystem
   {
     public override void Init(Level currentLevel)
     {

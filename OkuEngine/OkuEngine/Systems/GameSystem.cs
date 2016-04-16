@@ -4,7 +4,7 @@ using OkuEngine.Levels;
 
 namespace OkuEngine.Systems
 {
-  public abstract class EngineSystem
+  public abstract class GameSystem
   {
     public abstract void Init(Level currentLevel);
     public abstract void Execute(Level currentLevel);
