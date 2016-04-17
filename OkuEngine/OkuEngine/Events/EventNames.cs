@@ -1,13 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
+using OkuBase.Input;
+using OkuEngine.Input;
 
 namespace OkuEngine.Events
 {
   public static class EventNames
   {
+    /// <summary>
+    /// Gets the event name for a keyboard key up or down action.
+    /// </summary>
+    /// <param name="key">The key.</param>
+    /// <param name="action">The action.</param>
+    /// <returns>The name of the event the engine queues when the given key action occurrs.</returns>
+    public static string GetGenericInputEventName(Keys key, InputAction action)
+    {
+      return "keyboard_" + key.ToString().ToLower() + "_" + action.ToString().ToLower();
+    }
+
+    /// <summary>
+    /// Gets the event name for a mouse button up or down action.
+    /// </summary>
+    /// <param name="button">The mouse button.</param>
+    /// <param name="action">The action.</param>
+    /// <returns>The name of the event the engine queues when the given button action occurrs.</returns>
+    public static string GetGenericInputEventName(MouseButton button, InputAction action)
+    {
+      return "mouse_" + button.ToString().ToLower() + "_" + action.ToString().ToLower();
+    }
+
     /// <summary>
     /// Is queued after the level has changed. Has no parameters.
     /// When this event is triggered, the new level is already the current level.

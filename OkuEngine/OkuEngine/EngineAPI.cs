@@ -239,5 +239,30 @@ namespace OkuEngine
 
     #endregion
 
+    #region Input
+
+    public float GetAxisValue(string name)
+    {
+      foreach (var context in _level.InputContexts)
+      {
+        foreach (var mapping in context.AxisMappings)
+        {
+          if (mapping.Name == name)
+          {
+            float value = 0.0f;
+            foreach (var axis in mapping.Axes)
+            {
+              value = OkuMath.BasicMath.SignedMax(value, axis.GetCurrentValue());
+            }
+            return value;
+          }
+        }
+      }
+
+      return 0.0f;
+    }
+
+    #endregion
+
   }
 }

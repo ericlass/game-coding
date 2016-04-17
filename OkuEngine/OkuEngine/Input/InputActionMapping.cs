@@ -22,6 +22,14 @@ namespace OkuEngine.Input
     }
 
     /// <summary>
+    /// Gets the name of the event that is queued if any of the actions occurr.
+    /// </summary>
+    public string EventName
+    {
+      get { return _eventName; }
+    }
+
+    /// <summary>
     /// Gets the list of actions.
     /// </summary>
     public List<InputKeyAction> Actions

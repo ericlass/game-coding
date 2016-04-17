@@ -6,7 +6,7 @@ using OkuBase.Input;
 
 namespace OkuEngine.Input
 {
-  class KeyInputAxis : IInputAxis
+  public class KeyInputAxis : IInputAxis
   {
     public InputKey _key;
     public float _scale = 1.0f;
@@ -35,8 +35,8 @@ namespace OkuEngine.Input
 
     public float GetCurrentValue()
     {
-      Keys key = (Keys)((int)_key | 0xFFFF);
-      InputDevice device = (InputDevice)((int)_key | 0xF0000);
+      Keys key = (Keys)((int)_key & 0xFFFF);
+      InputDevice device = (InputDevice)((int)_key & 0xF0000);
 
       float value = 0.0f;
       switch (device)

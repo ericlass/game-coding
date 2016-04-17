@@ -40,8 +40,8 @@ namespace OkuEngine
     {
       SetCurrentLevel(_startLevel);
 
-      _renderSystem.Init(_currentLevel);
-      _inputSystem.Init(_currentLevel);
+      _renderSystem.Init();
+      _inputSystem.Init();
     }
 
     public override void Update(float dt)

@@ -248,6 +248,34 @@ namespace OkuMath
     }
 
     /// <summary>
+    /// Signed max function. Returns the value with the biggest absolute value.
+    /// </summary>
+    /// <param name="a">The first value.</param>
+    /// <param name="b">The second value.</param>
+    /// <returns>The value with the biggest absolute value.</returns>
+    public static float SignedMax(float a, float b)
+    {
+      if (Math.Abs(a) > Math.Abs(b))
+        return a;
+      else
+        return b;
+    }
+
+    /// <summary>
+    /// Signed max function. Returns the value with the biggest absolute value.
+    /// </summary>
+    /// <param name="a">The first value.</param>
+    /// <param name="b">The second value.</param>
+    /// <returns>The value with the biggest absolute value.</returns>
+    public static int SignedMax(int a, int b)
+    {
+      if (Math.Abs(a) > Math.Abs(b))
+        return a;
+      else
+        return b;
+    }
+
+    /// <summary>
     /// Calculates easing in or out.
     /// Positive strength creates easing in, negative easing out.
     /// </summary>

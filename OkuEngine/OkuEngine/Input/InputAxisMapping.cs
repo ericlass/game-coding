@@ -13,6 +13,11 @@ namespace OkuEngine.Input
       _name = name;
     }
 
+    public string Name
+    {
+      get { return _name; }
+    }
+
     public List<IInputAxis> Axes
     {
       get { return _axes; }

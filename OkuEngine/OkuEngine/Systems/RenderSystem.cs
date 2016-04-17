@@ -9,7 +9,7 @@ namespace OkuEngine.Systems
 {
   public class RenderSystem : GameSystem
   {
-    public override void Init(Level currentLevel)
+    public override void Init()
     {
       //TODO: Init required?
     }
@@ -40,7 +40,7 @@ namespace OkuEngine.Systems
       }
     }
 
-    public override void Finish(Level currentLevel)
+    public override void Finish()
     {
       //TODO: Finish required?
     }
