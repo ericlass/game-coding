@@ -8,12 +8,33 @@ namespace OkuEngine.Components
   /// </summary>
   public class TransformComponent : IComponent
   {
+    //TODO: Split this into four components, so the values can be overriden individually.
+
     public const string ComponentName = "transform";
 
     private Vector2f _translation = Vector2f.Zero;
     private float _rotation = 0.0f;
     private Vector2f _scale = Vector2f.One;
     private bool _screenSpace = false;
+
+    public TransformComponent()
+    {
+    }
+
+    public TransformComponent(Vector2f translation, float rotation, Vector2f scale)
+    {
+      _translation = translation;
+      _rotation = rotation;
+      _scale = scale;
+    }
+
+    public TransformComponent(Vector2f translation, float rotation, Vector2f scale, bool screenSpace)
+    {
+      _translation = translation;
+      _rotation = rotation;
+      _scale = scale;
+      _screenSpace = screenSpace;
+    }
 
     public bool IsMultiAssignable
     {
@@ -70,6 +91,11 @@ namespace OkuEngine.Components
       {
         return Matrix3x3f.Translate(_translation.X, _translation.Y) * Matrix3x3f.Rotation(_rotation) * Matrix3x3f.Scale(_scale.X, _scale.Y);
       }
+    }
+
+    public IComponent Copy()
+    {
+      return new TransformComponent(_translation, _rotation, _scale, _screenSpace);
     }
 
   }

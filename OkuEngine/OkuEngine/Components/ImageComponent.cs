@@ -51,5 +51,10 @@ namespace OkuEngine.Components
       set { _image = value; }
     }
 
+    public IComponent Copy()
+    {
+      return new ImageComponent(_image);
+    }
+
   }
 }

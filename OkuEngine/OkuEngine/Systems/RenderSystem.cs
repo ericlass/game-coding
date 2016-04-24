@@ -20,23 +20,22 @@ namespace OkuEngine.Systems
 
       foreach (var entity in currentLevel.Entities)
       {
-        bool hasTransform = entity.ContainsComponent(TransformComponent.ComponentName);
-        if (hasTransform)
-        {
-          var transform = (TransformComponent)entity.GetComponent(TransformComponent.ComponentName);
+        var transform = entity.GetComponent<TransformComponent>();
+        if (transform != null)
           graphics.ApplyAndPushTransform(transform.Translation, transform.Scale, transform.Rotation);
-        }
 
-        if (entity.ContainsComponent(ImageComponent.ComponentName))
-        {
-          var image = (ImageComponent)entity.GetComponent(ImageComponent.ComponentName);
-          graphics.DrawImage(image.Image, 0, 0);
-        }
+        Color tint = Color.White;
 
-        if (hasTransform)
-        {
+        var vcolor = entity.GetComponent<VertexColorComponent>();
+        if (vcolor != null)
+          tint = vcolor.Color;
+
+        var image = entity.GetComponent<ImageComponent>();
+        if (image != null)
+          graphics.DrawImage(image.Image, 0, 0, tint);
+
+        if (transform != null)
           graphics.PopTransform();
-        }
       }
     }
 

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using OkuBase.Graphics;
 using OkuEngine;
-using OkuMath;
 using OkuEngine.Events;
 using OkuEngine.Components;
 using OkuEngine.Input;
@@ -41,8 +41,8 @@ namespace OkuTestApp
 
       //Map some keys to an axis
       InputAxisMapping ax = new InputAxisMapping("horizontal");
-      ax.Axes.Add(new KeyInputAxis(InputKey.KeyboardD, -90.0f));
-      ax.Axes.Add(new KeyInputAxis(InputKey.KeyboardA, 90.0f));
+      ax.Axes.Add(new KeyInputAxis(InputKey.KeyboardD, -1.0f));
+      ax.Axes.Add(new KeyInputAxis(InputKey.KeyboardA, 1.0f));
       context.AxisMappings.Add(ax);
 
       //Activate input context
@@ -52,7 +52,7 @@ namespace OkuTestApp
       API.AddEventListener(new EventListener("rotate_cw", ev => trans.Rotation -= 45.0f));
 
       //Check mapped axis every frame
-      API.AddEventListener(new EventListener(EventNames.EngineTick, ev => trans.Rotation += API.GetAxisValue("horizontal") * (float)ev.Data[0]));
+      API.AddEventListener(new EventListener(EventNames.EngineTick, ev => trans.Rotation += API.GetAxisValue("horizontal") * (float)ev.Data[0] * 180.0f));
     }
 
     protected override void Finish()

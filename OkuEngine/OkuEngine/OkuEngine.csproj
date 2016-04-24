@@ -69,6 +69,7 @@
     <Compile Include="Components\IComponent.cs" />
     <Compile Include="Components\ImageComponent.cs" />
     <Compile Include="Components\TransformComponent.cs" />
+    <Compile Include="Components\VertexColorComponent.cs" />
     <Compile Include="EngineAPI.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Events\Event.cs" />
