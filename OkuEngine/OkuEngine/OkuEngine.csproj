@@ -66,10 +66,12 @@
     <Compile Include="Behavior\Sequence.cs" />
     <Compile Include="Behavior\Succeeder.cs" />
     <Compile Include="Collections\BlackBoard.cs" />
+    <Compile Include="Components\AngleComponent.cs" />
     <Compile Include="Components\IComponent.cs" />
     <Compile Include="Components\ImageComponent.cs" />
-    <Compile Include="Components\TransformComponent.cs" />
-    <Compile Include="Components\VertexColorComponent.cs" />
+    <Compile Include="Components\PositionComponent.cs" />
+    <Compile Include="Components\ScaleComponent.cs" />
+    <Compile Include="Components\ColorComponent.cs" />
     <Compile Include="EngineAPI.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Events\Event.cs" />

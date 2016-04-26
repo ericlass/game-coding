@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OkuMath;
 using OkuBase;
 using OkuBase.Graphics;
 using OkuEngine.Components;
@@ -20,13 +21,28 @@ namespace OkuEngine.Systems
 
       foreach (var entity in currentLevel.Entities)
       {
-        var transform = entity.GetComponent<TransformComponent>();
-        if (transform != null)
-          graphics.ApplyAndPushTransform(transform.Translation, transform.Scale, transform.Rotation);
+        var positionComp = entity.GetComponent<PositionComponent>();
+        var angleComp = entity.GetComponent<AngleComponent>();
+        var scaleComp = entity.GetComponent<ScaleComponent>();
+
+        bool hasTransform = positionComp != null || angleComp != null || scaleComp != null;
+        bool isScreenSpace = positionComp != null && positionComp.ScreenSpace;
+
+        if (hasTransform)
+        {
+          Vector2f pos = positionComp == null ? Vector2f.Zero : positionComp.Position;
+          float angle = angleComp == null ? 0.0f : angleComp.Angle;
+          Vector2f scale = scaleComp == null ? Vector2f.One : scaleComp.Scale;
+
+          if (isScreenSpace)
+            graphics.BeginScreenSpace();
+
+          graphics.ApplyAndPushTransform(pos, scale, angle);
+        }
 
         Color tint = Color.White;
 
-        var vcolor = entity.GetComponent<VertexColorComponent>();
+        var vcolor = entity.GetComponent<ColorComponent>();
         if (vcolor != null)
           tint = vcolor.Color;
 
@@ -34,8 +50,11 @@ namespace OkuEngine.Systems
         if (image != null)
           graphics.DrawImage(image.Image, 0, 0, tint);
 
-        if (transform != null)
+        if (hasTransform)
           graphics.PopTransform();
+
+        if (isScreenSpace)
+          graphics.EndScreenSpace();
       }
     }
 

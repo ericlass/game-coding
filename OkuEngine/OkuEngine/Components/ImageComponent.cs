@@ -9,11 +9,6 @@ namespace OkuEngine.Components
   /// </summary>
   public class ImageComponent : IComponent
   {
-    /// <summary>
-    /// The unique name of this component.
-    /// </summary>
-    public const string ComponentName = "image";
-
     private ImageBase _image = null;
 
     /// <summary>
@@ -32,14 +27,20 @@ namespace OkuEngine.Components
       _image = image;
     }
 
+    /// <summary>
+    /// Gets if the component can be assigned multiple times to the same entity.
+    /// </summary>
     public bool IsMultiAssignable
     {
       get { return true; }
     }
 
+    /// <summary>
+    /// Gets the name of the component.
+    /// </summary>
     public string Name
     {
-      get { return ComponentName; }
+      get { return "image"; }
     }
 
     /// <summary>
@@ -51,6 +52,10 @@ namespace OkuEngine.Components
       set { _image = value; }
     }
 
+    /// <summary>
+    /// Creates a deep copy of the component.
+    /// </summary>
+    /// <returns>A copy of the component.</returns>
     public IComponent Copy()
     {
       return new ImageComponent(_image);

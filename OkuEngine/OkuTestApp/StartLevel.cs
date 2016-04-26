@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using OkuMath;
 using OkuBase.Graphics;
 using OkuEngine;
 using OkuEngine.Events;
@@ -18,16 +19,32 @@ namespace OkuTestApp
       Entity entity = new Entity("first");
 
       //Add image component
-      entity.AddComponent(new ImageComponent(API.LoadImage("D:\\Temp\\Icons\\iconex_ap\\128x128\\plain\\bullet_ball_glass_blue.png")));
+      entity.AddComponent(new ImageComponent(API.LoadImage("D:\\Temp\\Icons\\iconex_ap\\128x128\\plain\\bullet_square_grey.png")));
 
-      //Add transform component
-      TransformComponent trans = new TransformComponent();
-      entity.AddComponent(trans);
+      //Add transform components
+      PositionComponent pos = new PositionComponent();
+      AngleComponent angle = new AngleComponent();
+      ScaleComponent scale = new ScaleComponent();
+      entity.AddComponent(pos);
+      entity.AddComponent(angle);
+      entity.AddComponent(scale);
+
+      entity.AddComponent(new ColorComponent(Color.Green));
 
       API.AddEntity(entity);
 
+      //Create entity instance
+      Entity instance = new Entity("instance");
+      instance.Template = entity;
+
+      //Instance overrides position and color components
+      instance.AddComponent(new PositionComponent(new Vector2f(150, 50), false));
+      instance.AddComponent(new ColorComponent(Color.Red));
+
+      API.AddEntity(instance);
+
       //Generic key event listener
-      API.AddEventListener(new EventListener(EventNames.GetGenericInputEventName(Keys.Space, InputAction.Down), ev => trans.Rotation += 45.0f));
+      API.AddEventListener(new EventListener(EventNames.GetGenericInputEventName(Keys.Space, InputAction.Down), ev => angle.Angle += 45.0f));
 
       //Create input context
       InputContext context = new InputContext();
@@ -49,10 +66,20 @@ namespace OkuTestApp
       API.SetInputContext(0, context);
 
       //Listen to mapped event
-      API.AddEventListener(new EventListener("rotate_cw", ev => trans.Rotation -= 45.0f));
+      API.AddEventListener(new EventListener("rotate_cw", ev => angle.Angle -= 45.0f));
 
       //Check mapped axis every frame
-      API.AddEventListener(new EventListener(EventNames.EngineTick, ev => trans.Rotation += API.GetAxisValue("horizontal") * (float)ev.Data[0] * 180.0f));
+      API.AddEventListener(new EventListener(EventNames.EngineTick, ev => angle.Angle += API.GetAxisValue("horizontal") * (float)ev.Data[0] * 180.0f));
+
+      //Add some event handlers for generic input events
+      string eventName = EventNames.GetGenericInputEventName(Keys.S, InputAction.Down);
+      API.AddEventListener(new EventListener(eventName, ev => pos.ScreenSpace = !pos.ScreenSpace));
+
+      eventName = EventNames.GetGenericInputEventName(Keys.Add, InputAction.Down);
+      API.AddEventListener(new EventListener(eventName, ev => scale.Scale = scale.Scale * 1.2f));
+
+      eventName = EventNames.GetGenericInputEventName(Keys.Subtract, InputAction.Down);
+      API.AddEventListener(new EventListener(eventName, ev => scale.Scale = scale.Scale * 0.8333f));
     }
 
     protected override void Finish()
