@@ -4,6 +4,7 @@ using OkuBase;
 using OkuEngine.Levels;
 using OkuEngine.Events;
 using OkuEngine.Systems;
+using OkuBase.Settings;
 
 namespace OkuEngine
 {

@@ -54,12 +54,14 @@ namespace OkuTestApp
       am.Actions.Add(new InputKeyAction(InputKey.KeyboardR, InputAction.Down));
       am.Actions.Add(new InputKeyAction(InputKey.KeyboardNumPad6, InputAction.Down));
       am.Actions.Add(new InputKeyAction(InputKey.KeyboardRight, InputAction.Down));
+      am.Actions.Add(new InputKeyAction(InputKey.MouseRButton, InputAction.Down));
       context.ActionMappings.Add(am);
 
       //Map some keys to an axis
       InputAxisMapping ax = new InputAxisMapping("horizontal");
       ax.Axes.Add(new KeyInputAxis(InputKey.KeyboardD, -1.0f));
       ax.Axes.Add(new KeyInputAxis(InputKey.KeyboardA, 1.0f));
+      ax.Axes.Add(new MouseInputAxis(10.0f, 0.0f));
       context.AxisMappings.Add(ax);
 
       //Activate input context

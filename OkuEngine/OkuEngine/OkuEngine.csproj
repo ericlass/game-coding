@@ -87,6 +87,7 @@
     <Compile Include="Input\InputContext.cs" />
     <Compile Include="Input\InputKey.cs" />
     <Compile Include="Input\KeyInputAxis.cs" />
+    <Compile Include="Input\MouseInputAxis.cs" />
     <Compile Include="Levels\Level.cs" />
     <Compile Include="OkuEngineStart.cs" />
     <Compile Include="Particles\DefaultParticleController.cs" />
