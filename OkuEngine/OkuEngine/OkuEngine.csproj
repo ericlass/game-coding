@@ -105,9 +105,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="States\StateMachine.cs" />
     <Compile Include="States\Transition.cs" />
+    <Compile Include="Systems\EntitySystem.cs" />
     <Compile Include="Systems\InputSystem.cs" />
     <Compile Include="Systems\RenderSystem.cs" />
     <Compile Include="Systems\GameSystem.cs" />
+    <Compile Include="Systems\RenderTask.cs" />
     <Compile Include="VariableNames.cs" />
   </ItemGroup>
   <ItemGroup>

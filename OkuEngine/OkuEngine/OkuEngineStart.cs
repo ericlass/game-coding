@@ -15,6 +15,7 @@ namespace OkuEngine
 
     private GameSystem _renderSystem = new RenderSystem();
     private GameSystem _inputSystem = new InputSystem();
+    private GameSystem _entitySystem = new EntitySystem();
 
     public OkuEngineStart(Level startLevel)
     {
@@ -43,6 +44,7 @@ namespace OkuEngine
 
       _renderSystem.Init();
       _inputSystem.Init();
+      _entitySystem.Init();
     }
 
     public override void Update(float dt)
@@ -54,6 +56,8 @@ namespace OkuEngine
       _inputSystem.Execute(_currentLevel);
 
       _currentLevel.EventQueue.Update(float.MaxValue);
+
+      _entitySystem.Execute(_currentLevel);
     }
 
     public override void Render()

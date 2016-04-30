@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using OkuEngine.Collections;
 using OkuEngine.Events;
 using OkuEngine.Input;
+using OkuEngine.Systems;
 
 namespace OkuEngine.Levels
 {
@@ -16,6 +17,7 @@ namespace OkuEngine.Levels
     private EventQueue _eventQueue = new EventQueue("level");
     private BlackBoard _variables = new BlackBoard();
     private List<InputContext> _inputContexts = new List<InputContext>(10);
+    private List<RenderTask> _renderQueue = new List<RenderTask>();
 
     private EngineAPI _api = null;
     private bool _initialized = false;
@@ -66,6 +68,14 @@ namespace OkuEngine.Levels
     internal List<InputContext> InputContexts
     {
       get { return _inputContexts; }
+    }
+
+    /// <summary>
+    /// Gets the render queue for this level.
+    /// </summary>
+    internal List<RenderTask> RenderQueue
+    {
+      get { return _renderQueue; }
     }
 
     /// <summary>

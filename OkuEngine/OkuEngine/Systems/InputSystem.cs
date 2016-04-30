@@ -13,10 +13,6 @@ namespace OkuEngine.Systems
   {
     private HashSet<int> _actionCodes = new HashSet<int>();
 
-    public override void Init()
-    {
-    }
-
     public override void Execute(Level currentLevel)
     {
       _actionCodes.Clear();
@@ -85,10 +81,6 @@ namespace OkuEngine.Systems
     private int GetInputActionCode(MouseButton button, InputAction action)
     {
       return (int)InputDevice.Mouse | (int)button | (int)action;
-    }
-
-    public override void Finish()
-    {
     }
     
   }

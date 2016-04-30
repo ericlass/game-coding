@@ -1,66 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using OkuMath;
 using OkuBase;
 using OkuBase.Graphics;
-using OkuEngine.Components;
 using OkuEngine.Levels;
 
 namespace OkuEngine.Systems
 {
   public class RenderSystem : GameSystem
   {
-    public override void Init()
-    {
-      //TODO: Init required?
-    }
-
     public override void Execute(Level currentLevel)
     {
       GraphicsManager graphics = OkuManager.Instance.Graphics;
 
-      foreach (var entity in currentLevel.Entities)
+      try
       {
-        var positionComp = entity.GetComponent<PositionComponent>();
-        var angleComp = entity.GetComponent<AngleComponent>();
-        var scaleComp = entity.GetComponent<ScaleComponent>();
-
-        bool hasTransform = positionComp != null || angleComp != null || scaleComp != null;
-        bool isScreenSpace = positionComp != null && positionComp.ScreenSpace;
-
-        if (hasTransform)
+        //Iterate render queue and execute render tasks
+        foreach (var task in currentLevel.RenderQueue)
         {
-          Vector2f pos = positionComp == null ? Vector2f.Zero : positionComp.Position;
-          float angle = angleComp == null ? 0.0f : angleComp.Angle;
-          Vector2f scale = scaleComp == null ? Vector2f.One : scaleComp.Scale;
-
-          if (isScreenSpace)
+          if (task.ScreenSpace)
             graphics.BeginScreenSpace();
 
-          graphics.ApplyAndPushTransform(pos, scale, angle);
-        }
+          graphics.ApplyAndPushTransform(task.Translation, task.Scale, task.Angle);
 
-        Color tint = Color.White;
+          graphics.DrawMesh(task.VertexPositions, task.TextureCoordinates, task.VertexColors, task.VertexPositions.Length, PrimitiveType.Quads, task.Texture);
 
-        var vcolor = entity.GetComponent<ColorComponent>();
-        if (vcolor != null)
-          tint = vcolor.Color;
-
-        var image = entity.GetComponent<ImageComponent>();
-        if (image != null)
-          graphics.DrawImage(image.Image, 0, 0, tint);
-
-        if (hasTransform)
           graphics.PopTransform();
 
-        if (isScreenSpace)
-          graphics.EndScreenSpace();
+          if (task.ScreenSpace)
+            graphics.EndScreenSpace();
+        }
       }
-    }
-
-    public override void Finish()
-    {
-      //TODO: Finish required?
+      finally
+      {
+        currentLevel.RenderQueue.Clear();
+      }
     }
 
   }

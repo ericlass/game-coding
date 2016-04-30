@@ -6,8 +6,14 @@ namespace OkuEngine.Systems
 {
   public abstract class GameSystem
   {
-    public abstract void Init();
+    public virtual void Init()
+    {
+    }
+
     public abstract void Execute(Level currentLevel);
-    public abstract void Finish();
+
+    public virtual void Finish()
+    {
+    }
   }
 }
