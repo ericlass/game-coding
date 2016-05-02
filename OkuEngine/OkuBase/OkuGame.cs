@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using OkuBase.Platform;
 using OkuBase.Settings;
@@ -78,11 +79,15 @@ namespace OkuBase
               break;
 
             case User32.WM_KEYDOWN:
-              _okuInstance.Input.KeyPressed((Keys)((int)msg.wParam));
+              int lParam = msg.lParam.ToInt32();
+              //Use state bit to check for key repeat
+              int state = lParam & 0x40000000;
+              if (state == 0)
+                _okuInstance.Input.Keyboard.KeyPressed((Keys)((int)msg.wParam));
               break;
 
             case User32.WM_KEYUP:
-              _okuInstance.Input.KeyReleased((Keys)((int)msg.wParam));
+              _okuInstance.Input.Keyboard.KeyReleased((Keys)((int)msg.wParam));
               break;
 
             case User32.WM_LBUTTONDBLCLK:

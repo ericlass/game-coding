@@ -25,8 +25,6 @@ namespace OkuBase.Input
     {
     }
 
-    public event KeyEventDelegate OnKeyPressed;
-    public event KeyEventDelegate OnKeyReleased;
     public event MouseEventDelegate OnMousePressed;
     public event MouseEventDelegate OnMouseReleased;
     public event MouseEventDelegate OnMouseDblClick;
@@ -43,18 +41,6 @@ namespace OkuBase.Input
     }
 
     //TODO: Track state of modifier keys (Strg, Shift, Caps)
-
-    internal void KeyPressed(Keys key)
-    {
-      if (OnKeyPressed != null)
-        OnKeyPressed(key);
-    }
-
-    internal void KeyReleased(Keys key)
-    {
-      if (OnKeyReleased != null)
-        OnKeyReleased(key);
-    }
 
     internal void MousePressed(MouseButton button)
     {

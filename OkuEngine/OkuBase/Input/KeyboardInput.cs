@@ -14,20 +14,39 @@ namespace OkuBase.Input
     private byte[] _lastState = new byte[256];
     private byte[] _state = new byte[256];
 
-    private bool _pressedKeysValid = false;
     private List<Keys> _pressedKeys = new List<Keys>();
+    private List<Keys> _pressedKeysQueue = new List<Keys>();
 
-    private bool _raisedKeysValid = false;
     private List<Keys> _raisedKeys = new List<Keys>();
+    private List<Keys> _raisedKeysQueue = new List<Keys>();
 
     private char _zero = new char();
     private byte[] _pressedChars = new byte[2];
+
+    public event KeyEventDelegate OnKeyPressed;
+    public event KeyEventDelegate OnKeyReleased;
 
     /// <summary>
     /// Creates a new keyboard input.
     /// </summary>
     public KeyboardInput()
     {
+    }
+
+    internal void KeyPressed(Keys key)
+    {
+      if (OnKeyPressed != null)
+        OnKeyPressed(key);
+
+      _pressedKeysQueue.Add(key);
+    }
+
+    internal void KeyReleased(Keys key)
+    {
+      if (OnKeyReleased != null)
+        OnKeyReleased(key);
+
+      _raisedKeysQueue.Add(key);
     }
 
     /// <summary>
@@ -39,8 +58,15 @@ namespace OkuBase.Input
       Array.Copy(_state, _lastState, _state.Length);
       User32.GetKeyboardState(_state);
 
-      _pressedKeysValid = false;
-      _raisedKeysValid = false;
+      var temp = _pressedKeys;
+      _pressedKeys = _pressedKeysQueue;
+      _pressedKeysQueue = temp;
+      _pressedKeysQueue.Clear();
+
+      temp = _raisedKeys;
+      _raisedKeys = _raisedKeysQueue;
+      _raisedKeysQueue = temp;
+      _raisedKeysQueue.Clear();
     }
 
     /// <summary>
@@ -82,7 +108,7 @@ namespace OkuBase.Input
     /// </summary>
     /// <param name="key">The key to check.</param>
     /// <returns>True if the key was pressed, else false.</returns>
-    public bool KeyPressed(Keys key)
+    public bool KeyWasPressed(Keys key)
     {
       return !KeyIsDown(key, _lastState) && KeyIsDown(key, _state);
     }
@@ -92,7 +118,7 @@ namespace OkuBase.Input
     /// </summary>
     /// <param name="key">The key to check.</param>
     /// <returns>True if the key was raised, else false.</returns>
-    public bool KeyRaised(Keys key)
+    public bool KeyWasRaised(Keys key)
     {
       return KeyIsDown(key, _lastState) && !KeyIsDown(key, _state);
     }
@@ -139,17 +165,6 @@ namespace OkuBase.Input
     /// <returns>A list of the buttons that have been pressed down.</returns>
     public List<Keys> GetPressedButtons()
     {
-      if (!_pressedKeysValid)
-      {
-        _pressedKeys.Clear();
-        //Loop through keys. Start with eight, the first keyboard key. Keys below 8 are mouse buttons.
-        for (int i = 8; i < _state.Length; i++)
-        {
-          Keys key = (Keys)i;
-          if (KeyPressed(key))
-            _pressedKeys.Add(key);
-        }
-      }
       return _pressedKeys;
     }
 
@@ -159,18 +174,6 @@ namespace OkuBase.Input
     /// <returns>A list of the buttons that have been raised up.</returns>
     public List<Keys> GetRaisedButtons()
     {
-      if (!_raisedKeysValid)
-      {
-        _raisedKeys.Clear();
-        //Loop through keys. Start with eight, the first keyboard key. Keys below 8 are mouse buttons.
-        for (int i = 8; i < _state.Length; i++)
-        {
-          Keys key = (Keys)i;
-          if (KeyRaised(key))
-            _raisedKeys.Add(key);
-        }
-        _raisedKeysValid = true;
-      }
       return _raisedKeys;
     }
 
