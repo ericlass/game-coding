@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using OkuMath;
+using OkuBase.Geometry;
 using OkuBase.Graphics;
 
 namespace OkuEngine.Systems
@@ -10,27 +10,19 @@ namespace OkuEngine.Systems
   /// </summary>
   public class RenderTask
   {
-    private Vector2f _scale = Vector2f.One;
-
-    public Vector2f Translation { get; set; }
-
-    public Vector2f Scale
+    public RenderTask()
     {
-      get { return _scale; }
-      set { _scale = value; }
+      Scale = Vector2f.One;
     }
 
+    public Vector2f Translation { get; set; }
+    public Vector2f Scale { get; set; }
     public float Angle { get; set; }
 
-    public Vector2f[] VertexPositions { get; set; }
-    public Vector2f[] TextureCoordinates { get; set; }
-    public Color[] VertexColors { get; set; }
-
-    public ImageBase Texture { get; set; }
     public ShaderProgram Shader { get; set; }
-    
     public int Layer { get; set; }
     public bool ScreenSpace { get; set; }
 
+    public Mesh Mesh { get; set; }
   }
 }

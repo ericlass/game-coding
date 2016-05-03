@@ -26,7 +26,7 @@ namespace OkuBase.Geometry
     /// <param name="vertices">The vertices of the mesh.</param>
     /// <param name="texture">The texture to use for the mesh (can be null).</param>
     /// <param name="type">The type of primitives to form from the vertices.</param>
-    public Mesh(Vertices vertices, Image texture, PrimitiveType type)
+    public Mesh(Vertices vertices, ImageBase texture, PrimitiveType type)
     {
       _vertices = vertices;
       _texture = texture;
@@ -71,29 +71,27 @@ namespace OkuBase.Geometry
       float halfWidth = image.Width / 2;
       float halfHeight = image.Height / 2;
 
-      Vector2f[] pos = new Vector2f[4];
-      pos[0] = new Vector2f(-halfWidth, halfHeight);
-      pos[1] = new Vector2f(halfWidth, halfHeight);
-      pos[2] = new Vector2f(halfWidth, -halfHeight);
-      pos[3] = new Vector2f(-halfWidth, -halfHeight);
+      Vector2f[] pos = new Vector2f[4] {
+        new Vector2f(-halfWidth, -halfHeight),
+        new Vector2f(-halfWidth, halfHeight),
+        new Vector2f(halfWidth, -halfHeight),
+        new Vector2f(halfWidth, halfHeight)
+      };
 
-      Vector2f[] tex = new Vector2f[4];
-      tex[0] = new Vector2f(0, 1);
-      tex[1] = new Vector2f(1, 1);
-      tex[2] = new Vector2f(1, 0);
-      tex[3] = new Vector2f(0, 0);
+      Vector2f[] tex = new Vector2f[4] {
+        new Vector2f(0, 0),
+        new Vector2f(0, 1),
+        new Vector2f(1, 0),
+        new Vector2f(1, 1)
+      };
 
-      Color[] col = new Color[4];
-      col[0] = tint;
-      col[1] = tint;
-      col[2] = tint;
-      col[3] = tint;
+      Color[] col = new Color[4] { tint, tint, tint, tint };
 
       Mesh result = new Mesh();
       result.Vertices = new Vertices(pos, tex, col);
 
       result.Texture = image;
-      result.PrimitiveType = PrimitiveType.Quads;
+      result.PrimitiveType = PrimitiveType.TriangleStrip;
 
       return result;
     }

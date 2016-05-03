@@ -178,7 +178,9 @@ namespace OkuBase
           Kernel32.QueryPerformanceCounter(out perf2);
           float renderTime = (perf2 - perf1) / (float)freq;
 
-          //System.Diagnostics.Debug.WriteLine("Update: " + updateTime.ToString("0.######") + " | Render: " + renderTime.ToString("0.######"));
+          string text = "Update: " + updateTime.ToString("0.######") + " | Render: " + renderTime.ToString("0.######");
+          System.Diagnostics.Debug.WriteLine(text);
+          OkuManager.Instance.Graphics.Title = text;
         }
       }
 

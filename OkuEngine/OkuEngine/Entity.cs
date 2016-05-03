@@ -73,11 +73,11 @@ namespace OkuEngine
     /// <returns>True if the entity contains at least one of the components, else false.</returns>
     public bool ContainsComponent<T>() where T : IComponent
     {
-      if (_components.Exists(comp => comp.GetType() == typeof(T)))
+      if (_components.Exists(comp => comp is T))
         return true;
 
       if (_template != null)
-        return _template._components.Exists(comp => comp.GetType() == typeof(T));
+        return _template._components.Exists(comp => comp is T);
 
       return false;
     }
@@ -89,13 +89,13 @@ namespace OkuEngine
     /// <returns>The first component with the name, or null if there is no such component.</returns>
     public T GetComponent<T>() where T : IComponent
     {
-      IComponent result = _components.Find(comp => comp.GetType() == typeof(T));
+      IComponent result = _components.Find(comp => comp is T);
 
       if (result != null)
         return (T)result;
 
       if (_template != null)
-        result = _template._components.Find(comp => comp.GetType() == typeof(T));
+        result = _template._components.Find(comp => comp is T);
 
       return (T)result;
     }
@@ -107,10 +107,10 @@ namespace OkuEngine
     /// <returns>A list of all components with the given name. Can be empty, but never null.</returns>
     public List<IComponent> GetComponents<T>() where T : IComponent
     {
-      List<IComponent> result = _components.FindAll(comp => comp.GetType() == typeof(T));
+      List<IComponent> result = _components.FindAll(comp => comp is T);
 
-      if (_template != null)
-        result.AddRange(_template._components.FindAll(comp => comp.GetType() == typeof(T)));
+      if (result.Count == 0 && _template != null)
+        result.AddRange(_template._components.FindAll(comp => comp is T));
 
       return result;
     }

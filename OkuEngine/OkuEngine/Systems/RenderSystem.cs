@@ -21,7 +21,7 @@ namespace OkuEngine.Systems
 
           graphics.ApplyAndPushTransform(task.Translation, task.Scale, task.Angle);
 
-          graphics.DrawMesh(task.VertexPositions, task.TextureCoordinates, task.VertexColors, task.VertexPositions.Length, PrimitiveType.Quads, task.Texture);
+          graphics.DrawMesh(task.Mesh);
 
           graphics.PopTransform();
 

@@ -19,7 +19,8 @@ namespace OkuTestApp
       Entity entity = new Entity("first");
 
       //Add image component
-      entity.AddComponent(new ImageComponent(API.LoadImage("D:\\Temp\\Icons\\iconex_ap\\128x128\\plain\\bullet_square_grey.png")));
+      var image = API.LoadImage("D:\\Temp\\Icons\\iconex_ap\\128x128\\plain\\bullet_square_grey.png");
+      entity.AddComponent(new ImageComponent(image));
 
       //Add transform components
       PositionComponent pos = new PositionComponent();
@@ -34,14 +35,18 @@ namespace OkuTestApp
       API.AddEntity(entity);
 
       //Create entity instance
-      Entity instance = new Entity("instance");
-      instance.Template = entity;
+      Random rand = new Random();
+      for (int i = 0; i < 100; i++)
+      {
+        Entity instance = new Entity("instance" + i);
+        instance.Template = entity;
 
-      //Instance overrides position and color components
-      instance.AddComponent(new PositionComponent(new Vector2f(150, 50), false));
-      instance.AddComponent(new ColorComponent(Color.Red));
+        //Instance overrides position and color components
+        instance.AddComponent(new PositionComponent(new Vector2f(rand.Next(-400, 400), rand.Next(-300, 300)), false));
+        instance.AddComponent(new ImageComponent(image, Color.RandomColor(rand)));
 
-      API.AddEntity(instance);
+        API.AddEntity(instance);
+      }
 
       //Generic key event listener
       API.AddEventListener(new EventListener(EventNames.GetGenericInputEventName(Keys.Space, InputAction.Down), ev => angle.Angle += 45.0f));

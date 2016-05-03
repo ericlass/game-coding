@@ -531,7 +531,7 @@
             Creates a new mesh with no data.
             </summary>
         </member>
-        <member name="M:OkuBase.Geometry.Mesh.#ctor(OkuBase.Geometry.Vertices,OkuBase.Graphics.Image,OkuBase.Graphics.PrimitiveType)">
+        <member name="M:OkuBase.Geometry.Mesh.#ctor(OkuBase.Geometry.Vertices,OkuBase.Graphics.ImageBase,OkuBase.Graphics.PrimitiveType)">
             <summary>
             Creates a new image with the given data.
             </summary>

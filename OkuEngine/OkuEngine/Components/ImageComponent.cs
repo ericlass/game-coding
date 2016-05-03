@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using OkuMath;
+using OkuBase.Geometry;
 using OkuBase.Graphics;
 using OkuEngine.Systems;
 
@@ -8,9 +10,11 @@ namespace OkuEngine.Components
   /// <summary>
   /// Component that defines a simple image for rendering.
   /// </summary>
-  public class ImageComponent : IComponent
+  public class ImageComponent : IRenderComponent
   {
     private ImageBase _image = null;
+    private Color _tint = Color.White;
+    private Mesh _mesh = null;
 
     /// <summary>
     /// Creates a new image component.
@@ -26,6 +30,17 @@ namespace OkuEngine.Components
     public ImageComponent(ImageBase image)
     {
       _image = image;
+    }
+
+    /// <summary>
+    /// Creates a new image component with the given image.
+    /// </summary>
+    /// <param name="image">The image for this component.</param>
+    /// <param name="tint">The color the image is tinted with.</param>
+    public ImageComponent(ImageBase image, Color tint)
+    {
+      _image = image;
+      _tint = tint;
     }
 
     /// <summary>
@@ -50,7 +65,27 @@ namespace OkuEngine.Components
     public ImageBase Image
     {
       get { return _image; }
-      set { _image = value; }
+      set
+      {
+        if (_image != value)
+        {
+          _image = value;
+          _mesh = null;
+        }
+      }
+    }
+
+    /// <summary>
+    /// Gets or sets the color the image is tinted with.
+    /// </summary>
+    public Color Tint
+    {
+      get { return _tint; }
+      set
+      {
+        _tint = value;
+        _mesh = null;
+      }
     }
 
     /// <summary>
@@ -59,8 +94,15 @@ namespace OkuEngine.Components
     /// <returns>A copy of the component.</returns>
     public IComponent Copy()
     {
-      return new ImageComponent(_image);
+      return new ImageComponent(_image, _tint);
     }
 
+    public Mesh GetMesh()
+    {
+      if (_mesh == null && _image != null)
+        _mesh = Mesh.ForImage(_image, _tint);
+
+      return _mesh;
+    }
   }
 }
