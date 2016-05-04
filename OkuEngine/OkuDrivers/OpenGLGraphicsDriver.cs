@@ -16,6 +16,9 @@ namespace OkuDrivers
 {
   public class OpenGLGraphicsDriver : IGraphicsDriver
   {
+    private static int VectorSize = System.Runtime.InteropServices.Marshal.SizeOf(Vector2f.Zero);
+    private static int ColorSize = System.Runtime.InteropServices.Marshal.SizeOf(Color.Black);
+
     private GraphicsSettings _settings = null;
     private Control _display = null;
     private IntPtr _displayHandle = IntPtr.Zero;
@@ -29,6 +32,10 @@ namespace OkuDrivers
     private Dictionary<int, int> _shaderPrograms = new Dictionary<int, int>(); //Maps shader program ids to opengl shader program names
     private Dictionary<int, Dictionary<string, int>> _uniformLocations = new Dictionary<int, Dictionary<string, int>>(); //Maps shader program ids to maps that map uniform names to opengl uniform locations
     private Dictionary<int, int> _vertexBuffers = new Dictionary<int, int>(); //Maps buffer ids to opengl buffer names
+
+    private ShaderProgram _activeShader = null;
+    private PrimitiveType _primitiveType = PrimitiveType.None;
+    private Vector2f[] _vertexPos = null;
 
     /// <summary>
     /// Handles resizing of the form. The OpenGL viewport is reset to fit the new size of the form.
@@ -110,43 +117,6 @@ namespace OkuDrivers
       }
     }
 
-    /// <summary>
-    /// Set array pointers for vertices, texture coordinates and vertex colors.
-    /// If a non-null value is given for an array, the corresponding client state
-    /// array is enabled. If null is given, it is disabled.
-    /// </summary>
-    /// <param name="vertices">The vertex array.</param>
-    /// <param name="texCoords">The texture coordinate array.</param>
-    /// <param name="colors">The vertex color array.</param>
-    private void SetPointers(Vector2f[] vertices, Vector2f[] texCoords, Color[] colors)
-    {
-      int vectorSize = System.Runtime.InteropServices.Marshal.SizeOf(Vector2f.Zero);
-
-      if (vertices != null)
-      {
-        Gl.glEnableClientState(Gl.GL_VERTEX_ARRAY);
-        Gl.glVertexPointer(2, Gl.GL_FLOAT, vectorSize, vertices);
-      }
-      else
-        Gl.glDisableClientState(Gl.GL_VERTEX_ARRAY);
-
-      if (texCoords != null)
-      {
-        Gl.glEnableClientState(Gl.GL_TEXTURE_COORD_ARRAY);
-        Gl.glTexCoordPointer(2, Gl.GL_FLOAT, vectorSize, texCoords);
-      }
-      else
-        Gl.glDisableClientState(Gl.GL_TEXTURE_COORD_ARRAY);
-
-      if (colors != null)
-      {
-        Gl.glEnableClientState(Gl.GL_COLOR_ARRAY);
-        Gl.glColorPointer(Gl.GL_BGRA, Gl.GL_UNSIGNED_BYTE, System.Runtime.InteropServices.Marshal.SizeOf(Color.Black), colors);
-      }
-      else
-        Gl.glDisableClientState(Gl.GL_COLOR_ARRAY);
-    }
-
     private void UpdateViewport(float left, float right, float bottom, float top)
     {
       Gl.glMatrixMode(Gl.GL_PROJECTION);
@@ -164,9 +134,175 @@ namespace OkuDrivers
       get { return _display; }
     }
 
-    public void SetBackgroundColor(Color color)
+    public Vector2f[] VertexPositions
     {
-      Gl.glClearColor(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
+      set
+      {
+        _vertexPos = value;
+        if (value != null)
+        {
+          Gl.glEnableClientState(Gl.GL_VERTEX_ARRAY);
+          Gl.glVertexPointer(2, Gl.GL_FLOAT, VectorSize, value);
+        }
+        else
+          Gl.glDisableClientState(Gl.GL_VERTEX_ARRAY);
+      }
+    }
+
+    public Vector2f[] VertexTexCoords
+    {
+      set
+      {
+        if (value != null)
+        {
+          Gl.glEnableClientState(Gl.GL_TEXTURE_COORD_ARRAY);
+          Gl.glTexCoordPointer(2, Gl.GL_FLOAT, VectorSize, value);
+        }
+        else
+          Gl.glDisableClientState(Gl.GL_TEXTURE_COORD_ARRAY);
+      }
+    }
+
+    public Vector2f[] VertexColors
+    {
+      set
+      {
+        if (value != null)
+        {
+          Gl.glEnableClientState(Gl.GL_COLOR_ARRAY);
+          Gl.glColorPointer(Gl.GL_BGRA, Gl.GL_UNSIGNED_BYTE, ColorSize, value);
+        }
+        else
+          Gl.glDisableClientState(Gl.GL_COLOR_ARRAY);
+      }
+    }
+
+    public PrimitiveType PrimitiveType
+    {
+      set{ _primitiveType = value; }
+    }
+
+    public ImageBase Texture
+    {
+      set
+      {
+        if (value != null)
+        {
+          int textureName = _textures[value.Id];
+          Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureName);
+        }
+        else
+          Gl.glBindTexture(Gl.GL_TEXTURE_2D, 0);
+      }
+    }
+
+    public Color BackgroundColor
+    {
+      set { Gl.glClearColor(value.R / 255.0f, value.G / 255.0f, value.B / 255.0f, value.A / 255.0f); }
+    }
+
+    public RenderTarget RenderTarget
+    {
+      set
+      {
+        if (value == null)
+        {
+          Gl.glBindFramebufferEXT(Gl.GL_FRAMEBUFFER_EXT, 0);
+          Gl.glViewport(0, 0, _display.ClientSize.Width, _display.ClientSize.Height);
+        }
+        else
+        {
+          if (!_textures.ContainsKey(value.Id))
+            throw new OkuException("Trying to bind an uninitialized render target! ID: " + value.Id);
+
+          Gl.glBindFramebufferEXT(Gl.GL_FRAMEBUFFER_EXT, _frameBuffer);
+          Gl.glFramebufferTexture2DEXT(Gl.GL_FRAMEBUFFER_EXT, Gl.GL_COLOR_ATTACHMENT0_EXT, Gl.GL_TEXTURE_2D, _textures[value.Id], 0);
+
+          Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
+          Gl.glViewport(0, 0, value.Width, value.Height);
+        }
+      }
+    }
+
+    public ScissorRect ScissorRectangle
+    {
+      set
+      {
+        if (value != null)
+        {
+          Gl.glEnable(Gl.GL_SCISSOR_TEST);
+          Gl.glScissor(value.Left, value.Right, value.Width, value.Height);
+        }
+        else
+          Gl.glDisable(Gl.GL_SCISSOR_TEST);
+      }
+    }
+
+    public Vector2f Translation
+    {
+      set
+      {
+        Gl.glMatrixMode(Gl.GL_MODELVIEW);
+        Gl.glTranslatef(value.X, value.Y, 0.0f);
+      }
+    }
+
+    public Vector2f Scale
+    {
+      set
+      {
+        Gl.glMatrixMode(Gl.GL_MODELVIEW);
+        Gl.glScalef(value.X, value.Y, 1.0f);
+      }
+    }
+
+    public float Angle
+    {
+      set
+      {
+        Gl.glMatrixMode(Gl.GL_MODELVIEW);
+        Gl.glRotatef(value, 0.0f, 0.0f, 1.0f);
+      }
+    }
+
+    public bool ScreenSpace
+    {
+      set
+      {
+        if (value)
+        {
+          Gl.glMatrixMode(Gl.GL_PROJECTION);
+          Gl.glPushMatrix();
+
+          Gl.glLoadIdentity();
+          Gl.glOrtho(0, _settings.Width, 0, _settings.Height, -1, 1);
+        }
+        else
+        {
+          Gl.glMatrixMode(Gl.GL_PROJECTION);
+          Gl.glPopMatrix();
+        }
+      }
+    }
+
+    public ShaderProgram Shader
+    {
+      set
+      {
+        _activeShader = value;
+        if (value != null)
+        {
+          if (!_shaderPrograms.ContainsKey(value.Id))
+            throw new OkuException("Trying to use an uninitialized shader program! ID: " + value.Id);
+
+          int programName = _shaderPrograms[value.Id];
+          Gl.glUseProgram(programName);
+        }
+        else
+        {
+          Gl.glUseProgram(0);
+        }
+      }
     }
 
     public void Initialize(GraphicsSettings settings)
@@ -229,7 +365,7 @@ namespace OkuDrivers
         Gl.glEnable(Gl.GL_DEPTH_TEST);
       }
 
-      SetBackgroundColor(settings.BackgroundColor);
+      BackgroundColor = settings.BackgroundColor;
 
       Gl.glLineWidth(1.0f);
       Gl.glEnable(Gl.GL_LINE_SMOOTH);
@@ -284,18 +420,6 @@ namespace OkuDrivers
       _textures.Add(image.Id, textureId);
     }
 
-    public void UpdateImage(Image image, int x, int y, int width, int height, ImageData data)
-    {
-      int textureId = 0;
-      if (_textures.ContainsKey(image.Id))
-        textureId = _textures[image.Id];
-      else
-        return;
-
-      Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
-      Gl.glTexSubImage2D(Gl.GL_TEXTURE_2D, 0, x, y, width, height, Gl.GL_BGRA, Gl.GL_UNSIGNED_BYTE, data.PixelData);
-    }
-
     public void ReleaseImage(Image image)
     {
       if (_textures.ContainsKey(image.Id))
@@ -342,30 +466,6 @@ namespace OkuDrivers
         throw new OkuException("Frame buffer was not setup correctly! ID: " + target.Id);
     }
 
-    public void SetRenderTarget(RenderTarget target)
-    {
-      if (target == null)
-      {
-        Gl.glBindFramebufferEXT(Gl.GL_FRAMEBUFFER_EXT, 0);
-        Gl.glViewport(0, 0, _display.ClientSize.Width, _display.ClientSize.Height);
-      }
-      else
-      {
-        if (!_textures.ContainsKey(target.Id))
-          throw new OkuException("Trying to bind an uninitialized render target! ID: " + target.Id);
-
-        Gl.glBindFramebufferEXT(Gl.GL_FRAMEBUFFER_EXT, _frameBuffer);
-        Gl.glFramebufferTexture2DEXT(Gl.GL_FRAMEBUFFER_EXT, Gl.GL_COLOR_ATTACHMENT0_EXT, Gl.GL_TEXTURE_2D, _textures[target.Id], 0);
-
-        Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
-        Gl.glViewport(0, 0, target.Width, target.Height);
-      }
-
-      //TODO: Not sure if this is really needed?
-      //Gl.glMatrixMode(Gl.GL_MODELVIEW);
-      //Gl.glLoadIdentity();
-    }
-
     public void ReleaseRenderTarget(RenderTarget target)
     {
       if (_textures.ContainsKey(target.Id))
@@ -394,219 +494,15 @@ namespace OkuDrivers
       Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
     }
 
-    public void DrawImage(ImageBase image, float x, float y, float rotation, float sx, float sy, Color tint)
-    {
-      if (!_textures.ContainsKey(image.Id))
-        return;
-
-      int textureId = _textures[image.Id];
-      Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
-
-      Gl.glPushMatrix();
-
-      Gl.glTranslatef(x, y, 0.0f);
-      Gl.glScalef(sx, sy, 1.0f);
-      Gl.glRotatef(rotation, 0.0f, 0.0f, 1.0f);
-
-      float halfWidth = image.Width / 2.0f;
-      float halfHeight = image.Height / 2.0f;
-
-      Gl.glBegin(Gl.GL_QUADS);
-
-      Gl.glColor4ub(tint.R, tint.G, tint.B, tint.A);
-
-      Gl.glTexCoord2f(0, 1);
-      Gl.glVertex2f(-halfWidth, halfHeight);
-
-      Gl.glTexCoord2f(1, 1);
-      Gl.glVertex2f(halfWidth, halfHeight);
-
-      Gl.glTexCoord2f(1, 0);
-      Gl.glVertex2f(halfWidth, -halfHeight);
-
-      Gl.glTexCoord2f(0, 0);
-      Gl.glVertex2f(-halfWidth, -halfHeight);
-
-      Gl.glEnd();
-
-      Gl.glBindTexture(Gl.GL_TEXTURE_2D, 0);
-
-      Gl.glPopMatrix();
-    }
-
-    public void DrawScreenAlignedQuad(ImageBase image, Color tint)
-    {
-      Gl.glMatrixMode(Gl.GL_PROJECTION);
-      Gl.glPushMatrix();
-
-      Gl.glLoadIdentity();
-      Gl.glOrtho(0, 1, 0, 1, -1, 1);
-
-      if (image != null)
-      {
-        int textureId = _textures[image.Id];
-        Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
-      }
-
-      Gl.glBegin(Gl.GL_QUADS);
-
-      Gl.glColor4ub(tint.R, tint.G, tint.B, tint.A);
-
-      Gl.glTexCoord2f(0, 1);
-      Gl.glVertex2f(0, 1);
-
-      Gl.glTexCoord2f(1, 1);
-      Gl.glVertex2f(1, 1);
-
-      Gl.glTexCoord2f(1, 0);
-      Gl.glVertex2f(1, 0);
-
-      Gl.glTexCoord2f(0, 0);
-      Gl.glVertex2f(0, 0);
-
-      Gl.glEnd();
-
-      if (image != null)
-        Gl.glBindTexture(Gl.GL_TEXTURE_2D, 0);
-
-      Gl.glMatrixMode(Gl.GL_PROJECTION);
-      Gl.glPopMatrix();
-    }
-
-    public void DrawLine(float x1, float y1, float x2, float y2, float width, Color color)
-    {
-      Gl.glDisable(Gl.GL_TEXTURE_2D);
-      try
-      {
-        Gl.glLineWidth(width);
-
-        Gl.glBegin(Gl.GL_LINES);
-
-        Gl.glColor4ub(color.R, color.G, color.B, color.A);
-        Gl.glVertex2f(x1, y1);
-        Gl.glVertex2f(x2, y2);
-
-        Gl.glEnd();
-      }
-      finally
-      {
-        Gl.glEnable(Gl.GL_TEXTURE_2D);
-      } 
-    }
-
-    public void DrawLines(Vector2f[] vertices, Color[] colors, int count, float width, LineMode interpretation)
-    {
-      Gl.glDisable(Gl.GL_TEXTURE_2D);
-      try
-      {
-        Gl.glLineWidth(width);
-
-        //Convert the interpretation to an OpenGL primitive type.
-        int primitive = VertexIntToGLPrimitive(interpretation);
-
-        SetPointers(vertices, null, colors);
-        Gl.glDrawArrays(primitive, 0, count);
-      }
-      finally
-      {
-        Gl.glEnable(Gl.GL_TEXTURE_2D);
-      }
-    }
-
-    public void DrawPoint(float x, float y, float size, Color color)
-    {
-      Gl.glDisable(Gl.GL_TEXTURE_2D);
-      try
-      {
-        Gl.glPointSize(size);
-
-        Gl.glBegin(Gl.GL_POINTS);
-
-        Gl.glColor4ub(color.R, color.G, color.B, color.A);
-        Gl.glVertex2f(x, y);
-
-        Gl.glEnd();
-      }
-      finally
-      {
-        Gl.glEnable(Gl.GL_TEXTURE_2D);
-      }
-    }
-
-    public void DrawPoints(Vector2f[] points, Color[] colors, int count, float size)
-    {
-      Gl.glDisable(Gl.GL_TEXTURE_2D);
-      try
-      {
-        Gl.glPointSize(size);
-
-        SetPointers(points, null, colors);
-        Gl.glDrawArrays(Gl.GL_POINTS, 0, count);
-      }
-      finally
-      {
-        Gl.glEnable(Gl.GL_TEXTURE_2D);
-      }
-    }
-
-    public void DrawMesh(Vector2f[] points, Vector2f[] texCoords, Color[] colors, int count, PrimitiveType type, ImageBase texture)
-    {
-      if (texture != null)
-      {
-        if (!_textures.ContainsKey(texture.Id))
-          return;
-
-        int textureId = _textures[texture.Id];
-        Gl.glBindTexture(Gl.GL_TEXTURE_2D, textureId);
-      }
-      else
-        Gl.glBindTexture(Gl.GL_TEXTURE_2D, 0);
-
-      int primitive = PrimitiveToGLPrimitive(type);
-
-      SetPointers(points, texCoords, colors);
-      Gl.glDrawArrays(primitive, 0, count);
-    }
-
     public void SetViewport(float left, float right, float bottom, float top)
     {
       UpdateViewport(left, right, bottom, top);
     }
 
-    public void BeginScreenSpace()
-    {
-      Gl.glMatrixMode(Gl.GL_PROJECTION);
-      Gl.glPushMatrix();
-
-      Gl.glLoadIdentity();
-      Gl.glOrtho(0, _settings.Width, 0, _settings.Height, -1, 1);
-    }
-
-    public void EndScreenSpace()
-    {
-      Gl.glMatrixMode(Gl.GL_PROJECTION);
-      Gl.glPopMatrix();
-    }
-
-    public void SetScissorRectangle(int left, int right, int width, int height)
-    {
-      Gl.glEnable(Gl.GL_SCISSOR_TEST);
-      Gl.glScissor(left, right, width, height);
-    }
-
-    public void ClearScissorRectangle()
-    {
-      Gl.glDisable(Gl.GL_SCISSOR_TEST);
-    }
-
-    public void ApplyAndPushTransform(Vector2f translation, Vector2f scale, float angle)
+    public void PushTransform()
     {
       Gl.glMatrixMode(Gl.GL_MODELVIEW);
       Gl.glPushMatrix();
-
-      Gl.glTranslatef(translation.X, translation.Y, 0.0f);
-      Gl.glScalef(scale.X, scale.Y, 1.0f);
-      Gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
     }
 
     public void PopTransform()
@@ -665,7 +561,7 @@ namespace OkuDrivers
       return builder.ToString();
     }
 
-    public int GetUniformLocation(ShaderProgram program, string name)
+    private int GetUniformLocation(ShaderProgram program, string name)
     {
       if (!_shaderPrograms.ContainsKey(program.Id))
         throw new OkuException("Trying to access a variable of an uninitialized shader program! ID: " + program.Id + "; Variable: " + name);
@@ -716,28 +612,34 @@ namespace OkuDrivers
       return true;
     }
 
-    public void UseShaderProgram(ShaderProgram program)
-    {
-      if (program != null)
-      {
-        if (!_shaderPrograms.ContainsKey(program.Id))
-          throw new OkuException("Trying to use an uninitialized shader program! ID: " + program.Id);
-
-        int programName = _shaderPrograms[program.Id];
-        Gl.glUseProgram(programName);
-      }
-      else
-      {
-        Gl.glUseProgram(0);
-      }
-    }
-
-    public void SetShaderFloat(ShaderProgram program, string name, params float[] values)
+    public void ReleaseShaderProgram(ShaderProgram program)
     {
       if (!_shaderPrograms.ContainsKey(program.Id))
-        throw new OkuException("Trying to set a float of an uninitialized shader program! ID: " + program.Id + "; " + name);
+        return;
 
-      int location = GetUniformLocation(program, name);
+      int vs = _shaders[program.VertexShader.Id];
+      int ps = _shaders[program.PixelShader.Id];
+      int prog = _shaderPrograms[program.Id];
+
+      Gl.glDeleteShader(vs);
+      Gl.glDeleteShader(ps);
+      Gl.glDeleteProgram(prog);
+
+      _shaders.Remove(program.VertexShader.Id);
+      _shaders.Remove(program.PixelShader.Id);
+      _shaderPrograms.Remove(program.Id);
+      _uniformLocations.Remove(program.Id);
+    }
+
+    public void SetShaderValue(string name, params float[] values)
+    {
+      if (_activeShader == null)
+        throw new OkuException("No shader bound! Bind a shader before trying to set a value!");
+
+      if (!_shaderPrograms.ContainsKey(_activeShader.Id))
+        throw new OkuException("Trying to set a float of an uninitialized shader program! ID: " + _activeShader.Id + "; " + name);
+
+      int location = GetUniformLocation(_activeShader, name);
 
       switch (values.Length)
       {
@@ -762,12 +664,15 @@ namespace OkuDrivers
       }
     }
 
-    public void SetShaderTexture(ShaderProgram program, string name, ImageBase image)
+    public void SetShaderValue(string name, ImageBase image)
     {
-      if (!_shaderPrograms.ContainsKey(program.Id))
-        throw new OkuException("Trying to set a texture of an uninitialized shader program! ID: " + program.Id + "; " + name);
+      if (_activeShader == null)
+        throw new OkuException("No shader bound! Bind a shader before trying to set a value!");
 
-      int location = GetUniformLocation(program, name);
+      if (!_shaderPrograms.ContainsKey(_activeShader.Id))
+        throw new OkuException("Trying to set a texture of an uninitialized shader program! ID: " + _activeShader.Id + "; " + name);
+
+      int location = GetUniformLocation(_activeShader, name);
 
       Gl.glActiveTexture(Gl.GL_TEXTURE0 + 1);
       Gl.glBindTexture(Gl.GL_TEXTURE_2D, _textures[image.Id]);
@@ -775,25 +680,38 @@ namespace OkuDrivers
       Gl.glActiveTexture(Gl.GL_TEXTURE0);
     }
 
-    public void ReleaseShaderProgram(ShaderProgram program)
+    public void Draw()
     {
-      if (!_shaderPrograms.ContainsKey(program.Id))
-        return;
+      if (_vertexPos == null)
+        throw new OkuException("Vertex positions not set before call to Draw()!");
 
-      int vs = _shaders[program.VertexShader.Id];
-      int ps = _shaders[program.PixelShader.Id];
-      int prog = _shaderPrograms[program.Id];
-
-      Gl.glDeleteShader(vs);
-      Gl.glDeleteShader(ps);
-      Gl.glDeleteProgram(prog);
-
-      _shaders.Remove(program.VertexShader.Id);
-      _shaders.Remove(program.PixelShader.Id);
-      _shaderPrograms.Remove(program.Id);
-      _uniformLocations.Remove(program.Id);
+      int primitive = PrimitiveToGLPrimitive(_primitiveType);
+      Gl.glDrawArrays(primitive, 0, _vertexPos.Length);
     }
 
+    public void Draw(int first, int last)
+    {
+      int primitive = PrimitiveToGLPrimitive(_primitiveType);
+      Gl.glDrawArrays(primitive, first, (last - first) + 1);
+    }
+
+    public void DrawInstanced(int count)
+    {
+      if (_vertexPos == null)
+        throw new OkuException("Vertex positions not set before call to DrawInstanced(int)!");
+
+      int primitive = PrimitiveToGLPrimitive(_primitiveType);
+      Gl.glDrawArraysInstancedEXT(primitive, 0, _vertexPos.Length, count);
+    }
+
+    public void DrawInstanced(int count, int first, int last)
+    {
+      int primitive = PrimitiveToGLPrimitive(_primitiveType);
+      Gl.glDrawArraysInstancedEXT(primitive, first, (last - first) + 1, count);
+    }
+
+    #region VertexBuffer (unused)
+    /*
     public void InitVertexBuffer(VertexBuffer vbuffer)
     {
       if (vbuffer.Vertices == null)
@@ -807,7 +725,7 @@ namespace OkuDrivers
 
       Gl.glBindBuffer(Gl.GL_ARRAY_BUFFER, buffer);
       Gl.glEnableClientState(Gl.GL_VERTEX_ARRAY);
-      
+
       Vertex test = new Vertex();
       int vertexSize = Marshal.SizeOf(test);
 
@@ -831,7 +749,7 @@ namespace OkuDrivers
 
       int buffer = _vertexBuffers[vbuffer.Id];
       Gl.glBindBuffer(Gl.GL_ARRAY_BUFFER, buffer);
-      
+
       Vertex test = new Vertex();
       Gl.glInterleavedArrays(Gl.GL_T2F_C4UB_V3F, Marshal.SizeOf(test), IntPtr.Zero);
 
@@ -878,6 +796,8 @@ namespace OkuDrivers
 
       _vertexBuffers.Remove(vbuffer.Id);
     }
+    */
+    #endregion
 
   }
 }

@@ -5,14 +5,20 @@ using System.Text;
 using OkuBase.Graphics;
 using OkuBase.Settings;
 using OkuMath;
+using OkuBase.Geometry;
 
 namespace OkuBase.Driver
 {
   public class NullGraphicsDriver : IGraphicsDriver
   {
-    public string DriverName
+    public float Angle
     {
-      get { return "null"; }
+      set { }
+    }
+
+    public Color BackgroundColor
+    {
+      set { }
     }
 
     public Control Display
@@ -20,51 +26,67 @@ namespace OkuBase.Driver
       get { return null; }
     }
 
-    public void SetBackgroundColor(Color color)
+    public string DriverName
     {
+      get { return "null"; }
     }
 
-    public void Initialize(GraphicsSettings settings)
+    public PrimitiveType PrimitiveType
     {
+      set { }
     }
 
-    public void Update(float dt)
+    public RenderTarget RenderTarget
     {
+      set { }
     }
 
-    public void Finish()
+    public Vector2f Scale
     {
+      set { }
     }
 
-    public void InitImage(Image image)
+    public ScissorRect ScissorRectangle
     {
+      set { }
     }
 
-    public void UpdateImage(Image image, int x, int y, int width, int height, ImageData data)
+    public bool ScreenSpace
     {
+      set { }
     }
 
-    public void ReleaseImage(Image image)
+    public ShaderProgram Shader
     {
+      set { }
     }
 
-    public void InitRenderTarget(RenderTarget target)
+    public ImageBase Texture
     {
+      set { }
     }
 
-    public void SetRenderTarget(RenderTarget target)
+    public Vector2f Translation
     {
+      set { }
     }
 
-    public void ReleaseRenderTarget(RenderTarget target)
+    public Vector2f[] VertexColors
     {
+      set { }
+    }
+
+    public Vector2f[] VertexPositions
+    {
+      set { }
+    }
+
+    public Vector2f[] VertexTexCoords
+    {
+      set { }
     }
 
     public void Begin()
-    {
-    }
-
-    public void End()
     {
     }
 
@@ -72,59 +94,39 @@ namespace OkuBase.Driver
     {
     }
 
-    public void DrawImage(ImageBase image, float x, float y, float rotation, float sx, float sy, Color tint)
+    public void Draw()
     {
     }
 
-    public void DrawScreenAlignedQuad(ImageBase image, Color tint)
+    public void Draw(int first, int last)
     {
     }
 
-    public void DrawLine(float x1, float y1, float x2, float y2, float width, Color color)
+    public void DrawInstanced(int count)
     {
     }
 
-    public void DrawLines(Vector2f[] vertices, Color[] colors, int count, float width, LineMode interpretation)
+    public void DrawInstanced(int count, int first, int last)
     {
     }
 
-    public void DrawPoint(float x, float y, float size, Color color)
+    public void End()
     {
     }
 
-    public void DrawPoints(Vector2f[] points, Color[] colors, int count, float size)
+    public void Finish()
     {
     }
 
-    public void DrawMesh(Vector2f[] points, Vector2f[] texCoords, Color[] colors, int count, PrimitiveType type, ImageBase texture)
+    public void Initialize(GraphicsSettings settings)
     {
     }
 
-    public void SetViewport(float left, float right, float bottom, float top)
+    public void InitImage(Image image)
     {
     }
 
-    public void BeginScreenSpace()
-    {
-    }
-
-    public void EndScreenSpace()
-    {
-    }
-
-    public void SetScissorRectangle(int left, int right, int width, int height)
-    {
-    }
-
-    public void ClearScissorRectangle()
-    {
-    }
-
-    public void ApplyAndPushTransform(Vector2f translation, Vector2f scale, float angle)
-    {
-    }
-
-    public void PopTransform()
+    public void InitRenderTarget(RenderTarget target)
     {
     }
 
@@ -133,15 +135,19 @@ namespace OkuBase.Driver
       return true;
     }
 
-    public void UseShaderProgram(ShaderProgram program)
+    public void PopTransform()
     {
     }
 
-    public void SetShaderFloat(ShaderProgram program, string name, params float[] values)
+    public void PushTransform()
     {
     }
 
-    public void SetShaderTexture(ShaderProgram program, string name, ImageBase image)
+    public void ReleaseImage(Image image)
+    {
+    }
+
+    public void ReleaseRenderTarget(RenderTarget target)
     {
     }
 
@@ -149,20 +155,21 @@ namespace OkuBase.Driver
     {
     }
 
-    public void InitVertexBuffer(Geometry.VertexBuffer vbuffer)
+    public void SetShaderValue(string name, ImageBase image)
     {
     }
 
-    public void UpdateVertexBuffer(Geometry.VertexBuffer vbuffer)
+    public void SetShaderValue(string name, params float[] values)
     {
     }
 
-    public void ReleaseVertexBuffer(Geometry.VertexBuffer vbuffer)
+    public void SetViewport(float left, float right, float bottom, float top)
     {
     }
 
-    public void DrawVertexBuffer(Geometry.VertexBuffer vbuffer, PrimitiveType ptype, ImageBase texture)
+    public void Update(float dt)
     {
     }
+
   }
 }

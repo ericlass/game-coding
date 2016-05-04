@@ -64,6 +64,7 @@
     <Compile Include="Driver\NullGraphicsDriver.cs" />
     <Compile Include="Geometry\Mesh.cs" />
     <Compile Include="Geometry\Rectangle2f.cs" />
+    <Compile Include="Geometry\ScissorRect.cs" />
     <Compile Include="Geometry\Vertex.cs" />
     <Compile Include="Geometry\VertexBuffer.cs" />
     <Compile Include="Geometry\Vertices.cs" />

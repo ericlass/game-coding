@@ -41,15 +41,5 @@ namespace OkuBase.Graphics
       get { return _pixelShader; }
     }
 
-    public void SetFloats(string name, params float[] values)
-    {
-      OkuManager.Instance.Graphics.Driver.SetShaderFloat(this, name, values);
-    }
-
-    public void SetTexture(string name, ImageBase image)
-    {
-      OkuManager.Instance.Graphics.Driver.SetShaderTexture(this, name, image);
-    }
-
   }
 }
