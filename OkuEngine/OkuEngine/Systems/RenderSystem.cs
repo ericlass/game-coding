@@ -13,20 +13,25 @@ namespace OkuEngine.Systems
 
       try
       {
+        graphics.VertexPositions = currentLevel.RenderQueue[0].Mesh.Vertices.Positions;
+        graphics.VertexTexCoords = currentLevel.RenderQueue[0].Mesh.Vertices.TexCoords;
+        graphics.PrimitiveType = PrimitiveType.TriangleStrip;
+
         //Iterate render queue and execute render tasks
         foreach (var task in currentLevel.RenderQueue)
         {
-          if (task.ScreenSpace)
-            graphics.BeginScreenSpace();
+          graphics.ScreenSpace = task.ScreenSpace;
+          graphics.VertexColors = task.Mesh.Vertices.Colors;
 
-          graphics.ApplyAndPushTransform(task.Translation, task.Scale, task.Angle);
+          graphics.PushTransform();
 
-          graphics.DrawMesh(task.Mesh);
+          graphics.Translation = task.Translation;
+          graphics.Scale = task.Scale;
+          graphics.Angle = task.Angle;
+
+          graphics.Draw(0, task.Mesh.Vertices.Positions.Length);
 
           graphics.PopTransform();
-
-          if (task.ScreenSpace)
-            graphics.EndScreenSpace();
         }
       }
       finally

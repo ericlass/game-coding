@@ -129,10 +129,10 @@ namespace OkuBase.Graphics
 
       if (updated)
       {
-        if (_fontSheetImage == null)
-          _fontSheetImage = OkuManager.Instance.Graphics.NewImage(ImageData.FromBitmap(_fontSheet), true);
-        else
-          OkuManager.Instance.Graphics.UpdateImage(_fontSheetImage, 0, 0, _fontSheetImage.Width, _fontSheetImage.Height, ImageData.FromBitmap(_fontSheet));
+        if (_fontSheetImage != null)
+          OkuManager.Instance.Graphics.ReleaseImage(_fontSheetImage);
+
+        _fontSheetImage = OkuManager.Instance.Graphics.NewImage(ImageData.FromBitmap(_fontSheet), true);
       }
     }
 

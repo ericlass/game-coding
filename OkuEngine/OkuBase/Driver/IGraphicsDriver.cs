@@ -40,14 +40,12 @@ namespace OkuBase.Driver
     void PushTransform();
     void PopTransform();
 
-    void Draw();
-    void Draw(int first, int last);
-    void DrawInstanced(int count);
-    void DrawInstanced(int count, int first, int last);
+    void Draw(int first, int count);
+    void DrawInstanced(int first, int count, int primcount);
 
     Vector2f[] VertexPositions { set; }
     Vector2f[] VertexTexCoords { set; }
-    Vector2f[] VertexColors { set; }
+    Color[] VertexColors { set; }
 
     PrimitiveType PrimitiveType { set; }
 
@@ -63,6 +61,9 @@ namespace OkuBase.Driver
     bool ScreenSpace { set; }
 
     ShaderProgram Shader { set; }
+
+    float LineWidth { set; }
+    float PointSize { set; }
 
   }
 }

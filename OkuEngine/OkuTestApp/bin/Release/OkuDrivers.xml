@@ -32,15 +32,5 @@
             <param name="mode">The draw mode to convert.</param>
             <returns>The primitive for the given draw mode or 0 for None or unknown draw mode.</returns>
         </member>
-        <member name="M:OkuDrivers.OpenGLGraphicsDriver.SetPointers(OkuMath.Vector2f[],OkuMath.Vector2f[],OkuBase.Graphics.Color[])">
-            <summary>
-            Set array pointers for vertices, texture coordinates and vertex colors.
-            If a non-null value is given for an array, the corresponding client state
-            array is enabled. If null is given, it is disabled.
-            </summary>
-            <param name="vertices">The vertex array.</param>
-            <param name="texCoords">The texture coordinate array.</param>
-            <param name="colors">The vertex color array.</param>
-        </member>
     </members>
 </doc>

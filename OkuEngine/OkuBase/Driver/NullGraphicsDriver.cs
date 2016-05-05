@@ -31,6 +31,16 @@ namespace OkuBase.Driver
       get { return "null"; }
     }
 
+    public float LineWidth
+    {
+      set { }
+    }
+
+    public float PointSize
+    {
+      set { }
+    }
+
     public PrimitiveType PrimitiveType
     {
       set { }
@@ -84,6 +94,14 @@ namespace OkuBase.Driver
     public Vector2f[] VertexTexCoords
     {
       set { }
+    }
+
+    Color[] IGraphicsDriver.VertexColors
+    {
+      set
+      {
+        throw new NotImplementedException();
+      }
     }
 
     public void Begin()

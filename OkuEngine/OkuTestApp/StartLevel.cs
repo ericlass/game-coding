@@ -43,6 +43,8 @@ namespace OkuTestApp
 
         //Instance overrides position and color components
         instance.AddComponent(new PositionComponent(new Vector2f(rand.Next(-400, 400), rand.Next(-300, 300)), false));
+        float scaleFactor = (float)rand.NextDouble();
+        instance.AddComponent(new ScaleComponent(new Vector2f(scaleFactor, scaleFactor)));
         instance.AddComponent(new ImageComponent(image, Color.RandomColor(rand)));
 
         API.AddEntity(instance);

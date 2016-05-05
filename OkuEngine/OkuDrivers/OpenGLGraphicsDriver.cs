@@ -163,7 +163,7 @@ namespace OkuDrivers
       }
     }
 
-    public Vector2f[] VertexColors
+    public Color[] VertexColors
     {
       set
       {
@@ -302,6 +302,22 @@ namespace OkuDrivers
         {
           Gl.glUseProgram(0);
         }
+      }
+    }
+
+    public float LineWidth
+    {
+      set
+      {
+        Gl.glLineWidth(value);
+      }
+    }
+
+    public float PointSize
+    {
+      set
+      {
+        throw new NotImplementedException();
       }
     }
 
@@ -680,34 +696,21 @@ namespace OkuDrivers
       Gl.glActiveTexture(Gl.GL_TEXTURE0);
     }
 
-    public void Draw()
+    public void Draw(int first, int count)
     {
-      if (_vertexPos == null)
-        throw new OkuException("Vertex positions not set before call to Draw()!");
-
       int primitive = PrimitiveToGLPrimitive(_primitiveType);
-      Gl.glDrawArrays(primitive, 0, _vertexPos.Length);
+      Gl.glDrawArrays(primitive, first, count);
     }
 
-    public void Draw(int first, int last)
+    void DrawInstanced(int first, int count, int primcount)
     {
       int primitive = PrimitiveToGLPrimitive(_primitiveType);
-      Gl.glDrawArrays(primitive, first, (last - first) + 1);
+      Gl.glDrawArraysInstancedEXT(primitive, first, count, primcount);
     }
 
-    public void DrawInstanced(int count)
+    void IGraphicsDriver.DrawInstanced(int first, int count, int primcount)
     {
-      if (_vertexPos == null)
-        throw new OkuException("Vertex positions not set before call to DrawInstanced(int)!");
-
-      int primitive = PrimitiveToGLPrimitive(_primitiveType);
-      Gl.glDrawArraysInstancedEXT(primitive, 0, _vertexPos.Length, count);
-    }
-
-    public void DrawInstanced(int count, int first, int last)
-    {
-      int primitive = PrimitiveToGLPrimitive(_primitiveType);
-      Gl.glDrawArraysInstancedEXT(primitive, first, (last - first) + 1, count);
+      throw new NotImplementedException();
     }
 
     #region VertexBuffer (unused)

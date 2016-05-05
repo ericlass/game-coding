@@ -19,6 +19,18 @@ namespace OkuBase.Graphics
     private Color[] _quadColor = new Color[4];
     private DynamicArray<Color> _colors = new DynamicArray<Color>();
 
+    private bool _screenSpace = false;
+    private ScissorRect _scissor = null;
+    private ShaderProgram _shader = null;
+    private Vector2f[] _vertPos = null;
+    private Vector2f[] _vertTex = null;
+    private Color[] _vertColors = null;
+    private PrimitiveType _primitiveType = PrimitiveType.None;
+    private ImageBase _texture = null;
+    private Vector2f _translation = Vector2f.Zero;
+    private Vector2f _scale = Vector2f.One;
+    private float _angle = 0.0f;
+
     private void OnViewportChange(ViewPort sender)
     {
       _driver.SetViewport(sender.Left, sender.Right, sender.Bottom, sender.Top);
@@ -32,16 +44,6 @@ namespace OkuBase.Graphics
     public ViewPort Viewport
     {
       get { return _viewport; }
-    }
-
-    public Color BackgroundColor
-    {
-      get { return _settings.BackgroundColor; }
-      set
-      {
-        _settings.BackgroundColor = value;
-        _driver.SetBackgroundColor(value);
-      }
     }
 
     /// <summary>
@@ -124,29 +126,6 @@ namespace OkuBase.Graphics
     }
 
     /// <summary>
-    /// Sets a rectangular area of the screen where drawing will happen. 
-    /// Everything outside of the specified area will not be drawn and
-    /// kept form the previous frame.
-    /// The area is specified in display space pixel coordinates and are inclusive.
-    /// </summary>
-    /// <param name="left">The left border of the scissor rectangle.</param>
-    /// <param name="right">The right border of the scissor rectangle.</param>
-    /// <param name="width">The width of the scissor rectangle.</param>
-    /// <param name="height">The height of the scissor rectangle.</param>
-    public void SetScissorRectangle(int left, int right, int width, int height)
-    {
-      _driver.SetScissorRectangle(left, right, width, height);
-    }
-
-    /// <summary>
-    /// Clear the scissor rectangle so that thw whole screen is redrawn again.
-    /// </summary>
-    public void ClearScissorRectangle()
-    {
-      _driver.ClearScissorRectangle();
-    }
-
-    /// <summary>
     /// Gets the factor by which the DPI setting of the system is higher than usual (96 dpi).
     /// </summary>
     /// <returns>The DPI factor.</returns>
@@ -176,11 +155,6 @@ namespace OkuBase.Graphics
       return NewImage(data, false);
     }
 
-    public void UpdateImage(Image image, int x, int y, int width, int height, ImageData data)
-    {
-      _driver.UpdateImage(image, x, y, width, height, data);
-    }
-
     public void ReleaseImage(Image image)
     {
       _driver.ReleaseImage(image);
@@ -191,12 +165,6 @@ namespace OkuBase.Graphics
       RenderTarget result = new RenderTarget(width, height);
       _driver.InitRenderTarget(result);
       return result;
-    }
-
-    public void SetRenderTarget(RenderTarget target)
-    {
-      _driver.SetRenderTarget(target);
-      _renderTarget = target;
     }
 
     public void ReleaseRenderTarget(RenderTarget target)
@@ -217,17 +185,7 @@ namespace OkuBase.Graphics
     internal void End()
     {
       _driver.End();
-    }
-
-    public void BeginScreenSpace()
-    {
-      _driver.BeginScreenSpace();
-    }
-
-    public void EndScreenSpace()
-    {
-      _driver.EndScreenSpace();
-    }
+    }    
 
     /// <summary>
     /// Clears the screen or current render target with the current background color.
@@ -237,43 +195,23 @@ namespace OkuBase.Graphics
       _driver.Clear();
     }
 
-    /// <summary>
-    /// Draws the given image at the given position, rotating and scaling it by the given 
-    /// values. The image is tinted with given tint color.
-    /// </summary>
-    /// <param name="image">The image to be drawn.</param>
-    /// <param name="x">The x coordinate of the position.</param>
-    /// <param name="y">The y coordinate of the position.</param>
-    /// <param name="rotation">The rotation angle in degrees.</param>
-    /// <param name="sx">The scale factor on the x axis.</param>
-    /// <param name="sy">The scale factor on the y axis.</param>
-    /// <param name="tint">A color that is used to tint the image with.</param>
-    public void DrawImage(ImageBase image, float x, float y, float rotation, float sx, float sy, Color tint)
+    public void DrawImage(ImageBase image, Color tint)
     {
-      _driver.DrawImage(image, x, y, rotation, sx, sy, tint);
+      Mesh mesh = Mesh.ForImage(image, tint);
+
+      _driver.VertexPositions = mesh.Vertices.Positions;
+      _driver.VertexTexCoords = mesh.Vertices.TexCoords;
+      _driver.VertexColors = mesh.Vertices.Colors;
+
+      _driver.Texture = image;
+      _driver.PrimitiveType = mesh.PrimitiveType;
+
+      _driver.Draw(0, mesh.Vertices.Positions.Length);
     }
 
-    /// <summary>
-    /// Draws the given image at the given position.
-    /// </summary>
-    /// <param name="image">The image to be drawn.</param>
-    /// <param name="x">The x coordinate of the position.</param>
-    /// <param name="y">The y coordinate of the position.</param>
-    public void DrawImage(ImageBase image, float x, float y)
+    public void DrawImage(ImageBase image)
     {
-      _driver.DrawImage(image, x, y, 0, 1, 1, Color.White);
-    }
-
-    /// <summary>
-    /// Draws the given image at the given position. The image is tinted with given tint color.
-    /// </summary>
-    /// <param name="image">The image to be drawn.</param>
-    /// <param name="x">The x coordinate of the position.</param>
-    /// <param name="y">The y coordinate of the position.</param>
-    /// <param name="tint">A color that is used to tint the image with.</param>
-    public void DrawImage(ImageBase image, float x, float y, Color tint)
-    {
-      _driver.DrawImage(image, x, y, 0, 1, 1, tint);
+      DrawImage(image, Color.White);
     }
 
     /// <summary>
@@ -284,7 +222,32 @@ namespace OkuBase.Graphics
     /// <param name="tint">The color tint the image with.</param>
     public void DrawScreenAlignedQuad(ImageBase image, Color tint)
     {
-      _driver.DrawScreenAlignedQuad(image, tint);
+      _driver.VertexPositions = new Vector2f[] {
+        new Vector2f(0, 0),
+        new Vector2f(0, _settings.Height),
+        new Vector2f(_settings.Width, 0),
+        new Vector2f(_settings.Width, _settings.Height)
+      };
+
+      _driver.VertexTexCoords = new Vector2f[] {
+        new Vector2f(0, 0),
+        new Vector2f(0, 1),
+        new Vector2f(1, 0),
+        new Vector2f(1, 1)
+      };
+
+      _driver.VertexColors = new Color[] {
+        tint,
+        tint,
+        tint,
+        tint
+      };
+
+      _driver.Texture = image;
+      _driver.PrimitiveType = PrimitiveType.TriangleStrip;
+      _driver.ScreenSpace = true;
+
+      _driver.Draw(0, 4);
     }
 
     /// <summary>
@@ -293,7 +256,7 @@ namespace OkuBase.Graphics
     /// <param name="image">The image to be drawn.</param>
     public void DrawScreenAlignedQuad(ImageBase image)
     {
-      _driver.DrawScreenAlignedQuad(image, Color.White);
+      DrawScreenAlignedQuad(image, Color.White);
     }
 
     /// <summary>
@@ -307,7 +270,29 @@ namespace OkuBase.Graphics
     /// <param name="color">The color of the line.</param>
     public void DrawLine(float x1, float y1, float x2, float y2, float width, Color color)
     {
-      _driver.DrawLine(x1, y1, x2, y2, width, color);
+      _driver.VertexPositions = new Vector2f[] { new Vector2f(x1, y1), new Vector2f(x2, y2) };
+      _driver.VertexColors = new Color[] { color, color };
+      _driver.VertexTexCoords = null;
+
+      _driver.LineWidth = width;
+      _driver.PrimitiveType = PrimitiveType.Lines;
+
+      _driver.Draw(0, 2);
+    }
+
+    private PrimitiveType LineModeToPrimitiveType(LineMode mode)
+    {
+      switch (mode)
+      {
+        case LineMode.Polygon:
+          return PrimitiveType.Polygon;
+        case LineMode.PolygonClosed:
+          return PrimitiveType.ClosedPolygon;
+        case LineMode.LineSegments:
+          return PrimitiveType.Lines;
+        default:
+          throw new OkuException("Unsupported line mode: " + mode.ToString());
+      }
     }
 
     /// <summary>
@@ -319,9 +304,16 @@ namespace OkuBase.Graphics
     /// <param name="count">The number of lines to draw from the given array.</param>
     /// <param name="width">The width of the lines in pixels.</param>
     /// <param name="interpretation">Specifies how to interpret the vertices.</param>
-    public void DrawLines(Vector2f[] vertices, Color[] colors, int count, float width, LineMode interpretation)
+    public void DrawLines(Vector2f[] vertices, Color[] colors, int count, float width, LineMode mode)
     {
-      _driver.DrawLines(vertices, colors, count, width, interpretation);
+      _driver.VertexPositions = vertices;
+      _driver.VertexColors = colors;
+      _driver.VertexTexCoords = null;
+
+      _driver.LineWidth = width;
+      _driver.PrimitiveType = LineModeToPrimitiveType(mode);
+
+      _driver.Draw(0, count);
     }
 
     /// <summary>
@@ -333,13 +325,13 @@ namespace OkuBase.Graphics
     /// <param name="count">The number of lines to draw from the given array.</param>
     /// <param name="width">The width of the lines in pixels.</param>
     /// <param name="interpretation">Specifies how to interpret the vertices.</param>
-    public void DrawLines(Vector2f[] vertices, Color color, int count, float width, LineMode interpretation)
+    public void DrawLines(Vector2f[] vertices, Color color, int count, float width, LineMode mode)
     {
-      _colors.Clear();
-      for (int i = 0; i < vertices.Length; i++)
-        _colors.Add(color);
+      Color[] colors = new Color[vertices.Length];
+      for (int i = 0; i < colors.Length; i++)
+        colors[i] = color;
 
-      _driver.DrawLines(vertices, _colors.InternalArray, count, width, interpretation);
+      DrawLines(vertices, colors, count, width, mode);
     }
 
     /// <summary>
@@ -351,7 +343,13 @@ namespace OkuBase.Graphics
     /// <param name="color">The color of the point.</param>
     public void DrawPoint(float x, float y, float size, Color color)
     {
-      _driver.DrawPoint(x, y, size, color);
+      _driver.VertexPositions = new Vector2f[] { new Vector2f(x, y) };
+      _driver.VertexColors = new Color[] { color };
+
+      _driver.PrimitiveType = PrimitiveType.Points;
+      _driver.PointSize = size;
+
+      _driver.Draw(0, 1);
     }
 
     /// <summary>
@@ -363,59 +361,35 @@ namespace OkuBase.Graphics
     /// <param name="size">The size of the points in pixels.</param>
     public void DrawPoints(Vector2f[] points, Color[] colors, int count, float size)
     {
-      _driver.DrawPoints(points, colors, count, size);
-    }
+      _driver.VertexPositions = points;
+      _driver.VertexColors = colors;
 
+      _driver.PrimitiveType = PrimitiveType.Points;
+      _driver.PointSize = size;
 
-    /// <summary>
-    /// Draws a generic mesh using the given parameters.
-    /// </summary>
-    /// <param name="points">The coordinates of the vertices of the mesh in world space. Must not be null.</param>
-    /// <param name="texCoords">The normalized texture coordinates of the vertices. Must be same length as points. If null, no texture is applied.</param>
-    /// <param name="colors">The colors of the vertices. Must be same length as points. If null, white is used as default color.</param>
-    /// <param name="count">The number of points to draw from the given array.</param>
-    /// <param name="type">The type of primitive used to draw the given vertices.</param>
-    /// <param name="texture">The texture to be applied. If not null, texCoords must also be given.</param>
-    public void DrawMesh(Vector2f[] points, Vector2f[] texCoords, Color[] colors, int count, PrimitiveType type, ImageBase texture)
-    {
-      _driver.DrawMesh(points, texCoords, colors, count, type, texture);
+      _driver.Draw(0, 1);
     }
 
     public void DrawMesh(Mesh mesh)
     {
-      _driver.DrawMesh(mesh.Vertices.Positions, mesh.Vertices.TexCoords, mesh.Vertices.Colors, mesh.Vertices.Count, mesh.PrimitiveType, mesh.Texture);
+      _driver.VertexPositions = mesh.Vertices.Positions;
+      _driver.VertexTexCoords = mesh.Vertices.TexCoords;
+      _driver.VertexColors = mesh.Vertices.Colors;
+
+      _driver.PrimitiveType = mesh.PrimitiveType;
+      _driver.Texture = mesh.Texture;
+
+      _driver.Draw(0, mesh.Vertices.Count);
     }
 
-    public void DrawRectangle(float left, float right, float bottom, float top, Color color)
+    public void Draw(int first, int count)
     {
-      _quad[0].X = left;
-      _quad[0].Y = bottom;
-
-      _quad[1].X = left;
-      _quad[1].Y = top;
-
-      _quad[2].X = right;
-      _quad[2].Y = top;
-
-      _quad[3].X = right;
-      _quad[3].Y = bottom;
-
-      _quadColor[0] = color;
-      _quadColor[1] = color;
-      _quadColor[2] = color;
-      _quadColor[3] = color;
-
-      _driver.DrawMesh(_quad, null, _quadColor, 4, PrimitiveType.Quads, null);
+      _driver.Draw(first, count);
     }
 
-    /// <summary>
-    /// Draws the given vertex buffer using the given texture.
-    /// </summary>
-    /// <param name="vbuffer">The vertex buffer to draw.</param>
-    /// <param name="texture">The texture to be used, can be null.</param>
-    public void DrawVertexBuffer(VertexBuffer vbuffer, PrimitiveType ptype, ImageBase texture)
+    public void DrawInstanced(int first, int count, int primcount)
     {
-      _driver.DrawVertexBuffer(vbuffer, ptype, texture);
+      _driver.DrawInstanced(first, count, primcount);
     }
 
     #endregion
@@ -430,19 +404,14 @@ namespace OkuBase.Graphics
       return program;
     }
 
-    public void UseShaderProgram(ShaderProgram program)
+    public void SetShaderaValue(string name, params float[] values)
     {
-      _driver.UseShaderProgram(program);
+      _driver.SetShaderValue(name, values);
     }
 
-    public void SetShaderFloat(ShaderProgram program, string name, params float[] values)
+    public void SetShaderValue(string name, ImageBase image)
     {
-      _driver.SetShaderFloat(program, name, values);
-    }
-
-    public void SetShaderTexture(ShaderProgram program, string name, ImageBase image)
-    {
-      _driver.SetShaderTexture(program, name, image);
+      _driver.SetShaderValue(name, image);
     }
 
     public void ReleaseShaderProgram(ShaderProgram program)
@@ -454,15 +423,9 @@ namespace OkuBase.Graphics
 
     #region Transform
 
-    /// <summary>
-    /// Pushes the current transformation onto the stack and applies the given transformation.
-    /// </summary>
-    /// <param name="translation">The amount to translate.</param>
-    /// <param name="scale">The scale factors.</param>
-    /// <param name="angle">The angle to rotate.</param>
-    public void ApplyAndPushTransform(Vector2f translation, Vector2f scale, float angle)
+    public void PushTransform()
     {
-      _driver.ApplyAndPushTransform(translation, scale, angle);
+      _driver.PushTransform();
     }
 
     /// <summary>
@@ -475,36 +438,141 @@ namespace OkuBase.Graphics
 
     #endregion
 
-    #region Vertex Buffers
-
-    /// <summary>
-    /// Initializes the given vertex buffer.
-    /// </summary>
-    /// <param name="vbuffer">The buffer to be initialized.</param>
-    public void InitVertexBuffer(VertexBuffer vbuffer)
+    public Vector2f[] VertexPositions
     {
-      _driver.InitVertexBuffer(vbuffer);
+      get { return _vertPos; }
+      set
+      {
+        _vertPos = value;
+        _driver.VertexPositions = value;
+      }
     }
 
-    /// <summary>
-    /// Updates the vertices of the given vertex buffer.
-    /// </summary>
-    /// <param name="vbuffer">The buffer to be updated.</param>
-    public void UpdateVertexBuffer(VertexBuffer vbuffer)
+    public Vector2f[] VertexTexCoords
     {
-      _driver.UpdateVertexBuffer(vbuffer);
+      get { return _vertTex; }
+      set
+      {
+        _vertTex = value;
+        _driver.VertexTexCoords = value;
+      }
     }
 
-    /// <summary>
-    /// Release the memory assigned to a vertex buffer.
-    /// </summary>
-    /// <param name="vbuffer">The buffer to be released.</param>
-    public void ReleaseVertexBuffer(VertexBuffer vbuffer)
+    public Color[] VertexColors
     {
-      _driver.ReleaseVertexBuffer(vbuffer);
+      get { return _vertColors; }
+      set
+      {
+        _vertColors = value;
+        _driver.VertexColors = value;
+      }
     }
 
-    #endregion
+    public PrimitiveType PrimitiveType
+    {
+      get { return _primitiveType; }
+      set
+      {
+        if (_primitiveType != value)
+        {
+          _primitiveType = value;
+          _driver.PrimitiveType = value;
+        }
+      }
+    }
+
+    public ImageBase Texture
+    {
+      get { return _texture; }
+      set
+      {
+        _texture = value;
+        _driver.Texture = value;
+      }
+    }
+
+    public Color BackgroundColor
+    {
+      get { return _settings.BackgroundColor; }
+      set
+      {
+        _settings.BackgroundColor = value;
+        _driver.BackgroundColor = value;
+      }
+    }
+
+    public RenderTarget RenderTarget
+    {
+      get { return _renderTarget; }
+      set
+      {
+        _renderTarget = value;
+        _driver.RenderTarget = value;
+      }
+    }
+
+    public ScissorRect ScissorRectangle
+    {
+      get { return _scissor; }
+      set
+      {
+        _scissor = value;
+        _driver.ScissorRectangle = value;
+      }
+    }
+
+    public Vector2f Translation
+    {
+      get { return _translation; }
+      set
+      {
+        _translation = value;
+        _driver.Translation = value;
+      }
+    }
+
+    public Vector2f Scale
+    {
+      get { return _scale; }
+      set
+      {
+        _scale = value;
+        _driver.Scale = value;
+      }
+    }
+
+    public float Angle
+    {
+      get { return _angle; }
+      set
+      {
+        _angle = value;
+        _driver.Angle = value;
+      }
+    }
+
+    public bool ScreenSpace
+    {
+      get { return _screenSpace; }
+      set
+      {
+        if (_screenSpace != value)
+        {
+          _screenSpace = value;
+          _driver.ScreenSpace = value;
+        }
+      }
+    }
+
+    public ShaderProgram Shader
+    {
+      get { return _shader; }
+      set
+      {
+        _shader = value;
+        _driver.Shader = value;
+      }
+    }
 
   }
 }
