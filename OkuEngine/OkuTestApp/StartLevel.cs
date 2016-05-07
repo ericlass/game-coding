@@ -19,8 +19,9 @@ namespace OkuTestApp
       Entity entity = new Entity("first");
 
       //Add image component
-      var image = API.LoadImage("D:\\Temp\\Icons\\iconex_ap\\128x128\\plain\\bullet_square_grey.png");
-      entity.AddComponent(new ImageComponent(image));
+      var imageData = API.LoadImage("D:\\Temp\\Icons\\iconex_ap\\128x128\\plain\\bullet_square_grey.png");
+      var imageHandle = Assets.AddImage(imageData);
+      entity.AddComponent(new ImageComponent(imageHandle));
 
       //Add transform components
       PositionComponent pos = new PositionComponent();
@@ -45,7 +46,7 @@ namespace OkuTestApp
         instance.AddComponent(new PositionComponent(new Vector2f(rand.Next(-400, 400), rand.Next(-300, 300)), false));
         float scaleFactor = (float)rand.NextDouble();
         instance.AddComponent(new ScaleComponent(new Vector2f(scaleFactor, scaleFactor)));
-        instance.AddComponent(new ImageComponent(image, Color.RandomColor(rand)));
+        instance.AddComponent(new ImageComponent(imageHandle, Color.RandomColor(rand)));
 
         API.AddEntity(instance);
       }

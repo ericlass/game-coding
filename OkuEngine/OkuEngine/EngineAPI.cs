@@ -42,11 +42,9 @@ namespace OkuEngine
     /// </summary>
     /// <param name="filename">The full path to the file containing the image.</param>
     /// <returns>The loaded image.</returns>
-    public Image LoadImage(string filename)
+    public ImageData LoadImage(string filename)
     {
-      ImageData data = ImageData.FromFile(filename);
-      Image result = OkuManager.Instance.Graphics.NewImage(data);
-      return result;
+      return ImageData.FromFile(filename);
     }
 
     #region Event Queue

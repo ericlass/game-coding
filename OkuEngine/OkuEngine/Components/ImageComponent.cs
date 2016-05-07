@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using OkuMath;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
-using OkuEngine.Systems;
+using OkuEngine.Assets;
 
 namespace OkuEngine.Components
 {
@@ -12,34 +10,31 @@ namespace OkuEngine.Components
   /// </summary>
   public class ImageComponent : IRenderComponent
   {
-    private ImageBase _image = null;
+    private AssetHandle _imageHandle = null;
     private Color _tint = Color.White;
-    private Mesh _mesh = null;
 
     /// <summary>
-    /// Creates a new image component.
+    /// Creates a new image component with the given image asset.
     /// </summary>
-    public ImageComponent()
+    /// <param name="imageHandle">The asset handle for the image for this component.</param>
+    public ImageComponent(AssetHandle imageHandle)
     {
+      if (!imageHandle.IsValid)
+        throw new ArgumentException("Given image asset handle is not valid anymore!");
+
+      if (imageHandle.AssetType != AssetType.Image)
+        throw new ArgumentException("Trying to create an image component with an asset of type: " + imageHandle.AssetType + "! Only image asset are allowed.");
+
+      _imageHandle = imageHandle;
     }
 
     /// <summary>
-    /// Creates a new image component with the given image.
+    /// Creates a new image component with the given image asset.
     /// </summary>
-    /// <param name="image">The image for this component.</param>
-    public ImageComponent(ImageBase image)
-    {
-      _image = image;
-    }
-
-    /// <summary>
-    /// Creates a new image component with the given image.
-    /// </summary>
-    /// <param name="image">The image for this component.</param>
+    /// <param name="imageHandle">The asset handle for the image for this component.</param>
     /// <param name="tint">The color the image is tinted with.</param>
-    public ImageComponent(ImageBase image, Color tint)
+    public ImageComponent(AssetHandle imageHandle, Color tint) : this(imageHandle)
     {
-      _image = image;
       _tint = tint;
     }
 
@@ -62,15 +57,14 @@ namespace OkuEngine.Components
     /// <summary>
     /// Gets or set the image.
     /// </summary>
-    public ImageBase Image
+    public AssetHandle ImageHandle
     {
-      get { return _image; }
+      get { return _imageHandle; }
       set
       {
-        if (_image != value)
+        if (_imageHandle != value)
         {
-          _image = value;
-          _mesh = null;
+          _imageHandle = value;
         }
       }
     }
@@ -84,7 +78,6 @@ namespace OkuEngine.Components
       set
       {
         _tint = value;
-        _mesh = null;
       }
     }
 
@@ -94,15 +87,14 @@ namespace OkuEngine.Components
     /// <returns>A copy of the component.</returns>
     public IComponent Copy()
     {
-      return new ImageComponent(_image, _tint);
+      return new ImageComponent(_imageHandle, _tint);
     }
 
     public Mesh GetMesh()
     {
-      if (_mesh == null && _image != null)
-        _mesh = Mesh.ForImage(_image, _tint);
-
-      return _mesh;
+      //TODO: Implement
+      return null;
     }
+
   }
 }

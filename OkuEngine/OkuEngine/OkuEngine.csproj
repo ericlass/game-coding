@@ -52,6 +52,12 @@
   <ItemGroup>
     <Compile Include="Animation\Animation.cs" />
     <Compile Include="Animation\AnimationFrame.cs" />
+    <Compile Include="Assets\AssetHandle.cs" />
+    <Compile Include="Assets\AssetManager.cs" />
+    <Compile Include="Assets\AssetType.cs" />
+    <Compile Include="Assets\DynamicMeshAsset.cs" />
+    <Compile Include="Assets\MeshAsset.cs" />
+    <Compile Include="Assets\StaticMeshAsset.cs" />
     <Compile Include="Behavior\BehaviorResult.cs" />
     <Compile Include="Behavior\BehaviorTreeNode.cs" />
     <Compile Include="Behavior\Composite.cs" />
@@ -91,6 +97,7 @@
     <Compile Include="Input\KeyInputAxis.cs" />
     <Compile Include="Input\MouseInputAxis.cs" />
     <Compile Include="Levels\Level.cs" />
+    <Compile Include="Levels\LevelInternal.cs" />
     <Compile Include="OkuEngineStart.cs" />
     <Compile Include="Particles\DefaultParticleController.cs" />
     <Compile Include="Particles\ForceEffector.cs" />

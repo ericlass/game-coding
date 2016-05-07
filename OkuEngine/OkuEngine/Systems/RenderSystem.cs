@@ -13,16 +13,16 @@ namespace OkuEngine.Systems
 
       try
       {
-        graphics.VertexPositions = currentLevel.RenderQueue[0].Mesh.Vertices.Positions;
-        graphics.VertexTexCoords = currentLevel.RenderQueue[0].Mesh.Vertices.TexCoords;
-        graphics.PrimitiveType = PrimitiveType.TriangleStrip;
-
         //Iterate render queue and execute render tasks
         foreach (var task in currentLevel.RenderQueue)
         {
-          graphics.ScreenSpace = task.ScreenSpace;
+          graphics.VertexPositions = task.Mesh.Vertices.Positions;
+          graphics.VertexTexCoords = task.Mesh.Vertices.TexCoords;
           graphics.VertexColors = task.Mesh.Vertices.Colors;
+          graphics.PrimitiveType = task.Mesh.PrimitiveType;
 
+          graphics.ScreenSpace = task.ScreenSpace;
+          
           graphics.PushTransform();
 
           graphics.Translation = task.Translation;
