@@ -1,5 +1,6 @@
 ﻿using System;
 using OkuEngine.Assets;
+using OkuEngine.Collections;
 
 namespace OkuEngine.Levels
 {
@@ -10,6 +11,7 @@ namespace OkuEngine.Levels
   {
     private EngineAPI _api = null;
     private AssetManager _assets = new AssetManager();
+    private BlackBoard _blackBoard = new BlackBoard();
     
     /// <summary>
     /// Gets the API with all functions of the engine.
@@ -25,6 +27,14 @@ namespace OkuEngine.Levels
     public AssetManager Assets
     {
       get { return _assets; }
+    }
+
+    /// <summary>
+    /// Gets the black board for this level.
+    /// </summary>
+    public BlackBoard Blackboard
+    {
+      get { return _blackBoard; }
     }
 
     /// <summary>

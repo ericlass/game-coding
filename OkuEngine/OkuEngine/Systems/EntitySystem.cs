@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using OkuMath;
-using OkuBase.Graphics;
 using OkuEngine.Components;
 using OkuEngine.Levels;
 
@@ -50,7 +49,10 @@ namespace OkuEngine.Systems
             task.Mesh = renderComp.GetMesh();
 
             //TODO: Set Layer
+            task.Layer = 0;
+
             //TODO: Set Shader
+            task.Shader = null;
 
             currentLevel.RenderQueue.Add(task);
           }                    
