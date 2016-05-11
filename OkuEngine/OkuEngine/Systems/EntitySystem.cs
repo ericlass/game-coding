@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OkuMath;
+using OkuEngine.Assets;
 using OkuEngine.Components;
 using OkuEngine.Levels;
 
@@ -21,17 +22,25 @@ namespace OkuEngine.Systems
       //Submit render tasks to render queue
       foreach (var entity in currentLevel.Entities)
       {
-        var renderComps = entity.GetComponents<IRenderComponent>();
+        var meshComps = entity.GetComponents<MeshComponent>();
 
-        if (renderComps.Count > 0)
+        if (meshComps.Count > 0)
         {
           var positionComp = entity.GetComponent<PositionComponent>();
           var angleComp = entity.GetComponent<AngleComponent>();
           var scaleComp = entity.GetComponent<ScaleComponent>();
+          var materialComp = entity.GetComponent<MaterialComponent>();
 
-          foreach (var comp in renderComps)
+          Vector2f translation = positionComp != null ? positionComp.Position : Vector2f.Zero;
+          bool screenSpace = positionComp != null ? positionComp.ScreenSpace : false;
+          Vector2f scale = scaleComp != null ? scaleComp.Scale : Vector2f.One;
+          float angle = angleComp != null ? angleComp.Angle : 0.0f;
+
+          AssetHandle material = materialComp != null ? materialComp.Material : null;
+
+          foreach (var comp in meshComps)
           {
-            IRenderComponent renderComp = comp as IRenderComponent;
+            MeshComponent meshComp = comp as MeshComponent;
 
             RenderTask task;
             if (_taskCacheBG.Count > 0)
@@ -41,23 +50,22 @@ namespace OkuEngine.Systems
 
             _taskCacheFG.Enqueue(task);
 
-            task.Translation = positionComp != null ? positionComp.Position : Vector2f.Zero;
-            task.ScreenSpace = positionComp != null ? positionComp.ScreenSpace : false;
-            task.Scale = scaleComp != null ? scaleComp.Scale : Vector2f.One;
-            task.Angle = angleComp != null ? angleComp.Angle : 0.0f;
+            task.Translation = translation;
+            task.Scale = scale;
+            task.Angle = angle;
+            task.ScreenSpace = screenSpace;
 
-            task.Mesh = renderComp.GetMesh();
+            task.Mesh = meshComp.Mesh;
+            task.Material = material;
 
             //TODO: Set Layer
             task.Layer = 0;
 
-            //TODO: Set Shader
-            task.Shader = null;
-
             currentLevel.RenderQueue.Add(task);
-          }                    
-        }        
+          }
+        }
       }
+
     }
     
   }

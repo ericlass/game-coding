@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using OkuBase;
+using OkuMath;
 using OkuBase.Graphics;
+using OkuEngine.Assets;
 using OkuEngine.Events;
 using OkuEngine.Components;
 using OkuEngine.Input;
@@ -239,6 +240,11 @@ namespace OkuEngine
 
     #region Input
 
+    /// <summary>
+    /// Gets the current value of the input axis with the given name.
+    /// </summary>
+    /// <param name="name">The name of the input axis.</param>
+    /// <returns>The current value of the input axis.</returns>
     public float GetAxisValue(string name)
     {
       foreach (var context in _level.InputContexts)
@@ -261,6 +267,35 @@ namespace OkuEngine
     }
 
     #endregion
+
+    public MeshAsset GetMeshForImage(int width, int height, bool isStatic)
+    {
+      float halfWidth = width / 2;
+      float halfHeight = height / 2;
+
+      Vector2f[] pos = new Vector2f[4] {
+        new Vector2f(-halfWidth, -halfHeight),
+        new Vector2f(-halfWidth, halfHeight),
+        new Vector2f(halfWidth, -halfHeight),
+        new Vector2f(halfWidth, halfHeight)
+      };
+
+      Vector2f[] tex = new Vector2f[4] {
+        new Vector2f(0, 0),
+        new Vector2f(0, 1),
+        new Vector2f(1, 0),
+        new Vector2f(1, 1)
+      };
+
+      MeshAsset result;
+      if (isStatic)
+        result = new StaticMeshAsset(pos, tex, null, PrimitiveType.TriangleStrip);
+      else
+        result = new DynamicMeshAsset(pos, tex, null, PrimitiveType.TriangleStrip);
+
+      return result;
+    }
+
 
   }
 }

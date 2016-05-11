@@ -35,6 +35,11 @@ namespace OkuEngine.Assets
       return AddAsset(mesh, mesh.IsStatic ? AssetType.StaticMesh : AssetType.DynamicMesh);
     }
 
+    public AssetHandle AddMaterial(MaterialAsset material)
+    {
+      return AddAsset(material, AssetType.Material);
+    }
+
     public object GetAsset(AssetHandle handle)
     {
       int id = handle.ID;

@@ -2,6 +2,7 @@
 using OkuMath;
 using OkuBase.Geometry;
 using OkuBase.Graphics;
+using OkuEngine.Assets;
 
 namespace OkuEngine.Systems
 {
@@ -15,14 +16,14 @@ namespace OkuEngine.Systems
       Scale = Vector2f.One;
     }
 
+    public AssetHandle Mesh { get; set; }
+    public AssetHandle Material { get; set; }
+
     public Vector2f Translation { get; set; }
     public Vector2f Scale { get; set; }
     public float Angle { get; set; }
 
-    public ShaderProgram Shader { get; set; }
     public int Layer { get; set; }
     public bool ScreenSpace { get; set; }
-
-    public Mesh Mesh { get; set; }
   }
 }

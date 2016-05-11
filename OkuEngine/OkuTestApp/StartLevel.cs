@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using OkuMath;
 using OkuBase.Graphics;
 using OkuEngine;
+using OkuEngine.Assets;
 using OkuEngine.Events;
 using OkuEngine.Components;
 using OkuEngine.Input;
@@ -21,7 +22,16 @@ namespace OkuTestApp
       //Add image component
       var imageData = API.LoadImage("D:\\Temp\\Icons\\iconex_ap\\128x128\\plain\\bullet_square_grey.png");
       var imageHandle = Assets.AddImage(imageData);
-      entity.AddComponent(new ImageComponent(imageHandle));
+
+      //Add mesh component
+      var meshAsset = API.GetMeshForImage(imageData.Width, imageData.Height, true);
+      var meshHandle = Assets.AddMesh(meshAsset);
+      entity.AddComponent(new MeshComponent(meshHandle));
+
+      //Add material component
+      var material = new MaterialAsset(imageHandle, Color.Green);
+      var matHandle = Assets.AddMaterial(material);
+      entity.AddComponent(new MaterialComponent(matHandle));
 
       //Add transform components
       PositionComponent pos = new PositionComponent();
@@ -31,12 +41,19 @@ namespace OkuTestApp
       entity.AddComponent(angle);
       entity.AddComponent(scale);
 
-      entity.AddComponent(new ColorComponent(Color.Green));
-
       API.AddEntity(entity);
 
-      //Create entity instance
+      //Create entity instances
       Random rand = new Random();
+
+      //Create some colored materials
+      AssetHandle[] mats = new AssetHandle[] {
+        Assets.AddMaterial(new MaterialAsset(imageHandle, Color.Red)),
+        Assets.AddMaterial(new MaterialAsset(imageHandle, Color.Blue)),
+        Assets.AddMaterial(new MaterialAsset(imageHandle, Color.Yellow)),
+        Assets.AddMaterial(new MaterialAsset(imageHandle, Color.Cyan))
+      };
+
       for (int i = 0; i < 100; i++)
       {
         Entity instance = new Entity("instance" + i);
@@ -46,7 +63,9 @@ namespace OkuTestApp
         instance.AddComponent(new PositionComponent(new Vector2f(rand.Next(-400, 400), rand.Next(-300, 300)), false));
         float scaleFactor = (float)rand.NextDouble();
         instance.AddComponent(new ScaleComponent(new Vector2f(scaleFactor, scaleFactor)));
-        instance.AddComponent(new ImageComponent(imageHandle, Color.RandomColor(rand)));
+        instance.AddComponent(new MeshComponent(meshHandle));
+
+        instance.AddComponent(new MaterialComponent(mats[rand.Next(mats.Length)]));
 
         API.AddEntity(instance);
       }

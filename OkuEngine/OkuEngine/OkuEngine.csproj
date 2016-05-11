@@ -56,6 +56,7 @@
     <Compile Include="Assets\AssetManager.cs" />
     <Compile Include="Assets\AssetType.cs" />
     <Compile Include="Assets\DynamicMeshAsset.cs" />
+    <Compile Include="Assets\MaterialAsset.cs" />
     <Compile Include="Assets\MeshAsset.cs" />
     <Compile Include="Assets\StaticMeshAsset.cs" />
     <Compile Include="Behavior\BehaviorResult.cs" />
@@ -75,11 +76,10 @@
     <Compile Include="Collections\SwapQueue.cs" />
     <Compile Include="Components\AngleComponent.cs" />
     <Compile Include="Components\IComponent.cs" />
-    <Compile Include="Components\ImageComponent.cs" />
-    <Compile Include="Components\IRenderComponent.cs" />
+    <Compile Include="Components\MaterialComponent.cs" />
+    <Compile Include="Components\MeshComponent.cs" />
     <Compile Include="Components\PositionComponent.cs" />
     <Compile Include="Components\ScaleComponent.cs" />
-    <Compile Include="Components\ColorComponent.cs" />
     <Compile Include="EngineAPI.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Events\Event.cs" />

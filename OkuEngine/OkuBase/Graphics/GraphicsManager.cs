@@ -404,7 +404,7 @@ namespace OkuBase.Graphics
       return program;
     }
 
-    public void SetShaderaValue(string name, params float[] values)
+    public void SetShaderValue(string name, params float[] values)
     {
       _driver.SetShaderValue(name, values);
     }

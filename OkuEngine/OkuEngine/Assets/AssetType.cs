@@ -7,6 +7,7 @@ namespace OkuEngine.Assets
     Undefined,
     Image,
     StaticMesh,
-    DynamicMesh
+    DynamicMesh,
+    Material
   }
 }

@@ -19,25 +19,25 @@ namespace OkuEngine.Assets
       get { return false; }
     }
 
-    public Vector2f[] Positions
+    public new Vector2f[] Positions
     {
       get { return _positions; }
       set { _positions = value; }
     }
 
-    public Vector2f[] TexCoords
+    public new Vector2f[] TexCoords
     {
       get { return _texCoords; }
       set { _texCoords = value; }
     }
 
-    public Color[] Colors
+    public new Color[] Colors
     {
       get { return _colors; }
       set { _colors = value; }
     }
 
-    public PrimitiveType PrimitiveType
+    public new PrimitiveType PrimitiveType
     {
       get { return _primitiveType; }
       set { _primitiveType = value; }

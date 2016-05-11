@@ -25,5 +25,25 @@ namespace OkuEngine.Assets
 
     public abstract bool IsStatic { get; }
 
+    internal Vector2f[] Positions
+    {
+      get { return _positions; }
+    }
+
+    internal Vector2f[] TexCoords
+    {
+      get { return _texCoords; }
+    }
+
+    internal Color[] Colors
+    {
+      get { return _colors; }
+    }
+
+    internal PrimitiveType PrimitiveType
+    {
+      get { return _primitiveType; }
+    }
+
   }
 }
