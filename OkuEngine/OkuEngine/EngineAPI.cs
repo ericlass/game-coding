@@ -7,6 +7,7 @@ using OkuEngine.Events;
 using OkuEngine.Components;
 using OkuEngine.Input;
 using OkuEngine.Levels;
+using OkuEngine.Systems;
 
 namespace OkuEngine
 {
@@ -268,6 +269,71 @@ namespace OkuEngine
 
     #endregion
 
+    #region Timers
+
+    /// <summary>
+    /// Sets a new timer that queues the given event once after the given time.
+    /// </summary>
+    /// <param name="time">The time to wait.</param>
+    /// <param name="eventName">The name of the event.</param>
+    /// <returns>The id of the timer that can be used with the ClearTimer method to stop the timer.</returns>
+    public int SetTimer(float time, string eventName)
+    {
+      Timer timer = new Timer(time, eventName, false);
+      _level.Timers.Add(timer);
+      return timer.ID;
+    }
+
+    /// <summary>
+    /// Sets a new interval that queues the given event periodically after the given time has passed.
+    /// </summary>
+    /// <param name="time">The time to wait between queueing the event.</param>
+    /// <param name="eventName">The name of the event.</param>
+    /// <returns>The id of the interval that can be used with the ClearInterval method to stop the interval.</returns>
+    public int SetInterval(float time, string eventName)
+    {
+      Timer timer = new Timer(time, eventName, true);
+      _level.Timers.Add(timer);
+      return timer.ID;
+    }
+
+    /// <summary>
+    /// Clears the timer with the given id. This can be used to stop a timer before it fires.
+    /// </summary>
+    /// <param name="timerId">The id of the timer.</param>
+    /// <returns>True if the timer was removed, false if there is no timer with the given id.</returns>
+    public bool ClearTimer(int timerId)
+    {
+      for (int i = _level.Timers.Count; i >= 0; i--)
+      {
+        if (_level.Timers[i].ID == timerId)
+        {
+          _level.Timers.RemoveAt(i);
+          return true;
+        }
+      }
+      return false;
+    }
+
+    /// <summary>
+    /// Clears the interval with the given id. This can be used to stop an interval firing the event over and over.
+    /// </summary>
+    /// <param name="timerId">The id of the interval.</param>
+    /// <returns>True if the interval was removed, false if there is no interval with the given id.</returns>
+    public bool ClearInterval(int intervalId)
+    {
+      return ClearTimer(intervalId);
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Creates a new mesh asset that can be used for rendering the given image in original size
+    /// </summary>
+    /// <param name="width">The width of the image.</param>
+    /// <param name="height">The height of the image.</param>
+    /// <param name="isStatic">Create a static (true) or dynamic (false) mesh.</param>
+    /// <returns>The mesh asst for the given image.</returns>
     public MeshAsset GetMeshForImage(int width, int height, bool isStatic)
     {
       float halfWidth = width / 2;

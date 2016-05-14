@@ -18,6 +18,7 @@ namespace OkuEngine.Levels
     private BlackBoard _variables = new BlackBoard();
     private List<InputContext> _inputContexts = new List<InputContext>(10);
     private List<RenderTask> _renderQueue = new List<RenderTask>();
+    private List<Timer> _timer = new List<Timer>();
     private bool _initialized = false;
 
     /// <summary>
@@ -74,6 +75,11 @@ namespace OkuEngine.Levels
     internal List<RenderTask> RenderQueue
     {
       get { return _renderQueue; }
+    }
+
+    internal List<Timer> Timers
+    {
+      get { return _timer; }
     }
 
     /// <summary>

@@ -76,6 +76,8 @@ namespace OkuTestApp
       //Create input context
       InputContext context = new InputContext();
 
+      API.SetInterval(1, "rotate_cw");
+
       //Map some key actions to an event
       InputActionMapping am = new InputActionMapping("rotate_cw");
       am.Actions.Add(new InputKeyAction(InputKey.KeyboardR, InputAction.Down));

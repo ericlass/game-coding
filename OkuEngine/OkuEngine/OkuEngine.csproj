@@ -119,6 +119,8 @@
     <Compile Include="Systems\RenderSystem.cs" />
     <Compile Include="Systems\GameSystem.cs" />
     <Compile Include="Systems\RenderTask.cs" />
+    <Compile Include="Systems\Timer.cs" />
+    <Compile Include="Systems\TimerSystem.cs" />
     <Compile Include="VariableNames.cs" />
   </ItemGroup>
   <ItemGroup>
