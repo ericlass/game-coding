@@ -12,7 +12,7 @@ namespace OkuTestApp
     [STAThread]
     static void Main()
     {
-      OkuEngineStart engine = new OkuEngineStart(new StartLevel());
+      OkuEngineStart engine = new OkuEngineStart(new TilemapLevel());
       engine.Run();
     }
   }

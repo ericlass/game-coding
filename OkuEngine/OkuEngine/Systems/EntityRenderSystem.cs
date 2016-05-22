@@ -7,7 +7,7 @@ using OkuEngine.Levels;
 
 namespace OkuEngine.Systems
 {
-  internal class EntitySystem : GameSystem
+  internal class EntityRenderSystem : GameSystem
   {
     private Queue<RenderTask> _taskCacheFG = new Queue<RenderTask>();
     private Queue<RenderTask> _taskCacheBG = new Queue<RenderTask>();

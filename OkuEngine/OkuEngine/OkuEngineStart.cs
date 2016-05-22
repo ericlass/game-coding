@@ -15,7 +15,7 @@ namespace OkuEngine
 
     private GameSystem _renderSystem = new RenderSystem();
     private GameSystem _inputSystem = new InputSystem();
-    private GameSystem _entitySystem = new EntitySystem();
+    private GameSystem _entitySystem = new EntityRenderSystem();
     private GameSystem _timerSystem = new TimerSystem();
 
     public OkuEngineStart(Level startLevel)

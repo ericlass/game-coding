@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 using OkuMath;
 using OkuBase.Graphics;
@@ -76,7 +76,7 @@ namespace OkuTestApp
       //Create input context
       InputContext context = new InputContext();
 
-      API.SetInterval(1, "rotate_cw");
+      API.SetInterval(1, "colortimer");
 
       //Map some key actions to an event
       InputActionMapping am = new InputActionMapping("rotate_cw");
@@ -111,6 +111,8 @@ namespace OkuTestApp
 
       eventName = EventNames.GetGenericInputEventName(Keys.Subtract, InputAction.Down);
       API.AddEventListener(new EventListener(eventName, ev => scale.Scale = scale.Scale * 0.8333f));
+
+      API.AddEventListener(new EventListener("colortimer", ev => OkuBase.OkuManager.Instance.Graphics.BackgroundColor = Color.RandomColor(rand)));
     }
 
     protected override void Finish()
