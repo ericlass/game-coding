@@ -54,7 +54,7 @@ namespace OkuEngine.Components
 
     /// <summary>
     /// List of mesh assest for the chunks of the tile map.
-    /// Each item in the list is an array of the chunks.
+    /// Each item in the list is an array of the chunks for a single tile layer.
     /// </summary>
     internal List<AssetHandle[]> ChunkMeshes { get; set; }
 
