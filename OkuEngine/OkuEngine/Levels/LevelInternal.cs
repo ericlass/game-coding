@@ -48,7 +48,7 @@ namespace OkuEngine.Levels
     /// <summary>
     /// Gets the variables of this level.
     /// </summary>
-    internal BlackBoard Variables
+    public BlackBoard Variables
     {
       get { return _variables; }
     }

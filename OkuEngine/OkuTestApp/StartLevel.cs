@@ -26,7 +26,7 @@ namespace OkuTestApp
       //Add mesh component
       var meshAsset = API.GetMeshForImage(imageData.Width, imageData.Height, true);
       var meshHandle = Assets.AddMesh(meshAsset);
-      entity.AddComponent(new MeshComponent(meshHandle));
+      entity.AddComponent(new SimpleMeshComponent(meshHandle));
 
       //Add material component
       var material = new MaterialAsset(imageHandle, Color.Green);
@@ -63,7 +63,7 @@ namespace OkuTestApp
         instance.AddComponent(new PositionComponent(new Vector2f(rand.Next(-400, 400), rand.Next(-300, 300)), false));
         float scaleFactor = (float)rand.NextDouble();
         instance.AddComponent(new ScaleComponent(new Vector2f(scaleFactor, scaleFactor)));
-        instance.AddComponent(new MeshComponent(meshHandle));
+        instance.AddComponent(new SimpleMeshComponent(meshHandle));
 
         instance.AddComponent(new MaterialComponent(mats[rand.Next(mats.Length)]));
 

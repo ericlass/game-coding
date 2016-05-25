@@ -42,26 +42,29 @@ namespace OkuEngine.Systems
           {
             MeshComponent meshComp = comp as MeshComponent;
 
-            RenderTask task;
-            if (_taskCacheBG.Count > 0)
-              task = _taskCacheBG.Dequeue();
-            else
-              task = new RenderTask();
+            foreach (var mesh in meshComp.GetMeshes(currentLevel))
+            {
+              RenderTask task;
+              if (_taskCacheBG.Count > 0)
+                task = _taskCacheBG.Dequeue();
+              else
+                task = new RenderTask();
 
-            _taskCacheFG.Enqueue(task);
+              _taskCacheFG.Enqueue(task);
 
-            task.Translation = translation;
-            task.Scale = scale;
-            task.Angle = angle;
-            task.ScreenSpace = screenSpace;
+              task.Translation = translation;
+              task.Scale = scale;
+              task.Angle = angle;
+              task.ScreenSpace = screenSpace;
 
-            task.Mesh = meshComp.Mesh;
-            task.Material = material;
+              task.Mesh = mesh;
+              task.Material = material;
 
-            //TODO: Set Layer
-            task.Layer = 0;
+              //TODO: Set Layer
+              task.Layer = 0;
 
-            currentLevel.RenderQueue.Add(task);
+              currentLevel.RenderQueue.Add(task);
+            }
           }
         }
       }

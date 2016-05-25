@@ -80,6 +80,7 @@
     <Compile Include="Components\MeshComponent.cs" />
     <Compile Include="Components\PositionComponent.cs" />
     <Compile Include="Components\ScaleComponent.cs" />
+    <Compile Include="Components\SimpleMeshComponent.cs" />
     <Compile Include="Components\TilemapComponent.cs" />
     <Compile Include="EngineAPI.cs" />
     <Compile Include="Entity.cs" />
@@ -120,7 +121,6 @@
     <Compile Include="Systems\RenderSystem.cs" />
     <Compile Include="Systems\GameSystem.cs" />
     <Compile Include="Systems\RenderTask.cs" />
-    <Compile Include="Systems\TilemapSystem.cs" />
     <Compile Include="Systems\Timer.cs" />
     <Compile Include="Systems\TimerSystem.cs" />
     <Compile Include="VariableNames.cs" />

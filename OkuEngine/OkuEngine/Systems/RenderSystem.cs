@@ -94,6 +94,8 @@ namespace OkuEngine.Systems
 
             graphics.PopTransform();
           }
+
+
         }
       }
       finally

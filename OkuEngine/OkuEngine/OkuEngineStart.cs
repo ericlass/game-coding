@@ -23,6 +23,13 @@ namespace OkuEngine
       _startLevel = startLevel;
     }
 
+    public override OkuSettings Configure()
+    {
+      var settings = base.Configure();
+      settings.Graphics.TextureFilter = OkuBase.Graphics.TextureFilter.NearestNeighbor;
+      return settings;
+    }
+
     private void SetCurrentLevel(Level level)
     {
       //Finalizes current level
