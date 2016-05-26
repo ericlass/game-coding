@@ -9,15 +9,44 @@ using OkuEngine.Assets;
 
 namespace OkuEngine.Components
 {
+  /// <summary>
+  /// Component that renders a tile map.
+  /// Maps can be loaded from different file formats, like Tiled XML format (TMX).
+  /// The tile map has one collision layer and 1-n graphical layers.
+  /// </summary>
   public class TilemapComponent : MeshComponent
   {
+    /// <summary>
+    /// No collision at all.
+    /// </summary>
     public const byte CollisionNone = 0;
+
+    /// <summary>
+    /// The full tile cannot be entered.
+    /// </summary>
     public const byte CollisionFull = 1;
+
+    /// <summary>
+    /// The north west triangle of the tile cannot be entered.
+    /// </summary>
     public const byte CollisionNorthWest = 2;
+
+    /// <summary>
+    /// The north east triangle of the tile cannot be entered.
+    /// </summary>
     public const byte CollisionNorthEast = 3;
+
+    /// <summary>
+    /// The south west triangle of the tile cannot be entered.
+    /// </summary>
     public const byte CollisionSouthWest = 4;
+
+    /// <summary>
+    /// The south east triangle of the tile cannot be entered.
+    /// </summary>
     public const byte CollisionSouthEast = 5;
 
+    //Width and height of chunks in number of tiles.
     private const int ChunkSize = 16;
 
     private AssetHandle _tileSetImage = null;
@@ -27,6 +56,8 @@ namespace OkuEngine.Components
     private int _tileHeight = 16;
     private byte[] _collision = null;
     private List<ushort[]> _layers = new List<ushort[]>();
+
+    private List<AssetHandle> _meshRenderList = new List<AssetHandle>();
 
     /// <summary>
     /// List of texture coordinates for the tiles from the tile sets.
@@ -41,6 +72,12 @@ namespace OkuEngine.Components
     /// </summary>
     private List<AssetHandle[]> _chunkMeshes { get; set; }
 
+    /// <summary>
+    /// Creates a new tilemap component with the given width, height and number of layers.
+    /// </summary>
+    /// <param name="width">The width of the tile map (tiles).</param>
+    /// <param name="height">The height of the tile map (tiles).</param>
+    /// <param name="layers">The number of graphical layers.</param>
     public TilemapComponent(int width, int height, int layers)
     {
       _width = width;
@@ -53,6 +90,16 @@ namespace OkuEngine.Components
         _layers.Add(new ushort[numTiles]);
     }
 
+    /// <summary>
+    /// Internal copy constructor.
+    /// </summary>
+    /// <param name="tileset">The tile set image.</param>
+    /// <param name="width">The width.</param>
+    /// <param name="height">The height.</param>
+    /// <param name="tileWidth">The width of a single tile.</param>
+    /// <param name="tileHeight">The height of a single tile.</param>
+    /// <param name="collision">The collision layer.</param>
+    /// <param name="layers">The graphical layer.</param>
     private TilemapComponent(AssetHandle tileset, int width, int height, int tileWidth, int tileHeight, byte[] collision, List<ushort[]> layers)
     {
       _tileSetImage = tileset;
@@ -62,62 +109,116 @@ namespace OkuEngine.Components
       _layers = layers;
     }
 
+    /// <summary>
+    /// Gets or set the tile set image containing the tile images for the graphical layers.
+    /// </summary>
     public AssetHandle Tileset
     {
       get { return _tileSetImage; }
       set { _tileSetImage = value; }
     }
 
+    /// <summary>
+    /// Gets the width of the tile map in tiles.
+    /// </summary>
     public int Width
     {
       get { return _width; }
     }
 
+    /// <summary>
+    /// Gets the height of the tile map in tiles.
+    /// </summary>
     public int Height
     {
       get { return _height; }
     }
 
+    /// <summary>
+    /// Gets the width of a single tile in pixels.
+    /// </summary>
     public int TileWidth
     {
       get { return _tileWidth; }
     }
 
+    /// <summary>
+    /// Gets the height of a single tile in pixels.
+    /// </summary>
     public int TileHeight
     {
       get { return _tileHeight; }
     }
 
+    /// <summary>
+    /// Gets the number of graphical layers.
+    /// </summary>
     public int LayerCount
     {
       get { return _layers.Count; }
     }
 
+    /// <summary>
+    /// Gets the name of the component.
+    /// </summary>
     public override string Name
     {
       get { return "tilemap"; }
     }
 
+    /// <summary>
+    /// Gets the collision type at the given position.
+    /// </summary>
+    /// <param name="x">The X coordinate of the tile.</param>
+    /// <param name="y">The Y coordinate of the tile.</param>
+    /// <returns>The collision type for the tile.</returns>
     public byte GetCollision(int x, int y)
     {
       return _collision[x + (y * _width)];
     }
 
+    /// <summary>
+    /// Sets the collision type for the tile at the given position.
+    /// </summary>
+    /// <param name="x">The X coordinate of the tile.</param>
+    /// <param name="y">The Y coordinate of the tile.</param>
+    /// <param name="collision">The new collision type.</param>
     public void SetCollision(int x, int y, byte collision)
     {
       _collision[x + (y * _width)] = collision;
     }
 
+    /// <summary>
+    /// Gets the tile id of the tile on one of the graphical layers.
+    /// </summary>
+    /// <param name="layer">The layer index.</param>
+    /// <param name="x">The X coordinate of the tile.</param>
+    /// <param name="y">The Y coordinate of the tile.</param>
+    /// <returns>The tile id of the tile.</returns>
     public ushort GetTile(int layer, int x, int y)
     {
       return _layers[layer][x + (y * _width)];
     }
 
+    /// <summary>
+    /// Sets the tile id of the tile on the specified tile and layer.
+    /// </summary>
+    /// <param name="layer">The layer index.</param>
+    /// <param name="x">The X coordinate of the tile.</param>
+    /// <param name="y">The Y coordinate of the tile.</param>
+    /// <param name="tile">The id of tile.</param>
     public void SetTile(int layer, int x, int y, ushort tile)
     {
       _layers[layer][x + (y * _width)] = tile;
     }
 
+    /// <summary>
+    /// Loads a tile map from a Tiled TMX file. Supports loading of CSV encoded layers.
+    /// The lowest layer is considered to be the collision layer. It should only contain tile ids from 0 - 5.
+    /// </summary>
+    /// <param name="stream">The stream containing the TMX file data.</param>
+    /// <param name="imageLoader">A callback that can resolve the relative image paths in TMX files.</param>
+    /// <returns>The loaded tile map.</returns>
     public static TilemapComponent LoadFromTiledXml(Stream stream, Func<string, AssetHandle> imageLoader)
     {
       XmlDocument doc = new XmlDocument();
@@ -196,16 +297,28 @@ namespace OkuEngine.Components
       return new TilemapComponent(tileSetImage, width, height, tileWidth, tileHeight, collisionData, layersData);
     }
 
-    public void SaveToOkuFormat(Stream stream)
+    /// <summary>
+    /// Saves the tilemap to an OkuEngine-specific, binary tilemap format that is optimized for fast loading and streaming.
+    /// </summary>
+    /// <param name="stream">The stream to save the tile map to.</param>
+    public static TilemapComponent SaveToOkuFormat(Stream stream)
     {
       throw new NotImplementedException();
     }
 
-    public void LoadFromOkuFormat(Stream stream)
+    /// <summary>
+    /// Loads tile map data from an OkuEngine-soecific file format.
+    /// </summary>
+    /// <param name="stream">The stream to load the data from.</param>
+    public static TilemapComponent LoadFromOkuFormat(Stream stream)
     {
       throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// Creates a deep copy of the component and all its data.
+    /// </summary>
+    /// <returns>A copy of the component.</returns>
     public override IComponent Copy()
     {
       byte[] cols = new byte[_collision.Length];
@@ -222,6 +335,11 @@ namespace OkuEngine.Components
       return new TilemapComponent(_tileSetImage, _width, _height, _tileWidth, _tileHeight, cols, layers);
     }
 
+    /// <summary>
+    /// Gets the meshes to be rendered for the current frame.
+    /// </summary>
+    /// <param name="currentLevel">The current level.</param>
+    /// <returns>The meshes to be rendered.</returns>
     internal override List<AssetHandle> GetMeshes(Level currentLevel)
     {
       if (_tileTexCoords == null)
@@ -230,11 +348,18 @@ namespace OkuEngine.Components
       if (_chunkMeshes == null)
         GenerateChunkMeshes(currentLevel);
 
-      //TODO: Render all layers
       //TODO: Render only visible chunks
-      return new List<AssetHandle>(_chunkMeshes[0]);
+      _meshRenderList.Clear();
+      foreach (var chunk in _chunkMeshes)
+        _meshRenderList.AddRange(chunk);
+
+      return _meshRenderList;
     }
 
+    /// <summary>
+    /// Generates the meshes for the chunks of the tile map.
+    /// </summary>
+    /// <param name="currentLevel">The current level.</param>
     private void GenerateChunkMeshes(Level currentLevel)
     {
       //How many chunks does the tilemap have?
@@ -327,6 +452,10 @@ namespace OkuEngine.Components
       _chunkMeshes = chunks;
     }
 
+    /// <summary>
+    /// Generate texture coordinates for the single tiles in the tile set.
+    /// </summary>
+    /// <param name="currentLevel">The current level.</param>
     private void GenerateTexCoords(Level currentLevel)
     {
       ImageBase image = currentLevel.Assets.GetAsset<ImageBase>(_tileSetImage);

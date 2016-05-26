@@ -5,6 +5,9 @@ using OkuEngine.Assets;
 
 namespace OkuEngine.Components
 {
+  /// <summary>
+  /// Abstract base class for mesh components.
+  /// </summary>
   public abstract class MeshComponent : IComponent
   {
     public bool IsMultiAssignable
