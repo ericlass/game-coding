@@ -94,6 +94,6 @@ namespace OkuEngine.Events
     /// Is queued once every frame.
     /// Single parameter is the delta time.
     /// </summary>
-    public const string EngineTick = "engine_tick";
+    public const string EveryFrame = "every_frame";
   }
 }

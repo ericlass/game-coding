@@ -14,47 +14,107 @@ namespace OkuTestApp
 {
   public class TilemapLevel : Level
   {
+    private Entity tileMapEntity = null;
+    private Entity player = null;
+
     protected override void Init()
     {
-      Entity entity = new Entity("tilemap");
+      OkuBase.OkuManager.Instance.Graphics.Viewport.Center = new Vector2f(256, 256);
 
-      TilemapComponent comp = TilemapComponent.LoadFromTiledXml(new FileStream("D:\\Graphics\\Tilemaps\\Zelda\\zelda3_kakariko.tmx", FileMode.Open),
+      //Tilemap
+      tileMapEntity = new Entity("tilemap");
+
+      TilemapComponent tileMapComp = TilemapComponent.LoadFromTiledXml(new FileStream("D:\\Graphics\\Tilemaps\\Collision\\collisiontest.tmx", FileMode.Open),
         name =>
         {
-          ImageData image = ImageData.FromFile(Path.Combine("D:\\Graphics\\Tilemaps\\Zelda", name));
-          var imageHandle = Assets.AddImage(image);
+          ImageData image = ImageData.FromFile(Path.Combine("D:\\Graphics\\Tilemaps\\Collision", name));
+          var handle = Assets.AddImage(image);
 
-          var materialhandle = Assets.AddMaterial(new MaterialAsset(imageHandle, Color.White));
-          entity.AddComponent(new MaterialComponent(materialhandle));
+          var materialhandle = Assets.AddMaterial(new MaterialAsset(handle, Color.White));
+          tileMapEntity.AddComponent(new MaterialComponent(materialhandle));
 
-          return imageHandle;
+          return handle;
         }
       );
 
-      entity.AddComponent(comp);
+      tileMapEntity.AddComponent(tileMapComp);
 
       PositionComponent position = new PositionComponent(Vector2f.Zero, false);
-      entity.AddComponent(position);
+      tileMapEntity.AddComponent(position);
 
-      API.AddEntity(entity);
+      API.AddEntity(tileMapEntity);
 
-      InputAxisMapping vertical = new InputAxisMapping("vertical");
+      //Player
+      player = new Entity("player");
+      player.AddComponent(new PositionComponent(new Vector2f(16, 64), false));
+
+      var imageData = API.LoadImage("D:\\Graphics\\white.png");
+      var imageHandle = Assets.AddImage(imageData);
+
+      MaterialAsset material = new MaterialAsset(imageHandle, Color.Blue);
+      var materialHandle = Assets.AddMaterial(material);
+
+      player.AddComponent(new MaterialComponent(materialHandle));
+
+      MeshAsset mesh = API.GetMeshForImage(imageData.Width, imageData.Height, true);
+      var meshHandle = Assets.AddMesh(mesh);
+
+      player.AddComponent(new SimpleMeshComponent(meshHandle));
+
+      API.AddEntity(player);
+
+      //Camera Movement
+      InputAxisMapping vertical = new InputAxisMapping("camera_vertical");
       vertical.Axes.Add(new KeyInputAxis(InputKey.KeyboardW, -1.0f));
       vertical.Axes.Add(new KeyInputAxis(InputKey.KeyboardS, 1.0f));
 
-      InputAxisMapping horizontal = new InputAxisMapping("horizontal");
+      InputAxisMapping horizontal = new InputAxisMapping("camera_horizontal");
       horizontal.Axes.Add(new KeyInputAxis(InputKey.KeyboardD, -1.0f));
       horizontal.Axes.Add(new KeyInputAxis(InputKey.KeyboardA, 1.0f));
+
+      //Player movement
+      InputAxisMapping playerVert = new InputAxisMapping("player_vertical");
+      playerVert.Axes.Add(new KeyInputAxis(InputKey.KeyboardUp, 1.0f));
+      playerVert.Axes.Add(new KeyInputAxis(InputKey.KeyboardDown, -1.0f));
+
+      InputAxisMapping playerHorz = new InputAxisMapping("player_horizontal");
+      playerHorz.Axes.Add(new KeyInputAxis(InputKey.KeyboardRight, 1.0f));
+      playerHorz.Axes.Add(new KeyInputAxis(InputKey.KeyboardLeft, -1.0f));
 
       InputContext context = new InputContext();
       context.AxisMappings.Add(vertical);
       context.AxisMappings.Add(horizontal);
+      context.AxisMappings.Add(playerVert);
+      context.AxisMappings.Add(playerHorz);
 
       API.SetInputContext(0, context);
 
       const float trans = 200;
-      API.AddEventListener(new EventListener(EventNames.EngineTick, ev => position.Position += new Vector2f(0, trans * API.GetAxisValue("vertical") * (float)ev.Data[0])));
-      API.AddEventListener(new EventListener(EventNames.EngineTick, ev => position.Position += new Vector2f(trans * API.GetAxisValue("horizontal") * (float)ev.Data[0], 0)));
+      API.AddEventListener(new EventListener(EventNames.EveryFrame, ev => position.Position += new Vector2f(0, trans * API.GetAxisValue("camera_vertical") * (float)ev.Data[0])));
+      API.AddEventListener(new EventListener(EventNames.EveryFrame, ev => position.Position += new Vector2f(trans * API.GetAxisValue("camera_horizontal") * (float)ev.Data[0], 0)));
+
+      API.AddEventListener(new EventListener(EventNames.EveryFrame, movePlayer));
+    }
+
+    private void movePlayer(Event ev)
+    {
+      float dt = (float)ev.Data[0];
+
+      float speed = 100.0f * dt;
+      float vx = API.GetAxisValue("player_horizontal") * speed;
+      float vy = API.GetAxisValue("player_vertical") * speed;
+      Vector2f v = new Vector2f(vx, vy);
+
+      var tilemap = tileMapEntity.GetComponent<TilemapComponent>();
+      var playerPos = player.GetComponent<PositionComponent>();
+
+      Vector2f playerMin = playerPos.Position - new Vector2f(4, 4);
+      Vector2f playMax = playerPos.Position + new Vector2f(4, 4);
+
+      Vector2f mv = tilemap.GetMaxMovement(playerMin, playMax, v);
+      //Vector2f mv = v;
+
+      playerPos.Position += mv;
     }
 
     protected override void Finish()

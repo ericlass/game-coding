@@ -432,5 +432,35 @@ namespace OkuMath
         return eta * i - ((eta * cosi + (float)Math.Sqrt(cost2)) * n);
     }
 
+    /// <summary>
+    /// Calculates the sign for each component of the given vector.
+    /// </summary>
+    /// <param name="vec"The vector.></param>
+    /// <returns>A vector where each component is set to the sign of the given vectors components.</returns>
+    public static Vector2f Sign(Vector2f vec)
+    {
+      return new Vector2f(Math.Sign(vec.X), Math.Sign(vec.Y));
+    }
+
+    /// <summary>
+    /// Calculates the sign for each component of the given vector.
+    /// </summary>
+    /// <param name="vec"The vector.></param>
+    /// <returns>A vector where each component is set to the sign of the given vectors components.</returns>
+    public static Vector3f Sign(Vector3f vec)
+    {
+      return new Vector3f(Math.Sign(vec.X), Math.Sign(vec.Y), Math.Sign(vec.Z));
+    }
+
+    /// <summary>
+    /// Calculates the sign for each component of the given vector.
+    /// </summary>
+    /// <param name="vec"The vector.></param>
+    /// <returns>A vector where each component is set to the sign of the given vectors components.</returns>
+    public static Vector4f Sign(Vector4f vec)
+    {
+      return new Vector4f(Math.Sign(vec.X), Math.Sign(vec.Y), Math.Sign(vec.Z), Math.Sign(vec.W));
+    }
+
   }
 }

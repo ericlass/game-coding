@@ -100,7 +100,7 @@ namespace OkuTestApp
       API.AddEventListener(new EventListener("rotate_cw", ev => angle.Angle -= 45.0f));
 
       //Check mapped axis every frame
-      API.AddEventListener(new EventListener(EventNames.EngineTick, ev => angle.Angle += API.GetAxisValue("horizontal") * (float)ev.Data[0] * 180.0f));
+      API.AddEventListener(new EventListener(EventNames.EveryFrame, ev => angle.Angle += API.GetAxisValue("horizontal") * (float)ev.Data[0] * 180.0f));
 
       //Add some event handlers for generic input events
       string eventName = EventNames.GetGenericInputEventName(Keys.S, InputAction.Down);

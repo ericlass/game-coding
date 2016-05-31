@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using System.Text;
 using OkuMath;
 using OkuBase.Graphics;
 using OkuEngine.Levels;
@@ -268,7 +269,19 @@ namespace OkuEngine.Components
         if (encoding != "csv")
           throw new FormatException("Only CSV encoding is currently supported for Tiled maps!");
 
-        string csv = data.InnerText.Trim().Replace("\r", "").Replace("\n", "");
+        //Reverse tile lines. Tiled stores the the map in left-right, top-down order, but we need it in left-right, bottom-up order
+        string csv = data.InnerText.Replace("\r", "");
+        List<string> lines = new List<string>(csv.Trim().Split('\n'));
+        lines[lines.Count - 1] += ","; //Add comma to last line
+        lines[0] = lines[0].Substring(0, lines[0].Length - 1); //Remove comma from last line
+        lines.Reverse();
+
+        StringBuilder builder = new StringBuilder();
+        foreach (var line in lines)
+          builder.Append(line);
+
+        //string csv = data.InnerText.Trim().Replace("\r", "").Replace("\n", "");
+        csv = builder.ToString();
         string[] parts = csv.Split(',');
 
         if (parts.Length != numTiles)
@@ -383,11 +396,11 @@ namespace OkuEngine.Components
         int tleft = chunkX * ChunkSize;
         int tright = Math.Min(tleft + ChunkSize, _width - 1);
 
-        int ttop = chunkY * ChunkSize;
-        int tbottom = Math.Min(ttop + ChunkSize, _height - 1);
+        int tbottom = chunkY * ChunkSize;
+        int ttop = Math.Min(tbottom + ChunkSize, _height - 1);
 
         //How many tile in this chunk
-        int numTiles = (tright - tleft) * (tbottom - ttop);
+        int numTiles = (tright - tleft) * (ttop - tbottom);
 
         //Create vertices lists
         List<List<Vector2f>> positions = new List<List<Vector2f>>(LayerCount);
@@ -404,10 +417,11 @@ namespace OkuEngine.Components
         }
 
         //Generate vertices for tile
-        for (int tileY = ttop; tileY <= tbottom; tileY++)
+        for (int tileY = tbottom; tileY <= ttop; tileY++)
         {
-          float top = pixelHeight - tileY * _tileHeight;
-          float bottom = top - _tileHeight;
+          float bottom = tileY * _tileHeight;
+          float top = bottom + _tileHeight;
+
           for (int tileX = tleft; tileX <= tright; tileX++)
           {
             float left = tileX * _tileWidth;
@@ -496,6 +510,163 @@ namespace OkuEngine.Components
       }
 
       _tileTexCoords = texCoords;
+    }
+
+    public Vector2f GetMaxMovement(Vector2f min, Vector2f max, Vector2f mov)
+    {
+      Vector2f result = mov;
+
+      Vector2f maxMov = max + mov;
+
+      //Calculate tile area that sweeped box touches
+      Vector2i tileLeftBottom = GridMath.CellOfPoint(min, _tileWidth);
+      Vector2i tileRightTop = GridMath.CellOfPoint(maxMov, _tileWidth);
+
+      //Calculate corner points of box
+      Vector2f leftBottom = min;
+      Vector2f leftTop = new Vector2f(min.X, max.Y);
+      Vector2f rightTop = max;
+      Vector2f rightBottom = new Vector2f(max.X, min.Y);
+
+      //Calculate line segement of box
+      var boxLines = new Tuple<Vector2f, Vector2f>[]
+      {
+        new Tuple<Vector2f, Vector2f>(leftBottom, leftTop),
+        new Tuple<Vector2f, Vector2f>(leftTop, rightTop),
+        new Tuple<Vector2f, Vector2f>(rightTop, rightBottom),
+        new Tuple<Vector2f, Vector2f>(rightBottom, leftBottom)
+      };
+
+      //Calculate movement vectors of corner points
+      var boxVectors = new Tuple<Vector2f, Vector2f>[]
+      {
+        new Tuple<Vector2f, Vector2f>(leftBottom, leftBottom + mov),
+        new Tuple<Vector2f, Vector2f>(leftTop, leftTop + mov),
+        new Tuple<Vector2f, Vector2f>(rightTop, rightTop + mov),
+        new Tuple<Vector2f, Vector2f>(rightBottom, rightBottom + mov)
+      };
+
+      var tileLines = new List<Tuple<Vector2f, Vector2f>>(4);
+      var tileVectors = new List<Tuple<Vector2f, Vector2f>>(4);
+
+      System.Diagnostics.Debug.WriteLine("----------");
+
+      System.Diagnostics.Debug.WriteLine(tileLeftBottom + " ; " + tileRightTop);
+
+      for (int ty = tileLeftBottom.Y; ty <= tileRightTop.Y; ty++)
+      {
+        for (int tx = tileLeftBottom.X; tx <= tileRightTop.X; tx++)
+        {
+          byte col = GetCollision(tx, ty);
+          System.Diagnostics.Debug.WriteLine(tx + ";" + ty + ":" + col);
+
+          if (col > CollisionNone)
+          {
+            tileLines.Clear();
+            tileVectors.Clear();
+
+            float tileLeft = tx * _tileWidth;
+            float tileRight = tileLeft + _tileWidth;
+            float tileBottom = ty * _tileHeight;
+            float tileTop = tileBottom + _tileHeight;
+
+            Vector2f tLeftBottom = new Vector2f(tileLeft, tileBottom);
+            Vector2f tLeftTop = new Vector2f(tileLeft, tileTop);
+            Vector2f tRightTop = new Vector2f(tileRight, tileTop);
+            Vector2f tRightBottom = new Vector2f(tileRight, tileBottom);
+
+            switch (col)
+            {
+              case CollisionFull:
+                tileLines.Add(new Tuple<Vector2f, Vector2f>(tLeftBottom, tLeftTop));
+                tileLines.Add(new Tuple<Vector2f, Vector2f>(tLeftTop, tRightTop));
+                tileLines.Add(new Tuple<Vector2f, Vector2f>(tRightTop, tRightBottom));
+                tileLines.Add(new Tuple<Vector2f, Vector2f>(tRightBottom, tLeftBottom));
+
+                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tLeftBottom, tLeftBottom - mov));
+                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tLeftTop, tLeftTop - mov));
+                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tRightTop, tRightTop - mov));
+                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tRightBottom, tRightBottom - mov));
+                break;
+
+              case CollisionNorthEast:
+                tileLines.Add(new Tuple<Vector2f, Vector2f>(tLeftTop, tRightTop));
+                tileLines.Add(new Tuple<Vector2f, Vector2f>(tRightTop, tRightBottom));
+                tileLines.Add(new Tuple<Vector2f, Vector2f>(tRightBottom, tLeftTop));
+
+                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tLeftTop, tLeftTop - mov));
+                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tRightTop, tRightTop - mov));
+                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tRightBottom, tRightBottom - mov));
+                break;
+
+              case CollisionNorthWest:
+                tileLines.Add(new Tuple<Vector2f, Vector2f>(tLeftBottom, tLeftTop));
+                tileLines.Add(new Tuple<Vector2f, Vector2f>(tLeftTop, tRightTop));
+                tileLines.Add(new Tuple<Vector2f, Vector2f>(tRightTop, tLeftBottom));
+
+                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tLeftBottom, tLeftBottom - mov));
+                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tLeftTop, tLeftTop - mov));
+                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tRightTop, tRightTop - mov));
+                break;
+
+              case CollisionSouthEast:
+                tileLines.Add(new Tuple<Vector2f, Vector2f>(tLeftBottom, tRightTop));
+                tileLines.Add(new Tuple<Vector2f, Vector2f>(tRightTop, tRightBottom));
+                tileLines.Add(new Tuple<Vector2f, Vector2f>(tRightBottom, tLeftBottom));
+
+                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tLeftBottom, tLeftBottom - mov));
+                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tRightTop, tRightTop - mov));
+                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tRightBottom, tRightBottom - mov));
+                break;
+
+              case CollisionSouthWest:
+                tileLines.Add(new Tuple<Vector2f, Vector2f>(tLeftBottom, tLeftTop));
+                tileLines.Add(new Tuple<Vector2f, Vector2f>(tLeftTop, tRightBottom));
+                tileLines.Add(new Tuple<Vector2f, Vector2f>(tRightBottom, tLeftBottom));
+
+                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tLeftBottom, tLeftBottom - mov));
+                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tLeftTop, tLeftTop - mov));
+                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tRightBottom, tRightBottom - mov));
+                break;
+
+              default:
+                throw new InvalidDataException("Unknown tile collision type: " + col);
+            }
+
+            foreach (var boxVec in boxVectors)
+            {
+              foreach (var tileLine in tileLines)
+              {
+                Vector2f? p = Intersections.LineSegmentLineSegment(boxVec.Item1, boxVec.Item2, tileLine.Item1, tileLine.Item2);
+                if (p.HasValue)
+                {
+                  Vector2f dif = p.Value - boxVec.Item1;
+                  result.X = BasicMath.SignedMin(result.X, dif.X);
+                  result.Y = BasicMath.SignedMin(result.Y, dif.Y);
+                }
+              }
+            }
+
+            foreach (var tileVec in tileVectors)
+            {
+              foreach (var boxLine in boxLines)
+              {
+                Vector2f? p = Intersections.LineSegmentLineSegment(tileVec.Item1, tileVec.Item2, boxLine.Item1, boxLine.Item2);
+                if (p.HasValue)
+                {
+                  Vector2f dif = p.Value - tileVec.Item1;
+                  result.X = Math.Min(result.X, dif.X);
+                  result.Y = Math.Min(result.Y, dif.Y);
+                }
+              }
+            }
+
+          }
+        }
+      }
+
+      Vector2f e = new Vector2f(0.001f, 0.001f);
+      return result - (e * VectorMath.Sign(mov));
     }
 
   }
