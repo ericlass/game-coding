@@ -90,8 +90,8 @@ namespace OkuTestApp
       API.SetInputContext(0, context);
 
       const float trans = 200;
-      API.AddEventListener(new EventListener(EventNames.EveryFrame, ev => position.Position += new Vector2f(0, trans * API.GetAxisValue("camera_vertical") * (float)ev.Data[0])));
-      API.AddEventListener(new EventListener(EventNames.EveryFrame, ev => position.Position += new Vector2f(trans * API.GetAxisValue("camera_horizontal") * (float)ev.Data[0], 0)));
+      //API.AddEventListener(new EventListener(EventNames.EveryFrame, ev => position.Position += new Vector2f(0, trans * API.GetAxisValue("camera_vertical") * (float)ev.Data[0])));
+      //API.AddEventListener(new EventListener(EventNames.EveryFrame, ev => position.Position += new Vector2f(trans * API.GetAxisValue("camera_horizontal") * (float)ev.Data[0], 0)));
 
       API.AddEventListener(new EventListener(EventNames.EveryFrame, movePlayer));
     }

@@ -516,10 +516,11 @@ namespace OkuEngine.Components
     {
       Vector2f result = mov;
 
-      Vector2f maxMov = max + mov;
+      Vector2f minMov = new Vector2f(min.X - Math.Abs(mov.X), min.Y - Math.Abs(mov.Y));
+      Vector2f maxMov = new Vector2f(max.X + Math.Abs(mov.X), max.Y + Math.Abs(mov.Y));
 
       //Calculate tile area that sweeped box touches
-      Vector2i tileLeftBottom = GridMath.CellOfPoint(min, _tileWidth);
+      Vector2i tileLeftBottom = GridMath.CellOfPoint(minMov, _tileWidth);
       Vector2i tileRightTop = GridMath.CellOfPoint(maxMov, _tileWidth);
 
       //Calculate corner points of box
@@ -550,8 +551,6 @@ namespace OkuEngine.Components
       var tileVectors = new List<Tuple<Vector2f, Vector2f>>(4);
 
       System.Diagnostics.Debug.WriteLine("----------");
-
-      System.Diagnostics.Debug.WriteLine(tileLeftBottom + " ; " + tileRightTop);
 
       for (int ty = tileLeftBottom.Y; ty <= tileRightTop.Y; ty++)
       {
@@ -633,6 +632,12 @@ namespace OkuEngine.Components
                 throw new InvalidDataException("Unknown tile collision type: " + col);
             }
 
+            foreach (var item in boxLines)
+            {
+              System.Diagnostics.Debug.WriteLine(item.Item1 + " - " + item.Item2);
+            }
+            
+
             foreach (var boxVec in boxVectors)
             {
               foreach (var tileLine in tileLines)
@@ -654,9 +659,9 @@ namespace OkuEngine.Components
                 Vector2f? p = Intersections.LineSegmentLineSegment(tileVec.Item1, tileVec.Item2, boxLine.Item1, boxLine.Item2);
                 if (p.HasValue)
                 {
-                  Vector2f dif = p.Value - tileVec.Item1;
-                  result.X = Math.Min(result.X, dif.X);
-                  result.Y = Math.Min(result.Y, dif.Y);
+                  Vector2f dif = (p.Value - tileVec.Item1) * -1.0f;
+                  result.X = BasicMath.SignedMin(result.X, dif.X);
+                  result.Y = BasicMath.SignedMin(result.Y, dif.Y);
                 }
               }
             }
@@ -666,7 +671,7 @@ namespace OkuEngine.Components
       }
 
       Vector2f e = new Vector2f(0.001f, 0.001f);
-      return result - (e * VectorMath.Sign(mov));
+      return result - (e * (VectorMath.Sign(mov)));
     }
 
   }
