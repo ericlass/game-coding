@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml;
 using System.Text;
 using OkuMath;
+using OkuBase.Platform;
 using OkuBase.Graphics;
 using OkuEngine.Levels;
 using OkuEngine.Assets;
@@ -514,14 +515,23 @@ namespace OkuEngine.Components
 
     public Vector2f GetMaxMovement(Vector2f min, Vector2f max, Vector2f mov)
     {
+      if (mov.SquaredMagnitude == 0)
+        return mov;
+
       Vector2f result = mov;
 
+      //Expand box by movement vector to get all tiles that have to be tested
       Vector2f minMov = new Vector2f(min.X - Math.Abs(mov.X), min.Y - Math.Abs(mov.Y));
       Vector2f maxMov = new Vector2f(max.X + Math.Abs(mov.X), max.Y + Math.Abs(mov.Y));
 
       //Calculate tile area that sweeped box touches
       Vector2i tileLeftBottom = GridMath.CellOfPoint(minMov, _tileWidth);
       Vector2i tileRightTop = GridMath.CellOfPoint(maxMov, _tileWidth);
+
+      tileLeftBottom.X = BasicMath.Clamp(tileLeftBottom.X, 0, _width - 1);
+      tileLeftBottom.Y = BasicMath.Clamp(tileLeftBottom.Y, 0, _height - 1);
+      tileRightTop.X = BasicMath.Clamp(tileRightTop.X, 0, _width - 1);
+      tileRightTop.Y = BasicMath.Clamp(tileRightTop.Y, 0, _height - 1);
 
       //Calculate corner points of box
       Vector2f leftBottom = min;
@@ -530,138 +540,112 @@ namespace OkuEngine.Components
       Vector2f rightBottom = new Vector2f(max.X, min.Y);
 
       //Calculate line segement of box
-      var boxLines = new Tuple<Vector2f, Vector2f>[]
+      var boxPoints = new Vector2f[]
       {
-        new Tuple<Vector2f, Vector2f>(leftBottom, leftTop),
-        new Tuple<Vector2f, Vector2f>(leftTop, rightTop),
-        new Tuple<Vector2f, Vector2f>(rightTop, rightBottom),
-        new Tuple<Vector2f, Vector2f>(rightBottom, leftBottom)
+        leftBottom,
+        leftTop,
+        rightTop,
+        rightBottom
       };
 
-      //Calculate movement vectors of corner points
-      var boxVectors = new Tuple<Vector2f, Vector2f>[]
-      {
-        new Tuple<Vector2f, Vector2f>(leftBottom, leftBottom + mov),
-        new Tuple<Vector2f, Vector2f>(leftTop, leftTop + mov),
-        new Tuple<Vector2f, Vector2f>(rightTop, rightTop + mov),
-        new Tuple<Vector2f, Vector2f>(rightBottom, rightBottom + mov)
-      };
+      var tilePoints = new List<Vector2f>(4);
+      bool hasCollision = false;
 
-      var tileLines = new List<Tuple<Vector2f, Vector2f>>(4);
-      var tileVectors = new List<Tuple<Vector2f, Vector2f>>(4);
-
-      System.Diagnostics.Debug.WriteLine("----------");
-
+      //Loop through all tiles and check for collisions
       for (int ty = tileLeftBottom.Y; ty <= tileRightTop.Y; ty++)
       {
         for (int tx = tileLeftBottom.X; tx <= tileRightTop.X; tx++)
         {
           byte col = GetCollision(tx, ty);
-          System.Diagnostics.Debug.WriteLine(tx + ";" + ty + ":" + col);
 
           if (col > CollisionNone)
           {
-            tileLines.Clear();
-            tileVectors.Clear();
+            tilePoints.Clear();
 
+            //Tile boundaries
             float tileLeft = tx * _tileWidth;
             float tileRight = tileLeft + _tileWidth;
             float tileBottom = ty * _tileHeight;
             float tileTop = tileBottom + _tileHeight;
 
+            //Tile corner points
             Vector2f tLeftBottom = new Vector2f(tileLeft, tileBottom);
             Vector2f tLeftTop = new Vector2f(tileLeft, tileTop);
             Vector2f tRightTop = new Vector2f(tileRight, tileTop);
             Vector2f tRightBottom = new Vector2f(tileRight, tileBottom);
 
+            //Create tile lines and point vectors depending on tile type
             switch (col)
             {
               case CollisionFull:
-                tileLines.Add(new Tuple<Vector2f, Vector2f>(tLeftBottom, tLeftTop));
-                tileLines.Add(new Tuple<Vector2f, Vector2f>(tLeftTop, tRightTop));
-                tileLines.Add(new Tuple<Vector2f, Vector2f>(tRightTop, tRightBottom));
-                tileLines.Add(new Tuple<Vector2f, Vector2f>(tRightBottom, tLeftBottom));
-
-                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tLeftBottom, tLeftBottom - mov));
-                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tLeftTop, tLeftTop - mov));
-                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tRightTop, tRightTop - mov));
-                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tRightBottom, tRightBottom - mov));
+                tilePoints.Add(tLeftBottom);
+                tilePoints.Add(tLeftTop);
+                tilePoints.Add(tRightTop);
+                tilePoints.Add(tRightBottom);
                 break;
 
               case CollisionNorthEast:
-                tileLines.Add(new Tuple<Vector2f, Vector2f>(tLeftTop, tRightTop));
-                tileLines.Add(new Tuple<Vector2f, Vector2f>(tRightTop, tRightBottom));
-                tileLines.Add(new Tuple<Vector2f, Vector2f>(tRightBottom, tLeftTop));
-
-                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tLeftTop, tLeftTop - mov));
-                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tRightTop, tRightTop - mov));
-                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tRightBottom, tRightBottom - mov));
+                tilePoints.Add(tLeftTop);
+                tilePoints.Add(tRightTop);
+                tilePoints.Add(tRightBottom);
                 break;
 
               case CollisionNorthWest:
-                tileLines.Add(new Tuple<Vector2f, Vector2f>(tLeftBottom, tLeftTop));
-                tileLines.Add(new Tuple<Vector2f, Vector2f>(tLeftTop, tRightTop));
-                tileLines.Add(new Tuple<Vector2f, Vector2f>(tRightTop, tLeftBottom));
-
-                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tLeftBottom, tLeftBottom - mov));
-                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tLeftTop, tLeftTop - mov));
-                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tRightTop, tRightTop - mov));
+                tilePoints.Add(tLeftBottom);
+                tilePoints.Add(tLeftTop);
+                tilePoints.Add(tRightTop);
                 break;
 
               case CollisionSouthEast:
-                tileLines.Add(new Tuple<Vector2f, Vector2f>(tLeftBottom, tRightTop));
-                tileLines.Add(new Tuple<Vector2f, Vector2f>(tRightTop, tRightBottom));
-                tileLines.Add(new Tuple<Vector2f, Vector2f>(tRightBottom, tLeftBottom));
-
-                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tLeftBottom, tLeftBottom - mov));
-                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tRightTop, tRightTop - mov));
-                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tRightBottom, tRightBottom - mov));
+                tilePoints.Add(tLeftBottom);
+                tilePoints.Add(tRightTop);
+                tilePoints.Add(tRightBottom);
                 break;
 
               case CollisionSouthWest:
-                tileLines.Add(new Tuple<Vector2f, Vector2f>(tLeftBottom, tLeftTop));
-                tileLines.Add(new Tuple<Vector2f, Vector2f>(tLeftTop, tRightBottom));
-                tileLines.Add(new Tuple<Vector2f, Vector2f>(tRightBottom, tLeftBottom));
-
-                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tLeftBottom, tLeftBottom - mov));
-                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tLeftTop, tLeftTop - mov));
-                tileVectors.Add(new Tuple<Vector2f, Vector2f>(tRightBottom, tRightBottom - mov));
+                tilePoints.Add(tLeftBottom);
+                tilePoints.Add(tLeftTop);
+                tilePoints.Add(tRightBottom);
                 break;
 
               default:
                 throw new InvalidDataException("Unknown tile collision type: " + col);
             }
 
-            foreach (var item in boxLines)
+            //Check if any movement vectors from box intersect tile lines
+            for (int b = 0; b < boxPoints.Length; b++)
             {
-              System.Diagnostics.Debug.WriteLine(item.Item1 + " - " + item.Item2);
-            }
-            
-
-            foreach (var boxVec in boxVectors)
-            {
-              foreach (var tileLine in tileLines)
+              for (int l = 0; l < tilePoints.Count; l++)
               {
-                Vector2f? p = Intersections.LineSegmentLineSegment(boxVec.Item1, boxVec.Item2, tileLine.Item1, tileLine.Item2);
+                int nextl = (l + 1) % tilePoints.Count;
+
+                Vector2f start = boxPoints[b];
+                Vector2f? p = Intersections.LineSegmentLineSegment(start, start + mov, tilePoints[l], tilePoints[nextl]);
                 if (p.HasValue)
                 {
-                  Vector2f dif = p.Value - boxVec.Item1;
+                  Vector2f dif = p.Value - start;
                   result.X = BasicMath.SignedMin(result.X, dif.X);
                   result.Y = BasicMath.SignedMin(result.Y, dif.Y);
+                  hasCollision = true;
                 }
               }
             }
 
-            foreach (var tileVec in tileVectors)
+            //Check if any movement vectors from tiles intersect the box
+            for (int l = 0; l < tilePoints.Count; l++)
             {
-              foreach (var boxLine in boxLines)
+              for (int b = 0; b < boxPoints.Length; b++)
               {
-                Vector2f? p = Intersections.LineSegmentLineSegment(tileVec.Item1, tileVec.Item2, boxLine.Item1, boxLine.Item2);
+                int nextb = (b + 1) % boxPoints.Length;
+
+                Vector2f start = tilePoints[l];
+                Vector2f? p = Intersections.LineSegmentLineSegment(start, start - mov, boxPoints[b], boxPoints[nextb]);
                 if (p.HasValue)
                 {
-                  Vector2f dif = (p.Value - tileVec.Item1) * -1.0f;
+                  Vector2f dif = (p.Value - start) * -1.0f;
                   result.X = BasicMath.SignedMin(result.X, dif.X);
                   result.Y = BasicMath.SignedMin(result.Y, dif.Y);
+                  hasCollision = true;
                 }
               }
             }
@@ -670,8 +654,14 @@ namespace OkuEngine.Components
         }
       }
 
-      Vector2f e = new Vector2f(0.001f, 0.001f);
-      return result - (e * (VectorMath.Sign(mov)));
+      //If there was a collision, move box a little away from tile to avoid problems
+      if (hasCollision)
+      {
+        Vector2f e = new Vector2f(0.01f, 0.01f);
+        result = result - (e * VectorMath.Sign(mov));
+      }
+
+      return result;
     }
 
   }

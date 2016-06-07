@@ -47,6 +47,7 @@ namespace OkuTestApp
       //Player
       player = new Entity("player");
       player.AddComponent(new PositionComponent(new Vector2f(16, 64), false));
+      player.AddComponent(new ScaleComponent(new Vector2f(4.0f, 1.0f)));
 
       var imageData = API.LoadImage("D:\\Graphics\\white.png");
       var imageHandle = Assets.AddImage(imageData);
@@ -89,7 +90,7 @@ namespace OkuTestApp
 
       API.SetInputContext(0, context);
 
-      const float trans = 200;
+      //const float trans = 200;
       //API.AddEventListener(new EventListener(EventNames.EveryFrame, ev => position.Position += new Vector2f(0, trans * API.GetAxisValue("camera_vertical") * (float)ev.Data[0])));
       //API.AddEventListener(new EventListener(EventNames.EveryFrame, ev => position.Position += new Vector2f(trans * API.GetAxisValue("camera_horizontal") * (float)ev.Data[0], 0)));
 
@@ -108,8 +109,8 @@ namespace OkuTestApp
       var tilemap = tileMapEntity.GetComponent<TilemapComponent>();
       var playerPos = player.GetComponent<PositionComponent>();
 
-      Vector2f playerMin = playerPos.Position - new Vector2f(4, 4);
-      Vector2f playMax = playerPos.Position + new Vector2f(4, 4);
+      Vector2f playerMin = playerPos.Position - new Vector2f(16, 4);
+      Vector2f playMax = playerPos.Position + new Vector2f(16, 4);
 
       Vector2f mv = tilemap.GetMaxMovement(playerMin, playMax, v);
       //Vector2f mv = v;
