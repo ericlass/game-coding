@@ -47,7 +47,7 @@ namespace OkuTestApp
       //Player
       player = new Entity("player");
       player.AddComponent(new PositionComponent(new Vector2f(16, 64), false));
-      player.AddComponent(new ScaleComponent(new Vector2f(4.0f, 1.0f)));
+      player.AddComponent(new ScaleComponent(new Vector2f(2.0f, 2.0f)));
 
       var imageData = API.LoadImage("D:\\Graphics\\white.png");
       var imageHandle = Assets.AddImage(imageData);
@@ -94,10 +94,10 @@ namespace OkuTestApp
       //API.AddEventListener(new EventListener(EventNames.EveryFrame, ev => position.Position += new Vector2f(0, trans * API.GetAxisValue("camera_vertical") * (float)ev.Data[0])));
       //API.AddEventListener(new EventListener(EventNames.EveryFrame, ev => position.Position += new Vector2f(trans * API.GetAxisValue("camera_horizontal") * (float)ev.Data[0], 0)));
 
-      API.AddEventListener(new EventListener(EventNames.EveryFrame, movePlayer));
+      API.AddEventListener(new EventListener(EventNames.EveryFrame, MovePlayerSAT));
     }
 
-    private void movePlayer(Event ev)
+    private void MovePlayer(Event ev)
     {
       float dt = (float)ev.Data[0];
 
@@ -109,13 +109,46 @@ namespace OkuTestApp
       var tilemap = tileMapEntity.GetComponent<TilemapComponent>();
       var playerPos = player.GetComponent<PositionComponent>();
 
-      Vector2f playerMin = playerPos.Position - new Vector2f(16, 4);
-      Vector2f playMax = playerPos.Position + new Vector2f(16, 4);
+      Vector2f playerMin = playerPos.Position - new Vector2f(8, 8);
+      Vector2f playMax = playerPos.Position + new Vector2f(8, 8);
 
       Vector2f mv = tilemap.GetMaxMovement(playerMin, playMax, v);
       //Vector2f mv = v;
 
       playerPos.Position += mv;
+    }
+
+    private void MovePlayerSAT(Event ev)
+    {
+      float dt = (float)ev.Data[0];
+
+      float speed = 100.0f * dt;
+      float vx = API.GetAxisValue("player_horizontal") * speed;
+      float vy = API.GetAxisValue("player_vertical") * speed;
+      Vector2f v = new Vector2f(vx, vy);
+
+      var tilemap = tileMapEntity.GetComponent<TilemapComponent>();
+      var playerPos = player.GetComponent<PositionComponent>();
+
+      playerPos.Position += v;
+
+      Vector2f playerMin = playerPos.Position - new Vector2f(8, 8);
+      Vector2f playMax = playerPos.Position + new Vector2f(8, 8);
+
+      Vector2f mv = Vector2f.Zero;
+      for (int i = 0; i < 5; i++)
+      {
+        mv = tilemap.GetMaxMovementSAT(playerMin, playMax);
+        
+        if (mv.SquaredMagnitude > 0)
+          System.Diagnostics.Debug.WriteLine("MTD" + i + ": " + mv);
+        else
+          break;
+
+        playerMin += mv;
+        playMax += mv;
+        playerPos.Position += mv;
+      }      
     }
 
     protected override void Finish()

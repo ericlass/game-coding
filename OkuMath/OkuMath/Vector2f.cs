@@ -360,6 +360,15 @@ namespace OkuMath
     }
 
     /// <summary>
+    /// Gets the absolute value for this vector. This means that for both X and Y the absolute value is calculated.
+    /// </summary>
+    /// <returns>The absolute vector.</returns>
+    public Vector2f Abs()
+    {
+      return new Vector2f(Math.Abs(X), Math.Abs(Y));
+    }
+
+    /// <summary>
     /// Parses the given string into a vector.
     /// The string is expected to be in the format "X;Y"
     /// like it is created by the ToString method. 

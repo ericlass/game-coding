@@ -664,5 +664,119 @@ namespace OkuEngine.Components
       return result;
     }
 
+    public Vector2f GetMaxMovementSAT(Vector2f min, Vector2f max)
+    {
+      //Calculate tile area that sweeped box touches
+      Vector2i tileLeftBottom = GridMath.CellOfPoint(min, _tileWidth);
+      Vector2i tileRightTop = GridMath.CellOfPoint(max, _tileWidth);
+
+      tileLeftBottom.X = BasicMath.Clamp(tileLeftBottom.X, 0, _width - 1);
+      tileLeftBottom.Y = BasicMath.Clamp(tileLeftBottom.Y, 0, _height - 1);
+      tileRightTop.X = BasicMath.Clamp(tileRightTop.X, 0, _width - 1);
+      tileRightTop.Y = BasicMath.Clamp(tileRightTop.Y, 0, _height - 1);
+
+      //Calculate corner points of box
+      Vector2f leftBottom = min;
+      Vector2f leftTop = new Vector2f(min.X, max.Y);
+      Vector2f rightTop = max;
+      Vector2f rightBottom = new Vector2f(max.X, min.Y);
+
+      //Calculate line segement of box
+      var boxPoints = new Vector2f[]
+      {
+        leftBottom,
+        leftTop,
+        rightTop,
+        rightBottom
+      };
+
+      var tilePoints = new List<Vector2f>(4);
+      bool hasCollision = false;
+
+      //Vector2f result = new Vector2f(float.MaxValue, float.MaxValue);
+      var result = Vector2f.Zero;
+
+      //Loop through all tiles and check for collisions
+      for (int ty = tileLeftBottom.Y; ty <= tileRightTop.Y; ty++)
+      {
+        for (int tx = tileLeftBottom.X; tx <= tileRightTop.X; tx++)
+        {
+          byte col = GetCollision(tx, ty);
+
+          if (col > CollisionNone)
+          {
+            tilePoints.Clear();
+
+            //Tile boundaries
+            float tileLeft = tx * _tileWidth;
+            float tileRight = tileLeft + _tileWidth;
+            float tileBottom = ty * _tileHeight;
+            float tileTop = tileBottom + _tileHeight;
+
+            //Tile corner points
+            Vector2f tLeftBottom = new Vector2f(tileLeft, tileBottom);
+            Vector2f tLeftTop = new Vector2f(tileLeft, tileTop);
+            Vector2f tRightTop = new Vector2f(tileRight, tileTop);
+            Vector2f tRightBottom = new Vector2f(tileRight, tileBottom);
+
+            //Create tile lines and point vectors depending on tile type
+            switch (col)
+            {
+              case CollisionFull:
+                tilePoints.Add(tLeftBottom);
+                tilePoints.Add(tLeftTop);
+                tilePoints.Add(tRightTop);
+                tilePoints.Add(tRightBottom);
+                break;
+
+              case CollisionNorthEast:
+                tilePoints.Add(tLeftTop);
+                tilePoints.Add(tRightTop);
+                tilePoints.Add(tRightBottom);
+                break;
+
+              case CollisionNorthWest:
+                tilePoints.Add(tLeftBottom);
+                tilePoints.Add(tLeftTop);
+                tilePoints.Add(tRightTop);
+                break;
+
+              case CollisionSouthEast:
+                tilePoints.Add(tLeftBottom);
+                tilePoints.Add(tRightTop);
+                tilePoints.Add(tRightBottom);
+                break;
+
+              case CollisionSouthWest:
+                tilePoints.Add(tLeftBottom);
+                tilePoints.Add(tLeftTop);
+                tilePoints.Add(tRightBottom);
+                break;
+
+              default:
+                throw new InvalidDataException("Unknown tile collision type: " + col);
+            }
+
+            Vector2f mtd;
+            if (Overlaps.PolygonPolygon(boxPoints, tilePoints.ToArray(), out mtd))
+            {
+              result += mtd;
+              hasCollision = true;
+            }
+
+          }
+        }
+      }
+
+      //If there was a collision, move box a little away from tile to avoid problems
+      if (hasCollision)
+        result *= 1.01f;
+
+      if (hasCollision)
+        return result;
+      else
+        return Vector2f.Zero;
+    }
+
   }
 }

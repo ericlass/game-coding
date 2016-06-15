@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace OkuMath
 {
@@ -25,9 +26,28 @@ namespace OkuMath
       Vector2f[] normals2 = PolygonMath.GetNormals(poly2);
 
       //Create array that contains normals of both polygons
-      Vector2f[] normalAxes = new Vector2f[normals1.Length + normals2.Length];
-      Array.Copy(normals1, normalAxes, normals1.Length);
-      Array.Copy(normals1, 0, normalAxes, normals1.Length, normals2.Length);
+      Vector2f[] allNormals = new Vector2f[normals1.Length + normals2.Length];
+      Array.Copy(normals1, allNormals, normals1.Length);
+      Array.Copy(normals2, 0, allNormals, normals1.Length, normals2.Length);
+
+      //Make axes unique
+      var allAxes = new List<Vector2f>();
+      foreach (var normal in allNormals)
+      {
+        bool exists = false;
+
+        foreach (var axis in allAxes)
+        {
+          if (axis == normal || axis == -normal)
+          {
+            exists = true;
+            break;
+          }
+        }
+
+        if (!exists)
+          allAxes.Add(normal);
+      }
 
       Vector2f separation = new Vector2f();
       float minOverlap = float.MaxValue;
@@ -37,15 +57,13 @@ namespace OkuMath
       float min2 = float.MaxValue;
       float max2 = float.MinValue;
 
-      for (int i = 0; i < normalAxes.Length; i++)
+      foreach (var axis in allAxes)
       {
-        Vector2f axis = normalAxes[i];
-
         GetProjectedBounds(axis, poly1, out min1, out max1);
         GetProjectedBounds(axis, poly2, out min2, out max2);
 
         if (min1 > max2 || max1 < min2)
-          return false;
+          return false; //Found a separating axis. Polys do not overlap.
         else
         {
           float center1 = (min1 + max1);
@@ -68,7 +86,7 @@ namespace OkuMath
         }
       }
 
-      mtd = separation * minOverlap;
+      mtd = separation * (-minOverlap);
       return true;
     }
 
