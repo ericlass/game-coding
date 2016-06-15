@@ -25,30 +25,27 @@ namespace OkuMath
       Vector2f[] normals1 = PolygonMath.GetNormals(poly1);
       Vector2f[] normals2 = PolygonMath.GetNormals(poly2);
 
-      //Create array that contains normals of both polygons
-      Vector2f[] allNormals = new Vector2f[normals1.Length + normals2.Length];
-      Array.Copy(normals1, allNormals, normals1.Length);
-      Array.Copy(normals2, 0, allNormals, normals1.Length, normals2.Length);
+      //Create combined list of all axes
+      List<Vector2f> allAxes = new List<Vector2f>(normals1.Length + normals2.Length);
+      allAxes.AddRange(normals1);
+      allAxes.AddRange(normals2);
 
-      //Make axes unique
-      var allAxes = new List<Vector2f>();
-      foreach (var normal in allNormals)
+      //Make axes unique so there are no duplicate axes
+      for (int i = allAxes.Count - 1; i >= 0; i--)
       {
-        bool exists = false;
-
-        foreach (var axis in allAxes)
+        var normal = allAxes[i];
+        for (int j = 0; j < i; j++)
         {
+          var axis = allAxes[j];
           if (axis == normal || axis == -normal)
           {
-            exists = true;
+            allAxes.RemoveAt(i);
             break;
           }
         }
-
-        if (!exists)
-          allAxes.Add(normal);
       }
 
+      //Intitialize values for loop
       Vector2f separation = new Vector2f();
       float minOverlap = float.MaxValue;
 

@@ -97,32 +97,11 @@ namespace OkuTestApp
       API.AddEventListener(new EventListener(EventNames.EveryFrame, MovePlayerSAT));
     }
 
-    private void MovePlayer(Event ev)
-    {
-      float dt = (float)ev.Data[0];
-
-      float speed = 100.0f * dt;
-      float vx = API.GetAxisValue("player_horizontal") * speed;
-      float vy = API.GetAxisValue("player_vertical") * speed;
-      Vector2f v = new Vector2f(vx, vy);
-
-      var tilemap = tileMapEntity.GetComponent<TilemapComponent>();
-      var playerPos = player.GetComponent<PositionComponent>();
-
-      Vector2f playerMin = playerPos.Position - new Vector2f(8, 8);
-      Vector2f playMax = playerPos.Position + new Vector2f(8, 8);
-
-      Vector2f mv = tilemap.GetMaxMovement(playerMin, playMax, v);
-      //Vector2f mv = v;
-
-      playerPos.Position += mv;
-    }
-
     private void MovePlayerSAT(Event ev)
     {
       float dt = (float)ev.Data[0];
 
-      float speed = 100.0f * dt;
+      float speed = 200.0f * dt;
       float vx = API.GetAxisValue("player_horizontal") * speed;
       float vy = API.GetAxisValue("player_vertical") * speed;
       Vector2f v = new Vector2f(vx, vy);
@@ -132,23 +111,15 @@ namespace OkuTestApp
 
       playerPos.Position += v;
 
-      Vector2f playerMin = playerPos.Position - new Vector2f(8, 8);
-      Vector2f playMax = playerPos.Position + new Vector2f(8, 8);
+      Vector2f playerMin = playerPos.Position - new Vector2f(7.9f, 7.9f);
+      Vector2f playMax = playerPos.Position + new Vector2f(7.9f, 7.9f);
 
-      Vector2f mv = Vector2f.Zero;
-      for (int i = 0; i < 5; i++)
-      {
-        mv = tilemap.GetMaxMovementSAT(playerMin, playMax);
+      Vector2f mv = tilemap.GetMaxMovementSAT(playerMin, playMax);
         
-        if (mv.SquaredMagnitude > 0)
-          System.Diagnostics.Debug.WriteLine("MTD" + i + ": " + mv);
-        else
-          break;
+      if (mv.SquaredMagnitude > 0)
+        System.Diagnostics.Debug.WriteLine("MTD: " + mv);
 
-        playerMin += mv;
-        playMax += mv;
-        playerPos.Position += mv;
-      }      
+      playerPos.Position += mv;
     }
 
     protected override void Finish()
