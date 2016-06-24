@@ -10,9 +10,12 @@ namespace OkuEngine
   /// </summary>
   public sealed class Entity
   {
+    private static int _entityId = 0;
+
     private string _name = null;
     private List<IComponent> _components = new List<IComponent>();
     private Entity _template = null;
+    private int _id = -1;
 
     public event Action<Entity, IComponent> OnAddComponent;
     public event Action<Entity, IComponent> OnRemoveComponent;
@@ -25,6 +28,8 @@ namespace OkuEngine
     public Entity(string name)
     {
       _name = name;
+      _entityId += 1;
+      _id = _entityId;
     }
 
     /// <summary>
@@ -34,6 +39,14 @@ namespace OkuEngine
     {
       get { return _name; }
       set { _name = value; }
+    }
+
+    /// <summary>
+    /// Gets the ID of the entity, which is unique and stable during the runtime of the application.
+    /// </summary>
+    internal int ID
+    {
+      get { return _id; }
     }
 
     /// <summary>

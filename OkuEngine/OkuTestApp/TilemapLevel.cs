@@ -24,19 +24,17 @@ namespace OkuTestApp
       //Tilemap
       tileMapEntity = new Entity("tilemap");
 
-      TilemapComponent tileMapComp = TilemapComponent.LoadFromTiledXml(new FileStream("D:\\Graphics\\Tilemaps\\Collision\\collisiontest.tmx", FileMode.Open),
-        name =>
-        {
-          ImageData image = ImageData.FromFile(Path.Combine("D:\\Graphics\\Tilemaps\\Collision", name));
-          var handle = Assets.AddImage(image);
+      String imagePath;
+      TilemapAsset tilemap = TilemapAsset.LoadFromTiledXml(new FileStream("D:\\Graphics\\Tilemaps\\Collision\\collisiontest.tmx", FileMode.Open), out imagePath);
+      AssetHandle tileMapHandle = Assets.AddTilemap(tilemap);
 
-          var materialhandle = Assets.AddMaterial(new MaterialAsset(handle, Color.White));
-          tileMapEntity.AddComponent(new MaterialComponent(materialhandle));
+      ImageData image = ImageData.FromFile(Path.Combine("D:\\Graphics\\Tilemaps\\Collision", imagePath));
+      var handle = Assets.AddImage(image);
 
-          return handle;
-        }
-      );
+      var materialhandle = Assets.AddMaterial(new MaterialAsset(handle, Color.White));
+      tileMapEntity.AddComponent(new MaterialComponent(materialhandle));
 
+      TilemapComponent tileMapComp = new TilemapComponent(tileMapHandle, handle);
       tileMapEntity.AddComponent(tileMapComp);
 
       PositionComponent position = new PositionComponent(Vector2f.Zero, false);
@@ -106,7 +104,7 @@ namespace OkuTestApp
       float vy = API.GetAxisValue("player_vertical") * speed;
       Vector2f v = new Vector2f(vx, vy);
 
-      var tilemap = tileMapEntity.GetComponent<TilemapComponent>();
+      var tilemapComp = tileMapEntity.GetComponent<TilemapComponent>();
       var playerPos = player.GetComponent<PositionComponent>();
 
       playerPos.Position += v;
@@ -114,6 +112,7 @@ namespace OkuTestApp
       Vector2f playerMin = playerPos.Position - new Vector2f(7.9f, 7.9f);
       Vector2f playMax = playerPos.Position + new Vector2f(7.9f, 7.9f);
 
+      TilemapAsset tilemap = Assets.GetAsset<TilemapAsset>(tilemapComp.Tilemap);
       Vector2f mv = tilemap.GetMaxMovementSAT(playerMin, playMax);
         
       if (mv.SquaredMagnitude > 0)

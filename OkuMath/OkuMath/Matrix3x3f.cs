@@ -179,6 +179,26 @@ namespace OkuMath
     }
 
     /// <summary>
+    /// Multiplies the given matrix by the given vector.
+    /// The vector is treated as a column vector.
+    /// </summary>
+    /// <param name="mat">The matrix.</param>
+    /// <param name="vec">The vector.</param>
+    /// <returns>The result of the multiplication.</returns>
+    public static Vector2f operator *(Matrix3x3f mat, Vector2f vec)
+    {
+      // This uses standard matrix multiplication rules.
+      //     mat        vec    result
+      // | #, #, # |   | # |   | # |
+      // | #, #, # | * | # | = | # |
+      // | 0, 0, 1 |   | 1 |   | X |
+      return new Vector2f(
+          mat[0].X * vec.X + mat[1].X * vec.Y + mat[2].X,
+          mat[0].Y * vec.X + mat[1].Y * vec.Y + mat[2].Y
+        );
+    }
+
+    /// <summary>
     /// Multiplies the given vector by the given matrix.
     /// The vector is treated as a row vector.
     /// </summary>

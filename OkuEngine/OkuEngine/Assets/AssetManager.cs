@@ -40,6 +40,11 @@ namespace OkuEngine.Assets
       return AddAsset(material, AssetType.Material);
     }
 
+    public AssetHandle AddTilemap(TilemapAsset tilemap)
+    {
+      return AddAsset(tilemap, AssetType.Tilemap);
+    }
+
     public object GetAsset(AssetHandle handle)
     {
       int id = handle.ID;

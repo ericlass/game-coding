@@ -4,12 +4,17 @@ using OkuMath;
 
 namespace OkuEngine.Systems
 {
-  public class BoundingBoxShape : ICollisionShape
+  public class BoundingBoxShape : CollisionShape
   {
     private Vector2f _min = Vector2f.Zero;
     private Vector2f _max = Vector2f.Zero;
+    private bool _dirty = true;
 
     private List<Vector2f[]> _vertices = null;
+
+    public BoundingBoxShape()
+    {
+    }
 
     public Vector2f Min
     {
@@ -17,7 +22,7 @@ namespace OkuEngine.Systems
       set
       {
         _min = value;
-        _vertices = null;
+        _dirty = true;
       }
     }
 
@@ -27,18 +32,18 @@ namespace OkuEngine.Systems
       set
       {
         _max = value;
-        _vertices = null;
+        _dirty = true;
       }
     }
 
-    public bool NeedsUpdate
+    internal override bool Dirty
     {
-      get { return _vertices == null; }
+      get { return _dirty; }
     }
 
-    public List<Vector2f[]> GetShapes()
+    public override List<Vector2f[]> GetShapes()
     {
-      if (_vertices == null)
+      if (_dirty)
       {
         _vertices = new List<Vector2f[]>(1);
         _vertices.Add(new Vector2f[]
@@ -48,6 +53,8 @@ namespace OkuEngine.Systems
           _max,
           new Vector2f(_max.X, _max.Y)
         });
+
+        _dirty = false;
       }
       return _vertices;
     }

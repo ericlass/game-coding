@@ -59,6 +59,7 @@
     <Compile Include="Assets\MaterialAsset.cs" />
     <Compile Include="Assets\MeshAsset.cs" />
     <Compile Include="Assets\StaticMeshAsset.cs" />
+    <Compile Include="Assets\TilemapAsset.cs" />
     <Compile Include="Behavior\BehaviorResult.cs" />
     <Compile Include="Behavior\BehaviorTreeNode.cs" />
     <Compile Include="Behavior\Composite.cs" />
@@ -121,12 +122,13 @@
     <Compile Include="States\Transition.cs" />
     <Compile Include="Systems\BoundingBoxShape.cs" />
     <Compile Include="Systems\EntityRenderSystem.cs" />
-    <Compile Include="Systems\ICollisionShape.cs" />
+    <Compile Include="Systems\CollisionShape.cs" />
     <Compile Include="Systems\InputSystem.cs" />
     <Compile Include="Systems\PhysicsSystem.cs" />
     <Compile Include="Systems\RenderSystem.cs" />
     <Compile Include="Systems\GameSystem.cs" />
     <Compile Include="Systems\RenderTask.cs" />
+    <Compile Include="Systems\TilemapShape.cs" />
     <Compile Include="Systems\Timer.cs" />
     <Compile Include="Systems\TimerSystem.cs" />
     <Compile Include="VariableNames.cs" />

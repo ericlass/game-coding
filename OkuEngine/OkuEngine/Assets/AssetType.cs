@@ -8,6 +8,7 @@ namespace OkuEngine.Assets
     Image,
     StaticMesh,
     DynamicMesh,
-    Material
+    Material,
+    Tilemap
   }
 }
