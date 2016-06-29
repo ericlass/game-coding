@@ -24,6 +24,7 @@ namespace OkuEngine.Components
     private AssetHandle _tileMap = null;
 
     private List<AssetHandle> _meshRenderList = new List<AssetHandle>();
+    private bool _registered = false;
 
     /// <summary>
     /// List of texture coordinates for the tiles from the tile sets.
@@ -54,7 +55,7 @@ namespace OkuEngine.Components
 
       _tileMap = tilemap;
       _tileSetImage = tileImage;
-    }
+    }    
 
     /// <summary>
     /// Gets or set the tile set image containing the tile images for the graphical layers.
@@ -62,13 +63,14 @@ namespace OkuEngine.Components
     public AssetHandle Tileset
     {
       get { return _tileSetImage; }
-      set { _tileSetImage = value; }
     }
 
+    /// <summary>
+    /// Gets or sets the tile map asset.
+    /// </summary>
     public AssetHandle Tilemap
     {
       get { return _tileMap; }
-      set { _tileMap = value; }
     }
 
     /// <summary>
@@ -89,12 +91,36 @@ namespace OkuEngine.Components
     }
 
     /// <summary>
+    /// Gets the tile map asset from the given level.
+    /// </summary>
+    /// <param name="level">The current level.</param>
+    /// <returns>The tile map asset.</returns>
+    private TilemapAsset GetTilemapAsset(Level level)
+    {
+      return level.Assets.GetAsset<TilemapAsset>(_tileMap);
+    }
+
+    private void OnTilemapModify()
+    {
+      _tileTexCoords = null;
+      _chunkMeshes = null;
+    }
+
+    /// <summary>
     /// Gets the meshes to be rendered for the current frame.
     /// </summary>
     /// <param name="currentLevel">The current level.</param>
     /// <returns>The meshes to be rendered.</returns>
     internal override List<AssetHandle> GetMeshes(Level currentLevel)
     {
+      TilemapAsset tilemap = GetTilemapAsset(currentLevel);
+
+      if (!_registered)
+      {
+        tilemap.OnModify += OnTilemapModify;
+        _registered = true;
+      }
+
       if (_tileTexCoords == null)
         GenerateTexCoords(currentLevel);
 
@@ -115,7 +141,7 @@ namespace OkuEngine.Components
     /// <param name="currentLevel">The current level.</param>
     private void GenerateChunkMeshes(Level currentLevel)
     {
-      TilemapAsset tilemap = currentLevel.Assets.GetAsset<TilemapAsset>(_tileMap);
+      TilemapAsset tilemap = GetTilemapAsset(currentLevel);
 
       //How many chunks does the tilemap have?
       int chunksH = (int)Math.Ceiling(tilemap.Width / (float)ChunkSize);
@@ -214,7 +240,7 @@ namespace OkuEngine.Components
     /// <param name="currentLevel">The current level.</param>
     private void GenerateTexCoords(Level currentLevel)
     {
-      TilemapAsset tilemap = currentLevel.Assets.GetAsset<TilemapAsset>(_tileMap);
+      TilemapAsset tilemap = GetTilemapAsset(currentLevel);
       ImageBase image = currentLevel.Assets.GetAsset<ImageBase>(_tileSetImage);
 
       //How many tiles in this image

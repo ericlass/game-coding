@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OkuMath;
+using OkuEngine.Levels;
 
 namespace OkuEngine.Systems
 {
@@ -22,6 +23,7 @@ namespace OkuEngine.Systems
       set
       {
         _min = value;
+        _vertices = null;
         _dirty = true;
       }
     }
@@ -32,6 +34,7 @@ namespace OkuEngine.Systems
       set
       {
         _max = value;
+        _vertices = null;
         _dirty = true;
       }
     }
@@ -39,11 +42,12 @@ namespace OkuEngine.Systems
     internal override bool Dirty
     {
       get { return _dirty; }
+      set { _dirty = value; }
     }
 
-    public override List<Vector2f[]> GetShapes()
+    public override List<Vector2f[]> GetShapes(Level currentLevel)
     {
-      if (_dirty)
+      if (_vertices == null)
       {
         _vertices = new List<Vector2f[]>(1);
         _vertices.Add(new Vector2f[]
@@ -53,8 +57,6 @@ namespace OkuEngine.Systems
           _max,
           new Vector2f(_max.X, _max.Y)
         });
-
-        _dirty = false;
       }
       return _vertices;
     }
