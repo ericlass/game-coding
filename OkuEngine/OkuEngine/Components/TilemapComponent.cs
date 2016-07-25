@@ -20,10 +20,10 @@ namespace OkuEngine.Components
     //Width and height of chunks in number of tiles.
     private const int ChunkSize = 16;
 
-    private AssetHandle _tileSetImage = null;
-    private AssetHandle _tileMap = null;
+    private int _tileSetImage = 0;
+    private int _tileMap = 0;
 
-    private List<AssetHandle> _meshRenderList = new List<AssetHandle>();
+    private List<int> _meshRenderList = new List<int>();
     private bool _registered = false;
 
     /// <summary>
@@ -37,22 +37,10 @@ namespace OkuEngine.Components
     /// List of mesh assest for the chunks of the tile map.
     /// Each item in the list is an array of the chunks for a single tile layer.
     /// </summary>
-    private List<AssetHandle[]> _chunkMeshes { get; set; }
+    private List<int[]> _chunkMeshes { get; set; }
 
-    public TilemapComponent(AssetHandle tilemap, AssetHandle tileImage)
+    public TilemapComponent(int tilemap, int tileImage)
     {
-      if (!tilemap.IsValid)
-        throw new ArgumentException("Given tilemap asset is not valid anymore!");
-
-      if (!tileImage.IsValid)
-        throw new ArgumentException("Given image asset is not valid anymore!");
-
-      if (tilemap.AssetType != AssetType.Tilemap)
-        throw new ArgumentException("Parameter 'tilemap' has to be asset type Tilemap!");
-
-      if (tileImage.AssetType != AssetType.Image)
-        throw new ArgumentException("Parameter 'image' has to be asset type Image!");
-
       _tileMap = tilemap;
       _tileSetImage = tileImage;
     }    
@@ -60,7 +48,7 @@ namespace OkuEngine.Components
     /// <summary>
     /// Gets or set the tile set image containing the tile images for the graphical layers.
     /// </summary>
-    public AssetHandle Tileset
+    public int Tileset
     {
       get { return _tileSetImage; }
     }
@@ -68,7 +56,7 @@ namespace OkuEngine.Components
     /// <summary>
     /// Gets or sets the tile map asset.
     /// </summary>
-    public AssetHandle Tilemap
+    public int Tilemap
     {
       get { return _tileMap; }
     }
@@ -111,7 +99,7 @@ namespace OkuEngine.Components
     /// </summary>
     /// <param name="currentLevel">The current level.</param>
     /// <returns>The meshes to be rendered.</returns>
-    internal override List<AssetHandle> GetMeshes(Level currentLevel)
+    internal override List<int> GetMeshes(Level currentLevel)
     {
       TilemapAsset tilemap = GetTilemapAsset(currentLevel);
 
@@ -149,9 +137,9 @@ namespace OkuEngine.Components
       int numChunks = chunksV * chunksH;
 
       //Prepare mesh cache for all layers
-      List<AssetHandle[]> chunks = new List<AssetHandle[]>(tilemap.LayerCount);
+      List<int[]> chunks = new List<int[]>(tilemap.LayerCount);
       for (int i = 0; i < tilemap.LayerCount; i++)
-        chunks.Add(new AssetHandle[numChunks]);
+        chunks.Add(new int[numChunks]);
 
       int pixelHeight = tilemap.Height * tilemap.TileHeight;
       for (int chunkIndex = 0; chunkIndex < numChunks; chunkIndex++)
@@ -227,7 +215,7 @@ namespace OkuEngine.Components
           Color[] cols = colors[layer].ToArray();
 
           StaticMeshAsset mesh = new StaticMeshAsset(pos, tex, cols, PrimitiveType.Quads);
-          chunks[layer][chunkIndex] = currentLevel.Assets.AddMesh(mesh);
+          chunks[layer][chunkIndex] = currentLevel.Assets.AddAsset(mesh);
         }
       }
 
@@ -241,11 +229,11 @@ namespace OkuEngine.Components
     private void GenerateTexCoords(Level currentLevel)
     {
       TilemapAsset tilemap = GetTilemapAsset(currentLevel);
-      ImageBase image = currentLevel.Assets.GetAsset<ImageBase>(_tileSetImage);
+      ImageAsset image = currentLevel.Assets.GetAsset<ImageAsset>(_tileSetImage);
 
       //How many tiles in this image
-      int tilesH = image.Width / tilemap.TileWidth;
-      int tilesV = image.Height / tilemap.TileHeight;
+      int tilesH = image.Image.Width / tilemap.TileWidth;
+      int tilesV = image.Image.Height / tilemap.TileHeight;
       int numTiles = tilesH * tilesV;
 
       //Prepare tex coord list. Contains texture coordinates for each tile.

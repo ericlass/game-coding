@@ -42,7 +42,6 @@ namespace OkuEngine.Systems
     internal override bool Dirty
     {
       get { return _dirty; }
-      set { _dirty = value; }
     }
 
     public override List<Vector2f[]> GetShapes(Level currentLevel)

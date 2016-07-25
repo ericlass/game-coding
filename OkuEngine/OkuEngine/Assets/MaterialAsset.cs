@@ -3,22 +3,22 @@ using OkuBase.Graphics;
 
 namespace OkuEngine.Assets
 {
-  public class MaterialAsset
+  public class MaterialAsset : Asset
   {
-    private AssetHandle _texture = null;
+    private int _texture = 0;
     private Color _tint = Color.White;
 
     public MaterialAsset()
     {
     }
 
-    public MaterialAsset(AssetHandle texture, Color tint)
+    public MaterialAsset(int texture, Color tint)
     {
       _texture = texture;
       _tint = tint;
     }
 
-    public AssetHandle Texture
+    public int Texture
     {
       get { return _texture; }
       set { _texture = value; }

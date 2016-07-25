@@ -36,7 +36,7 @@ namespace OkuEngine.Systems
           Vector2f scale = scaleComp != null ? scaleComp.Scale : Vector2f.One;
           float angle = angleComp != null ? angleComp.Angle : 0.0f;
 
-          AssetHandle material = materialComp != null ? materialComp.Material : null;
+          int material = materialComp != null ? materialComp.Material : 0;
 
           foreach (var comp in meshComps)
           {

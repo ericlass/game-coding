@@ -7,7 +7,7 @@ using OkuMath;
 
 namespace OkuEngine.Assets
 {
-  public class TilemapAsset
+  public class TilemapAsset : Asset
   {
     /// <summary>
     /// No collision at all.

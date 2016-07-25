@@ -1,11 +1,5 @@
-﻿using OkuBase;
-using OkuBase.Graphics;
-using OkuMath;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OkuEngine.Assets
 {
@@ -18,57 +12,39 @@ namespace OkuEngine.Assets
       _assets.Add(null); //Index 0 always means null
     }
 
-    private AssetHandle AddAsset(object asset, AssetType assetType)
+    public int AddAsset(Asset asset)
     {
       _assets.Add(asset);
-      return new AssetHandle(_assets.Count - 1, assetType);
+      return _assets.Count - 1;
     }
 
-    public AssetHandle AddImage(ImageData imageData)
+    public object GetAsset(int handle)
     {
-      Image image = OkuManager.Instance.Graphics.NewImage(imageData);
-      return AddAsset(image, AssetType.Image);
-    }
-
-    public AssetHandle AddMesh(MeshAsset mesh)
-    {
-      return AddAsset(mesh, mesh.IsStatic ? AssetType.StaticMesh : AssetType.DynamicMesh);
-    }
-
-    public AssetHandle AddMaterial(MaterialAsset material)
-    {
-      return AddAsset(material, AssetType.Material);
-    }
-
-    public AssetHandle AddTilemap(TilemapAsset tilemap)
-    {
-      return AddAsset(tilemap, AssetType.Tilemap);
-    }
-
-    public object GetAsset(AssetHandle handle)
-    {
-      int id = handle.ID;
-      if (id < 0 || id >= _assets.Count)
+      if (handle < 0 || handle >= _assets.Count)
         return null;
       else
-        return _assets[id];
+        return _assets[handle];
     }
 
-    public T GetAsset<T>(AssetHandle handle) where T : class
+    public T GetAsset<T>(int handle) where T : class
     {
       return GetAsset(handle) as T;
     }
 
-    public void RemoveAsset(AssetHandle handle)
+    public void RemoveAsset(int handle)
     {
-      int id = handle.ID;
-      if (id >= 0 && id < _assets.Count)
+      if (handle >= 0 && handle < _assets.Count)
       {
-        object asset = _assets[id];
+        object asset = _assets[handle];
         //TODO: Free resource from renderer, sound or whatever
-        _assets[id] = null;
-        handle.Invalidate();
+        _assets[handle] = null;
       }
+    }
+
+    public void UpdateAsset(Asset asset)
+    {
+      asset.SetFlags(AssetFlags.Updated);
+      //TODO: The rest (?)
     }
 
   }

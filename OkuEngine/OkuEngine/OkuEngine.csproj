@@ -52,10 +52,11 @@
   <ItemGroup>
     <Compile Include="Animation\Animation.cs" />
     <Compile Include="Animation\AnimationFrame.cs" />
-    <Compile Include="Assets\AssetHandle.cs" />
+    <Compile Include="Assets\Asset.cs" />
+    <Compile Include="Assets\AssetFlags.cs" />
     <Compile Include="Assets\AssetManager.cs" />
-    <Compile Include="Assets\AssetType.cs" />
     <Compile Include="Assets\DynamicMeshAsset.cs" />
+    <Compile Include="Assets\ImageAsset.cs" />
     <Compile Include="Assets\MaterialAsset.cs" />
     <Compile Include="Assets\MeshAsset.cs" />
     <Compile Include="Assets\StaticMeshAsset.cs" />

@@ -4,7 +4,7 @@ using OkuBase.Graphics;
 
 namespace OkuEngine.Assets
 {
-  public abstract class MeshAsset
+  public abstract class MeshAsset : Asset
   {
     protected Vector2f[] _positions = null;
     protected Vector2f[] _texCoords = null;

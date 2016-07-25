@@ -15,8 +15,8 @@ namespace OkuEngine.Systems
       Scale = Vector2f.One;
     }
 
-    public AssetHandle Mesh { get; set; }
-    public AssetHandle Material { get; set; }
+    public int Mesh { get; set; }
+    public int Material { get; set; }
 
     public Vector2f Translation { get; set; }
     public Vector2f Scale { get; set; }

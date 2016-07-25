@@ -17,6 +17,6 @@ namespace OkuEngine.Components
 
     public abstract string Name { get; }
     public abstract IComponent Copy();
-    internal abstract List<AssetHandle> GetMeshes(Level currentLevel);
+    internal abstract List<int> GetMeshes(Level currentLevel);
   }
 }

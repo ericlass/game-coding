@@ -10,28 +10,22 @@ namespace OkuEngine.Components
   /// </summary>
   public class SimpleMeshComponent : MeshComponent
   {
-    private AssetHandle _mesh = null;
-    private List<AssetHandle> _list = null;
+    private int _mesh = 0;
+    private List<int> _list = null;
 
     /// <summary>
     /// Creates a new mesh component with the given mesh.
     /// </summary>
     /// <param name="mesh"></param>
-    public SimpleMeshComponent(AssetHandle mesh)
+    public SimpleMeshComponent(int mesh)
     {
-      if (!mesh.IsValid)
-        throw new ArgumentException("Given mesh asset handle is not valid anymore!");
-
-      if (mesh.AssetType != AssetType.StaticMesh && mesh.AssetType != AssetType.DynamicMesh)
-        throw new ArgumentException("Trying to create a mesh component with an asset of type: " + mesh.AssetType + "! Only mesh assets are allowed.");
-
       _mesh = mesh;
     }
 
     /// <summary>
     /// Gets or sets the mesh of this component.
     /// </summary>
-    public AssetHandle Mesh
+    public int Mesh
     {
       get { return _mesh; }
       set
@@ -63,10 +57,10 @@ namespace OkuEngine.Components
     /// </summary>
     /// <param name="currentLevel">The current level.</param>
     /// <returns>The meshes to be rendered.</returns>
-    internal override List<AssetHandle> GetMeshes(Level currentLevel)
+    internal override List<int> GetMeshes(Level currentLevel)
     {
       if (_list == null)
-        _list = new List<AssetHandle>() { _mesh };
+        _list = new List<int>() { _mesh };
 
       return _list;
     }

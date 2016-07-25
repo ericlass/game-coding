@@ -26,12 +26,12 @@ namespace OkuTestApp
 
       String imagePath;
       TilemapAsset tilemap = TilemapAsset.LoadFromTiledXml(new FileStream("D:\\Graphics\\Tilemaps\\Collision\\collisiontest.tmx", FileMode.Open), out imagePath);
-      AssetHandle tileMapHandle = Assets.AddTilemap(tilemap);
+      int tileMapHandle = Assets.AddAsset(tilemap);
 
-      ImageData image = ImageData.FromFile(Path.Combine("D:\\Graphics\\Tilemaps\\Collision", imagePath));
-      var handle = Assets.AddImage(image);
+      Image image = API.LoadImage(Path.Combine("D:\\Graphics\\Tilemaps\\Collision", imagePath));
+      var handle = Assets.AddAsset(new ImageAsset(image));
 
-      var materialhandle = Assets.AddMaterial(new MaterialAsset(handle, Color.White));
+      var materialhandle = Assets.AddAsset(new MaterialAsset(handle, Color.White));
       tileMapEntity.AddComponent(new MaterialComponent(materialhandle));
 
       TilemapComponent tileMapComp = new TilemapComponent(tileMapHandle, handle);
@@ -48,15 +48,15 @@ namespace OkuTestApp
       player.AddComponent(new ScaleComponent(new Vector2f(2.0f, 2.0f)));
 
       var imageData = API.LoadImage("D:\\Graphics\\white.png");
-      var imageHandle = Assets.AddImage(imageData);
+      var imageHandle = Assets.AddAsset(new ImageAsset(imageData));
 
       MaterialAsset material = new MaterialAsset(imageHandle, Color.Blue);
-      var materialHandle = Assets.AddMaterial(material);
+      var materialHandle = Assets.AddAsset(material);
 
       player.AddComponent(new MaterialComponent(materialHandle));
 
       MeshAsset mesh = API.GetMeshForImage(imageData.Width, imageData.Height, true);
-      var meshHandle = Assets.AddMesh(mesh);
+      var meshHandle = Assets.AddAsset(mesh);
 
       player.AddComponent(new SimpleMeshComponent(meshHandle));
 

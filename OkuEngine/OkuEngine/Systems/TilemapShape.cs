@@ -6,41 +6,42 @@ using OkuEngine.Levels;
 
 namespace OkuEngine.Systems
 {
+  /// <summary>
+  /// Collision shape that is defined by a tile map.
+  /// </summary>
   public class TilemapShape : CollisionShape
   {
-    private AssetHandle _tilemap = null;
-    private bool _registered = false;
-    private bool _dirty = true;
+    private int _tilemap = 0;
 
     private List<Vector2f[]> _shapes = null;
 
-    public TilemapShape(AssetHandle tilemap)
-    {
-      _tilemap = tilemap;
-    }
-
     internal override bool Dirty
     {
-      get { return _dirty; }
-      set { _dirty = value; }
+      get
+      {
+        throw new NotImplementedException();
+      }
+    }
+
+    /// <summary>
+    /// Creates a new tile map shape with the given tile map asset.
+    /// </summary>
+    /// <param name="tilemap">The tile map assets handle.</param>
+    public TilemapShape(int tilemap)
+    {
+      _tilemap = tilemap;
     }
 
     public override List<Vector2f[]> GetShapes(Level currentLevel)
     {
       var tilemap = currentLevel.Assets.GetAsset<TilemapAsset>(_tilemap);
       
-      if (_shapes == null)
-      {
-        tilemap.OnModify += () => _dirty = true;
-        _registered = true;
-      }
-
-      if (_dirty)
+      if (_shapes == null || tilemap.HasFlags(AssetFlags.Updated))
       {
         //TODO: Generate shapes
       }
 
-      return null;
+      return _shapes;
     }
 
   }

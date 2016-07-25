@@ -49,9 +49,9 @@ namespace OkuEngine.Systems
         //Iterate render queue and execute render tasks
         foreach (var task in currentLevel.RenderQueue)
         {
-          if (task.Mesh != null && task.Mesh.IsValid)
+          if (task.Mesh > 0)
           {
-            if (lastMeshId != task.Mesh.ID)
+            if (lastMeshId != task.Mesh)
             {
               MeshAsset mesh = currentLevel.Assets.GetAsset<MeshAsset>(task.Mesh);
 
@@ -60,27 +60,27 @@ namespace OkuEngine.Systems
               graphics.VertexColors = mesh.Colors;
               graphics.PrimitiveType = mesh.PrimitiveType;
 
-              lastMeshId = task.Mesh.ID;
+              lastMeshId = task.Mesh;
               meshPointCount = mesh.Positions.Length;
             }
 
             graphics.ScreenSpace = task.ScreenSpace;
 
-            if (task.Material != null && task.Material.IsValid)
+            if (task.Material > 0)
             {
-              if (lastMatId != task.Material.ID)
+              if (lastMatId != task.Material)
               {
                 var material = currentLevel.Assets.GetAsset<MaterialAsset>(task.Material);
 
-                if (material.Texture != null && material.Texture.IsValid)
+                if (material.Texture > 0)
                 {
-                  var texture = currentLevel.Assets.GetAsset<ImageBase>(material.Texture);
-                  graphics.SetShaderValue("texture", texture);
+                  var texture = currentLevel.Assets.GetAsset<ImageAsset>(material.Texture);
+                  graphics.SetShaderValue("texture", texture.Image);
                 }
 
                 graphics.SetShaderValue("tint", material.Tint.R / 255.0f, material.Tint.G / 255.0f, material.Tint.B / 255.0f, material.Tint.A / 255.0f);
 
-                lastMatId = task.Material.ID;
+                lastMatId = task.Material;
               }
             }
 
@@ -138,30 +138,9 @@ namespace OkuEngine.Systems
       }
     }
 
-    private static int CompareAssetHandles(AssetHandle x, AssetHandle y)
+    private static int CompareAssetHandles(int x, int y)
     {
-      if (x == null)
-      {
-        if (y == null)
-        {
-          return 0;
-        }
-        else
-        {
-          return -1;
-        }
-      }
-      else
-      {
-        if (y == null)
-        {
-          return 1;
-        }
-        else
-        {
-          return x.ID - y.ID;
-        }
-      }
+      return x - y;
     }
 
   }

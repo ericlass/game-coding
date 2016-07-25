@@ -5,20 +5,14 @@ namespace OkuEngine.Components
 {
   public class MaterialComponent : IComponent
   {
-    private AssetHandle _material = null;
+    private int _material = 0;
 
-    public MaterialComponent(AssetHandle material)
+    public MaterialComponent(int material)
     {
-      if (!material.IsValid)
-        throw new ArgumentException("Given material asset handle is not valid anymore!");
-
-      if (material.AssetType != AssetType.Material)
-        throw new ArgumentException("Trying to create a material component with an asset of type: " + material.AssetType + "! Only material assets are allowed.");
-
       _material = material;
     }
 
-    public AssetHandle Material
+    public int Material
     {
       get { return _material; }
       set { _material = value; }

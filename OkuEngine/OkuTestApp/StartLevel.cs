@@ -20,17 +20,17 @@ namespace OkuTestApp
       Entity entity = new Entity("first");
 
       //Add image component
-      var imageData = API.LoadImage("D:\\Temp\\Icons\\iconex_ap\\128x128\\plain\\bullet_square_grey.png");
-      var imageHandle = Assets.AddImage(imageData);
+      var image = API.LoadImage("D:\\Temp\\Icons\\iconex_ap\\128x128\\plain\\bullet_square_grey.png");
+      var imageHandle = Assets.AddAsset(new ImageAsset(image));
 
       //Add mesh component
-      var meshAsset = API.GetMeshForImage(imageData.Width, imageData.Height, true);
-      var meshHandle = Assets.AddMesh(meshAsset);
+      var meshAsset = API.GetMeshForImage(image.Width, image.Height, true);
+      var meshHandle = Assets.AddAsset(meshAsset);
       entity.AddComponent(new SimpleMeshComponent(meshHandle));
 
       //Add material component
       var material = new MaterialAsset(imageHandle, Color.Green);
-      var matHandle = Assets.AddMaterial(material);
+      var matHandle = Assets.AddAsset(material);
       entity.AddComponent(new MaterialComponent(matHandle));
 
       //Add transform components
@@ -47,11 +47,11 @@ namespace OkuTestApp
       Random rand = new Random();
 
       //Create some colored materials
-      AssetHandle[] mats = new AssetHandle[] {
-        Assets.AddMaterial(new MaterialAsset(imageHandle, Color.Red)),
-        Assets.AddMaterial(new MaterialAsset(imageHandle, Color.Blue)),
-        Assets.AddMaterial(new MaterialAsset(imageHandle, Color.Yellow)),
-        Assets.AddMaterial(new MaterialAsset(imageHandle, Color.Cyan))
+      int[] mats = new int[] {
+        Assets.AddAsset(new MaterialAsset(imageHandle, Color.Red)),
+        Assets.AddAsset(new MaterialAsset(imageHandle, Color.Blue)),
+        Assets.AddAsset(new MaterialAsset(imageHandle, Color.Yellow)),
+        Assets.AddAsset(new MaterialAsset(imageHandle, Color.Cyan))
       };
 
       for (int i = 0; i < 100; i++)

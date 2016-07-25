@@ -182,8 +182,6 @@ namespace OkuEngine.Systems
             shapes.Add(transformedShape);
           }
         }
-
-        colComp.Shape.Dirty = false;
       }
     }
   }
