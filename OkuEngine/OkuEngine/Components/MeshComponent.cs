@@ -8,15 +8,13 @@ namespace OkuEngine.Components
   /// <summary>
   /// Abstract base class for mesh components.
   /// </summary>
-  public abstract class MeshComponent : IComponent
+  public abstract class MeshComponent : Component
   {
-    public bool IsMultiAssignable
+    public override bool IsMultiAssignable
     {
       get { return true; }
     }
 
-    public abstract string Name { get; }
-    public abstract IComponent Copy();
     internal abstract List<int> GetMeshes(Level currentLevel);
   }
 }

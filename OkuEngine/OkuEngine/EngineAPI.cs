@@ -20,25 +20,6 @@ namespace OkuEngine
       _level = level;
     }
 
-    #region Entity component event handlers
-
-    private void Entity_OnAddComponent(Entity arg1, IComponent arg2)
-    {
-      QueueEvent(EventNames.EntityComponentAdded, arg1, arg2);
-    }
-
-    private void Entity_OnRemoveComponent(Entity arg1, IComponent arg2)
-    {
-      QueueEvent(EventNames.EntityComponentRemoved, arg1, arg2);
-    }
-
-    private void Entity_OnClearComponents(Entity obj)
-    {
-      QueueEvent(EventNames.EntityComponentsCleared, obj);
-    }
-
-    #endregion
-
     /// <summary>
     /// Loads an image from the given file.
     /// </summary>
@@ -89,11 +70,7 @@ namespace OkuEngine
     public void AddEntity(Entity entity)
     {
       _level.Entities.Add(entity);
-      QueueEvent(EventNames.LevelEntityAdded, entity);
-
-      entity.OnAddComponent += Entity_OnAddComponent;
-      entity.OnRemoveComponent += Entity_OnRemoveComponent;
-      entity.OnClearComponents += Entity_OnClearComponents;
+      QueueEvent(LevelEventNames.LevelEntityAdded, entity);
     }
 
     /// <summary>
@@ -104,11 +81,7 @@ namespace OkuEngine
     {
       bool result = _level.Entities.Remove(entity);
       if (result)
-        QueueEvent(EventNames.LevelEntityRemoved, entity);
-
-      entity.OnAddComponent -= Entity_OnAddComponent;
-      entity.OnRemoveComponent -= Entity_OnRemoveComponent;
-      entity.OnClearComponents -= Entity_OnClearComponents;
+        QueueEvent(LevelEventNames.LevelEntityRemoved, entity);
     }
 
     /// <summary>
@@ -116,13 +89,6 @@ namespace OkuEngine
     /// </summary>
     public void ClearEntities()
     {
-      foreach (Entity entity in _level.Entities)
-      {
-        entity.OnAddComponent -= Entity_OnAddComponent;
-        entity.OnRemoveComponent -= Entity_OnRemoveComponent;
-        entity.OnClearComponents -= Entity_OnClearComponents;
-      }
-
       _level.Entities.Clear();
     }
 
@@ -141,7 +107,7 @@ namespace OkuEngine
       foreach (var eventName in eventListener.EventNames)
         _level.EventQueue.AddListener(eventName, eventListener.Handler);
 
-      QueueEvent(EventNames.LevelEventListenerAdded, eventListener);
+      QueueEvent(LevelEventNames.LevelEventListenerAdded, eventListener);
     }
 
     /// <summary>
@@ -156,7 +122,7 @@ namespace OkuEngine
         _level.EventQueue.RemoveListener(eventName, eventListener.Handler);
 
       if (result)
-        QueueEvent(EventNames.LevelEventListenerRemoved, eventListener);
+        QueueEvent(LevelEventNames.LevelEventListenerRemoved, eventListener);
     }
 
     /// <summary>
@@ -165,7 +131,7 @@ namespace OkuEngine
     public void ClearEventListeners()
     {
       _level.EventListeners.Clear();
-      QueueEvent(EventNames.LevelEventListenersCleared);
+      QueueEvent(LevelEventNames.LevelEventListenersCleared);
     }
 
     #endregion

@@ -47,7 +47,7 @@ namespace OkuEngine.Components
     /// Creates a deep copy of the component.
     /// </summary>
     /// <returns>A copy of the component.</returns>
-    public override IComponent Copy()
+    public override Component Copy()
     {
       return new SimpleMeshComponent(_mesh);
     }

@@ -24,7 +24,6 @@ namespace OkuEngine.Components
     private int _tileMap = 0;
 
     private List<int> _meshRenderList = new List<int>();
-    private bool _registered = false;
 
     /// <summary>
     /// List of texture coordinates for the tiles from the tile sets.
@@ -73,7 +72,7 @@ namespace OkuEngine.Components
     /// Creates a deep copy of the component and all its data.
     /// </summary>
     /// <returns>A copy of the component.</returns>
-    public override IComponent Copy()
+    public override Component Copy()
     {
       return new TilemapComponent(_tileMap, _tileSetImage);
     }
@@ -103,11 +102,6 @@ namespace OkuEngine.Components
     {
       TilemapAsset tilemap = GetTilemapAsset(currentLevel);
 
-      if (!_registered)
-      {
-        tilemap.OnModify += OnTilemapModify;
-        _registered = true;
-      }
 
       if (_tileTexCoords == null)
         GenerateTexCoords(currentLevel);

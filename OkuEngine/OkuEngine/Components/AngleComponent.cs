@@ -9,7 +9,7 @@ namespace OkuEngine.Components
   /// <summary>
   /// Component that defines a rotation angle around the center of the entity.
   /// </summary>
-  public class AngleComponent : IComponent
+  public class AngleComponent : Component
   {
     private float _angle = 0.0f;
     private bool _dirty = true;
@@ -52,7 +52,7 @@ namespace OkuEngine.Components
     /// <summary>
     /// Gets if the component can be assigned multiple times to the same entity.
     /// </summary>
-    public bool IsMultiAssignable
+    public override bool IsMultiAssignable
     {
       get { return false; }
     }
@@ -60,7 +60,7 @@ namespace OkuEngine.Components
     /// <summary>
     /// Gets the name of the component.
     /// </summary>
-    public string Name
+    public override string Name
     {
       get{ return "angle"; }
     }
@@ -69,7 +69,7 @@ namespace OkuEngine.Components
     /// Creates a deep copy of the component.
     /// </summary>
     /// <returns>A copy of the component.</returns>
-    public IComponent Copy()
+    public override Component Copy()
     {
       return new AngleComponent(_angle);
     }

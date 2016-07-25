@@ -3,7 +3,7 @@ using OkuEngine.Assets;
 
 namespace OkuEngine.Components
 {
-  public class MaterialComponent : IComponent
+  public class MaterialComponent : Component
   {
     private int _material = 0;
 
@@ -18,17 +18,17 @@ namespace OkuEngine.Components
       set { _material = value; }
     }
 
-    public bool IsMultiAssignable
+    public override bool IsMultiAssignable
     {
       get { return false; }
     }
 
-    public string Name
+    public override string Name
     {
       get { return "material"; }
     }
 
-    public IComponent Copy()
+    public override Component Copy()
     {
       return new MaterialComponent(_material);
     }

@@ -6,7 +6,7 @@ namespace OkuEngine.Components
   /// <summary>
   /// Defines the velocity of an entity in world units per second.
   /// </summary>
-  public class VelocityComponent : IComponent
+  public class VelocityComponent : Component
   {
     public Vector2f _velocity = Vector2f.Zero;
 
@@ -35,17 +35,17 @@ namespace OkuEngine.Components
       set { _velocity = value; }
     }
 
-    public bool IsMultiAssignable
+    public override bool IsMultiAssignable
     {
       get { return false; }
     }
 
-    public string Name
+    public override string Name
     {
       get { return "velocity"; }
     }
 
-    public IComponent Copy()
+    public override Component Copy()
     {
       return new VelocityComponent(_velocity);
     }

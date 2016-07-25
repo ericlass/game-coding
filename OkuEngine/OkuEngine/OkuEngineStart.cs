@@ -44,7 +44,7 @@ namespace OkuEngine
         _currentLevel.DoInit();
 
       //Queue level change event
-      _currentLevel.API.QueueEvent(EventNames.LevelChanged);
+      _currentLevel.API.QueueEvent(LevelEventNames.LevelChanged);
     }
 
     public override void Initialize()
@@ -61,7 +61,11 @@ namespace OkuEngine
     public override void Update(float dt)
     {
       _currentLevel.Variables[VariableNames.DeltaTime] = dt;
-      _currentLevel.API.QueueEvent(EventNames.EveryFrame, dt);
+      _currentLevel.API.QueueEvent(LevelEventNames.EveryFrame, dt);
+
+      //Update entities
+      foreach (var entity in _currentLevel.Entities)
+        entity.Update(dt);
 
       //Update systems
       _inputSystem.Execute(_currentLevel);

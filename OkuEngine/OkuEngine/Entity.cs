@@ -13,13 +13,11 @@ namespace OkuEngine
     private static int _entityId = 0;
 
     private string _name = null;
-    private List<IComponent> _components = new List<IComponent>();
+    private List<Component> _components = new List<Component>();
     private Entity _template = null;
     private int _id = -1;
 
-    public event Action<Entity, IComponent> OnAddComponent;
-    public event Action<Entity, IComponent> OnRemoveComponent;
-    public event Action<Entity> OnClearComponents;
+    private EventQueue _eventQueue = null;
 
     /// <summary>
     /// Creates a new entity with the given name.
@@ -30,6 +28,8 @@ namespace OkuEngine
       _name = name;
       _entityId += 1;
       _id = _entityId;
+
+      _eventQueue = new EventQueue("entity_queue_" + _name);
     }
 
     /// <summary>
@@ -62,19 +62,27 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Event queue that is used only by components of the entity for communicating changes.
+    /// </summary>
+    public EventQueue EventQueue
+    {
+      get { return _eventQueue; }
+    }
+
+    /// <summary>
     /// Adds the given component to the entity.
     /// </summary>
     /// <param name="component">The component to be adeed.</param>
     /// <returns>The entity itself. This allows to chain multiple Add calls.</returns>
-    public Entity AddComponent(IComponent component)
+    public Entity AddComponent(Component component)
     {
       if (!component.IsMultiAssignable && _components.Exists(comp => comp.Name == component.Name))
         throw new InvalidOperationException("Trying to add a '" + component.Name + "' component twice to entity '" + _name + "' although it is not multi-assignable!");
 
       _components.Add(component);
+      component.OnAdd(this);
 
-      if (OnAddComponent != null)
-        OnAddComponent(this, component);
+      _eventQueue.QueueEvent(EntityEventNames.EntityComponentAdded, component);
 
       return this;
     }
@@ -84,7 +92,7 @@ namespace OkuEngine
     /// </summary>
     /// <param name="componentName">The name of the component.</param>
     /// <returns>True if the entity contains at least one of the components, else false.</returns>
-    public bool ContainsComponent<T>() where T : IComponent
+    public bool ContainsComponent<T>() where T : Component
     {
       if (_components.Exists(comp => comp is T))
         return true;
@@ -100,9 +108,9 @@ namespace OkuEngine
     /// </summary>
     /// <param name="componentName">The name of the component to find.</param>
     /// <returns>The first component with the name, or null if there is no such component.</returns>
-    public T GetComponent<T>() where T : IComponent
+    public T GetComponent<T>() where T : Component
     {
-      IComponent result = _components.Find(comp => comp is T);
+      Component result = _components.Find(comp => comp is T);
 
       if (result != null)
         return (T)result;
@@ -118,9 +126,9 @@ namespace OkuEngine
     /// </summary>
     /// <param name="componentName">The name of the components.</param>
     /// <returns>A list of all components with the given name. Can be empty, but never null.</returns>
-    public List<IComponent> GetComponents<T>() where T : IComponent
+    public List<Component> GetComponents<T>() where T : Component
     {
-      List<IComponent> result = _components.FindAll(comp => comp is T);
+      List<Component> result = _components.FindAll(comp => comp is T);
 
       if (result.Count == 0 && _template != null)
         result.AddRange(_template._components.FindAll(comp => comp is T));
@@ -133,12 +141,15 @@ namespace OkuEngine
     /// </summary>
     /// <param name="component">The component to be removed.</param>
     /// <returns>True if the component was removed. False if the entity did not contain the component.</returns>
-    public bool RemoveComponent(IComponent component)
+    public bool RemoveComponent(Component component)
     {
       bool result = _components.Remove(component);
 
-      if (result && OnRemoveComponent != null)
-        OnRemoveComponent(this, component);
+      if (result)
+      {
+        _eventQueue.QueueEvent(EntityEventNames.EntityComponentRemoved, component);
+        component.OnRemove(this);
+      }
 
       return result;
     }
@@ -149,9 +160,7 @@ namespace OkuEngine
     public void ClearComponents()
     {
       _components.Clear();
-
-      if (OnClearComponents != null)
-        OnClearComponents(this);
+      _eventQueue.QueueEvent(EntityEventNames.EntityComponentsCleared);
     }
 
     /// <summary>
@@ -167,6 +176,16 @@ namespace OkuEngine
         result._components.Add(comp.Copy());
 
       return result;
+    }
+
+    /// <summary>
+    /// Updates all components of the entity. Has to be called each frame.
+    /// </summary>
+    /// <param name="dt">Time past since the last frame in seconds.</param>
+    public void Update(float dt)
+    {
+      foreach (var comp in _components)
+        comp.Update(this, dt);
     }
 
   }

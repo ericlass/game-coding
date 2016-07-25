@@ -6,7 +6,11 @@ using OkuEngine.Input;
 
 namespace OkuEngine.Events
 {
-  public static class EventNames
+  /// <summary>
+  /// Provides name and description for events related to levels,
+  /// like adding or removing entities or event handlers.
+  /// </summary>
+  public static class LevelEventNames
   {
     /// <summary>
     /// Gets the event name for a keyboard key up or down action.
@@ -37,40 +41,22 @@ namespace OkuEngine.Events
     public const string LevelChanged = "level_changed";
 
     /// <summary>
-    /// Is queued after a component was added to an entity.
-    /// Parameters are the entity and the new component.
-    /// </summary>
-    public const string EntityComponentAdded = "entity_component_added";
-
-    /// <summary>
-    /// Is queued after a component was removed from an entity.
-    /// Parameters are the entity and the removed component.
-    /// </summary>
-    public const string EntityComponentRemoved = "entity_component_removed";
-
-    /// <summary>
-    /// Is queued after all components were removed from an entity.
-    /// Only parameters is the entity.
-    /// </summary>
-    public const string EntityComponentsCleared = "entity_components_cleared";
-
-    /// <summary>
     /// Is queued after a new event listener was added to a level.
     /// Single parameter is the new event Listener.
     /// </summary>
-    public const string LevelEventListenerAdded = "level_event_Listener_added";
+    public const string LevelEventListenerAdded = "level_event_listener_added";
 
     /// <summary>
     /// Is queued after an event listener was removed from a level.
     /// Single parameter is the removed event Listener.
     /// </summary>
-    public const string LevelEventListenerRemoved = "level_event_Listener_removed";
+    public const string LevelEventListenerRemoved = "level_event_listener_removed";
 
     /// <summary>
     /// Is queued after all event listeners were removed from a level.
     /// No parameters.
     /// </summary>
-    public const string LevelEventListenersCleared = "level_event_Listeners_cleared";
+    public const string LevelEventListenersCleared = "level_event_listeners_cleared";
 
     /// <summary>
     /// Is queued after a new entity was added to the level.

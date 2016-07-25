@@ -46,8 +46,6 @@ namespace OkuEngine.Assets
     private byte[] _collision = null;
     private List<ushort[]> _layers = new List<ushort[]>();
 
-    public event Action OnModify;
-
     /// <summary>
     /// Creates a new tilemap component with the given width, height and number of layers.
     /// </summary>
@@ -143,7 +141,6 @@ namespace OkuEngine.Assets
     public void SetCollision(int x, int y, byte collision)
     {
       _collision[x + (y * _width)] = collision;
-      OnModify?.Invoke();
     }
 
     /// <summary>
@@ -168,7 +165,6 @@ namespace OkuEngine.Assets
     public void SetTile(int layer, int x, int y, ushort tile)
     {
       _layers[layer][x + (y * _width)] = tile;
-      OnModify?.Invoke();
     }
 
     public Vector2f GetMaxMovementSAT(Vector2f min, Vector2f max)

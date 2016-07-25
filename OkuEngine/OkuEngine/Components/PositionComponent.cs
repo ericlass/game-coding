@@ -6,7 +6,7 @@ namespace OkuEngine.Components
   /// <summary>
   /// Component that defines a position either in world or screen space coordinates.
   /// </summary>
-  public class PositionComponent : IComponent
+  public class PositionComponent : Component
   {
     private Vector2f _position = Vector2f.Zero;
     private Vector2f _prevPos = Vector2f.Zero;
@@ -74,7 +74,7 @@ namespace OkuEngine.Components
     /// <summary>
     /// Gets if the component can be assigned multiple times to the same entity.
     /// </summary>
-    public bool IsMultiAssignable
+    public override bool IsMultiAssignable
     {
       get { return false; }
     }
@@ -82,7 +82,7 @@ namespace OkuEngine.Components
     /// <summary>
     /// Gets the name of the component.
     /// </summary>
-    public string Name
+    public override string Name
     {
       get{ return "position"; }
     }
@@ -91,7 +91,7 @@ namespace OkuEngine.Components
     /// Creates a deep copy of the component.
     /// </summary>
     /// <returns>A copy of the component.</returns>
-    public IComponent Copy()
+    public override Component Copy()
     {
       return new PositionComponent(_position, _screenSpace);
     }

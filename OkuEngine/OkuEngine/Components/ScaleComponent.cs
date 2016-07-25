@@ -6,7 +6,7 @@ namespace OkuEngine.Components
   /// <summary>
   /// Component that defines a scale factor for two dimensions.
   /// </summary>
-  public class ScaleComponent : IComponent
+  public class ScaleComponent : Component
   {
     private Vector2f _scale = Vector2f.One;
     private bool _dirty = true;
@@ -49,7 +49,7 @@ namespace OkuEngine.Components
     /// <summary>
     /// Gets if the component can be assigned multiple times to the same entity.
     /// </summary>
-    public bool IsMultiAssignable
+    public override bool IsMultiAssignable
     {
       get { return false; }
     }
@@ -57,7 +57,7 @@ namespace OkuEngine.Components
     /// <summary>
     /// Gets the name of the component.
     /// </summary>
-    public string Name
+    public override string Name
     {
       get { return "scale"; }
     }
@@ -66,7 +66,7 @@ namespace OkuEngine.Components
     /// Creates a deep copy of the component.
     /// </summary>
     /// <returns>A copy of the component.</returns>
-    public IComponent Copy()
+    public override Component Copy()
     {
       return new ScaleComponent(_scale);
     }

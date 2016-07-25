@@ -53,7 +53,6 @@
     <Compile Include="Animation\Animation.cs" />
     <Compile Include="Animation\AnimationFrame.cs" />
     <Compile Include="Assets\Asset.cs" />
-    <Compile Include="Assets\AssetFlags.cs" />
     <Compile Include="Assets\AssetManager.cs" />
     <Compile Include="Assets\DynamicMeshAsset.cs" />
     <Compile Include="Assets\ImageAsset.cs" />
@@ -78,7 +77,7 @@
     <Compile Include="Collections\SwapQueue.cs" />
     <Compile Include="Components\AngleComponent.cs" />
     <Compile Include="Components\CollisionComponent.cs" />
-    <Compile Include="Components\IComponent.cs" />
+    <Compile Include="Components\Component.cs" />
     <Compile Include="Components\MaterialComponent.cs" />
     <Compile Include="Components\MeshComponent.cs" />
     <Compile Include="Components\PhysicsComponent.cs" />
@@ -89,9 +88,10 @@
     <Compile Include="Components\VelocityComponent.cs" />
     <Compile Include="EngineAPI.cs" />
     <Compile Include="Entity.cs" />
+    <Compile Include="Events\EntityEventNames.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\EventListener.cs" />
-    <Compile Include="Events\EventNames.cs" />
+    <Compile Include="Events\LevelEventNames.cs" />
     <Compile Include="Events\EventQueue.cs" />
     <Compile Include="Input\IInputAxis.cs" />
     <Compile Include="Input\InputActionMapping.cs" />

@@ -41,11 +41,5 @@ namespace OkuEngine.Assets
       }
     }
 
-    public void UpdateAsset(Asset asset)
-    {
-      asset.SetFlags(AssetFlags.Updated);
-      //TODO: The rest (?)
-    }
-
   }
 }

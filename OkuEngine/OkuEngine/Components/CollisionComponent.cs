@@ -3,7 +3,7 @@ using OkuEngine.Systems;
 
 namespace OkuEngine.Components
 {
-  public class CollisionComponent : IComponent
+  public class CollisionComponent : Component
   {
     private CollisionShape _shape = null;
     private string _eventName = null;
@@ -38,17 +38,17 @@ namespace OkuEngine.Components
       set { _isSolid = value; }
     }
 
-    public bool IsMultiAssignable
+    public override bool IsMultiAssignable
     {
       get { return false; }
     }
 
-    public string Name
+    public override string Name
     {
       get { return "collision"; }
     }
 
-    public IComponent Copy()
+    public override Component Copy()
     {
       throw new NotImplementedException();
     }

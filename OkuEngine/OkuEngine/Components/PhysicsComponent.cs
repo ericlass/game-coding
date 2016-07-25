@@ -2,7 +2,7 @@
 
 namespace OkuEngine.Components
 {
-  public class PhysicsComponent : IComponent
+  public class PhysicsComponent : Component
   {
     private float _gravityMultiplier = 1.0f;
     private float _bounce = 0.5f;
@@ -19,17 +19,17 @@ namespace OkuEngine.Components
       _mass = mass;
     }
 
-    public bool IsMultiAssignable
+    public override bool IsMultiAssignable
     {
       get{ return false; }
     }
 
-    public string Name
+    public override string Name
     {
       get{ return "physics"; }
     }
 
-    public IComponent Copy()
+    public override Component Copy()
     {
       return new PhysicsComponent(_gravityMultiplier, _bounce, _mass);
     }

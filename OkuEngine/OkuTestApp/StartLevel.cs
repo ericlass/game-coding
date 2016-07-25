@@ -71,7 +71,7 @@ namespace OkuTestApp
       }
 
       //Generic key event listener
-      API.AddEventListener(new EventListener(EventNames.GetGenericInputEventName(Keys.Space, InputAction.Down), ev => angle.Angle += 45.0f));
+      API.AddEventListener(new EventListener(LevelEventNames.GetGenericInputEventName(Keys.Space, InputAction.Down), ev => angle.Angle += 45.0f));
 
       //Create input context
       InputContext context = new InputContext();
@@ -100,16 +100,16 @@ namespace OkuTestApp
       API.AddEventListener(new EventListener("rotate_cw", ev => angle.Angle -= 45.0f));
 
       //Check mapped axis every frame
-      API.AddEventListener(new EventListener(EventNames.EveryFrame, ev => angle.Angle += API.GetAxisValue("horizontal") * (float)ev.Data[0] * 180.0f));
+      API.AddEventListener(new EventListener(LevelEventNames.EveryFrame, ev => angle.Angle += API.GetAxisValue("horizontal") * (float)ev.Data[0] * 180.0f));
 
       //Add some event handlers for generic input events
-      string eventName = EventNames.GetGenericInputEventName(Keys.S, InputAction.Down);
+      string eventName = LevelEventNames.GetGenericInputEventName(Keys.S, InputAction.Down);
       API.AddEventListener(new EventListener(eventName, ev => pos.ScreenSpace = !pos.ScreenSpace));
 
-      eventName = EventNames.GetGenericInputEventName(Keys.Add, InputAction.Down);
+      eventName = LevelEventNames.GetGenericInputEventName(Keys.Add, InputAction.Down);
       API.AddEventListener(new EventListener(eventName, ev => scale.Scale = scale.Scale * 1.2f));
 
-      eventName = EventNames.GetGenericInputEventName(Keys.Subtract, InputAction.Down);
+      eventName = LevelEventNames.GetGenericInputEventName(Keys.Subtract, InputAction.Down);
       API.AddEventListener(new EventListener(eventName, ev => scale.Scale = scale.Scale * 0.8333f));
 
       API.AddEventListener(new EventListener("colortimer", ev => OkuBase.OkuManager.Instance.Graphics.BackgroundColor = Color.RandomColor(rand)));

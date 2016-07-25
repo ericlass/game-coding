@@ -36,7 +36,7 @@ namespace OkuEngine.Systems
     {
       var tilemap = currentLevel.Assets.GetAsset<TilemapAsset>(_tilemap);
       
-      if (_shapes == null || tilemap.HasFlags(AssetFlags.Updated))
+      if (_shapes == null)
       {
         //TODO: Generate shapes
       }
