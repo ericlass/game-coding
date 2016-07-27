@@ -26,6 +26,7 @@ namespace OkuEngine
     public Entity(string name)
     {
       _name = name;
+
       _entityId += 1;
       _id = _entityId;
 

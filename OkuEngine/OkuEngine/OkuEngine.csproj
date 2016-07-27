@@ -84,7 +84,7 @@
     <Compile Include="Components\PositionComponent.cs" />
     <Compile Include="Components\ScaleComponent.cs" />
     <Compile Include="Components\SimpleMeshComponent.cs" />
-    <Compile Include="Components\TilemapComponent.cs" />
+    <Compile Include="Components\TilemapMeshComponent.cs" />
     <Compile Include="Components\VelocityComponent.cs" />
     <Compile Include="EngineAPI.cs" />
     <Compile Include="Entity.cs" />

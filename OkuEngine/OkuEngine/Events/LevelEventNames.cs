@@ -35,6 +35,19 @@ namespace OkuEngine.Events
     }
 
     /// <summary>
+    /// Gets the event name for a generic overlap event that is queued
+    /// when two entities with physics components overlap.
+    /// </summary>
+    /// <param name="entity1">The first entity.</param>
+    /// <param name="entity2">The second entity.</param>
+    /// <returns>The name of event the engine queues when two entities overlap.</returns>
+    public static string GetGenericOverlapEventName(Entity entity1, Entity entity2)
+    {
+      //Use max and min so order of ids does not matter
+      return "overlap_entities_" + Math.Min(entity1.ID, entity2.ID) + "_" + Math.Max(entity1.ID, entity2.ID);
+    }
+
+    /// <summary>
     /// Is queued after the level has changed. Has no parameters.
     /// When this event is triggered, the new level is already the current level.
     /// </summary>

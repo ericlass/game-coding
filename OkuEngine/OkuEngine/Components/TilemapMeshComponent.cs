@@ -15,7 +15,7 @@ namespace OkuEngine.Components
   /// Maps can be loaded from different file formats, like Tiled XML format (TMX).
   /// The tile map has one collision layer and 1-n graphical layers.
   /// </summary>
-  public class TilemapComponent : MeshComponent
+  public class TilemapMeshComponent : MeshComponent
   {
     //Width and height of chunks in number of tiles.
     private const int ChunkSize = 16;
@@ -24,6 +24,7 @@ namespace OkuEngine.Components
     private int _tileMap = 0;
 
     private List<int> _meshRenderList = new List<int>();
+    private List<Vector2i> _changedTiles = new List<Vector2i>();
 
     /// <summary>
     /// List of texture coordinates for the tiles from the tile sets.
@@ -38,7 +39,7 @@ namespace OkuEngine.Components
     /// </summary>
     private List<int[]> _chunkMeshes { get; set; }
 
-    public TilemapComponent(int tilemap, int tileImage)
+    public TilemapMeshComponent(int tilemap, int tileImage)
     {
       _tileMap = tilemap;
       _tileSetImage = tileImage;
@@ -74,7 +75,7 @@ namespace OkuEngine.Components
     /// <returns>A copy of the component.</returns>
     public override Component Copy()
     {
-      return new TilemapComponent(_tileMap, _tileSetImage);
+      return new TilemapMeshComponent(_tileMap, _tileSetImage);
     }
 
     /// <summary>
@@ -101,7 +102,6 @@ namespace OkuEngine.Components
     internal override List<int> GetMeshes(Level currentLevel)
     {
       TilemapAsset tilemap = GetTilemapAsset(currentLevel);
-
 
       if (_tileTexCoords == null)
         GenerateTexCoords(currentLevel);

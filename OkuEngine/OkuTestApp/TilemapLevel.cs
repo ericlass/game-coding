@@ -34,7 +34,7 @@ namespace OkuTestApp
       var materialhandle = Assets.AddAsset(new MaterialAsset(handle, Color.White));
       tileMapEntity.AddComponent(new MaterialComponent(materialhandle));
 
-      TilemapComponent tileMapComp = new TilemapComponent(tileMapHandle, handle);
+      TilemapMeshComponent tileMapComp = new TilemapMeshComponent(tileMapHandle, handle);
       tileMapEntity.AddComponent(tileMapComp);
 
       PositionComponent position = new PositionComponent(Vector2f.Zero, false);
@@ -104,7 +104,7 @@ namespace OkuTestApp
       float vy = API.GetAxisValue("player_vertical") * speed;
       Vector2f v = new Vector2f(vx, vy);
 
-      var tilemapComp = tileMapEntity.GetComponent<TilemapComponent>();
+      var tilemapComp = tileMapEntity.GetComponent<TilemapMeshComponent>();
       var playerPos = player.GetComponent<PositionComponent>();
 
       playerPos.Position += v;
