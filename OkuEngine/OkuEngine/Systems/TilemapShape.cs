@@ -15,14 +15,6 @@ namespace OkuEngine.Systems
 
     private List<Vector2f[]> _shapes = null;
 
-    internal override bool Dirty
-    {
-      get
-      {
-        throw new NotImplementedException();
-      }
-    }
-
     /// <summary>
     /// Creates a new tile map shape with the given tile map asset.
     /// </summary>

@@ -9,7 +9,6 @@ namespace OkuEngine.Components
   public class ScaleComponent : Component
   {
     private Vector2f _scale = Vector2f.One;
-    private bool _dirty = true;
 
     /// <summary>
     /// Creates a new scale component that does not scale.
@@ -33,17 +32,7 @@ namespace OkuEngine.Components
     public Vector2f Scale
     {
       get { return _scale; }
-      set
-      {
-        _scale = value;
-        _dirty = true;
-      }
-    }
-
-    internal bool Dirty
-    {
-      get { return _dirty; }
-      set { _dirty = value; }
+      set { _scale = value; }
     }
 
     /// <summary>

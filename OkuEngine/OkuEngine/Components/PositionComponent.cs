@@ -11,7 +11,6 @@ namespace OkuEngine.Components
     private Vector2f _position = Vector2f.Zero;
     private Vector2f _prevPos = Vector2f.Zero;
     private bool _screenSpace = false;
-    private bool _dirty = true;
 
     /// <summary>
     /// Creates a new position component with position [0,0] in world space.
@@ -41,7 +40,6 @@ namespace OkuEngine.Components
       {
         _position = value;
         _prevPos = value;
-        _dirty = true;
       }
     }
 
@@ -51,15 +49,6 @@ namespace OkuEngine.Components
     public Vector2f PreviousPosition
     {
       get { return _prevPos; }
-    }
-
-    /// <summary>
-    /// Gets or sets if the transform is dirty (was changed since last frame).
-    /// </summary>
-    internal bool Dirty
-    {
-      get { return _dirty; }
-      set { _dirty = value; }
     }
 
     /// <summary>

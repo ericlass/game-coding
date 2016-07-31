@@ -12,7 +12,7 @@ namespace OkuEngine.Events
   /// </summary>
   public class EventQueue
   {
-    private Dictionary<string, HashSet<Action<Event>>> _listeners = new Dictionary<string, HashSet<Action<Event>>>();
+    private Dictionary<string, SortedSet<Action<Event>>> _listeners = new Dictionary<string, SortedSet<Action<Event>>>();
     private List<Event> _backQueue = new List<Event>();
     private List<Event> _activeQueue = new List<Event>();
     private List<Event> _unusedEvents = new List<Event>();
@@ -45,7 +45,7 @@ namespace OkuEngine.Events
     public bool AddListener(string eventName, Action<Event> eventDelegate)
     {
       if (!_listeners.ContainsKey(eventName))
-        _listeners.Add(eventName, new HashSet<Action<Event>>());
+        _listeners.Add(eventName, new SortedSet<Action<Event>>());
 
       if (_listeners[eventName].Contains(eventDelegate))
         return false;
@@ -62,18 +62,50 @@ namespace OkuEngine.Events
     /// <returns>True if the listener was removed, false if the listener was not registered for the event type.</returns>
     public bool RemoveListener(string eventName, Action<Event> eventDelegate)
     {
-      if (eventDelegate != null && _listeners.ContainsKey(eventName) && _listeners[eventName].Contains(eventDelegate))
+      if (eventDelegate == null)
+        return false;
+
+      if (_listeners.ContainsKey(eventName) && _listeners[eventName].Contains(eventDelegate))
       {
         _listeners[eventName].Remove(eventDelegate);
+
         //If there are no more listeners for an event, remove it from the map
         if (_listeners[eventName].Count == 0)
-        {
           _listeners.Remove(eventName);
-        }
+
         return true;
       }
 
       return false;
+    }
+
+    /// <summary>
+    /// Removes the given listener from all events.
+    /// </summary>
+    /// <param name="eventDelegate">The listener that shall be removed.</param>
+    /// <returns>True if listener was removed from one or more events. False if the listener was not registered at all.</returns>
+    public bool RemoveListener(Action<Event> eventDelegate)
+    {
+      if (eventDelegate == null)
+        return false;
+
+      bool result = false;
+
+      foreach (var listeners in _listeners.Values)
+        result = result || listeners.Remove(eventDelegate);
+
+      return result;
+    }
+
+    /// <summary>
+    /// Clears the event queue completely, including all queued events and registered listeners.
+    /// </summary>
+    public void Clear()
+    {
+      _listeners.Clear();
+      _activeQueue.Clear();
+      _backQueue.Clear();
+      _unusedEvents.Clear();
     }
 
     /// <summary>

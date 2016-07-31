@@ -17,8 +17,6 @@ namespace OkuEngine
     private Entity _template = null;
     private int _id = -1;
 
-    private EventQueue _eventQueue = null;
-
     /// <summary>
     /// Creates a new entity with the given name.
     /// </summary>
@@ -29,8 +27,6 @@ namespace OkuEngine
 
       _entityId += 1;
       _id = _entityId;
-
-      _eventQueue = new EventQueue("entity_queue_" + _name);
     }
 
     /// <summary>
@@ -63,20 +59,15 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Event queue that is used only by components of the entity for communicating changes.
-    /// </summary>
-    public EventQueue EventQueue
-    {
-      get { return _eventQueue; }
-    }
-
-    /// <summary>
     /// Adds the given component to the entity.
     /// </summary>
     /// <param name="component">The component to be adeed.</param>
     /// <returns>The entity itself. This allows to chain multiple Add calls.</returns>
     public Entity AddComponent(Component component)
     {
+      if (_components.Contains(component))
+        return this;
+
       if (!component.IsMultiAssignable && _components.Exists(comp => comp.Name == component.Name))
         throw new InvalidOperationException("Trying to add a '" + component.Name + "' component twice to entity '" + _name + "' although it is not multi-assignable!");
 

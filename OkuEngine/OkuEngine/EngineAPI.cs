@@ -293,6 +293,8 @@ namespace OkuEngine
 
     #endregion
 
+    #region Meshes
+
     /// <summary>
     /// Creates a new mesh asset that can be used for rendering the given image in original size
     /// </summary>
@@ -328,6 +330,7 @@ namespace OkuEngine
       return result;
     }
 
+    #endregion
 
   }
 }

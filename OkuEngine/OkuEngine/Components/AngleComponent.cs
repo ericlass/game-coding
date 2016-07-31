@@ -12,7 +12,6 @@ namespace OkuEngine.Components
   public class AngleComponent : Component
   {
     private float _angle = 0.0f;
-    private bool _dirty = true;
 
     /// <summary>
     /// Creates a new angle component with 0 angle.
@@ -36,17 +35,7 @@ namespace OkuEngine.Components
     public float Angle
     {
       get { return _angle; }
-      set
-      {
-        _angle = value;
-        _dirty = true;
-      }
-    }
-
-    internal bool Dirty
-    {
-      get { return _dirty; }
-      set { _dirty = value; }
+      set { _angle = value; }
     }
 
     /// <summary>

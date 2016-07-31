@@ -18,30 +18,6 @@ namespace OkuEngine.Components
     public abstract bool IsMultiAssignable { get; }
 
     /// <summary>
-    /// Is called when a component is added to an entity.
-    /// Allows to do initialzation specfic to an entity, like registering to the entities event queue.
-    /// </summary>
-    public virtual void OnAdd(Entity owner)
-    {
-    }
-
-    /// <summary>
-    /// Called every frame for logic processing.
-    /// </summary>
-    /// <param name="dt">Time passed since last frame in seconds.</param>
-    public virtual void Update(Entity owner, float dt)
-    {
-    }
-
-    /// <summary>
-    /// Is called when a component is removed from an entity.
-    /// Allows to do cleanup specfic to an entity, like unregistering from the entities event queue.
-    /// </summary>
-    public virtual void OnRemove(Entity owner)
-    {
-    }
-
-    /// <summary>
     /// Does a full, deep, independent copy of the component.
     /// </summary>
     /// <returns>A copy of the component.</returns>
