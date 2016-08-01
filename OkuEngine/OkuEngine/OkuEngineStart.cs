@@ -13,11 +13,10 @@ namespace OkuEngine
     private Level _startLevel = null;
     private Level _currentLevel = null;
 
+    private List<GameSystem> _systems = new List<GameSystem>();
+
     private GameSystem _renderSystem = new RenderSystem();
-    private GameSystem _inputSystem = new InputSystem();
-    private GameSystem _entitySystem = new EntityRenderSystem();
-    private GameSystem _timerSystem = new TimerSystem();
-    private GameSystem _physicsSystem = new PhysicsSystem();
+    private GameSystem _entityRenderSystem = new EntityRenderSystem();
 
     public OkuEngineStart(Level startLevel)
     {
@@ -33,6 +32,8 @@ namespace OkuEngine
 
     private void SetCurrentLevel(Level level)
     {
+      Level previous = _currentLevel;
+
       //Finalizes current level
       if (_currentLevel != null)
         _currentLevel.DoFinish();
@@ -43,38 +44,47 @@ namespace OkuEngine
       if (_currentLevel != null)
         _currentLevel.DoInit();
 
-      //Queue level change event
-      _currentLevel.API.QueueEvent(LevelEventNames.LevelChanged);
+      //Inform systems about the level change
+      foreach (var system in _systems)
+        system.LevelChanged(previous, level);
     }
 
     public override void Initialize()
     {
       SetCurrentLevel(_startLevel);
 
+      _systems = new List<GameSystem>()
+      {
+        new InputSystem(),
+        new TimerSystem(),
+        new PhysicsSystem()
+      };
+
+
+      foreach (var system in _systems)
+        system.Init();
+
+      _entityRenderSystem.Init();
       _renderSystem.Init();
-      _inputSystem.Init();
-      _entitySystem.Init();
-      _timerSystem.Init();
-      _physicsSystem.Init();
     }
 
     public override void Update(float dt)
     {
       _currentLevel.Variables[VariableNames.DeltaTime] = dt;
-      _currentLevel.API.QueueEvent(LevelEventNames.EveryFrame, dt);
+      _currentLevel.API.QueueEvent(EventNames.EveryFrame, dt);
 
       //Update entities
       foreach (var entity in _currentLevel.Entities)
         entity.Update(dt);
 
       //Update systems
-      _inputSystem.Execute(_currentLevel);
-      _timerSystem.Execute(_currentLevel);
-      _physicsSystem.Execute(_currentLevel);
+      foreach (var system in _systems)
+        system.Execute(_currentLevel);
 
       _currentLevel.EventQueue.Update(float.MaxValue);
 
-      _entitySystem.Execute(_currentLevel);
+      //Execute after event handling so everything is updated correctly before rendering
+      _entityRenderSystem.Execute(_currentLevel);
     }
 
     public override void Render()

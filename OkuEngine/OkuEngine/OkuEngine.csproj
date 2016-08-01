@@ -88,10 +88,9 @@
     <Compile Include="Components\VelocityComponent.cs" />
     <Compile Include="EngineAPI.cs" />
     <Compile Include="Entity.cs" />
-    <Compile Include="Events\EntityEventNames.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\EventListener.cs" />
-    <Compile Include="Events\LevelEventNames.cs" />
+    <Compile Include="EventNames.cs" />
     <Compile Include="Events\EventQueue.cs" />
     <Compile Include="Input\IInputAxis.cs" />
     <Compile Include="Input\InputActionMapping.cs" />
@@ -105,6 +104,7 @@
     <Compile Include="Input\MouseInputAxis.cs" />
     <Compile Include="Levels\Level.cs" />
     <Compile Include="Levels\LevelInternal.cs" />
+    <Compile Include="ObservableCache.cs" />
     <Compile Include="OkuEngineStart.cs" />
     <Compile Include="Particles\DefaultParticleController.cs" />
     <Compile Include="Particles\ForceEffector.cs" />
@@ -121,7 +121,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="States\StateMachine.cs" />
     <Compile Include="States\Transition.cs" />
-    <Compile Include="Systems\BoundingBoxShape.cs" />
     <Compile Include="Systems\EntityRenderSystem.cs" />
     <Compile Include="Systems\CollisionShape.cs" />
     <Compile Include="Systems\InputSystem.cs" />

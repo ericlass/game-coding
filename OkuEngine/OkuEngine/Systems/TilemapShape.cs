@@ -30,7 +30,7 @@ namespace OkuEngine.Systems
       
       if (_shapes == null)
       {
-        //TODO: Generate shapes
+        //TODO: Generate shapes and register with cache
       }
 
       return _shapes;

@@ -9,7 +9,7 @@ namespace OkuEngine.Levels
   /// </summary>
   public abstract partial class Level
   {
-    private EngineAPI _api = null;
+    private EngineAPI _engine = null;
     private AssetManager _assets = new AssetManager();
     private BlackBoard _blackBoard = new BlackBoard();
     
@@ -18,7 +18,7 @@ namespace OkuEngine.Levels
     /// </summary>
     public EngineAPI API
     {
-      get { return _api; }
+      get { return _engine; }
     }
 
     /// <summary>

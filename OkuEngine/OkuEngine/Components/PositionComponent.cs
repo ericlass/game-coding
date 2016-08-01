@@ -40,6 +40,7 @@ namespace OkuEngine.Components
       {
         _position = value;
         _prevPos = value;
+        QueueEvent(EventNames.EntityMoved);
       }
     }
 

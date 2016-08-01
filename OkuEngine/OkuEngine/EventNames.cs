@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using OkuBase.Input;
 using OkuEngine.Input;
 
-namespace OkuEngine.Events
+namespace OkuEngine
 {
   /// <summary>
   /// Provides name and description for events related to levels,
   /// like adding or removing entities or event handlers.
   /// </summary>
-  public static class LevelEventNames
+  public static class EventNames
   {
     /// <summary>
     /// Gets the event name for a keyboard key up or down action.
@@ -94,5 +93,29 @@ namespace OkuEngine.Events
     /// Single parameter is the delta time.
     /// </summary>
     public const string EveryFrame = "every_frame";
+
+    /// <summary>
+    /// Is queued after a component was added to an entity.
+    /// Parameters are the entity and the new component.
+    /// </summary>
+    public const string EntityComponentAdded = "entity_component_added";
+
+    /// <summary>
+    /// Is queued after a component was removed from an entity.
+    /// Parameters are the entity and the removed component.
+    /// </summary>
+    public const string EntityComponentRemoved = "entity_component_removed";
+
+    /// <summary>
+    /// Is queued after all components were removed from an entity.
+    /// Parameter is the entity.
+    /// </summary>
+    public const string EntityComponentsCleared = "entity_components_cleared";
+
+    /// <summary>
+    /// Queued when the position of an entity changed.
+    /// Parameter is the moved entity.
+    /// </summary>
+    public const string EntityMoved = "entity_moved";
   }
 }

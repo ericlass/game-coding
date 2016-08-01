@@ -89,7 +89,7 @@ namespace OkuEngine.Levels
     {
       if (!_initialized)
       {
-        _api = new EngineAPI(this);
+        _engine = new EngineAPI(this);
         Init();
         _initialized = true;
       }

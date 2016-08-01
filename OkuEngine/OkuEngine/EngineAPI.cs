@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using OkuMath;
 using OkuBase.Graphics;
 using OkuEngine.Assets;
 using OkuEngine.Events;
-using OkuEngine.Components;
 using OkuEngine.Input;
 using OkuEngine.Levels;
 using OkuEngine.Systems;
@@ -15,7 +13,7 @@ namespace OkuEngine
   {
     private Level _level = null;
 
-    internal EngineAPI(Level level)
+    public EngineAPI(Level level)
     {
       _level = level;
     }
@@ -69,8 +67,9 @@ namespace OkuEngine
     /// <param name="entity">The entity to be added.</param>
     public void AddEntity(Entity entity)
     {
+      entity.Engine = this;
       _level.Entities.Add(entity);
-      QueueEvent(LevelEventNames.LevelEntityAdded, entity);
+      QueueEvent(EventNames.LevelEntityAdded, entity);
     }
 
     /// <summary>
@@ -79,9 +78,10 @@ namespace OkuEngine
     /// <param name="entity">The entity to be removed.</param>
     public void RemoveEntity(Entity entity)
     {
+      entity.Engine = null;
       bool result = _level.Entities.Remove(entity);
       if (result)
-        QueueEvent(LevelEventNames.LevelEntityRemoved, entity);
+        QueueEvent(EventNames.LevelEntityRemoved, entity);
     }
 
     /// <summary>
@@ -107,7 +107,7 @@ namespace OkuEngine
       foreach (var eventName in eventListener.EventNames)
         _level.EventQueue.AddListener(eventName, eventListener.Handler);
 
-      QueueEvent(LevelEventNames.LevelEventListenerAdded, eventListener);
+      QueueEvent(EventNames.LevelEventListenerAdded, eventListener);
     }
 
     /// <summary>
@@ -122,7 +122,7 @@ namespace OkuEngine
         _level.EventQueue.RemoveListener(eventName, eventListener.Handler);
 
       if (result)
-        QueueEvent(LevelEventNames.LevelEventListenerRemoved, eventListener);
+        QueueEvent(EventNames.LevelEventListenerRemoved, eventListener);
     }
 
     /// <summary>
@@ -131,7 +131,7 @@ namespace OkuEngine
     public void ClearEventListeners()
     {
       _level.EventListeners.Clear();
-      QueueEvent(LevelEventNames.LevelEventListenersCleared);
+      QueueEvent(EventNames.LevelEventListenersCleared);
     }
 
     #endregion

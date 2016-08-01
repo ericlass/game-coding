@@ -10,6 +10,10 @@ namespace OkuEngine.Systems
     {
     }
 
+    public virtual void LevelChanged(Level previous, Level next)
+    {
+    }
+
     public abstract void Execute(Level currentLevel);
 
     public virtual void Finish()

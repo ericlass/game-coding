@@ -16,6 +16,7 @@ namespace OkuEngine
     private List<Component> _components = new List<Component>();
     private Entity _template = null;
     private int _id = -1;
+    private EngineAPI _engine = null;
 
     /// <summary>
     /// Creates a new entity with the given name.
@@ -59,6 +60,25 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Private getter for the engine API.
+    /// </summary>
+    internal EngineAPI Engine
+    {
+      get { return _engine; }
+      set { _engine = value; }
+    }
+
+    /// <summary>
+    /// Forwards a component event to the levels event queue.
+    /// </summary>
+    /// <param name="eventName">The name of the event.</param>
+    /// <param name="component">The component that triggered the event.</param>
+    internal void QueueComponentEvent(string eventName, Component component)
+    {
+      Engine.QueueEvent(eventName, this, component);
+    }
+
+    /// <summary>
     /// Adds the given component to the entity.
     /// </summary>
     /// <param name="component">The component to be adeed.</param>
@@ -72,9 +92,9 @@ namespace OkuEngine
         throw new InvalidOperationException("Trying to add a '" + component.Name + "' component twice to entity '" + _name + "' although it is not multi-assignable!");
 
       _components.Add(component);
-      component.OnAdd(this);
+      component.SetOwner(this);
 
-      _eventQueue.QueueEvent(EntityEventNames.EntityComponentAdded, component);
+      Engine?.QueueEvent(EventNames.EntityComponentAdded, this, component);
 
       return this;
     }
@@ -139,8 +159,8 @@ namespace OkuEngine
 
       if (result)
       {
-        _eventQueue.QueueEvent(EntityEventNames.EntityComponentRemoved, component);
-        component.OnRemove(this);
+        Engine?.QueueEvent(EventNames.EntityComponentRemoved, component);
+        component.SetOwner(null);
       }
 
       return result;
@@ -152,7 +172,7 @@ namespace OkuEngine
     public void ClearComponents()
     {
       _components.Clear();
-      _eventQueue.QueueEvent(EntityEventNames.EntityComponentsCleared);
+      Engine?.QueueEvent(EventNames.EntityComponentsCleared);
     }
 
     /// <summary>
@@ -177,7 +197,7 @@ namespace OkuEngine
     public void Update(float dt)
     {
       foreach (var comp in _components)
-        comp.Update(this, dt);
+        comp.Update(dt);
     }
 
   }
