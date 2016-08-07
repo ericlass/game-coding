@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Xml;
-using System.Text;
 using OkuMath;
 using OkuBase.Graphics;
 using OkuEngine.Levels;
@@ -21,10 +18,10 @@ namespace OkuEngine.Components
     private const int ChunkSize = 16;
 
     private int _tileSetImage = 0;
-    private int _tileMap = 0;
+    private Tilemap _tileMap = null;
 
     private List<int> _meshRenderList = new List<int>();
-    private List<Vector2i> _changedTiles = new List<Vector2i>();
+    private SortedSet<int> _changedChunks = new SortedSet<int>();
 
     /// <summary>
     /// List of texture coordinates for the tiles from the tile sets.
@@ -39,11 +36,21 @@ namespace OkuEngine.Components
     /// </summary>
     private List<int[]> _chunkMeshes { get; set; }
 
-    public TilemapMeshComponent(int tilemap, int tileImage)
+    public TilemapMeshComponent(Tilemap tilemap, int tileImage)
     {
       _tileMap = tilemap;
       _tileSetImage = tileImage;
-    }    
+
+      _tileMap.OnChangeTile += TileMap_OnChangeTile;
+    }
+
+    private void TileMap_OnChangeTile(Vector2i obj)
+    {
+      int chunkIndex = obj.X / ChunkSize * obj.Y / ChunkSize;
+      _changedChunks.Add(chunkIndex);
+
+      QueueEvent(EventNames.EntityMeshChanged);
+    }
 
     /// <summary>
     /// Gets or set the tile set image containing the tile images for the graphical layers.
@@ -56,7 +63,7 @@ namespace OkuEngine.Components
     /// <summary>
     /// Gets or sets the tile map asset.
     /// </summary>
-    public int Tilemap
+    public Tilemap Tilemap
     {
       get { return _tileMap; }
     }
@@ -79,34 +86,16 @@ namespace OkuEngine.Components
     }
 
     /// <summary>
-    /// Gets the tile map asset from the given level.
-    /// </summary>
-    /// <param name="level">The current level.</param>
-    /// <returns>The tile map asset.</returns>
-    private TilemapAsset GetTilemapAsset(Level level)
-    {
-      return level.Assets.GetAsset<TilemapAsset>(_tileMap);
-    }
-
-    private void OnTilemapModify()
-    {
-      _tileTexCoords = null;
-      _chunkMeshes = null;
-    }
-
-    /// <summary>
     /// Gets the meshes to be rendered for the current frame.
     /// </summary>
     /// <param name="currentLevel">The current level.</param>
     /// <returns>The meshes to be rendered.</returns>
     internal override List<int> GetMeshes(Level currentLevel)
     {
-      TilemapAsset tilemap = GetTilemapAsset(currentLevel);
-
       if (_tileTexCoords == null)
         GenerateTexCoords(currentLevel);
 
-      if (_chunkMeshes == null)
+      if (_chunkMeshes == null || _changedChunks.Count > 0)
         GenerateChunkMeshes(currentLevel);
 
       //TODO: Render only visible chunks
@@ -123,19 +112,17 @@ namespace OkuEngine.Components
     /// <param name="currentLevel">The current level.</param>
     private void GenerateChunkMeshes(Level currentLevel)
     {
-      TilemapAsset tilemap = GetTilemapAsset(currentLevel);
-
       //How many chunks does the tilemap have?
-      int chunksH = (int)Math.Ceiling(tilemap.Width / (float)ChunkSize);
-      int chunksV = (int)Math.Ceiling(tilemap.Height / (float)ChunkSize);
+      int chunksH = (int)Math.Ceiling(_tileMap.Width / (float)ChunkSize);
+      int chunksV = (int)Math.Ceiling(_tileMap.Height / (float)ChunkSize);
       int numChunks = chunksV * chunksH;
 
       //Prepare mesh cache for all layers
-      List<int[]> chunks = new List<int[]>(tilemap.LayerCount);
-      for (int i = 0; i < tilemap.LayerCount; i++)
+      List<int[]> chunks = new List<int[]>(_tileMap.LayerCount);
+      for (int i = 0; i < _tileMap.LayerCount; i++)
         chunks.Add(new int[numChunks]);
 
-      int pixelHeight = tilemap.Height * tilemap.TileHeight;
+      int pixelHeight = _tileMap.Height * _tileMap.TileHeight;
       for (int chunkIndex = 0; chunkIndex < numChunks; chunkIndex++)
       {
         //chunks x and y coordinates
@@ -144,22 +131,22 @@ namespace OkuEngine.Components
 
         //Which tiles are inside this chunk
         int tleft = chunkX * ChunkSize;
-        int tright = Math.Min(tleft + ChunkSize, tilemap.Width - 1);
+        int tright = Math.Min(tleft + ChunkSize, _tileMap.Width - 1);
 
         int tbottom = chunkY * ChunkSize;
-        int ttop = Math.Min(tbottom + ChunkSize, tilemap.Height - 1);
+        int ttop = Math.Min(tbottom + ChunkSize, _tileMap.Height - 1);
 
         //How many tile in this chunk
         int numTiles = (tright - tleft) * (ttop - tbottom);
 
         //Create vertices lists
-        List<List<Vector2f>> positions = new List<List<Vector2f>>(tilemap.LayerCount);
-        List<List<Vector2f>> texCoords = new List<List<Vector2f>>(tilemap.LayerCount);
-        List<List<Color>> colors = new List<List<Color>>(tilemap.LayerCount);
+        List<List<Vector2f>> positions = new List<List<Vector2f>>(_tileMap.LayerCount);
+        List<List<Vector2f>> texCoords = new List<List<Vector2f>>(_tileMap.LayerCount);
+        List<List<Color>> colors = new List<List<Color>>(_tileMap.LayerCount);
 
         //Create vertices list for each layer
         int numVertices = numTiles * 4;
-        for (int i = 0; i < tilemap.LayerCount; i++)
+        for (int i = 0; i < _tileMap.LayerCount; i++)
         {
           positions.Add(new List<Vector2f>(numVertices));
           texCoords.Add(new List<Vector2f>(numVertices));
@@ -169,18 +156,18 @@ namespace OkuEngine.Components
         //Generate vertices for tile
         for (int tileY = tbottom; tileY <= ttop; tileY++)
         {
-          float bottom = tileY * tilemap.TileHeight;
-          float top = bottom + tilemap.TileHeight;
+          float bottom = tileY * _tileMap.TileHeight;
+          float top = bottom + _tileMap.TileHeight;
 
           for (int tileX = tleft; tileX <= tright; tileX++)
           {
-            float left = tileX * tilemap.TileWidth;
-            float right = left + tilemap.TileWidth;
+            float left = tileX * _tileMap.TileWidth;
+            float right = left + _tileMap.TileWidth;
 
             //Iterating layers here saves calcualting tile coordinate again for each layer
-            for (int layer = 0; layer < tilemap.LayerCount; layer++)
+            for (int layer = 0; layer < _tileMap.LayerCount; layer++)
             {
-              ushort tile = tilemap.GetTile(layer, tileX, tileY);
+              ushort tile = _tileMap.GetTile(layer, tileX, tileY);
               if (tile > 0)
               {
                 List<Vector2f> vecs = positions[layer];
@@ -208,8 +195,10 @@ namespace OkuEngine.Components
           Vector2f[] tex = texCoords[layer].ToArray();
           Color[] cols = colors[layer].ToArray();
 
-          StaticMeshAsset mesh = new StaticMeshAsset(pos, tex, cols, PrimitiveType.Quads);
-          chunks[layer][chunkIndex] = currentLevel.Assets.AddAsset(mesh);
+          int meshEntry = currentLevel.MeshCache.CreateEntry();
+          currentLevel.MeshCache.BufferData(meshEntry, new Mesh(pos, tex, cols, PrimitiveType.Quads));
+
+          chunks[layer][chunkIndex] = meshEntry;
         }
       }
 
@@ -222,12 +211,11 @@ namespace OkuEngine.Components
     /// <param name="currentLevel">The current level.</param>
     private void GenerateTexCoords(Level currentLevel)
     {
-      TilemapAsset tilemap = GetTilemapAsset(currentLevel);
       ImageAsset image = currentLevel.Assets.GetAsset<ImageAsset>(_tileSetImage);
 
       //How many tiles in this image
-      int tilesH = image.Image.Width / tilemap.TileWidth;
-      int tilesV = image.Image.Height / tilemap.TileHeight;
+      int tilesH = image.Image.Width / _tileMap.TileWidth;
+      int tilesV = image.Image.Height / _tileMap.TileHeight;
       int numTiles = tilesH * tilesV;
 
       //Prepare tex coord list. Contains texture coordinates for each tile.

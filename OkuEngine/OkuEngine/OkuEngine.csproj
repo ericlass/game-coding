@@ -54,12 +54,10 @@
     <Compile Include="Animation\AnimationFrame.cs" />
     <Compile Include="Assets\Asset.cs" />
     <Compile Include="Assets\AssetManager.cs" />
-    <Compile Include="Assets\DynamicMeshAsset.cs" />
     <Compile Include="Assets\ImageAsset.cs" />
     <Compile Include="Assets\MaterialAsset.cs" />
-    <Compile Include="Assets\MeshAsset.cs" />
-    <Compile Include="Assets\StaticMeshAsset.cs" />
-    <Compile Include="Assets\TilemapAsset.cs" />
+    <Compile Include="Mesh.cs" />
+    <Compile Include="Tilemap.cs" />
     <Compile Include="Behavior\BehaviorResult.cs" />
     <Compile Include="Behavior\BehaviorTreeNode.cs" />
     <Compile Include="Behavior\Composite.cs" />
@@ -104,6 +102,7 @@
     <Compile Include="Input\MouseInputAxis.cs" />
     <Compile Include="Levels\Level.cs" />
     <Compile Include="Levels\LevelInternal.cs" />
+    <Compile Include="MeshCache.cs" />
     <Compile Include="ObservableCache.cs" />
     <Compile Include="OkuEngineStart.cs" />
     <Compile Include="Particles\DefaultParticleController.cs" />
@@ -119,6 +118,7 @@
     <Compile Include="Particles\PointEmitter.cs" />
     <Compile Include="Particles\PointParticleRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShapeCache.cs" />
     <Compile Include="States\StateMachine.cs" />
     <Compile Include="States\Transition.cs" />
     <Compile Include="Systems\EntityRenderSystem.cs" />

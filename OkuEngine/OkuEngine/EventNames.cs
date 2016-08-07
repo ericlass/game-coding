@@ -117,5 +117,55 @@ namespace OkuEngine
     /// Parameter is the moved entity.
     /// </summary>
     public const string EntityMoved = "entity_moved";
+
+    /// <summary>
+    /// Queued when a new entry is added to the mesh cache.
+    /// Be aware that at this moment, no data has been buffered for the entry.
+    /// Parameter is the id of the added entry.
+    /// </summary>
+    public const string MeshCacheEntryAdded = "mesh_cache_entry_added";
+
+    /// <summary>
+    /// Queued when mesh data is buffered for a mesh cache entry.
+    /// Parameter is the id of the update entry.
+    /// </summary>
+    public const string MeshCacheDataBuffered = "mesh_cache_data_buffered";
+
+    /// <summary>
+    /// Queued when a mesh cache entry is removed.
+    /// Parameter is the id of removed entry.
+    /// </summary>
+    public const string MeshCacheEntryRemoved = "mesh_cache_entry_removed";
+
+    /// <summary>
+    /// Queued when a new entry is added to the shape cache.
+    /// Be aware that at this moment, no data has been buffered for the entry.
+    /// Parameter is the id of the added entry.
+    /// </summary>
+    public const string ShapeCacheEntryAdded = "shape_cache_entry_added";
+
+    /// <summary>
+    /// Queued when mesh data is buffered for a shape cache entry.
+    /// Parameter is the id of the update entry.
+    /// </summary>
+    public const string ShapeCacheDataBuffered = "shape_cache_data_buffered";
+
+    /// <summary>
+    /// Queued when a shape cache entry is removed.
+    /// Parameter is the id of removed entry.
+    /// </summary>
+    public const string ShapeCacheEntryRemoved = "shape_cache_entry_removed";
+
+    /// <summary>
+    /// Queued when the mesh of an entity changes.
+    /// Parameters are the entity and the mesh components that queued the event.
+    /// </summary>
+    public const string EntityMeshChanged = "entity_mesh_changed";
+
+    /// <summary>
+    /// Queued when the shape of an entity changes.
+    /// Parameters are the entity and the mesh components that queued the event.
+    /// </summary>
+    public const string EntityShapeChanged = "entity_shape_changed";
   }
 }

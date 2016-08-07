@@ -5,9 +5,9 @@ using System.Text;
 using System.Xml;
 using OkuMath;
 
-namespace OkuEngine.Assets
+namespace OkuEngine
 {
-  public class TilemapAsset : Asset
+  public class Tilemap
   {
     /// <summary>
     /// No collision at all.
@@ -55,7 +55,7 @@ namespace OkuEngine.Assets
     /// <param name="width">The width of the tile map (tiles).</param>
     /// <param name="height">The height of the tile map (tiles).</param>
     /// <param name="layers">The number of graphical layers.</param>
-    public TilemapAsset(int width, int height, int layers)
+    public Tilemap(int width, int height, int layers)
     {
       _width = width;
       _height = height;
@@ -76,7 +76,7 @@ namespace OkuEngine.Assets
     /// <param name="tileHeight">The height of a single tile.</param>
     /// <param name="collision">The collision layer.</param>
     /// <param name="layers">The graphical layer.</param>
-    private TilemapAsset(int width, int height, int tileWidth, int tileHeight, byte[] collision, List<ushort[]> layers)
+    private Tilemap(int width, int height, int tileWidth, int tileHeight, byte[] collision, List<ushort[]> layers)
     {
       _width = width;
       _height = height;
@@ -289,7 +289,7 @@ namespace OkuEngine.Assets
     /// <param name="stream">The stream containing the TMX file data.</param>
     /// <param name="imageLoader">A callback that can resolve the relative image paths in TMX files.</param>
     /// <returns>The loaded tile map.</returns>
-    public static TilemapAsset LoadFromTiledXml(Stream stream, out string tileImagePath)
+    public static Tilemap LoadFromTiledXml(Stream stream, out string tileImagePath)
     {
       XmlDocument doc = new XmlDocument();
       doc.Load(stream);
@@ -376,14 +376,14 @@ namespace OkuEngine.Assets
         }
       }
 
-      return new TilemapAsset(width, height, tileWidth, tileHeight, collisionData, layersData);
+      return new Tilemap(width, height, tileWidth, tileHeight, collisionData, layersData);
     }
 
     /// <summary>
     /// Saves the tilemap to an OkuEngine-specific, binary tilemap format that is optimized for fast loading and streaming.
     /// </summary>
     /// <param name="stream">The stream to save the tile map to.</param>
-    public static TilemapAsset SaveToOkuFormat(Stream stream)
+    public static Tilemap SaveToOkuFormat(Stream stream)
     {
       throw new NotImplementedException();
     }
@@ -392,7 +392,7 @@ namespace OkuEngine.Assets
     /// Loads tile map data from an OkuEngine-soecific file format.
     /// </summary>
     /// <param name="stream">The stream to load the data from.</param>
-    public static TilemapAsset LoadFromOkuFormat(Stream stream)
+    public static Tilemap LoadFromOkuFormat(Stream stream)
     {
       throw new NotImplementedException();
     }

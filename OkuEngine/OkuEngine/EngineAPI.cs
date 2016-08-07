@@ -300,9 +300,8 @@ namespace OkuEngine
     /// </summary>
     /// <param name="width">The width of the image.</param>
     /// <param name="height">The height of the image.</param>
-    /// <param name="isStatic">Create a static (true) or dynamic (false) mesh.</param>
     /// <returns>The mesh asst for the given image.</returns>
-    public MeshAsset GetMeshForImage(int width, int height, bool isStatic)
+    public Mesh GetMeshForImage(int width, int height)
     {
       float halfWidth = width / 2;
       float halfHeight = height / 2;
@@ -321,13 +320,7 @@ namespace OkuEngine
         new Vector2f(1, 1)
       };
 
-      MeshAsset result;
-      if (isStatic)
-        result = new StaticMeshAsset(pos, tex, null, PrimitiveType.TriangleStrip);
-      else
-        result = new DynamicMeshAsset(pos, tex, null, PrimitiveType.TriangleStrip);
-
-      return result;
+      return new Mesh(pos, tex, null, PrimitiveType.TriangleStrip);
     }
 
     #endregion

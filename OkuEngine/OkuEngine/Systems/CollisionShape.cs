@@ -7,6 +7,13 @@ namespace OkuEngine.Systems
 {
   public abstract class CollisionShape
   {
+    public event Action OnChange;
+
+    protected void FireChangeEvent()
+    {
+      OnChange?.Invoke();
+    }
+
     public abstract List<Vector2f[]> GetShapes(Level currentLevel);
   }
 }

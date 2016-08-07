@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using OkuEngine.Assets;
 using OkuMath;
 using OkuEngine.Levels;
 
@@ -11,23 +10,26 @@ namespace OkuEngine.Systems
   /// </summary>
   public class TilemapShape : CollisionShape
   {
-    private int _tilemap = 0;
-
+    private Tilemap _tilemap = null;
     private List<Vector2f[]> _shapes = null;
 
     /// <summary>
     /// Creates a new tile map shape with the given tile map asset.
     /// </summary>
     /// <param name="tilemap">The tile map assets handle.</param>
-    public TilemapShape(int tilemap)
+    public TilemapShape(Tilemap tilemap)
     {
       _tilemap = tilemap;
+      _tilemap.OnChangeCollision += Tilemap_OnChangeCollision;
+    }
+
+    private void Tilemap_OnChangeCollision(Vector2i obj)
+    {
+      FireChangeEvent();
     }
 
     public override List<Vector2f[]> GetShapes(Level currentLevel)
     {
-      var tilemap = currentLevel.Assets.GetAsset<TilemapAsset>(_tilemap);
-      
       if (_shapes == null)
       {
         //TODO: Generate shapes and register with cache

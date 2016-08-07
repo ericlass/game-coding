@@ -24,8 +24,10 @@ namespace OkuTestApp
       var imageHandle = Assets.AddAsset(new ImageAsset(image));
 
       //Add mesh component
-      var meshAsset = API.GetMeshForImage(image.Width, image.Height, true);
-      var meshHandle = Assets.AddAsset(meshAsset);
+      var meshAsset = API.GetMeshForImage(image.Width, image.Height);
+      var meshHandle = MeshCache.CreateEntry();
+      MeshCache.BufferData(meshHandle, meshAsset);
+
       entity.AddComponent(new SimpleMeshComponent(meshHandle));
 
       //Add material component

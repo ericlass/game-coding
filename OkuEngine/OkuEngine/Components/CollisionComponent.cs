@@ -18,6 +18,13 @@ namespace OkuEngine.Components
       _shape = shape;
       _eventName = eventName;
       _isSolid = isSolid;
+
+      _shape.OnChange += Shape_OnChange;
+    }
+
+    private void Shape_OnChange()
+    {
+      QueueEvent(EventNames.EntityShapeChanged);
     }
 
     public CollisionShape Shape

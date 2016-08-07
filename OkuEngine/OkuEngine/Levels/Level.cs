@@ -12,6 +12,8 @@ namespace OkuEngine.Levels
     private EngineAPI _engine = null;
     private AssetManager _assets = new AssetManager();
     private BlackBoard _blackBoard = new BlackBoard();
+    private MeshCache _meshCache = null;
+    private ShapeCache _shapeCache = null;
     
     /// <summary>
     /// Gets the API with all functions of the engine.
@@ -35,6 +37,34 @@ namespace OkuEngine.Levels
     public BlackBoard Blackboard
     {
       get { return _blackBoard; }
+    }
+
+    /// <summary>
+    /// Gets the mesh cache for this level.
+    /// </summary>
+    public MeshCache MeshCache
+    {
+      get
+      {
+        if (_meshCache == null)
+          _meshCache = new MeshCache(this);
+
+        return _meshCache;
+      }
+    }
+
+    /// <summary>
+    /// Gets the shape cache for this level.
+    /// </summary>
+    public ShapeCache ShapeCache
+    {
+      get
+      {
+        if (_shapeCache == null)
+          _shapeCache = new ShapeCache(this);
+
+        return _shapeCache;
+      }
     }
 
     /// <summary>

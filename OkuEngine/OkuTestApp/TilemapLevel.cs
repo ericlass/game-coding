@@ -14,19 +14,18 @@ namespace OkuTestApp
 {
   public class TilemapLevel : Level
   {
-    private Entity tileMapEntity = null;
     private Entity player = null;
+    private Tilemap _tilemap = null;
 
     protected override void Init()
     {
       OkuBase.OkuManager.Instance.Graphics.Viewport.Center = new Vector2f(256, 256);
 
       //Tilemap
-      tileMapEntity = new Entity("tilemap");
+      var tileMapEntity = new Entity("tilemap");
 
       String imagePath;
-      TilemapAsset tilemap = TilemapAsset.LoadFromTiledXml(new FileStream("D:\\Graphics\\Tilemaps\\Collision\\collisiontest.tmx", FileMode.Open), out imagePath);
-      int tileMapHandle = Assets.AddAsset(tilemap);
+      _tilemap = Tilemap.LoadFromTiledXml(new FileStream("D:\\Graphics\\Tilemaps\\Collision\\collisiontest.tmx", FileMode.Open), out imagePath);
 
       Image image = API.LoadImage(Path.Combine("D:\\Graphics\\Tilemaps\\Collision", imagePath));
       var handle = Assets.AddAsset(new ImageAsset(image));
@@ -34,7 +33,7 @@ namespace OkuTestApp
       var materialhandle = Assets.AddAsset(new MaterialAsset(handle, Color.White));
       tileMapEntity.AddComponent(new MaterialComponent(materialhandle));
 
-      TilemapMeshComponent tileMapComp = new TilemapMeshComponent(tileMapHandle, handle);
+      TilemapMeshComponent tileMapComp = new TilemapMeshComponent(_tilemap, handle);
       tileMapEntity.AddComponent(tileMapComp);
 
       PositionComponent position = new PositionComponent(Vector2f.Zero, false);
@@ -55,10 +54,10 @@ namespace OkuTestApp
 
       player.AddComponent(new MaterialComponent(materialHandle));
 
-      MeshAsset mesh = API.GetMeshForImage(imageData.Width, imageData.Height, true);
-      var meshHandle = Assets.AddAsset(mesh);
+      int meshEntry = MeshCache.CreateEntry();
+      MeshCache.BufferData(meshEntry, API.GetMeshForImage(imageData.Width, imageData.Height));
 
-      player.AddComponent(new SimpleMeshComponent(meshHandle));
+      player.AddComponent(new SimpleMeshComponent(meshEntry));
 
       API.AddEntity(player);
 
@@ -92,10 +91,10 @@ namespace OkuTestApp
       //API.AddEventListener(new EventListener(EventNames.EveryFrame, ev => position.Position += new Vector2f(0, trans * API.GetAxisValue("camera_vertical") * (float)ev.Data[0])));
       //API.AddEventListener(new EventListener(EventNames.EveryFrame, ev => position.Position += new Vector2f(trans * API.GetAxisValue("camera_horizontal") * (float)ev.Data[0], 0)));
 
-      API.AddEventListener(new EventListener(EventNames.EveryFrame, MovePlayerSAT));
+      API.AddEventListener(new EventListener(EventNames.EveryFrame, MovePlayer));
     }
 
-    private void MovePlayerSAT(Event ev)
+    private void MovePlayer(Event ev)
     {
       float dt = (float)ev.Data[0];
 
@@ -104,7 +103,6 @@ namespace OkuTestApp
       float vy = API.GetAxisValue("player_vertical") * speed;
       Vector2f v = new Vector2f(vx, vy);
 
-      var tilemapComp = tileMapEntity.GetComponent<TilemapMeshComponent>();
       var playerPos = player.GetComponent<PositionComponent>();
 
       playerPos.Position += v;
@@ -112,12 +110,8 @@ namespace OkuTestApp
       Vector2f playerMin = playerPos.Position - new Vector2f(7.9f, 7.9f);
       Vector2f playMax = playerPos.Position + new Vector2f(7.9f, 7.9f);
 
-      TilemapAsset tilemap = Assets.GetAsset<TilemapAsset>(tilemapComp.Tilemap);
-      Vector2f mv = tilemap.GetMaxMovementSAT(playerMin, playMax);
+      Vector2f mv = _tilemap.GetMaxMovementSAT(playerMin, playMax);
         
-      if (mv.SquaredMagnitude > 0)
-        System.Diagnostics.Debug.WriteLine("MTD: " + mv);
-
       playerPos.Position += mv;
     }
 

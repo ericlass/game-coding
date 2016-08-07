@@ -49,11 +49,11 @@ namespace OkuEngine.Systems
         //Iterate render queue and execute render tasks
         foreach (var task in currentLevel.RenderQueue)
         {
-          if (task.Mesh > 0)
+          if (task.Mesh >= 0)
           {
             if (lastMeshId != task.Mesh)
             {
-              MeshAsset mesh = currentLevel.Assets.GetAsset<MeshAsset>(task.Mesh);
+              Mesh mesh = currentLevel.MeshCache[task.Mesh];
 
               graphics.VertexPositions = mesh.Positions;
               graphics.VertexTexCoords = mesh.TexCoords;
