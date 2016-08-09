@@ -115,9 +115,7 @@ namespace OkuEngine.Systems
         //Store transformed shape in spatial hash map
         foreach (var cell in cells)
         {
-          int cellHash = 7;
-          cellHash = (cellHash * 31) + cell.X;
-          cellHash = (cellHash * 31) + cell.Y;
+          int cellHash = cell.GetHashCode();
 
           //Add entity to map from cell hash to entity
           Dictionary<int, List<Vector2f[]>> cellShapes = null;

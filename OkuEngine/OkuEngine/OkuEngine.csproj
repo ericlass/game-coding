@@ -56,7 +56,10 @@
     <Compile Include="Assets\AssetManager.cs" />
     <Compile Include="Assets\ImageAsset.cs" />
     <Compile Include="Assets\MaterialAsset.cs" />
+    <Compile Include="ISpatialHashMap.cs" />
     <Compile Include="Mesh.cs" />
+    <Compile Include="SpatialHashGrid.cs" />
+    <Compile Include="Systems\SpatialSystem.cs" />
     <Compile Include="Tilemap.cs" />
     <Compile Include="Behavior\BehaviorResult.cs" />
     <Compile Include="Behavior\BehaviorTreeNode.cs" />

@@ -498,10 +498,21 @@ namespace OkuMath
       return base.Equals(obj);
     }
 
-    //Shuts up code analyzer
+    /// <summary>
+    /// Gets the hash code for the vector.
+    /// </summary>
+    /// <returns>The hash code of this vector.</returns>
     public override int GetHashCode()
     {
-      return base.GetHashCode();
+      return ((((217 + X) * 31) + Y) * 31) + Z;
+
+      /* Longer version:
+      int hash = 7;
+      hash = (hash * 31) + X;
+      hash = (hash * 31) + Y;
+      hash = (hash * 31) + Z;
+      return hash;
+      */
     }
 
   }
