@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using OkuEngine.Components;
 using OkuEngine.Events;
 using OkuEngine.Levels;
 
@@ -11,22 +13,122 @@ namespace OkuEngine.Systems
   /// </summary>
   public class SpatialSystem : GameSystem
   {
+    private const int MeshGroup = 1;
+    private const int ShapeGroup = 2;
+
+    private List<int> _updatedMeshes = new List<int>();
+    private List<int> _removedMeshes = new List<int>();
+    private List<int> _updatedShapes = new List<int>();
+    private List<int> _removedShapes = new List<int>();
+    private List<Entity> _transformedEntities = new List<Entity>();
+    private List<Entity> _addedEntities = new List<Entity>();
+    private List<Entity> _removedEntities = new List<Entity>();
+
     public override void LevelChanged(Level previous, Level next)
     {
       if (previous != null)
       {
-        //TODO: Unregister from old level
+        previous.EventQueue.RemoveListener(OnEvent);
       }
 
       if (next != null)
       {
-        //TODO: Register to new level
+        next.Engine.AddEventListener(new EventListener(EventNames.MeshCacheDataBuffered, OnEvent));
+        next.Engine.AddEventListener(new EventListener(EventNames.MeshCacheEntryRemoved, OnEvent));
+
+        next.Engine.AddEventListener(new EventListener(EventNames.ShapeCacheDataBuffered, OnEvent));
+        next.Engine.AddEventListener(new EventListener(EventNames.ShapeCacheEntryRemoved, OnEvent));
+
+        next.Engine.AddEventListener(new EventListener(EventNames.LevelEntityAdded, OnEvent));
+        next.Engine.AddEventListener(new EventListener(EventNames.LevelEntityRemoved, OnEvent));
+
+        next.Engine.AddEventListener(new EventListener(EventNames.EntityComponentAdded, OnEvent));
+        next.Engine.AddEventListener(new EventListener(EventNames.EntityComponentRemoved, OnEvent));
+        next.Engine.AddEventListener(new EventListener(EventNames.EntityComponentsCleared, OnEvent));
+        next.Engine.AddEventListener(new EventListener(EventNames.EntityMeshChanged, OnEvent));
+
+        next.Engine.AddEventListener(new EventListener(EventNames.EntityMoved, OnEvent));
+        next.Engine.AddEventListener(new EventListener(EventNames.EntityRotated, OnEvent));
+        next.Engine.AddEventListener(new EventListener(EventNames.EntityScaled, OnEvent));
+      }
+    }
+
+    private void OnEvent(Event ev)
+    {
+      switch (ev.Name)
+      {
+        case EventNames.MeshCacheDataBuffered:
+          _updatedMeshes.Add((int)ev.Data[0]);
+          break;
+
+        case EventNames.MeshCacheEntryRemoved:
+          _removedMeshes.Add((int)ev.Data[0]);
+          break;
+
+        case EventNames.ShapeCacheDataBuffered:
+          _updatedShapes.Add((int)ev.Data[0]);
+          break;
+
+        case EventNames.ShapeCacheEntryRemoved:
+          _removedShapes.Add((int)ev.Data[0]);
+          break;
+
+        case EventNames.EntityMoved:
+        case EventNames.EntityRotated:
+        case EventNames.EntityScaled:
+          _transformedEntities.Add((Entity)ev.Data[0]);
+          break;
+
+        case EventNames.LevelEntityAdded:
+          var entity = ev.Data[0] as Entity;
+          if (entity.ContainsComponent<CollisionComponent>() || entity.ContainsComponent<MeshComponent>())
+            _addedEntities.Add(entity);
+          break;
+
+        case EventNames.LevelEntityRemoved:
+          entity = ev.Data[0] as Entity;
+          if (entity.ContainsComponent<CollisionComponent>() || entity.ContainsComponent<MeshComponent>())
+            _removedEntities.Add(entity);
+          break;
+
+        case EventNames.EntityComponentAdded:
+          var component = ev.Data[1] as Component;
+          if (component is CollisionComponent)
+          {
+            var comp = component as CollisionComponent;
+            _updatedShapes.Add(comp.Shape);
+          }
+          if (component is MeshComponent)
+          {
+            var comp = component as MeshComponent;
+            _updatedShapes.AddRange(comp.GetMeshes());
+          }
+
+          break;
+
+        case EventNames.EntityComponentRemoved:
+          //TODO: Implement
+          break;
+
+        case EventNames.EntityComponentsCleared:
+          //TODO: Implement
+          break;
+
+        case EventNames.EntityMeshChanged:
+          //TODO: Implement
+          break;
+
+        default:
+          throw new Exception("Received event not registered for: " + ev.Name);
       }
     }
 
     public override void Execute(Level currentLevel)
     {
-      throw new NotImplementedException();
+      //TODO: Each entity has either an instance of a mesh or a shape or both.
+      //And each entity also has its own transform. So, you cannot simply use the mesh
+      //or shape ID for spatial hashing. Using the entity ID would only work when
+      //each entity can only have one shape and one mesh.
     }
 
   }

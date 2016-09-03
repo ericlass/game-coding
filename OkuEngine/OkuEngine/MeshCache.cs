@@ -26,17 +26,17 @@ namespace OkuEngine
 
     private void MeshCache_OnRemoveEntry(int obj)
     {
-      _level?.API.QueueEvent(EventNames.MeshCacheEntryRemoved, obj);
+      _level?.Engine.QueueEvent(EventNames.MeshCacheEntryRemoved, obj);
     }
 
     private void MeshCache_OnBufferData(int obj)
     {
-      _level?.API.QueueEvent(EventNames.MeshCacheDataBuffered, obj);
+      _level?.Engine.QueueEvent(EventNames.MeshCacheDataBuffered, obj);
     }
 
     private void MeshCache_OnCreateEntry(int obj)
     {
-      _level?.API.QueueEvent(EventNames.MeshCacheEntryAdded, obj);
+      _level?.Engine.QueueEvent(EventNames.MeshCacheEntryAdded, obj);
     }
 
   }

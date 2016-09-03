@@ -32,6 +32,7 @@ namespace OkuEngine.Components
       {
         _mesh = value;
         _list = null;
+        QueueEvent(EventNames.EntityMeshChanged);
       }
     }
 

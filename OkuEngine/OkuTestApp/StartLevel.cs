@@ -20,11 +20,11 @@ namespace OkuTestApp
       Entity entity = new Entity("first");
 
       //Add image component
-      var image = API.LoadImage("D:\\Temp\\Icons\\iconex_ap\\128x128\\plain\\bullet_square_grey.png");
+      var image = Engine.LoadImage("D:\\Temp\\Icons\\iconex_ap\\128x128\\plain\\bullet_square_grey.png");
       var imageHandle = Assets.AddAsset(new ImageAsset(image));
 
       //Add mesh component
-      var meshAsset = API.GetMeshForImage(image.Width, image.Height);
+      var meshAsset = Engine.GetMeshForImage(image.Width, image.Height);
       var meshHandle = MeshCache.CreateEntry();
       MeshCache.BufferData(meshHandle, meshAsset);
 
@@ -43,7 +43,7 @@ namespace OkuTestApp
       entity.AddComponent(angle);
       entity.AddComponent(scale);
 
-      API.AddEntity(entity);
+      Engine.AddEntity(entity);
 
       //Create entity instances
       Random rand = new Random();
@@ -69,16 +69,16 @@ namespace OkuTestApp
 
         instance.AddComponent(new MaterialComponent(mats[rand.Next(mats.Length)]));
 
-        API.AddEntity(instance);
+        Engine.AddEntity(instance);
       }
 
       //Generic key event listener
-      API.AddEventListener(new EventListener(EventNames.GetGenericInputEventName(Keys.Space, InputAction.Down), ev => angle.Angle += 45.0f));
+      Engine.AddEventListener(new EventListener(EventNames.GetGenericInputEventName(Keys.Space, InputAction.Down), ev => angle.Angle += 45.0f));
 
       //Create input context
       InputContext context = new InputContext();
 
-      API.SetInterval(1, "colortimer");
+      Engine.SetInterval(1, "colortimer");
 
       //Map some key actions to an event
       InputActionMapping am = new InputActionMapping("rotate_cw");
@@ -96,25 +96,25 @@ namespace OkuTestApp
       context.AxisMappings.Add(ax);
 
       //Activate input context
-      API.SetInputContext(0, context);
+      Engine.SetInputContext(0, context);
 
       //Listen to mapped event
-      API.AddEventListener(new EventListener("rotate_cw", ev => angle.Angle -= 45.0f));
+      Engine.AddEventListener(new EventListener("rotate_cw", ev => angle.Angle -= 45.0f));
 
       //Check mapped axis every frame
-      API.AddEventListener(new EventListener(EventNames.EveryFrame, ev => angle.Angle += API.GetAxisValue("horizontal") * (float)ev.Data[0] * 180.0f));
+      Engine.AddEventListener(new EventListener(EventNames.EveryFrame, ev => angle.Angle += Engine.GetAxisValue("horizontal") * (float)ev.Data[0] * 180.0f));
 
       //Add some event handlers for generic input events
       string eventName = EventNames.GetGenericInputEventName(Keys.S, InputAction.Down);
-      API.AddEventListener(new EventListener(eventName, ev => pos.ScreenSpace = !pos.ScreenSpace));
+      Engine.AddEventListener(new EventListener(eventName, ev => pos.ScreenSpace = !pos.ScreenSpace));
 
       eventName = EventNames.GetGenericInputEventName(Keys.Add, InputAction.Down);
-      API.AddEventListener(new EventListener(eventName, ev => scale.Scale = scale.Scale * 1.2f));
+      Engine.AddEventListener(new EventListener(eventName, ev => scale.Scale = scale.Scale * 1.2f));
 
       eventName = EventNames.GetGenericInputEventName(Keys.Subtract, InputAction.Down);
-      API.AddEventListener(new EventListener(eventName, ev => scale.Scale = scale.Scale * 0.8333f));
+      Engine.AddEventListener(new EventListener(eventName, ev => scale.Scale = scale.Scale * 0.8333f));
 
-      API.AddEventListener(new EventListener("colortimer", ev => OkuBase.OkuManager.Instance.Graphics.BackgroundColor = Color.RandomColor(rand)));
+      Engine.AddEventListener(new EventListener("colortimer", ev => OkuBase.OkuManager.Instance.Graphics.BackgroundColor = Color.RandomColor(rand)));
     }
 
     protected override void Finish()

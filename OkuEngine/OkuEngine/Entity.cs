@@ -60,7 +60,7 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Private getter for the engine API.
+    /// Private getter for the engine Engine.
     /// </summary>
     internal EngineAPI Engine
     {

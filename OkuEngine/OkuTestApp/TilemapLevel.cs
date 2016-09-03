@@ -27,7 +27,7 @@ namespace OkuTestApp
       String imagePath;
       _tilemap = Tilemap.LoadFromTiledXml(new FileStream("D:\\Graphics\\Tilemaps\\Collision\\collisiontest.tmx", FileMode.Open), out imagePath);
 
-      Image image = API.LoadImage(Path.Combine("D:\\Graphics\\Tilemaps\\Collision", imagePath));
+      Image image = Engine.LoadImage(Path.Combine("D:\\Graphics\\Tilemaps\\Collision", imagePath));
       var handle = Assets.AddAsset(new ImageAsset(image));
 
       var materialhandle = Assets.AddAsset(new MaterialAsset(handle, Color.White));
@@ -39,14 +39,14 @@ namespace OkuTestApp
       PositionComponent position = new PositionComponent(Vector2f.Zero, false);
       tileMapEntity.AddComponent(position);
 
-      API.AddEntity(tileMapEntity);
+      Engine.AddEntity(tileMapEntity);
 
       //Player
       player = new Entity("player");
       player.AddComponent(new PositionComponent(new Vector2f(16, 64), false));
       player.AddComponent(new ScaleComponent(new Vector2f(2.0f, 2.0f)));
 
-      var imageData = API.LoadImage("D:\\Graphics\\white.png");
+      var imageData = Engine.LoadImage("D:\\Graphics\\white.png");
       var imageHandle = Assets.AddAsset(new ImageAsset(imageData));
 
       MaterialAsset material = new MaterialAsset(imageHandle, Color.Blue);
@@ -55,11 +55,11 @@ namespace OkuTestApp
       player.AddComponent(new MaterialComponent(materialHandle));
 
       int meshEntry = MeshCache.CreateEntry();
-      MeshCache.BufferData(meshEntry, API.GetMeshForImage(imageData.Width, imageData.Height));
+      MeshCache.BufferData(meshEntry, Engine.GetMeshForImage(imageData.Width, imageData.Height));
 
       player.AddComponent(new SimpleMeshComponent(meshEntry));
 
-      API.AddEntity(player);
+      Engine.AddEntity(player);
 
       //Camera Movement
       InputAxisMapping vertical = new InputAxisMapping("camera_vertical");
@@ -85,13 +85,13 @@ namespace OkuTestApp
       context.AxisMappings.Add(playerVert);
       context.AxisMappings.Add(playerHorz);
 
-      API.SetInputContext(0, context);
+      Engine.SetInputContext(0, context);
 
       //const float trans = 200;
-      //API.AddEventListener(new EventListener(EventNames.EveryFrame, ev => position.Position += new Vector2f(0, trans * API.GetAxisValue("camera_vertical") * (float)ev.Data[0])));
-      //API.AddEventListener(new EventListener(EventNames.EveryFrame, ev => position.Position += new Vector2f(trans * API.GetAxisValue("camera_horizontal") * (float)ev.Data[0], 0)));
+      //Engine.AddEventListener(new EventListener(EventNames.EveryFrame, ev => position.Position += new Vector2f(0, trans * Engine.GetAxisValue("camera_vertical") * (float)ev.Data[0])));
+      //Engine.AddEventListener(new EventListener(EventNames.EveryFrame, ev => position.Position += new Vector2f(trans * Engine.GetAxisValue("camera_horizontal") * (float)ev.Data[0], 0)));
 
-      API.AddEventListener(new EventListener(EventNames.EveryFrame, MovePlayer));
+      Engine.AddEventListener(new EventListener(EventNames.EveryFrame, MovePlayer));
     }
 
     private void MovePlayer(Event ev)
@@ -99,8 +99,8 @@ namespace OkuTestApp
       float dt = (float)ev.Data[0];
 
       float speed = 200.0f * dt;
-      float vx = API.GetAxisValue("player_horizontal") * speed;
-      float vy = API.GetAxisValue("player_vertical") * speed;
+      float vx = Engine.GetAxisValue("player_horizontal") * speed;
+      float vy = Engine.GetAxisValue("player_vertical") * speed;
       Vector2f v = new Vector2f(vx, vy);
 
       var playerPos = player.GetComponent<PositionComponent>();

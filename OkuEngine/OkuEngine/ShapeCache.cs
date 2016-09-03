@@ -27,17 +27,17 @@ namespace OkuEngine
 
     private void ShapeCache_OnRemoveEntry(int obj)
     {
-      _level?.API.QueueEvent(EventNames.ShapeCacheEntryRemoved, obj);
+      _level?.Engine.QueueEvent(EventNames.ShapeCacheEntryRemoved, obj);
     }
 
     private void ShapeCache_OnBufferData(int obj)
     {
-      _level?.API.QueueEvent(EventNames.ShapeCacheDataBuffered, obj);
+      _level?.Engine.QueueEvent(EventNames.ShapeCacheDataBuffered, obj);
     }
 
     private void ShapeCache_OnCreateEntry(int obj)
     {
-      _level?.API.QueueEvent(EventNames.ShapeCacheEntryAdded, obj);
+      _level?.Engine.QueueEvent(EventNames.ShapeCacheEntryAdded, obj);
     }
   }
 }

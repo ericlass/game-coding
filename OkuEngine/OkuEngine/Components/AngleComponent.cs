@@ -35,7 +35,11 @@ namespace OkuEngine.Components
     public float Angle
     {
       get { return _angle; }
-      set { _angle = value; }
+      set
+      {
+        _angle = value;
+        QueueEvent(EventNames.EntityRotated);
+      }
     }
 
     /// <summary>

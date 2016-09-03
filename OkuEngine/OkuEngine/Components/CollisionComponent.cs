@@ -5,7 +5,7 @@ namespace OkuEngine.Components
 {
   public class CollisionComponent : Component
   {
-    private CollisionShape _shape = null;
+    private int _shape = -1;
     private string _eventName = null;
     private bool _isSolid = true;
 
@@ -13,24 +13,21 @@ namespace OkuEngine.Components
     {
     }
 
-    public CollisionComponent(CollisionShape shape, string eventName, bool isSolid)
+    public CollisionComponent(int shape, string eventName, bool isSolid)
     {
       _shape = shape;
       _eventName = eventName;
       _isSolid = isSolid;
-
-      _shape.OnChange += Shape_OnChange;
     }
 
-    private void Shape_OnChange()
-    {
-      QueueEvent(EventNames.EntityShapeChanged);
-    }
-
-    public CollisionShape Shape
+    public int Shape
     {
       get { return _shape; }
-      set { _shape = value; }
+      set
+      {
+        _shape = value;
+        QueueEvent(EventNames.EntityShapeChanged);
+      }
     }
 
     public string EventName

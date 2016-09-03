@@ -111,6 +111,32 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Removes the item with the given id and group.
+    /// </summary>
+    /// <param name="group">The group index.</param>
+    /// <param name="id">The id of the item to remove.</param>
+    public void Remove(int group, int id)
+    {
+      if (!_itemHashMap.ContainsKey(group))
+        return;
+
+      var itemGroupMap = _itemHashMap[group];
+
+      if (!itemGroupMap.ContainsKey(id))
+        return;
+
+      SortedSet<int> cells = itemGroupMap[id];
+      itemGroupMap.Remove(id);
+
+      var spatialGroupMap = _spatialHashMap[group];
+      foreach (int cell in cells)
+      {
+        if (spatialGroupMap.ContainsKey(cell))
+          spatialGroupMap[cell].Remove(id);
+      }
+    }
+
+    /// <summary>
     /// Gets all items in the given group that touch any 
     /// of the cells the AABB given by [min, max] touches.
     /// </summary>
@@ -178,6 +204,8 @@ namespace OkuEngine
 
       return result;
     }
+
+    
 
   }
 }

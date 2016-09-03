@@ -71,7 +71,7 @@ namespace OkuEngine
     public override void Update(float dt)
     {
       _currentLevel.Variables[VariableNames.DeltaTime] = dt;
-      _currentLevel.API.QueueEvent(EventNames.EveryFrame, dt);
+      _currentLevel.Engine.QueueEvent(EventNames.EveryFrame, dt);
 
       //Update entities
       foreach (var entity in _currentLevel.Entities)

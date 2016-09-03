@@ -16,9 +16,9 @@ namespace OkuEngine.Levels
     private ShapeCache _shapeCache = null;
     
     /// <summary>
-    /// Gets the API with all functions of the engine.
+    /// Gets the Engine with all functions of the engine.
     /// </summary>
-    public EngineAPI API
+    public EngineAPI Engine
     {
       get { return _engine; }
     }

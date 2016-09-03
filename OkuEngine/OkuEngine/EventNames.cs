@@ -119,6 +119,18 @@ namespace OkuEngine
     public const string EntityMoved = "entity_moved";
 
     /// <summary>
+    /// Queued when the rotation of an entity changed.
+    /// Parameter is the moved entity.
+    /// </summary>
+    public const string EntityRotated = "entity_rotated";
+
+    /// <summary>
+    /// Queued when the scale of an entity changed.
+    /// Parameter is the moved entity.
+    /// </summary>
+    public const string EntityScaled = "entity_scaled";
+
+    /// <summary>
     /// Queued when a new entry is added to the mesh cache.
     /// Be aware that at this moment, no data has been buffered for the entry.
     /// Parameter is the id of the added entry.

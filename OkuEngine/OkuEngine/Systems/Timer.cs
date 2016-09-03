@@ -40,7 +40,7 @@ namespace OkuEngine.Systems
       _currentTime -= currentLevel.Variables.GetFloat(VariableNames.DeltaTime);
       if (_currentTime <= 0.0f)
       {
-        currentLevel.API.QueueEvent(_event);
+        currentLevel.Engine.QueueEvent(_event);
 
         if (_repeat)
           _currentTime = _currentTime + _time;

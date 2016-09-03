@@ -32,7 +32,11 @@ namespace OkuEngine.Components
     public Vector2f Scale
     {
       get { return _scale; }
-      set { _scale = value; }
+      set
+      {
+        _scale = value;
+        QueueEvent(EventNames.EntityScaled);
+      }
     }
 
     /// <summary>

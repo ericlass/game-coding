@@ -23,7 +23,7 @@ namespace OkuEngine.Systems
       List<Keys> pressedKeys = input.Keyboard.GetPressedButtons();
       foreach (var key in pressedKeys)
       {
-        currentLevel.API.QueueEvent(EventNames.GetGenericInputEventName(key, InputAction.Down));
+        currentLevel.Engine.QueueEvent(EventNames.GetGenericInputEventName(key, InputAction.Down));
         _actionCodes.Add(GetInputActionCode(key, InputAction.Down));
       }
 
@@ -31,7 +31,7 @@ namespace OkuEngine.Systems
       List<Keys> raisedKeys = input.Keyboard.GetRaisedButtons();
       foreach (var key in raisedKeys)
       {
-        currentLevel.API.QueueEvent(EventNames.GetGenericInputEventName(key, InputAction.Up));
+        currentLevel.Engine.QueueEvent(EventNames.GetGenericInputEventName(key, InputAction.Up));
         _actionCodes.Add(GetInputActionCode(key, InputAction.Up));
       }
 
@@ -39,7 +39,7 @@ namespace OkuEngine.Systems
       List<MouseButton> pressedButtons = input.Mouse.GetPressedButtons();
       foreach (var button in pressedButtons)
       {
-        currentLevel.API.QueueEvent(EventNames.GetGenericInputEventName(button, InputAction.Down));
+        currentLevel.Engine.QueueEvent(EventNames.GetGenericInputEventName(button, InputAction.Down));
         _actionCodes.Add(GetInputActionCode(button, InputAction.Down));
       }
 
@@ -47,7 +47,7 @@ namespace OkuEngine.Systems
       List<MouseButton> raisedButtons = input.Mouse.GetRaisedButtons();
       foreach (var button in raisedButtons)
       {
-        currentLevel.API.QueueEvent(EventNames.GetGenericInputEventName(button, InputAction.Up));
+        currentLevel.Engine.QueueEvent(EventNames.GetGenericInputEventName(button, InputAction.Up));
         _actionCodes.Add(GetInputActionCode(button, InputAction.Up));
       }
 
@@ -67,7 +67,7 @@ namespace OkuEngine.Systems
           }
 
           if (doQueue)
-            currentLevel.API.QueueEvent(actionMapping.EventName);
+            currentLevel.Engine.QueueEvent(actionMapping.EventName);
         }
       }
 
