@@ -19,7 +19,8 @@ namespace OkuEngine.Levels
     private List<InputContext> _inputContexts = new List<InputContext>(10);
     private List<RenderTask> _renderQueue = new List<RenderTask>();
     private List<Timer> _timer = new List<Timer>();
-    private ISpatialHashMap _spatialMap = new SpatialHashGrid();
+    private ISpatialHashMap _spatialMeshMap = new SpatialHashGrid();
+    private ISpatialHashMap _spatialShapeMap = new SpatialHashGrid();
     private bool _initialized = false;
 
     /// <summary>
@@ -89,9 +90,17 @@ namespace OkuEngine.Levels
     /// <summary>
     /// Gets the spatial hash map for this level containing the meshes and shapes.
     /// </summary>
-    internal ISpatialHashMap SpatialMap
+    internal ISpatialHashMap SpatialMeshMap
     {
-      get { return _spatialMap; }
+      get { return _spatialMeshMap; }
+    }
+
+    /// <summary>
+    /// Gets the spatial hash map for this level containing the meshes and shapes.
+    /// </summary>
+    internal ISpatialHashMap SpatialShapeMap
+    {
+      get { return _spatialShapeMap; }
     }
 
     /// <summary>

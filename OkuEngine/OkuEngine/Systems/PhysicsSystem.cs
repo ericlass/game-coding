@@ -101,7 +101,7 @@ namespace OkuEngine.Systems
 
       Matrix3x3f transformMatrix = Matrix3x3f.Translate(newPos.X, newPos.Y) * Matrix3x3f.Rotation(angle) * Matrix3x3f.Scale(scale.X, scale.Y);
 
-      foreach (var shape in colComp.Shape.GetShapes(currentLevel))
+      foreach (var shape in colComp.Shape)
       {
         //Transform object space shape to world space using matrix
         Vector2f[] transformedShape = new Vector2f[shape.Length];

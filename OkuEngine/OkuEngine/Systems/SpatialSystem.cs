@@ -24,6 +24,8 @@ namespace OkuEngine.Systems
     private List<Entity> _addedEntities = new List<Entity>();
     private List<Entity> _removedEntities = new List<Entity>();
 
+    private Level _currentLevel = null;
+
     public override void LevelChanged(Level previous, Level next)
     {
       if (previous != null)
@@ -51,10 +53,13 @@ namespace OkuEngine.Systems
         next.Engine.AddEventListener(new EventListener(EventNames.EntityRotated, OnEvent));
         next.Engine.AddEventListener(new EventListener(EventNames.EntityScaled, OnEvent));
       }
+
+      _currentLevel = next;
     }
 
     private void OnEvent(Event ev)
     {
+      //TODO: Extact cases to methods
       switch (ev.Name)
       {
         case EventNames.MeshCacheDataBuffered:
@@ -98,24 +103,47 @@ namespace OkuEngine.Systems
             var comp = component as CollisionComponent;
             _updatedShapes.Add(comp.Shape);
           }
-          if (component is MeshComponent)
+          else if (component is MeshComponent)
           {
             var comp = component as MeshComponent;
-            _updatedShapes.AddRange(comp.GetMeshes());
+            _updatedMeshes.AddRange(comp.GetMeshes(_currentLevel));
           }
-
           break;
 
         case EventNames.EntityComponentRemoved:
-          //TODO: Implement
+          component = ev.Data[1] as Component;
+          if (component is CollisionComponent)
+          {
+            var comp = component as CollisionComponent;
+            _removedShapes.Add(comp.Shape);
+          }
+          else if (component is MeshComponent)
+          {
+            var comp = component as MeshComponent;
+            _removedMeshes.AddRange(comp.GetMeshes(_currentLevel));
+          }
           break;
 
         case EventNames.EntityComponentsCleared:
-          //TODO: Implement
+          entity = ev.Data[0] as Entity;
+          foreach (var comp in entity.GetComponents<CollisionComponent>())
+          {
+            var compo = comp as CollisionComponent;
+            _removedShapes.Add(compo.Shape);
+          }
+
+          foreach (var comp in entity.GetComponents<MeshComponent>())
+          {
+            var compo = comp as MeshComponent;
+            _removedMeshes.AddRange(compo.GetMeshes(_currentLevel));
+          }
           break;
 
         case EventNames.EntityMeshChanged:
-          //TODO: Implement
+          {
+            MeshComponent comp = ev.Data[1] as MeshComponent;
+            _updatedMeshes.AddRange(comp.GetMeshes(_currentLevel));
+          }
           break;
 
         default:
@@ -125,10 +153,48 @@ namespace OkuEngine.Systems
 
     public override void Execute(Level currentLevel)
     {
-      //TODO: Each entity has either an instance of a mesh or a shape or both.
-      //And each entity also has its own transform. So, you cannot simply use the mesh
-      //or shape ID for spatial hashing. Using the entity ID would only work when
-      //each entity can only have one shape and one mesh.
+      foreach (var mesh in _updatedMeshes)
+      {
+        currentLevel.SpatialMeshMap.AddOrUpdate(0, mesh, currentLevel.MeshCache[mesh].Positions);
+      }
+      _updatedMeshes.Clear();
+
+      foreach (var mesh in _removedMeshes)
+      {
+
+      }
+      _removedMeshes.Clear();
+
+      foreach (var shape in _updatedShapes)
+      {
+
+      }
+      _updatedShapes.Clear();
+
+      foreach (var shape in _removedShapes)
+      {
+
+      }
+      _removedShapes.Clear();
+
+      foreach (var entity in _transformedEntities)
+      {
+
+      }
+      _transformedEntities.Clear();
+
+      foreach (var entity in _addedEntities)
+      {
+
+      }
+      _addedEntities.Clear();
+
+      foreach (var entity in _removedEntities)
+      {
+
+      }
+      _removedEntities.Clear();
+
     }
 
   }

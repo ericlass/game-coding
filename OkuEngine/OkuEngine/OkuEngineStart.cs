@@ -47,6 +47,10 @@ namespace OkuEngine
       //Inform systems about the level change
       foreach (var system in _systems)
         system.LevelChanged(previous, level);
+
+      //Aloso inform "special" systems
+      _entityRenderSystem.LevelChanged(previous, level);
+      _renderSystem.LevelChanged(previous, level);
     }
 
     public override void Initialize()
@@ -57,7 +61,8 @@ namespace OkuEngine
       {
         new InputSystem(),
         new TimerSystem(),
-        new PhysicsSystem()
+        new PhysicsSystem(),
+        new SpatialSystem()
       };
 
 
