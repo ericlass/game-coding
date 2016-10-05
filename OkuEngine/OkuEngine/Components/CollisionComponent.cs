@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using OkuEngine.Systems;
 
 namespace OkuEngine.Components
 {
   public class CollisionComponent : Component
   {
-    private int _shape = -1;
     private string _eventName = null;
     private bool _isSolid = true;
 
@@ -13,21 +13,10 @@ namespace OkuEngine.Components
     {
     }
 
-    public CollisionComponent(int shape, string eventName, bool isSolid)
+    public CollisionComponent(string eventName, bool isSolid)
     {
-      _shape = shape;
       _eventName = eventName;
       _isSolid = isSolid;
-    }
-
-    public int Shape
-    {
-      get { return _shape; }
-      set
-      {
-        _shape = value;
-        QueueEvent(EventNames.EntityShapeChanged);
-      }
     }
 
     public string EventName

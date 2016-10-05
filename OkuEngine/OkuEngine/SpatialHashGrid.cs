@@ -15,10 +15,16 @@ namespace OkuEngine
     private int _cellSize = 32;
 
     //Dictionary<GROUP, Dictionary<CELLHASH, SortedSet<ID>>>
+    //Used for finding which items are inside each cell
     private Dictionary<int, Dictionary<int, SortedSet<int>>> _spatialHashMap = new Dictionary<int, Dictionary<int, SortedSet<int>>>();
 
     //Dictionary<GROUP, Dictionary<ID, SortedSet<CELLHASH>>>
+    //Used for finding in which cells an item is
     private Dictionary<int, Dictionary<int, SortedSet<int>>> _itemHashMap = new Dictionary<int, Dictionary<int, SortedSet<int>>>();
+
+    //Dictionary<ID, SortedSet<GROUP>>
+    //Used for finding in which groups an item is used
+    private Dictionary<int, SortedSet<int>> _itemGroupMap = new Dictionary<int, SortedSet<int>>();
 
     /// <summary>
     /// Creates a new SpatialHashGrid with a defaul cell size of 32.
@@ -89,6 +95,18 @@ namespace OkuEngine
         itemGroupMap.Remove(id);
       }
 
+      //Make sure the relation item -> group(s) is stored
+      SortedSet<int> groups = null;
+      if (_itemGroupMap.ContainsKey(id))
+        groups = _itemGroupMap[id];
+      else
+      {
+        groups = new SortedSet<int>();
+        _itemGroupMap.Add(id, groups);
+      }
+
+      groups.Add(group);
+
       //Get cells the AABB of the poly touches
       var aabb = AABBMath.FromPoints(poly);
       var cells = GridMath.CellsOfAABB(aabb.Item1, aabb.Item2, _cellSize);
@@ -111,6 +129,22 @@ namespace OkuEngine
     }
 
     /// <summary>
+    /// Updates the item with the given id on all groups where it is used.
+    /// </summary>
+    /// <param name="id">The id of the item.</param>
+    /// <param name="poly">The polygon of the item.</param>
+    public void UpdateAll(int id, Vector2f[] poly)
+    {
+      if (_itemGroupMap.ContainsKey(id))
+      {
+        foreach (var group in _itemGroupMap[id])
+        {
+          AddOrUpdate(group, id, poly);
+        }
+      }
+    }
+
+    /// <summary>
     /// Removes the item with the given id and group.
     /// </summary>
     /// <param name="group">The group index.</param>
@@ -128,11 +162,28 @@ namespace OkuEngine
       SortedSet<int> cells = itemGroupMap[id];
       itemGroupMap.Remove(id);
 
+      _itemGroupMap.Remove(id);
+
       var spatialGroupMap = _spatialHashMap[group];
       foreach (int cell in cells)
       {
         if (spatialGroupMap.ContainsKey(cell))
           spatialGroupMap[cell].Remove(id);
+      }
+    }
+
+    /// <summary>
+    /// Removes the item with the given id from all groups it is used in.
+    /// </summary>
+    /// <param name="id">The id of the item to remove.</param>
+    public void RemoveAll(int id)
+    {
+      if (_itemGroupMap.ContainsKey(id))
+      {
+        foreach (var group in _itemGroupMap[id])
+        {
+          Remove(group, id);
+        }
       }
     }
 
@@ -203,9 +254,7 @@ namespace OkuEngine
       }
 
       return result;
-    }
-
-    
+    }    
 
   }
 }

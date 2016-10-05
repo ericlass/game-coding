@@ -14,6 +14,6 @@ namespace OkuEngine.Systems
       OnChange?.Invoke();
     }
 
-    public abstract List<Vector2f[]> GetShapes(Level currentLevel);
+    public abstract List<int> GetShapes(Level currentLevel);
   }
 }

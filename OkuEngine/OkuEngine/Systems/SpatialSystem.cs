@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OkuMath;
 using OkuEngine.Components;
 using OkuEngine.Events;
 using OkuEngine.Levels;
@@ -35,12 +36,7 @@ namespace OkuEngine.Systems
 
       if (next != null)
       {
-        next.Engine.AddEventListener(new EventListener(EventNames.MeshCacheDataBuffered, OnEvent));
-        next.Engine.AddEventListener(new EventListener(EventNames.MeshCacheEntryRemoved, OnEvent));
-
-        next.Engine.AddEventListener(new EventListener(EventNames.ShapeCacheDataBuffered, OnEvent));
-        next.Engine.AddEventListener(new EventListener(EventNames.ShapeCacheEntryRemoved, OnEvent));
-
+        //Entity based events
         next.Engine.AddEventListener(new EventListener(EventNames.LevelEntityAdded, OnEvent));
         next.Engine.AddEventListener(new EventListener(EventNames.LevelEntityRemoved, OnEvent));
 
@@ -52,6 +48,13 @@ namespace OkuEngine.Systems
         next.Engine.AddEventListener(new EventListener(EventNames.EntityMoved, OnEvent));
         next.Engine.AddEventListener(new EventListener(EventNames.EntityRotated, OnEvent));
         next.Engine.AddEventListener(new EventListener(EventNames.EntityScaled, OnEvent));
+
+        //Cache events
+        next.Engine.AddEventListener(new EventListener(EventNames.MeshCacheDataBuffered, OnEvent));
+        next.Engine.AddEventListener(new EventListener(EventNames.MeshCacheEntryRemoved, OnEvent));
+
+        next.Engine.AddEventListener(new EventListener(EventNames.ShapeCacheDataBuffered, OnEvent));
+        next.Engine.AddEventListener(new EventListener(EventNames.ShapeCacheEntryRemoved, OnEvent));
       }
 
       _currentLevel = next;
@@ -59,7 +62,7 @@ namespace OkuEngine.Systems
 
     private void OnEvent(Event ev)
     {
-      //TODO: Extact cases to methods
+      //TODO: Extract cases to methods
       switch (ev.Name)
       {
         case EventNames.MeshCacheDataBuffered:
@@ -151,49 +154,121 @@ namespace OkuEngine.Systems
       }
     }
 
+    /// <summary>
+    /// Creates a transformation matrix for the given entity from its position, angle and scale components, if they exist.
+    /// </summary>
+    /// <param name="entity">The entity.</param>
+    /// <returns>The transformation matrix for this entity.</returns>
+    private Matrix3x3f GetEntityTransformMatrix(Entity entity)
+    {
+      PositionComponent posComp = entity.GetComponent<PositionComponent>();
+      AngleComponent angleComp = entity.GetComponent<AngleComponent>();
+      ScaleComponent scaleComp = entity.GetComponent<ScaleComponent>();
+
+      return
+        (posComp == null ? Matrix3x3f.Identity : Matrix3x3f.Translate(posComp.Position.X, posComp.Position.Y)) *
+        (angleComp == null ? Matrix3x3f.Identity : Matrix3x3f.Rotation(angleComp.Angle)) *
+        (scaleComp == null ? Matrix3x3f.Identity : Matrix3x3f.Scale(scaleComp.Scale.X, scaleComp.Scale.Y));
+    }
+
+    /// <summary>
+    /// Transforms a polygon using the given transformation matrix.
+    /// </summary>
+    /// <param name="poly">The poly to be transformed.</param>
+    /// <param name="transform">The transformation matrix.</param>
+    /// <returns>A copy of the poly transformed using the given matrix.</returns>
+    private Vector2f[] TranformPoly(Vector2f[] poly, Matrix3x3f transform)
+    {
+      Vector2f[] result = new Vector2f[poly.Length];
+
+      for (int i = 0; i < poly.Length; i++)
+      {
+        result[i] = transform * poly[i];
+      }
+
+      return result;
+    }
+
     public override void Execute(Level currentLevel)
     {
-      foreach (var mesh in _updatedMeshes)
-      {
-        currentLevel.SpatialMeshMap.AddOrUpdate(0, mesh, currentLevel.MeshCache[mesh].Positions);
-      }
-      _updatedMeshes.Clear();
-
-      foreach (var mesh in _removedMeshes)
-      {
-
-      }
-      _removedMeshes.Clear();
-
-      foreach (var shape in _updatedShapes)
-      {
-
-      }
-      _updatedShapes.Clear();
-
-      foreach (var shape in _removedShapes)
-      {
-
-      }
-      _removedShapes.Clear();
-
-      foreach (var entity in _transformedEntities)
-      {
-
-      }
-      _transformedEntities.Clear();
-
       foreach (var entity in _addedEntities)
       {
+        var transformMatrix = GetEntityTransformMatrix(entity);
 
+        //TODO: Make this work. Shapes have to work just like meshes.
+        var colComp = entity.GetComponent<CollisionComponent>();
+        if (colComp != null)
+        {
+          //TODO: Transform each shape to world space
+          //TODO: Add transformed shape to spatial map
+          //currentLevel.SpatialShapeMap.AddOrUpdate(entity.ID, colComp.Shape, currentLevel.ShapeCache[colComp.Shape].GetShapes());
+        }
+
+        //Meshes
+        var meshComps = entity.GetComponents<MeshComponent>();
+        foreach (var meshComp in meshComps)
+        {
+          var mesh = meshComp as MeshComponent;
+          foreach (var meshId in mesh.GetMeshes(currentLevel))
+          {
+            var meshWorldSpace = TranformPoly(currentLevel.MeshCache[meshId].Positions, transformMatrix);
+            currentLevel.SpatialMeshMap.AddOrUpdate(entity.ID, meshId, meshWorldSpace);
+          }
+        }
       }
       _addedEntities.Clear();
 
       foreach (var entity in _removedEntities)
       {
+        //TODO: Handle shapes
 
+        var meshComps = entity.GetComponents<MeshComponent>();
+        foreach (var meshComp in meshComps)
+        {
+          var mesh = meshComp as MeshComponent;
+          foreach (var meshId in mesh.GetMeshes(currentLevel))
+          {
+            currentLevel.SpatialMeshMap.Remove(entity.ID, meshId);
+          }
+        }
       }
       _removedEntities.Clear();
+
+
+      foreach (var mesh in _updatedMeshes)
+      {
+        //TODO: Transform mesh to world space, but for this I need the entity!!!
+        currentLevel.SpatialMeshMap.UpdateAll(mesh, currentLevel.MeshCache[mesh].Positions);
+      }
+      _updatedMeshes.Clear();
+
+      foreach (var mesh in _removedMeshes)
+      {
+        currentLevel.SpatialMeshMap.RemoveAll(mesh);
+      }
+      _removedMeshes.Clear();
+
+      foreach (var shape in _updatedShapes)
+      {
+        currentLevel.SpatialShapeMap.UpdateAll(shape, currentLevel.ShapeCache[shape].GetShapes());
+      }
+      _updatedShapes.Clear();
+
+      foreach (var shape in _removedShapes)
+      {
+        currentLevel.SpatialShapeMap.RemoveAll(shape);
+      }
+      _removedShapes.Clear();
+
+      foreach (var entity in _transformedEntities)
+      {
+        //TODO: Implement
+      }
+      _transformedEntities.Clear();
+
+      
+
+      
 
     }
 

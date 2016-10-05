@@ -11,7 +11,7 @@ namespace OkuEngine.Systems
   public class TilemapShape : CollisionShape
   {
     private Tilemap _tilemap = null;
-    private List<Vector2f[]> _shapes = null;
+    private List<int> _shapes = null;
 
     /// <summary>
     /// Creates a new tile map shape with the given tile map asset.
@@ -26,9 +26,10 @@ namespace OkuEngine.Systems
     private void Tilemap_OnChangeCollision(Vector2i obj)
     {
       FireChangeEvent();
+      //TODO: Update changed shape
     }
 
-    public override List<Vector2f[]> GetShapes(Level currentLevel)
+    public override List<int> GetShapes(Level currentLevel)
     {
       if (_shapes == null)
       {

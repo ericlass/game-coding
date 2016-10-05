@@ -1,5 +1,5 @@
 ﻿using System;
-using OkuEngine.Systems;
+using OkuMath;
 using OkuEngine.Levels;
 
 namespace OkuEngine
@@ -8,7 +8,7 @@ namespace OkuEngine
   /// Defines an observable shape cache that caches all collision shapes in the current level.
   /// This cache already queues change notifications to the levels event queue.
   /// </summary>
-  public class ShapeCache : ObservableCache<CollisionShape>
+  public class ShapeCache : ObservableCache<Vector2f[]>
   {
     private Level _level = null;
 
