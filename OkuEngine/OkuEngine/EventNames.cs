@@ -176,7 +176,7 @@ namespace OkuEngine
 
     /// <summary>
     /// Queued when the shape of an entity changes.
-    /// Parameters are the entity and the mesh component that queued the event.
+    /// Parameters are the entity and the shape component that queued the event.
     /// </summary>
     public const string EntityShapeChanged = "entity_shape_changed";
   }

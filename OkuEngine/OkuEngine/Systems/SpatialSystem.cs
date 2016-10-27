@@ -26,6 +26,8 @@ namespace OkuEngine.Systems
     private List<Entity> _removedEntities = new List<Entity>();
 
     private Level _currentLevel = null;
+    private Dictionary<int, SortedSet<int>> _entityShapeMap = new Dictionary<int, SortedSet<int>>();
+    private Dictionary<int, SortedSet<int>> _entityMeshMap = new Dictionary<int, SortedSet<int>>();
 
     public override void LevelChanged(Level previous, Level next)
     {
@@ -43,7 +45,9 @@ namespace OkuEngine.Systems
         next.Engine.AddEventListener(new EventListener(EventNames.EntityComponentAdded, OnEvent));
         next.Engine.AddEventListener(new EventListener(EventNames.EntityComponentRemoved, OnEvent));
         next.Engine.AddEventListener(new EventListener(EventNames.EntityComponentsCleared, OnEvent));
+
         next.Engine.AddEventListener(new EventListener(EventNames.EntityMeshChanged, OnEvent));
+        next.Engine.AddEventListener(new EventListener(EventNames.EntityShapeChanged, OnEvent));
 
         next.Engine.AddEventListener(new EventListener(EventNames.EntityMoved, OnEvent));
         next.Engine.AddEventListener(new EventListener(EventNames.EntityRotated, OnEvent));
@@ -62,7 +66,6 @@ namespace OkuEngine.Systems
 
     private void OnEvent(Event ev)
     {
-      //TODO: Extract cases to methods
       switch (ev.Name)
       {
         case EventNames.MeshCacheDataBuffered:
@@ -89,22 +92,22 @@ namespace OkuEngine.Systems
 
         case EventNames.LevelEntityAdded:
           var entity = ev.Data[0] as Entity;
-          if (entity.ContainsComponent<CollisionComponent>() || entity.ContainsComponent<MeshComponent>())
+          if (entity.ContainsComponent<ShapeComponent>() || entity.ContainsComponent<MeshComponent>())
             _addedEntities.Add(entity);
           break;
 
         case EventNames.LevelEntityRemoved:
           entity = ev.Data[0] as Entity;
-          if (entity.ContainsComponent<CollisionComponent>() || entity.ContainsComponent<MeshComponent>())
+          if (entity.ContainsComponent<ShapeComponent>() || entity.ContainsComponent<MeshComponent>())
             _removedEntities.Add(entity);
           break;
 
         case EventNames.EntityComponentAdded:
           var component = ev.Data[1] as Component;
-          if (component is CollisionComponent)
+          if (component is ShapeComponent)
           {
-            var comp = component as CollisionComponent;
-            _updatedShapes.Add(comp.Shape);
+            var comp = component as ShapeComponent;
+            _updatedShapes.AddRange(comp.GetShapes(_currentLevel));
           }
           else if (component is MeshComponent)
           {
@@ -115,10 +118,10 @@ namespace OkuEngine.Systems
 
         case EventNames.EntityComponentRemoved:
           component = ev.Data[1] as Component;
-          if (component is CollisionComponent)
+          if (component is ShapeComponent)
           {
-            var comp = component as CollisionComponent;
-            _removedShapes.Add(comp.Shape);
+            var comp = component as ShapeComponent;
+            _removedShapes.AddRange(comp.GetShapes(_currentLevel));
           }
           else if (component is MeshComponent)
           {
@@ -129,10 +132,10 @@ namespace OkuEngine.Systems
 
         case EventNames.EntityComponentsCleared:
           entity = ev.Data[0] as Entity;
-          foreach (var comp in entity.GetComponents<CollisionComponent>())
+          foreach (var comp in entity.GetComponents<ShapeComponent>())
           {
-            var compo = comp as CollisionComponent;
-            _removedShapes.Add(compo.Shape);
+            var compo = comp as ShapeComponent;
+            _removedShapes.AddRange(compo.GetShapes(_currentLevel));
           }
 
           foreach (var comp in entity.GetComponents<MeshComponent>())
@@ -142,10 +145,26 @@ namespace OkuEngine.Systems
           }
           break;
 
+        //TODO: Shape and mesh changes required to remove the old entity<>shape / entity<>mesh
+        //from the spatial map and internal maps and then add the new one accordingly.
+        //Challenges:
+        //  - Component can't tell me which one was the old one
+        //  - You have to specifically update one mesh/shape instance, not all of them
+        //Solutions:
+        //  - Let the component queue a "remove" event first giving the old mesh/shape, then the "add" event
+        //  - Enhance "QueueEvent" for component to be able to pass additional parameters. Then the components could proive old and new mesh/shape id.
+
         case EventNames.EntityMeshChanged:
           {
             MeshComponent comp = ev.Data[1] as MeshComponent;
             _updatedMeshes.AddRange(comp.GetMeshes(_currentLevel));
+          }
+          break;
+
+        case EventNames.EntityShapeChanged:
+          {
+            var comp = ev.Data[1] as ShapeComponent;
+            _updatedShapes.AddRange(comp.GetShapes(_currentLevel));
           }
           break;
 
@@ -177,7 +196,7 @@ namespace OkuEngine.Systems
     /// <param name="poly">The poly to be transformed.</param>
     /// <param name="transform">The transformation matrix.</param>
     /// <returns>A copy of the poly transformed using the given matrix.</returns>
-    private Vector2f[] TranformPoly(Vector2f[] poly, Matrix3x3f transform)
+    private Vector2f[] TransformPoly(Vector2f[] poly, Matrix3x3f transform)
     {
       Vector2f[] result = new Vector2f[poly.Length];
 
@@ -191,84 +210,146 @@ namespace OkuEngine.Systems
 
     public override void Execute(Level currentLevel)
     {
-      foreach (var entity in _addedEntities)
-      {
-        var transformMatrix = GetEntityTransformMatrix(entity);
-
-        //TODO: Make this work. Shapes have to work just like meshes.
-        var colComp = entity.GetComponent<CollisionComponent>();
-        if (colComp != null)
-        {
-          //TODO: Transform each shape to world space
-          //TODO: Add transformed shape to spatial map
-          //currentLevel.SpatialShapeMap.AddOrUpdate(entity.ID, colComp.Shape, currentLevel.ShapeCache[colComp.Shape].GetShapes());
-        }
-
-        //Meshes
-        var meshComps = entity.GetComponents<MeshComponent>();
-        foreach (var meshComp in meshComps)
-        {
-          var mesh = meshComp as MeshComponent;
-          foreach (var meshId in mesh.GetMeshes(currentLevel))
-          {
-            var meshWorldSpace = TranformPoly(currentLevel.MeshCache[meshId].Positions, transformMatrix);
-            currentLevel.SpatialMeshMap.AddOrUpdate(entity.ID, meshId, meshWorldSpace);
-          }
-        }
-      }
-      _addedEntities.Clear();
-
+      //Removed entities
       foreach (var entity in _removedEntities)
       {
-        //TODO: Handle shapes
-
-        var meshComps = entity.GetComponents<MeshComponent>();
-        foreach (var meshComp in meshComps)
+        foreach (var shapeComp in entity.GetComponents<ShapeComponent>())
         {
-          var mesh = meshComp as MeshComponent;
-          foreach (var meshId in mesh.GetMeshes(currentLevel))
+          foreach (var shapeId in (shapeComp as ShapeComponent).GetShapes(currentLevel))
+          {
+            currentLevel.SpatialShapeMap.Remove(entity.ID, shapeId);
+            if (_entityShapeMap.ContainsKey(shapeId))
+            {
+              var entityList = _entityShapeMap[shapeId];
+              entityList.Remove(entity.ID);
+              if (entityList.Count <= 0)
+                _entityShapeMap.Remove(shapeId);
+            }
+          }
+        }
+
+        foreach (var meshComp in entity.GetComponents<MeshComponent>())
+        {
+          foreach (var meshId in (meshComp as MeshComponent).GetMeshes(currentLevel))
           {
             currentLevel.SpatialMeshMap.Remove(entity.ID, meshId);
+            if (_entityMeshMap.ContainsKey(meshId))
+            {
+              var meshList = _entityMeshMap[meshId];
+              meshList.Remove(entity.ID);
+              if (meshList.Count <= 0)
+                _entityMeshMap.Remove(meshId);
+            }
           }
         }
       }
       _removedEntities.Clear();
 
 
-      foreach (var mesh in _updatedMeshes)
+      // Added entities
+      foreach (var entity in _addedEntities)
       {
-        //TODO: Transform mesh to world space, but for this I need the entity!!!
-        currentLevel.SpatialMeshMap.UpdateAll(mesh, currentLevel.MeshCache[mesh].Positions);
-      }
-      _updatedMeshes.Clear();
+        var transformMatrix = GetEntityTransformMatrix(entity);
 
+        //Shapes
+        foreach (var shapeComp in entity.GetComponents<ShapeComponent>())
+        {
+          foreach (var shapeId in (shapeComp as ShapeComponent).GetShapes(currentLevel))
+          {
+            var shapeWorldSpace = TransformPoly(currentLevel.ShapeCache[shapeId], transformMatrix);
+            currentLevel.SpatialShapeMap.AddOrUpdate(entity.ID, shapeId, shapeWorldSpace);
+
+            if (_entityShapeMap.ContainsKey(shapeId))
+              _entityShapeMap[shapeId].Add(entity.ID);
+            else
+              _entityShapeMap.Add(shapeId, new SortedSet<int>() { entity.ID });
+          }
+        }
+
+        //Meshes
+        foreach (var meshComp in entity.GetComponents<MeshComponent>())
+        {
+          foreach (var meshId in (meshComp as MeshComponent).GetMeshes(currentLevel))
+          {
+            var meshWorldSpace = TransformPoly(currentLevel.MeshCache[meshId].Positions, transformMatrix);
+            currentLevel.SpatialMeshMap.AddOrUpdate(entity.ID, meshId, meshWorldSpace);
+
+            if (_entityMeshMap.ContainsKey(meshId))
+              _entityMeshMap[meshId].Add(entity.ID);
+            else
+              _entityMeshMap.Add(meshId, new SortedSet<int>() { entity.ID });
+          }
+        }
+      }
+      _addedEntities.Clear();
+
+
+      //Removed meshes
       foreach (var mesh in _removedMeshes)
       {
         currentLevel.SpatialMeshMap.RemoveAll(mesh);
       }
       _removedMeshes.Clear();
 
-      foreach (var shape in _updatedShapes)
-      {
-        currentLevel.SpatialShapeMap.UpdateAll(shape, currentLevel.ShapeCache[shape].GetShapes());
-      }
-      _updatedShapes.Clear();
 
+      //Updated meshes
+      foreach (var meshId in _updatedMeshes)
+      {
+        foreach (var entityId in _entityMeshMap[meshId])
+        {
+          var transform = GetEntityTransformMatrix(currentLevel.Entities[entityId]);
+          var transformedMesh = TransformPoly(currentLevel.MeshCache[meshId].Positions, transform);
+          currentLevel.SpatialMeshMap.AddOrUpdate(entityId, meshId, transformedMesh);
+        }
+      }
+      _updatedMeshes.Clear();
+
+
+      //Removed shapes
       foreach (var shape in _removedShapes)
       {
         currentLevel.SpatialShapeMap.RemoveAll(shape);
       }
       _removedShapes.Clear();
 
+
+      //Updates shapes
+      foreach (var shapeId in _updatedShapes)
+      {
+        foreach (var entityId in _entityShapeMap[shapeId])
+        {
+          var transform = GetEntityTransformMatrix(currentLevel.Entities[entityId]);
+          var transformedShape = TransformPoly(currentLevel.ShapeCache[shapeId], transform);
+          currentLevel.SpatialShapeMap.AddOrUpdate(entityId, shapeId, transformedShape);
+        }
+      }
+      _updatedShapes.Clear();
+
+
+      //Transformed entities
       foreach (var entity in _transformedEntities)
       {
-        //TODO: Implement
+        var transform = GetEntityTransformMatrix(entity);
+
+        foreach (var shapeComp in entity.GetComponents<ShapeComponent>())
+        {
+          foreach (var shapeId in (shapeComp as ShapeComponent).GetShapes(currentLevel))
+          {
+            var tranformedShape = TransformPoly(currentLevel.ShapeCache[shapeId], transform);
+            currentLevel.SpatialShapeMap.AddOrUpdate(entity.ID, shapeId, tranformedShape);
+          }
+
+          foreach (var meshComp in entity.GetComponents<MeshComponent>())
+          {
+            foreach (var meshId in (meshComp as MeshComponent).GetMeshes(currentLevel))
+            {
+              var transformedMesh = TransformPoly(currentLevel.MeshCache[meshId].Positions, transform);
+              currentLevel.SpatialMeshMap.AddOrUpdate(entity.ID, meshId, transformedMesh);
+            }            
+          }
+        }
       }
       _transformedEntities.Clear();
-
-      
-
-      
 
     }
 
