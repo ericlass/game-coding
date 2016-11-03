@@ -73,9 +73,17 @@ namespace OkuEngine
     /// </summary>
     /// <param name="eventName">The name of the event.</param>
     /// <param name="component">The component that triggered the event.</param>
-    internal void QueueComponentEvent(string eventName, Component component)
+    internal void QueueComponentEvent(string eventName, Component component, params object[] eventData)
     {
-      Engine.QueueEvent(eventName, this, component);
+      var data = new object[eventData.Length + 2];
+      data[0] = this;
+      data[1] = component;
+      for (int i = 0; i < eventData.Length; i++)
+      {
+        data[i + 2] = eventData[i];
+      }
+
+      Engine.QueueEvent(eventName, data);
     }
 
     /// <summary>

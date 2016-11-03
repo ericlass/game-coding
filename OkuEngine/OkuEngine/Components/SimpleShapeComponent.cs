@@ -37,8 +37,9 @@ namespace OkuEngine.Components
       {
         if (_shape != value)
         {
+          var oldShape = _shape;
           _shape = value;
-          QueueEvent(EventNames.EntityShapeChanged);
+          QueueEvent(EventNames.EntityShapeExchanged, new int[] { oldShape }, new int[] { _shape });
         }
       }
     }

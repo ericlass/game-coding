@@ -30,9 +30,10 @@ namespace OkuEngine.Components
       get { return _mesh; }
       set
       {
+        var oldMesh = _mesh;
         _mesh = value;
         _list = null;
-        QueueEvent(EventNames.EntityMeshChanged);
+        QueueEvent(EventNames.EntityMeshExchanged, new int[] { oldMesh }, new int[] { _mesh });
       }
     }
 

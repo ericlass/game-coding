@@ -48,8 +48,7 @@ namespace OkuEngine.Components
     {
       int chunkIndex = obj.X / ChunkSize * obj.Y / ChunkSize;
       _changedChunks.Add(chunkIndex);
-
-      QueueEvent(EventNames.EntityMeshChanged);
+      //Change is communicated later when the meshes are updated in the mesh cache
     }
 
     /// <summary>

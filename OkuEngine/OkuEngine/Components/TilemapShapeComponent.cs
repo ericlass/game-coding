@@ -39,7 +39,7 @@ namespace OkuEngine.Components
         {
           _tilemap = value;
           _updateNeeded = true;
-          QueueEvent(EventNames.EntityShapeChanged);
+          //Change is communicated later when updating the shape cache
         }
 
         if (_tilemap != null)

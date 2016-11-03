@@ -169,15 +169,15 @@ namespace OkuEngine
     public const string ShapeCacheEntryRemoved = "shape_cache_entry_removed";
 
     /// <summary>
-    /// Queued when the mesh of an entity changes.
-    /// Parameters are the entity and the mesh component that queued the event.
+    /// Queued when the mesh of an entity is exchanged with another.
+    /// Parameters are the entity, the mesh component that queued the event, the old and the new mesh ids as int[].
     /// </summary>
-    public const string EntityMeshChanged = "entity_mesh_changed";
+    public const string EntityMeshExchanged = "entity_mesh_exchanged";
 
     /// <summary>
-    /// Queued when the shape of an entity changes.
-    /// Parameters are the entity and the shape component that queued the event.
+    /// Queued when the shape of an entity is exchanged with another.
+    /// Parameters are the entity, the shape component that queued the event, the old and the new mesh ids as int[].
     /// </summary>
-    public const string EntityShapeChanged = "entity_shape_changed";
+    public const string EntityShapeExchanged = "entity_shape_exchanged";
   }
 }

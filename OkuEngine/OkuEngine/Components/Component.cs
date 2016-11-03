@@ -29,6 +29,15 @@ namespace OkuEngine.Components
     }
 
     /// <summary>
+    /// Convenience method for queueing component event. The entity and component are automatically attached.
+    /// </summary>
+    /// <param name="eventName">The name of the event to queue.</param>
+    protected void QueueEvent(string eventName, params object[] parameters)
+    {
+      Owner.QueueComponentEvent(eventName, this, parameters);
+    }
+
+    /// <summary>
     /// Components must define a unique name.
     /// </summary>
     public abstract string Name { get; }

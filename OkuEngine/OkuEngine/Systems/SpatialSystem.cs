@@ -46,8 +46,8 @@ namespace OkuEngine.Systems
         next.Engine.AddEventListener(new EventListener(EventNames.EntityComponentRemoved, OnEvent));
         next.Engine.AddEventListener(new EventListener(EventNames.EntityComponentsCleared, OnEvent));
 
-        next.Engine.AddEventListener(new EventListener(EventNames.EntityMeshChanged, OnEvent));
-        next.Engine.AddEventListener(new EventListener(EventNames.EntityShapeChanged, OnEvent));
+        next.Engine.AddEventListener(new EventListener(EventNames.EntityMeshExchanged, OnEvent));
+        next.Engine.AddEventListener(new EventListener(EventNames.EntityShapeExchanged, OnEvent));
 
         next.Engine.AddEventListener(new EventListener(EventNames.EntityMoved, OnEvent));
         next.Engine.AddEventListener(new EventListener(EventNames.EntityRotated, OnEvent));
@@ -145,26 +145,17 @@ namespace OkuEngine.Systems
           }
           break;
 
-        //TODO: Shape and mesh changes required to remove the old entity<>shape / entity<>mesh
-        //from the spatial map and internal maps and then add the new one accordingly.
-        //Challenges:
-        //  - Component can't tell me which one was the old one
-        //  - You have to specifically update one mesh/shape instance, not all of them
-        //Solutions:
-        //  - Let the component queue a "remove" event first giving the old mesh/shape, then the "add" event
-        //  - Enhance "QueueEvent" for component to be able to pass additional parameters. Then the components could proive old and new mesh/shape id.
-
-        case EventNames.EntityMeshChanged:
+        case EventNames.EntityMeshExchanged:
           {
-            MeshComponent comp = ev.Data[1] as MeshComponent;
-            _updatedMeshes.AddRange(comp.GetMeshes(_currentLevel));
+            _removedMeshes.AddRange(ev.Data[2] as int[]);
+            _updatedMeshes.AddRange(ev.Data[3] as int[]);
           }
           break;
 
-        case EventNames.EntityShapeChanged:
+        case EventNames.EntityShapeExchanged:
           {
-            var comp = ev.Data[1] as ShapeComponent;
-            _updatedShapes.AddRange(comp.GetShapes(_currentLevel));
+            _removedShapes.AddRange(ev.Data[2] as int[]);
+            _updatedShapes.AddRange(ev.Data[3] as int[]);
           }
           break;
 
