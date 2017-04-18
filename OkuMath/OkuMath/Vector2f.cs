@@ -195,6 +195,50 @@ namespace OkuMath
     }
 
     /// <summary>
+    /// Subtracts the given int value from each component of the vector.
+    /// </summary>
+    /// <param name="vec">The vector.</param>
+    /// <param name="sub">The int value to subtract.</param>
+    /// <returns></returns>
+    public static Vector2f operator -(Vector2f vec, int sub)
+    {
+      return new Vector2f(vec.X - sub, vec.Y - sub);
+    }
+
+    /// <summary>
+    /// Subtracts the given float value from each component of the vector.
+    /// </summary>
+    /// <param name="vec">The vector.</param>
+    /// <param name="sub">The float value to subtract.</param>
+    /// <returns></returns>
+    public static Vector2f operator -(Vector2f vec, float sub)
+    {
+      return new Vector2f(vec.X - sub, vec.Y - sub);
+    }
+
+    /// <summary>
+    /// Add the given int value to each component of the vector.
+    /// </summary>
+    /// <param name="vec">The vector.</param>
+    /// <param name="add">The int value to add.</param>
+    /// <returns></returns>
+    public static Vector2f operator +(Vector2f vec, int add)
+    {
+      return new Vector2f(vec.X + add, vec.Y + add);
+    }
+
+    /// <summary>
+    /// Add the given float value to each component of the vector.
+    /// </summary>
+    /// <param name="vec">The vector.</param>
+    /// <param name="add">The float value to add.</param>
+    /// <returns></returns>
+    public static Vector2f operator +(Vector2f vec, float add)
+    {
+      return new Vector2f(vec.X + add, vec.Y + add);
+    }
+
+    /// <summary>
     /// Scales the given vectors components by the given multiplier.
     /// </summary>
     /// <param name="vec">The vector to be multiplied.</param>

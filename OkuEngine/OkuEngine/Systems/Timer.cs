@@ -37,7 +37,7 @@ namespace OkuEngine.Systems
 
     public bool Update(Level currentLevel)
     {
-      _currentTime -= currentLevel.Variables.GetFloat(VariableNames.DeltaTime);
+      _currentTime -= currentLevel.Engine.DeltaTime;
       if (_currentTime <= 0.0f)
       {
         currentLevel.Engine.QueueEvent(_event);

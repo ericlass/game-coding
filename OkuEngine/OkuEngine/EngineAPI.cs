@@ -6,12 +6,16 @@ using OkuEngine.Events;
 using OkuEngine.Input;
 using OkuEngine.Levels;
 using OkuEngine.Systems;
+using OkuEngine.Components;
 
 namespace OkuEngine
 {
   public class EngineAPI
   {
     private Level _level = null;
+    private float _dt = 0.0f;
+    private float _prevDt = 0.0f;
+    private float _gravity = 9.81f;
 
     public EngineAPI(Level level)
     {
@@ -26,6 +30,68 @@ namespace OkuEngine
     public Image LoadImage(string filename)
     {
       return OkuBase.OkuManager.Instance.Graphics.NewImage(ImageData.FromFile(filename));
+    }
+
+    /// <summary>
+    /// Gets the time that passed since the last frame in (fractional) seconds.
+    /// </summary>
+    public float DeltaTime
+    {
+      get { return _dt; }
+      internal set { _dt = value; }
+    }
+
+    /// <summary>
+    /// Gets the time that passed between the last and the second-to-last frame in (fractional seconds).
+    /// </summary>
+    public float PreviousDeltaTime
+    {
+      get { return _prevDt; }
+      set { _prevDt = value; }
+    }
+
+    /// <summary>
+    /// Gets or set the current gravity. The default value is 9.81 which is the standard earth gravity.
+    /// </summary>
+    public float Gravity
+    {
+      get { return _gravity; }
+      set { _gravity = value; }
+    }
+
+    /// <summary>
+    /// Creates a transformation matrix for the given entity from its position, angle and scale components, if they exist.
+    /// </summary>
+    /// <param name="entity">The entity.</param>
+    /// <returns>The transformation matrix for this entity.</returns>
+    public Matrix3x3f GetEntityTransformMatrix(Entity entity)
+    {
+      PositionComponent posComp = entity.GetComponent<PositionComponent>();
+      AngleComponent angleComp = entity.GetComponent<AngleComponent>();
+      ScaleComponent scaleComp = entity.GetComponent<ScaleComponent>();
+
+      return
+        (posComp == null ? Matrix3x3f.Identity : Matrix3x3f.Translate(posComp.Position.X, posComp.Position.Y)) *
+        (angleComp == null ? Matrix3x3f.Identity : Matrix3x3f.Rotation(angleComp.Angle)) *
+        (scaleComp == null ? Matrix3x3f.Identity : Matrix3x3f.Scale(scaleComp.Scale.X, scaleComp.Scale.Y));
+    }
+
+    /// <summary>
+    /// Transforms a polygon using the given transformation matrix.
+    /// </summary>
+    /// <param name="poly">The poly to be transformed.</param>
+    /// <param name="transform">The transformation matrix.</param>
+    /// <returns>A copy of the poly transformed using the given matrix.</returns>
+    public Vector2f[] TransformPoly(Vector2f[] poly, Matrix3x3f transform)
+    {
+      Vector2f[] result = new Vector2f[poly.Length];
+
+      for (int i = 0; i < poly.Length; i++)
+      {
+        result[i] = transform * poly[i];
+      }
+
+      return result;
     }
 
     #region Event Queue

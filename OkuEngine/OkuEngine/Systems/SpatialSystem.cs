@@ -164,41 +164,6 @@ namespace OkuEngine.Systems
       }
     }
 
-    /// <summary>
-    /// Creates a transformation matrix for the given entity from its position, angle and scale components, if they exist.
-    /// </summary>
-    /// <param name="entity">The entity.</param>
-    /// <returns>The transformation matrix for this entity.</returns>
-    private Matrix3x3f GetEntityTransformMatrix(Entity entity)
-    {
-      PositionComponent posComp = entity.GetComponent<PositionComponent>();
-      AngleComponent angleComp = entity.GetComponent<AngleComponent>();
-      ScaleComponent scaleComp = entity.GetComponent<ScaleComponent>();
-
-      return
-        (posComp == null ? Matrix3x3f.Identity : Matrix3x3f.Translate(posComp.Position.X, posComp.Position.Y)) *
-        (angleComp == null ? Matrix3x3f.Identity : Matrix3x3f.Rotation(angleComp.Angle)) *
-        (scaleComp == null ? Matrix3x3f.Identity : Matrix3x3f.Scale(scaleComp.Scale.X, scaleComp.Scale.Y));
-    }
-
-    /// <summary>
-    /// Transforms a polygon using the given transformation matrix.
-    /// </summary>
-    /// <param name="poly">The poly to be transformed.</param>
-    /// <param name="transform">The transformation matrix.</param>
-    /// <returns>A copy of the poly transformed using the given matrix.</returns>
-    private Vector2f[] TransformPoly(Vector2f[] poly, Matrix3x3f transform)
-    {
-      Vector2f[] result = new Vector2f[poly.Length];
-
-      for (int i = 0; i < poly.Length; i++)
-      {
-        result[i] = transform * poly[i];
-      }
-
-      return result;
-    }
-
     public override void Execute(Level currentLevel)
     {
       //Removed entities
@@ -240,14 +205,14 @@ namespace OkuEngine.Systems
       // Added entities
       foreach (var entity in _addedEntities)
       {
-        var transformMatrix = GetEntityTransformMatrix(entity);
+        var transformMatrix = currentLevel.Engine.GetEntityTransformMatrix(entity);
 
         //Shapes
         foreach (var shapeComp in entity.GetComponents<ShapeComponent>())
         {
           foreach (var shapeId in (shapeComp as ShapeComponent).GetShapes(currentLevel))
           {
-            var shapeWorldSpace = TransformPoly(currentLevel.ShapeCache[shapeId], transformMatrix);
+            var shapeWorldSpace = currentLevel.Engine.TransformPoly(currentLevel.ShapeCache[shapeId], transformMatrix);
             currentLevel.SpatialShapeMap.AddOrUpdate(entity.ID, shapeId, shapeWorldSpace);
 
             if (_entityShapeMap.ContainsKey(shapeId))
@@ -262,7 +227,7 @@ namespace OkuEngine.Systems
         {
           foreach (var meshId in (meshComp as MeshComponent).GetMeshes(currentLevel))
           {
-            var meshWorldSpace = TransformPoly(currentLevel.MeshCache[meshId].Positions, transformMatrix);
+            var meshWorldSpace = currentLevel.Engine.TransformPoly(currentLevel.MeshCache[meshId].Positions, transformMatrix);
             currentLevel.SpatialMeshMap.AddOrUpdate(entity.ID, meshId, meshWorldSpace);
 
             if (_entityMeshMap.ContainsKey(meshId))
@@ -288,8 +253,8 @@ namespace OkuEngine.Systems
       {
         foreach (var entityId in _entityMeshMap[meshId])
         {
-          var transform = GetEntityTransformMatrix(currentLevel.Entities[entityId]);
-          var transformedMesh = TransformPoly(currentLevel.MeshCache[meshId].Positions, transform);
+          var transform = currentLevel.Engine.GetEntityTransformMatrix(currentLevel.Entities[entityId]);
+          var transformedMesh = currentLevel.Engine.TransformPoly(currentLevel.MeshCache[meshId].Positions, transform);
           currentLevel.SpatialMeshMap.AddOrUpdate(entityId, meshId, transformedMesh);
         }
       }
@@ -309,8 +274,8 @@ namespace OkuEngine.Systems
       {
         foreach (var entityId in _entityShapeMap[shapeId])
         {
-          var transform = GetEntityTransformMatrix(currentLevel.Entities[entityId]);
-          var transformedShape = TransformPoly(currentLevel.ShapeCache[shapeId], transform);
+          var transform = currentLevel.Engine.GetEntityTransformMatrix(currentLevel.Entities[entityId]);
+          var transformedShape = currentLevel.Engine.TransformPoly(currentLevel.ShapeCache[shapeId], transform);
           currentLevel.SpatialShapeMap.AddOrUpdate(entityId, shapeId, transformedShape);
         }
       }
@@ -320,13 +285,13 @@ namespace OkuEngine.Systems
       //Transformed entities
       foreach (var entity in _transformedEntities)
       {
-        var transform = GetEntityTransformMatrix(entity);
+        var transform = currentLevel.Engine.GetEntityTransformMatrix(entity);
 
         foreach (var shapeComp in entity.GetComponents<ShapeComponent>())
         {
           foreach (var shapeId in (shapeComp as ShapeComponent).GetShapes(currentLevel))
           {
-            var tranformedShape = TransformPoly(currentLevel.ShapeCache[shapeId], transform);
+            var tranformedShape = currentLevel.Engine.TransformPoly(currentLevel.ShapeCache[shapeId], transform);
             currentLevel.SpatialShapeMap.AddOrUpdate(entity.ID, shapeId, tranformedShape);
           }
 
@@ -334,7 +299,7 @@ namespace OkuEngine.Systems
           {
             foreach (var meshId in (meshComp as MeshComponent).GetMeshes(currentLevel))
             {
-              var transformedMesh = TransformPoly(currentLevel.MeshCache[meshId].Positions, transform);
+              var transformedMesh = currentLevel.Engine.TransformPoly(currentLevel.MeshCache[meshId].Positions, transform);
               currentLevel.SpatialMeshMap.AddOrUpdate(entity.ID, meshId, transformedMesh);
             }            
           }

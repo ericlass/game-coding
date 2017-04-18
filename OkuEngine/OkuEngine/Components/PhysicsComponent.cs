@@ -14,9 +14,9 @@ namespace OkuEngine.Components
 
     public PhysicsComponent(float gravityMultiplier, float bounce, float mass)
     {
-      _gravityMultiplier = gravityMultiplier;
-      _bounce = bounce;
-      _mass = mass;
+      GravityMultiplier = gravityMultiplier;
+      Bounce = bounce;
+      Mass = mass;
     }
 
     public override bool IsMultiAssignable
@@ -29,9 +29,15 @@ namespace OkuEngine.Components
       get{ return "physics"; }
     }
 
+    public float Mass { get => _mass; set => _mass = value; }
+
+    public float Bounce { get => _bounce; set => _bounce = value; }
+
+    public float GravityMultiplier { get => _gravityMultiplier; set => _gravityMultiplier = value; }
+
     public override Component Copy()
     {
-      return new PhysicsComponent(_gravityMultiplier, _bounce, _mass);
+      return new PhysicsComponent(GravityMultiplier, Bounce, Mass);
     }
 
   }
