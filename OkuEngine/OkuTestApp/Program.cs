@@ -13,7 +13,7 @@ namespace OkuTestApp
     static void Main()
     {
       //var level = new StartLevel();
-      var level = new TilemapLevel();
+      var level = new PhysicsLevel();
 
       OkuEngineStart engine = new OkuEngineStart(level);
       engine.Run();

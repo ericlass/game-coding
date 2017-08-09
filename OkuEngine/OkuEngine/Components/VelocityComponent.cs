@@ -9,6 +9,7 @@ namespace OkuEngine.Components
   public class VelocityComponent : Component
   {
     public Vector2f _velocity = Vector2f.Zero;
+    public Vector2f _previousVelocity = Vector2f.Zero;
 
     /// <summary>
     /// Creates a new velocaity component.
@@ -33,6 +34,15 @@ namespace OkuEngine.Components
     {
       get { return _velocity; }
       set { _velocity = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the velocity from the previous frame.
+    /// </summary>
+    public Vector2f PreviousVelocity
+    {
+      get { return _previousVelocity; }
+      set { _previousVelocity = value; }
     }
 
     public override bool IsMultiAssignable

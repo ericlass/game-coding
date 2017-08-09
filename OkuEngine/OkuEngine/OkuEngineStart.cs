@@ -61,8 +61,8 @@ namespace OkuEngine
       {
         new InputSystem(),
         new TimerSystem(),
-        new PhysicsSystem(),
-        new SpatialSystem()
+        new SpatialSystem(),
+        new PhysicsSystem()        
       };
 
 

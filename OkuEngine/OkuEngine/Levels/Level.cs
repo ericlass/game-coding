@@ -14,6 +14,12 @@ namespace OkuEngine.Levels
     private BlackBoard _blackBoard = new BlackBoard();
     private MeshCache _meshCache = null;
     private ShapeCache _shapeCache = null;
+
+    public Level()
+    {
+      _spatialMeshMap = new SpatialHashGrid(this);
+      _spatialShapeMap = new SpatialHashGrid(this);
+    }
     
     /// <summary>
     /// Gets the Engine with all functions of the engine.

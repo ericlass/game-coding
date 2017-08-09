@@ -9,6 +9,7 @@ namespace OkuEngine.Components
   public class PositionComponent : Component
   {
     private Vector2f _position = Vector2f.Zero;
+    private Vector2f _previousPosition = Vector2f.Zero;
     private bool _screenSpace = false;
 
     /// <summary>
@@ -40,6 +41,15 @@ namespace OkuEngine.Components
         _position = value;
         QueueEvent(EventNames.EntityMoved);
       }
+    }
+
+    /// <summary>
+    /// Gets or sets the position of the entity from the last frame.
+    /// </summary>
+    public Vector2f PreviousPosition
+    {
+      get { return _previousPosition; }
+      set { _previousPosition = value; }
     }
 
     /// <summary>

@@ -15,12 +15,11 @@ namespace OkuEngine.Levels
     private List<Entity> _entities = new List<Entity>(100);
     private List<EventListener> _listeners = new List<EventListener>(50);
     private EventQueue _eventQueue = new EventQueue("level");
-    private BlackBoard _variables = new BlackBoard();
     private List<InputContext> _inputContexts = new List<InputContext>(10);
     private List<RenderTask> _renderQueue = new List<RenderTask>();
     private List<Timer> _timer = new List<Timer>();
-    private ISpatialHashMap _spatialMeshMap = new SpatialHashGrid();
-    private ISpatialHashMap _spatialShapeMap = new SpatialHashGrid();
+    private ISpatialHashMap _spatialMeshMap = null;
+    private ISpatialHashMap _spatialShapeMap = null;
     private bool _initialized = false;
 
     /// <summary>
@@ -45,14 +44,6 @@ namespace OkuEngine.Levels
     internal EventQueue EventQueue
     {
       get { return _eventQueue; }
-    }
-
-    /// <summary>
-    /// Gets the variables of this level.
-    /// </summary>
-    public BlackBoard Variables
-    {
-      get { return _variables; }
     }
 
     /// <summary>

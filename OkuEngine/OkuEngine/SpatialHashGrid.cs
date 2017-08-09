@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OkuMath;
+using OkuEngine.Components;
+using OkuEngine.Levels;
 
 namespace OkuEngine
 {
@@ -13,31 +12,29 @@ namespace OkuEngine
   public class SpatialHashGrid : ISpatialHashMap
   {
     private int _cellSize = 32;
+    private Level _level = null;
 
-    //Dictionary<GROUP, Dictionary<CELLHASH, SortedSet<ID>>>
-    //Used for finding which items are inside each cell
-    private Dictionary<int, Dictionary<int, SortedSet<int>>> _spatialHashMap = new Dictionary<int, Dictionary<int, SortedSet<int>>>();
+    //Dictionary<CellHash, List<Entity>>
+    //Used for finding which entities are inside each cell
+    private Dictionary<int, SortedSet<Entity>> _spatialHashMap = new Dictionary<int, SortedSet<Entity>>();
 
-    //Dictionary<GROUP, Dictionary<ID, SortedSet<CELLHASH>>>
+    //Dictionary<EntityID, List<CellHash>>
     //Used for finding in which cells an item is
-    private Dictionary<int, Dictionary<int, SortedSet<int>>> _itemHashMap = new Dictionary<int, Dictionary<int, SortedSet<int>>>();
-
-    //Dictionary<ID, SortedSet<GROUP>>
-    //Used for finding in which groups an item is used
-    private Dictionary<int, SortedSet<int>> _itemGroupMap = new Dictionary<int, SortedSet<int>>();
+    private Dictionary<int, SortedSet<int>> _itemHashMap = new Dictionary<int, SortedSet<int>>();
 
     /// <summary>
     /// Creates a new SpatialHashGrid with a defaul cell size of 32.
     /// </summary>
-    public SpatialHashGrid()
+    public SpatialHashGrid(Level level)
     {
+      _level = level;
     }
 
     /// <summary>
     /// Creates a new SpatialHashGrid with the given cell size.
     /// </summary>
     /// <param name="cellSize">The width and height of the grid cells.</param>
-    public SpatialHashGrid(int cellSize)
+    public SpatialHashGrid(Level level, int cellSize) : this(level)
     {
       _cellSize = cellSize;
     }
@@ -51,95 +48,43 @@ namespace OkuEngine
     }
 
     /// <summary>
-    /// Adds or updates the given polygon int th grid of the given group.
+    /// Adds or updates the given entity in the grid.
     /// </summary>
-    /// <param name="group">The group index.</param>
-    /// <param name="id">The id of the item that is added.</param>
-    /// <param name="poly">The poylygon of the item.</param>
-    public void AddOrUpdate(int group, int id, Vector2f[] poly)
+    /// <param name="entity">The entity to add or update</param>
+    public void AddOrUpdate(Entity entity)
     {
-      //Get or create spatial group map
-      Dictionary<int, SortedSet<int>> spatialGroupMap = null;
-      if (!_spatialHashMap.ContainsKey(group))
+      if (!entity.ContainsComponent<ShapeComponent>())
+        throw new Exception("Entities must contain at least one shape component before being added to the spatial map!");
+
+      SortedSet<int> cellList = null;
+      if (!_itemHashMap.ContainsKey(entity.ID))
       {
-        spatialGroupMap = new Dictionary<int, SortedSet<int>>();
-        _spatialHashMap.Add(group, spatialGroupMap);
+        cellList = new SortedSet<int>();
+        _itemHashMap.Add(entity.ID, cellList);
       }
       else
       {
-        spatialGroupMap = _spatialHashMap[group];
+        cellList = _itemHashMap[entity.ID];
+        cellList.Clear();
       }
 
-      //Get or create item group map
-      Dictionary<int, SortedSet<int>> itemGroupMap = null;
-      if (!_itemHashMap.ContainsKey(group))
+      var shapes = _level.Engine.GetTransformedShapes(entity);
+      foreach (var shape in shapes)
       {
-        itemGroupMap = new Dictionary<int, SortedSet<int>>();
-        _itemHashMap.Add(group, itemGroupMap);
-      }
-      else
-      {
-        itemGroupMap = _itemHashMap[group];
-      }
-
-      //If item is already in map, remove it before adding it
-      if (itemGroupMap.ContainsKey(id))
-      {
-        var currentCells = itemGroupMap[id];
-        foreach (var cell in currentCells)
+        foreach (var poly in shape.Value)
         {
-          if (spatialGroupMap.ContainsKey(cell))
-            spatialGroupMap[cell].Remove(id);
-        }
+          var aabb = AABBMath.FromPoints(poly);
+          var cells = GridMath.CellsOfAABB(aabb.Item1, aabb.Item2, _cellSize);
+          foreach (var cell in cells)
+          {
+            var cellHash = cell.GetHashCode();
+            if (!_spatialHashMap.ContainsKey(cellHash))
+              _spatialHashMap.Add(cellHash, new SortedSet<Entity>() { entity });
+            else
+              _spatialHashMap[cellHash].Add(entity);
 
-        itemGroupMap.Remove(id);
-      }
-
-      //Make sure the relation item -> group(s) is stored
-      SortedSet<int> groups = null;
-      if (_itemGroupMap.ContainsKey(id))
-        groups = _itemGroupMap[id];
-      else
-      {
-        groups = new SortedSet<int>();
-        _itemGroupMap.Add(id, groups);
-      }
-
-      groups.Add(group);
-
-      //Get cells the AABB of the poly touches
-      var aabb = AABBMath.FromPoints(poly);
-      var cells = GridMath.CellsOfAABB(aabb.Item1, aabb.Item2, _cellSize);
-
-      //Add poly to spatial and item hash maps
-      foreach (var cell in cells)
-      {
-        int cellHash = cell.GetHashCode();
-
-        if (!spatialGroupMap.ContainsKey(cellHash))
-          spatialGroupMap.Add(cellHash, new SortedSet<int>());
-
-        spatialGroupMap[cellHash].Add(id);
-
-        if (!itemGroupMap.ContainsKey(id))
-          itemGroupMap.Add(id, new SortedSet<int>());
-
-        itemGroupMap[id].Add(cellHash);
-      }
-    }
-
-    /// <summary>
-    /// Updates the item with the given id on all groups where it is used.
-    /// </summary>
-    /// <param name="id">The id of the item.</param>
-    /// <param name="poly">The polygon of the item.</param>
-    public void UpdateAll(int id, Vector2f[] poly)
-    {
-      if (_itemGroupMap.ContainsKey(id))
-      {
-        foreach (var group in _itemGroupMap[id])
-        {
-          AddOrUpdate(group, id, poly);
+            cellList.Add(cellHash);
+          }
         }
       }
     }
@@ -147,43 +92,19 @@ namespace OkuEngine
     /// <summary>
     /// Removes the item with the given id and group.
     /// </summary>
-    /// <param name="group">The group index.</param>
-    /// <param name="id">The id of the item to remove.</param>
-    public void Remove(int group, int id)
+    /// <param name="entity">The entity to be removed.</param>
+    public void Remove(Entity entity)
     {
-      if (!_itemHashMap.ContainsKey(group))
+      if (!_itemHashMap.ContainsKey(entity.ID))
         return;
 
-      var itemGroupMap = _itemHashMap[group];
-
-      if (!itemGroupMap.ContainsKey(id))
-        return;
-
-      SortedSet<int> cells = itemGroupMap[id];
-      itemGroupMap.Remove(id);
-
-      _itemGroupMap.Remove(id);
-
-      var spatialGroupMap = _spatialHashMap[group];
-      foreach (int cell in cells)
+      var cells = _itemHashMap[entity.ID];
+      _itemHashMap.Remove(entity.ID);
+      foreach (var cell in cells)
       {
-        if (spatialGroupMap.ContainsKey(cell))
-          spatialGroupMap[cell].Remove(id);
-      }
-    }
-
-    /// <summary>
-    /// Removes the item with the given id from all groups it is used in.
-    /// </summary>
-    /// <param name="id">The id of the item to remove.</param>
-    public void RemoveAll(int id)
-    {
-      if (_itemGroupMap.ContainsKey(id))
-      {
-        foreach (var group in _itemGroupMap[id])
-        {
-          Remove(group, id);
-        }
+        _spatialHashMap[cell].Remove(entity);
+        if (_spatialHashMap[cell].Count == 0)
+          _spatialHashMap.Remove(cell);
       }
     }
 
@@ -191,28 +112,24 @@ namespace OkuEngine
     /// Gets all items in the given group that touch any 
     /// of the cells the AABB given by [min, max] touches.
     /// </summary>
-    /// <param name="group">The group index.</param>
     /// <param name="min">The minimum vector of the AABB.</param>
     /// <param name="max">The maximum vector of the AABB.</param>
-    /// <returns>A list of all item ids that are inside of or near to the given AABB. Null if the given group index is currently unknown.</returns>
-    public SortedSet<int> GetItemsForAABB(int group, Vector2f min, Vector2f max)
+    /// <returns>A list of all entites that are inside of or near to the given AABB. Might be empty, but never null.</returns>
+    public SortedSet<Entity> GetItemsForAABB(Vector2f min, Vector2f max)
     {
-      if (!_spatialHashMap.ContainsKey(group))
-        return null;
-
       //Get cells the AABB touches
-      var groupMap = _spatialHashMap[group];
       var cells = GridMath.CellsOfAABB(min, max, _cellSize);
 
-      //
-      SortedSet<int> result = new SortedSet<int>();
+      var result = new SortedSet<Entity>();
       foreach (var cell in cells)
       {
         int cellHash = cell.GetHashCode();
-        if (groupMap.ContainsKey(cellHash))
+        if (_spatialHashMap.ContainsKey(cellHash))
         {
-          foreach (var item in groupMap[cellHash])
+          foreach (var item in _spatialHashMap[cellHash])
+          {
             result.Add(item);
+          }
         }
       }
 
@@ -223,38 +140,37 @@ namespace OkuEngine
     /// Gets all items in the given group that touch the
     /// same cells as the item with the given id.
     /// </summary>
-    /// <param name="group">The group index.</param>
-    /// <param name="id">The id of the item.</param>
-    /// <returns>A list of all item ids that are near the given item. Null if the given group index or item id is currently unknown.</returns>
-    public SortedSet<int> GetItemsNear(int group, int id)
+    /// <param name="entity">The entity to check.</param>
+    /// <returns>A list of all entities that are near the given item. Might be empty, but never null.</returns>
+    public SortedSet<Entity> GetItemsNear(Entity entity)
     {
-      //Check if group is known in both maps
-      if (!_itemHashMap.ContainsKey(group))
-        return null;
+      if (!_itemHashMap.ContainsKey(entity.ID))
+        throw new Exception("Entity with ID " + entity.ID + " was not added to the spatial hashmap!");
 
-      if (!_spatialHashMap.ContainsKey(group))
-        return null;
-
-      var itemGroupMap = _itemHashMap[group];
-
-      //Check if given id is currently known
-      if (!itemGroupMap.ContainsKey(id))
-        return null;
-
-      SortedSet<int> result = new SortedSet<int>();
-      var spatialGroupMap = _spatialHashMap[group];
-      var cellHashes = itemGroupMap[id];
-      foreach (var cellHash in cellHashes)
+      var result = new SortedSet<Entity>();
+      var cells = _itemHashMap[entity.ID];
+      foreach (var cell in cells)
       {
-        if (spatialGroupMap.ContainsKey(cellHash))
+        if (_spatialHashMap.ContainsKey(cell))
         {
-          foreach (var item in spatialGroupMap[cellHash])
-            result.Add(item);
+          var entities =_spatialHashMap[cell];
+          foreach (var near in entities)
+          {
+            if (near.ID != entity.ID)
+              result.Add(near);
+          }
         }
       }
-
       return result;
-    }    
+    }
 
+    /// <summary>
+    /// Clears all data contained in the hash maps.
+    /// </summary>
+    public void Clear()
+    {
+      _spatialHashMap.Clear();
+      _itemHashMap.Clear();
+    }
   }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using OkuEngine.Levels;
-using OkuEngine.Assets;
 
 namespace OkuEngine.Components
 {

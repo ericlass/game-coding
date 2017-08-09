@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using OkuMath;
 using OkuBase.Graphics;
-using OkuEngine.Assets;
 using OkuEngine.Events;
 using OkuEngine.Input;
 using OkuEngine.Levels;
@@ -13,9 +13,9 @@ namespace OkuEngine
   public class EngineAPI
   {
     private Level _level = null;
-    private float _dt = 0.0f;
-    private float _prevDt = 0.0f;
-    private float _gravity = 9.81f;
+    private float _dt = 0.001f;
+    private float _prevDt = 0.001f;
+    private Vector2f _gravity = new Vector2f(0.0f, -9.81f);
 
     public EngineAPI(Level level)
     {
@@ -53,7 +53,7 @@ namespace OkuEngine
     /// <summary>
     /// Gets or set the current gravity. The default value is 9.81 which is the standard earth gravity.
     /// </summary>
-    public float Gravity
+    public Vector2f Gravity
     {
       get { return _gravity; }
       set { _gravity = value; }
@@ -89,6 +89,30 @@ namespace OkuEngine
       for (int i = 0; i < poly.Length; i++)
       {
         result[i] = transform * poly[i];
+      }
+
+      return result;
+    }
+
+    public Dictionary<int, List<Vector2f[]>> GetTransformedShapes(Entity entity)
+    {
+      var shapeComponents = entity.GetComponents<ShapeComponent>();
+      if (shapeComponents.Count == 0)
+        return null;
+
+      var result = new Dictionary<int, List<Vector2f[]>>();
+      var matrix = GetEntityTransformMatrix(entity);
+      foreach (var shapeComp in shapeComponents)
+      {
+        foreach (var shape in (shapeComp as ShapeComponent).GetShapes(_level))
+        {
+          var vertices = _level.ShapeCache[shape];
+          var transformedVertices = TransformPoly(vertices, matrix);
+          if (!result.ContainsKey(shape))
+            result.Add(shape, new List<Vector2f[]>() { transformedVertices });
+          else
+            result[shape].Add(transformedVertices);
+        }
       }
 
       return result;
@@ -387,6 +411,27 @@ namespace OkuEngine
       };
 
       return new Mesh(pos, tex, null, PrimitiveType.TriangleStrip);
+    }
+
+    /// <summary>
+    /// Creates a new mesh asset that can be used for rendering the given image in original size
+    /// </summary>
+    /// <param name="width">The width of the image.</param>
+    /// <param name="height">The height of the image.</param>
+    /// <returns>The mesh asst for the given image.</returns>
+    public Vector2f[] GetBoxShape(int width, int height)
+    {
+      float halfWidth = width / 2;
+      float halfHeight = height / 2;
+
+      Vector2f[] pos = new Vector2f[4] {
+        new Vector2f(-halfWidth, -halfHeight),
+        new Vector2f(-halfWidth, halfHeight),
+        new Vector2f(halfWidth, halfHeight),
+        new Vector2f(halfWidth, -halfHeight)        
+      };
+
+      return pos;
     }
 
     #endregion

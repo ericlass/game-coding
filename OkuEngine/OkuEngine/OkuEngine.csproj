@@ -63,6 +63,7 @@
     <Compile Include="Mesh.cs" />
     <Compile Include="SpatialHashGrid.cs" />
     <Compile Include="Systems\SpatialSystem.cs" />
+    <Compile Include="Systems\UpdateSystem.cs" />
     <Compile Include="Tilemap.cs" />
     <Compile Include="Behavior\BehaviorResult.cs" />
     <Compile Include="Behavior\BehaviorTreeNode.cs" />

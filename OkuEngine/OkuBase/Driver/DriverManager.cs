@@ -106,13 +106,15 @@ namespace OkuBase.Driver
 
     public override void Finish()
     {
+      bool sameDomain = _graphicsDomain == _audioDomain;
+
       if (_graphicsDomain != null)
       {
         AppDomain.Unload(_graphicsDomain);
         _graphicsDomain = null;
       }
 
-      if (_audioDomain != null)
+      if (!sameDomain && _audioDomain != null)
       {
         AppDomain.Unload(_audioDomain);
         _audioDomain = null;

@@ -22,13 +22,30 @@ namespace OkuEngine.Systems
         if (posComp == null)
           continue;
 
+        var veloComp = entity.GetComponent<VelocityComponent>();
+
         Vector2f pos = posComp.Position;
+//        Vector2f prevPos = posComp.PreviousPosition;
         float dt = currentLevel.Engine.DeltaTime;
+//        float prevDt = currentLevel.Engine.PreviousDeltaTime;
+        var a = currentLevel.Engine.Gravity * physicsComp.GravityMultiplier;
 
         //Time corrected verlet integration: xi+1 = xi + (xi - xi-1) * (dti / dti-1) + a * dti * dti
-        Vector2f newPos = pos + (pos - pos - 1) * (dt / currentLevel.Engine.PreviousDeltaTime) + currentLevel.Engine.Gravity * dt * dt;
+        
+        var v = Vector2f.Zero;
+        if (veloComp != null)
+        {
+          v = veloComp.Velocity;
+        }
+        v = v + a * dt;
 
-        posComp.Position = pos;
+        posComp.PreviousPosition = pos;
+        posComp.Position += v * dt;
+
+        if (veloComp != null)
+        {
+          veloComp.Velocity = v;
+        }
       }
 
       //Second, check all object for collision
@@ -41,28 +58,50 @@ namespace OkuEngine.Systems
         var shapes = shapeComp.GetShapes(currentLevel);
         foreach (var shape in shapes)
         {
-          var nearShapes = currentLevel.SpatialShapeMap.GetItemsNear(entity.ID, shape);
-          foreach (var nearShape in nearShapes)
+          var shape1 = currentLevel.ShapeCache[shape];
+          if (shape1 == null)
+            throw new Exception("Could not find shape with ID " + shape);
+
+          var nearEntities = currentLevel.SpatialShapeMap.GetItemsNear(entity);
+          foreach (var nearEntity in nearEntities)
           {
-            var shape1 = currentLevel.ShapeCache[shape];
-            var shape2 = currentLevel.ShapeCache[nearShape];
+            //if (nearEntity == entity)
+            //  continue;
 
-            if (shape1 == null)
-              throw new Exception("Could not find shape with ID " + shape);
-
-            if (shape2 == null)
-              throw new Exception("Could not find shape with ID " + nearShape);
-
-            var transformMatrix = currentLevel.Engine.GetEntityTransformMatrix(entity);
-            var shape1World = currentLevel.Engine.TransformPoly(shape1, transformMatrix);
-            var shape2World = currentLevel.Engine.TransformPoly(shape1, transformMatrix);
-
-            Vector2f mtd;
-            if (Overlaps.PolygonPolygon(shape1World, shape2World, out mtd))
+            var shapeComponents = nearEntity.GetComponents<ShapeComponent>();
+            foreach (var nearShapeComp in shapeComponents)
             {
-              //TODO: Fix spatial map to support this. We need to know the ID of the other entity!
-              //TODO: Apply MTD
-              //TODO: Queue overlap event: currentLevel.Engine.QueueEvent(EventNames.GetGenericOverlapEventName(entity, TODO), null);
+              foreach (var nearShape in (nearShapeComp as ShapeComponent).GetShapes(currentLevel))
+              {
+                var shape2 = currentLevel.ShapeCache[nearShape];
+                if (shape2 == null)
+                  throw new Exception("Could not find shape with ID " + nearEntity);
+
+                var transformMatrix1 = currentLevel.Engine.GetEntityTransformMatrix(entity);
+                var shape1World = currentLevel.Engine.TransformPoly(shape1, transformMatrix1);
+                var transformMatrix2 = currentLevel.Engine.GetEntityTransformMatrix(nearEntity);
+                var shape2World = currentLevel.Engine.TransformPoly(shape2, transformMatrix2);
+
+                Vector2f mtd;
+                if (Overlaps.PolygonPolygon(shape1World, shape2World, out mtd))
+                {
+                  //TODO: Apply MTD
+                  var posComp = entity.GetComponent<PositionComponent>();
+                  if (posComp != null)
+                  {
+                    posComp.Position += mtd;
+                  }
+
+                  var veloComp = entity.GetComponent<VelocityComponent>();
+                  if (veloComp != null)
+                  {
+                    veloComp.Velocity = Vector2f.Zero;
+                  }
+
+                  currentLevel.Engine.QueueEvent(EventNames.GetGenericOverlapEventName(entity, nearEntity), new object[] { entity, nearEntity });
+                }
+
+              }
             }
           }
         }

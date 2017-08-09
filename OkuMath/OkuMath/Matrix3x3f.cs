@@ -193,8 +193,10 @@ namespace OkuMath
       // | #, #, # | * | # | = | # |
       // | 0, 0, 1 |   | 1 |   | X |
       return new Vector2f(
-          mat[0].X * vec.X + mat[1].X * vec.Y + mat[2].X,
-          mat[0].Y * vec.X + mat[1].Y * vec.Y + mat[2].Y
+        VectorMath.DotProduct(mat[0], new Vector3f(vec, 1)),
+        VectorMath.DotProduct(mat[1], new Vector3f(vec, 1))
+//          mat[0].X * vec.X + mat[1].X * vec.Y + mat[2].X,
+//          mat[0].Y * vec.X + mat[1].Y * vec.Y + mat[2].Y
         );
     }
 

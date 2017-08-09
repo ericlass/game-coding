@@ -8,7 +8,7 @@ namespace OkuEngine
   /// <summary>
   /// Defines a single entity. An entity is nothing but a named collection of components.
   /// </summary>
-  public sealed class Entity
+  public sealed class Entity : IComparable<Entity>
   {
     private static int _entityId = 0;
 
@@ -103,6 +103,21 @@ namespace OkuEngine
       component.SetOwner(this);
 
       Engine?.QueueEvent(EventNames.EntityComponentAdded, this, component);
+
+      return this;
+    }
+
+    /// <summary>
+    /// Adds multiple components to the entity.
+    /// </summary>
+    /// <param name="components">The components to be added.</param>
+    /// <returns>The entity itself. This allows to chain multiple Add calls.</returns>
+    public Entity AddComponents(params Component[] components)
+    {
+      foreach (var comp in components)
+      {
+        AddComponent(comp);
+      }
 
       return this;
     }
@@ -208,5 +223,9 @@ namespace OkuEngine
         comp.Update(dt);
     }
 
+    public int CompareTo(Entity other)
+    {
+      return _id - other._id;
+    }
   }
 }

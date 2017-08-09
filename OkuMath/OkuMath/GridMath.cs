@@ -32,12 +32,12 @@ namespace OkuMath
     /// <returns>A list of all cells the AABB touches.</returns>
     public static Vector2i[] CellsOfAABB(Vector2f min, Vector2f max, float cellSize)
     {
-      int left = (int)(min.X / cellSize);
-      int right = (int)(max.X / cellSize);
-      int top = (int)(max.Y / cellSize);
-      int bottom = (int)(min.Y / cellSize);
+      int left = (int)Math.Floor(min.X / cellSize);
+      int right = (int)Math.Floor(max.X / cellSize);
+      int top = (int)Math.Floor(max.Y / cellSize);
+      int bottom = (int)Math.Floor(min.Y / cellSize);
 
-      Vector2i[] result = new Vector2i[right - left * top - bottom];
+      Vector2i[] result = new Vector2i[((right - left) + 1) * ((top - bottom) + 1)];
       int i = 0;
       for (int x = left; x <= right; x++)
       {
